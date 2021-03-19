@@ -49,16 +49,16 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
  * restored actual path from the information in the shortest paths trees.
  *
  * <p>
- * Additionally if $|S| > |T|$ the algorithm is executed on the reversed graph. This allows
- * to reduce the number of buckets and optimize memory usage of the algorithm.
+ * Additionally if $|S| > |T|$ the algorithm is executed on the reversed graph. This allows to
+ * reduce the number of buckets and optimize memory usage of the algorithm.
  *
  * <p>
  * The efficiency of this algorithm is derived from the fact that contraction hierarchy produces
  * fairly small shortest paths trees. This allows to both speedup the computations and decrease
  * memory usage to store the paths. The bottleneck of the algorithm is the contraction hierarchy
  * computation, which can lead to significant overhead for dense graphs both in terms of running
- * time and space complexity. Therefore the ideal use cases for this algorithm are sparse graphs
- * of any size with low average out-degree of vertices.
+ * time and space complexity. Therefore the ideal use cases for this algorithm are sparse graphs of
+ * any size with low average out-degree of vertices.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -97,9 +97,9 @@ public class CHManyToManyShortestPaths<V, E>
     }
 
     /**
-     * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}.
-     * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}. It is
+     * up to a user of this algorithm to handle the creation and termination of the provided
+     * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph a graph
@@ -107,7 +107,9 @@ public class CHManyToManyShortestPaths<V, E>
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph, ThreadPoolExecutor executor)
     {
-        this(new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy());
+        this(
+            new ContractionHierarchyPrecomputation<>(graph, executor)
+                .computeContractionHierarchy());
     }
 
     /**

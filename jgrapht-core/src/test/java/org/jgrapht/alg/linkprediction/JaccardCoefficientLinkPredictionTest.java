@@ -43,18 +43,18 @@ public class JaccardCoefficientLinkPredictionTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         TestUtil
-        .constructGraph(
-            g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
-                { 3, 4 }, { 3, 5 }, { 4, 5 } });
+            .constructGraph(
+                g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
+                    { 3, 4 }, { 3, 5 }, { 4, 5 } });
 
         JaccardCoefficientLinkPrediction<Integer, DefaultEdge> alg =
             new JaccardCoefficientLinkPrediction<>(g);
 
-        assertEquals(2d/3, alg.predict(0, 2), 1e-9);
-        assertEquals(2d/4, alg.predict(0, 4), 1e-9);
-        assertEquals(1d/6, alg.predict(3, 2), 1e-9);
+        assertEquals(2d / 3, alg.predict(0, 2), 1e-9);
+        assertEquals(2d / 4, alg.predict(0, 4), 1e-9);
+        assertEquals(1d / 6, alg.predict(3, 2), 1e-9);
     }
-    
+
     @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
     public void testInvalidPrediction()
     {

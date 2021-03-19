@@ -200,7 +200,7 @@ public class ImmutableNetworkAdapterTest
         assertFalse(g.getType().isModifiable());
 
         assertTrue(g.containsEdge("v5", "v2"));
-        
+
         Graph<String, DefaultEdge> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());

@@ -207,19 +207,21 @@ public abstract class BaseEventDrivenImporter<V, E>
      * 
      * @param consumer the consumer
      */
-    public void addVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer) { 
+    public void addVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer)
+    {
         vertexWithAttributesConsumers.add(consumer);
     }
-    
+
     /**
      * Remove a vertex with attributes consumer
      * 
      * @param consumer the consumer
      */
-    public void removeVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer) { 
+    public void removeVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer)
+    {
         vertexWithAttributesConsumers.remove(consumer);
     }
-    
+
     /**
      * Add an edge attribute consumer.
      * 
@@ -245,19 +247,21 @@ public abstract class BaseEventDrivenImporter<V, E>
      * 
      * @param consumer the consumer
      */
-    public void addEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer) { 
+    public void addEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer)
+    {
         edgeWithAttributesConsumers.add(consumer);
     }
-    
+
     /**
      * Remove an edge with attributes consumer
      * 
      * @param consumer the consumer
      */
-    public void removeEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer) { 
+    public void removeEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer)
+    {
         edgeWithAttributesConsumers.remove(consumer);
     }
-    
+
     /**
      * Notify for the vertex count.
      * 
@@ -287,7 +291,7 @@ public abstract class BaseEventDrivenImporter<V, E>
     {
         vertexConsumers.forEach(c -> c.accept(v));
     }
-    
+
     /**
      * Notify for a vertex with attributes.
      * 
@@ -319,7 +323,7 @@ public abstract class BaseEventDrivenImporter<V, E>
     {
         edgeWithAttributesConsumers.forEach(c -> c.accept(e, attrs));
     }
-    
+
     /**
      * Notify for a graph attribute
      * 

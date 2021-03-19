@@ -81,7 +81,7 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     @Test
     public void testGetTour3()
     {
-        int[][] edges = {{1, 2, 5}};
+        int[][] edges = { { 1, 2, 5 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =
@@ -97,7 +97,7 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     @Test
     public void testGetTour4()
     {
-        int[][] edges = {{1, 2, 5}, {1, 3, 5}, {2, 3, 9},};
+        int[][] edges = { { 1, 2, 5 }, { 1, 3, 5 }, { 2, 3, 9 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =

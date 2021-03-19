@@ -50,7 +50,7 @@ public class ChordalGraphMaxCliqueFinderTest
     @Test
     public void testGetMaximumClique2()
     {
-        int[][] edges = {{1, 2}, {3, 4}, {3, 5}, {3, 6}, {4, 5}, {4, 6}, {5, 6},};
+        int[][] edges = { { 1, 2 }, { 3, 4 }, { 3, 5 }, { 3, 6 }, { 4, 5 }, { 4, 6 }, { 5, 6 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();
@@ -65,7 +65,7 @@ public class ChordalGraphMaxCliqueFinderTest
     @Test
     public void testGetMaximumClique3()
     {
-        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 1},};
+        int[][] edges = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 1 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();
@@ -78,7 +78,7 @@ public class ChordalGraphMaxCliqueFinderTest
     @Test
     public void testGetMaximumClique4()
     {
-        int[][] edges = {{1, 1}, {1, 1}, {1, 2}, {1, 2}, {1, 2}, {2, 2}, {2, 2},};
+        int[][] edges = { { 1, 1 }, { 1, 1 }, { 1, 2 }, { 1, 2 }, { 1, 2 }, { 2, 2 }, { 2, 2 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
 
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();

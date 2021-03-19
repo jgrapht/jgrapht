@@ -77,8 +77,8 @@ public interface MinimumCostFlowProblem<V, E>
     Function<E, Integer> getArcCapacityUpperBounds();
 
     /**
-     * Returns a function which specifies the network arc costs. Every unit of flow through an
-     * arc will have the price of the cost of this arc.
+     * Returns a function which specifies the network arc costs. Every unit of flow through an arc
+     * will have the price of the cost of this arc.
      *
      * @return arc cost function
      */
@@ -128,7 +128,9 @@ public interface MinimumCostFlowProblem<V, E>
             Function<E, Integer> arcCapacityUpperBounds,
             Function<E, Integer> arcCapacityLowerBounds)
         {
-            this(graph, nodeSupplies, arcCapacityUpperBounds, arcCapacityLowerBounds, graph::getEdgeWeight);
+            this(
+                graph, nodeSupplies, arcCapacityUpperBounds, arcCapacityLowerBounds,
+                graph::getEdgeWeight);
         }
 
         /**
@@ -141,10 +143,9 @@ public interface MinimumCostFlowProblem<V, E>
          * @param arcCosts the arc costs
          */
         public MinimumCostFlowProblemImpl(
-                Graph<V, E> graph, Function<V, Integer> nodeSupplies,
-                Function<E, Integer> arcCapacityUpperBounds,
-                Function<E, Integer> arcCapacityLowerBounds,
-                Function<E, Double> arcCosts)
+            Graph<V, E> graph, Function<V, Integer> nodeSupplies,
+            Function<E, Integer> arcCapacityUpperBounds,
+            Function<E, Integer> arcCapacityLowerBounds, Function<E, Double> arcCosts)
         {
             this.graph = Objects.requireNonNull(graph);
             this.nodeSupplies = Objects.requireNonNull(nodeSupplies);
@@ -193,7 +194,8 @@ public interface MinimumCostFlowProblem<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Function<E, Double> getArcCosts(){
+        public Function<E, Double> getArcCosts()
+        {
             return arcCosts;
         }
     }

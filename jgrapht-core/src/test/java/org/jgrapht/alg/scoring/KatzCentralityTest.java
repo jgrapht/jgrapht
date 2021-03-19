@@ -42,7 +42,8 @@ public class KatzCentralityTest
     @Test
     public void testGraph2Nodes()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("1");
         g.addVertex("2");
@@ -75,7 +76,8 @@ public class KatzCentralityTest
     @Test
     public void testGraph3Nodes()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("1");
         g.addVertex("2");
@@ -93,7 +95,8 @@ public class KatzCentralityTest
     @Test
     public void testGraph1()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("A");
         g.addVertex("B");
@@ -302,7 +305,8 @@ public class KatzCentralityTest
     @Test
     public void testUnweightedGraph2()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("center");
         g.addVertex("a");
@@ -327,7 +331,8 @@ public class KatzCentralityTest
     @Test
     public void testEmptyGraph()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         final VertexScoringAlgorithm<String, Double> pr =
             new KatzCentrality<>(g, 0.85, 100, 0.0001);
@@ -338,7 +343,8 @@ public class KatzCentralityTest
     @Test(expected = IllegalArgumentException.class)
     public void testNonExistantVertex()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("center");
         g.addVertex("a");
@@ -359,7 +365,8 @@ public class KatzCentralityTest
     @Test(expected = IllegalArgumentException.class)
     public void testBadParameters1()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         new KatzCentrality<>(g, -1, 100, 0.0001);
     }
@@ -367,7 +374,8 @@ public class KatzCentralityTest
     @Test(expected = IllegalArgumentException.class)
     public void testBadParameters2()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         new KatzCentrality<>(g, 0.85, 0, 0.0001);
     }
@@ -375,7 +383,8 @@ public class KatzCentralityTest
     @Test(expected = IllegalArgumentException.class)
     public void testBadParameters3()
     {
-        final DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        final DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultEdge.class);
 
         new KatzCentrality<>(g, 0.85, 100, 0.0);
     }

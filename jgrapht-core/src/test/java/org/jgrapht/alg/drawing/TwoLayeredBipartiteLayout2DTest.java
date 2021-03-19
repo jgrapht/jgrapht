@@ -127,7 +127,7 @@ public class TwoLayeredBipartiteLayout2DTest
         String v4 = graph.addVertex();
         String v5 = graph.addVertex();
         String v6 = graph.addVertex();
-        String v7 = graph.addVertex(); 
+        String v7 = graph.addVertex();
 
         graph.addEdge(v1, v4);
         graph.addEdge(v1, v5);
@@ -152,5 +152,5 @@ public class TwoLayeredBipartiteLayout2DTest
         assertEquals(Point2D.of(3.0, 5.0), model.get(v5));
         assertEquals(Point2D.of(3.0, 10.0), model.get(v6));
     }
-    
+
 }

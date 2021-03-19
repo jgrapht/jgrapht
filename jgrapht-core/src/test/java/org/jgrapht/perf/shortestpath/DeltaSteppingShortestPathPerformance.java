@@ -47,7 +47,8 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingGnm(GnmState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree, data.executor).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree, data.executor)
+            .getPaths(0);
     }
 
     @Benchmark
@@ -90,7 +91,8 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingBarabasiAlbert(BarabasiAlbertState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.m0, data.executor).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.m0, data.executor)
+            .getPaths(0);
     }
 
     @Benchmark
@@ -132,7 +134,8 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingComplete(CompleteGraphState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices, data.executor).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices, data.executor)
+            .getPaths(0);
     }
 
     @Benchmark
@@ -156,12 +159,16 @@ public class DeltaSteppingShortestPathPerformance
         public ThreadPoolExecutor executor;
 
         @Setup
-        public void createExecutor(){
-            executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+        public void createExecutor()
+        {
+            executor = ConcurrencyUtil
+                .createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
         }
 
         @TearDown
-        public void shutdownExecutor() throws InterruptedException {
+        public void shutdownExecutor()
+            throws InterruptedException
+        {
             ConcurrencyUtil.shutdownExecutionService(executor);
         }
 

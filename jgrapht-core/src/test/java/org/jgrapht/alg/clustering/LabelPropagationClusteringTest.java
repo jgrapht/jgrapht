@@ -181,7 +181,7 @@ public class LabelPropagationClusteringTest
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
         graph.addEdge(0, 2);
-        
+
         LabelPropagationClustering<Integer, DefaultEdge> alg =
             new LabelPropagationClustering<>(graph, 0, new Random(31));
         Clustering<Integer> clustering = alg.getClustering();
@@ -192,5 +192,5 @@ public class LabelPropagationClusteringTest
         assertEquals(Set.of(0, 1, 2), clusters.get(0));
         assertEquals(Set.of(3), clusters.get(1));
     }
-    
+
 }

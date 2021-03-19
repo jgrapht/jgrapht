@@ -215,7 +215,7 @@ public abstract class AbstractGraph<V, E>
         int hash = vertexSet().hashCode();
 
         final boolean isDirected = getType().isDirected();
-        
+
         for (E e : edgeSet()) {
             int part = e.hashCode();
 
@@ -225,11 +225,11 @@ public abstract class AbstractGraph<V, E>
             int pairing = source + target;
             if (isDirected) {
                 // see http://en.wikipedia.org/wiki/Pairing_function (VK);
-                pairing = ((pairing) * (pairing + 1) / 2) + target;    
+                pairing = ((pairing) * (pairing + 1) / 2) + target;
             }
-            
+
             part = (31 * part) + pairing;
-            part = (31 * part) + Double.hashCode(getEdgeWeight(e)); 
+            part = (31 * part) + Double.hashCode(getEdgeWeight(e));
 
             hash += part;
         }
@@ -278,18 +278,20 @@ public abstract class AbstractGraph<V, E>
 
             V gSource = g.getEdgeSource(e);
             V gTarget = g.getEdgeTarget(e);
-            
-            if (isDirected) { 
+
+            if (isDirected) {
                 if (!gSource.equals(source) || !gTarget.equals(target)) {
                     return false;
-                }    
-            } else { 
-                if ((!gSource.equals(source) || !gTarget.equals(target)) && (!gSource.equals(target) || !gTarget.equals(source))) { 
+                }
+            } else {
+                if ((!gSource.equals(source) || !gTarget.equals(target))
+                    && (!gSource.equals(target) || !gTarget.equals(source)))
+                {
                     return false;
                 }
             }
 
-            if (Double.compare(getEdgeWeight(e), g.getEdgeWeight(e)) != 0) { 
+            if (Double.compare(getEdgeWeight(e), g.getEdgeWeight(e)) != 0) {
                 return false;
             }
         }

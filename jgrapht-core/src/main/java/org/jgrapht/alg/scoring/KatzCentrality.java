@@ -108,8 +108,7 @@ public final class KatzCentrality<V, E>
     public KatzCentrality(final Graph<V, E> g)
     {
         this(
-            g, DAMPING_FACTOR_DEFAULT, exogenousFactorDefaultFunction(),
-            MAX_ITERATIONS_DEFAULT,
+            g, DAMPING_FACTOR_DEFAULT, exogenousFactorDefaultFunction(), MAX_ITERATIONS_DEFAULT,
             TOLERANCE_DEFAULT);
     }
 
@@ -122,8 +121,8 @@ public final class KatzCentrality<V, E>
     public KatzCentrality(final Graph<V, E> g, final double dampingFactor)
     {
         this(
-            g, dampingFactor, exogenousFactorDefaultFunction(),
-            MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
+            g, dampingFactor, exogenousFactorDefaultFunction(), MAX_ITERATIONS_DEFAULT,
+            TOLERANCE_DEFAULT);
     }
 
     /**
@@ -177,8 +176,8 @@ public final class KatzCentrality<V, E>
      * @param maxIterations the maximum number of iterations to perform
      */
     public KatzCentrality(
-        final Graph<V, E> g, final double dampingFactor, final ToDoubleFunction<V> exogenousFactorFunction,
-        final int maxIterations)
+        final Graph<V, E> g, final double dampingFactor,
+        final ToDoubleFunction<V> exogenousFactorFunction, final int maxIterations)
     {
         this(g, dampingFactor, exogenousFactorFunction, maxIterations, TOLERANCE_DEFAULT);
     }
@@ -194,8 +193,9 @@ public final class KatzCentrality<V, E>
      *        between iterations change less than this value
      */
     public KatzCentrality(
-        final Graph<V, E> g, final double dampingFactor, final ToDoubleFunction<V> exogenousFactorFunction,
-        final int maxIterations, final double tolerance)
+        final Graph<V, E> g, final double dampingFactor,
+        final ToDoubleFunction<V> exogenousFactorFunction, final int maxIterations,
+        final double tolerance)
     {
         this.g = g;
         this.scores = new HashMap<>();
@@ -226,7 +226,8 @@ public final class KatzCentrality<V, E>
     }
 
     /* Checks for the valid values of the parameters */
-    private void validate(final double dampingFactor, final int maxIterations, final double tolerance)
+    private void validate(
+        final double dampingFactor, final int maxIterations, final double tolerance)
     {
         if (maxIterations <= 0) {
             throw new IllegalArgumentException("Maximum iterations must be positive");

@@ -20,11 +20,12 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 
 /**
- * Path validator for shortest path algorithms. Shortest path algorithms typically maintain a set of partial paths
- * which are iteratively extended until some stopping criterion is met, e.g. the target vertex is reached. A path
- * validator can be used to enforce additional criteria as to the validity of a given path. A partial path can only be
- * extended by another edge if the path validator deems this extension feasible. As per example, a path validator can be
- * used to enforce that a path connecting a source to a terminal vertex visits at least $n$ vertices.
+ * Path validator for shortest path algorithms. Shortest path algorithms typically maintain a set of
+ * partial paths which are iteratively extended until some stopping criterion is met, e.g. the
+ * target vertex is reached. A path validator can be used to enforce additional criteria as to the
+ * validity of a given path. A partial path can only be extended by another edge if the path
+ * validator deems this extension feasible. As per example, a path validator can be used to enforce
+ * that a path connecting a source to a terminal vertex visits at least $n$ vertices.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

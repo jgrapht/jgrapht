@@ -30,80 +30,77 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * NETGEN-style network generator. This generator is capable of generating bipartite
- * matching problems (both weighted and unweighted), maximum flow problems and minimum
- * cost flow problems. Note, that this generator works only with directed graphs. The
- * algorithm is originally described in: <it>D. Klingman, A. Napier, and J. Shutz,
- * "NETGEN - A program for generating large scale (un)capacitated assignment, transportation,
- * and minimum cost flow network problems", Management Science 20, 5, 814-821 (1974)</it>
+ * NETGEN-style network generator. This generator is capable of generating bipartite matching
+ * problems (both weighted and unweighted), maximum flow problems and minimum cost flow problems.
+ * Note, that this generator works only with directed graphs. The algorithm is originally described
+ * in: <it>D. Klingman, A. Napier, and J. Shutz, "NETGEN - A program for generating large scale
+ * (un)capacitated assignment, transportation, and minimum cost flow network problems", Management
+ * Science 20, 5, 814-821 (1974)</it>
  * <p>
- * This generator is not completely equivalent to the original implementation. A number
- * of changes has been made to remove bugs and ensure parameter constraints. For a complete
- * parameter description and constraints on them, see {@link NetworkGeneratorConfig}. Under
- * an assumption that this generator receives a valid config, the following properties of
- * the resulting minimum cost flow network are guaranteed:
+ * This generator is not completely equivalent to the original implementation. A number of changes
+ * has been made to remove bugs and ensure parameter constraints. For a complete parameter
+ * description and constraints on them, see {@link NetworkGeneratorConfig}. Under an assumption that
+ * this generator receives a valid config, the following properties of the resulting minimum cost
+ * flow network are guaranteed:
  * <ol>
- *     <li>Network has exactly the same number of nodes, network sources, transshipment sources,
- *     network sinks, transshipment sinks, and transshipment nodes;</li>
- *     <li>Network has exactly the same number of arcs;</li>
- *     <li>Pure network sources don't have incoming arcs; pure network sinks don't
- *     have outgoing arcs;</li>
- *     <li>Capacity lower and upper bounds are satisfied for all arcs except for a subset of
- *     skeleton arcs, for which the capacity lower bound is equal to the supply of the source
- *     arc's chain is originating from. The description of the skeleton network and source
- *     chains follows. This is done to ensure that the generated network is feasible with
- *     respect to the node supplies. You can find out which arcs belong to the skeleton network
- *     by using {@link NetworkInfo}. For example, if there is only one network source, network
- *     supply is equal to 10, minCap = 1, maxCap = 5, then some of the arcs will have the capacity
- *     equal to 10;</li>
- *     <li>If percentCapacitated is 100, then all arcs have finite capacity (which is bounded
- *     by minCap and maxCap). If percent capacitated is 0, every arc is uncapacitated;</li>
- *     <li>Cost lower and upper bound are satisfied;</li>
- *     <li>If percentWithInfCost is 100, then all arcs have infinite cost. If percentWithInfCost
- *     is 0, then every arc has finite cost (which is bounded by minCost and maxCost).</li>
- *     <li>Every source's supply is at least 1;</li>
- *     <li>Every sink's supply is at most -1 (equivalently, demand is at least 1);</li>
- *     <li>The resulting network is feasible meaning that there exist a network flow satisfying
- *     the source supply, sink demand and arc capacity constraints.</li>
+ * <li>Network has exactly the same number of nodes, network sources, transshipment sources, network
+ * sinks, transshipment sinks, and transshipment nodes;</li>
+ * <li>Network has exactly the same number of arcs;</li>
+ * <li>Pure network sources don't have incoming arcs; pure network sinks don't have outgoing
+ * arcs;</li>
+ * <li>Capacity lower and upper bounds are satisfied for all arcs except for a subset of skeleton
+ * arcs, for which the capacity lower bound is equal to the supply of the source arc's chain is
+ * originating from. The description of the skeleton network and source chains follows. This is done
+ * to ensure that the generated network is feasible with respect to the node supplies. You can find
+ * out which arcs belong to the skeleton network by using {@link NetworkInfo}. For example, if there
+ * is only one network source, network supply is equal to 10, minCap = 1, maxCap = 5, then some of
+ * the arcs will have the capacity equal to 10;</li>
+ * <li>If percentCapacitated is 100, then all arcs have finite capacity (which is bounded by minCap
+ * and maxCap). If percent capacitated is 0, every arc is uncapacitated;</li>
+ * <li>Cost lower and upper bound are satisfied;</li>
+ * <li>If percentWithInfCost is 100, then all arcs have infinite cost. If percentWithInfCost is 0,
+ * then every arc has finite cost (which is bounded by minCost and maxCost).</li>
+ * <li>Every source's supply is at least 1;</li>
+ * <li>Every sink's supply is at most -1 (equivalently, demand is at least 1);</li>
+ * <li>The resulting network is feasible meaning that there exist a network flow satisfying the
+ * source supply, sink demand and arc capacity constraints.</li>
  * </ol>
- * Note, that transshipment sources and transshipment sinks can have incoming and outgoing
- * arcs respectively, but this property is optional.
+ * Note, that transshipment sources and transshipment sinks can have incoming and outgoing arcs
+ * respectively, but this property is optional.
  * <p>
- * The maximum flow networks, that are generated by this algorithm, are guaranteed to have
- * following properties:
+ * The maximum flow networks, that are generated by this algorithm, are guaranteed to have following
+ * properties:
  * <ol>
- *     <li>Properties 1-5 are equivalent to the properties of the generated minimum cost
- *     flow networks;</li>
- *     <li>The maximum flow is <i>greater that or equal to</i> the value of the total
- *     supply specified in the network config.</li>
+ * <li>Properties 1-5 are equivalent to the properties of the generated minimum cost flow
+ * networks;</li>
+ * <li>The maximum flow is <i>greater that or equal to</i> the value of the total supply specified
+ * in the network config.</li>
  * </ol>
  * <p>
  * The bipartite matching problems, that are generated by this algorithm, are guaranteed to
  * following properties:
  * <ol>
- *     <li>Properties 1, 2, 6, 7 are equivalent to the properties of the generated minimum
- *     cost flow networks;</li>
- *     <li>For the generated problem, there exist a perfect matching meaning that every vertex
- *     can be matched.</li>
+ * <li>Properties 1, 2, 6, 7 are equivalent to the properties of the generated minimum cost flow
+ * networks;</li>
+ * <li>For the generated problem, there exist a perfect matching meaning that every vertex can be
+ * matched.</li>
  * </ol>
  * <p>
- * Now a brief description of the algorithm will be provided. The generator begins by
- * distributing supply among network sources. Every source gets at least 1 unit of supply.
- * After that, approximately 60% of transshipment nodes are evenly separated between sources.
- * For every source, an initial chain is built using these transshipment nodes. A chain is
- * effectively a path. Remaining 40% of transshipment nodes are randomly distributed among
- * source chains.
+ * Now a brief description of the algorithm will be provided. The generator begins by distributing
+ * supply among network sources. Every source gets at least 1 unit of supply. After that,
+ * approximately 60% of transshipment nodes are evenly separated between sources. For every source,
+ * an initial chain is built using these transshipment nodes. A chain is effectively a path.
+ * Remaining 40% of transshipment nodes are randomly distributed among source chains.
  * <p>
- * Now every chain has to be connected to at least one sink and every sink has to be connected
- * to at least on chain. For every chain a random number of arcs is generated. This number is at
- * least 1. The total number of generated arcs is max(sourceNum, sinkNum). Every chain is
- * connected to random sinks such that above constraints are satisfied. The network source
- * supply is distributed among network sinks such that every sink received at least 1 unit
- * of supply (with negative sign).
+ * Now every chain has to be connected to at least one sink and every sink has to be connected to at
+ * least on chain. For every chain a random number of arcs is generated. This number is at least 1.
+ * The total number of generated arcs is max(sourceNum, sinkNum). Every chain is connected to random
+ * sinks such that above constraints are satisfied. The network source supply is distributed among
+ * network sinks such that every sink received at least 1 unit of supply (with negative sign).
  * <p>
- * After the skeleton network is generated, the network is guaranteed to be feasible. The
- * remaining arcs are randomly distributed between remaining pairs of vertices. The algorithm
- * tries to distribute them evenly to avoid large arc clusters.
+ * After the skeleton network is generated, the network is guaranteed to be feasible. The remaining
+ * arcs are randomly distributed between remaining pairs of vertices. The algorithm tries to
+ * distribute them evenly to avoid large arc clusters.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -111,7 +108,8 @@ import java.util.stream.IntStream;
  * @see NetworkGeneratorConfig
  * @see NetworkInfo
  */
-public class NetworkGenerator<V, E> {
+public class NetworkGenerator<V, E>
+{
 
     /**
      * Upper bound on the number of nodes in the network this generator can work with.
@@ -126,8 +124,8 @@ public class NetworkGenerator<V, E> {
      */
     public static final int MAX_ARC_NUM = 2 * 1000 * 1000 * 1000;
     /**
-     * Upper bound on the arc capacities and costs values in the network this
-     * generator can work with.
+     * Upper bound on the arc capacities and costs values in the network this generator can work
+     * with.
      */
     public static final int CAPACITY_COST_BOUND = 2 * 1000 * 1000 * 1000;
 
@@ -150,16 +148,15 @@ public class NetworkGenerator<V, E> {
     private NetworkInfo<V, E> networkInfo;
 
     /**
-     * Network nodes stored in a list. Nodes of the same type are located in
-     * the continuous segments. There are 5 segments in this list:
+     * Network nodes stored in a list. Nodes of the same type are located in the continuous
+     * segments. There are 5 segments in this list:
      * <p>
      * [ pureSources | tSources | tNodes | tSinks | pureSinks ]
      * <p>
-     * - [ 0, pureSourceNum )                                    - pure source nodes
-     * - [ pureSourceNum, sourceNum )                            - transshipment source nodes
-     * - [ sourceNum, sourceNum + transshipNodeNum )             - transshipment nodes
-     * - [ sourceNum + transshipNodeNum, nodeNum - pureSinkNum ) - transshipment sink nodes
-     * - [ nodeNum - pureSinkNum, nodeNum )                      - pure sink nodes
+     * - [ 0, pureSourceNum ) - pure source nodes - [ pureSourceNum, sourceNum ) - transshipment
+     * source nodes - [ sourceNum, sourceNum + transshipNodeNum ) - transshipment nodes - [
+     * sourceNum + transshipNodeNum, nodeNum - pureSinkNum ) - transshipment sink nodes - [ nodeNum
+     * - pureSinkNum, nodeNum ) - pure sink nodes
      */
     private List<Node> nodes;
     /**
@@ -185,15 +182,15 @@ public class NetworkGenerator<V, E> {
      */
     private long source2TSourceUB;
     /**
-     * Maximum number of arcs a network can contain between source nodes and t-nodes.
-     * This value is decreased during skeleton network generation whenever an arc
-     * between corresponding pair of nodes is generated.
+     * Maximum number of arcs a network can contain between source nodes and t-nodes. This value is
+     * decreased during skeleton network generation whenever an arc between corresponding pair of
+     * nodes is generated.
      */
     private long source2TNodeUB;
     /**
-     * Maximum number of arcs a network can contain between source nodes and sink nodes.
-     * This value is decreased during skeleton network generation whenever an arc
-     * between corresponding pair of nodes is generated.
+     * Maximum number of arcs a network can contain between source nodes and sink nodes. This value
+     * is decreased during skeleton network generation whenever an arc between corresponding pair of
+     * nodes is generated.
      */
     private long source2SinkUB;
 
@@ -202,15 +199,14 @@ public class NetworkGenerator<V, E> {
      */
     private long tNode2TSourceUB;
     /**
-     * Maximum number of arcs a network can contain between t-nodes.
-     * This value is decreased during skeleton network generation whenever an arc
-     * between corresponding pair of nodes is generated.
+     * Maximum number of arcs a network can contain between t-nodes. This value is decreased during
+     * skeleton network generation whenever an arc between corresponding pair of nodes is generated.
      */
     private long tNode2TNodeUB;
     /**
-     * Maximum number of arcs a network can contain between t-nodes and sink nodes.
-     * This value is decreased during skeleton network generation whenever an arc
-     * between corresponding pair of nodes is generated.
+     * Maximum number of arcs a network can contain between t-nodes and sink nodes. This value is
+     * decreased during skeleton network generation whenever an arc between corresponding pair of
+     * nodes is generated.
      */
     private long tNode2SinkUB;
 
@@ -228,98 +224,109 @@ public class NetworkGenerator<V, E> {
     private long tSink2SinkUB;
 
     /**
-     * Creates a new network generator using specified {@code config}. The created
-     * generator uses random seed for the random number generator. Thus the code
-     * using this generator won't produce the same networks between different
-     * invocations.
+     * Creates a new network generator using specified {@code config}. The created generator uses
+     * random seed for the random number generator. Thus the code using this generator won't produce
+     * the same networks between different invocations.
      *
      * @param config the network configuration for this generator.
      */
-    public NetworkGenerator(NetworkGeneratorConfig config) {
+    public NetworkGenerator(NetworkGeneratorConfig config)
+    {
         this(config, System.nanoTime());
     }
 
     /**
-     * Creates a new network generator using specified {@code config} and {@code seed}.
-     * As the seed for the random number generator is fixed, the code using this
-     * generator will produce the same networks between different invocations.
+     * Creates a new network generator using specified {@code config} and {@code seed}. As the seed
+     * for the random number generator is fixed, the code using this generator will produce the same
+     * networks between different invocations.
      *
      * @param config the network configuration for this generator.
-     * @param seed   the seed for the random number generator.
+     * @param seed the seed for the random number generator.
      */
-    public NetworkGenerator(NetworkGeneratorConfig config, long seed) {
+    public NetworkGenerator(NetworkGeneratorConfig config, long seed)
+    {
         this(config, new Random(seed));
     }
 
     /**
-     * Creates a new network generator using specified {@code config} and random
-     * number generator {@code rng}. The network generated by this algorithm depends
-     * entirely on the random number sequences produced by {@code rng} given a fixed
-     * network config.
+     * Creates a new network generator using specified {@code config} and random number generator
+     * {@code rng}. The network generated by this algorithm depends entirely on the random number
+     * sequences produced by {@code rng} given a fixed network config.
      *
      * @param config the network configuration for this generator.
-     * @param rng    the random number generator for this algorithm.
+     * @param rng the random number generator for this algorithm.
      */
-    public NetworkGenerator(NetworkGeneratorConfig config, Random rng) {
+    public NetworkGenerator(NetworkGeneratorConfig config, Random rng)
+    {
         this.config = config;
         this.rng = rng;
     }
 
     /**
-     * Generates a bipartite matching problem satisfying the parameters specified in the
-     * config provided to this generator. The provided network config must specify a
-     * bipartite matching problem, otherwise an exception will be throws by this method.
-     * For a description of the bipartite matching problem, see {@link BipartiteMatchingProblem}.
+     * Generates a bipartite matching problem satisfying the parameters specified in the config
+     * provided to this generator. The provided network config must specify a bipartite matching
+     * problem, otherwise an exception will be throws by this method. For a description of the
+     * bipartite matching problem, see {@link BipartiteMatchingProblem}.
      *
      * @param graph the target graph which will represent the generated problem.
      * @return generated bipartite matching problem.
      */
-    public BipartiteMatchingProblem<V, E> generateBipartiteMatchingProblem(Graph<V, E> graph) {
+    public BipartiteMatchingProblem<V, E> generateBipartiteMatchingProblem(Graph<V, E> graph)
+    {
         if (!config.isAssignmentProblem()) {
-            throw new IllegalArgumentException("Input config doesn't specify a bipartite matching problem");
+            throw new IllegalArgumentException(
+                "Input config doesn't specify a bipartite matching problem");
         }
         GraphTests.requireDirected(graph);
 
         generate(graph);
 
-        return new BipartiteMatchingProblem.BipartiteMatchingProblemImpl<>(graph, new HashSet<>(networkInfo.getSources()), new HashSet<>(networkInfo.getSinks()), e -> (double) costMap.get(e), config.isCostWeighted());
+        return new BipartiteMatchingProblem.BipartiteMatchingProblemImpl<>(
+            graph, new HashSet<>(networkInfo.getSources()), new HashSet<>(networkInfo.getSinks()),
+            e -> (double) costMap.get(e), config.isCostWeighted());
     }
 
     /**
-     * Generates a maximum flow problem satisfying the parameters specified in the
-     * config provided to this generator. The provided network config must specify a
-     * maximum flow problem, otherwise an exception will be throws by this method.
-     * For a description of the maximum flow problem, see {@link MaximumFlowProblem}.
+     * Generates a maximum flow problem satisfying the parameters specified in the config provided
+     * to this generator. The provided network config must specify a maximum flow problem, otherwise
+     * an exception will be throws by this method. For a description of the maximum flow problem,
+     * see {@link MaximumFlowProblem}.
      *
      * @param graph the target graph which will represent the generated problem.
      * @return generated maximum flow problem.
      */
-    public MaximumFlowProblem<V, E> generateMaxFlowProblem(Graph<V, E> graph) {
+    public MaximumFlowProblem<V, E> generateMaxFlowProblem(Graph<V, E> graph)
+    {
         if (!config.isMaxFlowProblem()) {
-            throw new IllegalArgumentException("Input config doesn't specify a maximum flow problem");
+            throw new IllegalArgumentException(
+                "Input config doesn't specify a maximum flow problem");
         }
         GraphTests.requireDirected(graph);
 
         generate(graph);
 
         // calling network info to get unmodifiable source and sink lists
-        return new MaximumFlowProblem.MaximumFlowProblemImpl<>(graph, new HashSet<>(networkInfo.getSources()), new HashSet<>(networkInfo.getSinks()), e -> (double) capacityMap.get(e));
+        return new MaximumFlowProblem.MaximumFlowProblemImpl<>(
+            graph, new HashSet<>(networkInfo.getSources()), new HashSet<>(networkInfo.getSinks()),
+            e -> (double) capacityMap.get(e));
     }
 
     /**
-     * Generates a minimum cost flow problem satisfying the parameters specified in the
-     * config provided to this generator. For a description of the minimum cost flow
-     * problem, see {@link MinimumCostFlowProblem}.
+     * Generates a minimum cost flow problem satisfying the parameters specified in the config
+     * provided to this generator. For a description of the minimum cost flow problem, see
+     * {@link MinimumCostFlowProblem}.
      *
      * @param graph the target graph which will represent the generated problem.
      * @return generated minimum cost flow problem.
      */
-    public MinimumCostFlowProblem<V, E> generateMinimumCostFlowProblem(Graph<V, E> graph) {
+    public MinimumCostFlowProblem<V, E> generateMinimumCostFlowProblem(Graph<V, E> graph)
+    {
         GraphTests.requireDirected(graph);
 
         generate(graph);
 
-        return new MinimumCostFlowProblem.MinimumCostFlowProblemImpl<>(graph, v -> supplyMap.getOrDefault(v, 0), e -> capacityMap.get(e), e -> costMap.get(e));
+        return new MinimumCostFlowProblem.MinimumCostFlowProblemImpl<>(
+            graph, v -> supplyMap.getOrDefault(v, 0), e -> capacityMap.get(e), e -> costMap.get(e));
     }
 
     /**
@@ -329,7 +336,8 @@ public class NetworkGenerator<V, E> {
      *
      * @param graph the target graph which will represent the generated problem.
      */
-    private void generate(Graph<V, E> graph) {
+    private void generate(Graph<V, E> graph)
+    {
         init(graph);
 
         createSupply();
@@ -345,13 +353,13 @@ public class NetworkGenerator<V, E> {
     }
 
     /**
-     * Initializes internal datastructures. This method gets called during every invocation
-     * of the {@link NetworkGenerator#generate(Graph)} to clear information from previous
-     * invocation.
+     * Initializes internal datastructures. This method gets called during every invocation of the
+     * {@link NetworkGenerator#generate(Graph)} to clear information from previous invocation.
      *
      * @param graph the target graph which will represent the generated problem.
      */
-    private void init(Graph<V, E> graph) {
+    private void init(Graph<V, E> graph)
+    {
         this.graph = Objects.requireNonNull(graph);
 
         this.nodes = new ArrayList<>();
@@ -385,10 +393,11 @@ public class NetworkGenerator<V, E> {
     /**
      * Creates {@code num} nodes of the specified {@code type}.
      *
-     * @param num  the number of nodes to generate.
+     * @param num the number of nodes to generate.
      * @param type the type of nodes to generate.
      */
-    private void createNodes(int num, NodeType type) {
+    private void createNodes(int num, NodeType type)
+    {
         for (int i = 0; i < num; i++) {
             V vertex = graph.addVertex();
             Node node = new Node(vertex, type);
@@ -400,10 +409,11 @@ public class NetworkGenerator<V, E> {
     /**
      * Distributes supply units among source nodes.
      * <p>
-     * The precondition for this method is that totalSupply >= max(sourceNum, sinkNum).
-     * This method guarantees that every sourceNode received at least one unit of supply.
+     * The precondition for this method is that totalSupply >= max(sourceNum, sinkNum). This method
+     * guarantees that every sourceNode received at least one unit of supply.
      */
-    private void createSupply() {
+    private void createSupply()
+    {
         // supply per source is guaranteed to be at least 1
         int supplyPerSource = config.getTotalSupply() / config.getSourceNum();
         for (int sourceId = 0; sourceId < config.getSourceNum(); sourceId++) {
@@ -431,21 +441,24 @@ public class NetworkGenerator<V, E> {
     /**
      * Initializes source chains by adding source nodes as 1-st nodes of their chains.
      */
-    private void initChains() {
+    private void initChains()
+    {
         for (Node node : getSources()) {
             node.chainNodes.add(node);
         }
     }
 
     /**
-     * Generates source chains using all t-nodes. The generated chains are disjoint
-     * and not yet connected to sinks.
+     * Generates source chains using all t-nodes. The generated chains are disjoint and not yet
+     * connected to sinks.
      */
-    private void generateChains() {
+    private void generateChains()
+    {
         int transshipmentNodeNum = config.getTransshipNodeNum();
         int sixtyPercent = (6 * transshipmentNodeNum) / 10;
 
-        ElementsSequenceGenerator<Node> tNodesGenerator = new ElementsSequenceGenerator<>(getTransshipNodes(), rng);
+        ElementsSequenceGenerator<Node> tNodesGenerator =
+            new ElementsSequenceGenerator<>(getTransshipNodes(), rng);
 
         // generating chains from source nodes using ~60% of pure transshipment nodes
         for (int i = 0, chainSourceId = 0; i < sixtyPercent; i++, chainSourceId++) {
@@ -469,30 +482,30 @@ public class NetworkGenerator<V, E> {
     }
 
     /**
-     * Connects generated chains to sinks and distributes network supply among sinks.
-     * This method guarantees that:
+     * Connects generated chains to sinks and distributes network supply among sinks. This method
+     * guarantees that:
      * <p>
-     * 1. Every source chain is connected to at least one sink.
-     * 2. Every sink is connected to at least one source chain.
-     * 3. Every sink's supply is at most -1 (or its demand is at least 1).
+     * 1. Every source chain is connected to at least one sink. 2. Every sink is connected to at
+     * least one source chain. 3. Every sink's supply is at most -1 (or its demand is at least 1).
      */
-    private void connectChainsToSinks() {
+    private void connectChainsToSinks()
+    {
         int remainingArcs = config.getArcNum() - graph.edgeSet().size();
         assert remainingArcs >= config.getSinkNum();
 
         /*
          * First, we have to compute the number of arcs to use to connect source chains to sinks.
          * Our "guess" is 2 * max(sourceNum, sinkNum). At the same time we have to take the
-         * following upper bounds into account:
-         * 1. this value is bounded by #remaining_arcs from above.
-         * 2. this value is bounded by source2SinkUB + tNode2SinkUB from above.
+         * following upper bounds into account: 1. this value is bounded by #remaining_arcs from
+         * above. 2. this value is bounded by source2SinkUB + tNode2SinkUB from above.
          *
-         * We have to take one more bound into account to ensure that every sink's demand is
-         * at least 1. A source's supply is distributed among sinks it's connected to such that
-         * every sink get's at least 1 unit of demand. Thus, for every source we don't generate
-         * more arcs that the number of supply units it has.
+         * We have to take one more bound into account to ensure that every sink's demand is at
+         * least 1. A source's supply is distributed among sinks it's connected to such that every
+         * sink get's at least 1 unit of demand. Thus, for every source we don't generate more arcs
+         * that the number of supply units it has.
          */
-        int chainToSinkArcs = Math.min(remainingArcs, 2 * Math.max(config.getSourceNum(), config.getSinkNum()));
+        int chainToSinkArcs =
+            Math.min(remainingArcs, 2 * Math.max(config.getSourceNum(), config.getSinkNum()));
         int chainToSinkArcUB = (int) Math.min(source2SinkUB + tNode2SinkUB, MAX_ARC_NUM);
         chainToSinkArcs = Math.min(chainToSinkArcUB, chainToSinkArcs);
 
@@ -511,13 +524,14 @@ public class NetworkGenerator<V, E> {
         sinkDistributor.addLowerBound(source -> 1);
         sinkDistributor.addUpperBound(source -> source.supply);
         sinkDistributor.addUpperBound(source -> config.getSinkNum());
-        List<Integer> sinksPerSourceDist = sinkDistributor.getDistribution(sources, chainToSinkArcs);
+        List<Integer> sinksPerSourceDist =
+            sinkDistributor.getDistribution(sources, chainToSinkArcs);
 
         List<Node> sinks = getSinks();
         /*
-         * Generate the assigned number of source chain to sink arcs from every source.
-         * This process cycles through the sink list ensuring that every sink gets at
-         * least or arc from some source chain.
+         * Generate the assigned number of source chain to sink arcs from every source. This process
+         * cycles through the sink list ensuring that every sink gets at least or arc from some
+         * source chain.
          */
         for (int i = 0, sinkId = 0; i < sources.size(); i++) {
             Node chainSource = sources.get(i);
@@ -533,13 +547,14 @@ public class NetworkGenerator<V, E> {
             }
 
             /*
-             * Randomly distribute supply units among target sinks such that
-             * every sink gets at least 1 unit of demand.
+             * Randomly distribute supply units among target sinks such that every sink gets at
+             * least 1 unit of demand.
              */
             Distributor<Node> sinkSupplyDistributor = new Distributor<>(rng);
             sinkSupplyDistributor.addLowerBound(sink -> 1);
 
-            List<Integer> supplyDist = sinkSupplyDistributor.getDistribution(chainSinks, chainSource.supply);
+            List<Integer> supplyDist =
+                sinkSupplyDistributor.getDistribution(chainSinks, chainSource.supply);
 
             for (int j = 0; j < sinksPerSource; j++) {
                 Node sink = chainSinks.get(j);
@@ -549,7 +564,9 @@ public class NetworkGenerator<V, E> {
                 Node arcTail = chainSource.chainNodes.get(arcTailIndex);
 
                 addSkeletonArc(chainSource, arcTail, sink);
-                supplyMap.put(sink.graphVertex, supplyMap.getOrDefault(sink.graphVertex, 0) - sinkSupply);
+                supplyMap
+                    .put(
+                        sink.graphVertex, supplyMap.getOrDefault(sink.graphVertex, 0) - sinkSupply);
             }
         }
 
@@ -558,7 +575,8 @@ public class NetworkGenerator<V, E> {
     /**
      * Generates remaining arcs to satisfy the arcNum constraint.
      */
-    private void addAllRemainingArcs() {
+    private void addAllRemainingArcs()
+    {
 
         final int remainingArcs = config.getArcNum() - graph.edgeSet().size();
         assert remainingArcs >= 0;
@@ -566,9 +584,11 @@ public class NetworkGenerator<V, E> {
         /*
          * Upper bounds for every class of arcs.
          */
-        List<Long> upperBounds = new ArrayList<>(List.of(source2TSourceUB, source2TNodeUB, source2SinkUB,
-                tNode2TSourceUB, tNode2TNodeUB, tNode2SinkUB,
-                tSink2TSourceUB, tSink2TNodeUB, tSink2SinkUB));
+        List<Long> upperBounds = new ArrayList<>(
+            List
+                .of(
+                    source2TSourceUB, source2TNodeUB, source2SinkUB, tNode2TSourceUB, tNode2TNodeUB,
+                    tNode2SinkUB, tSink2TSourceUB, tSink2TNodeUB, tSink2SinkUB));
 
         long classBoundsSum = upperBounds.stream().mapToLong(l -> l).sum();
         if (classBoundsSum == 0) {
@@ -576,20 +596,23 @@ public class NetworkGenerator<V, E> {
         }
 
         /*
-         * Distribute remaining arcs among every arc class. Upper bounds of the number of arcs
-         * for every class are taken into account. Additionally, as for large networks these
-         * upperbounds are large, we introduce weight bounds to distribute arcs evenly
-         * among arc classes.
+         * Distribute remaining arcs among every arc class. Upper bounds of the number of arcs for
+         * every class are taken into account. Additionally, as for large networks these upperbounds
+         * are large, we introduce weight bounds to distribute arcs evenly among arc classes.
          */
         Distributor<Integer> arcNumDistributor = new Distributor<>(rng);
-        arcNumDistributor.addUpperBound(classId -> (int) Math.min(upperBounds.get(classId), MAX_ARC_NUM));
+        arcNumDistributor
+            .addUpperBound(classId -> (int) Math.min(upperBounds.get(classId), MAX_ARC_NUM));
         arcNumDistributor.addUpperBound(classId -> {
             double classWeight = (double) upperBounds.get(classId) / classBoundsSum;
             int weightBound = (int) (2.0 * classWeight * remainingArcs);
             return weightBound + 1; // make this bound positive
         });
 
-        List<Integer> arcNumDistribution = arcNumDistributor.getDistribution(IntStream.range(0, upperBounds.size()).boxed().collect(Collectors.toList()), remainingArcs);
+        List<Integer> arcNumDistribution = arcNumDistributor
+            .getDistribution(
+                IntStream.range(0, upperBounds.size()).boxed().collect(Collectors.toList()),
+                remainingArcs);
 
         generateArcs(getSources(), getTransshipSources(), arcNumDistribution.get(0));
         generateArcs(getSources(), getTransshipNodes(), arcNumDistribution.get(1));
@@ -610,16 +633,18 @@ public class NetworkGenerator<V, E> {
      * Generates {@code arcsToGenerate} number of arcs between nodes from {@code tails} and
      * {@code heads}. A node can belong to both lists at the same time.
      *
-     * @param tails          list of possible arc tails.
-     * @param heads          list of possible arc heads.
+     * @param tails list of possible arc tails.
+     * @param heads list of possible arc heads.
      * @param arcsToGenerate number of arcs to generate
      */
-    private void generateArcs(List<Node> tails, List<Node> heads, int arcsToGenerate) {
+    private void generateArcs(List<Node> tails, List<Node> heads, int arcsToGenerate)
+    {
 
         // For every tail, compute an upper bound on the number arcs it's
         // possible to generate from it.
         Set<Node> headsSet = new HashSet<>(heads);
-        List<Integer> outDegrees = tails.stream().map(node -> getPossibleArcNum(node, headsSet)).collect(Collectors.toList());
+        List<Integer> outDegrees = tails
+            .stream().map(node -> getPossibleArcNum(node, headsSet)).collect(Collectors.toList());
         long degreeSum = outDegrees.stream().mapToLong(i -> i).sum();
 
         // Add weight bounds as well to make the distribution more uniform.
@@ -631,7 +656,10 @@ public class NetworkGenerator<V, E> {
             return tailArcWeightBound + 1;
         });
 
-        List<Integer> arcNumDistribution = arcNumDistributor.getDistribution(IntStream.range(0, tails.size()).boxed().collect(Collectors.toList()), arcsToGenerate);
+        List<Integer> arcNumDistribution = arcNumDistributor
+            .getDistribution(
+                IntStream.range(0, tails.size()).boxed().collect(Collectors.toList()),
+                arcsToGenerate);
 
         // For every tail, generate the assigned number of arcs.
         for (int i = 0; i < tails.size(); i++) {
@@ -639,7 +667,8 @@ public class NetworkGenerator<V, E> {
             Node tail = tails.get(i);
             int tailArcNum = arcNumDistribution.get(i);
 
-            ElementsSequenceGenerator<Node> headGenerator = new ElementsSequenceGenerator<>(heads, rng);
+            ElementsSequenceGenerator<Node> headGenerator =
+                new ElementsSequenceGenerator<>(heads, rng);
             while (tailArcNum > 0 && headGenerator.hasNext()) {
                 Node currentHead = headGenerator.next();
                 if (isValidArc(tail, currentHead)) {
@@ -652,20 +681,22 @@ public class NetworkGenerator<V, E> {
     }
 
     /**
-     * Returns the number of arcs it is possible to generate from {@code node} to the
-     * {@code nodes} set.
+     * Returns the number of arcs it is possible to generate from {@code node} to the {@code nodes}
+     * set.
      *
-     * @param node  an arc tail.
+     * @param node an arc tail.
      * @param nodes set of possible arc heads.
      * @return the computed number of arcs it's possible to generate.
      */
-    private int getPossibleArcNum(Node node, Set<Node> nodes) {
+    private int getPossibleArcNum(Node node, Set<Node> nodes)
+    {
         int possibleArcNum = nodes.size();
         if (nodes.contains(node)) {
             possibleArcNum--;
         }
         for (E arc : graph.outgoingEdgesOf(node.graphVertex)) {
-            Node arcHead = graphVertexMapping.get(Graphs.getOppositeVertex(graph, arc, node.graphVertex));
+            Node arcHead =
+                graphVertexMapping.get(Graphs.getOppositeVertex(graph, arc, node.graphVertex));
             if (nodes.contains(arcHead)) {
                 possibleArcNum--;
             }
@@ -674,12 +705,13 @@ public class NetworkGenerator<V, E> {
     }
 
     /**
-     * Returns the network information computed for the last generated problem. Call this
-     * method only after the first invocation of any generating method.
+     * Returns the network information computed for the last generated problem. Call this method
+     * only after the first invocation of any generating method.
      *
      * @return network information.
      */
-    public NetworkInfo<V, E> getNetworkInfo() {
+    public NetworkInfo<V, E> getNetworkInfo()
+    {
         return networkInfo;
     }
 
@@ -690,19 +722,21 @@ public class NetworkGenerator<V, E> {
      * @param head arc head.
      * @return {@code true} if it's possible to add an arc, {@code false} otherwise.
      */
-    private boolean isValidArc(Node tail, Node head) {
+    private boolean isValidArc(Node tail, Node head)
+    {
         return tail != head && !graph.containsEdge(tail.graphVertex, head.graphVertex);
     }
 
     /**
-     * Adds an arc between the {@code tail} and {@code head}. The added arc is registered
-     * to update upper bounds on the number of possible arcs to generate.
+     * Adds an arc between the {@code tail} and {@code head}. The added arc is registered to update
+     * upper bounds on the number of possible arcs to generate.
      *
      * @param chainSource the source of the chain.
-     * @param tail        arc tail.
-     * @param head        arc head.
+     * @param tail arc tail.
+     * @param head arc head.
      */
-    private void addSkeletonArc(Node chainSource, Node tail, Node head) {
+    private void addSkeletonArc(Node chainSource, Node tail, Node head)
+    {
         assert isValidArc(tail, head);
         E arc = graph.addEdge(tail.graphVertex, head.graphVertex);
         capacityMap.put(arc, Math.max(getCapacity(), chainSource.supply));
@@ -721,7 +755,8 @@ public class NetworkGenerator<V, E> {
      * @param tail arc tail.
      * @param head arc head.
      */
-    private void addArc(Node tail, Node head) {
+    private void addArc(Node tail, Node head)
+    {
         assert isValidArc(tail, head);
         E edge = graph.addEdge(tail.graphVertex, head.graphVertex);
 
@@ -730,46 +765,47 @@ public class NetworkGenerator<V, E> {
     }
 
     /**
-     * Registers an arc between {@code tail} and {@code head} by decreasing one of the
-     * upper bounds by 1.
+     * Registers an arc between {@code tail} and {@code head} by decreasing one of the upper bounds
+     * by 1.
      *
      * @param tail arc tail.
      * @param head arc head.
      */
-    private void registerSkeletonArc(Node tail, Node head) {
+    private void registerSkeletonArc(Node tail, Node head)
+    {
         switch (tail.type) {
-            case PURE_SOURCE:
-            case TRANSSHIP_SOURCE:
-                switch (head.type) {
-                    case TRANSSHIP_NODE:
-                        source2TNodeUB--;
-                        break;
-                    case TRANSSHIP_SINK:
-                    case PURE_SINK:
-                        source2SinkUB--;
-                        break;
-                    default:
-                        // should never happen
-                        throw new RuntimeException();
-                }
-                break;
+        case PURE_SOURCE:
+        case TRANSSHIP_SOURCE:
+            switch (head.type) {
             case TRANSSHIP_NODE:
-                switch (head.type) {
-                    case TRANSSHIP_NODE:
-                        tNode2TNodeUB--;
-                        break;
-                    case TRANSSHIP_SINK:
-                    case PURE_SINK:
-                        tNode2SinkUB--;
-                        break;
-                    default:
-                        // should never happen
-                        throw new RuntimeException();
-                }
+                source2TNodeUB--;
+                break;
+            case TRANSSHIP_SINK:
+            case PURE_SINK:
+                source2SinkUB--;
                 break;
             default:
                 // should never happen
                 throw new RuntimeException();
+            }
+            break;
+        case TRANSSHIP_NODE:
+            switch (head.type) {
+            case TRANSSHIP_NODE:
+                tNode2TNodeUB--;
+                break;
+            case TRANSSHIP_SINK:
+            case PURE_SINK:
+                tNode2SinkUB--;
+                break;
+            default:
+                // should never happen
+                throw new RuntimeException();
+            }
+            break;
+        default:
+            // should never happen
+            throw new RuntimeException();
         }
     }
 
@@ -778,7 +814,8 @@ public class NetworkGenerator<V, E> {
      *
      * @return the generated arc capacity.
      */
-    private int getCapacity() {
+    private int getCapacity()
+    {
         int percent = generateBetween(1, 100);
         if (percent <= config.getPercentCapacitated()) {
             return generateBetween(config.getMinCap(), config.getMaxCap());
@@ -792,7 +829,8 @@ public class NetworkGenerator<V, E> {
      *
      * @return the generated arc cost.
      */
-    private int getCost() {
+    private int getCost()
+    {
         int percent = generateBetween(1, 100);
         if (percent <= config.getPercentWithInfCost()) {
             return Integer.MAX_VALUE;
@@ -801,19 +839,21 @@ public class NetworkGenerator<V, E> {
         }
     }
 
-    private int generatePositiveRandom(int boundInclusive) {
+    private int generatePositiveRandom(int boundInclusive)
+    {
         return rng.nextInt(boundInclusive) + 1;
     }
 
     /**
-     * Generates a random number using random number generator between {@code startInclusive}
-     * and {@code endInclusive}.
+     * Generates a random number using random number generator between {@code startInclusive} and
+     * {@code endInclusive}.
      *
      * @param startInclusive lower bound
-     * @param endInclusive   upper bound
+     * @param endInclusive upper bound
      * @return the generated number
      */
-    private int generateBetween(int startInclusive, int endInclusive) {
+    private int generateBetween(int startInclusive, int endInclusive)
+    {
         return rng.nextInt(endInclusive - startInclusive + 1) + startInclusive;
     }
 
@@ -823,7 +863,8 @@ public class NetworkGenerator<V, E> {
      * @param endExclusive upper bound.
      * @return the generated number.
      */
-    private int generateRandom(int endExclusive) {
+    private int generateRandom(int endExclusive)
+    {
         return rng.nextInt(endExclusive);
     }
 
@@ -832,7 +873,8 @@ public class NetworkGenerator<V, E> {
      *
      * @return a list containing generated transshipment sources.
      */
-    private List<Node> getTransshipSources() {
+    private List<Node> getTransshipSources()
+    {
         return nodes.subList(config.getPureSourceNum(), config.getSourceNum());
     }
 
@@ -841,7 +883,8 @@ public class NetworkGenerator<V, E> {
      *
      * @return a list containing generated sources.
      */
-    private List<Node> getSources() {
+    private List<Node> getSources()
+    {
         return nodes.subList(0, config.getSourceNum());
     }
 
@@ -850,8 +893,10 @@ public class NetworkGenerator<V, E> {
      *
      * @return a list containing generated t-nodes.
      */
-    private List<Node> getTransshipNodes() {
-        return nodes.subList(config.getSourceNum(), config.getSourceNum() + config.getTransshipNodeNum());
+    private List<Node> getTransshipNodes()
+    {
+        return nodes
+            .subList(config.getSourceNum(), config.getSourceNum() + config.getTransshipNodeNum());
     }
 
     /**
@@ -859,8 +904,12 @@ public class NetworkGenerator<V, E> {
      *
      * @return a list containing generated transshipment sinks.
      */
-    private List<Node> getTransshipSinks() {
-        return nodes.subList(config.getSourceNum() + config.getTransshipNodeNum(), nodes.size() - config.getPureSinkNum());
+    private List<Node> getTransshipSinks()
+    {
+        return nodes
+            .subList(
+                config.getSourceNum() + config.getTransshipNodeNum(),
+                nodes.size() - config.getPureSinkNum());
     }
 
     /**
@@ -868,37 +917,53 @@ public class NetworkGenerator<V, E> {
      *
      * @return a list containing generated sinks.
      */
-    private List<Node> getSinks() {
+    private List<Node> getSinks()
+    {
         return nodes.subList(config.getSourceNum() + config.getTransshipNodeNum(), nodes.size());
     }
 
     /**
      * Enum specifying the nodes type.
      */
-    private enum NodeType {
-        PURE_SOURCE {
+    private enum NodeType
+    {
+        PURE_SOURCE
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "Pure source";
             }
-        }, TRANSSHIP_SOURCE {
+        },
+        TRANSSHIP_SOURCE
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "Transship source";
             }
-        }, TRANSSHIP_NODE {
+        },
+        TRANSSHIP_NODE
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "Transship node";
             }
-        }, TRANSSHIP_SINK {
+        },
+        TRANSSHIP_SINK
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "Transship sink";
             }
-        }, PURE_SINK {
+        },
+        PURE_SINK
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "Pure sink";
             }
         };
@@ -911,10 +976,11 @@ public class NetworkGenerator<V, E> {
     }
 
     /**
-     * Internal representation of network nodes. This class is used to store auxiliary
-     * information during generation process.
+     * Internal representation of network nodes. This class is used to store auxiliary information
+     * during generation process.
      */
-    private class Node {
+    private class Node
+    {
         /**
          * Graph vertex counterpart of this node.
          */
@@ -936,9 +1002,10 @@ public class NetworkGenerator<V, E> {
          * Creates a new node using {@code graphVertex} and {@code type}.
          *
          * @param graphVertex network vertex.
-         * @param type        type of this node.
+         * @param type type of this node.
          */
-        Node(V graphVertex, NodeType type) {
+        Node(V graphVertex, NodeType type)
+        {
             this.graphVertex = graphVertex;
             this.type = type;
             chainNodes = new ArrayList<>();
@@ -949,7 +1016,8 @@ public class NetworkGenerator<V, E> {
          *
          * @return the last node of this node's chain.
          */
-        Node getLastInChain() {
+        Node getLastInChain()
+        {
             return chainNodes.get(chainNodes.size() - 1);
         }
 
@@ -958,7 +1026,8 @@ public class NetworkGenerator<V, E> {
          *
          * @return the length of this node's chain.
          */
-        int getChainLength() {
+        int getChainLength()
+        {
             return chainNodes.size();
         }
 
@@ -966,7 +1035,8 @@ public class NetworkGenerator<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
+        public String toString()
+        {
             return String.format("{%s}: type = %s, supply = %d", graphVertex, type, supply);
         }
 

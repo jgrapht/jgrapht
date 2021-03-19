@@ -44,12 +44,16 @@ public class CHManyToManyShortestPathsTest
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
@@ -133,7 +137,7 @@ public class CHManyToManyShortestPathsTest
         Graph<Integer, DefaultWeightedEdge> graph = getMultigraph();
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED),executor)
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
                 .computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
@@ -167,7 +171,7 @@ public class CHManyToManyShortestPathsTest
         Graph<Integer, DefaultWeightedEdge> graph)
     {
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED),executor)
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
                 .computeContractionHierarchy();
         return new CHManyToManyShortestPaths<>(hierarchy);
     }

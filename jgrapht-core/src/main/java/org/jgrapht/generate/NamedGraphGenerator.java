@@ -1747,7 +1747,7 @@ public class NamedGraphGenerator<V, E>
     }
 
     // -------------Zachary's Karate Club Graph-----------//
-    
+
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Zachary%27s_karate_club">Zachary's
      * karate club Graph</a>.
@@ -1773,7 +1773,7 @@ public class NamedGraphGenerator<V, E>
         for (int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
-    
+
     // --------------Helper methods-----------------/
     private V addVertex(Graph<V, E> targetGraph, int i)
     {

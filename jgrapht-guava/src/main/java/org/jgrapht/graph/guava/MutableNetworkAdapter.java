@@ -99,12 +99,12 @@ public class MutableNetworkAdapter<V, E>
      *        is required in order to make edge source/targets be consistent.
      */
     public MutableNetworkAdapter(
-        MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, 
+        MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
         ElementOrderMethod<V> vertexOrderMethod)
     {
         super(network, vertexSupplier, edgeSupplier, vertexOrderMethod);
     }
-    
+
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
@@ -229,7 +229,7 @@ public class MutableNetworkAdapter<V, E>
             newGraph.unmodifiableEdgeSet = null;
             newGraph.network = Graphs.copyOf(this.network);
             newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);
-            
+
             return newGraph;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -293,9 +293,9 @@ public class MutableNetworkAdapter<V, E>
             E e = (E) ois.readObject();
             network.addEdge(s, t, e);
         }
-        
+
         // setup the vertex order
-        vertexOrder = createVertexOrder(vertexOrderMethod);        
+        vertexOrder = createVertexOrder(vertexOrderMethod);
     }
 
 }

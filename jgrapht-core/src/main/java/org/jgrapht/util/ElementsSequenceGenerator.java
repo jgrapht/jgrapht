@@ -22,21 +22,24 @@ import java.util.*;
 /**
  * Generates elements from the input collection in random order.
  * <p>
- * An element can be generated only once. After all elements have been generated,
- * this generator halts. At every step, an element is generated uniformly at random,
- * which means that every element has an equal probability to be generated. This
- * implementation is based on the <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">
- * Fisher-Yates algorithm</a>. The generator is unbiased meaning the every permutation is
- * equally likely.
+ * An element can be generated only once. After all elements have been generated, this generator
+ * halts. At every step, an element is generated uniformly at random, which means that every element
+ * has an equal probability to be generated. This implementation is based on the
+ * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle"> Fisher-Yates algorithm</a>.
+ * The generator is unbiased meaning the every permutation is equally likely.
  *
  * @param <T> element type
  * @author Timofey Chudakov
  */
-public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T> {
+public class ElementsSequenceGenerator<T>
+    implements
+    Iterator<T>,
+    Iterable<T>
+{
 
     /**
-     * Input elements ordered as a list. This list is being decreased in size as
-     * the elements are generated.
+     * Input elements ordered as a list. This list is being decreased in size as the elements are
+     * generated.
      */
     private List<T> elements;
     /**
@@ -49,32 +52,35 @@ public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T> {
      *
      * @param elements a collection of elements to generate elements from.
      */
-    public ElementsSequenceGenerator(Collection<T> elements) {
+    public ElementsSequenceGenerator(Collection<T> elements)
+    {
         this(elements, System.nanoTime());
     }
 
     /**
-     * Constructs a new {@link ElementsSequenceGenerator} using the specified
-     * {@code seed}. Two different generators with the same seed will produce
-     * identical sequences given that the same collection of elements is provided.
+     * Constructs a new {@link ElementsSequenceGenerator} using the specified {@code seed}. Two
+     * different generators with the same seed will produce identical sequences given that the same
+     * collection of elements is provided.
      *
      * @param elements a collection of elements to generate elements from.
      * @param seed a seed for the random number generator
      */
-    public ElementsSequenceGenerator(Collection<T> elements, long seed) {
+    public ElementsSequenceGenerator(Collection<T> elements, long seed)
+    {
         this(elements, new Random(seed));
     }
 
     /**
-     * Constructs a new {@link ElementsSequenceGenerator} using the specified random
-     * number generator {@code rng}. Two different generators will produce identical
-     * sequences from a collection of elements given that the random number generator
-     * produces the same sequence of numbers.
+     * Constructs a new {@link ElementsSequenceGenerator} using the specified random number
+     * generator {@code rng}. Two different generators will produce identical sequences from a
+     * collection of elements given that the random number generator produces the same sequence of
+     * numbers.
      *
      * @param elements a collection of elements to generate elements from.
      * @param rng a random number generator
      */
-    public ElementsSequenceGenerator(Collection<T> elements, Random rng) {
+    public ElementsSequenceGenerator(Collection<T> elements, Random rng)
+    {
         this.elements = new ArrayList<>(elements);
         this.rng = rng;
     }
@@ -83,7 +89,8 @@ public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return !elements.isEmpty();
     }
 
@@ -91,7 +98,8 @@ public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T> {
      * {@inheritDoc}
      */
     @Override
-    public T next() {
+    public T next()
+    {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -107,7 +115,8 @@ public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T> {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<T> iterator()
+    {
         return this;
     }
 }

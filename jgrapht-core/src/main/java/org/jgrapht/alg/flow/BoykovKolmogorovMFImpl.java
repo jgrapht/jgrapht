@@ -23,27 +23,28 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
 import java.util.*;
 
 /**
- * This is an implementation of the <a href="https://en.wikipedia.org/wiki/Graph_cuts_in_computer_vision#Implementation_(exact)">
- * Boykov-Kolmogorov maximum flow algorithm</a>. This algorithm is a special-purpose
- * approach to solving computer vision related maximum flow problems. The algorithm was initially
- * described in: <i>Y. Boykov and V. Kolmogorov, "An experimental comparison of min-cut/max-flow
- * algorithms for energy minimization in vision," in IEEE Transactions on Pattern Analysis and
- * Machine Intelligence, vol. 26, no. 9, pp. 1124-1137, Sept. 2004, doi: 10.1109/TPAMI.2004.60.</i>.
- * An extended description is given in: <i>Vladimir Kolmogorov. 2004. Graph based algorithms for scene
+ * This is an implementation of the
+ * <a href="https://en.wikipedia.org/wiki/Graph_cuts_in_computer_vision#Implementation_(exact)">
+ * Boykov-Kolmogorov maximum flow algorithm</a>. This algorithm is a special-purpose approach to
+ * solving computer vision related maximum flow problems. The algorithm was initially described in:
+ * <i>Y. Boykov and V. Kolmogorov, "An experimental comparison of min-cut/max-flow algorithms for
+ * energy minimization in vision," in IEEE Transactions on Pattern Analysis and Machine
+ * Intelligence, vol. 26, no. 9, pp. 1124-1137, Sept. 2004, doi: 10.1109/TPAMI.2004.60.</i>. An
+ * extended description is given in: <i>Vladimir Kolmogorov. 2004. Graph based algorithms for scene
  * reconstruction from two or more views. Ph.D. Dissertation. Cornell University, USA. Advisor(s)
  * Ramin Zabih. Order Number: AAI3114475.</i>.
  * <p>
  * This implementation uses 2 heuristics described in Vladimir Kolmogorov's original PhD thesis:
  * <ul>
- *     <li>Timestamp heuristic.</li>
- *     <li>Distance heuristic;</li>
+ * <li>Timestamp heuristic.</li>
+ * <li>Distance heuristic;</li>
  * </ul>
  * <p>
  * The worse-case running time of this algorithm on a network $G = (V, E)$ with a capacity function
- * $c: E \rightArrow R^{+}$ is $\mathcal{O}(E\times f)$, where $f$ is the maximum flow value. The reason
- * for this is that the algorithm doesn't necessarily augments shortest $s-t$ paths in a residual
- * network. That's why the argument about the running time complexity is the same as with the
- * Ford-Fulkerson algorithm.
+ * $c: E \rightArrow R^{+}$ is $\mathcal{O}(E\times f)$, where $f$ is the maximum flow value. The
+ * reason for this is that the algorithm doesn't necessarily augments shortest $s-t$ paths in a
+ * residual network. That's why the argument about the running time complexity is the same as with
+ * the Ford-Fulkerson algorithm.
  * <p>
  * This algorithm doesn't have the best performance on all types of networks. It's recommended to
  * check if this algorithm gives substantial performance improvement before using it in a particular
@@ -57,15 +58,18 @@ import java.util.*;
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  */
-public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E> {
+public class BoykovKolmogorovMFImpl<V, E>
+    extends
+    MaximumFlowAlgorithmBase<V, E>
+{
 
     /**
      * Whether to print debug related messages.
      */
     private static final boolean DEBUG = false;
     /**
-     * The timestamp used for free nodes. This value is the smallest among
-     * all node timestamps and is assigned only to free vertices.
+     * The timestamp used for free nodes. This value is the smallest among all node timestamps and
+     * is assigned only to free vertices.
      */
     private static final long FREE_NODE_TIMESTAMP = 0;
     /**
@@ -74,8 +78,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     private static final long INITIAL_TIMESTAMP = 1;
 
     /**
-     * The value of the current iteration timestamp. After each iteration, the current
-     * timestamp is incremented.
+     * The value of the current iteration timestamp. After each iteration, the current timestamp is
+     * incremented.
      */
     private long currentTimestamp;
 
@@ -98,33 +102,32 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     private VertexExtension currentSink;
 
     /**
-     * The queue of active vertices. An active vertex is a network vertex which:
-     * (a) belongs to source or sink flow tree.
-     * (b) has an outgoing edge with positive capacity, which target is a free vertex.
-     * The active vertices are processed according to the FIFO principle.
+     * The queue of active vertices. An active vertex is a network vertex which: (a) belongs to
+     * source or sink flow tree. (b) has an outgoing edge with positive capacity, which target is a
+     * free vertex. The active vertices are processed according to the FIFO principle.
      */
     private final Deque<VertexExtension> activeVertices;
     /**
-     * A list of orphans emerged after an s-t path augmentation. An orphan is a
-     * network node which parent edge in the residual network flow tree became
-     * saturated.
+     * A list of orphans emerged after an s-t path augmentation. An orphan is a network node which
+     * parent edge in the residual network flow tree became saturated.
      */
     private final List<VertexExtension> orphans;
 
     /**
-     * A queue of child orphans. A child orphan is a descendant of an orphan, which
-     * didn't get a new parent in corresponding flow free. These child orphans have
-     * precedence over regular orphans and are processed according to the FIFO principle.
+     * A queue of child orphans. A child orphan is a descendant of an orphan, which didn't get a new
+     * parent in corresponding flow free. These child orphans have precedence over regular orphans
+     * and are processed according to the FIFO principle.
      */
     private final Deque<VertexExtension> childOrphans;
 
     /**
-     * Creates a new algorithm instance with the specified {@code network}. The created
-     * algorithm uses default epsilon.
+     * Creates a new algorithm instance with the specified {@code network}. The created algorithm
+     * uses default epsilon.
      *
      * @param network flow network.
      */
-    public BoykovKolmogorovMFImpl(Graph<V, E> network) {
+    public BoykovKolmogorovMFImpl(Graph<V, E> network)
+    {
         this(network, DEFAULT_EPSILON);
     }
 
@@ -134,7 +137,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      * @param network flow network
      * @param epsilon tolerance for the comparison of floating point values
      */
-    public BoykovKolmogorovMFImpl(Graph<V, E> network, double epsilon) {
+    public BoykovKolmogorovMFImpl(Graph<V, E> network, double epsilon)
+    {
         super(Objects.requireNonNull(network, "Network must be not null!"), epsilon);
 
         vertexExtensionsFactory = VertexExtension::new;
@@ -149,7 +153,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      * {@inheritDoc}
      */
     @Override
-    public MaximumFlow<E> getMaximumFlow(V source, V sink) {
+    public MaximumFlow<E> getMaximumFlow(V source, V sink)
+    {
         this.calculateMaximumFlow(source, sink);
         maxFlow = composeFlow();
         return new MaximumFlowImpl<>(maxFlowValue, maxFlow);
@@ -158,18 +163,19 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     /**
      * Computes the maximum flow value.
      * <p>
-     * This is the main algorithm loop. First, an algorithm initialization is performed.
-     * The initialization includes augmenting all source-sink and source-node-sink paths.
-     * After that, the algorithm finds the rest of the augmenting path by iteratively:
+     * This is the main algorithm loop. First, an algorithm initialization is performed. The
+     * initialization includes augmenting all source-sink and source-node-sink paths. After that,
+     * the algorithm finds the rest of the augmenting path by iteratively:
      * <p>
-     * - growing the source and sink flow trees using active vertices
-     * - augmenting s-t paths using bounding edges between source and sink flow trees.
-     * - adopting orphan nodes emerged after s-t path augmentation.
+     * - growing the source and sink flow trees using active vertices - augmenting s-t paths using
+     * bounding edges between source and sink flow trees. - adopting orphan nodes emerged after s-t
+     * path augmentation.
      *
      * @param source network source
-     * @param sink   network sink.
+     * @param sink network sink.
      */
-    private void calculateMaximumFlow(V source, V sink) {
+    private void calculateMaximumFlow(V source, V sink)
+    {
         super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
         if (!network.containsVertex(source)) {
@@ -194,7 +200,7 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
         makeActive(currentSource);
         makeActive(currentSink);
 
-        for (; ; ) {
+        for (;;) {
             AnnotatedFlowEdge boundingEdge = grow();
             if (boundingEdge == null) {
                 break;
@@ -207,13 +213,14 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Augments all source-sink and source-node-sink paths. This improved performance on
-     * the computer vision maximum flow networks.
+     * Augments all source-sink and source-node-sink paths. This improved performance on the
+     * computer vision maximum flow networks.
      *
      * @param source network source.
-     * @param sink   network sink.
+     * @param sink network sink.
      */
-    private void augmentShortPaths(VertexExtension source, VertexExtension sink) {
+    private void augmentShortPaths(VertexExtension source, VertexExtension sink)
+    {
         for (AnnotatedFlowEdge sourceEdge : source.getOutgoing()) {
             VertexExtension mediumVertex = sourceEdge.getTarget();
             if (mediumVertex == sink) {
@@ -224,7 +231,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                 for (AnnotatedFlowEdge sinkEdge : mediumVertex.getOutgoing()) {
                     VertexExtension targetVertex = sinkEdge.getTarget();
                     if (targetVertex == sink) {
-                        double flow = Math.min(sourceEdge.getResidualCapacity(), sinkEdge.getResidualCapacity());
+                        double flow = Math
+                            .min(sourceEdge.getResidualCapacity(), sinkEdge.getResidualCapacity());
                         pushFlowThrough(sourceEdge, flow);
                         pushFlowThrough(sinkEdge, flow);
                         maxFlowValue += flow;
@@ -242,25 +250,25 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     /**
      * Performs an algorithm grow phase.
      * <p>
-     * During the grow phase, the network active vertices are iteratively processed.
-     * The goal of this processing is to find an (outgoing for source tree / incoming
-     * for sink tree) edge with positive capacity which opposite node is either a free
-     * node or belongs to the other tree. In the first case, the tree gets one more
-     * node, in the second case, a bounding edge is found and the algorithm can proceed
-     * to the augment phase.
+     * During the grow phase, the network active vertices are iteratively processed. The goal of
+     * this processing is to find an (outgoing for source tree / incoming for sink tree) edge with
+     * positive capacity which opposite node is either a free node or belongs to the other tree. In
+     * the first case, the tree gets one more node, in the second case, a bounding edge is found and
+     * the algorithm can proceed to the augment phase.
      * <p>
-     * Since processing logic is different for source and sink trees, the code handles
-     * there cases separately. This method returns either a bounding edge or {@code null}.
-     * The {@code null} value can be returned only after all of the active vertices are
-     * processed and no bounding edge is found. This means that the residual network
-     * is disconnected and the algorithm can terminate.
+     * Since processing logic is different for source and sink trees, the code handles there cases
+     * separately. This method returns either a bounding edge or {@code null}. The {@code null}
+     * value can be returned only after all of the active vertices are processed and no bounding
+     * edge is found. This means that the residual network is disconnected and the algorithm can
+     * terminate.
      *
      * @return a bounding edge or {@code null} if no bounding edge exists.
      */
-    private AnnotatedFlowEdge grow() {
-        for (VertexExtension activeVertex = nextActiveVertex();
-             activeVertex != null;
-             activeVertex = nextActiveVertex()) {
+    private AnnotatedFlowEdge grow()
+    {
+        for (VertexExtension activeVertex = nextActiveVertex(); activeVertex != null;
+            activeVertex = nextActiveVertex())
+        {
 
             if (activeVertex.isSourceTreeVertex()) {
                 // processing source tree vertex
@@ -279,7 +287,10 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                         } else if (target.isFreeVertex()) {
                             // found a node which can be added to the source tree
                             if (DEBUG) {
-                                System.out.printf("Growing source tree: %s -> %s\n\n", edge, target.prototype);
+                                System.out
+                                    .printf(
+                                        "Growing source tree: %s -> %s\n\n", edge,
+                                        target.prototype);
                             }
 
                             target.parentEdge = edge;
@@ -289,9 +300,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                             makeActive(target);
                         } else {
                             /*
-                             * The target node belongs to the source tree the distance
-                             * heuristic can be applied to possibly build a tree with
-                             * smaller height.
+                             * The target node belongs to the source tree the distance heuristic can
+                             * be applied to possibly build a tree with smaller height.
                              */
                             assert target.isSourceTreeVertex();
                             if (isCloserToTerminal(activeVertex, target)) {
@@ -320,7 +330,9 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                             return edge;
                         } else if (source.isFreeVertex()) {
                             if (DEBUG) {
-                                System.out.printf("Growing sink tree: %s -> %s\n\n", source.prototype, edge);
+                                System.out
+                                    .printf(
+                                        "Growing sink tree: %s -> %s\n\n", source.prototype, edge);
                             }
 
                             source.parentEdge = edge;
@@ -349,19 +361,19 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Augments an s-t path specified using the {@code boundingEdge} and computes
-     * the set of tree orphans emerged after augmentation.
+     * Augments an s-t path specified using the {@code boundingEdge} and computes the set of tree
+     * orphans emerged after augmentation.
      * <p>
-     * First, the path flow bottleneck is found. Then the bottleneck flow
-     * value is pushed through every path edge. If some path edge gets saturated,
-     * the corresponding tree node is added to the orphan set. In the case the
-     * saturated edge connects source tree vertices, the edge target becomes an
-     * orphan, otherwise if the saturated edge connects sink tree vertices, that
-     * the edge source becomes an orphan.
+     * First, the path flow bottleneck is found. Then the bottleneck flow value is pushed through
+     * every path edge. If some path edge gets saturated, the corresponding tree node is added to
+     * the orphan set. In the case the saturated edge connects source tree vertices, the edge target
+     * becomes an orphan, otherwise if the saturated edge connects sink tree vertices, that the edge
+     * source becomes an orphan.
      *
      * @param boundingEdge s-t path bounding edge between source and sink trees.
      */
-    private void augment(AnnotatedFlowEdge boundingEdge) {
+    private void augment(AnnotatedFlowEdge boundingEdge)
+    {
         double bottleneck = findBottleneck(boundingEdge);
 
         if (DEBUG) {
@@ -383,7 +395,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
 
             System.out.printf("Pushing %.0f flow through path:\n", bottleneck);
             for (AnnotatedFlowEdge edge : pathEdges) {
-                System.out.printf("(%s, %s) - ", edge.getSource().prototype, edge.getTarget().prototype);
+                System.out
+                    .printf("(%s, %s) - ", edge.getSource().prototype, edge.getTarget().prototype);
             }
             System.out.println("\n");
         }
@@ -427,7 +440,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      * @param boundingEdge s-t path bounding edge.
      * @return the computed bottleneck.
      */
-    private double findBottleneck(AnnotatedFlowEdge boundingEdge) {
+    private double findBottleneck(AnnotatedFlowEdge boundingEdge)
+    {
         double bottleneck = boundingEdge.getResidualCapacity();
 
         VertexExtension source = boundingEdge.getSource();
@@ -448,13 +462,13 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     /**
      * Adopts all orphans.
      * <p>
-     * Processing every orphan, the goal of this procedure is to either find
-     * a parent node within the same tree, or identify that no such parent can be found,
-     * make the orphan a free vertex and process all descendants of this node the same way.
-     * If multiple parents exist, the closest to terminal is selected using distance
-     * and timestamp heuristic.
+     * Processing every orphan, the goal of this procedure is to either find a parent node within
+     * the same tree, or identify that no such parent can be found, make the orphan a free vertex
+     * and process all descendants of this node the same way. If multiple parents exist, the closest
+     * to terminal is selected using distance and timestamp heuristic.
      */
-    private void adopt() {
+    private void adopt()
+    {
         while (!orphans.isEmpty() || !childOrphans.isEmpty()) {
             VertexExtension currentVertex;
 
@@ -477,7 +491,9 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                     if (edge.getInverse().hasCapacity()) {
                         VertexExtension targetNode = edge.getTarget();
 
-                        if (targetNode.isSourceTreeVertex() && hasConnectionToTerminal(targetNode)) {
+                        if (targetNode.isSourceTreeVertex()
+                            && hasConnectionToTerminal(targetNode))
+                        {
                             if (targetNode.distance < minDistance) {
                                 minDistance = targetNode.distance;
                                 newParentEdge = edge.getInverse();
@@ -512,7 +528,10 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                 } else {
 
                     if (DEBUG) {
-                        System.out.printf("Vertex %s get's adopted via %s\n\n", currentVertex.prototype, newParentEdge);
+                        System.out
+                            .printf(
+                                "Vertex %s get's adopted via %s\n\n", currentVertex.prototype,
+                                newParentEdge);
                     }
                     // adopt this vertex
                     makeCheckedInThisIteration(currentVertex);
@@ -566,7 +585,10 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                 } else {
 
                     if (DEBUG) {
-                        System.out.printf("Vertex %s get's adopted via %s\n\n", currentVertex.prototype, newParentEdge);
+                        System.out
+                            .printf(
+                                "Vertex %s get's adopted via %s\n\n", currentVertex.prototype,
+                                newParentEdge);
                     }
                     // adopt this vertex
                     makeCheckedInThisIteration(currentVertex);
@@ -580,7 +602,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     /**
      * Initializes a new algorithm iteration.
      */
-    private void nextIteration() {
+    private void nextIteration()
+    {
         currentTimestamp++;
         makeCheckedInThisIteration(currentSource);
         makeCheckedInThisIteration(currentSink);
@@ -591,8 +614,9 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      *
      * @param vertex network vertex.
      */
-    private void makeActive(VertexExtension vertex) {
-        if(!vertex.active){
+    private void makeActive(VertexExtension vertex)
+    {
+        if (!vertex.active) {
             vertex.active = true;
             activeVertices.addFirst(vertex);
         }
@@ -603,7 +627,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      *
      * @return the next active vertex to be processed.
      */
-    private VertexExtension nextActiveVertex() {
+    private VertexExtension nextActiveVertex()
+    {
         while (!activeVertices.isEmpty()) {
             VertexExtension nextActive = activeVertices.getLast();
             assert nextActive.active;
@@ -622,7 +647,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      *
      * @param vertex network vertex.
      */
-    private void finishVertex(VertexExtension vertex) {
+    private void finishVertex(VertexExtension vertex)
+    {
         assert activeVertices.getLast() == vertex;
         activeVertices.pollLast();
         vertex.active = false;
@@ -633,7 +659,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      *
      * @param vertex network vertex.
      */
-    private void makeCheckedInThisIteration(VertexExtension vertex) {
+    private void makeCheckedInThisIteration(VertexExtension vertex)
+    {
         vertex.timestamp = currentTimestamp;
     }
 
@@ -641,27 +668,29 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      * Checks if the distance of the {@code vertex} was updated during this iteration.
      *
      * @param vertex network vertex.
-     * @return {@code true} if the distance of the {@code vertex} was updated
-     * in this iteration, {@code false} otherwise.
+     * @return {@code true} if the distance of the {@code vertex} was updated in this iteration,
+     *         {@code false} otherwise.
      */
-    private boolean wasCheckedInThisIteration(VertexExtension vertex) {
+    private boolean wasCheckedInThisIteration(VertexExtension vertex)
+    {
         return vertex.timestamp == currentTimestamp;
     }
 
     /**
-     * Checks if the {@code vertex} is connected to a terminal vertex
-     * (source or sink).
+     * Checks if the {@code vertex} is connected to a terminal vertex (source or sink).
      *
      * @param vertex network vertex.
-     * @return {@code true} if the {@code vertex} is connected to a
-     * terminal vertex, {@code false} otherwise.
+     * @return {@code true} if the {@code vertex} is connected to a terminal vertex, {@code false}
+     *         otherwise.
      */
-    private boolean hasConnectionToTerminal(VertexExtension vertex) {
+    private boolean hasConnectionToTerminal(VertexExtension vertex)
+    {
         int distance = 0;
 
         for (VertexExtension currentVertex = vertex;
-             currentVertex != currentSource && currentVertex != currentSink;
-             currentVertex = currentVertex.getParent()) {
+            currentVertex != currentSource && currentVertex != currentSink;
+            currentVertex = currentVertex.getParent())
+        {
 
             if (currentVertex.parentEdge == null) {
                 return false;
@@ -673,9 +702,9 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
         }
 
         // update distance and timestamp values for every path vertex
-        for (VertexExtension currentVertex = vertex;
-             !wasCheckedInThisIteration(currentVertex);
-             currentVertex = currentVertex.getParent()) {
+        for (VertexExtension currentVertex = vertex; !wasCheckedInThisIteration(currentVertex);
+            currentVertex = currentVertex.getParent())
+        {
 
             currentVertex.distance = distance;
             distance--;
@@ -686,15 +715,16 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Checks if the vertex {@code p} is closer to terminal than the vertex {@code t}
-     * using the distance heuristic.
+     * Checks if the vertex {@code p} is closer to terminal than the vertex {@code t} using the
+     * distance heuristic.
      *
      * @param p network vertex.
      * @param t network vertex.
-     * @return {@code true} is {@code p} is closer to terminal than {@code t},
-     * {@code false} otherwise.
+     * @return {@code true} is {@code p} is closer to terminal than {@code t}, {@code false}
+     *         otherwise.
      */
-    private boolean isCloserToTerminal(VertexExtension p, VertexExtension t) {
+    private boolean isCloserToTerminal(VertexExtension p, VertexExtension t)
+    {
         return p.timestamp >= t.timestamp && p.distance + 1 < t.distance;
     }
 
@@ -704,27 +734,37 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      * @param vertex network vertex.
      * @return a vertex extension which corresponds to the network {@code vertex}.
      */
-    private VertexExtension getVertexExtension(V vertex) {
+    private VertexExtension getVertexExtension(V vertex)
+    {
         return (VertexExtension) vertexExtensionManager.getExtension(vertex);
     }
 
     /**
      * Enum specifying vertex tree status
      */
-    private enum VertexTreeStatus {
-        SOURCE_TREE_VERTEX {
+    private enum VertexTreeStatus
+    {
+        SOURCE_TREE_VERTEX
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "SOURCE_TREE_VERTEX";
             }
-        }, SINK_TREE_VERTEX {
+        },
+        SINK_TREE_VERTEX
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "SINK_TREE_VERTEX";
             }
-        }, FREE_VERTEX {
+        },
+        FREE_VERTEX
+        {
             @Override
-            public String toString() {
+            public String toString()
+            {
                 return "FREE_VERTEX";
             }
         };
@@ -735,19 +775,20 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     /**
      * Network vertex extension used to store auxiliary vertex information.
      */
-    private class VertexExtension extends VertexExtensionBase {
+    private class VertexExtension
+        extends
+        VertexExtensionBase
+    {
 
         /**
-         * This vertex timestamp. The timestamp is the last iteration in which
-         * the distance to terminal of this vertex was updated. If this value
-         * isn't equal to the most recent iteration index, the distance value
-         * may be outdated.
+         * This vertex timestamp. The timestamp is the last iteration in which the distance to
+         * terminal of this vertex was updated. If this value isn't equal to the most recent
+         * iteration index, the distance value may be outdated.
          */
         long timestamp;
         /**
-         * The distance of this vertex to a terminal vertex (network source or sink).
-         * This value may not represent the actual distance as it's not updated every
-         * iteration.
+         * The distance of this vertex to a terminal vertex (network source or sink). This value may
+         * not represent the actual distance as it's not updated every iteration.
          */
         int distance;
         /**
@@ -767,7 +808,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
         /**
          * Creates a new free vertex.
          */
-        VertexExtension() {
+        VertexExtension()
+        {
             parentEdge = null;
             treeStatus = VertexTreeStatus.FREE_VERTEX;
         }
@@ -775,20 +817,20 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
         /**
          * Checks if this vertex belongs to the source tree.
          *
-         * @return {@code true} if this vertex belongs to the source tree,
-         * {@code false} otherwise.
+         * @return {@code true} if this vertex belongs to the source tree, {@code false} otherwise.
          */
-        boolean isSourceTreeVertex() {
+        boolean isSourceTreeVertex()
+        {
             return treeStatus == VertexTreeStatus.SOURCE_TREE_VERTEX;
         }
 
         /**
          * Checks if this vertex belongs to the sink tree.
          *
-         * @return {@code true} if this vertex belongs to the sink tree,
-         * {@code false} otherwise.
+         * @return {@code true} if this vertex belongs to the sink tree, {@code false} otherwise.
          */
-        boolean isSinkTreeVertex() {
+        boolean isSinkTreeVertex()
+        {
             return treeStatus == VertexTreeStatus.SINK_TREE_VERTEX;
         }
 
@@ -797,14 +839,16 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
          *
          * @return {@code true} if this vertex is free, {@code false} otherwise.
          */
-        boolean isFreeVertex() {
+        boolean isFreeVertex()
+        {
             return treeStatus == VertexTreeStatus.FREE_VERTEX;
         }
 
         /**
          * Disconnects this vertex from its parent.
          */
-        void makeOrphan() {
+        void makeOrphan()
+        {
             parentEdge = null;
         }
 
@@ -813,7 +857,8 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
          *
          * @return the parent of this vertex.
          */
-        VertexExtension getParent() {
+        VertexExtension getParent()
+        {
             assert parentEdge != null;
             return this == parentEdge.getSource() ? parentEdge.getTarget() : parentEdge.getSource();
         }
@@ -822,16 +867,19 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            return String.format("{%s}: parent_edge = %s, tree_status = %s, distance = %d, timestamp = %d",
+        public String toString()
+        {
+            return String
+                .format(
+                    "{%s}: parent_edge = %s, tree_status = %s, distance = %d, timestamp = %d",
                     prototype,
-                    parentEdge == null ? "null" : String.format("(%s, %s)", parentEdge.getSource().prototype, parentEdge.getTarget().prototype),
-                    treeStatus
-                    , distance
-                    , timestamp
-            );
+                    parentEdge == null ? "null"
+                        : String
+                            .format(
+                                "(%s, %s)", parentEdge.getSource().prototype,
+                                parentEdge.getTarget().prototype),
+                    treeStatus, distance, timestamp);
 
         }
     }
 }
-

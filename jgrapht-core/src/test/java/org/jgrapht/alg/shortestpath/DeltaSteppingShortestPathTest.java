@@ -50,15 +50,18 @@ public class DeltaSteppingShortestPathTest
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
-
 
     private static final String S = "S";
     private static final String T = "T";
@@ -92,16 +95,17 @@ public class DeltaSteppingShortestPathTest
     }
 
     @Test
-    public void testLineGraph() {
+    public void testLineGraph()
+    {
         int maxNumberOfVertices = 10;
         for (int numberOfVertices = 2; numberOfVertices < maxNumberOfVertices; ++numberOfVertices) {
-            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>>
-                    testInput = generateLineGraphTestInput(numberOfVertices);
+            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>,
+                List<DefaultWeightedEdge>> testInput = generateLineGraphTestInput(numberOfVertices);
             Graph<Integer, DefaultWeightedEdge> graph = testInput.getFirst();
             List<Integer> vertices = testInput.getSecond();
             List<DefaultWeightedEdge> edges = testInput.getThird();
             GraphPath<Integer, DefaultWeightedEdge> shortestPath =
-                    new DeltaSteppingShortestPath<>(graph, executor).getPath(0, numberOfVertices - 1);
+                new DeltaSteppingShortestPath<>(graph, executor).getPath(0, numberOfVertices - 1);
             assertEquals(numberOfVertices - 1, shortestPath.getWeight(), 1e-9);
             assertEquals(vertices, shortestPath.getVertexList());
             assertEquals(edges, shortestPath.getEdgeList());
@@ -114,7 +118,8 @@ public class DeltaSteppingShortestPathTest
         Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
         assertEquals(
-            Arrays.asList(S), new DeltaSteppingShortestPath<>(graph, executor).getPath(S, S).getVertexList());
+            Arrays.asList(S),
+            new DeltaSteppingShortestPath<>(graph, executor).getPath(S, S).getVertexList());
         assertEquals(
             Arrays.asList(S, Y, T),
             new DeltaSteppingShortestPath<>(graph, executor).getPath(S, T).getVertexList());
@@ -222,9 +227,11 @@ public class DeltaSteppingShortestPathTest
         return graph;
     }
 
-    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>>
-    generateLineGraphTestInput(int numberOfVertices) {
-        Graph<Integer, DefaultWeightedEdge> result = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>,
+        List<DefaultWeightedEdge>> generateLineGraphTestInput(int numberOfVertices)
+    {
+        Graph<Integer, DefaultWeightedEdge> result =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         List<Integer> vertices = new ArrayList<>(numberOfVertices);
         List<DefaultWeightedEdge> edges = new ArrayList<>(numberOfVertices - 1);
         for (int i = 0; i < numberOfVertices - 1; ++i) {
@@ -244,7 +251,8 @@ public class DeltaSteppingShortestPathTest
         graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-            new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1, random, true, true);
+            new GnmRandomGraphGenerator<>(
+                numOfVertices, numOfEdges - numOfVertices + 1, random, true, true);
         generator.generateGraph(graph);
         makeConnected(graph);
         addEdgeWeights(graph, random);

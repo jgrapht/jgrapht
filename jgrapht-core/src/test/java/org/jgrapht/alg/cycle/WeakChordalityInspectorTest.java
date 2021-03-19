@@ -55,7 +55,7 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal2()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
@@ -71,7 +71,7 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal3()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
@@ -87,7 +87,7 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal4()
     {
-        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 1},};
+        int[][] edges = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 1 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
@@ -104,9 +104,8 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal5()
     {
-        int[][] edges = {{1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 4}, {2, 5},
-                {2, 6}, {2, 7}, {3, 5}, {3, 6}, {3, 7}, {4, 6},
-                {4, 7}, {5, 7},};
+        int[][] edges = { { 1, 3 }, { 1, 4 }, { 1, 5 }, { 1, 6 }, { 2, 4 }, { 2, 5 }, { 2, 6 },
+            { 2, 7 }, { 3, 5 }, { 3, 6 }, { 3, 7 }, { 4, 6 }, { 4, 7 }, { 5, 7 }, };
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         TestUtil.constructGraph(graph, edges);
 
@@ -124,9 +123,8 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal6()
     {
-        int[][] edges = {{1, 1}, {1, 1}, {1, 2}, {1, 2}, {1, 2}, {1, 3},
-                {2, 4}, {2, 4}, {2, 4}, {3, 4}, {4, 4}, {4, 4},
-                {4, 4},};
+        int[][] edges = { { 1, 1 }, { 1, 1 }, { 1, 2 }, { 1, 2 }, { 1, 2 }, { 1, 3 }, { 2, 4 },
+            { 2, 4 }, { 2, 4 }, { 3, 4 }, { 4, 4 }, { 4, 4 }, { 4, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
@@ -142,10 +140,9 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal7()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {2, 7}, {2, 8}, {2, 10},
-                {2, 5}, {3, 5}, {3, 6}, {4, 7}, {5, 8}, {5, 9},
-                {5, 6}, {6, 9}, {7, 8}, {7, 10}, {8, 9}, {8, 10},
-                {9, 10},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 4 }, { 2, 7 }, { 2, 8 }, { 2, 10 }, { 2, 5 },
+            { 3, 5 }, { 3, 6 }, { 4, 7 }, { 5, 8 }, { 5, 9 }, { 5, 6 }, { 6, 9 }, { 7, 8 },
+            { 7, 10 }, { 8, 9 }, { 8, 10 }, { 9, 10 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         WeakChordalityInspector<Integer, DefaultEdge> inspector =

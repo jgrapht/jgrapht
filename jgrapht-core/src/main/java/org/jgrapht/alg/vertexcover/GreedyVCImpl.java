@@ -109,8 +109,8 @@ public class GreedyVCImpl<V, E>
             vx.addNeighbor(ux);
 
             assert (ux.neighbors.get(vx).intValue() == vx.neighbors
-                .get(
-                    ux).intValue()) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+                .get(ux)
+                .intValue()) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
         TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();

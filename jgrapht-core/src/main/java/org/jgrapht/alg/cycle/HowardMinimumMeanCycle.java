@@ -41,27 +41,28 @@ import java.util.Objects;
  *
  * <p>
  * The algorithm is described in the article: Ali Dasdan, Sandy S. Irani, and Rajesh K. Gupta. 1999.
- * Efficient algorithms for optimum cycle mean and optimum cost to time ratio problems.
- * In Proceedings of the 36th annual ACM/IEEE Design Automation Conference (DAC ’99).
- * Association for Computing Machinery, New York, NY, USA, 37–42.
- * DOI:https://doi.org/10.1145/309847.309862
+ * Efficient algorithms for optimum cycle mean and optimum cost to time ratio problems. In
+ * Proceedings of the 36th annual ACM/IEEE Design Automation Conference (DAC ’99). Association for
+ * Computing Machinery, New York, NY, USA, 37–42. DOI:https://doi.org/10.1145/309847.309862
  *
  * <p>
- * Firstly, the graph is divided into strongly connected components. The minimum
- * cycle mean is then computed as the globally minimum cycle mean over all components.
- * In the process the necessary information is recorded to be able to reconstruct the
- * cycle with minimum mean.
+ * Firstly, the graph is divided into strongly connected components. The minimum cycle mean is then
+ * computed as the globally minimum cycle mean over all components. In the process the necessary
+ * information is recorded to be able to reconstruct the cycle with minimum mean.
  *
  * <p>
- * The computations are divided into iterations. In each iteration the algorithm tries
- * to update current minimum cycle mean value. There is a possibility to limit the
- * total number of iteration via a constructor parameter.
+ * The computations are divided into iterations. In each iteration the algorithm tries to update
+ * current minimum cycle mean value. There is a possibility to limit the total number of iteration
+ * via a constructor parameter.
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
  * @author Semen Chudakov
  */
-public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V, E> {
+public class HowardMinimumMeanCycle<V, E>
+    implements
+    MinimumCycleMeanAlgorithm<V, E>
+{
     /**
      * The underlying graph.
      */
@@ -71,8 +72,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      */
     private final StrongConnectivityAlgorithm<V, E> strongConnectivityAlgorithm;
     /**
-     * Maximum number of iterations performed during the computation. If not provided
-     * via constructor the value if defaulted to {@link Integer#MAX_VALUE}.
+     * Maximum number of iterations performed during the computation. If not provided via
+     * constructor the value if defaulted to {@link Integer#MAX_VALUE}.
      */
     private final int maximumIterations;
     /**
@@ -93,24 +94,21 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      */
     private int currentCycleLength;
     /**
-     * Vertex which is used to reconstruct the cycle
-     * found on current iteration.
+     * Vertex which is used to reconstruct the cycle found on current iteration.
      */
     private V currentCycleVertex;
 
     /**
-     * For each vertex contains an edge, which together
-     * for the policy graph on current iteration.
+     * For each vertex contains an edge, which together for the policy graph on current iteration.
      */
     private Map<V, E> policyGraph;
     /**
-     * For each vertex indicates, if it has been reached by a search
-     * during computing vertices distance in the policy graph.
+     * For each vertex indicates, if it has been reached by a search during computing vertices
+     * distance in the policy graph.
      */
     private Map<V, Boolean> reachedVertices;
     /**
-     * For each vertex stores its level which is used to find a cycle in the
-     * policy graph.
+     * For each vertex stores its level which is used to find a cycle in the policy graph.
      */
     private Map<V, Integer> vertexLevel;
     /**
@@ -118,42 +116,45 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      */
     private Map<V, Double> vertexDistance;
 
-
     /**
      * Constructs an instance of the algorithm for the given {@code graph}.
      *
      * @param graph graph
      */
-    public HowardMinimumMeanCycle(Graph<V, E> graph) {
+    public HowardMinimumMeanCycle(Graph<V, E> graph)
+    {
         this(graph, Integer.MAX_VALUE);
     }
 
     /**
-     * Constructs an instance of the algorithm for the given {@code graph}
-     * and {@code maximumIterations}.
+     * Constructs an instance of the algorithm for the given {@code graph} and
+     * {@code maximumIterations}.
      *
-     * @param graph             graph
+     * @param graph graph
      * @param maximumIterations maximum number of iterations
      */
-    public HowardMinimumMeanCycle(Graph<V, E> graph, int maximumIterations) {
+    public HowardMinimumMeanCycle(Graph<V, E> graph, int maximumIterations)
+    {
         this(graph, maximumIterations, new GabowStrongConnectivityInspector<>(graph), 1e-9);
     }
 
     /**
      * Constructs an instance of the algorithm for the given {@code graph},
-     * {@code maximumIterations}, {@code strongConnectivityAlgorithm} and
-     * {@code toleranceEpsilon}.
+     * {@code maximumIterations}, {@code strongConnectivityAlgorithm} and {@code toleranceEpsilon}.
      *
-     * @param graph                       graph
-     * @param maximumIterations           maximum number of iterations
+     * @param graph graph
+     * @param maximumIterations maximum number of iterations
      * @param strongConnectivityAlgorithm algorithm to compute strongly connected components
-     * @param toleranceEpsilon            tolerance to compare floating point numbers
+     * @param toleranceEpsilon tolerance to compare floating point numbers
      */
-    public HowardMinimumMeanCycle(Graph<V, E> graph, int maximumIterations,
-                                  StrongConnectivityAlgorithm<V, E> strongConnectivityAlgorithm, double toleranceEpsilon) {
+    public HowardMinimumMeanCycle(
+        Graph<V, E> graph, int maximumIterations,
+        StrongConnectivityAlgorithm<V, E> strongConnectivityAlgorithm, double toleranceEpsilon)
+    {
         this.graph = Objects.requireNonNull(graph, "graph should not be null!");
-        this.strongConnectivityAlgorithm = Objects.requireNonNull(strongConnectivityAlgorithm,
-                "strongConnectivityAlgorithm should not be null!");
+        this.strongConnectivityAlgorithm = Objects
+            .requireNonNull(
+                strongConnectivityAlgorithm, "strongConnectivityAlgorithm should not be null!");
         if (maximumIterations < 0) {
             throw new IllegalArgumentException("maximumIterations should be non-negative");
         }
@@ -170,7 +171,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      * {@inheritDoc}
      */
     @Override
-    public double getCycleMean() {
+    public double getCycleMean()
+    {
         GraphPath<V, E> cycle = getCycle();
         if (cycle == null) {
             return Double.POSITIVE_INFINITY;
@@ -182,7 +184,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      * {@inheritDoc}
      */
     @Override
-    public GraphPath<V, E> getCycle() {
+    public GraphPath<V, E> getCycle()
+    {
         // best cycle information
         boolean isBestCycleFound = false;
         double bestCycleWeight = 0.0;
@@ -195,8 +198,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
             // special case: connected component is empty
             // or contains one vertex with no incoming edges
             boolean skip = component.vertexSet().size() == 0;
-            skip |= component.vertexSet().size() == 1 && component.incomingEdgesOf(
-                    component.vertexSet().iterator().next()).size() == 0;
+            skip |= component.vertexSet().size() == 1
+                && component.incomingEdgesOf(component.vertexSet().iterator().next()).size() == 0;
             if (skip) {
                 continue;
             }
@@ -214,8 +217,9 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
             }
 
             // update best cycle information if necessary
-            if (isCurrentCycleFound &&
-                    (!isBestCycleFound || currentCycleWeight * bestCycleLength < bestCycleWeight * currentCycleLength)) {
+            if (isCurrentCycleFound && (!isBestCycleFound
+                || currentCycleWeight * bestCycleLength < bestCycleWeight * currentCycleLength))
+            {
                 isBestCycleFound = true;
                 bestCycleWeight = currentCycleWeight;
                 bestCycleLength = currentCycleLength;
@@ -236,13 +240,14 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
     }
 
     /**
-     * Computes policy graph for {@code component} and stores result in {@code policyGraph}
-     * and {@code vertexDistance}. For every vertex in the policy graph an edge with the minimum
-     * weight is retained in the policy graph.
+     * Computes policy graph for {@code component} and stores result in {@code policyGraph} and
+     * {@code vertexDistance}. For every vertex in the policy graph an edge with the minimum weight
+     * is retained in the policy graph.
      *
      * @param component connected component
      */
-    private void constructPolicyGraph(Graph<V, E> component) {
+    private void constructPolicyGraph(Graph<V, E> component)
+    {
         for (V v : component.vertexSet()) {
             vertexDistance.put(v, Double.POSITIVE_INFINITY);
         }
@@ -261,22 +266,21 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
     }
 
     /**
-     * Finds cycle in the {@code policyGraph} and computes computes its mean.
-     * The found cycle is identified by a vertex {@code currentCycleVertex}.
-     * The cycle returned by this method does not necessarily has the smalles
-     * mean over all cycles in the policy graph.
+     * Finds cycle in the {@code policyGraph} and computes computes its mean. The found cycle is
+     * identified by a vertex {@code currentCycleVertex}. The cycle returned by this method does not
+     * necessarily has the smalles mean over all cycles in the policy graph.
      *
      * <p>
-     * To find cycles this methods assigns a level to each vertex. Initially
-     * every vertex has a level equal to $-1$ which means that the vertex has
-     * not been visited. During the computations this method starts DFS from
-     * every not visited vertex and assigns a unique positive level $l$ to every
-     * traversed vertex. If DFS comes across a vertex with level $l$ this indicates
-     * that a cycle has been detected.
+     * To find cycles this methods assigns a level to each vertex. Initially every vertex has a
+     * level equal to $-1$ which means that the vertex has not been visited. During the computations
+     * this method starts DFS from every not visited vertex and assigns a unique positive level $l$
+     * to every traversed vertex. If DFS comes across a vertex with level $l$ this indicates that a
+     * cycle has been detected.
      *
      * @param component connected component
      */
-    private void constructCycle(Graph<V, E> component) {
+    private void constructCycle(Graph<V, E> component)
+    {
         for (V v : component.vertexSet()) {
             vertexLevel.put(v, -1);
         }
@@ -311,7 +315,9 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
                 }
 
                 // update minimum mean value
-                if (!isCurrentCycleFound || (currentWeight * currentCycleLength < currentCycleWeight * currentSize)) {
+                if (!isCurrentCycleFound
+                    || (currentWeight * currentCycleLength < currentCycleWeight * currentSize))
+                {
                     isCurrentCycleFound = true;
                     currentCycleWeight = currentWeight;
                     currentCycleLength = currentSize;
@@ -323,16 +329,17 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
     }
 
     /**
-     * This method runs the reverted BFS starting from {@code currentCycleVertex}
-     * to update data in {@code policyGraph} and {@code vertexDistance}. This step
-     * is needed to identify if current value of minimum mean is optimal for the
-     * {@code graph}. This method also uses {@code comparator} to find out if update
-     * value of minium mean is sufficiently smaller than the previous one.
+     * This method runs the reverted BFS starting from {@code currentCycleVertex} to update data in
+     * {@code policyGraph} and {@code vertexDistance}. This step is needed to identify if current
+     * value of minimum mean is optimal for the {@code graph}. This method also uses
+     * {@code comparator} to find out if update value of minium mean is sufficiently smaller than
+     * the previous one.
      *
      * @param component connected component
      * @return if the currently best mean has been improved
      */
-    private boolean computeVertexDistance(Graph<V, E> component) {
+    private boolean computeVertexDistance(Graph<V, E> component)
+    {
         // BFS queue
         Deque<V> queue = new ArrayDeque<>();
         for (V v : component.vertexSet()) {
@@ -350,7 +357,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
                 V v = Graphs.getOppositeVertex(component, e, u);
                 if (policyGraph.get(v).equals(e) && !reachedVertices.get(v)) {
                     reachedVertices.put(v, true);
-                    double updatedDistance = vertexDistance.get(u) + component.getEdgeWeight(e) - currentMean;
+                    double updatedDistance =
+                        vertexDistance.get(u) + component.getEdgeWeight(e) - currentMean;
                     vertexDistance.put(v, updatedDistance);
                     queue.addLast(v);
                 }
@@ -365,7 +373,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
                 V v = Graphs.getOppositeVertex(component, e, u);
 
                 double oldDistance = vertexDistance.get(v);
-                double updatedDistance = vertexDistance.get(u) + component.getEdgeWeight(e) - currentMean;
+                double updatedDistance =
+                    vertexDistance.get(u) + component.getEdgeWeight(e) - currentMean;
 
                 if (oldDistance > updatedDistance) {
                     // check if the value of minimum mean
@@ -389,7 +398,9 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      * @param bestCycleWeight cycle weight
      * @return constructed minimum mean cycle
      */
-    private GraphPath<V, E> buildPath(V bestCycleVertex, int bestCycleLength, double bestCycleWeight) {
+    private GraphPath<V, E> buildPath(
+        V bestCycleVertex, int bestCycleLength, double bestCycleWeight)
+    {
         List<E> pathEdges = new ArrayList<>(bestCycleLength);
         List<V> pathVertices = new ArrayList<>(bestCycleLength + 1);
 
@@ -404,6 +415,7 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
 
         } while (!v.equals(bestCycleVertex));
 
-        return new GraphWalk<>(graph, bestCycleVertex, bestCycleVertex, pathVertices, pathEdges, bestCycleWeight);
+        return new GraphWalk<>(
+            graph, bestCycleVertex, bestCycleVertex, pathVertices, pathEdges, bestCycleWeight);
     }
 }

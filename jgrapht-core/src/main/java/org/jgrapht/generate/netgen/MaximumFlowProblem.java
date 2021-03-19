@@ -25,26 +25,26 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * This class represents a maximum flow problem. Use this class for both directed
- * and undirected maximum flow problems.
+ * This class represents a maximum flow problem. Use this class for both directed and undirected
+ * maximum flow problems.
  * <p>
- * The single-source, single-sink maximum flow problem is defined as follows:
- * \[ \begin{align} \mbox{maximize}~&amp; \sum_{e \in \delta^+(s)}f_e - \sum_{e \in \delta^-(s)}f_e &amp;\\
- * \mbox{s.t. }&amp;\sum_{e\in \delta^-(v)} f_e = \sum_{e\in \delta^+(v)} f_e &amp; \forall v\in V\setminus \{s, t\} \\
- * &amp;0 \leq f_e \leq c_e &amp; \forall e\in E \end{align} \]
- * Here $\delta^+(v)$ and $\delta^-(v)$ denote the outgoing and incoming edges of vertex
- * $v$ respectively. The value $f_e$ denotes the flow on edge $e$, which is bounded by
- * $c_e$ - the capacity of the edge $e$. The vertex $s$ is a network source, the vertex
- * $t$ - network sink. The edge capacities can be retrieved using {@link MaximumFlowProblem#getCapacities()}.
- * The problem formulation above defines a canonical maximum flow problem, i.e. with only one
- * source and one sink.
+ * The single-source, single-sink maximum flow problem is defined as follows: \[ \begin{align}
+ * \mbox{maximize}~&amp; \sum_{e \in \delta^+(s)}f_e - \sum_{e \in \delta^-(s)}f_e &amp;\\
+ * \mbox{s.t. }&amp;\sum_{e\in \delta^-(v)} f_e = \sum_{e\in \delta^+(v)} f_e &amp; \forall v\in
+ * V\setminus \{s, t\} \\ &amp;0 \leq f_e \leq c_e &amp; \forall e\in E \end{align} \] Here
+ * $\delta^+(v)$ and $\delta^-(v)$ denote the outgoing and incoming edges of vertex $v$
+ * respectively. The value $f_e$ denotes the flow on edge $e$, which is bounded by $c_e$ - the
+ * capacity of the edge $e$. The vertex $s$ is a network source, the vertex $t$ - network sink. The
+ * edge capacities can be retrieved using {@link MaximumFlowProblem#getCapacities()}. The problem
+ * formulation above defines a canonical maximum flow problem, i.e. with only one source and one
+ * sink.
  * <p>
- * A maximum flow problem can be defined on a network with multiple sources and sinks.
- * This problem can be reduced to the above problem definition as follows:
+ * A maximum flow problem can be defined on a network with multiple sources and sinks. This problem
+ * can be reduced to the above problem definition as follows:
  * <ul>
- *     <li>Two special vertices are added to the graph: a super source and a super sink;</li>
- *     <li>Edges with infinite capacity are added from the super source to every source
- *     and from every sink to the super sink</li>
+ * <li>Two special vertices are added to the graph: a super source and a super sink;</li>
+ * <li>Edges with infinite capacity are added from the super source to every source and from every
+ * sink to the super sink</li>
  * </ul>
  * To use this reduction, see {@link MaximumFlowProblem#toSingleSourceSingleSinkProblem()}.
  *
@@ -53,7 +53,8 @@ import java.util.function.Function;
  * @author Timofey Chudakov
  * @see org.jgrapht.alg.interfaces.MaximumFlowAlgorithm
  */
-public interface MaximumFlowProblem<V, E> {
+public interface MaximumFlowProblem<V, E>
+{
 
     double CAPACITY_INF = Integer.MAX_VALUE;
 
@@ -79,36 +80,38 @@ public interface MaximumFlowProblem<V, E> {
     Set<V> getSinks();
 
     /**
-     * Returns one source of this problem (a problem is guaranteed to have at least one source).
-     * Use this method if the problem is in canonical form (only one source and one sink).
+     * Returns one source of this problem (a problem is guaranteed to have at least one source). Use
+     * this method if the problem is in canonical form (only one source and one sink).
      *
      * @return one source of this problem.
      */
-    default V getSource() {
+    default V getSource()
+    {
         return getSources().iterator().next();
     }
 
     /**
-     * Returns one sink of this problem (a problem is guaranteed to have at least one sink).
-     * Use this method if the problem is in canonical form (only one source and one sink).
+     * Returns one sink of this problem (a problem is guaranteed to have at least one sink). Use
+     * this method if the problem is in canonical form (only one source and one sink).
      *
      * @return one sink of this problem.
      */
-    default V getSink() {
+    default V getSink()
+    {
         return getSinks().iterator().next();
     }
 
     /**
-     * Returns the capacity function of this problem. This function is defined for
-     * all edges of the underlying network.
+     * Returns the capacity function of this problem. This function is defined for all edges of the
+     * underlying network.
      *
      * @return the capacity function of this problem.
      */
     Function<E, Double> getCapacities();
 
     /**
-     * Converts this problem to the canonical form. Resulting problem is equivalent
-     * to the previous one.
+     * Converts this problem to the canonical form. Resulting problem is equivalent to the previous
+     * one.
      *
      * @return a problem in the canonical form.
      */
@@ -119,14 +122,16 @@ public interface MaximumFlowProblem<V, E> {
      *
      * @return {@code true} if this problem is in the canonical form, {@code false} otherwise.
      */
-    default boolean isSingleSourceSingleSinkProblem() {
+    default boolean isSingleSourceSingleSinkProblem()
+    {
         return getSources().size() == 1 && getSinks().size() == 1;
     }
 
     /**
      * Dumps the network edge capacities to the underlying graph.
      */
-    default void dumpCapacities(){
+    default void dumpCapacities()
+    {
         Graph<V, E> graph = getGraph();
         Function<E, Double> capacities = getCapacities();
         for (E edge : graph.edgeSet()) {
@@ -140,7 +145,10 @@ public interface MaximumFlowProblem<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class MaximumFlowProblemImpl<V, E> implements MaximumFlowProblem<V, E> {
+    class MaximumFlowProblemImpl<V, E>
+        implements
+        MaximumFlowProblem<V, E>
+    {
         private final Graph<V, E> graph;
         private final Set<V> sources;
         private final Set<V> sinks;
@@ -149,12 +157,14 @@ public interface MaximumFlowProblem<V, E> {
         /**
          * Constructs a new maximum flow problem.
          *
-         * @param graph      flow network
-         * @param sources    set of network sources
-         * @param sinks      set of network sinks
+         * @param graph flow network
+         * @param sources set of network sources
+         * @param sinks set of network sinks
          * @param capacities network capacity function
          */
-        public MaximumFlowProblemImpl(Graph<V, E> graph, Set<V> sources, Set<V> sinks, Function<E, Double> capacities) {
+        public MaximumFlowProblemImpl(
+            Graph<V, E> graph, Set<V> sources, Set<V> sinks, Function<E, Double> capacities)
+        {
             this.graph = graph;
             this.sources = sources;
             this.sinks = sinks;
@@ -165,7 +175,8 @@ public interface MaximumFlowProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Graph<V, E> getGraph() {
+        public Graph<V, E> getGraph()
+        {
             return graph;
         }
 
@@ -173,7 +184,8 @@ public interface MaximumFlowProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Set<V> getSources() {
+        public Set<V> getSources()
+        {
             return sources;
         }
 
@@ -181,7 +193,8 @@ public interface MaximumFlowProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Set<V> getSinks() {
+        public Set<V> getSinks()
+        {
             return sinks;
         }
 
@@ -189,7 +202,8 @@ public interface MaximumFlowProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Function<E, Double> getCapacities() {
+        public Function<E, Double> getCapacities()
+        {
             return capacities;
         }
 
@@ -197,7 +211,8 @@ public interface MaximumFlowProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public MaximumFlowProblem<V, E> toSingleSourceSingleSinkProblem() {
+        public MaximumFlowProblem<V, E> toSingleSourceSingleSinkProblem()
+        {
             Set<E> newEdges = new HashSet<>();
 
             Set<V> sourceSet = convert(sources, newEdges, true);
@@ -215,17 +230,18 @@ public interface MaximumFlowProblem<V, E> {
         }
 
         /**
-         * Adds a new super vertex and connects it to all vertices in {@code vertices}.
-         * Depending on the value of {@code sources}, the edges are directed from super
-         * vertex or to super vertex. New edges are added to {@code newEdges}.
+         * Adds a new super vertex and connects it to all vertices in {@code vertices}. Depending on
+         * the value of {@code sources}, the edges are directed from super vertex or to super
+         * vertex. New edges are added to {@code newEdges}.
          *
          * @param vertices set of vertices to connect super vertex to
          * @param newEdges container to add new edges to
-         * @param sources  {@code true} if super vertex is super source,
-         *                 {@code false} if it's super sink
+         * @param sources {@code true} if super vertex is super source, {@code false} if it's super
+         *        sink
          * @return 1 element set containing the super vertex
          */
-        private Set<V> convert(Set<V> vertices, Set<E> newEdges, boolean sources) {
+        private Set<V> convert(Set<V> vertices, Set<E> newEdges, boolean sources)
+        {
             if (vertices.size() == 1) {
                 return vertices;
             }

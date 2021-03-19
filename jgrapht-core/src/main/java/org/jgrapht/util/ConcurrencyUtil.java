@@ -23,44 +23,48 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Utility class to manage creation and shutting down instance
- * of the {@link ThreadPoolExecutor}.
+ * Utility class to manage creation and shutting down instance of the {@link ThreadPoolExecutor}.
  */
-public class ConcurrencyUtil {
+public class ConcurrencyUtil
+{
     /**
-     * Creates a {@link ThreadPoolExecutor} with fixed number of threads which is
-     * equal to {@code parallelism}.
+     * Creates a {@link ThreadPoolExecutor} with fixed number of threads which is equal to
+     * {@code parallelism}.
      *
      * @param parallelism number of thread for the executor
      * @return created executor
      */
-    public static ThreadPoolExecutor createThreadPoolExecutor(int parallelism) {
+    public static ThreadPoolExecutor createThreadPoolExecutor(int parallelism)
+    {
         return (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelism);
     }
 
     /**
-     * Shuts down the {@code executor}. This operation puts the {@code service}
-     * into a state where every subsequent task submitted to the {@code service}
-     * will be rejected. This method calls
-     * {@link #shutdownExecutionService(ExecutorService, long, TimeUnit)} with
-     * $time = Long.MAX_VALUE$ and $timeUnit = TimeUnit.MILLISECONDS$.
+     * Shuts down the {@code executor}. This operation puts the {@code service} into a state where
+     * every subsequent task submitted to the {@code service} will be rejected. This method calls
+     * {@link #shutdownExecutionService(ExecutorService, long, TimeUnit)} with $time =
+     * Long.MAX_VALUE$ and $timeUnit = TimeUnit.MILLISECONDS$.
      *
      * @param service service to be shut down
      */
-    public static void shutdownExecutionService(ExecutorService service) throws InterruptedException {
-        shutdownExecutionService(service,Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+    public static void shutdownExecutionService(ExecutorService service)
+        throws InterruptedException
+    {
+        shutdownExecutionService(service, Long.MAX_VALUE, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * Shuts down the {@code executor}. This operation puts the {@code service}
-     * into a state where every subsequent task submitted to the {@code service}
-     * will be rejected.
+     * Shuts down the {@code executor}. This operation puts the {@code service} into a state where
+     * every subsequent task submitted to the {@code service} will be rejected.
      *
      * @param service service to be shut down
      * @param time period of time to wait for the completion of the termination
      * @param timeUnit time duration granularity for the provided {@code time}
      */
-    public static void shutdownExecutionService(ExecutorService service, long time, TimeUnit timeUnit) throws InterruptedException {
+    public static void shutdownExecutionService(
+        ExecutorService service, long time, TimeUnit timeUnit)
+        throws InterruptedException
+    {
         service.shutdown();
         service.awaitTermination(time, timeUnit);
     }

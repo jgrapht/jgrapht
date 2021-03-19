@@ -94,14 +94,14 @@ public interface EventDrivenImporter<V, E>
      * @param consumer the consumer
      */
     void addVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer);
-    
+
     /**
      * Remove a vertex with attributes consumer
      * 
      * @param consumer the consumer
      */
     void removeVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer);
- 
+
     /**
      * Add an edge consumer.
      * 
@@ -122,14 +122,14 @@ public interface EventDrivenImporter<V, E>
      * @param consumer the consumer
      */
     void addEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer);
-    
+
     /**
      * Remove an edge with attributes consumer
      * 
      * @param consumer the consumer
      */
     void removeEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer);
-    
+
     /**
      * Add a graph attribute consumer.
      * 

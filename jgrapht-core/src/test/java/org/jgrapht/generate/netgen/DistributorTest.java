@@ -31,24 +31,26 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class DistributorTest {
+public class DistributorTest
+{
     private static final long SEED = 1;
 
     private final Random rng = new Random(SEED);
 
     @Test
-    public void testDistributor_NoUpperBounds_OneValidDistribution() {
+    public void testDistributor_NoUpperBounds_OneValidDistribution()
+    {
         Distributor<String> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> {
             switch (element) {
-                case "a":
-                    return 3;
-                case "b":
-                    return 4;
-                case "c":
-                    return 2;
-                default:
-                    return 0;
+            case "a":
+                return 3;
+            case "b":
+                return 4;
+            case "c":
+                return 2;
+            default:
+                return 0;
             }
         });
         List<Integer> distribution = distributor.getDistribution(List.of("a", "b", "c"), 9);
@@ -57,36 +59,38 @@ public class DistributorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDistributor_NoUpperBounds_NoValidDistribution() {
+    public void testDistributor_NoUpperBounds_NoValidDistribution()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> {
             switch (element) {
-                case 1:
-                    return 5;
-                case 2:
-                    return 6;
-                case 3:
-                    return 2;
-                default:
-                    return 0;
+            case 1:
+                return 5;
+            case 2:
+                return 6;
+            case 3:
+                return 2;
+            default:
+                return 0;
             }
         });
         List<Integer> distribution = distributor.getDistribution(List.of(1, 2, 3), 12);
     }
 
     @Test
-    public void testDistributor_NoLowerBounds_OneValidDistribution() {
+    public void testDistributor_NoLowerBounds_OneValidDistribution()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> {
             switch (element) {
-                case 1:
-                    return 3;
-                case 2:
-                    return 5;
-                case 3:
-                    return 2;
-                default:
-                    return 0;
+            case 1:
+                return 3;
+            case 2:
+                return 5;
+            case 3:
+                return 2;
+            default:
+                return 0;
             }
         });
 
@@ -96,18 +100,19 @@ public class DistributorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDistributor_NoLowerBounds_NoValidDistribution() {
+    public void testDistributor_NoLowerBounds_NoValidDistribution()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> {
             switch (element) {
-                case 1:
-                    return 3;
-                case 2:
-                    return 4;
-                case 3:
-                    return 2;
-                default:
-                    return 0;
+            case 1:
+                return 3;
+            case 2:
+                return 4;
+            case 3:
+                return 2;
+            default:
+                return 0;
             }
         });
 
@@ -115,14 +120,17 @@ public class DistributorTest {
     }
 
     @Test
-    public void testDistributor_AllBounds1() {
+    public void testDistributor_AllBounds1()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> 5);
         distributor.addUpperBound(element -> 10);
 
         int elementNum = 10;
         int valueNum = 5 * elementNum;
-        List<Integer> dist = distributor.getDistribution(IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
+        List<Integer> dist = distributor
+            .getDistribution(
+                IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
 
         int sum = dist.stream().mapToInt(i -> i).sum();
         assertEquals(sum, valueNum);
@@ -133,14 +141,17 @@ public class DistributorTest {
     }
 
     @Test
-    public void testDistributor_AllBounds2() {
+    public void testDistributor_AllBounds2()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> 5);
         distributor.addUpperBound(element -> 10);
 
         int elementNum = 10;
         int valueNum = 10 * elementNum;
-        List<Integer> dist = distributor.getDistribution(IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
+        List<Integer> dist = distributor
+            .getDistribution(
+                IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
 
         int sum = dist.stream().mapToInt(i -> i).sum();
         assertEquals(sum, valueNum);
@@ -151,14 +162,17 @@ public class DistributorTest {
     }
 
     @Test
-    public void testDistributor_AllBounds3() {
+    public void testDistributor_AllBounds3()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         distributor.addLowerBound(element -> 5);
         distributor.addUpperBound(element -> 10);
 
         int elementNum = 10;
         int valueNum = 8 * elementNum;
-        List<Integer> dist = distributor.getDistribution(IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
+        List<Integer> dist = distributor
+            .getDistribution(
+                IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
 
         int sum = dist.stream().mapToInt(i -> i).sum();
         assertEquals(sum, valueNum);
@@ -170,7 +184,8 @@ public class DistributorTest {
     }
 
     @Test
-    public void testDistributor_AllBounds_LargeBounds() {
+    public void testDistributor_AllBounds_LargeBounds()
+    {
         Distributor<Integer> distributor = new Distributor<>(rng);
         int lb = 1000 * 1000;
         int ub = 2 * 1000 * 1000;
@@ -179,7 +194,9 @@ public class DistributorTest {
 
         int elementNum = 1000;
         int valueNum = ((lb + ub) / 2) * elementNum;
-        List<Integer> dist = distributor.getDistribution(IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
+        List<Integer> dist = distributor
+            .getDistribution(
+                IntStream.range(0, elementNum).boxed().collect(Collectors.toList()), valueNum);
 
         int sum = dist.stream().mapToInt(i -> i).sum();
         assertEquals(sum, valueNum);

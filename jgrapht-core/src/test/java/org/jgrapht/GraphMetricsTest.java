@@ -405,7 +405,7 @@ public class GraphMetricsTest
         }
         assertEquals(4, GraphMetrics.getNumberOfTriangles(g));
     }
-    
+
     @Test
     public void testMultipleEdges2()
     {
@@ -415,7 +415,8 @@ public class GraphMetricsTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
-        int[][] edges = { { 0, 1 }, { 1, 2 }, { 2, 0 }, { 1, 3 }, { 2, 3 }, { 2, 1 }, {0, 2}, {0, 2} };
+        int[][] edges =
+            { { 0, 1 }, { 1, 2 }, { 2, 0 }, { 1, 3 }, { 2, 3 }, { 2, 1 }, { 0, 2 }, { 0, 2 } };
         for (int[] e : edges) {
             Graphs.addEdgeWithVertices(g, e[0], e[1]);
         }

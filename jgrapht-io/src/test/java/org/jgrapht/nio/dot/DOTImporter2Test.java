@@ -964,8 +964,8 @@ public class DOTImporter2Test
         // @formatter:on
 
         DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
-        
-        importer.setVertexWithAttributesFactory((id, attrs)->{
+
+        importer.setVertexWithAttributesFactory((id, attrs) -> {
             return id + "-" + attrs.get("color").getValue();
         });
 
@@ -977,7 +977,7 @@ public class DOTImporter2Test
         assertTrue(graph.containsVertex("a1-green"));
         assertTrue(graph.containsVertex("a2-white"));
     }
-    
+
     @Test
     public void testCreateEdgesWithAttributes()
         throws ImportException
@@ -993,21 +993,21 @@ public class DOTImporter2Test
         // @formatter:on
 
         DOTImporter<String, String> importer = new DOTImporter<>();
-        
-        importer.setVertexWithAttributesFactory((id, attrs)->{
+
+        importer.setVertexWithAttributesFactory((id, attrs) -> {
             return id + "-" + attrs.get("color").getValue();
         });
-        
-        importer.setEdgeWithAttributesFactory((attrs)->{
+
+        importer.setEdgeWithAttributesFactory((attrs) -> {
             return attrs.get("label").getValue();
         });
 
-        DirectedPseudograph<String, String> graph = new DirectedPseudograph<>(
-            SupplierUtil.createStringSupplier(), null, false);
+        DirectedPseudograph<String, String> graph =
+            new DirectedPseudograph<>(SupplierUtil.createStringSupplier(), null, false);
         importer.importGraph(graph, new StringReader(input));
 
         assertTrue(graph.containsEdge("e1"));
         assertTrue(graph.containsEdge("e2"));
     }
-    
+
 }

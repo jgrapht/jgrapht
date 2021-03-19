@@ -20,13 +20,13 @@ package org.jgrapht.generate.netgen;
 import java.util.*;
 
 /**
- * Represents network auxiliary information. This information is produced
- * by the {@link NetworkGenerator}.
+ * Represents network auxiliary information. This information is produced by the
+ * {@link NetworkGenerator}.
  * <p>
  * Using the network information instance, you can find out:
  * <ul>
- *     <li>Which network vertices belong to which class.</li>
- *     <li>Which network arcs belong to the skeleton network.</li>
+ * <li>Which network vertices belong to which class.</li>
+ * <li>Which network arcs belong to the skeleton network.</li>
  * </ul>
  *
  * @param <V> the graph vertex type
@@ -34,7 +34,8 @@ import java.util.*;
  * @author Timofey Chudakov
  * @see NetworkGenerator
  */
-public class NetworkInfo<V, E> {
+public class NetworkInfo<V, E>
+{
     /**
      * Network configuration.
      */
@@ -53,7 +54,8 @@ public class NetworkInfo<V, E> {
      *
      * @param config network configuration.
      */
-    NetworkInfo(NetworkGeneratorConfig config) {
+    NetworkInfo(NetworkGeneratorConfig config)
+    {
         this.config = config;
         this.vertices = new ArrayList<>();
         this.skeletonArcs = new ArrayList<>();
@@ -64,7 +66,8 @@ public class NetworkInfo<V, E> {
      *
      * @param chainArc chain arc.
      */
-    void registerChainArc(E chainArc) {
+    void registerChainArc(E chainArc)
+    {
         skeletonArcs.add(chainArc);
     }
 
@@ -73,7 +76,8 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network pure sources.
      */
-    public List<V> getPureSources() {
+    public List<V> getPureSources()
+    {
         return Collections.unmodifiableList(vertices.subList(0, config.getPureSourceNum()));
     }
 
@@ -82,8 +86,10 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network t-sources.
      */
-    public List<V> getTransshipmentSources() {
-        return Collections.unmodifiableList(vertices.subList(config.getPureSourceNum(), config.getSourceNum()));
+    public List<V> getTransshipmentSources()
+    {
+        return Collections
+            .unmodifiableList(vertices.subList(config.getPureSourceNum(), config.getSourceNum()));
     }
 
     /**
@@ -91,7 +97,8 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network sources.
      */
-    public List<V> getSources() {
+    public List<V> getSources()
+    {
         return Collections.unmodifiableList(vertices.subList(0, config.getSourceNum()));
     }
 
@@ -100,8 +107,14 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network t-nodes.
      */
-    public List<V> getTransshipmentNodes() {
-        return Collections.unmodifiableList(vertices.subList(config.getSourceNum(), config.getSourceNum() + config.getTransshipNodeNum()));
+    public List<V> getTransshipmentNodes()
+    {
+        return Collections
+            .unmodifiableList(
+                vertices
+                    .subList(
+                        config.getSourceNum(),
+                        config.getSourceNum() + config.getTransshipNodeNum()));
     }
 
     /**
@@ -109,8 +122,12 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network pure sinks.
      */
-    public List<V> getPureSinks() {
-        return Collections.unmodifiableList(vertices.subList(config.getNodeNum() - config.getPureSinkNum(), config.getNodeNum()));
+    public List<V> getPureSinks()
+    {
+        return Collections
+            .unmodifiableList(
+                vertices
+                    .subList(config.getNodeNum() - config.getPureSinkNum(), config.getNodeNum()));
     }
 
     /**
@@ -118,8 +135,14 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network t-sinks.
      */
-    public List<V> getTransshipmentSinks() {
-        return Collections.unmodifiableList(vertices.subList(config.getNodeNum() - config.getSinkNum(), config.getNodeNum() - config.getPureSinkNum()));
+    public List<V> getTransshipmentSinks()
+    {
+        return Collections
+            .unmodifiableList(
+                vertices
+                    .subList(
+                        config.getNodeNum() - config.getSinkNum(),
+                        config.getNodeNum() - config.getPureSinkNum()));
     }
 
     /**
@@ -127,8 +150,11 @@ public class NetworkInfo<V, E> {
      *
      * @return a list containing network sinks.
      */
-    public List<V> getSinks() {
-        return Collections.unmodifiableList(vertices.subList(config.getNodeNum() - config.getSinkNum(), config.getNodeNum()));
+    public List<V> getSinks()
+    {
+        return Collections
+            .unmodifiableList(
+                vertices.subList(config.getNodeNum() - config.getSinkNum(), config.getNodeNum()));
     }
 
     /**
@@ -136,7 +162,8 @@ public class NetworkInfo<V, E> {
      *
      * @return a list of network skeleton arcs.
      */
-    public List<E> getSkeletonArcs() {
+    public List<E> getSkeletonArcs()
+    {
         return Collections.unmodifiableList(skeletonArcs);
     }
 }

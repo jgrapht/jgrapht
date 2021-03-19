@@ -307,18 +307,19 @@ public class MutableGraphAdapterTest
     }
 
     @Test
-    public void testEdgeCoherenceSameGraph() {
+    public void testEdgeCoherenceSameGraph()
+    {
         final MutableGraph<Integer> g = GraphBuilder.undirected().build();
         g.putEdge(0, 1);
 
         final MutableGraphAdapter<Integer> a = new MutableGraphAdapter<>(g);
-        
+
         EndpointPair<Integer> e1 = a.getEdge(0, 1);
         EndpointPair<Integer> e2 = a.getEdge(1, 0);
-        
+
         assertEquals(e1, e2);
         assertEquals(a.getEdgeSource(e1), a.getEdgeSource(e2));
         assertEquals(a.getEdgeTarget(e1), a.getEdgeTarget(e2));
     }
-    
+
 }

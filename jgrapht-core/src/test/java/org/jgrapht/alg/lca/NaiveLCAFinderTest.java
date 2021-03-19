@@ -216,14 +216,12 @@ public class NaiveLCAFinderTest
      * See issue #953
      */
     @Test
-    public void testLca(){
+    public void testLca()
+    {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         /*
-         *       a-->b-->c
-         *       |       ^
-         *       V       |
-         *       d-->e-->f
+         * a-->b-->c | ^ V | d-->e-->f
          *
          */
         Graphs.addEdgeWithVertices(g, "a", "b");

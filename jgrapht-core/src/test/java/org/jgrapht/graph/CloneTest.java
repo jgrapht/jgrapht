@@ -98,7 +98,8 @@ public class CloneTest
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             return super.hashCode();
         }
     }

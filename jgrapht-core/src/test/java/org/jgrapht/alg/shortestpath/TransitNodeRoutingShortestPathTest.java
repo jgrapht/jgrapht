@@ -48,7 +48,8 @@ import static org.junit.Assert.assertNull;
  *
  * @author Semen Chudakov
  */
-public class TransitNodeRoutingShortestPathTest {
+public class TransitNodeRoutingShortestPathTest
+{
     /**
      * Seed for random numbers generator used in tests.
      */
@@ -56,156 +57,175 @@ public class TransitNodeRoutingShortestPathTest {
 
     /**
      * Executor which is supplied to {@link TransitNodeRoutingShortestPath},
-     * {@link TransitNodeRoutingPrecomputation} and {@link ContractionHierarchyPrecomputation} in this test case.
+     * {@link TransitNodeRoutingPrecomputation} and {@link ContractionHierarchyPrecomputation} in
+     * this test case.
      */
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
     @Test
-    public void testOneVertex() {
+    public void testOneVertex()
+    {
         Integer vertex = 1;
-        Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         graph.addVertex(vertex);
 
-        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath
-                = new TransitNodeRoutingShortestPath<>(graph, executor);
+        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath =
+            new TransitNodeRoutingShortestPath<>(graph, executor);
 
         GraphPath<Integer, DefaultWeightedEdge> path = shortestPath.getPath(vertex, vertex);
-        GraphWalk<Integer, DefaultWeightedEdge> expectedPath = new GraphWalk<>(graph, vertex, vertex,
-                Collections.singletonList(vertex), Collections.emptyList(), 0.0);
+        GraphWalk<Integer, DefaultWeightedEdge> expectedPath = new GraphWalk<>(
+            graph, vertex, vertex, Collections.singletonList(vertex), Collections.emptyList(), 0.0);
         assertEquals(expectedPath, path);
     }
 
     @Test
-    public void testTwoVertices() {
+    public void testTwoVertices()
+    {
         Integer v1 = 1;
         Integer v2 = 2;
 
-        Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge edge1 = Graphs.addEdgeWithVertices(graph, v1, v2, 1.0);
         DefaultWeightedEdge edge2 = Graphs.addEdgeWithVertices(graph, v1, v2, 2.0);
         DefaultWeightedEdge edge3 = Graphs.addEdgeWithVertices(graph, v2, v1, 1.0);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy =
-                new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor).computeContractionHierarchy();
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
+                .computeContractionHierarchy();
 
-        TransitNodeRouting<Integer, DefaultWeightedEdge> routing
-                = new TransitNodeRoutingPrecomputation<>(
-                        contractionHierarchy, 1, executor).computeTransitNodeRouting();
-        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath
-                = new TransitNodeRoutingShortestPath<>(routing);
+        TransitNodeRouting<Integer, DefaultWeightedEdge> routing =
+            new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1, executor)
+                .computeTransitNodeRouting();
+        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath =
+            new TransitNodeRoutingShortestPath<>(routing);
 
         GraphPath<Integer, DefaultWeightedEdge> expectedPath1 = new GraphWalk<>(
-                graph, v1, v2, Arrays.asList(v1, v2), Collections.singletonList(edge1), 1.0);
+            graph, v1, v2, Arrays.asList(v1, v2), Collections.singletonList(edge1), 1.0);
         assertEquals(expectedPath1, shortestPath.getPath(v1, v2));
 
         GraphPath<Integer, DefaultWeightedEdge> expectedPath2 = new GraphWalk<>(
-                graph, v2, v1, Arrays.asList(v2, v1), Collections.singletonList(edge3), 1.0);
+            graph, v2, v1, Arrays.asList(v2, v1), Collections.singletonList(edge3), 1.0);
         assertEquals(expectedPath2, shortestPath.getPath(v2, v1));
     }
 
     @Test
-    public void testThreeVertices() {
+    public void testThreeVertices()
+    {
         Integer v1 = 1;
         Integer v2 = 2;
         Integer v3 = 3;
 
-        Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge edge1 = Graphs.addEdgeWithVertices(graph, v1, v2, 1.0);
         DefaultWeightedEdge edge2 = Graphs.addEdgeWithVertices(graph, v2, v3, 2.0);
         DefaultWeightedEdge edge3 = Graphs.addEdgeWithVertices(graph, v3, v2, 1.0);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy =
-                new ContractionHierarchyPrecomputation<>(
-                        graph, () -> new Random(SEED), executor).computeContractionHierarchy();
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
+                .computeContractionHierarchy();
 
-        TransitNodeRouting<Integer, DefaultWeightedEdge> routing
-                = new TransitNodeRoutingPrecomputation<>(
-                        contractionHierarchy, 1, executor).computeTransitNodeRouting();
-        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath
-                = new TransitNodeRoutingShortestPath<>(routing);
+        TransitNodeRouting<Integer, DefaultWeightedEdge> routing =
+            new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1, executor)
+                .computeTransitNodeRouting();
+        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath =
+            new TransitNodeRoutingShortestPath<>(routing);
 
         GraphPath<Integer, DefaultWeightedEdge> expectedPath1 = new GraphWalk<>(
-                graph, v1, v2, Arrays.asList(v1, v2), Collections.singletonList(edge1), 1.0);
+            graph, v1, v2, Arrays.asList(v1, v2), Collections.singletonList(edge1), 1.0);
         assertEquals(expectedPath1, shortestPath.getPath(v1, v2));
         assertNull(shortestPath.getPath(v2, v1));
 
         GraphPath<Integer, DefaultWeightedEdge> expectedPath2 = new GraphWalk<>(
-                graph, v2, v3, Arrays.asList(v2, v3), Collections.singletonList(edge2), 2.0);
+            graph, v2, v3, Arrays.asList(v2, v3), Collections.singletonList(edge2), 2.0);
         assertEquals(expectedPath2, shortestPath.getPath(v2, v3));
         GraphPath<Integer, DefaultWeightedEdge> expectedPath3 = new GraphWalk<>(
-                graph, v3, v2, Arrays.asList(v3, v2), Collections.singletonList(edge3), 1.0);
+            graph, v3, v2, Arrays.asList(v3, v2), Collections.singletonList(edge3), 1.0);
         assertEquals(expectedPath3, shortestPath.getPath(v3, v2));
 
         GraphPath<Integer, DefaultWeightedEdge> expectedPath4 = new GraphWalk<>(
-                graph, v1, v3, Arrays.asList(v1, v2, v3), Arrays.asList(edge1, edge2), 3.0);
+            graph, v1, v3, Arrays.asList(v1, v2, v3), Arrays.asList(edge1, edge2), 3.0);
         assertEquals(expectedPath4, shortestPath.getPath(v1, v3));
         assertNull(shortestPath.getPath(v3, v1));
     }
 
     @Test
-    public void testOnRandomGraphs() {
+    public void testOnRandomGraphs()
+    {
         int numOfVertices = 30;
         int vertexDegree = 5;
         int numOfIterations = 20;
         int source = 0;
         Random random = new Random(SEED);
         for (int i = 0; i < numOfIterations; ++i) {
-            testOnGraph(generateRandomGraph(numOfVertices, vertexDegree * numOfVertices, random), source);
+            testOnGraph(
+                generateRandomGraph(numOfVertices, vertexDegree * numOfVertices, random), source);
         }
     }
 
     /**
-     * Test correctness of {@link TransitNodeRoutingShortestPath} on {@code graph}
-     * starting at {@code source}.
+     * Test correctness of {@link TransitNodeRoutingShortestPath} on {@code graph} starting at
+     * {@code source}.
      *
-     * @param graph  graph
+     * @param graph graph
      * @param source vertex in {@code graph}
      */
-    private void testOnGraph(Graph<Integer, DefaultWeightedEdge> graph, Integer source) {
-        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
+    private void testOnGraph(Graph<Integer, DefaultWeightedEdge> graph, Integer source)
+    {
+        ShortestPathAlgorithm.SingleSourcePaths<Integer,
+            DefaultWeightedEdge> dijkstraShortestPaths =
                 new DijkstraShortestPath<>(graph).getPaths(source);
 
-        ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy
-                = new ContractionHierarchyPrecomputation<>(
-                        graph, () -> new Random(SEED), executor).computeContractionHierarchy();
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy =
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
+                .computeContractionHierarchy();
 
         TransitNodeRouting<Integer, DefaultWeightedEdge> routing =
-                new TransitNodeRoutingPrecomputation<>(contractionHierarchy, executor).computeTransitNodeRouting();
+            new TransitNodeRoutingPrecomputation<>(contractionHierarchy, executor)
+                .computeTransitNodeRouting();
 
-        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> transitNodeRoutingShortestPath
-                = new TransitNodeRoutingShortestPath<>(routing);
-        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> tnrShortestPaths
-                = transitNodeRoutingShortestPath.getPaths(source);
-
+        TransitNodeRoutingShortestPath<Integer,
+            DefaultWeightedEdge> transitNodeRoutingShortestPath =
+                new TransitNodeRoutingShortestPath<>(routing);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> tnrShortestPaths =
+            transitNodeRoutingShortestPath.getPaths(source);
 
         assertEqualPaths(dijkstraShortestPaths, tnrShortestPaths, graph.vertexSet());
     }
 
     /**
-     * Generates an instance of random graph with {@code numOfVertices} vertices
-     * and {@code numOfEdges} edges.
+     * Generates an instance of random graph with {@code numOfVertices} vertices and
+     * {@code numOfEdges} edges.
      *
      * @param numOfVertices number of vertices
-     * @param numOfEdges    number of edges
+     * @param numOfEdges number of edges
      * @return generated graph
      */
-    private Graph<Integer, DefaultWeightedEdge> generateRandomGraph(int numOfVertices, int numOfEdges, Random random) {
+    private Graph<Integer, DefaultWeightedEdge> generateRandomGraph(
+        int numOfVertices, int numOfEdges, Random random)
+    {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-                new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1, SEED);
+            new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1, SEED);
         generator.generateGraph(graph);
         makeConnected(graph);
         addEdgeWeights(graph, random);
@@ -218,7 +238,8 @@ public class TransitNodeRoutingShortestPathTest {
      *
      * @param graph graph
      */
-    private void makeConnected(Graph<Integer, DefaultWeightedEdge> graph) {
+    private void makeConnected(Graph<Integer, DefaultWeightedEdge> graph)
+    {
         Object[] vertices = graph.vertexSet().toArray();
         for (int i = 0; i < vertices.length - 1; ++i) {
             graph.addEdge((Integer) vertices[i], (Integer) vertices[i + 1]);
@@ -229,10 +250,11 @@ public class TransitNodeRoutingShortestPathTest {
     /**
      * Sets edge weights to edges in {@code graph}.
      *
-     * @param graph  graph
+     * @param graph graph
      * @param random random numbers generator
      */
-    private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph, Random random) {
+    private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph, Random random)
+    {
         for (DefaultWeightedEdge edge : graph.edgeSet()) {
             graph.setEdgeWeight(edge, random.nextDouble());
         }
@@ -241,14 +263,15 @@ public class TransitNodeRoutingShortestPathTest {
     /**
      * Checks computed single source shortest paths tree for equality.
      *
-     * @param expected  expected paths
-     * @param actual    actual paths
+     * @param expected expected paths
+     * @param actual actual paths
      * @param vertexSet vertices
      */
     private void assertEqualPaths(
-            ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> expected,
-            ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> actual,
-            Set<Integer> vertexSet) {
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> expected,
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> actual,
+        Set<Integer> vertexSet)
+    {
         for (Integer sink : vertexSet) {
             assertEquals(expected.getPath(sink), actual.getPath(sink));
         }

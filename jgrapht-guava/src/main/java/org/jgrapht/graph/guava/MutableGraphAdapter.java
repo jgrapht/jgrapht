@@ -234,7 +234,7 @@ public class MutableGraphAdapter<V>
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.graph = Graphs.copyOf(this.graph);
-            newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);            
+            newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -298,7 +298,7 @@ public class MutableGraphAdapter<V>
             V t = (V) ois.readObject();
             graph.putEdge(s, t);
         }
-        
+
         // setup the vertex order
         vertexOrder = createVertexOrder(vertexOrderMethod);
     }

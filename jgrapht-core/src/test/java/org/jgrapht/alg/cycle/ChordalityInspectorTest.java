@@ -87,7 +87,7 @@ public class ChordalityInspectorTest
     @Test
     public void testPerfectEliminationOrder()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector =
@@ -134,7 +134,7 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal2()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
@@ -150,7 +150,7 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal3()
     {
-        int[][] edges = {{1, 2}, {2, 3}, {3, 1}, {4, 5}, {5, 6}, {6, 4},};
+        int[][] edges = { { 1, 2 }, { 2, 3 }, { 3, 1 }, { 4, 5 }, { 5, 6 }, { 6, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
@@ -165,9 +165,9 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal4()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {3, 4}, {3, 5}, {4, 5},
-                {5, 6}, {5, 7}, {6, 7}, {7, 8}, {7, 9}, {8, 9},
-                {9, 1}, {10, 1}, {3, 7}, {1, 7},};
+        int[][] edges =
+            { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 4 }, { 3, 5 }, { 4, 5 }, { 5, 6 }, { 5, 7 },
+                { 6, 7 }, { 7, 8 }, { 7, 9 }, { 8, 9 }, { 9, 1 }, { 10, 1 }, { 3, 7 }, { 1, 7 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
@@ -182,9 +182,9 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal5()
     {
-        int[][] edges = {{1, 2},{2, 3},{3, 4},{4, 1},{1, 5},{5, 2},
-                {2, 6},{6, 3},{3, 7},{7, 4},{4, 8},{8, 1},
-                {5, 6},{6, 7},{7, 8},{8, 5},{5, 7},{6, 8},};
+        int[][] edges = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 1 }, { 1, 5 }, { 5, 2 }, { 2, 6 },
+            { 6, 3 }, { 3, 7 }, { 7, 4 }, { 4, 8 }, { 8, 1 }, { 5, 6 }, { 6, 7 }, { 7, 8 },
+            { 8, 5 }, { 5, 7 }, { 6, 8 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
@@ -201,7 +201,7 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal6()
     {
-        int[][] edges = {{1, 1}, {1, 2}, {1, 2}, {1, 3}, {3, 1}, {2, 3},};
+        int[][] edges = { { 1, 1 }, { 1, 2 }, { 1, 2 }, { 1, 3 }, { 3, 1 }, { 2, 3 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
@@ -216,8 +216,8 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal7()
     {
-        int[][] edges = {{1, 1}, {1, 2}, {2, 1}, {2, 2}, {3, 3}, {4, 4},
-                {2, 3}, {2, 3}, {3, 4}, {4, 5}, {5, 2},};
+        int[][] edges = { { 1, 1 }, { 1, 2 }, { 2, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 2, 3 },
+            { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 2 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
 
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
@@ -293,7 +293,7 @@ public class ChordalityInspectorTest
     @Test
     public void testIsPerfectEliminationOrder1()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4);
@@ -308,7 +308,7 @@ public class ChordalityInspectorTest
     @Test
     public void testIsPerfectEliminationOrder2()
     {
-        int[][] edges = {{1, 2}, {1, 4}, {2, 3}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 4 }, { 2, 3 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
         List<Integer> order = Arrays.asList(1, 2, 4, 3);
 
@@ -336,9 +336,9 @@ public class ChordalityInspectorTest
     @Test
     public void testIsPerfectEliminationOrder3()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {2, 3}, {3, 4}, {3, 5},
-                {3, 6}, {4, 5}, {5, 6}, {6, 7}, {6, 8}, {6, 9},
-                {7, 8}, {8, 9}, {8, 10}, {9, 10},};
+        int[][] edges =
+            { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 3 }, { 3, 4 }, { 3, 5 }, { 3, 6 }, { 4, 5 },
+                { 5, 6 }, { 6, 7 }, { 6, 8 }, { 6, 9 }, { 7, 8 }, { 8, 9 }, { 8, 10 }, { 9, 10 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         assertTrue(
@@ -351,10 +351,9 @@ public class ChordalityInspectorTest
     @Test
     public void testIsPerfectEliminationOrder4()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {2, 3}, {3, 4}, {3, 5},
-                {3, 6}, {3, 7}, {4, 5}, {5, 6}, {5, 7}, {6, 7},
-                {6, 8}, {7, 9}, {7, 10}, {7, 11}, {9, 10}, {9, 11},
-                {9, 12}, {10, 11}, {11, 12},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 3 }, { 3, 4 }, { 3, 5 }, { 3, 6 },
+            { 3, 7 }, { 4, 5 }, { 5, 6 }, { 5, 7 }, { 6, 7 }, { 6, 8 }, { 7, 9 }, { 7, 10 },
+            { 7, 11 }, { 9, 10 }, { 9, 11 }, { 9, 12 }, { 10, 11 }, { 11, 12 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
@@ -369,8 +368,8 @@ public class ChordalityInspectorTest
     @Test
     public void testIsPerfectEliminationOrder5()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}, {3, 5},
-                {4, 5}, {4, 6}, {5, 6},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, { 3, 5 }, { 4, 5 },
+            { 4, 6 }, { 5, 6 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         List<Integer> order = Arrays.asList(1, 2, 5, 6, 4, 3);
@@ -385,9 +384,8 @@ public class ChordalityInspectorTest
     @Test
     public void testIsPerfectEliminationOrder6()
     {
-        int[][] edges = {{1, 2},{2, 3},{2, 4},{3, 4},{4, 5},{4, 6},
-                {5, 6},{6, 7},{6, 8},{7, 8},{8, 9},{8, 10},
-                {9, 10},{10, 1},{10, 2},};
+        int[][] edges = { { 1, 2 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, { 4, 5 }, { 4, 6 }, { 5, 6 },
+            { 6, 7 }, { 6, 8 }, { 7, 8 }, { 8, 9 }, { 8, 10 }, { 9, 10 }, { 10, 1 }, { 10, 2 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);

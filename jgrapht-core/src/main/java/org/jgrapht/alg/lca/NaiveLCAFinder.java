@@ -29,13 +29,12 @@ import java.util.*;
  * Find the Lowest Common Ancestor of a directed graph.
  *
  * <p>
- * Find the LCA, defined as <i>"Let $G = (V, E)$ be a DAG, and let $x, y \in V$. Let $G_{x,y}$ be the
- * subgraph of $G$ induced by the set of all common ancestors of $x$ and $y$. Define SLCA (x, y) to
- * be the set of out-degree 0 nodes (leafs) in $G_{x,y}$. The lowest common ancestors of $x$ and $y$
- * are the elements of SLCA (x, y). "</i>
- * from <i> Michael A. Bender, Martín Farach-Colton, Giridhar Pemmasani, Steven Skiena, Pavel
- * Sumazin, Lowest common ancestors in trees and directed acyclic graphs, Journal of Algorithms,
- * Volume 57, Issue 2, 2005, Pages 75-94, ISSN 0196-6774,
+ * Find the LCA, defined as <i>"Let $G = (V, E)$ be a DAG, and let $x, y \in V$. Let $G_{x,y}$ be
+ * the subgraph of $G$ induced by the set of all common ancestors of $x$ and $y$. Define SLCA (x, y)
+ * to be the set of out-degree 0 nodes (leafs) in $G_{x,y}$. The lowest common ancestors of $x$ and
+ * $y$ are the elements of SLCA (x, y). "</i> from <i> Michael A. Bender, Martín Farach-Colton,
+ * Giridhar Pemmasani, Steven Skiena, Pavel Sumazin, Lowest common ancestors in trees and directed
+ * acyclic graphs, Journal of Algorithms, Volume 57, Issue 2, 2005, Pages 75-94, ISSN 0196-6774,
  * https://doi.org/10.1016/j.jalgor.2005.08.001.</i>
  *
  * <p>
@@ -129,12 +128,12 @@ public class NaiveLCAFinder<V, E>
             boolean isLeaf = true;
             for (E edge : graph.outgoingEdgesOf(ancestor)) {
                 V target = graph.getEdgeTarget(edge);
-                if (commonAncestors.contains(target)){
+                if (commonAncestors.contains(target)) {
                     isLeaf = false;
                     break;
                 }
             }
-            if(isLeaf){
+            if (isLeaf) {
                 leaves.add(ancestor);
             }
         }

@@ -152,7 +152,7 @@ public class IndexedFRLayoutAlgorithm2DTest
 
         assertEquals(0, alg.getSavedComparisons());
     }
-    
+
     @Test
     public void testGraphWithIsolatedVertex()
     {
@@ -179,7 +179,7 @@ public class IndexedFRLayoutAlgorithm2DTest
         final double normalizationFactor = 0.5;
         final double theta = 0;
         IndexedFRLayoutAlgorithm2D<String, DefaultEdge> alg =
-            new IndexedFRLayoutAlgorithm2D<>(iterations, theta, normalizationFactor, rng);        
+            new IndexedFRLayoutAlgorithm2D<>(iterations, theta, normalizationFactor, rng);
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 100d, 100d));
         alg.layout(graph, model);

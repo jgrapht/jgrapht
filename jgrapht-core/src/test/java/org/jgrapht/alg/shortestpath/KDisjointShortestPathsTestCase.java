@@ -1002,68 +1002,68 @@ public abstract class KDisjointShortestPathsTestCase
             Assert.assertTrue(isIncluded);
         }
     }
-    
+
     @Test
     public void testFirstPathEdgesFirst()
     {
-         GraphBuilder<Integer, DefaultWeightedEdge,
-         ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
-             SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
-         
-         builder.addEdge(1, 2, 1);
-         builder.addEdge(2, 1, 1);
-         builder.addEdge(2, 3, 1);
-         builder.addEdge(3, 2, 1);
-         
-         builder.addEdge(1, 4, 1);
-         builder.addEdge(4, 1, 1);
-         builder.addEdge(1, 5, 1);
-         builder.addEdge(5, 1, 1);
-         
-         builder.addEdge(2, 5, 1);
-         builder.addEdge(5, 2, 1);
-         builder.addEdge(2, 6, 1);
-         builder.addEdge(6, 2, 1);
-         
-         builder.addEdge(3, 6, 1);
-         builder.addEdge(6, 3, 1);
-         builder.addEdge(3, 7, 1);
-         builder.addEdge(7, 3, 1);
-         
-         builder.addEdge(4, 5, 1);
-         builder.addEdge(5, 4, 1);
-         builder.addEdge(6, 7, 1);
-         builder.addEdge(7, 6, 1);
-         
-         builder.addEdge(5, 8, 1);
-         builder.addEdge(8, 5, 1);
-         builder.addEdge(6, 9, 1);
-         builder.addEdge(9, 6, 1);
-         
-         builder.addEdge(8, 9, 1);
-         builder.addEdge(9, 8, 1);
-         
-         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = builder.build();
-         KShortestPathAlgorithm<Integer, DefaultWeightedEdge> ksp = getKShortestPathAlgorithm(graph);
-         List<GraphPath<Integer, DefaultWeightedEdge>> paths = ksp.getPaths(1, 3, 3);
-         
-         GraphPath<Integer, DefaultWeightedEdge> expectedP1 =
-             new GraphWalk<>(graph, Arrays.asList(1, 2, 3), 2);
-         assertEquals(expectedP1, paths.get(0));
-         assertEquals(2, paths.get(0).getLength());
-         assertEquals(2.0, paths.get(0).getWeight(), 0.0);
-         
-         GraphPath<Integer, DefaultWeightedEdge> expectedP2 =
-             new GraphWalk<>(graph, Arrays.asList(1, 5, 2, 6, 3), 4);
-         assertEquals(expectedP2, paths.get(1));
-         assertEquals(4, paths.get(1).getLength());
-         assertEquals(4.0, paths.get(1).getWeight(), 0.0);
-         
-         GraphPath<Integer, DefaultWeightedEdge> expectedP3 =
-             new GraphWalk<>(graph, Arrays.asList(1, 4, 5, 8, 9, 6, 7, 3), 7);
-         assertEquals(expectedP3, paths.get(2));
-         assertEquals(7, paths.get(2).getLength());
-         assertEquals(7.0, paths.get(2).getWeight(), 0.0);
+        GraphBuilder<Integer, DefaultWeightedEdge,
+            ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
+                SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
+
+        builder.addEdge(1, 2, 1);
+        builder.addEdge(2, 1, 1);
+        builder.addEdge(2, 3, 1);
+        builder.addEdge(3, 2, 1);
+
+        builder.addEdge(1, 4, 1);
+        builder.addEdge(4, 1, 1);
+        builder.addEdge(1, 5, 1);
+        builder.addEdge(5, 1, 1);
+
+        builder.addEdge(2, 5, 1);
+        builder.addEdge(5, 2, 1);
+        builder.addEdge(2, 6, 1);
+        builder.addEdge(6, 2, 1);
+
+        builder.addEdge(3, 6, 1);
+        builder.addEdge(6, 3, 1);
+        builder.addEdge(3, 7, 1);
+        builder.addEdge(7, 3, 1);
+
+        builder.addEdge(4, 5, 1);
+        builder.addEdge(5, 4, 1);
+        builder.addEdge(6, 7, 1);
+        builder.addEdge(7, 6, 1);
+
+        builder.addEdge(5, 8, 1);
+        builder.addEdge(8, 5, 1);
+        builder.addEdge(6, 9, 1);
+        builder.addEdge(9, 6, 1);
+
+        builder.addEdge(8, 9, 1);
+        builder.addEdge(9, 8, 1);
+
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = builder.build();
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> ksp = getKShortestPathAlgorithm(graph);
+        List<GraphPath<Integer, DefaultWeightedEdge>> paths = ksp.getPaths(1, 3, 3);
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 =
+            new GraphWalk<>(graph, Arrays.asList(1, 2, 3), 2);
+        assertEquals(expectedP1, paths.get(0));
+        assertEquals(2, paths.get(0).getLength());
+        assertEquals(2.0, paths.get(0).getWeight(), 0.0);
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 =
+            new GraphWalk<>(graph, Arrays.asList(1, 5, 2, 6, 3), 4);
+        assertEquals(expectedP2, paths.get(1));
+        assertEquals(4, paths.get(1).getLength());
+        assertEquals(4.0, paths.get(1).getWeight(), 0.0);
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP3 =
+            new GraphWalk<>(graph, Arrays.asList(1, 4, 5, 8, 9, 6, 7, 3), 7);
+        assertEquals(expectedP3, paths.get(2));
+        assertEquals(7, paths.get(2).getLength());
+        assertEquals(7.0, paths.get(2).getWeight(), 0.0);
     }
 
     protected abstract <V,

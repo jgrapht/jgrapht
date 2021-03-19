@@ -100,7 +100,7 @@ public class JSONEventDrivenImporter
 {
     private boolean notifyVertexAttributesOutOfOrder;
     private boolean notifyEdgeAttributesOutOfOrder;
-    
+
     /**
      * Constructs a new importer.
      */
@@ -108,16 +108,17 @@ public class JSONEventDrivenImporter
     {
         this(true, true);
     }
-    
+
     /**
      * Constructs a new importer.
      * 
-     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order even if 
-     *        they appear together in the input
-     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even if 
-     *        they appear together in the input        
+     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
+     *        even if they appear together in the input
+     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
+     *        if they appear together in the input
      */
-    public JSONEventDrivenImporter(boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
+    public JSONEventDrivenImporter(
+        boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
     {
         this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
         this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
@@ -250,12 +251,12 @@ public class JSONEventDrivenImporter
                     if (nodeId == null) {
                         nodeId = "Singleton_" + singletonsUUID + "_" + (singletons++);
                     }
-                    if (notifyVertexAttributesOutOfOrder) { 
+                    if (notifyVertexAttributesOutOfOrder) {
                         notifyVertex(nodeId);
-                        for(Entry<String, Attribute> entry: attributes.entrySet()) { 
+                        for (Entry<String, Attribute> entry : attributes.entrySet()) {
                             notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
                         }
-                    } else { 
+                    } else {
                         notifyVertexWithAttributes(nodeId, attributes);
                     }
                     insideNode = false;
@@ -266,21 +267,20 @@ public class JSONEventDrivenImporter
                         Attribute attributeWeight = attributes.get(WEIGHT);
                         if (attributeWeight != null) {
                             AttributeType type = attributeWeight.getType();
-                            if (type.equals(AttributeType.INT) || 
-                                type.equals(AttributeType.FLOAT)
+                            if (type.equals(AttributeType.INT) || type.equals(AttributeType.FLOAT)
                                 || type.equals(AttributeType.DOUBLE))
                             {
                                 weight = Double.parseDouble(attributeWeight.getValue());
                             }
                         }
                         Triple<String, String, Double> et = Triple.of(sourceId, targetId, weight);
-                        if (notifyEdgeAttributesOutOfOrder) { 
+                        if (notifyEdgeAttributesOutOfOrder) {
                             // notify individually
                             notifyEdge(et);
-                            for(Entry<String, Attribute> entry: attributes.entrySet()) { 
+                            for (Entry<String, Attribute> entry : attributes.entrySet()) {
                                 notifyEdgeAttribute(et, entry.getKey(), entry.getValue());
                             }
-                        } else { 
+                        } else {
                             // notify with all attributes
                             notifyEdgeWithAttributes(et, attributes);
                         }

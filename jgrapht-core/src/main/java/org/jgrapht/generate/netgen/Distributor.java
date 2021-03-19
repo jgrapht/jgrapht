@@ -25,17 +25,17 @@ import java.util.function.Function;
 /**
  * Distributes value units among keys given lower and upper bound constraints.
  * <p>
- * Let's define a set of elements $\{k_1, k_2, \dots, k_n\}$. For every element a set of
- * lower bounds $\{l_1, l_2, \dots, l_t\}$ and upper bounds $\{u_1, u_2, \dots, u_p\}$ is
- * specified. The problem is to randomly distribute a number of abstract value units $V$
- * among keys such that the lower bound and upper bound constraints are satisfied. This
- * class solves this problem.
+ * Let's define a set of elements $\{k_1, k_2, \dots, k_n\}$. For every element a set of lower
+ * bounds $\{l_1, l_2, \dots, l_t\}$ and upper bounds $\{u_1, u_2, \dots, u_p\}$ is specified. The
+ * problem is to randomly distribute a number of abstract value units $V$ among keys such that the
+ * lower bound and upper bound constraints are satisfied. This class solves this problem.
  *
  * @param <K> the element type.
  * @author Timofey Chudakov
  * @see NetworkGenerator
  */
-public class Distributor<K> {
+public class Distributor<K>
+{
     /**
      * Random number generator used by this distributor.
      */
@@ -52,7 +52,8 @@ public class Distributor<K> {
     /**
      * Creates a Distributor using random seed.
      */
-    public Distributor() {
+    public Distributor()
+    {
         this(System.nanoTime());
     }
 
@@ -61,7 +62,8 @@ public class Distributor<K> {
      *
      * @param seed the seed for the random number generator.
      */
-    public Distributor(long seed) {
+    public Distributor(long seed)
+    {
         this(new Random(seed));
     }
 
@@ -70,7 +72,8 @@ public class Distributor<K> {
      *
      * @param rng a random number generator to use.
      */
-    public Distributor(Random rng) {
+    public Distributor(Random rng)
+    {
         this.rng = rng;
         this.lowerBounds = new ArrayList<>();
         this.upperBounds = new ArrayList<>();
@@ -81,7 +84,8 @@ public class Distributor<K> {
      *
      * @param upperBound an upper bound function.
      */
-    public void addUpperBound(Function<K, Integer> upperBound) {
+    public void addUpperBound(Function<K, Integer> upperBound)
+    {
         this.upperBounds.add(upperBound);
     }
 
@@ -90,7 +94,8 @@ public class Distributor<K> {
      *
      * @param lowerBound a lower bound function.
      */
-    public void addLowerBound(Function<K, Integer> lowerBound) {
+    public void addLowerBound(Function<K, Integer> lowerBound)
+    {
         this.lowerBounds.add(lowerBound);
     }
 
@@ -100,7 +105,8 @@ public class Distributor<K> {
      * @param keys list of keys.
      * @return the computed key lower bounds.
      */
-    private List<Integer> computeLowerBounds(List<K> keys) {
+    private List<Integer> computeLowerBounds(List<K> keys)
+    {
         List<Integer> keyLowerBounds = new ArrayList<>(keys.size());
         for (K key : keys) {
             int lowerBound = 0;
@@ -119,7 +125,8 @@ public class Distributor<K> {
      * @param keys a list of keys.
      * @return the computed key upper bound.
      */
-    private List<Integer> computeUpperBounds(List<K> keys) {
+    private List<Integer> computeUpperBounds(List<K> keys)
+    {
         List<Integer> keyUpperBounds = new ArrayList<>(keys.size());
         for (K key : keys) {
             int upperBound = Integer.MAX_VALUE;
@@ -133,13 +140,14 @@ public class Distributor<K> {
     }
 
     /**
-     * Computes a suffix sum of the {@code bounds}. Returns computed suffix sum and
-     * the sum of all elements in the {@code bounds list}.
+     * Computes a suffix sum of the {@code bounds}. Returns computed suffix sum and the sum of all
+     * elements in the {@code bounds list}.
      *
      * @param bounds list of integers.
      * @return computed pair of suffix sum list and a sum of all elements.
      */
-    private Pair<List<Integer>, Long> computeSuffixSum(List<Integer> bounds) {
+    private Pair<List<Integer>, Long> computeSuffixSum(List<Integer> bounds)
+    {
         List<Integer> suffixSum = new ArrayList<>(Collections.nCopies(bounds.size(), 0));
         long sum = 0;
         for (int i = bounds.size() - 1; i >= 0; i--) {
@@ -151,16 +159,16 @@ public class Distributor<K> {
     }
 
     /**
-     * Computes and returns a value distribution for the list of keys. The resulting
-     * distribution will satisfy the (possibly empty) sets of lower and upper bound
-     * constraints. Distributed values will be in the same order as the keys in the
-     * key list.
+     * Computes and returns a value distribution for the list of keys. The resulting distribution
+     * will satisfy the (possibly empty) sets of lower and upper bound constraints. Distributed
+     * values will be in the same order as the keys in the key list.
      *
-     * @param keys     the list of keys.
+     * @param keys the list of keys.
      * @param valueNum the number of abstract value units to distribute.
      * @return the computed value distribution.
      */
-    public List<Integer> getDistribution(List<K> keys, final int valueNum) {
+    public List<Integer> getDistribution(List<K> keys, final int valueNum)
+    {
         List<Integer> keyLowerBounds = computeLowerBounds(keys);
         List<Integer> keyUpperBounds = computeUpperBounds(keys);
 
@@ -174,9 +182,11 @@ public class Distributor<K> {
         long ubSum = ubSufSumP.getSecond();
 
         if (lbSum > valueNum) {
-            throw new IllegalArgumentException("Can't distribute values among keys: the sum of lower bounds is greater than the number of values");
+            throw new IllegalArgumentException(
+                "Can't distribute values among keys: the sum of lower bounds is greater than the number of values");
         } else if (ubSum < valueNum) {
-            throw new IllegalArgumentException("Can't distribute values among keys: the sum of upper bounds is smaller than the number of values");
+            throw new IllegalArgumentException(
+                "Can't distribute values among keys: the sum of upper bounds is smaller than the number of values");
         }
 
         int remainingValues = valueNum;
@@ -192,7 +202,8 @@ public class Distributor<K> {
             upperBound = Math.min(upperBound, valueNumUpperBound);
 
             if (lowerBound > upperBound) {
-                throw new IllegalArgumentException("Infeasible bound specified for the key: " + keys.get(i));
+                throw new IllegalArgumentException(
+                    "Infeasible bound specified for the key: " + keys.get(i));
             }
 
             int allocatedValues = rng.nextInt(upperBound - lowerBound + 1) + lowerBound;

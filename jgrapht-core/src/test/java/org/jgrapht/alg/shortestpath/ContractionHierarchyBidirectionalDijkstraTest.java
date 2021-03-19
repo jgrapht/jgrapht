@@ -42,18 +42,22 @@ public class ContractionHierarchyBidirectionalDijkstraTest
     private static final long SEED = 19L;
 
     /**
-     * Executor which is supplied to the {@link ContractionHierarchyBidirectionalDijkstra}
-     * algorithm in this test case.
+     * Executor which is supplied to the {@link ContractionHierarchyBidirectionalDijkstra} algorithm
+     * in this test case.
      */
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
 

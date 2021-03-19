@@ -191,14 +191,13 @@ public class BlossomVInitializerTest
     @Test
     public void testFractionalInitialization1()
     {
-        int[][] edges = { { 0, 3, 8 }, { 0, 4, 3 }, { 0, 5, 3 }, { 1, 3, 2 },
-            { 1, 4, 5 }, { 1, 5, 2 }, { 2, 3, 7 }, { 2, 4, 3 }, { 2, 5, 4 } };
+        int[][] edges = { { 0, 3, 8 }, { 0, 4, 3 }, { 0, 5, 3 }, { 1, 3, 2 }, { 1, 4, 5 },
+            { 1, 5, 2 }, { 2, 3, 7 }, { 2, 4, 3 }, { 2, 5, 4 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
         KolmogorovWeightedPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
 
         assertEquals(8, matching.getWeight(), EPS);
@@ -221,8 +220,7 @@ public class BlossomVInitializerTest
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
         KolmogorovWeightedPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
 
         assertEquals(14, matching.getWeight(), EPS);
@@ -241,13 +239,12 @@ public class BlossomVInitializerTest
     public void testFractionalInitialization3()
     {
         int[][] edges = new int[][] { { 0, 5, 6 }, { 0, 6, 8 }, { 1, 5, 5 }, { 1, 6, 5 },
-                { 1, 7, 3 }, { 2, 4, 2 }, { 2, 5, 1 }, { 2, 6, 8 }, { 3, 5, 5 }, { 3, 7, 9 } };
+            { 1, 7, 3 }, { 2, 4, 2 }, { 2, 5, 1 }, { 2, 6, 8 }, { 3, 5, 5 }, { 3, 7, 9 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
         KolmogorovWeightedPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
 
         assertEquals(18, matching.getWeight(), EPS);
@@ -271,8 +268,7 @@ public class BlossomVInitializerTest
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
         KolmogorovWeightedPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
 
         assertEquals(24, matching.getWeight(), EPS);
@@ -290,14 +286,13 @@ public class BlossomVInitializerTest
     public void testFractionalInitialization5()
     {
         int[][] edges = new int[][] { { 1, 0, 2 }, { 1, 2, 5 }, { 0, 2, 4 }, { 1, 4, 5 },
-                { 2, 4, 2 }, { 1, 3, 2 }, { 1, 5, 4 }, { 3, 5, 3 }, { 4, 5, 5 }, { 3, 6, 4 },
-                { 5, 6, 2 }, { 5, 7, 3 }, { 6, 7, 4 }, { 4, 7, 4 } };
+            { 2, 4, 2 }, { 1, 3, 2 }, { 1, 5, 4 }, { 3, 5, 3 }, { 4, 5, 5 }, { 3, 6, 4 },
+            { 5, 6, 2 }, { 5, 7, 3 }, { 6, 7, 4 }, { 4, 7, 4 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
 
         assertEquals(11, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
@@ -311,14 +306,13 @@ public class BlossomVInitializerTest
     public void testFractionalInitialization6()
     {
         int[][] edges = new int[][] { { 0, 1, 5 }, { 0, 2, 9 }, { 1, 2, 6 }, { 2, 3, 4 },
-                { 2, 4, 5 }, { 3, 4, 3 }, { 1, 4, 8 }, { 1, 5, 8 }, { 0, 5, 11 }, { 4, 5, 7 },
-                { 4, 6, 3 }, { 5, 6, 5 }, { 6, 7, 3 }, { 5, 7, 6 }, { 4, 7, 6 }, { 3, 7, 9 } };
+            { 2, 4, 5 }, { 3, 4, 3 }, { 1, 4, 8 }, { 1, 5, 8 }, { 0, 5, 11 }, { 4, 5, 7 },
+            { 4, 6, 3 }, { 5, 6, 5 }, { 6, 7, 3 }, { 5, 7, 6 }, { 4, 7, 6 }, { 3, 7, 9 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
 
         assertEquals(18, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
@@ -340,8 +334,7 @@ public class BlossomVInitializerTest
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
 
         assertEquals(21, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
@@ -361,8 +354,7 @@ public class BlossomVInitializerTest
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
 
         assertEquals(20, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
@@ -382,8 +374,7 @@ public class BlossomVInitializerTest
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
 
         assertEquals(17, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());

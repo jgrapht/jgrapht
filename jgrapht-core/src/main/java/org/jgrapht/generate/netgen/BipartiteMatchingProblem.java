@@ -23,30 +23,29 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * This class represents a bipartite matching problem. The problem can be weighted or
- * unweighted depending on the {@link BipartiteMatchingProblem#isWeighted()}.
+ * This class represents a bipartite matching problem. The problem can be weighted or unweighted
+ * depending on the {@link BipartiteMatchingProblem#isWeighted()}.
  * <p>
- * The minimum weight (minimum cost) perfect bipartite matching problem is defined as follows:
- * \[ \begin{align} \mbox{minimize}~&amp; \sum_{e \in E}c_e\cdot x_e &amp;\\
- * \mbox{s.t. }&amp;\sum_{e\in \delta(v)} x_e = 1 &amp; \forall v\in V\\
- * &amp;x_e \in \{0,1\} &amp; \forall e\in E \end{align} \]
- * Here $\delta(v)$ denotes the set of edges incident to the vertex $v$.
- * The parameters $c_{e}$ define a cost of adding the edge $e$ to the matching.
- * If the problem is unweighted, the values $c_e$ are equal to 1 in the problem formulation.
+ * The minimum weight (minimum cost) perfect bipartite matching problem is defined as follows: \[
+ * \begin{align} \mbox{minimize}~&amp; \sum_{e \in E}c_e\cdot x_e &amp;\\ \mbox{s.t.
+ * }&amp;\sum_{e\in \delta(v)} x_e = 1 &amp; \forall v\in V\\ &amp;x_e \in \{0,1\} &amp; \forall
+ * e\in E \end{align} \] Here $\delta(v)$ denotes the set of edges incident to the vertex $v$. The
+ * parameters $c_{e}$ define a cost of adding the edge $e$ to the matching. If the problem is
+ * unweighted, the values $c_e$ are equal to 1 in the problem formulation.
  * <p>
- * This class can define bipartite matching problems without the requirement that every
- * edge must be matched, i.e. non-perfect matching problems. These problems are called
- * maximum cardinality bipartite matching problems. The goal of the maximum cardinality
- * matching problem is to find a matching with maximum number of edges. If the cost
- * function is used in this setup, the goal is to find the cheapest matching among all
- * matchings of maximum cardinality.
+ * This class can define bipartite matching problems without the requirement that every edge must be
+ * matched, i.e. non-perfect matching problems. These problems are called maximum cardinality
+ * bipartite matching problems. The goal of the maximum cardinality matching problem is to find a
+ * matching with maximum number of edges. If the cost function is used in this setup, the goal is to
+ * find the cheapest matching among all matchings of maximum cardinality.
  *
  * @param <V> the graph vertex types
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  * @see org.jgrapht.alg.interfaces.MatchingAlgorithm
  */
-public interface BipartiteMatchingProblem<V, E> {
+public interface BipartiteMatchingProblem<V, E>
+{
 
     /**
      * Returns the graph, which defines the problem
@@ -70,9 +69,9 @@ public interface BipartiteMatchingProblem<V, E> {
     Set<V> getPartition2();
 
     /**
-     * Returns a cost function of this problem. This function must be defined for all edges
-     * of the graph. In the case the problem is unweighted, the function must return any
-     * constant value for all edges.
+     * Returns a cost function of this problem. This function must be defined for all edges of the
+     * graph. In the case the problem is unweighted, the function must return any constant value for
+     * all edges.
      *
      * @return a cost function of this problem
      */
@@ -88,7 +87,8 @@ public interface BipartiteMatchingProblem<V, E> {
     /**
      * Dumps the problem edge costs to the underlying graph.
      */
-    default void dumpCosts(){
+    default void dumpCosts()
+    {
         Graph<V, E> graph = getGraph();
         Function<E, Double> costs = getCosts();
         for (E edge : graph.edgeSet()) {
@@ -102,7 +102,10 @@ public interface BipartiteMatchingProblem<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class BipartiteMatchingProblemImpl<V, E> implements BipartiteMatchingProblem<V, E> {
+    class BipartiteMatchingProblemImpl<V, E>
+        implements
+        BipartiteMatchingProblem<V, E>
+    {
         private final Graph<V, E> graph;
         private final Set<V> partition1;
         private final Set<V> partition2;
@@ -112,13 +115,16 @@ public interface BipartiteMatchingProblem<V, E> {
         /**
          * Constructs a new bipartite matching problem
          *
-         * @param graph      a graph, which defines the problem
+         * @param graph a graph, which defines the problem
          * @param partition1 one of the partitions of the graph
          * @param partition2 one of the partitions of the graph
-         * @param costs      problem cost function
-         * @param weighted   is the problem is weighted or not
+         * @param costs problem cost function
+         * @param weighted is the problem is weighted or not
          */
-        public BipartiteMatchingProblemImpl(Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<E, Double> costs, boolean weighted) {
+        public BipartiteMatchingProblemImpl(
+            Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<E, Double> costs,
+            boolean weighted)
+        {
             this.graph = graph;
             this.partition1 = partition1;
             this.partition2 = partition2;
@@ -130,7 +136,8 @@ public interface BipartiteMatchingProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Graph<V, E> getGraph() {
+        public Graph<V, E> getGraph()
+        {
             return graph;
         }
 
@@ -138,7 +145,8 @@ public interface BipartiteMatchingProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Function<E, Double> getCosts() {
+        public Function<E, Double> getCosts()
+        {
             return costs;
         }
 
@@ -146,7 +154,8 @@ public interface BipartiteMatchingProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Set<V> getPartition1() {
+        public Set<V> getPartition1()
+        {
             return partition1;
         }
 
@@ -154,7 +163,8 @@ public interface BipartiteMatchingProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Set<V> getPartition2() {
+        public Set<V> getPartition2()
+        {
             return partition2;
         }
 
@@ -162,7 +172,8 @@ public interface BipartiteMatchingProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public boolean isWeighted() {
+        public boolean isWeighted()
+        {
             return weighted;
         }
 

@@ -95,7 +95,8 @@ public final class AlphaCentrality<V, E>
      * @param dampingFactor the damping factor
      * @param exogenousFactor the exogenous factor
      */
-    public AlphaCentrality(final Graph<V, E> g, final double dampingFactor, final double exogenousFactor)
+    public AlphaCentrality(
+        final Graph<V, E> g, final double dampingFactor, final double exogenousFactor)
     {
         this(g, dampingFactor, exogenousFactor, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
     }
@@ -108,7 +109,8 @@ public final class AlphaCentrality<V, E>
      * @param exogenousFactorFunction ToDoubleFunction a provider of exogenous factors per vertex
      */
     public AlphaCentrality(
-        final Graph<V, E> g, final double dampingFactor, final ToDoubleFunction<V> exogenousFactorFunction)
+        final Graph<V, E> g, final double dampingFactor,
+        final ToDoubleFunction<V> exogenousFactorFunction)
     {
         this(g, dampingFactor, exogenousFactorFunction, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
     }
@@ -122,7 +124,8 @@ public final class AlphaCentrality<V, E>
      * @param maxIterations the maximum number of iterations to perform
      */
     public AlphaCentrality(
-        final Graph<V, E> g, final double dampingFactor, final double exogenousFactor, final int maxIterations)
+        final Graph<V, E> g, final double dampingFactor, final double exogenousFactor,
+        final int maxIterations)
     {
         this(g, dampingFactor, exogenousFactor, maxIterations, TOLERANCE_DEFAULT);
     }
@@ -136,8 +139,8 @@ public final class AlphaCentrality<V, E>
      * @param maxIterations the maximum number of iterations to perform
      */
     public AlphaCentrality(
-        final Graph<V, E> g, final double dampingFactor, final ToDoubleFunction<V> exogenousFactorFunction,
-        final int maxIterations)
+        final Graph<V, E> g, final double dampingFactor,
+        final ToDoubleFunction<V> exogenousFactorFunction, final int maxIterations)
     {
         this(g, dampingFactor, exogenousFactorFunction, maxIterations, TOLERANCE_DEFAULT);
     }
@@ -153,8 +156,8 @@ public final class AlphaCentrality<V, E>
      *        between iterations change less than this value
      */
     public AlphaCentrality(
-        final Graph<V, E> g, final double dampingFactor, final double exogenousFactor, final int maxIterations,
-        final double tolerance)
+        final Graph<V, E> g, final double dampingFactor, final double exogenousFactor,
+        final int maxIterations, final double tolerance)
     {
         this.g = g;
         this.scores = new HashMap<>();
@@ -175,8 +178,9 @@ public final class AlphaCentrality<V, E>
      *        between iterations change less than this value
      */
     public AlphaCentrality(
-        final Graph<V, E> g, final double dampingFactor, final ToDoubleFunction<V> exogenousFactorFunction,
-        final int maxIterations, final double tolerance)
+        final Graph<V, E> g, final double dampingFactor,
+        final ToDoubleFunction<V> exogenousFactorFunction, final int maxIterations,
+        final double tolerance)
     {
         this.g = g;
         this.scores = new HashMap<>();
@@ -207,7 +211,8 @@ public final class AlphaCentrality<V, E>
     }
 
     /* Checks for the valid values of the parameters */
-    private void validate(final double dampingFactor, final int maxIterations, final double tolerance)
+    private void validate(
+        final double dampingFactor, final int maxIterations, final double tolerance)
     {
         if (maxIterations <= 0) {
             throw new IllegalArgumentException("Maximum iterations must be positive");

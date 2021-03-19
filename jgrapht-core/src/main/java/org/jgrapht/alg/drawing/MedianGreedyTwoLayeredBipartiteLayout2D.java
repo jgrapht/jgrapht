@@ -74,7 +74,7 @@ public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
     {
         super(partition, vertexComparator, vertical);
     }
-    
+
     @Override
     protected void drawSecondPartition(Graph<V, E> graph, List<V> partition, LayoutModel2D<V> model)
     {

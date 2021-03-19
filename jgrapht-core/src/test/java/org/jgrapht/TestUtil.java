@@ -22,9 +22,11 @@ import org.jgrapht.graph.*;
 /**
  * Test related utility methods.
  */
-public class TestUtil {
+public class TestUtil
+{
 
-    public static void constructGraph(Graph<Integer, DefaultEdge> graph, int[][] edges) {
+    public static void constructGraph(Graph<Integer, DefaultEdge> graph, int[][] edges)
+    {
         boolean weighted = edges.length > 0 && edges[0].length > 2;
         for (int[] edge : edges) {
             DefaultEdge graphEdge = Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -34,43 +36,50 @@ public class TestUtil {
         }
     }
 
-    public static <V> void constructGraph(Graph<V, DefaultEdge> graph, V[][] edges) {
+    public static <V> void constructGraph(Graph<V, DefaultEdge> graph, V[][] edges)
+    {
         for (V[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         }
     }
 
-    public static<V> Graph<V, DefaultEdge> createUndirected(V[][] edges) {
+    public static <V> Graph<V, DefaultEdge> createUndirected(V[][] edges)
+    {
         Graph<V, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;
     }
 
-    public static Graph<Integer, DefaultEdge> createUndirected(int[][] edges) {
+    public static Graph<Integer, DefaultEdge> createUndirected(int[][] edges)
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;
     }
 
-    public static Graph<Integer, DefaultEdge> createDirected(int[][] edges) {
+    public static Graph<Integer, DefaultEdge> createDirected(int[][] edges)
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;
     }
 
-    public static <V> Graph<V, DefaultEdge> createDirected(V[][] edges) {
+    public static <V> Graph<V, DefaultEdge> createDirected(V[][] edges)
+    {
         Graph<V, DefaultEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;
     }
 
-    public static Graph<Integer, DefaultEdge> createPseudograph(int[][] edges){
+    public static Graph<Integer, DefaultEdge> createPseudograph(int[][] edges)
+    {
         Graph<Integer, DefaultEdge> graph = new WeightedPseudograph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;
     }
 
-    public static <V> Graph<V, DefaultEdge> createPseudograph(V[][] edges){
+    public static <V> Graph<V, DefaultEdge> createPseudograph(V[][] edges)
+    {
         Graph<V, DefaultEdge> graph = new WeightedPseudograph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;

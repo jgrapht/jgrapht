@@ -56,7 +56,7 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
     @Test
     public void testGetMinimalSeparators2()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
@@ -76,10 +76,9 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
     @Test
     public void testGetMinimalSeparators3()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {3, 4}, {3, 5}, {3, 6},
-                {3, 8}, {3, 10}, {3, 11}, {4, 5}, {4, 6}, {5, 6},
-                {6, 7}, {6, 8}, {6, 10}, {6, 11}, {7, 8}, {7, 10},
-                {8, 9}, {8, 10}, {9, 10},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 4 }, { 3, 5 }, { 3, 6 }, { 3, 8 },
+            { 3, 10 }, { 3, 11 }, { 4, 5 }, { 4, 6 }, { 5, 6 }, { 6, 7 }, { 6, 8 }, { 6, 10 },
+            { 6, 11 }, { 7, 8 }, { 7, 10 }, { 8, 9 }, { 8, 10 }, { 9, 10 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
@@ -102,10 +101,10 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
     @Test
     public void testGetMinimalSeparators4()
     {
-        int[][] edges = {{1, 2}, {2, 8}, {2, 9}, {3, 8}, {3, 9}, {4, 6},
-                {4, 8}, {5, 6}, {5, 8}, {6, 7}, {6, 8}, {6, 9},
-                {7, 8}, {7, 9}, {8, 9}, {8, 10}, {8, 11}, {8, 12},
-                {9, 10}, {9, 11}, {9, 12}, {10, 11}, {11, 12},};
+        int[][] edges =
+            { { 1, 2 }, { 2, 8 }, { 2, 9 }, { 3, 8 }, { 3, 9 }, { 4, 6 }, { 4, 8 }, { 5, 6 },
+                { 5, 8 }, { 6, 7 }, { 6, 8 }, { 6, 9 }, { 7, 8 }, { 7, 9 }, { 8, 9 }, { 8, 10 },
+                { 8, 11 }, { 8, 12 }, { 9, 10 }, { 9, 11 }, { 9, 12 }, { 10, 11 }, { 11, 12 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
@@ -128,7 +127,7 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
     @Test
     public void testGetMinimalSeparators5()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
@@ -146,8 +145,8 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
     @Test
     public void testGetMinimalSeparators6()
     {
-        int[][] edges = {{1, 1}, {1, 1}, {1, 2}, {2, 3}, {2, 3}, {2, 3},
-                {2, 5}, {3, 3}, {3, 4}, {5, 3}, {5, 3}, {5, 4},};
+        int[][] edges = { { 1, 1 }, { 1, 1 }, { 1, 2 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 5 },
+            { 3, 3 }, { 3, 4 }, { 5, 3 }, { 5, 3 }, { 5, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =

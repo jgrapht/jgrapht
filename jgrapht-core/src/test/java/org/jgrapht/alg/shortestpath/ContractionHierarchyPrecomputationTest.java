@@ -41,18 +41,22 @@ public class ContractionHierarchyPrecomputationTest
     private static final long SEED = 19L;
 
     /**
-     * Executor which is supplied to the {@link ContractionHierarchyPrecomputation}
-     * algorithm in this test case.
+     * Executor which is supplied to the {@link ContractionHierarchyPrecomputation} algorithm in
+     * this test case.
      */
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
@@ -428,7 +432,8 @@ public class ContractionHierarchyPrecomputationTest
             generateRandomGraph(graph, numOfVertices, probability);
 
             ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-                new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy();
+                new ContractionHierarchyPrecomputation<>(graph, executor)
+                    .computeContractionHierarchy();
 
             assertCorrectMapping(graph, hierarchy);
             assertNoEdgesRemoved(graph, hierarchy);

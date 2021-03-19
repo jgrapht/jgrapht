@@ -27,23 +27,24 @@ import java.util.function.*;
  * Naive algorithm for many-to-many shortest paths problem using.
  *
  * <p>
- * Time complexity of the algorithm is $O(|S||T|C)$, where $S$ is the set of source vertices,
- * $T$ is the set of target vertices and $C$ is the complexity of the
+ * Time complexity of the algorithm is $O(|S||T|C)$, where $S$ is the set of source vertices, $T$ is
+ * the set of target vertices and $C$ is the complexity of the
  * {@link ShortestPathAlgorithm#getPath(Object, Object)} method of the provided implementation.
  *
  * <p>
- * For every pair of {@code source} and {@code target} vertices computes a shortest path
- * between them using provided implementation of {@link ShortestPathAlgorithm}. By default
- * this implementation uses {@link BidirectionalDijkstraShortestPath}. If desired, a different
+ * For every pair of {@code source} and {@code target} vertices computes a shortest path between
+ * them using provided implementation of {@link ShortestPathAlgorithm}. By default this
+ * implementation uses {@link BidirectionalDijkstraShortestPath}. If desired, a different
  * implementation can be provided via the {@code function} constructor parameter.
  *
  * <p>
- * The computation complexity of the algorithm consists of two main components - the $|S||T|$ multiplier
- * and the $C$ multiplier. This yields two bottlenecks for the algorithm. First of them is the situation
- * when the total number calls to {@link ShortestPathAlgorithm#getPath(Object, Object)} is large. The
- * second situation is when the complexity of the individual call to
- * {@link ShortestPathAlgorithm#getPath(Object, Object)} takes a lot of time. Therefore the ideal use cases
- * for this algorithm are small graphs or large graphs with low total number of source and target vertices.
+ * The computation complexity of the algorithm consists of two main components - the $|S||T|$
+ * multiplier and the $C$ multiplier. This yields two bottlenecks for the algorithm. First of them
+ * is the situation when the total number calls to
+ * {@link ShortestPathAlgorithm#getPath(Object, Object)} is large. The second situation is when the
+ * complexity of the individual call to {@link ShortestPathAlgorithm#getPath(Object, Object)} takes
+ * a lot of time. Therefore the ideal use cases for this algorithm are small graphs or large graphs
+ * with low total number of source and target vertices.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

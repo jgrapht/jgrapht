@@ -63,8 +63,8 @@ import java.util.concurrent.*;
  * </ul>
  *
  * <p>
- * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from outside.
+ * For parallelization, this implementation relies on the {@link ThreadPoolExecutor} which is
+ * supplied to this algorithm from outside.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -122,8 +122,8 @@ public class DeltaSteppingShortestPath<V, E>
     private List<Set<V>> bucketStructure;
 
     /**
-     * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to
-     * keep track of when all submitted tasks are finished.
+     * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to keep
+     * track of when all submitted tasks are finished.
      */
     private ExecutorCompletionService<Void> completionService;
     /**
@@ -157,9 +157,9 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph and {@code executor}.
-     * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * Constructs a new instance of the algorithm for a given graph and {@code executor}. It is up
+     * to a user of this algorithm to handle the creation and termination of the provided
+     * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph graph
@@ -175,7 +175,8 @@ public class DeltaSteppingShortestPath<V, E>
      *
      * @param graph the graph
      * @param delta bucket width
-     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
+     * @deprecated replaced with
+     *             {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
      */
     @Deprecated
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta)
@@ -184,9 +185,9 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}.
-     * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}. It
+     * is up to a user of this algorithm to handle the creation and termination of the provided
+     * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph the graph
@@ -212,7 +213,6 @@ public class DeltaSteppingShortestPath<V, E>
         this(graph, 0.0, parallelism);
     }
 
-
     /**
      * Constructs a new instance of the algorithm for a given graph, delta, parallelism. If delta is
      * $0.0$ it will be computed during the algorithm execution. In general if the value of
@@ -223,7 +223,8 @@ public class DeltaSteppingShortestPath<V, E>
      * @param graph the graph
      * @param delta bucket width
      * @param parallelism maximum number of threads used in the computations
-     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
+     * @deprecated replaced with
+     *             {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
      */
     @Deprecated
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism)
@@ -241,7 +242,8 @@ public class DeltaSteppingShortestPath<V, E>
      * @param delta bucket width
      * @param executor executor which will be used for parallelization
      */
-    private void init(Graph<V, E> graph, double delta, ThreadPoolExecutor executor){
+    private void init(Graph<V, E> graph, double delta, ThreadPoolExecutor executor)
+    {
         if (delta < 0) {
             throw new IllegalArgumentException(DELTA_MUST_BE_NON_NEGATIVE);
         }
@@ -410,11 +412,11 @@ public class DeltaSteppingShortestPath<V, E>
         while (true) {
             int firstNonEmptyBucket = 0;
             while (firstNonEmptyBucket < numOfBuckets
-                    && bucketStructure.get(firstNonEmptyBucket).isEmpty())
+                && bucketStructure.get(firstNonEmptyBucket).isEmpty())
             { // skip empty buckets
                 ++firstNonEmptyBucket;
             }
-            if(firstNonEmptyBucket == numOfBuckets) { // terminate if all buckets are empty
+            if (firstNonEmptyBucket == numOfBuckets) { // terminate if all buckets are empty
                 break;
             }
             // the content of a bucket is replaced
@@ -432,7 +434,6 @@ public class DeltaSteppingShortestPath<V, E>
             removed.clear();
         }
     }
-
 
     /**
      * Manages edge relaxations. Adds all elements from {@code vertices} to the

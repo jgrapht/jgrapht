@@ -547,7 +547,7 @@ public class BetweennessCentralityTest
 
         return g;
     }
-    
+
     @Test(expected = ArithmeticException.class)
     public void testOverflow()
     {
@@ -580,6 +580,5 @@ public class BetweennessCentralityTest
         assertEquals(scores.get(3289), Double.NaN, 1e-9);
         assertEquals(scores.get(3290), 0d, 1e-9);
     }
-
 
 }

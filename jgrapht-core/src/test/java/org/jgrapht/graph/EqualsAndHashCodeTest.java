@@ -279,19 +279,15 @@ public class EqualsAndHashCodeTest
     @Test
     public void testHashcodeEquals()
     {
-        Graph<Integer,
-            Integer> g = GraphTypeBuilder
-                .<Integer, Integer> directed().weighted(true)
-                .buildGraph();
+        Graph<Integer, Integer> g =
+            GraphTypeBuilder.<Integer, Integer> directed().weighted(true).buildGraph();
         g.addVertex(0);
         g.addVertex(1);
         g.addEdge(0, 1, 1);
         g.setEdgeWeight(1, 2 + 1e-08);
 
-        Graph<Integer,
-            Integer> h = GraphTypeBuilder
-            .<Integer, Integer> directed().weighted(true)
-            .buildGraph();
+        Graph<Integer, Integer> h =
+            GraphTypeBuilder.<Integer, Integer> directed().weighted(true).buildGraph();
         h.addVertex(0);
         h.addVertex(1);
         h.addEdge(0, 1, 1);
@@ -299,22 +295,16 @@ public class EqualsAndHashCodeTest
 
         assertNotEquals(g, h);
     }
-    
+
     @Test
     public void testUndirectedEquality()
     {
-        Graph<Integer,
-            Integer> g = GraphTypeBuilder
-                .<Integer, Integer> undirected()
-                .buildGraph();
+        Graph<Integer, Integer> g = GraphTypeBuilder.<Integer, Integer> undirected().buildGraph();
         g.addVertex(0);
         g.addVertex(1);
         g.addEdge(0, 1, 1);
 
-        Graph<Integer,
-            Integer> h = GraphTypeBuilder
-            .<Integer, Integer> undirected()
-            .buildGraph();
+        Graph<Integer, Integer> h = GraphTypeBuilder.<Integer, Integer> undirected().buildGraph();
         h.addVertex(0);
         h.addVertex(1);
         h.addEdge(1, 0, 1);
@@ -322,22 +312,16 @@ public class EqualsAndHashCodeTest
         assertEquals(g.hashCode(), h.hashCode());
         assertEquals(g, h);
     }
-    
+
     @Test
     public void testDirectedEquality()
     {
-        Graph<Integer,
-            Integer> g = GraphTypeBuilder
-                .<Integer, Integer> directed()
-                .buildGraph();
+        Graph<Integer, Integer> g = GraphTypeBuilder.<Integer, Integer> directed().buildGraph();
         g.addVertex(0);
         g.addVertex(1);
         g.addEdge(0, 1, 1);
 
-        Graph<Integer,
-            Integer> h = GraphTypeBuilder
-            .<Integer, Integer> directed()
-            .buildGraph();
+        Graph<Integer, Integer> h = GraphTypeBuilder.<Integer, Integer> directed().buildGraph();
         h.addVertex(0);
         h.addVertex(1);
         h.addEdge(1, 0, 1);
@@ -345,7 +329,7 @@ public class EqualsAndHashCodeTest
         assertNotEquals(g.hashCode(), h.hashCode());
         assertNotEquals(g, h);
     }
-    
+
     /**
      * Simple custom edge class.
      */

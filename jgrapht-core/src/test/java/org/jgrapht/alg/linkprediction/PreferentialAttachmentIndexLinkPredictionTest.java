@@ -43,9 +43,9 @@ public class PreferentialAttachmentIndexLinkPredictionTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         TestUtil
-        .constructGraph(
-            g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
-                { 3, 4 }, { 3, 5 }, { 4, 5 } });
+            .constructGraph(
+                g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
+                    { 3, 4 }, { 3, 5 }, { 4, 5 } });
 
         PreferentialAttachmentLinkPrediction<Integer, DefaultEdge> alg =
             new PreferentialAttachmentLinkPrediction<>(g);
@@ -63,8 +63,8 @@ public class PreferentialAttachmentIndexLinkPredictionTest
             }
         }
 
-        double[] expected = { 6.0,8.0,4.0,12.0,6.0,6.0};
-        
+        double[] expected = { 6.0, 8.0, 4.0, 12.0, 6.0, 6.0 };
+
         assertArrayEquals(expected, scores, 1e-9);
 
     }

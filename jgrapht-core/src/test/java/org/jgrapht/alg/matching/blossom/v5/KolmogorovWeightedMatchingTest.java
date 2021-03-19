@@ -1617,8 +1617,7 @@ public class KolmogorovWeightedMatchingTest
     private void test(int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         DefaultUndirectedGraph<Integer, DefaultEdge> graph =
-                (DefaultUndirectedGraph<Integer, DefaultEdge>)
-                        TestUtil.createUndirected(edges);
+            (DefaultUndirectedGraph<Integer, DefaultEdge>) TestUtil.createUndirected(edges);
         int maxVertex = 0;
         for (int[] edge : edges) {
             maxVertex = Math.max(Math.max(maxVertex, edge[0]), edge[1]);
@@ -1626,8 +1625,7 @@ public class KolmogorovWeightedMatchingTest
         graph.setVertexSupplier(SupplierUtil.createIntegerSupplier(maxVertex + 1));
         KolmogorovWeightedMatching<Integer, DefaultEdge> weightedMatching =
             new KolmogorovWeightedMatching<>(graph, options, objectiveSense);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            weightedMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = weightedMatching.getMatching();
         assertEquals(matching.getWeight(), result, EPS);
         assertTrue(weightedMatching.testOptimality());
         assertTrue(weightedMatching.getError() < EPS);

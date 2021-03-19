@@ -162,7 +162,7 @@ public class KolmogorovWeightedPerfectMatchingTest
     @Test
     public void testInvalidDualSolution()
     {
-        int[][] edges = {{1, 2, 7}, {2, 3, 4}, {3, 4, 3}, {4, 1, 4},};
+        int[][] edges = { { 1, 2, 7 }, { 2, 3, 4 }, { 3, 4, 3 }, { 4, 1, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> matching =
@@ -2015,7 +2015,7 @@ public class KolmogorovWeightedPerfectMatchingTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching43()
     {
-        int[][] edges = {{1, 2, 1}, {1, 3, 2}, {2, 3, 3},};
+        int[][] edges = { { 1, 2, 1 }, { 1, 3, 2 }, { 2, 3, 3 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
         graph.addVertex(4);
 
@@ -2496,8 +2496,7 @@ public class KolmogorovWeightedPerfectMatchingTest
     private void test(int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         test(
-            new DefaultUndirectedWeightedGraph<>(DefaultEdge.class), edges, result,
-            objectiveSense);
+            new DefaultUndirectedWeightedGraph<>(DefaultEdge.class), edges, result, objectiveSense);
     }
 
     /**
@@ -2516,8 +2515,7 @@ public class KolmogorovWeightedPerfectMatchingTest
 
         KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
             new KolmogorovWeightedPerfectMatching<>(graph, options, objectiveSense);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
-            perfectMatching.getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = perfectMatching.getMatching();
         assertEquals(result, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
         checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), objectiveSense);

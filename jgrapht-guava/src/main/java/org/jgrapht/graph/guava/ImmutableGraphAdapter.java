@@ -217,7 +217,7 @@ public class ImmutableGraphAdapter<V>
 
         // setup the vertex order
         vertexOrder = createVertexOrder(vertexOrderMethod);
-        
+
         // setup the immutable copy
         this.graph = ImmutableGraph.copyOf(mutableGraph);
     }

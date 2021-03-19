@@ -60,22 +60,24 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * This implementation is based on the {@link ContractionHierarchyPrecomputation}.
  *
  * <p>
- * The precomputation algorithm is described in the article: Arz, Julian &amp; Luxen, Dennis &amp; Sanders,
- * Peter. (2013). Transit Node Routing Reconsidered. 7933. 10.1007/978-3-642-38527-8_7.
+ * The precomputation algorithm is described in the article: Arz, Julian &amp; Luxen, Dennis &amp;
+ * Sanders, Peter. (2013). Transit Node Routing Reconsidered. 7933. 10.1007/978-3-642-38527-8_7.
  *
  * <p>
- * As mentioned is the original paper, TNR in itself is not a complete algorithm, but a framework which is used to speed
- * up shortest paths computations. Formally the framework consists of the following parts:
+ * As mentioned is the original paper, TNR in itself is not a complete algorithm, but a framework
+ * which is used to speed up shortest paths computations. Formally the framework consists of the
+ * following parts:
  * <p>
  * <ul style="list-style-type:circle;">
  * <li>set $T ⊆ V$ of transit vertices;</li>
- * <li>distance table $D_{T} : T × T → {\rm I\!R}^{+}_{0}$ of shortest path distances between the transit vertices;</li>
- * <li>forward (backward) access vertex mapping $A^{↑} : V → 2^{T}$ ($A^{↓} : V → 2^{T}$).
- * For any shortest $s$–$t$-path $P$ containing transit vertices, $A^{↑}(s)$ ($A^{↓}(t)$)
- * must contain the first (last) transit vertex on $P$;</li>
+ * <li>distance table $D_{T} : T × T → {\rm I\!R}^{+}_{0}$ of shortest path distances between the
+ * transit vertices;</li>
+ * <li>forward (backward) access vertex mapping $A^{↑} : V → 2^{T}$ ($A^{↓} : V → 2^{T}$). For any
+ * shortest $s$–$t$-path $P$ containing transit vertices, $A^{↑}(s)$ ($A^{↓}(t)$) must contain the
+ * first (last) transit vertex on $P$;</li>
  * <li>locality filter $L : V × V → \{true, false\}$. $L(s, t)$ must be $true$ when no shortest path
- * between $s$ and $t$ contains a transit vertex. False positives are allowed, i.e., $L(s, t)$ may sometimes be
- * $true$ even when a shortest path contains a transit vertex.</li>
+ * between $s$ and $t$ contains a transit vertex. False positives are allowed, i.e., $L(s, t)$ may
+ * sometimes be $true$ even when a shortest path contains a transit vertex.</li>
  * </ul>
  *
  * <p>
@@ -85,19 +87,20 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * of this TNR work please refer to the original paper.
  *
  * <p>
- * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from outside.
+ * For parallelization, this implementation relies on the {@link ThreadPoolExecutor} which is
+ * supplied to this algorithm from outside.
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
  * @author Semen Chudakov
  * @see ContractionHierarchyPrecomputation
  */
-class TransitNodeRoutingPrecomputation<V, E> {
+class TransitNodeRoutingPrecomputation<V, E>
+{
     /**
-     * Special Voronoi diagram cell id to indicate, that a vertex does not
-     * belong to any cells. For usual Voronoi cell the ids of contracted vertices
-     * are used. Once those ids are non-negative, this value is guaranteed to be unique.
+     * Special Voronoi diagram cell id to indicate, that a vertex does not belong to any cells. For
+     * usual Voronoi cell the ids of contracted vertices are used. Once those ids are non-negative,
+     * this value is guaranteed to be unique.
      */
     private static final int NO_VORONOI_CELL = -1;
 
@@ -122,14 +125,14 @@ class TransitNodeRoutingPrecomputation<V, E> {
      */
     private int parallelism;
     /**
-     * Supplier for the preferable heap implementation. Provided heap is used
-     * to build Voronoi diagram.
+     * Supplier for the preferable heap implementation. Provided heap is used to build Voronoi
+     * diagram.
      */
     private Supplier<AddressableHeap<Double, ContractionVertex<V>>> heapSupplier;
 
     /**
-     * List of contracted vertices. It is used to evenly distribute work between threads
-     * in the parallel computations.
+     * List of contracted vertices. It is used to evenly distribute work between threads in the
+     * parallel computations.
      */
     private List<ContractionVertex<V>> contractionVertices;
     /**
@@ -151,8 +154,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
     private List<V> transitVerticesList;
 
     /**
-     * Voronoi diagram for the contraction graph. Here the transit vertices
-     * are used as cells centers.
+     * Voronoi diagram for the contraction graph. Here the transit vertices are used as cells
+     * centers.
      */
     private VoronoiDiagram<V> voronoiDiagram;
     /**
@@ -170,69 +173,75 @@ class TransitNodeRoutingPrecomputation<V, E> {
      */
     private ExecutorCompletionService<Void> completionService;
 
-
     /**
-     * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}.
-     * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}. It is
+     * up to a user of this algorithm to handle the creation and termination of the provided
+     * {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param graph graph
      * @param executor executor which will be used for parallelization
      */
-    public TransitNodeRoutingPrecomputation(Graph<V, E> graph, ThreadPoolExecutor executor) {
-        this(new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy(), executor);
+    public TransitNodeRoutingPrecomputation(Graph<V, E> graph, ThreadPoolExecutor executor)
+    {
+        this(
+            new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy(),
+            executor);
     }
 
-
     /**
-     * Constructs an instance of the algorithm for the given {@code contractionHierarchy} and {@code executor}.
-     * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * Constructs an instance of the algorithm for the given {@code contractionHierarchy} and
+     * {@code executor}. It is up to a user of this algorithm to handle the creation and termination
+     * of the provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param hierarchy contraction hierarchy
      * @param executor executor which will be used for parallelization
      */
-    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy, ThreadPoolExecutor executor) {
+    public TransitNodeRoutingPrecomputation(
+        ContractionHierarchy<V, E> hierarchy, ThreadPoolExecutor executor)
+    {
         this(hierarchy, (int) Math.sqrt(hierarchy.getGraph().vertexSet().size()), executor);
     }
 
     /**
      * Constructs an instance of the algorithm for a given {@code contractionHierarchy},
-     * {@code numberOfTransitVertices} and {@code executor}. It is up to a user of this
-     * algorithm to handle the creation and termination of the provided {@code executor}.
-     * Utility methods to manage a {@code ThreadPoolExecutor} see
-     * {@link org.jgrapht.util.ConcurrencyUtil}.
+     * {@code numberOfTransitVertices} and {@code executor}. It is up to a user of this algorithm to
+     * handle the creation and termination of the provided {@code executor}. Utility methods to
+     * manage a {@code ThreadPoolExecutor} see {@link org.jgrapht.util.ConcurrencyUtil}.
      *
-     * @param hierarchy               contraction hierarchy
+     * @param hierarchy contraction hierarchy
      * @param numberOfTransitVertices number of transit vertices
      * @param executor executor which will be used for parallelization
      */
-    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy,
-                                            int numberOfTransitVertices, ThreadPoolExecutor executor) {
+    public TransitNodeRoutingPrecomputation(
+        ContractionHierarchy<V, E> hierarchy, int numberOfTransitVertices,
+        ThreadPoolExecutor executor)
+    {
         this(hierarchy, numberOfTransitVertices, PairingHeap::new, executor);
     }
 
     /**
      * Constructs an instance of the algorithm for a given {@code contractionHierarchy},
-     * {@code parallelism}, {@code numberOfTransitVertices}, {@code heapSupplier} and {@code executor}.
-     * Heap provided by the {@code heapSupplier} is used which computing the
-     * Voronoi diagram. It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@code parallelism}, {@code numberOfTransitVertices}, {@code heapSupplier} and
+     * {@code executor}. Heap provided by the {@code heapSupplier} is used which computing the
+     * Voronoi diagram. It is up to a user of this algorithm to handle the creation and termination
+     * of the provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
-     * @param hierarchy               contraction hierarchy
+     * @param hierarchy contraction hierarchy
      * @param numberOfTransitVertices number of transit vertices
-     * @param heapSupplier            supplier for preferable heap implementation
-     * @param executor                executor which will be used for parallelization
+     * @param heapSupplier supplier for preferable heap implementation
+     * @param executor executor which will be used for parallelization
      */
-    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy,
-                                            int numberOfTransitVertices,
-                                            Supplier<AddressableHeap<Double, ContractionVertex<V>>> heapSupplier,
-                                            ThreadPoolExecutor executor) {
+    public TransitNodeRoutingPrecomputation(
+        ContractionHierarchy<V, E> hierarchy, int numberOfTransitVertices,
+        Supplier<AddressableHeap<Double, ContractionVertex<V>>> heapSupplier,
+        ThreadPoolExecutor executor)
+    {
         if (numberOfTransitVertices > hierarchy.getGraph().vertexSet().size()) {
-            throw new IllegalArgumentException("number of transit vertices is larger than the number of vertices in the graph");
+            throw new IllegalArgumentException(
+                "number of transit vertices is larger than the number of vertices in the graph");
         }
         this.contractionHierarchy = hierarchy;
         this.contractionGraph = hierarchy.getContractionGraph();
@@ -241,84 +250,91 @@ class TransitNodeRoutingPrecomputation<V, E> {
         this.parallelism = executor.getMaximumPoolSize();
         this.heapSupplier = heapSupplier;
 
-        this.contractionVertices = new ArrayList<>(Collections.nCopies(contractionGraph.vertexSet().size(), null));
+        this.contractionVertices =
+            new ArrayList<>(Collections.nCopies(contractionGraph.vertexSet().size(), null));
         this.manyToManyShortestPathsAlgorithm = new CHManyToManyShortestPaths<>(hierarchy);
 
         this.executor = executor;
         this.completionService = new ExecutorCompletionService<>(this.executor);
     }
 
-
     /**
      * Computes transit node routing based on {@code contractionHierarchy}.
      *
      * @return transit node routing
      */
-    public TransitNodeRouting<V, E> computeTransitNodeRouting() {
+    public TransitNodeRouting<V, E> computeTransitNodeRouting()
+    {
         fillContractionVerticesList();
 
         contractedTransitVerticesSet = selectTopKTransitVertices(numberOfTransitVertices);
-        transitVerticesSet = contractedTransitVerticesSet.stream()
-                .map(v -> v.vertex).collect(Collectors.toCollection(HashSet::new));
+        transitVerticesSet = contractedTransitVerticesSet
+            .stream().map(v -> v.vertex).collect(Collectors.toCollection(HashSet::new));
         transitVerticesList = new ArrayList<>(transitVerticesSet);
 
         VoronoiDiagramComputation voronoiDiagramComputation = new VoronoiDiagramComputation();
         voronoiDiagram = voronoiDiagramComputation.computeVoronoiDiagram();
 
         ManyToManyShortestPaths<V, E> contractedPaths = manyToManyShortestPathsAlgorithm
-                .getManyToManyPaths(transitVerticesSet, transitVerticesSet);
+            .getManyToManyPaths(transitVerticesSet, transitVerticesSet);
         transitVerticesPaths = unpackPaths(contractedPaths);
 
         Pair<AccessVertices<V, E>, LocalityFilter<V>> avAndLf = computeAVAndLF();
 
-        return new TransitNodeRouting<>(contractionHierarchy, contractedTransitVerticesSet,
-                transitVerticesPaths, voronoiDiagram, avAndLf.getFirst(), avAndLf.getSecond());
+        return new TransitNodeRouting<>(
+            contractionHierarchy, contractedTransitVerticesSet, transitVerticesPaths,
+            voronoiDiagram, avAndLf.getFirst(), avAndLf.getSecond());
     }
 
-
     /**
-     * Fills {@code contractionVertices} with vertices from {@code contractionGraph}.
-     * For each vertex its position in the list is equal to its {@code id}.
+     * Fills {@code contractionVertices} with vertices from {@code contractionGraph}. For each
+     * vertex its position in the list is equal to its {@code id}.
      */
-    private void fillContractionVerticesList() {
+    private void fillContractionVerticesList()
+    {
         for (ContractionVertex<V> v : contractionGraph.vertexSet()) {
             contractionVertices.set(v.vertexId, v);
         }
     }
 
     /**
-     * Unpacks in parallel contracted paths stored in {@code shortestPaths}.
-     * Unpacked path are returned as {@link DefaultManyToManyShortestPathsImpl}.
+     * Unpacks in parallel contracted paths stored in {@code shortestPaths}. Unpacked path are
+     * returned as {@link DefaultManyToManyShortestPathsImpl}.
      *
      * @param shortestPaths contracted many-to-many shortest paths
      * @return unpacked paths
      */
-    private ManyToManyShortestPaths<V, E> unpackPaths(ManyToManyShortestPaths<V, E> shortestPaths) {
+    private ManyToManyShortestPaths<V, E> unpackPaths(ManyToManyShortestPaths<V, E> shortestPaths)
+    {
         Map<V, Map<V, GraphPath<V, E>>> pathsMap =
-                CollectionUtil.newHashMapWithExpectedSize(numberOfTransitVertices);
+            CollectionUtil.newHashMapWithExpectedSize(numberOfTransitVertices);
         for (V v : transitVerticesList) {
             pathsMap.put(v, CollectionUtil.newHashMapWithExpectedSize(numberOfTransitVertices));
         }
 
         for (int taskId = 0; taskId < parallelism; ++taskId) {
-            PathsUnpackingTask task = new PathsUnpackingTask(taskId, transitVerticesList, pathsMap, shortestPaths);
+            PathsUnpackingTask task =
+                new PathsUnpackingTask(taskId, transitVerticesList, pathsMap, shortestPaths);
             completionService.submit(task, null);
         }
         waitForTasksCompletion(parallelism);
 
-        return new DefaultManyToManyShortestPathsImpl<>(transitVerticesSet, transitVerticesSet, pathsMap);
+        return new DefaultManyToManyShortestPathsImpl<>(
+            transitVerticesSet, transitVerticesSet, pathsMap);
     }
 
     /**
-     * Selects top {@code numberOfTransitVertices} vertices in the contraction hierarchy
-     * as transit vertices.
+     * Selects top {@code numberOfTransitVertices} vertices in the contraction hierarchy as transit
+     * vertices.
      *
      * @param numberOfTransitVertices number of transit vertices to select
      * @return set of transit vertices
      */
-    private Set<ContractionVertex<V>> selectTopKTransitVertices(int numberOfTransitVertices) {
+    private Set<ContractionVertex<V>> selectTopKTransitVertices(int numberOfTransitVertices)
+    {
         int numberOfVertices = contractionGraph.vertexSet().size();
-        Set<ContractionVertex<V>> result = CollectionUtil.newHashSetWithExpectedSize(numberOfTransitVertices);
+        Set<ContractionVertex<V>> result =
+            CollectionUtil.newHashSetWithExpectedSize(numberOfTransitVertices);
         for (ContractionVertex<V> vertex : contractionGraph.vertexSet()) {
             if (vertex.contractionLevel >= numberOfVertices - numberOfTransitVertices) {
                 result.add(vertex);
@@ -332,25 +348,29 @@ class TransitNodeRoutingPrecomputation<V, E> {
      *
      * @return pair of access vertices and locality filter.
      */
-    private Pair<AccessVertices<V, E>, LocalityFilter<V>> computeAVAndLF() {
+    private Pair<AccessVertices<V, E>, LocalityFilter<V>> computeAVAndLF()
+    {
         LocalityFilterBuilder localityFilterBuilder =
-                new LocalityFilterBuilder(contractionGraph.vertexSet().size());
+            new LocalityFilterBuilder(contractionGraph.vertexSet().size());
 
-        AccessVerticesBuilder accessVerticesBuilder = new AccessVerticesBuilder(contractionGraph.vertexSet().size());
+        AccessVerticesBuilder accessVerticesBuilder =
+            new AccessVerticesBuilder(contractionGraph.vertexSet().size());
 
         ContractionHierarchyBFS forwardBFS = new ContractionHierarchyBFS(
-                new MaskSubgraph<>(contractionGraph, v -> false, e -> !e.isUpward));
+            new MaskSubgraph<>(contractionGraph, v -> false, e -> !e.isUpward));
         ContractionHierarchyBFS backwardBFS = new ContractionHierarchyBFS(
-                new MaskSubgraph<>(new EdgeReversedGraph<>(contractionGraph), v -> false, e -> e.isUpward));
+            new MaskSubgraph<>(
+                new EdgeReversedGraph<>(contractionGraph), v -> false, e -> e.isUpward));
 
         for (int taskId = 0; taskId < parallelism; ++taskId) {
-            AVAndLFConstructionTask task = new AVAndLFConstructionTask(taskId, localityFilterBuilder,
-                    accessVerticesBuilder, forwardBFS, backwardBFS);
+            AVAndLFConstructionTask task = new AVAndLFConstructionTask(
+                taskId, localityFilterBuilder, accessVerticesBuilder, forwardBFS, backwardBFS);
             completionService.submit(task, null);
         }
         waitForTasksCompletion(parallelism);
 
-        return Pair.of(accessVerticesBuilder.buildVertices(), localityFilterBuilder.buildLocalityFilter());
+        return Pair
+            .of(accessVerticesBuilder.buildVertices(), localityFilterBuilder.buildLocalityFilter());
     }
 
     /**
@@ -358,7 +378,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
      *
      * @param numberOfTasks number of tasks
      */
-    private void waitForTasksCompletion(int numberOfTasks) {
+    private void waitForTasksCompletion(int numberOfTasks)
+    {
         for (int i = 0; i < numberOfTasks; ++i) {
             try {
                 completionService.take().get();
@@ -368,25 +389,25 @@ class TransitNodeRoutingPrecomputation<V, E> {
         }
     }
 
-
     /**
-     * Algorithm which computes Voronoi diagram for the {@code contractionGraph}.
-     * It uses {@code transitVertices} as Voronoi cells centers. To build the
-     * diagram runs a Dijkstra`s algorithm with multiple sources on a reversed
-     * {@code graph}. Uses Voronoi cells centers as initial sources. During the
-     * computations for each vertex maintains distance to the closest cell center
-     * as well as the id if this cell center.
+     * Algorithm which computes Voronoi diagram for the {@code contractionGraph}. It uses
+     * {@code transitVertices} as Voronoi cells centers. To build the diagram runs a Dijkstra`s
+     * algorithm with multiple sources on a reversed {@code graph}. Uses Voronoi cells centers as
+     * initial sources. During the computations for each vertex maintains distance to the closest
+     * cell center as well as the id if this cell center.
      */
-    private class VoronoiDiagramComputation {
+    private class VoronoiDiagramComputation
+    {
         /**
-         * Priority queue which stores vertices ordered by theirs distances
-         * to the corresponding Voronoi cell center.
+         * Priority queue which stores vertices ordered by theirs distances to the corresponding
+         * Voronoi cell center.
          */
         private AddressableHeap<Double, ContractionVertex<V>> heap;
         /**
          * For every vertex added to the {@code heap} stores a corresponding handle.
          */
-        private Map<ContractionVertex<V>, AddressableHeap.Handle<Double, ContractionVertex<V>>> seen;
+        private Map<ContractionVertex<V>,
+            AddressableHeap.Handle<Double, ContractionVertex<V>>> seen;
 
         /**
          * For every vertex stores an id of a corresponding Voronoi cell center.
@@ -397,11 +418,11 @@ class TransitNodeRoutingPrecomputation<V, E> {
          */
         private double[] distanceToCenter;
 
-
         /**
          * Constructs a new instance of the algorithm.
          */
-        VoronoiDiagramComputation() {
+        VoronoiDiagramComputation()
+        {
             this.heap = heapSupplier.get();
             this.seen = new HashMap<>();
         }
@@ -411,7 +432,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return Voronoi diagram
          */
-        VoronoiDiagram<V> computeVoronoiDiagram() {
+        VoronoiDiagram<V> computeVoronoiDiagram()
+        {
             int numberOfVertices = contractionGraph.vertexSet().size();
             voronoiCells = new int[numberOfVertices];
             distanceToCenter = new double[numberOfVertices];
@@ -419,8 +441,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
             Arrays.fill(distanceToCenter, Double.POSITIVE_INFINITY);
 
             // mask all shortcuts in the contraction graph
-            Graph<ContractionVertex<V>, ContractionEdge<E>> searchGraph =
-                    new EdgeReversedGraph<>(new MaskSubgraph<>(contractionGraph, v -> false, e -> e.edge == null));
+            Graph<ContractionVertex<V>, ContractionEdge<E>> searchGraph = new EdgeReversedGraph<>(
+                new MaskSubgraph<>(contractionGraph, v -> false, e -> e.edge == null));
 
             for (ContractionVertex<V> transitVertex : contractedTransitVerticesSet) {
                 updateDistance(transitVertex, transitVertex, 0.0);
@@ -448,11 +470,13 @@ class TransitNodeRoutingPrecomputation<V, E> {
         /**
          * If necessary updates distance of the {@code vertex} in the {@code heap}.
          *
-         * @param vertex      vertex
+         * @param vertex vertex
          * @param predecessor predecessor of {@code vertex} in the shortest paths tree
-         * @param distance    distance to vertex
+         * @param distance distance to vertex
          */
-        private void updateDistance(ContractionVertex<V> vertex, ContractionVertex<V> predecessor, double distance) {
+        private void updateDistance(
+            ContractionVertex<V> vertex, ContractionVertex<V> predecessor, double distance)
+        {
             AddressableHeap.Handle<Double, ContractionVertex<V>> handle = seen.get(vertex);
             if (handle == null) {
                 handle = heap.insert(distance, vertex);
@@ -469,11 +493,13 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * If necessary updates Voronoi cell id and distance in {@code voronoiCells} and
          * {@code distanceToCenter} for vertex.
          *
-         * @param vertex      vertex
+         * @param vertex vertex
          * @param predecessor predecessor of {@code vertex} in the shortest paths tree
-         * @param distance    distance to vertex
+         * @param distance distance to vertex
          */
-        private void visitVertex(ContractionVertex<V> vertex, ContractionVertex<V> predecessor, double distance) {
+        private void visitVertex(
+            ContractionVertex<V> vertex, ContractionVertex<V> predecessor, double distance)
+        {
             int updatedVoronoiCell;
             if (vertex.vertexId == predecessor.vertexId) {
                 updatedVoronoiCell = vertex.vertexId;
@@ -486,14 +512,13 @@ class TransitNodeRoutingPrecomputation<V, E> {
     }
 
     /**
-     * BFS algorithm which is used to compute access vertices and
-     * locality filter. Runs a CH BFS query over contractionGraph. Does not
-     * traverse edges leaving transit vertices. Reports all traversed transit
-     * vertices as access vertices. For every traversed non-transit vertex
-     * reports a corresponding Voronoi cell id. Those ids are then used to
-     * construct locality filter.
+     * BFS algorithm which is used to compute access vertices and locality filter. Runs a CH BFS
+     * query over contractionGraph. Does not traverse edges leaving transit vertices. Reports all
+     * traversed transit vertices as access vertices. For every traversed non-transit vertex reports
+     * a corresponding Voronoi cell id. Those ids are then used to construct locality filter.
      */
-    private class ContractionHierarchyBFS {
+    private class ContractionHierarchyBFS
+    {
         /**
          * Search graph.
          */
@@ -504,17 +529,21 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @param contractionGraph contraction graph
          */
-        public ContractionHierarchyBFS(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph) {
+        public ContractionHierarchyBFS(
+            Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph)
+        {
             this.contractionGraph = contractionGraph;
         }
 
         /**
-         * Runs a forward CH BFS query to calculate access vertices and ids of visited Voronoi cells.
+         * Runs a forward CH BFS query to calculate access vertices and ids of visited Voronoi
+         * cells.
          *
          * @param vertex search starting vertex
          * @return access vertices and visited Voronoi cells ids
          */
-        public Pair<Set<V>, Set<Integer>> runSearch(ContractionVertex<V> vertex) {
+        public Pair<Set<V>, Set<Integer>> runSearch(ContractionVertex<V> vertex)
+        {
             Set<V> accessVertices = new HashSet<>();
             Set<Integer> visitedVoronoiCells = new HashSet<>();
 
@@ -532,7 +561,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
                     visitedVoronoiCells.add(voronoiDiagram.getVoronoiCellId(v));
 
                     for (ContractionEdge<E> e : contractionGraph.outgoingEdgesOf(v)) {
-                        ContractionVertex<V> successor = Graphs.getOppositeVertex(contractionGraph, e, v);
+                        ContractionVertex<V> successor =
+                            Graphs.getOppositeVertex(contractionGraph, e, v);
                         if (!visitedVerticesIds.contains(successor.vertexId)) {
                             queue.add(successor);
                         }
@@ -547,17 +577,18 @@ class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Provides API to build an {@code AccessVertices} object.
      */
-    private class AccessVerticesBuilder {
+    private class AccessVerticesBuilder
+    {
         /**
-         * For every vertex in {@code contractionGraph} stores a list of
-         * forward access vertices. Id of a contracted vertex is equal to the
-         * index in this list, at which corresponding access vertices are stored.
+         * For every vertex in {@code contractionGraph} stores a list of forward access vertices. Id
+         * of a contracted vertex is equal to the index in this list, at which corresponding access
+         * vertices are stored.
          */
         private List<List<AccessVertex<V, E>>> forwardAccessVertices;
         /**
-         * For every vertex in {@code contractionGraph} stores a list of
-         * backward access vertices. Id of a contracted vertex is equal to the
-         * index in this list, at which corresponding access vertices are stored.
+         * For every vertex in {@code contractionGraph} stores a list of backward access vertices.
+         * Id of a contracted vertex is equal to the index in this list, at which corresponding
+         * access vertices are stored.
          */
         private List<List<AccessVertex<V, E>>> backwardAccessVertices;
 
@@ -566,7 +597,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @param numberOfVertices number of vertices in a m graph
          */
-        public AccessVerticesBuilder(int numberOfVertices) {
+        public AccessVerticesBuilder(int numberOfVertices)
+        {
             this.forwardAccessVertices = new ArrayList<>(numberOfVertices);
             this.backwardAccessVertices = new ArrayList<>(numberOfVertices);
             for (int i = 0; i < numberOfVertices; ++i) {
@@ -576,82 +608,99 @@ class TransitNodeRoutingPrecomputation<V, E> {
         }
 
         /**
-         * Builds a new instance of {@code AccessVertices} using {@code forwardAccessVertices}
-         * and {@code backwardAccessVertices}.
+         * Builds a new instance of {@code AccessVertices} using {@code forwardAccessVertices} and
+         * {@code backwardAccessVertices}.
          *
          * @return access vertices
          */
-        public AccessVertices<V, E> buildVertices() {
+        public AccessVertices<V, E> buildVertices()
+        {
             return new AccessVertices<>(forwardAccessVertices, backwardAccessVertices);
         }
 
         /**
-         * Computes a list of forward access vertices for {@code v} using {@code vertices}
-         * and adds them to the {@code forwardAccessVertices}.
+         * Computes a list of forward access vertices for {@code v} using {@code vertices} and adds
+         * them to the {@code forwardAccessVertices}.
          *
-         * @param v        vertex
+         * @param v vertex
          * @param vertices transit vertices
          */
-        public void addForwardAccessVertices(ContractionVertex<V> v, Set<V> vertices) {
-            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> manyToManyShortestPaths
-                    = manyToManyShortestPathsAlgorithm.getManyToManyPaths(Collections.singleton(v.vertex), vertices);
+        public void addForwardAccessVertices(ContractionVertex<V> v, Set<V> vertices)
+        {
+            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> manyToManyShortestPaths =
+                manyToManyShortestPathsAlgorithm
+                    .getManyToManyPaths(Collections.singleton(v.vertex), vertices);
 
-            Set<V> prunedVertices = getPrunedAccessVertices(v.vertex, vertices, manyToManyShortestPaths, true);
+            Set<V> prunedVertices =
+                getPrunedAccessVertices(v.vertex, vertices, manyToManyShortestPaths, true);
             List<AccessVertex<V, E>> accessVerticesList = forwardAccessVertices.get(v.vertexId);
             for (V unpackedVertex : vertices) {
                 if (!prunedVertices.contains(unpackedVertex)) {
-                    accessVerticesList.add(new AccessVertex<>(unpackedVertex, manyToManyShortestPaths.getPath(v.vertex, unpackedVertex)));
+                    accessVerticesList
+                        .add(
+                            new AccessVertex<>(
+                                unpackedVertex,
+                                manyToManyShortestPaths.getPath(v.vertex, unpackedVertex)));
                 }
             }
         }
 
         /**
-         * Computes a list of backward access vertices for {@code v} using {@code vertices}
-         * and adds them to the {@code backwardAccessVertices}.
+         * Computes a list of backward access vertices for {@code v} using {@code vertices} and adds
+         * them to the {@code backwardAccessVertices}.
          *
-         * @param v        vertex
+         * @param v vertex
          * @param vertices transit vertices
          */
-        public void addBackwardAccessVertices(ContractionVertex<V> v, Set<V> vertices) {
-            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> manyToManyShortestPaths
-                    = manyToManyShortestPathsAlgorithm.getManyToManyPaths(vertices, Collections.singleton(v.vertex));
+        public void addBackwardAccessVertices(ContractionVertex<V> v, Set<V> vertices)
+        {
+            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> manyToManyShortestPaths =
+                manyToManyShortestPathsAlgorithm
+                    .getManyToManyPaths(vertices, Collections.singleton(v.vertex));
 
-            Set<V> prunedVertices = getPrunedAccessVertices(v.vertex, vertices, manyToManyShortestPaths, false);
+            Set<V> prunedVertices =
+                getPrunedAccessVertices(v.vertex, vertices, manyToManyShortestPaths, false);
             List<AccessVertex<V, E>> accessVerticesList = backwardAccessVertices.get(v.vertexId);
             for (V unpackedVertex : vertices) {
                 if (!prunedVertices.contains(unpackedVertex)) {
-                    accessVerticesList.add(new AccessVertex<>(unpackedVertex, manyToManyShortestPaths.getPath(unpackedVertex, v.vertex)));
+                    accessVerticesList
+                        .add(
+                            new AccessVertex<>(
+                                unpackedVertex,
+                                manyToManyShortestPaths.getPath(unpackedVertex, v.vertex)));
                 }
             }
         }
-
 
         /**
          * Selects redundant access vertices from {@code vertices}.
          *
-         * @param v                       vertex
-         * @param vertices                transit vertices
+         * @param v vertex
+         * @param vertices transit vertices
          * @param manyToManyShortestPaths transit vertices paths
-         * @param forwardAccessVertices   if {@code vertices} are forward access vertices
-         *                                for not wrt {@code v}
+         * @param forwardAccessVertices if {@code vertices} are forward access vertices for not wrt
+         *        {@code v}
          * @return redundant access vertices
          */
-        private Set<V> getPrunedAccessVertices(V v, Set<V> vertices,
-                                               ManyToManyShortestPaths<V, E> manyToManyShortestPaths,
-                                               boolean forwardAccessVertices) {
+        private Set<V> getPrunedAccessVertices(
+            V v, Set<V> vertices, ManyToManyShortestPaths<V, E> manyToManyShortestPaths,
+            boolean forwardAccessVertices)
+        {
             Set<V> result = new HashSet<>();
             for (V v1 : vertices) {
                 if (!result.contains(v1)) {
                     for (V v2 : vertices) {
                         if (!v1.equals(v2) && !result.contains(v2)) {
                             if (forwardAccessVertices) {
-                                if (manyToManyShortestPaths.getWeight(v, v1) + transitVerticesPaths.getWeight(v1, v2)
-                                        <= manyToManyShortestPaths.getWeight(v, v2)) {
+                                if (manyToManyShortestPaths.getWeight(v, v1) + transitVerticesPaths
+                                    .getWeight(v1, v2) <= manyToManyShortestPaths.getWeight(v, v2))
+                                {
                                     result.add(v2);
                                 }
                             } else {
-                                if (transitVerticesPaths.getWeight(v2, v1) + manyToManyShortestPaths.getWeight(v1, v)
-                                        <= manyToManyShortestPaths.getWeight(v2, v)) {
+                                if (transitVerticesPaths.getWeight(v2, v1) + manyToManyShortestPaths
+                                    .getWeight(v1, v) <= manyToManyShortestPaths.getWeight(v2, v))
+                                {
                                     result.add(v2);
                                 }
                             }
@@ -666,7 +715,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Provides API to build a {@code LocalityFilter} object.
      */
-    private class LocalityFilterBuilder {
+    private class LocalityFilterBuilder
+    {
         /**
          * Visited Voronoi cells by a forward {@code ContractionHierarchyBFS} search.
          */
@@ -681,7 +731,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @param numberOfVertices number of vertices in graph
          */
-        public LocalityFilterBuilder(int numberOfVertices) {
+        public LocalityFilterBuilder(int numberOfVertices)
+        {
             this.visitedForwardVoronoiCells = new ArrayList<>(numberOfVertices);
             this.visitedBackwardVoronoiCells = new ArrayList<>(numberOfVertices);
             for (int i = 0; i < numberOfVertices; ++i) {
@@ -690,45 +741,48 @@ class TransitNodeRoutingPrecomputation<V, E> {
             }
         }
 
-
         /**
-         * Adds {@code visitedVoronoiCells} to this builder in the forward
-         * direction for {@code vertex}.
+         * Adds {@code visitedVoronoiCells} to this builder in the forward direction for
+         * {@code vertex}.
          *
-         * @param vertex              vertex
+         * @param vertex vertex
          * @param visitedVoronoiCells visited Voronoi cells
          */
-        public void addForwardVisitedVoronoiCells(ContractionVertex<V> vertex, Set<Integer> visitedVoronoiCells) {
+        public void addForwardVisitedVoronoiCells(
+            ContractionVertex<V> vertex, Set<Integer> visitedVoronoiCells)
+        {
             this.visitedForwardVoronoiCells.set(vertex.vertexId, visitedVoronoiCells);
         }
 
         /**
-         * Adds {@code visitedVoronoiCells} to this builder in the backward
-         * direction for {@code vertex}.
+         * Adds {@code visitedVoronoiCells} to this builder in the backward direction for
+         * {@code vertex}.
          *
-         * @param vertex              vertex
+         * @param vertex vertex
          * @param visitedVoronoiCells visited Voronoi cells
          */
-        public void addBackwardVisitedVoronoiCells(ContractionVertex<V> vertex, Set<Integer> visitedVoronoiCells) {
+        public void addBackwardVisitedVoronoiCells(
+            ContractionVertex<V> vertex, Set<Integer> visitedVoronoiCells)
+        {
             this.visitedBackwardVoronoiCells.set(vertex.vertexId, visitedVoronoiCells);
         }
 
-
         /**
-         * Builds an instance of {@code LocalityFilter} using {@code visitedForwardVoronoiCells}
-         * and {@code visitedBackwardVoronoiCells}.
+         * Builds an instance of {@code LocalityFilter} using {@code visitedForwardVoronoiCells} and
+         * {@code visitedBackwardVoronoiCells}.
          *
          * @return locality filter
          */
-        public LocalityFilter<V> buildLocalityFilter() {
-            return new LocalityFilter<>(contractionMapping, visitedForwardVoronoiCells, visitedBackwardVoronoiCells);
+        public LocalityFilter<V> buildLocalityFilter()
+        {
+            return new LocalityFilter<>(
+                contractionMapping, visitedForwardVoronoiCells, visitedBackwardVoronoiCells);
         }
     }
 
-
     /**
-     * This class represents return type of this algorithm and contains all data computed during
-     * the execution of the algorithm. Formally it consists of:
+     * This class represents return type of this algorithm and contains all data computed during the
+     * execution of the algorithm. Formally it consists of:
      *
      * <ul style="list-style-type:circle;">
      * <li>{@link ContractionHierarchy} which was used to compute this transit node routing;</li>
@@ -742,10 +796,10 @@ class TransitNodeRoutingPrecomputation<V, E> {
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
-    static class TransitNodeRouting<V, E> {
+    static class TransitNodeRouting<V, E>
+    {
         /**
-         * Contraction hierarchy based on which this transit node
-         * routing was computed.
+         * Contraction hierarchy based on which this transit node routing was computed.
          */
         private ContractionHierarchy<V, E> contractionHierarchy;
 
@@ -759,8 +813,7 @@ class TransitNodeRoutingPrecomputation<V, E> {
         private ManyToManyShortestPaths<V, E> transitVerticesPaths;
 
         /**
-         * Voronoi diagram of the graph using {@code transitVertices}
-         * as cells centers.
+         * Voronoi diagram of the graph using {@code transitVertices} as cells centers.
          */
         private VoronoiDiagram<V> voronoiDiagram;
         /**
@@ -777,7 +830,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return contraction hierarchy of this transit node routing
          */
-        public ContractionHierarchy<V, E> getContractionHierarchy() {
+        public ContractionHierarchy<V, E> getContractionHierarchy()
+        {
             return contractionHierarchy;
         }
 
@@ -786,7 +840,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return transit vertices of this transit node routing
          */
-        public Set<ContractionVertex<V>> getTransitVertices() {
+        public Set<ContractionVertex<V>> getTransitVertices()
+        {
             return transitVertices;
         }
 
@@ -795,7 +850,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return paths between every pair of {@code transitVertices}
          */
-        public ManyToManyShortestPaths<V, E> getTransitVerticesPaths() {
+        public ManyToManyShortestPaths<V, E> getTransitVerticesPaths()
+        {
             return transitVerticesPaths;
         }
 
@@ -804,7 +860,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return Voronoi diagram of this transit node routing
          */
-        public VoronoiDiagram<V> getVoronoiDiagram() {
+        public VoronoiDiagram<V> getVoronoiDiagram()
+        {
             return voronoiDiagram;
         }
 
@@ -813,7 +870,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return access vertices of this transit node routing
          */
-        public AccessVertices<V, E> getAccessVertices() {
+        public AccessVertices<V, E> getAccessVertices()
+        {
             return accessVertices;
         }
 
@@ -822,10 +880,10 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return locality filter of this transit node routing
          */
-        public LocalityFilter<V> getLocalityFilter() {
+        public LocalityFilter<V> getLocalityFilter()
+        {
             return localityFilter;
         }
-
 
         /**
          * Constructs a new instance for the given {@code contractionHierarchy},
@@ -833,17 +891,19 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * {@code accessVertices} and {@code localityFilter}.
          *
          * @param contractionHierarchy contraction hierarchy
-         * @param transitVertices      transit vertices
+         * @param transitVertices transit vertices
          * @param transitVerticesPaths paths between transit vertices
-         * @param voronoiDiagram       Voronoi diagram
-         * @param accessVertices       access vertices
-         * @param localityFilter       locality filter
+         * @param voronoiDiagram Voronoi diagram
+         * @param accessVertices access vertices
+         * @param localityFilter locality filter
          */
-        public TransitNodeRouting(ContractionHierarchy<V, E> contractionHierarchy,
-                                  Set<ContractionVertex<V>> transitVertices,
-                                  ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> transitVerticesPaths,
-                                  VoronoiDiagram<V> voronoiDiagram,
-                                  AccessVertices<V, E> accessVertices, LocalityFilter<V> localityFilter) {
+        public TransitNodeRouting(
+            ContractionHierarchy<V, E> contractionHierarchy,
+            Set<ContractionVertex<V>> transitVertices,
+            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> transitVerticesPaths,
+            VoronoiDiagram<V> voronoiDiagram, AccessVertices<V, E> accessVertices,
+            LocalityFilter<V> localityFilter)
+        {
             this.contractionHierarchy = contractionHierarchy;
             this.transitVertices = transitVertices;
             this.transitVerticesPaths = transitVerticesPaths;
@@ -853,19 +913,19 @@ class TransitNodeRoutingPrecomputation<V, E> {
         }
     }
 
-
     /**
-     * Voronoi diagram for a graph. Formally each cell in the diagram is defined as
-     * $Vor(v) = \{u ∈ V : ∀w ∈ T$ \ $ \{v\} : \mu(u, v) ≤ \mu(u, w)\}$, where $V$ is the vertex set,
-     * $T$ is a set of vertaccess verticesices representing Voronoi cells centers and $\mu(u,v)$ denotes distance
+     * Voronoi diagram for a graph. Formally each cell in the diagram is defined as $Vor(v) = \{u ∈
+     * V : ∀w ∈ T$ \ $ \{v\} : \mu(u, v) ≤ \mu(u, w)\}$, where $V$ is the vertex set, $T$ is a set
+     * of vertaccess verticesices representing Voronoi cells centers and $\mu(u,v)$ denotes distance
      * between vertices $u$ and $v$.
      *
      * @param <V> graph vertex type
      */
-    public static class VoronoiDiagram<V> {
+    public static class VoronoiDiagram<V>
+    {
         /**
-         * For each vertex in {@code contractionGraph} contains id of its Voronoi
-         * cell, or {@code NO_VORONOI_CELL} if it does not belong to any cell.
+         * For each vertex in {@code contractionGraph} contains id of its Voronoi cell, or
+         * {@code NO_VORONOI_CELL} if it does not belong to any cell.
          */
         private int[] voronoiCells;
 
@@ -874,7 +934,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @param voronoiCells Voronoi cells ids
          */
-        public VoronoiDiagram(int[] voronoiCells) {
+        public VoronoiDiagram(int[] voronoiCells)
+        {
             this.voronoiCells = voronoiCells;
         }
 
@@ -884,7 +945,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * @param vertex vertex
          * @return Voronoi cell id
          */
-        public int getVoronoiCellId(ContractionVertex<V> vertex) {
+        public int getVoronoiCellId(ContractionVertex<V> vertex)
+        {
             return voronoiCells[vertex.vertexId];
         }
     }
@@ -893,31 +955,30 @@ class TransitNodeRoutingPrecomputation<V, E> {
      * Search space based locality filter.
      *
      * <p>
-     * Formally a locality filter is defined as $L : V × V → \{true, false\}$.
-     * $L(s, t)$ must be $true$ when no shortest path between $s$ and $t$ contains
-     * a transit vertex.
+     * Formally a locality filter is defined as $L : V × V → \{true, false\}$. $L(s, t)$ must be
+     * $true$ when no shortest path between $s$ and $t$ contains a transit vertex.
      *
      * <p>
-     * For every vertex in the {@code contractionGraph} stores two sets of visited Voronoi
-     * cells by forward and backward {@code ContractionHierarchyBFS}.
+     * For every vertex in the {@code contractionGraph} stores two sets of visited Voronoi cells by
+     * forward and backward {@code ContractionHierarchyBFS}.
      *
      * @param <V> graph vertex type
      */
-    public static class LocalityFilter<V> {
+    public static class LocalityFilter<V>
+    {
         /**
-         * Mapping of vertices in the initial graph to the vertices in
-         * the contraction graph.
+         * Mapping of vertices in the initial graph to the vertices in the contraction graph.
          */
         private Map<V, ContractionVertex<V>> contractionMapping;
 
         /**
-         * For every vertex in the contraction graph stores visited
-         * Voronoi cells ids by a forward {@code ContractionHierarchyBFS}.
+         * For every vertex in the contraction graph stores visited Voronoi cells ids by a forward
+         * {@code ContractionHierarchyBFS}.
          */
         private List<Set<Integer>> visitedForwardVoronoiCells;
         /**
-         * For every vertex in the contraction graph stores visited
-         * Voronoi cells ids by a backward {@code ContractionHierarchyBFS}.
+         * For every vertex in the contraction graph stores visited Voronoi cells ids by a backward
+         * {@code ContractionHierarchyBFS}.
          */
         private List<Set<Integer>> visitedBackwardVoronoiCells;
 
@@ -925,36 +986,42 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * Constructs a new instance for the given {@code contractionMapping},
          * {@code visitedForwardVoronoiCells} and {@code visitedBackwardVoronoiCells}.
          *
-         * @param contractionMapping          contraction mapping
-         * @param visitedForwardVoronoiCells  visited Voronoi cells ids by a forward search
+         * @param contractionMapping contraction mapping
+         * @param visitedForwardVoronoiCells visited Voronoi cells ids by a forward search
          * @param visitedBackwardVoronoiCells visited Voronoi cells ids by a backward search
          */
-        public LocalityFilter(Map<V, ContractionVertex<V>> contractionMapping,
-                              List<Set<Integer>> visitedForwardVoronoiCells,
-                              List<Set<Integer>> visitedBackwardVoronoiCells) {
+        public LocalityFilter(
+            Map<V, ContractionVertex<V>> contractionMapping,
+            List<Set<Integer>> visitedForwardVoronoiCells,
+            List<Set<Integer>> visitedBackwardVoronoiCells)
+        {
             this.contractionMapping = contractionMapping;
             this.visitedForwardVoronoiCells = visitedForwardVoronoiCells;
             this.visitedBackwardVoronoiCells = visitedBackwardVoronoiCells;
         }
 
         /**
-         * Returns $true$ when no shortest paths between {@code source} and {@code sink}
-         * contains a transit vertex.
+         * Returns $true$ when no shortest paths between {@code source} and {@code sink} contains a
+         * transit vertex.
          *
          * @param source source vertex
-         * @param sink   sink vertex
-         * @return $true$ iff no shortest paths between {@code source} and {@code sink}
-         * contains a transit vertex
+         * @param sink sink vertex
+         * @return $true$ iff no shortest paths between {@code source} and {@code sink} contains a
+         *         transit vertex
          */
-        public boolean isLocal(V source, V sink) {
+        public boolean isLocal(V source, V sink)
+        {
             ContractionVertex<V> contractedSource = contractionMapping.get(source);
             ContractionVertex<V> contractedSink = contractionMapping.get(sink);
 
-            Set<Integer> sourceVisitedVoronoiCells = visitedForwardVoronoiCells.get(contractedSource.vertexId);
-            Set<Integer> sinkVisitedVoronoiCells = visitedBackwardVoronoiCells.get(contractedSink.vertexId);
+            Set<Integer> sourceVisitedVoronoiCells =
+                visitedForwardVoronoiCells.get(contractedSource.vertexId);
+            Set<Integer> sinkVisitedVoronoiCells =
+                visitedBackwardVoronoiCells.get(contractedSink.vertexId);
 
             if (sourceVisitedVoronoiCells.contains(NO_VORONOI_CELL)
-                    || sinkVisitedVoronoiCells.contains(NO_VORONOI_CELL)) {
+                || sinkVisitedVoronoiCells.contains(NO_VORONOI_CELL))
+            {
                 return true;
             }
 
@@ -979,30 +1046,34 @@ class TransitNodeRoutingPrecomputation<V, E> {
     }
 
     /**
-     * Stores forward and backward access vertices computed for the
-     * transit node routing.
+     * Stores forward and backward access vertices computed for the transit node routing.
      *
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
-    public static class AccessVertices<V, E> {
+    public static class AccessVertices<V, E>
+    {
         /**
          * For each vertex in {@code contractionGraph} stores corresponding forward access vertices.
          */
         private List<List<AccessVertex<V, E>>> forwardAccessVertices;
         /**
-         * For each vertex in {@code contractionGraph} stores corresponding backward access vertices.
+         * For each vertex in {@code contractionGraph} stores corresponding backward access
+         * vertices.
          */
         private List<List<AccessVertex<V, E>>> backwardAccessVertices;
 
         /**
-         * Constructs a new instance for the given {@code forwardAccessVertices} and {@code backwardAccessVertices}.
+         * Constructs a new instance for the given {@code forwardAccessVertices} and
+         * {@code backwardAccessVertices}.
          *
-         * @param forwardAccessVertices  forward access vertices
+         * @param forwardAccessVertices forward access vertices
          * @param backwardAccessVertices backward access vertices
          */
-        public AccessVertices(List<List<AccessVertex<V, E>>> forwardAccessVertices,
-                              List<List<AccessVertex<V, E>>> backwardAccessVertices) {
+        public AccessVertices(
+            List<List<AccessVertex<V, E>>> forwardAccessVertices,
+            List<List<AccessVertex<V, E>>> backwardAccessVertices)
+        {
             this.forwardAccessVertices = forwardAccessVertices;
             this.backwardAccessVertices = backwardAccessVertices;
         }
@@ -1013,7 +1084,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * @param vertex vertex
          * @return list of forward access vertices
          */
-        public List<AccessVertex<V, E>> getForwardAccessVertices(ContractionVertex<V> vertex) {
+        public List<AccessVertex<V, E>> getForwardAccessVertices(ContractionVertex<V> vertex)
+        {
             return forwardAccessVertices.get(vertex.vertexId);
         }
 
@@ -1023,7 +1095,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * @param vertex vertex
          * @return list of backward access vertices
          */
-        public List<AccessVertex<V, E>> getBackwardAccessVertices(ContractionVertex<V> vertex) {
+        public List<AccessVertex<V, E>> getBackwardAccessVertices(ContractionVertex<V> vertex)
+        {
             return backwardAccessVertices.get(vertex.vertexId);
         }
     }
@@ -1031,21 +1104,21 @@ class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Forward or backward access vertex computed for a certain vertex $v$ in the graph.
      * <p>
-     * In the transit node routing if $u$ is a forward access vertex for $v$, it means that
-     * if you want go far away from $v$, it is highly likely that you would need to
-     * pass through $u$. Correspondingly, if $u$ is a backward access vertex for $v$, it
-     * means that if you want to go to $v$ from far away, you would highly likely go through
-     * $u$.
+     * In the transit node routing if $u$ is a forward access vertex for $v$, it means that if you
+     * want go far away from $v$, it is highly likely that you would need to pass through $u$.
+     * Correspondingly, if $u$ is a backward access vertex for $v$, it means that if you want to go
+     * to $v$ from far away, you would highly likely go through $u$.
      *
      * <p>
-     * Stores transit vertex and the shortest path between $v$ and {@code vertex}.
-     * If this is a forward access vertex, then {@code vertex} is the ending vertex in the
-     * {@code path}, Otherwise it is a starting vertex of the {@code path}.
+     * Stores transit vertex and the shortest path between $v$ and {@code vertex}. If this is a
+     * forward access vertex, then {@code vertex} is the ending vertex in the {@code path},
+     * Otherwise it is a starting vertex of the {@code path}.
      *
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
-    public static class AccessVertex<V, E> {
+    public static class AccessVertex<V, E>
+    {
         /**
          * Transit vertex.
          */
@@ -1060,7 +1133,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return transit vertex of this access vertex
          */
-        public V getVertex() {
+        public V getVertex()
+        {
             return vertex;
         }
 
@@ -1069,7 +1143,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return path between a vertex in the graph and {@code vertex}.
          */
-        public GraphPath<V, E> getPath() {
+        public GraphPath<V, E> getPath()
+        {
             return path;
         }
 
@@ -1077,9 +1152,10 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * Constructs a new instance for the given {@code vertex} and {@code path}.
          *
          * @param vertex a transit vertex
-         * @param path   path between a vertex in the graph and {@code vertex}
+         * @param path path between a vertex in the graph and {@code vertex}
          */
-        public AccessVertex(V vertex, GraphPath<V, E> path) {
+        public AccessVertex(V vertex, GraphPath<V, E> path)
+        {
             this.vertex = vertex;
             this.path = path;
         }
@@ -1088,7 +1164,10 @@ class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Task which is used to perform {@code ContractionHierarchyBFS} in parallel.
      */
-    private class AVAndLFConstructionTask implements Runnable {
+    private class AVAndLFConstructionTask
+        implements
+        Runnable
+    {
         /**
          * Id of this task.
          */
@@ -1115,16 +1194,17 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * Constructs a new instance for the give {@code taskId}, {@code localityFilterBuilder},
          * {@code accessVerticesBuilder}, {@code forwardBFS} and {@code backwardBFS}.
          *
-         * @param taskId                id of this task
+         * @param taskId id of this task
          * @param localityFilterBuilder builder object for {@code LocalityFilter}
          * @param accessVerticesBuilder builder object for {@code AccessVertices}
-         * @param forwardBFS            forward {@code ContractionHierarchyBFS}
-         * @param backwardBFS           backward {@code ContractionHierarchyBFS}
+         * @param forwardBFS forward {@code ContractionHierarchyBFS}
+         * @param backwardBFS backward {@code ContractionHierarchyBFS}
          */
-        public AVAndLFConstructionTask(int taskId, LocalityFilterBuilder localityFilterBuilder,
-                                       AccessVerticesBuilder accessVerticesBuilder,
-                                       ContractionHierarchyBFS forwardBFS,
-                                       ContractionHierarchyBFS backwardBFS) {
+        public AVAndLFConstructionTask(
+            int taskId, LocalityFilterBuilder localityFilterBuilder,
+            AccessVerticesBuilder accessVerticesBuilder, ContractionHierarchyBFS forwardBFS,
+            ContractionHierarchyBFS backwardBFS)
+        {
             this.taskId = taskId;
             this.localityFilterBuilder = localityFilterBuilder;
             this.accessVerticesBuilder = accessVerticesBuilder;
@@ -1133,7 +1213,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
         }
 
         @Override
-        public void run() {
+        public void run()
+        {
             int start = workerSegmentStart(0, contractionVertices.size(), taskId);
             int end = workerSegmentEnd(0, contractionVertices.size(), taskId);
             for (int i = start; i < end; ++i) {
@@ -1153,10 +1234,12 @@ class TransitNodeRoutingPrecomputation<V, E> {
     }
 
     /**
-     * Task which is used to unpack contracted many-to-many
-     * shortest paths between transit vertices.
+     * Task which is used to unpack contracted many-to-many shortest paths between transit vertices.
      */
-    private class PathsUnpackingTask implements Runnable {
+    private class PathsUnpackingTask
+        implements
+        Runnable
+    {
         /**
          * Id of this task.
          */
@@ -1179,14 +1262,15 @@ class TransitNodeRoutingPrecomputation<V, E> {
          * Constructs a new instance for the given {@code taskId}, {@code transitVertices},
          * {@code pathsMap} and {@code shortestPaths}.
          *
-         * @param taskId          id of this task
+         * @param taskId id of this task
          * @param transitVertices transit vertices
-         * @param pathsMap        map for unpacked paths
-         * @param shortestPaths   paths to be unpacked
+         * @param pathsMap map for unpacked paths
+         * @param shortestPaths paths to be unpacked
          */
-        public PathsUnpackingTask(int taskId, List<V> transitVertices,
-                                  Map<V, Map<V, GraphPath<V, E>>> pathsMap,
-                                  ManyToManyShortestPaths<V, E> shortestPaths) {
+        public PathsUnpackingTask(
+            int taskId, List<V> transitVertices, Map<V, Map<V, GraphPath<V, E>>> pathsMap,
+            ManyToManyShortestPaths<V, E> shortestPaths)
+        {
             this.taskId = taskId;
             this.transitVertices = transitVertices;
             this.pathsMap = pathsMap;
@@ -1194,7 +1278,8 @@ class TransitNodeRoutingPrecomputation<V, E> {
         }
 
         @Override
-        public void run() {
+        public void run()
+        {
             int start = workerSegmentStart(0, transitVertices.size(), taskId);
             int end = workerSegmentEnd(0, transitVertices.size(), taskId);
 
@@ -1208,15 +1293,15 @@ class TransitNodeRoutingPrecomputation<V, E> {
         }
     }
 
-
     /**
      * Computes start of the working chunk for this task.
      *
      * @param segmentStart working segment start
-     * @param segmentEnd   working segment end
+     * @param segmentEnd working segment end
      * @return working chunk start
      */
-    private int workerSegmentStart(int segmentStart, int segmentEnd, int taskId) {
+    private int workerSegmentStart(int segmentStart, int segmentEnd, int taskId)
+    {
         return segmentStart + ((segmentEnd - segmentStart) * taskId) / parallelism;
     }
 
@@ -1224,10 +1309,11 @@ class TransitNodeRoutingPrecomputation<V, E> {
      * Computes end of the working chunk for this task.
      *
      * @param segmentStart working segment start
-     * @param segmentEnd   working segment end
+     * @param segmentEnd working segment end
      * @return working chunk end
      */
-    private int workerSegmentEnd(int segmentStart, int segmentEnd, int taskId) {
+    private int workerSegmentEnd(int segmentStart, int segmentEnd, int taskId)
+    {
         return segmentStart + ((segmentEnd - segmentStart) * (taskId + 1)) / parallelism;
     }
 }

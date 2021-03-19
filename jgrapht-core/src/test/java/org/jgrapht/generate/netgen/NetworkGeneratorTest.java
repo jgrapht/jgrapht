@@ -42,14 +42,17 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Timofey Chudakov
  */
-public class NetworkGeneratorTest {
+public class NetworkGeneratorTest
+{
 
     private static final long SEED = 1;
     private static final double EPS = 1e-9;
 
     private final Random rng = new Random(SEED);
 
-    private static <V, E> void validateNetwork(Graph<V, E> network, NetworkInfo<V, E> networkInfo, NetworkGeneratorConfig config) {
+    private static <V, E> void validateNetwork(
+        Graph<V, E> network, NetworkInfo<V, E> networkInfo, NetworkGeneratorConfig config)
+    {
         List<V> pureSources = networkInfo.getPureSources();
         assertEquals(config.getPureSourceNum(), pureSources.size());
 
@@ -105,7 +108,10 @@ public class NetworkGeneratorTest {
 
     }
 
-    private static <V, E, N extends Number> void validateCapacities(Graph<V, E> graph, Function<E, N> capacities, NetworkInfo<V, E> info, NetworkGeneratorConfig config) {
+    private static <V, E, N extends Number> void validateCapacities(
+        Graph<V, E> graph, Function<E, N> capacities, NetworkInfo<V, E> info,
+        NetworkGeneratorConfig config)
+    {
         Set<E> skeletonArcs = new HashSet<>(info.getSkeletonArcs());
 
         for (E edge : graph.edgeSet()) {
@@ -116,14 +122,18 @@ public class NetworkGeneratorTest {
         }
     }
 
-    private static <V, E, I extends Number> void validateCosts(Graph<V, E> graph, Function<E, I> costs, NetworkGeneratorConfig config) {
+    private static <V, E, I extends Number> void validateCosts(
+        Graph<V, E> graph, Function<E, I> costs, NetworkGeneratorConfig config)
+    {
         for (E edge : graph.edgeSet()) {
             assertTrue(costs.apply(edge).doubleValue() >= config.getMinCost() - EPS);
             assertTrue(costs.apply(edge).doubleValue() <= config.getMaxCost() + EPS);
         }
     }
 
-    private static <V, E> void validateSupplies(MinimumCostFlowProblem<V, E> problem, NetworkInfo<V, E> info) {
+    private static <V,
+        E> void validateSupplies(MinimumCostFlowProblem<V, E> problem, NetworkInfo<V, E> info)
+    {
         Function<V, Integer> supplyFunction = problem.getNodeSupply();
         for (V source : info.getSources()) {
             assertTrue(supplyFunction.apply(source) > 0);
@@ -134,8 +144,10 @@ public class NetworkGeneratorTest {
         }
     }
 
-    private static <V, E, I extends Number> void compareFunctions(Graph<V, E> firstGraph, Graph<V, E> secondGraph,
-                                                                  Function<E, I> firstFunc, Function<E, I> secondFunc) {
+    private static <V, E, I extends Number> void compareFunctions(
+        Graph<V, E> firstGraph, Graph<V, E> secondGraph, Function<E, I> firstFunc,
+        Function<E, I> secondFunc)
+    {
         for (E firstArc : firstGraph.edgeSet()) {
             V source = firstGraph.getEdgeSource(firstArc);
             V target = firstGraph.getEdgeTarget(firstArc);
@@ -146,7 +158,9 @@ public class NetworkGeneratorTest {
         }
     }
 
-    private static <V, E> void assertBipartiteMatchingProblemsAreEqual(BipartiteMatchingProblem<V, E> firstProblem, BipartiteMatchingProblem<V, E> secondProblem) {
+    private static <V, E> void assertBipartiteMatchingProblemsAreEqual(
+        BipartiteMatchingProblem<V, E> firstProblem, BipartiteMatchingProblem<V, E> secondProblem)
+    {
         Graph<V, E> firstGraph = firstProblem.getGraph();
         Graph<V, E> secondGraph = secondProblem.getGraph();
 
@@ -155,10 +169,13 @@ public class NetworkGeneratorTest {
         assertEquals(firstProblem.getPartition1(), secondProblem.getPartition1());
         assertEquals(firstProblem.getPartition2(), secondProblem.getPartition2());
 
-        compareFunctions(firstGraph, secondGraph, firstProblem.getCosts(), secondProblem.getCosts());
+        compareFunctions(
+            firstGraph, secondGraph, firstProblem.getCosts(), secondProblem.getCosts());
     }
 
-    private static <V, E> void assertMaxFlowProblemsAreEqual(MaximumFlowProblem<V, E> firstProblem, MaximumFlowProblem<V, E> secondProblem) {
+    private static <V, E> void assertMaxFlowProblemsAreEqual(
+        MaximumFlowProblem<V, E> firstProblem, MaximumFlowProblem<V, E> secondProblem)
+    {
         Graph<V, E> firstGraph = firstProblem.getGraph();
         Graph<V, E> secondGraph = secondProblem.getGraph();
 
@@ -167,10 +184,13 @@ public class NetworkGeneratorTest {
         assertEquals(firstProblem.getSources(), secondProblem.getSources());
         assertEquals(firstProblem.getSinks(), secondProblem.getSinks());
 
-        compareFunctions(firstGraph, secondGraph, firstProblem.getCapacities(), secondProblem.getCapacities());
+        compareFunctions(
+            firstGraph, secondGraph, firstProblem.getCapacities(), secondProblem.getCapacities());
     }
 
-    private static <V, E> void assertMinCostFlowProblemsAreEqual(MinimumCostFlowProblem<V, E> firstProblem, MinimumCostFlowProblem<V, E> secondProblem) {
+    private static <V, E> void assertMinCostFlowProblemsAreEqual(
+        MinimumCostFlowProblem<V, E> firstProblem, MinimumCostFlowProblem<V, E> secondProblem)
+    {
         Graph<V, E> firstGraph = firstProblem.getGraph();
         Graph<V, E> secondGraph = secondProblem.getGraph();
 
@@ -183,50 +203,67 @@ public class NetworkGeneratorTest {
             assertEquals(firstSupply.apply(vertex), secondSupply.apply(vertex));
         }
 
-        compareFunctions(firstGraph, secondGraph, firstProblem.getArcCapacityLowerBounds(), secondProblem.getArcCapacityLowerBounds());
-        compareFunctions(firstGraph, secondGraph, firstProblem.getArcCapacityUpperBounds(), secondProblem.getArcCapacityUpperBounds());
-        compareFunctions(firstGraph, secondGraph, firstProblem.getArcCosts(), secondProblem.getArcCosts());
+        compareFunctions(
+            firstGraph, secondGraph, firstProblem.getArcCapacityLowerBounds(),
+            secondProblem.getArcCapacityLowerBounds());
+        compareFunctions(
+            firstGraph, secondGraph, firstProblem.getArcCapacityUpperBounds(),
+            secondProblem.getArcCapacityUpperBounds());
+        compareFunctions(
+            firstGraph, secondGraph, firstProblem.getArcCosts(), secondProblem.getArcCosts());
 
     }
 
-    private static <V, E> void assertGraphsAreEqual(Graph<V, E> firstGraph, Graph<V, E> secondGraph) {
+    private static <V, E> void assertGraphsAreEqual(Graph<V, E> firstGraph, Graph<V, E> secondGraph)
+    {
         assertEquals(firstGraph.vertexSet(), firstGraph.vertexSet());
 
         assertEquals(firstGraph.edgeSet().size(), secondGraph.edgeSet().size());
 
         for (E firstEdge : firstGraph.edgeSet()) {
-            E secondEdge = secondGraph.getEdge(firstGraph.getEdgeSource(firstEdge), firstGraph.getEdgeTarget(firstEdge));
-            assertEquals(firstGraph.getEdgeWeight(firstEdge), secondGraph.getEdgeWeight(secondEdge), EPS);
+            E secondEdge = secondGraph
+                .getEdge(firstGraph.getEdgeSource(firstEdge), firstGraph.getEdgeTarget(firstEdge));
+            assertEquals(
+                firstGraph.getEdgeWeight(firstEdge), secondGraph.getEdgeWeight(secondEdge), EPS);
         }
     }
 
-    private static <V, E> void assertIsFeasible(BipartiteMatchingProblem<V, E> problem) {
+    private static <V, E> void assertIsFeasible(BipartiteMatchingProblem<V, E> problem)
+    {
         Graph<V, E> graph = problem.getGraph();
         Graph<V, E> undirectedGraph = new AsUndirectedGraph<>(graph);
 
-        MatchingAlgorithm<V, E> matchingAlgorithm = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(undirectedGraph, problem.getPartition1(), problem.getPartition2());
+        MatchingAlgorithm<V, E> matchingAlgorithm =
+            new HopcroftKarpMaximumCardinalityBipartiteMatching<>(
+                undirectedGraph, problem.getPartition1(), problem.getPartition2());
 
         MatchingAlgorithm.Matching<V, E> matching = matchingAlgorithm.getMatching();
 
         assertEquals(graph.vertexSet().size(), 2 * matching.getEdges().size());
     }
 
-    private static <V, E> double getMaxFlowValue(MaximumFlowProblem<V, E> problem) {
+    private static <V, E> double getMaxFlowValue(MaximumFlowProblem<V, E> problem)
+    {
         MaximumFlowProblem<V, E> convertedProblem = problem.toSingleSourceSingleSinkProblem();
 
         Graph<V, E> graph = convertedProblem.getGraph();
         convertedProblem.dumpCapacities();
 
         MaximumFlowAlgorithm<V, E> algorithm = new PushRelabelMFImpl<>(graph);
-        MaximumFlowAlgorithm.MaximumFlow<E> flow = algorithm.getMaximumFlow(convertedProblem.getSource(), convertedProblem.getSink());
+        MaximumFlowAlgorithm.MaximumFlow<E> flow =
+            algorithm.getMaximumFlow(convertedProblem.getSource(), convertedProblem.getSink());
 
         return flow.getValue();
     }
 
-    private MinimumCostFlowProblem<Integer, DefaultEdge> generateMinCostFlowProblem(NetworkGeneratorConfig config, long seed) {
-        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), true);
+    private MinimumCostFlowProblem<Integer, DefaultEdge> generateMinCostFlowProblem(
+        NetworkGeneratorConfig config, long seed)
+    {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), true);
         NetworkGenerator<Integer, DefaultEdge> generator = new NetworkGenerator<>(config, seed);
-        MinimumCostFlowProblem<Integer, DefaultEdge> problem = generator.generateMinimumCostFlowProblem(graph);
+        MinimumCostFlowProblem<Integer, DefaultEdge> problem =
+            generator.generateMinimumCostFlowProblem(graph);
 
         NetworkInfo<Integer, DefaultEdge> info = generator.getNetworkInfo();
         validateNetwork(graph, info, config);
@@ -237,8 +274,11 @@ public class NetworkGeneratorTest {
         return problem;
     }
 
-    private MaximumFlowProblem<Integer, DefaultEdge> generateMaxFlowProblem(NetworkGeneratorConfig config, long seed) {
-        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), true);
+    private MaximumFlowProblem<Integer, DefaultEdge> generateMaxFlowProblem(
+        NetworkGeneratorConfig config, long seed)
+    {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), true);
         NetworkGenerator<Integer, DefaultEdge> generator = new NetworkGenerator<>(config, seed);
         MaximumFlowProblem<Integer, DefaultEdge> problem = generator.generateMaxFlowProblem(graph);
 
@@ -249,10 +289,14 @@ public class NetworkGeneratorTest {
         return problem;
     }
 
-    private static BipartiteMatchingProblem<Integer, DefaultEdge> generateBipartiteMatchingProblem(NetworkGeneratorConfig config, long seed) {
-        Graph<Integer, DefaultEdge> graph = new DefaultDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier());
+    private static BipartiteMatchingProblem<Integer, DefaultEdge> generateBipartiteMatchingProblem(
+        NetworkGeneratorConfig config, long seed)
+    {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier());
         NetworkGenerator<Integer, DefaultEdge> generator = new NetworkGenerator<>(config, seed);
-        BipartiteMatchingProblem<Integer, DefaultEdge> problem = generator.generateBipartiteMatchingProblem(graph);
+        BipartiteMatchingProblem<Integer, DefaultEdge> problem =
+            generator.generateBipartiteMatchingProblem(graph);
 
         NetworkInfo<Integer, DefaultEdge> info = generator.getNetworkInfo();
         validateNetwork(graph, info, config);
@@ -261,16 +305,22 @@ public class NetworkGeneratorTest {
         return problem;
     }
 
-    private void testMinCostFlowProblem(NetworkGeneratorConfig config, long seed) {
-        MinimumCostFlowProblem<Integer, DefaultEdge> firstProblem = generateMinCostFlowProblem(config, seed);
-        MinimumCostFlowProblem<Integer, DefaultEdge> secondProblem = generateMinCostFlowProblem(config, seed);
+    private void testMinCostFlowProblem(NetworkGeneratorConfig config, long seed)
+    {
+        MinimumCostFlowProblem<Integer, DefaultEdge> firstProblem =
+            generateMinCostFlowProblem(config, seed);
+        MinimumCostFlowProblem<Integer, DefaultEdge> secondProblem =
+            generateMinCostFlowProblem(config, seed);
 
         assertMinCostFlowProblemsAreEqual(firstProblem, secondProblem);
     }
 
-    private void testMaxFlowProblem(NetworkGeneratorConfig config, long seed) {
-        MaximumFlowProblem<Integer, DefaultEdge> firstProblem = generateMaxFlowProblem(config, seed);
-        MaximumFlowProblem<Integer, DefaultEdge> secondProblem = generateMaxFlowProblem(config, seed);
+    private void testMaxFlowProblem(NetworkGeneratorConfig config, long seed)
+    {
+        MaximumFlowProblem<Integer, DefaultEdge> firstProblem =
+            generateMaxFlowProblem(config, seed);
+        MaximumFlowProblem<Integer, DefaultEdge> secondProblem =
+            generateMaxFlowProblem(config, seed);
 
         assertMaxFlowProblemsAreEqual(firstProblem, secondProblem);
 
@@ -278,25 +328,34 @@ public class NetworkGeneratorTest {
         assertTrue(maxFlow + EPS > config.getTotalSupply());
     }
 
-    private void testBipartiteMatchingProblem(NetworkGeneratorConfig config, long seed) {
-        BipartiteMatchingProblem<Integer, DefaultEdge> firstProblem = generateBipartiteMatchingProblem(config, seed);
-        BipartiteMatchingProblem<Integer, DefaultEdge> secondProblem = generateBipartiteMatchingProblem(config, seed);
+    private void testBipartiteMatchingProblem(NetworkGeneratorConfig config, long seed)
+    {
+        BipartiteMatchingProblem<Integer, DefaultEdge> firstProblem =
+            generateBipartiteMatchingProblem(config, seed);
+        BipartiteMatchingProblem<Integer, DefaultEdge> secondProblem =
+            generateBipartiteMatchingProblem(config, seed);
 
         assertIsFeasible(firstProblem);
         assertBipartiteMatchingProblemsAreEqual(firstProblem, secondProblem);
     }
 
     @Test
-    public void testMinCostFlow_MinimumArcNum() {
+    public void testMinCostFlow_MinimumArcNum()
+    {
         List<Integer> tNodes = List.of(0, 1, 2, 5, 10, 20, 30);
         for (int sourceNum = 1; sourceNum < 4; sourceNum++) {
             for (int tSourceNum = 0; tSourceNum <= sourceNum; tSourceNum++) {
                 for (int sinkNum = 1; sinkNum < 4; sinkNum++) {
                     for (int tSinkNum = 0; tSinkNum <= sinkNum; tSinkNum++) {
                         for (int tNodeNum : tNodes) {
-                            int arcNum = (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-                            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setParams(sourceNum + tNodeNum + sinkNum,
-                                    arcNum, sourceNum, sinkNum, tSourceNum, tSinkNum, Math.max(sourceNum, sinkNum), 1, 100, 1, 100, 100, 0).build();
+                            int arcNum = (int) NetworkGeneratorConfig
+                                .getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
+                            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                                .setParams(
+                                    sourceNum + tNodeNum + sinkNum, arcNum, sourceNum, sinkNum,
+                                    tSourceNum, tSinkNum, Math.max(sourceNum, sinkNum), 1, 100, 1,
+                                    100, 100, 0)
+                                .build();
                             testMinCostFlowProblem(config, rng.nextLong());
                         }
                     }
@@ -306,16 +365,22 @@ public class NetworkGeneratorTest {
     }
 
     @Test
-    public void testMinCostFlow_MaximumArcNum() {
+    public void testMinCostFlow_MaximumArcNum()
+    {
         List<Integer> tNodes = List.of(0, 1, 2, 5, 10, 20, 30);
         for (int sourceNum = 1; sourceNum < 4; sourceNum++) {
             for (int tSourceNum = 0; tSourceNum <= sourceNum; tSourceNum++) {
                 for (int sinkNum = 1; sinkNum < 4; sinkNum++) {
                     for (int tSinkNum = 0; tSinkNum <= sinkNum; tSinkNum++) {
                         for (int tNodeNum : tNodes) {
-                            int arcNum = (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tSourceNum, tNodeNum, tSinkNum, sinkNum);
-                            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setParams(sourceNum + tNodeNum + sinkNum,
-                                    arcNum, sourceNum, sinkNum, tSourceNum, tSinkNum, 10 * sourceNum, 1, 100, 1, 100, 100, 0).build();
+                            int arcNum = (int) NetworkGeneratorConfig
+                                .getMaximumArcNum(
+                                    sourceNum, tSourceNum, tNodeNum, tSinkNum, sinkNum);
+                            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                                .setParams(
+                                    sourceNum + tNodeNum + sinkNum, arcNum, sourceNum, sinkNum,
+                                    tSourceNum, tSinkNum, 10 * sourceNum, 1, 100, 1, 100, 100, 0)
+                                .build();
                             testMinCostFlowProblem(config, rng.nextLong());
                         }
                     }
@@ -324,32 +389,47 @@ public class NetworkGeneratorTest {
         }
     }
 
-    //    @Test
-    public void test() {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setParams(100 * 1000, 2000 * 1000, 1000, 1000, 500, 500, MAX_SUPPLY, 1, 100000, 1, 100000, 100, 0).build();
+    // @Test
+    public void test()
+    {
+        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+            .setParams(
+                100 * 1000, 2000 * 1000, 1000, 1000, 500, 500, MAX_SUPPLY, 1, 100000, 1, 100000,
+                100, 0)
+            .build();
         testMinCostFlowProblem(config, rng.nextLong());
     }
 
     @Test
-    public void testMinCostFlow_MinimumArcNumA() {
+    public void testMinCostFlow_MinimumArcNumA()
+    {
         int sourceNum = 2;
         int tSourceNum = 0;
         int tNodeNum = 1;
         int tSinkNum = 0;
         int sinkNum = 3;
         int arcNum = (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setParams(sourceNum + tNodeNum + sinkNum,
-                arcNum, sourceNum, sinkNum, tSourceNum, tSinkNum, 10 * sourceNum, 1, 100, 1, 100, 100, 0).build();
+        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+            .setParams(
+                sourceNum + tNodeNum + sinkNum, arcNum, sourceNum, sinkNum, tSourceNum, tSinkNum,
+                10 * sourceNum, 1, 100, 1, 100, 100, 0)
+            .build();
         testMinCostFlowProblem(config, rng.nextLong());
     }
 
     @Test
-    public void testMaxFlow_MinimumNumberOfArcs() {
+    public void testMaxFlow_MinimumNumberOfArcs()
+    {
         for (int sourceNum = 1; sourceNum < 5; sourceNum++) {
             for (int sinkNum = 1; sinkNum < 5; sinkNum++) {
                 for (int tNodeNum = 0; tNodeNum < 30; tNodeNum++) {
-                    int arcNum = (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setMaximumFlowProblemParams(sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100, sourceNum, sinkNum).build();
+                    int arcNum =
+                        (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
+                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                        .setMaximumFlowProblemParams(
+                            sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100,
+                            sourceNum, sinkNum)
+                        .build();
                     testMaxFlowProblem(config, rng.nextLong());
                 }
             }
@@ -357,12 +437,18 @@ public class NetworkGeneratorTest {
     }
 
     @Test
-    public void testMaxFlow_MaximumNumberOfArcs() {
+    public void testMaxFlow_MaximumNumberOfArcs()
+    {
         for (int sourceNum = 1; sourceNum < 5; sourceNum++) {
             for (int sinkNum = 1; sinkNum < 5; sinkNum++) {
                 for (int tNodeNum = 0; tNodeNum < 30; tNodeNum++) {
-                    int arcNum = (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tNodeNum, sinkNum);
-                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setMaximumFlowProblemParams(sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100, sourceNum, sinkNum).build();
+                    int arcNum =
+                        (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tNodeNum, sinkNum);
+                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                        .setMaximumFlowProblemParams(
+                            sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100,
+                            sourceNum, sinkNum)
+                        .build();
                     testMaxFlowProblem(config, rng.nextLong());
                 }
             }
@@ -370,14 +456,21 @@ public class NetworkGeneratorTest {
     }
 
     @Test
-    public void testMaxFlow_RandomNumberOfArcs() {
+    public void testMaxFlow_RandomNumberOfArcs()
+    {
         for (int sourceNum = 1; sourceNum < 5; sourceNum++) {
             for (int sinkNum = 1; sinkNum < 5; sinkNum++) {
                 for (int tNodeNum = 0; tNodeNum < 30; tNodeNum++) {
-                    int lB = (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-                    int uB = (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tNodeNum, sinkNum);
+                    int lB =
+                        (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
+                    int uB =
+                        (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tNodeNum, sinkNum);
                     int arcNum = rng.nextInt(uB - lB + 1) + lB;
-                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setMaximumFlowProblemParams(sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100, sourceNum, sinkNum).build();
+                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                        .setMaximumFlowProblemParams(
+                            sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100,
+                            sourceNum, sinkNum)
+                        .build();
                     testMaxFlowProblem(config, rng.nextLong());
                 }
             }
@@ -385,34 +478,42 @@ public class NetworkGeneratorTest {
     }
 
     @Test
-    public void testBipartiteMatchingProblem_MinimumNumberOfArcs() {
+    public void testBipartiteMatchingProblem_MinimumNumberOfArcs()
+    {
         for (int i = 1; i < 50; i++) {
-            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setBipartiteMatchingProblemParams(2 * i, i, 1, 100).build();
+            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                .setBipartiteMatchingProblemParams(2 * i, i, 1, 100).build();
             testBipartiteMatchingProblem(config, rng.nextLong());
         }
     }
 
     @Test
-    public void testBipartiteMatchingProblem_MaximumNumberOfArcs() {
+    public void testBipartiteMatchingProblem_MaximumNumberOfArcs()
+    {
         for (int i = 1; i < 50; i++) {
-            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setBipartiteMatchingProblemParams(2 * i, i * i, 1, 100).build();
+            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                .setBipartiteMatchingProblemParams(2 * i, i * i, 1, 100).build();
             testBipartiteMatchingProblem(config, rng.nextLong());
         }
     }
 
     @Test
-    public void testBipartiteMatchingProblem_RandomNumberOfArcs() {
+    public void testBipartiteMatchingProblem_RandomNumberOfArcs()
+    {
         for (int i = 1; i < 50; i++) {
             int max = i * i;
             int arcNum = rng.nextInt(max - i + 1) + i;
-            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setBipartiteMatchingProblemParams(2 * i, arcNum, 1, 100).build();
+            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+                .setBipartiteMatchingProblemParams(2 * i, arcNum, 1, 100).build();
             testBipartiteMatchingProblem(config, rng.nextLong());
         }
     }
 
     @Test
-    public void testBipartiteMatchingProblem_LargeProblem() {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setBipartiteMatchingProblemParams(1000, 250000, 1, 100).build();
+    public void testBipartiteMatchingProblem_LargeProblem()
+    {
+        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+            .setBipartiteMatchingProblemParams(1000, 250000, 1, 100).build();
         testBipartiteMatchingProblem(config, rng.nextLong());
     }
 }
