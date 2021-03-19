@@ -115,19 +115,6 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
     private double radius;
 
     /**
-     * Constructs a new instance of the algorithm for a given {@code graph}.
-     *
-     * @param graph the graph
-     * @deprecated replaced with
-     *             {@link #ContractionHierarchyBidirectionalDijkstra(Graph, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph)
-    {
-        this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
-    }
-
-    /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}. It
      * is up to a user of this algorithm to handle the creation and termination of the provided
      * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see

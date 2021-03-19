@@ -176,19 +176,6 @@ public class ContractionHierarchyPrecomputation<V, E>
     private Consumer<ContractionVertex<V>> markUpwardEdgesConsumer;
 
     /**
-     * Constructs a new instance of the algorithm for a given {@code graph}.
-     *
-     * @param graph graph
-     * @deprecated replaced with
-     *             {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public ContractionHierarchyPrecomputation(Graph<V, E> graph)
-    {
-        this(graph, Runtime.getRuntime().availableProcessors());
-    }
-
-    /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}. It
      * is up to a user of this algorithm to handle the creation and termination of the provided
      * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
@@ -200,36 +187,6 @@ public class ContractionHierarchyPrecomputation<V, E>
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, ThreadPoolExecutor executor)
     {
         this(graph, Random::new, executor);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given {@code graph} and {@code parallelism}.
-     *
-     * @param graph graph
-     * @param parallelism maximum number of threads used in the computations
-     * @deprecated replaced with
-     *             {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism)
-    {
-        this(graph, parallelism, Random::new, PairingHeap::new);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given {@code graph} and
-     * {@code randomSupplier}. Provided {@code randomSupplier} should return different random
-     * generators instances, because they are used by different threads.
-     *
-     * @param graph graph
-     * @param randomSupplier supplier for preferable instances of {@link Random}
-     * @deprecated replaced with
-     *             {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier)
-    {
-        this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier);
     }
 
     /**
@@ -247,46 +204,6 @@ public class ContractionHierarchyPrecomputation<V, E>
         Graph<V, E> graph, Supplier<Random> randomSupplier, ThreadPoolExecutor executor)
     {
         this(graph, randomSupplier, PairingHeap::new, executor);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given {@code graph}, {@code parallelism} and
-     * {@code randomSupplier}.
-     *
-     * @param graph graph
-     * @param parallelism maximum number of threads used in the computations
-     * @param randomSupplier supplier for preferable instances of {@link Random}
-     * @deprecated replaced with
-     *             {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public ContractionHierarchyPrecomputation(
-        Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier)
-    {
-        this(graph, parallelism, randomSupplier, PairingHeap::new);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given {@code graph}, {@code parallelism},
-     * {@code randomSupplier} and {@code shortcutsSearchHeapSupplier}. Provided
-     * {@code randomSupplier} should return different random generators instances, because they are
-     * used by different threads.
-     *
-     * @param graph graph
-     * @param parallelism maximum number of threads used in the computations
-     * @param randomSupplier supplier for preferable instances of {@link Random}
-     * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
-     * @deprecated replaced with
-     *             {@link #ContractionHierarchyPrecomputation(Graph, Supplier, Supplier, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public ContractionHierarchyPrecomputation(
-        Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
-        Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier)
-    {
-        init(
-            graph, randomSupplier, shortcutsSearchHeapSupplier,
-            ConcurrencyUtil.createThreadPoolExecutor(parallelism));
     }
 
     /**

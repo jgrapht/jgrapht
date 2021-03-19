@@ -31,7 +31,7 @@ public class ConcurrencyUtil
      * Creates a {@link ThreadPoolExecutor} with fixed number of threads which is equal to
      * {@code parallelism}.
      *
-     * @param parallelism number of thread for the executor
+     * @param parallelism number of threads for the executor
      * @return created executor
      */
     public static ThreadPoolExecutor createThreadPoolExecutor(int parallelism)
