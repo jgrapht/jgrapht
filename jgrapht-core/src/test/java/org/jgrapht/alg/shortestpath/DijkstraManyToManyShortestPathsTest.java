@@ -55,6 +55,12 @@ public class DijkstraManyToManyShortestPathsTest
     {
         super.testNoPath();
     }
+    
+    @Test
+    public void testNoPathMultiset()
+    {
+        super.testNoPathMultiSet();
+    }
 
     @Test
     public void testDifferentSourcesAndTargetsSimpleGraph()

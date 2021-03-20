@@ -483,5 +483,23 @@ public abstract class BaseManyToManyShortestPathsTest
 
         return graph;
     }
+    
+    protected void testNoPathMultiSet()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
+            DefaultWeightedEdge> shortestPaths =
+                getAlgorithm(graph).getManyToManyPaths(Set.of(1), Set.of(2, 3));
+
+        assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 2), 1e-9);
+        assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 3), 1e-9);
+        assertNull(shortestPaths.getPath(1, 2));
+        assertNull(shortestPaths.getPath(1, 3));
+    }
 
 }

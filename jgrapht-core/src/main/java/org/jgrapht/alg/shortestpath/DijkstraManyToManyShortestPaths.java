@@ -139,6 +139,9 @@ public class DijkstraManyToManyShortestPaths<V, E>
             assertCorrectSourceAndTarget(source, target);
             if (reversed) {
                 GraphPath<V, E> reversedPath = searchSpaces.get(target).getPath(source);
+                if (reversedPath == null) { 
+                    return null;
+                }
                 List<V> vertices = reversedPath.getVertexList();
                 List<E> edges = reversedPath.getEdgeList();
                 Collections.reverse(vertices);
