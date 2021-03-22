@@ -224,20 +224,25 @@ public class FRLayoutAlgorithm2D<V, E>
                 // limit by temperature
                 Point2D vDisp = Points
                     .add(repulsiveDisp.get(v), attractiveDisp.getOrDefault(v, Point2D.of(0d, 0d)));
-                double vDispLen = Points.length(vDisp);
-                Point2D vPos = Points
-                    .add(
-                        model.get(v),
-                        Points.scalarMultiply(vDisp, Math.min(vDispLen, temp) / vDispLen));
-
-                // limit by frame
-                vPos = Point2D
-                    .of(
-                        Math.min(minX + width, Math.max(minX, vPos.getX())),
-                        Math.min(minY + height, Math.max(minY, vPos.getY())));
-
-                // store result
-                model.put(v, vPos);
+                
+                if (comparator.compare(vDisp.getX(), 0d) != 0
+                    || comparator.compare(vDisp.getY(), 0d) != 0)
+                {
+                    double vDispLen = Points.length(vDisp);
+                    Point2D vPos = Points
+                        .add(
+                            model.get(v),
+                            Points.scalarMultiply(vDisp, Math.min(vDispLen, temp) / vDispLen));
+    
+                    // limit by frame
+                    vPos = Point2D
+                        .of(
+                            Math.min(minX + width, Math.max(minX, vPos.getX())),
+                            Math.min(minY + height, Math.max(minY, vPos.getY())));
+    
+                    // store result
+                    model.put(v, vPos);
+                }
             }
         }
     }
@@ -281,7 +286,7 @@ public class FRLayoutAlgorithm2D<V, E>
             Point2D vDisp = Point2D.of(0d, 0d);
 
             for (V u : graph.vertexSet()) {
-                if (v == u) {
+                if (v.equals(u)) {
                     continue;
                 }
                 Point2D uPos = Points.subtract(model.get(u), origin);
