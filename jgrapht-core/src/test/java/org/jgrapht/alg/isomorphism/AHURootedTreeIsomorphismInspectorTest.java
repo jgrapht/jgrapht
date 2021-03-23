@@ -313,14 +313,14 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test
     public void testLineGraph()
     {
-        final int N = 20_000;
+        final int n = 20_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 1; i <= N - 1; i++) {
+        for (int i = 1; i <= n - 1; i++) {
             tree1.addEdge(i, i + 1);
         }
 
@@ -341,14 +341,14 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test
     public void testHugeNumberOfChildren()
     {
-        final int N = 100_000;
+        final int n = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 2; i <= N; i++) {
+        for (int i = 2; i <= n; i++) {
             tree1.addEdge(1, i);
         }
 

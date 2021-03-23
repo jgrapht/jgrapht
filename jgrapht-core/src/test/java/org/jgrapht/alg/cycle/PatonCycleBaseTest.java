@@ -34,8 +34,8 @@ import static org.junit.Assert.assertTrue;
 
 public class PatonCycleBaseTest
 {
-    private static int MAX_SIZE = 10;
-    private static int[] RESULTS = { 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36 };
+    private static final int MAX_SIZE = 10;
+    private static final int[] RESULTS = { 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36 };
 
     @Test
     public void testAlgorithm()

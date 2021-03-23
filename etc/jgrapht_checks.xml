@@ -41,6 +41,46 @@
         <!-- Checks for naming convention -->
         <!-- See https://checkstyle.sourceforge.io/config_naming.html -->
         <module name="ConstantName" />
+        <module name="IllegalIdentifierName" />
+        <module name="LambdaParameterName" />
+        <module name="LocalFinalVariableName">
+            <property name="id" value="LocalFinalVariableNameMain" />
+            <!-- Use the default configuration in main code -->
+        </module>
+        <module name="LocalFinalVariableName">
+            <property name="id" value="LocalFinalVariableNameTest" />
+            <property name="format" value="^[a-z][a-zA-Z0-9]*(_[0-9]+)?$" />
+        </module>
+        <module name="LocalVariableName">
+            <property name="id" value="LocalVariableNameMain" />
+            <!-- Use the default configuration in main code -->
+        </module>
+        <module name="LocalVariableName">
+            <property name="id" value="LocalVariableNameTest" />
+            <property name="format" value="^[a-z][a-zA-Z0-9]*(_[0-9]+)?$" />
+        </module>
+        <module name="MemberName">
+            <property name="id" value="MemberNameMain" />
+            <!-- Use the default configuration in main code -->
+        </module>
+        <module name="MemberName">
+            <property name="id" value="MemberNameTest" />
+            <property name="format" value="^[a-z][a-zA-Z0-9]*(_[0-9]+)?$" />
+        </module>
+        <module name="MethodName">
+            <property name="id" value="MethodNameMain" />
+            <!-- Use the default configuration in main code -->
+        </module>
+        <module name="MethodName">
+            <property name="id" value="MethodNameTest" />
+            <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$" />
+        </module>
+        <module name="PackageName" />
+        <module name="ParameterName" />
+        <module name="PatternVariableName" />
+        <module name="RecordComponentName" />
+        <module name="StaticVariableName" />
+        <module name="TypeName" />
 
         <module name="EqualsHashCode" />
         <module name="StringLiteralEquality" />

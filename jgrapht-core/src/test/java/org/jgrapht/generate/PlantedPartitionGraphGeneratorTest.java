@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  */
 public class PlantedPartitionGraphGeneratorTest
 {
-    private final long SEED = 5;
+    private static final long SEED = 5;
 
     /* bad inputs */
 

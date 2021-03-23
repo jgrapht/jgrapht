@@ -65,7 +65,7 @@ public class RecursiveExactVCImpl<V, E>
     /** Input graph **/
     private Graph<V, E> graph;
     /** Number of vertices in the graph **/
-    private int N;
+    private int n;
     /**
      * Neighbor cache TODO JK: It might be worth trying to replace the neighbors index by a bitset
      * view. As such, all operations can be simplified to bitset operations, which may improve the
@@ -132,7 +132,7 @@ public class RecursiveExactVCImpl<V, E>
         neighborCache = new NeighborCache<>(graph);
         vertexIDDictionary = new HashMap<>();
 
-        N = vertices.size();
+        n = vertices.size();
         // Sort vertices based on their weight/degree ratio in ascending order
         // TODO JK: Are there better orderings?
         vertices.sort(Comparator.comparingDouble(v -> vertexWeightMap.get(v) / graph.degreeOf(v)));
@@ -147,11 +147,11 @@ public class RecursiveExactVCImpl<V, E>
         upperBoundOnVertexCoverWeight = this.calculateUpperBound();
 
         // Invoke recursive algorithm
-        BitSetCover vertexCover = this.calculateCoverRecursively(0, new BitSet(N), 0);
+        BitSetCover vertexCover = this.calculateCoverRecursively(0, new BitSet(n), 0);
 
         // Build solution
         Set<V> verticesInCover = new LinkedHashSet<>();
-        for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i < N;
+        for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i < n;
             i = vertexCover.bitSetCover.nextSetBit(i + 1))
             verticesInCover.add(vertices.get(i));
         return new VertexCoverAlgorithm.VertexCoverImpl<>(verticesInCover, vertexCover.weight);
@@ -170,7 +170,7 @@ public class RecursiveExactVCImpl<V, E>
         // because it doesn't cover any edges)
         int indexNextVertex = -1;
         Set<V> neighbors = Collections.emptySet();
-        for (int index = visited.nextClearBit(indexNextCandidate); index >= 0 && index < N;
+        for (int index = visited.nextClearBit(indexNextCandidate); index >= 0 && index < n;
             index = visited.nextClearBit(index + 1))
         {
 
@@ -187,7 +187,7 @@ public class RecursiveExactVCImpl<V, E>
 
         // Base case 1: all vertices have been visited
         if (indexNextVertex == -1) { // We've visited all vertices, return the base case
-            BitSetCover vertexCover = new BitSetCover(N, 0);
+            BitSetCover vertexCover = new BitSetCover(n, 0);
             if (accumulatedWeight <= upperBoundOnVertexCoverWeight) { // Found new a solution that
                                                                       // matches our bound. Tighten
                                                                       // the bound.
@@ -198,7 +198,7 @@ public class RecursiveExactVCImpl<V, E>
             // already have. Return a cover with a large weight, such that the other branch will be
             // preferred over this branch.
         } else if (accumulatedWeight >= upperBoundOnVertexCoverWeight) {
-            return new BitSetCover(N, N);
+            return new BitSetCover(n, n);
         }
 
         // Recursion

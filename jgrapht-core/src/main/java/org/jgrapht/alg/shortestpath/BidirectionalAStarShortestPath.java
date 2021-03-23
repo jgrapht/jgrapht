@@ -170,8 +170,8 @@ public class BidirectionalAStarShortestPath<V, E>
                 }
 
                 double edgeWeight = frontier.graph.getEdgeWeight(edge);
-                double gScore_current = frontier.getDistance(v);
-                double tentativeGScore = gScore_current + edgeWeight;
+                double gScore = frontier.getDistance(v);
+                double tentativeGScore = gScore + edgeWeight;
                 double fScore = tentativeGScore
                     + frontier.heuristic.getCostEstimate(successor, frontier.endVertex);
 
@@ -179,7 +179,7 @@ public class BidirectionalAStarShortestPath<V, E>
 
                 // check if best path can be updated
                 double pathDistance =
-                    gScore_current + edgeWeight + otherFrontier.getDistance(successor);
+                    gScore + edgeWeight + otherFrontier.getDistance(successor);
                 if (pathDistance < bestPath) {
                     bestPath = pathDistance;
                     bestPathCommonVertex = successor;

@@ -74,7 +74,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     private final Graph<V, E> network;
     /* Number of vertices in the graph */
-    private final int N;
+    private final int n;
     /* Algorithm used to computed the Maximum $s-t$ flows */
     private final MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm;
 
@@ -123,8 +123,8 @@ public class GusfieldGomoryHuCutTree<V, E>
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
         this.network = GraphTests.requireUndirected(network);
-        this.N = network.vertexSet().size();
-        if (N < 2)
+        this.n = network.vertexSet().size();
+        if (n < 2)
             throw new IllegalArgumentException("Graph must have at least 2 vertices");
         this.minimumSTCutAlgorithm = minimumSTCutAlgorithm;
         vertexList.addAll(network.vertexSet());
@@ -137,11 +137,11 @@ public class GusfieldGomoryHuCutTree<V, E>
      */
     private void calculateGomoryHuTree()
     {
-        flowMatrix = new double[N][N];
-        p = new int[N];
-        fl = new double[N];
+        flowMatrix = new double[n][n];
+        p = new int[n];
+        fl = new double[n];
 
-        for (int s = 1; s < N; s++) {
+        for (int s = 1; s < n; s++) {
             int t = p[s];
             double flowValue =
                 minimumSTCutAlgorithm.calculateMinCut(vertexList.get(s), vertexList.get(t));
@@ -149,7 +149,7 @@ public class GusfieldGomoryHuCutTree<V, E>
                                                                                  // paper
             fl[s] = flowValue;
 
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < n; i++)
                 if (i != s && sourcePartition.contains(vertexList.get(i)) && p[i] == t)
                     p[i] = s;
             if (sourcePartition.contains(vertexList.get(p[t]))) {
@@ -185,7 +185,7 @@ public class GusfieldGomoryHuCutTree<V, E>
         SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(gomoryHuTree, vertexList);
-        for (int i = 1; i < N; i++) {
+        for (int i = 1; i < n; i++) {
             Graphs.addEdge(gomoryHuTree, vertexList.get(i), vertexList.get(p[i]), fl[i]);
         }
 

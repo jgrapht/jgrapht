@@ -51,7 +51,7 @@ public class TransitiveReductionTest
     {
 
         // @formatter:off
-        final int[][] expected_path_matrix = new int[][] {
+        final int[][] expectedPathMatrix = new int[][] {
             {0, 1, 1, 1, 1},
             {0, 0, 0, 0, 0},
             {0, 1, 0, 1, 1},
@@ -65,37 +65,37 @@ public class TransitiveReductionTest
 
         final int n = MATRIX.length;
 
-        // calc path matrix
-        int[][] path_matrix = new int[n][n];
+        // calc pathMatrix
+        int[][] pathMatrix = new int[n][n];
         {
             {
-                System.arraycopy(MATRIX, 0, path_matrix, 0, MATRIX.length);
+                System.arraycopy(MATRIX, 0, pathMatrix, 0, MATRIX.length);
 
-                final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(path_matrix);
+                final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(pathMatrix);
 
                 TransitiveReduction.transformToPathMatrix(pathMatrixAsBitSetArray);
 
-                path_matrix = asIntArray(pathMatrixAsBitSetArray);
+                pathMatrix = asIntArray(pathMatrixAsBitSetArray);
             }
             // System.out.println(Arrays.deepToString(path_matrix) + " path
             // matrix");
 
-            Assert.assertArrayEquals(expected_path_matrix, path_matrix);
+            Assert.assertArrayEquals(expectedPathMatrix, pathMatrix);
         }
 
         // calc transitive reduction
         {
-            int[][] transitively_reduced_matrix = new int[n][n];
+            int[][] transitivelyReducedMatrix = new int[n][n];
             {
                 System
-                    .arraycopy(path_matrix, 0, transitively_reduced_matrix, 0, path_matrix.length);
+                    .arraycopy(pathMatrix, 0, transitivelyReducedMatrix, 0, pathMatrix.length);
 
                 final BitSet[] transitivelyReducedMatrixAsBitSetArray =
-                    asBitSetArray(transitively_reduced_matrix);
+                    asBitSetArray(transitivelyReducedMatrix);
 
                 TransitiveReduction.transitiveReduction(transitivelyReducedMatrixAsBitSetArray);
 
-                transitively_reduced_matrix = asIntArray(transitivelyReducedMatrixAsBitSetArray);
+                transitivelyReducedMatrix = asIntArray(transitivelyReducedMatrixAsBitSetArray);
             }
 
             // System.out.println(Arrays.deepToString(transitively_reduced_matrix)
@@ -103,7 +103,7 @@ public class TransitiveReductionTest
 
             Assert
                 .assertArrayEquals(
-                    EXPECTED_TRANSITIVELY_REDUCED_MATRIX, transitively_reduced_matrix);
+                    EXPECTED_TRANSITIVELY_REDUCED_MATRIX, transitivelyReducedMatrix);
         }
     }
 
@@ -273,8 +273,8 @@ public class TransitiveReductionTest
         assertTrue(graph.containsEdge(4, 1));
 
         // the full verification; less readable, but somewhat more complete :)
-        int[][] actual_transitively_reduced_matrix = fromDirectedGraphToMatrix(graph);
-        assertArrayEquals(EXPECTED_TRANSITIVELY_REDUCED_MATRIX, actual_transitively_reduced_matrix);
+        int[][] actualTransitivelyReducedMatrix = fromDirectedGraphToMatrix(graph);
+        assertArrayEquals(EXPECTED_TRANSITIVELY_REDUCED_MATRIX, actualTransitivelyReducedMatrix);
     }
 
     static private Graph<Integer, DefaultEdge> fromMatrixToDirectedGraph(final int[][] matrix)
@@ -306,10 +306,10 @@ public class TransitiveReductionTest
             final Integer v1 = directedGraph.getEdgeSource(edge);
             final Integer v2 = directedGraph.getEdgeTarget(edge);
 
-            final int v_1 = vertices.indexOf(v1);
-            final int v_2 = vertices.indexOf(v2);
+            final int i1 = vertices.indexOf(v1);
+            final int i2 = vertices.indexOf(v2);
 
-            matrix[v_1][v_2] = 1;
+            matrix[i1][i2] = 1;
         }
         return matrix;
 

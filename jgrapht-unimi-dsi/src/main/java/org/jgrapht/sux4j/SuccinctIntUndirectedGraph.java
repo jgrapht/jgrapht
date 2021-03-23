@@ -169,7 +169,7 @@ public class SuccinctIntUndirectedGraph
         final long[] result = new long[2];
         cumulativeOutdegrees.get(vertex, result);
         final IntSet s = new IntOpenHashSet(IntSets.fromTo((int) result[0], (int) result[1]));
-        for (final int e : ITERABLES.reverseSortedEdgesOfNoLoops(vertex))
+        for (final int e : iterables.reverseSortedEdgesOfNoLoops(vertex))
             s.add(e);
         return s;
     }
@@ -340,11 +340,11 @@ public class SuccinctIntUndirectedGraph
         }
     }
 
-    private final SuccinctGraphIterables ITERABLES = new SuccinctGraphIterables(this);
+    private final SuccinctGraphIterables iterables = new SuccinctGraphIterables(this);
 
     @Override
     public GraphIterables<Integer, Integer> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

@@ -12,4 +12,13 @@
     <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocMethod" />
     <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocType" />
     <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocPackage" />
+    <!-- Suppress main-checks in test-code and test-checks in main-code -->
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="LocalFinalVariableNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="LocalFinalVariableNameTest" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="LocalVariableNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="LocalVariableNameTest" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="MemberNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="MemberNameTest" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="MethodNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="MethodNameTest" />
 </suppressions>

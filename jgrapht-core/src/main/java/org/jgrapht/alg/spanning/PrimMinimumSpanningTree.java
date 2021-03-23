@@ -68,7 +68,7 @@ public class PrimMinimumSpanningTree<V, E>
             CollectionUtil.newHashSetWithExpectedSize(g.vertexSet().size());
         double spanningTreeWeight = 0d;
 
-        final int N = g.vertexSet().size();
+        final int n = g.vertexSet().size();
 
         /*
          * Normalize the graph by mapping each vertex to an integer.
@@ -77,13 +77,13 @@ public class PrimMinimumSpanningTree<V, E>
         Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
         List<V> indexList = vertexToIntegerMapping.getIndexList();
 
-        VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
+        VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, n);
         AddressableHeap.Handle<Double, VertexInfo>[] fibNodes =
             (AddressableHeap.Handle<Double, VertexInfo>[]) Array
-                .newInstance(AddressableHeap.Handle.class, N);
+                .newInstance(AddressableHeap.Handle.class, n);
         AddressableHeap<Double, VertexInfo> fibonacciHeap = new FibonacciHeap<>();
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             vertices[i] = new VertexInfo();
             vertices[i].id = i;
             vertices[i].distance = Double.MAX_VALUE;

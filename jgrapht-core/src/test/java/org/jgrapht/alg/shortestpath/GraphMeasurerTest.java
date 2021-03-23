@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 public class GraphMeasurerTest
 {
 
-    private final double EPSILON = 0.000000001;
+    private static final double EPSILON = 0.000000001;
 
     private Graph<Integer, DefaultEdge> getGraph1()
     {
@@ -74,21 +74,21 @@ public class GraphMeasurerTest
 
         Random random = new Random(12345678);
 
-        final int N = 100;
-        final int M = 100000;
+        final int n = 100;
+        final int m = 100000;
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             g.addVertex(i);
         }
 
-        for (int i = 0; i < N - 1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             g.addEdge(i, i + 1);
             g.setEdgeWeight(g.getEdge(i, i + 1), 50 + random.nextInt(50));
         }
 
-        for (int i = N - 1; i < M; i++) {
-            int u = random.nextInt(N);
-            int v = random.nextInt(N);
+        for (int i = n - 1; i < m; i++) {
+            int u = random.nextInt(n);
+            int v = random.nextInt(n);
 
             if (u != v) {
                 g.addEdge(u, v);

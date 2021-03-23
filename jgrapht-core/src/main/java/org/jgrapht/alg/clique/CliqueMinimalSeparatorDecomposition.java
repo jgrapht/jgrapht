@@ -128,7 +128,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         }
         for (int i = 1, n = graph.vertexSet().size(); i <= n; i++) {
             V v = getMaxLabelVertex(vertexLabels);
-            LinkedList<V> Y = new LinkedList<>(Graphs.neighborListOf(gprime, v));
+            LinkedList<V> neighborsY = new LinkedList<>(Graphs.neighborListOf(gprime, v));
 
             if (vertexLabels.get(v) <= s) {
                 generators.add(v);
@@ -144,7 +144,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             HashMap<Integer, HashSet<V>> reach = new HashMap<>();
 
             // mark y reached and add y to reach
-            for (V y : Y) {
+            for (V y : neighborsY) {
                 reached.add(y);
                 addToReach(vertexLabels.get(y), y, reach);
             }
@@ -162,7 +162,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
                         if (!reached.contains(z)) {
                             reached.add(z);
                             if (vertexLabels.get(z) > j) {
-                                Y.add(z);
+                                neighborsY.add(z);
                                 E fillEdge = graph.getEdgeSupplier().get();
                                 fillEdges.add(fillEdge);
                                 addToReach(vertexLabels.get(z), z, reach);
@@ -174,7 +174,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
                 }
             }
 
-            for (V y : Y) {
+            for (V y : neighborsY) {
                 chordalGraph.addEdge(v, y);
                 vertexLabels.put(y, vertexLabels.get(y) + 1);
             }

@@ -139,10 +139,10 @@ public class FloydWarshallShortestPaths<V, E>
 
         lazyCalculateMatrix();
 
-        int v_a = vertexIndices.get(a);
-        int v_b = vertexIndices.get(b);
+        int vA = vertexIndices.get(a);
+        int vB = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == null) { // No path exists
+        if (backtrace[vA][vB] == null) { // No path exists
             return createEmptyPath(a, b);
         }
 
@@ -150,12 +150,12 @@ public class FloydWarshallShortestPaths<V, E>
         List<E> edges = new ArrayList<>();
         V u = a;
         while (!u.equals(b)) {
-            int v_u = vertexIndices.get(u);
-            E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b]);
+            int vU = vertexIndices.get(u);
+            E e = TypeUtil.uncheckedCast(backtrace[vU][vB]);
             edges.add(e);
             u = Graphs.getOppositeVertex(graph, e, u);
         }
-        return new GraphWalk<>(graph, a, b, null, edges, d[v_a][v_b]);
+        return new GraphWalk<>(graph, a, b, null, edges, d[vA][vB]);
     }
 
     /**
@@ -201,13 +201,13 @@ public class FloydWarshallShortestPaths<V, E>
     {
         lazyCalculateMatrix();
 
-        int v_a = vertexIndices.get(a);
-        int v_b = vertexIndices.get(b);
+        int vA = vertexIndices.get(a);
+        int vB = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == null) { // No path exists
+        if (backtrace[vA][vB] == null) { // No path exists
             return null;
         } else {
-            E e = TypeUtil.uncheckedCast(backtrace[v_a][v_b]);
+            E e = TypeUtil.uncheckedCast(backtrace[vA][vB]);
             return Graphs.getOppositeVertex(graph, e, a);
         }
     }
@@ -229,14 +229,14 @@ public class FloydWarshallShortestPaths<V, E>
     {
         lazyCalculateMatrix();
 
-        int v_a = vertexIndices.get(a);
-        int v_b = vertexIndices.get(b);
+        int vA = vertexIndices.get(a);
+        int vB = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == null) { // No path exists
+        if (backtrace[vA][vB] == null) { // No path exists
             return null;
         } else {
             populateLastHopMatrix();
-            E e = TypeUtil.uncheckedCast(lastHopMatrix[v_a][v_b]);
+            E e = TypeUtil.uncheckedCast(lastHopMatrix[vA][vB]);
             return Graphs.getOppositeVertex(graph, e, b);
         }
     }
@@ -273,13 +273,13 @@ public class FloydWarshallShortestPaths<V, E>
                 V source = graph.getEdgeSource(edge);
                 V target = graph.getEdgeTarget(edge);
                 if (!source.equals(target)) {
-                    int v_1 = vertexIndices.get(source);
-                    int v_2 = vertexIndices.get(target);
+                    int v1 = vertexIndices.get(source);
+                    int v2 = vertexIndices.get(target);
                     double edgeWeight = graph.getEdgeWeight(edge);
-                    if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
-                        d[v_1][v_2] = d[v_2][v_1] = edgeWeight;
-                        backtrace[v_1][v_2] = edge;
-                        backtrace[v_2][v_1] = edge;
+                    if (Double.compare(edgeWeight, d[v1][v2]) < 0) {
+                        d[v1][v2] = d[v2][v1] = edgeWeight;
+                        backtrace[v1][v2] = edge;
+                        backtrace[v2][v1] = edge;
                     }
                 }
             }
@@ -287,15 +287,15 @@ public class FloydWarshallShortestPaths<V, E>
                  // the arcs and querying source/sink does not suffice for graphs
                  // which contain both edges and arcs
             for (V v1 : graph.vertexSet()) {
-                int v_1 = vertexIndices.get(v1);
+                int i1 = vertexIndices.get(v1);
                 for (E e : graph.outgoingEdgesOf(v1)) {
                     V v2 = Graphs.getOppositeVertex(graph, e, v1);
                     if (!v1.equals(v2)) {
-                        int v_2 = vertexIndices.get(v2);
+                        int i2 = vertexIndices.get(v2);
                         double edgeWeight = graph.getEdgeWeight(e);
-                        if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
-                            d[v_1][v_2] = edgeWeight;
-                            backtrace[v_1][v_2] = e;
+                        if (Double.compare(edgeWeight, d[i1][i2]) < 0) {
+                            d[i1][i2] = edgeWeight;
+                            backtrace[i1][i2] = e;
                         }
                     }
                 }
@@ -313,9 +313,9 @@ public class FloydWarshallShortestPaths<V, E>
                         continue;
                     }
 
-                    double ik_kj = d[i][k] + d[k][j];
-                    if (Double.compare(ik_kj, d[i][j]) < 0) {
-                        d[i][j] = ik_kj;
+                    double sumIKKJ = d[i][k] + d[k][j];
+                    if (Double.compare(sumIKKJ, d[i][j]) < 0) {
+                        d[i][j] = sumIKKJ;
                         backtrace[i][j] = backtrace[i][k];
                     }
                 }
@@ -349,8 +349,8 @@ public class FloydWarshallShortestPaths<V, E>
                 V u = vertices.get(i);
                 V b = vertices.get(j);
                 while (!u.equals(b)) {
-                    int v_u = vertexIndices.get(u);
-                    E e = TypeUtil.uncheckedCast(backtrace[v_u][j]);
+                    int vU = vertexIndices.get(u);
+                    E e = TypeUtil.uncheckedCast(backtrace[vU][j]);
                     V other = Graphs.getOppositeVertex(graph, e, u);
                     lastHopMatrix[i][vertexIndices.get(other)] = e;
                     u = other;

@@ -181,7 +181,7 @@ public class SuccinctUndirectedGraph
         for (int d = (int) (result[1] - result[0]); d-- != 0;)
             s.add(IntIntSortedPair.of(x, (int) (iterator.nextLong() - base)));
 
-        for (final IntIntSortedPair e : ITERABLES.reverseSortedEdgesOfNoLoops(x))
+        for (final IntIntSortedPair e : iterables.reverseSortedEdgesOfNoLoops(x))
             s.add(e);
 
         return s;
@@ -414,11 +414,11 @@ public class SuccinctUndirectedGraph
         }
     }
 
-    private final SuccinctGraphIterables ITERABLES = new SuccinctGraphIterables(this);
+    private final SuccinctGraphIterables iterables = new SuccinctGraphIterables(this);
 
     @Override
     public GraphIterables<Integer, IntIntSortedPair> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

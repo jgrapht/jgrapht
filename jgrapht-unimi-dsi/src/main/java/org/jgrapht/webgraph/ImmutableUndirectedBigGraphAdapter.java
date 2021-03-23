@@ -219,7 +219,7 @@ public class ImmutableUndirectedBigGraphAdapter
         return new ImmutableUndirectedBigGraphAdapter(immutableGraph.copy());
     }
 
-    private final GraphIterables<Long, LongLongSortedPair> ITERABLES = new GraphIterables<>()
+    private final GraphIterables<Long, LongLongSortedPair> iterables = new GraphIterables<>()
     {
         @Override
         public ImmutableUndirectedBigGraphAdapter getGraph()
@@ -338,6 +338,6 @@ public class ImmutableUndirectedBigGraphAdapter
     @Override
     public GraphIterables<Long, LongLongSortedPair> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

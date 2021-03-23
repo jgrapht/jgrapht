@@ -69,7 +69,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 {
 
     /* Number of vertices in the graph */
-    private final int N;
+    private final int n;
     /* Algorithm used to computed the Maximum s-t flows */
     private final MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm;
 
@@ -116,8 +116,8 @@ public class GusfieldEquivalentFlowTree<V, E>
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
         GraphTests.requireUndirected(network);
-        this.N = network.vertexSet().size();
-        if (N < 2)
+        this.n = network.vertexSet().size();
+        if (n < 2)
             throw new IllegalArgumentException("Graph must have at least 2 vertices");
         this.minimumSTCutAlgorithm = minimumSTCutAlgorithm;
         vertexList.addAll(network.vertexSet());
@@ -130,18 +130,18 @@ public class GusfieldEquivalentFlowTree<V, E>
      */
     private void calculateEquivalentFlowTree()
     {
-        flowMatrix = new double[N][N];
-        p = new int[N];
-        neighbors = new int[N];
+        flowMatrix = new double[n][n];
+        p = new int[n];
+        neighbors = new int[n];
 
-        for (int s = 1; s < N; s++) {
+        for (int s = 1; s < n; s++) {
             int t = p[s];
             neighbors[s] = t;
             double flowValue =
                 minimumSTCutAlgorithm.calculateMinCut(vertexList.get(s), vertexList.get(t));
             Set<V> sourcePartition = minimumSTCutAlgorithm.getSourcePartition(); // Set X in the
                                                                                  // paper
-            for (int i = s; i < N; i++)
+            for (int i = s; i < n; i++)
                 if (sourcePartition.contains(vertexList.get(i)) && p[i] == t)
                     p[i] = s;
 
@@ -168,7 +168,7 @@ public class GusfieldEquivalentFlowTree<V, E>
         SimpleWeightedGraph<V, DefaultWeightedEdge> equivalentFlowTree =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(equivalentFlowTree, vertexList);
-        for (int i = 1; i < N; i++) {
+        for (int i = 1; i < n; i++) {
             DefaultWeightedEdge e =
                 equivalentFlowTree.addEdge(vertexList.get(i), vertexList.get(neighbors[i]));
             equivalentFlowTree.setEdgeWeight(e, flowMatrix[i][neighbors[i]]);

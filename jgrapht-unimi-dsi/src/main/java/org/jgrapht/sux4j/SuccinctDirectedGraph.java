@@ -523,11 +523,11 @@ public class SuccinctDirectedGraph
         }
     }
 
-    private final GraphIterables<Integer, IntIntPair> ITERABLES = new SuccinctGraphIterables(this);
+    private final GraphIterables<Integer, IntIntPair> iterables = new SuccinctGraphIterables(this);
 
     @Override
     public GraphIterables<Integer, IntIntPair> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

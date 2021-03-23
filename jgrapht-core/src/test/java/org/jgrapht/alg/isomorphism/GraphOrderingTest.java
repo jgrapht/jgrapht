@@ -62,67 +62,67 @@ public class GraphOrderingTest
             v3o = g1Ordering.getVertexNumber(v3), v4o = g1Ordering.getVertexNumber(v4),
             v5o = g1Ordering.getVertexNumber(v5);
 
-        int[] v1Outs = { v2o, v3o, v4o };
-        int[] v1Outs_ = g1Ordering.getOutEdges(v1o);
+        int[] v1OutsExpected = { v2o, v3o, v4o };
+        int[] v1Outs = g1Ordering.getOutEdges(v1o);
+        Arrays.sort(v1OutsExpected);
         Arrays.sort(v1Outs);
-        Arrays.sort(v1Outs_);
 
-        int[] v2Outs = { v1o, v4o };
-        int[] v2Outs_ = g1Ordering.getOutEdges(v2o);
+        int[] v2OutsExpected = { v1o, v4o };
+        int[] v2Outs = g1Ordering.getOutEdges(v2o);
+        Arrays.sort(v2OutsExpected);
         Arrays.sort(v2Outs);
-        Arrays.sort(v2Outs_);
 
-        int[] v3Outs = { v1o };
-        int[] v3Outs_ = g1Ordering.getOutEdges(v3o);
+        int[] v3OutsExpected = { v1o };
+        int[] v3Outs = g1Ordering.getOutEdges(v3o);
+        Arrays.sort(v3OutsExpected);
         Arrays.sort(v3Outs);
-        Arrays.sort(v3Outs_);
 
-        int[] v4Outs = { v1o, v2o };
-        int[] v4Outs_ = g1Ordering.getOutEdges(v4o);
+        int[] v4OutsExpected = { v1o, v2o };
+        int[] v4Outs = g1Ordering.getOutEdges(v4o);
+        Arrays.sort(v4OutsExpected);
         Arrays.sort(v4Outs);
-        Arrays.sort(v4Outs_);
 
-        int[] v5Outs = {};
-        int[] v5Outs_ = g1Ordering.getOutEdges(v5o);
+        int[] v5OutsExpected = {};
+        int[] v5Outs = g1Ordering.getOutEdges(v5o);
+        Arrays.sort(v5OutsExpected);
         Arrays.sort(v5Outs);
-        Arrays.sort(v5Outs_);
 
-        assertArrayEquals(v1Outs, v1Outs_);
-        assertArrayEquals(v2Outs, v2Outs_);
-        assertArrayEquals(v3Outs, v3Outs_);
-        assertArrayEquals(v4Outs, v4Outs_);
-        assertArrayEquals(v5Outs, v5Outs_);
+        assertArrayEquals(v1OutsExpected, v1Outs);
+        assertArrayEquals(v2OutsExpected, v2Outs);
+        assertArrayEquals(v3OutsExpected, v3Outs);
+        assertArrayEquals(v4OutsExpected, v4Outs);
+        assertArrayEquals(v5OutsExpected, v5Outs);
 
-        int[] v1Ins = { v2o, v3o, v4o };
-        int[] v1Ins_ = g1Ordering.getOutEdges(v1o);
+        int[] v1InsExpected = { v2o, v3o, v4o };
+        int[] v1Ins = g1Ordering.getOutEdges(v1o);
+        Arrays.sort(v1InsExpected);
         Arrays.sort(v1Ins);
-        Arrays.sort(v1Ins_);
 
-        int[] v2Ins = { v1o, v4o };
-        int[] v2Ins_ = g1Ordering.getOutEdges(v2o);
+        int[] v2InsExpected = { v1o, v4o };
+        int[] v2Ins = g1Ordering.getOutEdges(v2o);
+        Arrays.sort(v2InsExpected);
         Arrays.sort(v2Ins);
-        Arrays.sort(v2Ins_);
 
-        int[] v3Ins = { v1o };
-        int[] v3Ins_ = g1Ordering.getOutEdges(v3o);
+        int[] v3InsExpected = { v1o };
+        int[] v3Ins = g1Ordering.getOutEdges(v3o);
+        Arrays.sort(v3InsExpected);
         Arrays.sort(v3Ins);
-        Arrays.sort(v3Ins_);
 
-        int[] v4Ins = { v1o, v2o };
-        int[] v4Ins_ = g1Ordering.getOutEdges(v4o);
+        int[] v4InsExpected = { v1o, v2o };
+        int[] v4Ins = g1Ordering.getOutEdges(v4o);
+        Arrays.sort(v4InsExpected);
         Arrays.sort(v4Ins);
-        Arrays.sort(v4Ins_);
 
-        int[] v5Ins = {};
-        int[] v5Ins_ = g1Ordering.getOutEdges(v5o);
+        int[] v5InsExpected = {};
+        int[] v5Ins = g1Ordering.getOutEdges(v5o);
+        Arrays.sort(v5InsExpected);
         Arrays.sort(v5Ins);
-        Arrays.sort(v5Ins_);
 
-        assertArrayEquals(v1Ins, v1Ins_);
-        assertArrayEquals(v2Ins, v2Ins_);
-        assertArrayEquals(v3Ins, v3Ins_);
-        assertArrayEquals(v4Ins, v4Ins_);
-        assertArrayEquals(v5Ins, v5Ins_);
+        assertArrayEquals(v1InsExpected, v1Ins);
+        assertArrayEquals(v2InsExpected, v2Ins);
+        assertArrayEquals(v3InsExpected, v3Ins);
+        assertArrayEquals(v4InsExpected, v4Ins);
+        assertArrayEquals(v5InsExpected, v5Ins);
 
         assertEquals(false, g1Ordering.hasEdge(v1o, v1o));
         assertEquals(true, g1Ordering.hasEdge(v1o, v2o));
@@ -181,67 +181,68 @@ public class GraphOrderingTest
             v3o = g1Ordering.getVertexNumber(v3), v4o = g1Ordering.getVertexNumber(v4),
             v5o = g1Ordering.getVertexNumber(v5);
 
-        int[] v1Outs = { v2o };
-        int[] v1Outs_ = g1Ordering.getOutEdges(v1o);
+
+        int[] v1OutsExpected = { v2o };
+        int[] v1Outs = g1Ordering.getOutEdges(v1o);
+        Arrays.sort(v1OutsExpected);
         Arrays.sort(v1Outs);
-        Arrays.sort(v1Outs_);
 
-        int[] v2Outs = { v3o };
-        int[] v2Outs_ = g1Ordering.getOutEdges(v2o);
+        int[] v2OutsExpected = { v3o };
+        int[] v2Outs = g1Ordering.getOutEdges(v2o);
+        Arrays.sort(v2OutsExpected);
         Arrays.sort(v2Outs);
-        Arrays.sort(v2Outs_);
 
-        int[] v3Outs = { v2o, v4o };
-        int[] v3Outs_ = g1Ordering.getOutEdges(v3o);
+        int[] v3OutsExpected = { v2o, v4o };
+        int[] v3Outs = g1Ordering.getOutEdges(v3o);
+        Arrays.sort(v3OutsExpected);
         Arrays.sort(v3Outs);
-        Arrays.sort(v3Outs_);
 
-        int[] v4Outs = {};
-        int[] v4Outs_ = g1Ordering.getOutEdges(v4o);
+        int[] v4OutsExpected = {};
+        int[] v4Outs = g1Ordering.getOutEdges(v4o);
+        Arrays.sort(v4OutsExpected);
         Arrays.sort(v4Outs);
-        Arrays.sort(v4Outs_);
 
-        int[] v5Outs = {};
-        int[] v5Outs_ = g1Ordering.getOutEdges(v5o);
+        int[] v5OutsExpected = {};
+        int[] v5Outs = g1Ordering.getOutEdges(v5o);
+        Arrays.sort(v5OutsExpected);
         Arrays.sort(v5Outs);
-        Arrays.sort(v5Outs_);
 
-        assertArrayEquals(v1Outs, v1Outs_);
-        assertArrayEquals(v2Outs, v2Outs_);
-        assertArrayEquals(v3Outs, v3Outs_);
-        assertArrayEquals(v4Outs, v4Outs_);
-        assertArrayEquals(v5Outs, v5Outs_);
+        assertArrayEquals(v1OutsExpected, v1Outs);
+        assertArrayEquals(v2OutsExpected, v2Outs);
+        assertArrayEquals(v3OutsExpected, v3Outs);
+        assertArrayEquals(v4OutsExpected, v4Outs);
+        assertArrayEquals(v5OutsExpected, v5Outs);
 
-        int[] v1Ins = {};
-        int[] v1Ins_ = g1Ordering.getInEdges(v1o);
+        int[] v1InsExpected = {};
+        int[] v1Ins = g1Ordering.getInEdges(v1o);
+        Arrays.sort(v1InsExpected);
         Arrays.sort(v1Ins);
-        Arrays.sort(v1Ins_);
 
-        int[] v2Ins = { v1o, v3o };
-        int[] v2Ins_ = g1Ordering.getInEdges(v2o);
+        int[] v2InsExpected = { v1o, v3o };
+        int[] v2Ins = g1Ordering.getInEdges(v2o);
+        Arrays.sort(v2InsExpected);
         Arrays.sort(v2Ins);
-        Arrays.sort(v2Ins_);
 
-        int[] v3Ins = { v2o };
-        int[] v3Ins_ = g1Ordering.getInEdges(v3o);
+        int[] v3InsExpected = { v2o };
+        int[] v3Ins = g1Ordering.getInEdges(v3o);
+        Arrays.sort(v3InsExpected);
         Arrays.sort(v3Ins);
-        Arrays.sort(v3Ins_);
 
-        int[] v4Ins = { v3o };
-        int[] v4Ins_ = g1Ordering.getInEdges(v4o);
+        int[] v4InsExpected = { v3o };
+        int[] v4Ins = g1Ordering.getInEdges(v4o);
+        Arrays.sort(v4InsExpected);
         Arrays.sort(v4Ins);
-        Arrays.sort(v4Ins_);
 
-        int[] v5Ins = {};
-        int[] v5Ins_ = g1Ordering.getInEdges(v5o);
+        int[] v5InsExpected = {};
+        int[] v5Ins = g1Ordering.getInEdges(v5o);
+        Arrays.sort(v5InsExpected);
         Arrays.sort(v5Ins);
-        Arrays.sort(v5Ins_);
 
-        assertArrayEquals(v1Ins, v1Ins_);
-        assertArrayEquals(v2Ins, v2Ins_);
-        assertArrayEquals(v3Ins, v3Ins_);
-        assertArrayEquals(v4Ins, v4Ins_);
-        assertArrayEquals(v5Ins, v5Ins_);
+        assertArrayEquals(v1InsExpected, v1Ins);
+        assertArrayEquals(v2InsExpected, v2Ins);
+        assertArrayEquals(v3InsExpected, v3Ins);
+        assertArrayEquals(v4InsExpected, v4Ins);
+        assertArrayEquals(v5InsExpected, v5Ins);
 
         assertEquals(false, g1Ordering.hasEdge(v1o, v1o));
         assertEquals(true, g1Ordering.hasEdge(v1o, v2o));

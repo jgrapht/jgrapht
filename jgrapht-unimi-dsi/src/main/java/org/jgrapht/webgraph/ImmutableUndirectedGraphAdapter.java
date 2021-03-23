@@ -205,7 +205,7 @@ public class ImmutableUndirectedGraphAdapter
         return new ImmutableUndirectedGraphAdapter(immutableGraph.copy());
     }
 
-    private final GraphIterables<Integer, IntIntSortedPair> ITERABLES = new GraphIterables<>()
+    private final GraphIterables<Integer, IntIntSortedPair> iterables = new GraphIterables<>()
     {
         @Override
         public ImmutableUndirectedGraphAdapter getGraph()
@@ -325,6 +325,6 @@ public class ImmutableUndirectedGraphAdapter
     @Override
     public GraphIterables<Integer, IntIntSortedPair> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

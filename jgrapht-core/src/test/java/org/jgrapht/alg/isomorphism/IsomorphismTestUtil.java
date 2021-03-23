@@ -67,10 +67,10 @@ public class IsomorphismTestUtil
         return Pair.of(forest, generateMappedGraph(forest, map));
     }
 
-    public static Graph<Integer, DefaultEdge> generateForest(int N, Random random)
+    public static Graph<Integer, DefaultEdge> generateForest(int n, Random random)
     {
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-            new BarabasiAlbertForestGenerator<>(N / 10, N, random);
+            new BarabasiAlbertForestGenerator<>(n / 10, n, random);
 
         Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
@@ -101,10 +101,10 @@ public class IsomorphismTestUtil
         return Pair.of(generateMappedGraph(graph, mapping), mapping);
     }
 
-    public static Graph<Integer, DefaultEdge> generateTree(int N, Random random)
+    public static Graph<Integer, DefaultEdge> generateTree(int n, Random random)
     {
         BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
-            new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
+            new BarabasiAlbertGraphGenerator<>(1, 1, n - 1, random);
 
         Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);

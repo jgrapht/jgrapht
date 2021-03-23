@@ -51,8 +51,8 @@ public class ColorRefinementAlgorithmTest
         tree.addEdge(6, 7);
         tree.addEdge(6, 8);
 
-        ColorRefinementAlgorithm<Integer, DefaultEdge> CR = new ColorRefinementAlgorithm<>(tree);
-        Map<Integer, Integer> colors = CR.getColoring().getColors();
+        ColorRefinementAlgorithm<Integer, DefaultEdge> cr = new ColorRefinementAlgorithm<>(tree);
+        Map<Integer, Integer> colors = cr.getColoring().getColors();
 
         // symmetric pairs around 3 should have the same color and different colors otherwise
 
@@ -82,9 +82,9 @@ public class ColorRefinementAlgorithmTest
         regularGraph.addEdge(5, 6);
         regularGraph.addEdge(6, 4);
 
-        ColorRefinementAlgorithm<Integer, DefaultEdge> CR =
+        ColorRefinementAlgorithm<Integer, DefaultEdge> cr =
             new ColorRefinementAlgorithm<>(regularGraph);
-        Map<Integer, Integer> colors = CR.getColoring().getColors();
+        Map<Integer, Integer> colors = cr.getColoring().getColors();
 
         // all vertices should have the same color
 
@@ -128,8 +128,8 @@ public class ColorRefinementAlgorithmTest
 
         graph1.addEdge(10, 11);
 
-        ColorRefinementAlgorithm<Integer, DefaultEdge> CR = new ColorRefinementAlgorithm<>(graph1);
-        Map<Integer, Integer> colors = CR.getColoring().getColors();
+        ColorRefinementAlgorithm<Integer, DefaultEdge> cr = new ColorRefinementAlgorithm<>(graph1);
+        Map<Integer, Integer> colors = cr.getColoring().getColors();
 
         // 9 and 10 should have the same color, all others should have distinct colors
 
@@ -169,8 +169,8 @@ public class ColorRefinementAlgorithmTest
         graph1.addEdge(8, 4);
         graph1.addEdge(8, 6);
 
-        ColorRefinementAlgorithm<Integer, DefaultEdge> CR = new ColorRefinementAlgorithm<>(graph1);
-        Map<Integer, Integer> colors = CR.getColoring().getColors();
+        ColorRefinementAlgorithm<Integer, DefaultEdge> cr = new ColorRefinementAlgorithm<>(graph1);
+        Map<Integer, Integer> colors = cr.getColoring().getColors();
 
         // 1 and 3 should have the same color, all others should have distinct colors
 

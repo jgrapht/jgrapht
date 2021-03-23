@@ -56,21 +56,21 @@ public class VertexToIntegerMappingTest
     public void testRandomInstances()
     {
         Random random = new Random(0x88);
-        final int NUM_TESTS = 1024;
+        final int numTests = 1024;
         Supplier<String> supplier = SupplierUtil.createStringSupplier(random.nextInt(100));
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 10 + random.nextInt(1024);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 10 + random.nextInt(1024);
 
             Set<String> vertices =
-                IntStream.range(0, N).mapToObj(x -> supplier.get()).collect(Collectors.toSet());
+                IntStream.range(0, n).mapToObj(x -> supplier.get()).collect(Collectors.toSet());
             VertexToIntegerMapping<String> mapping = new VertexToIntegerMapping<>(vertices);
 
             Map<String, Integer> vertexMap = mapping.getVertexMap();
             List<String> indexList = mapping.getIndexList();
 
-            Assert.assertEquals(N, vertexMap.size());
-            Assert.assertEquals(N, indexList.size());
+            Assert.assertEquals(n, vertexMap.size());
+            Assert.assertEquals(n, indexList.size());
 
             for (int i = 0; i < indexList.size(); i++) {
                 Assert.assertEquals(i, vertexMap.get(indexList.get(i)).intValue());

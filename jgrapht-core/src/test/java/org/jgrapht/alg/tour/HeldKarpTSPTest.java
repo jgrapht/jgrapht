@@ -340,10 +340,10 @@ public class HeldKarpTSPTest
          * Generate 500 'random' directed multigraphs that contain a tour
          */
 
-        final int NUM_TESTS = 500;
+        final int numTests = 500;
         Random random = new Random(123);
 
-        for (int test = 0; test < NUM_TESTS; test++) {
+        for (int test = 0; test < numTests; test++) {
             Graph<String, DefaultWeightedEdge> g =
                 new DirectedMultigraph<>(DefaultWeightedEdge.class);
 

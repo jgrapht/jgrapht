@@ -82,11 +82,11 @@ public class RadixSortTest
     public void testRandomHugeArray()
     {
         Random random = new Random(0x881);
-        final int N = 1_000_000;
+        final int n = 1_000_000;
 
-        List<Integer> list = new ArrayList<>(N);
+        List<Integer> list = new ArrayList<>(n);
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             list.add(random.nextInt(Integer.MAX_VALUE));
         }
 
@@ -110,14 +110,14 @@ public class RadixSortTest
 
     private void testRandomArrays(Random random)
     {
-        final int NUM_TESTS = 500_000;
+        final int numTests = 500_000;
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 1 + random.nextInt(100);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 1 + random.nextInt(100);
 
-            List<Integer> list = new ArrayList<>(N);
+            List<Integer> list = new ArrayList<>(n);
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < n; i++) {
                 list.add(random.nextInt(Integer.MAX_VALUE));
             }
 

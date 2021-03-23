@@ -33,7 +33,7 @@ import static org.junit.Assert.fail;
  */
 public class RandomRegularGraphGeneratorTest
 {
-    private final long SEED = 5;
+    private static final long SEED = 5;
 
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeN()

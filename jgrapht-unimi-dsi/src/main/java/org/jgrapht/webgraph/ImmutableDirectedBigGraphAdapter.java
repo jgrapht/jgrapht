@@ -209,7 +209,7 @@ public class ImmutableDirectedBigGraphAdapter
             immutableGraph.copy(), immutableTranspose != null ? immutableTranspose.copy() : null);
     }
 
-    private final GraphIterables<Long, LongLongPair> ITERABLES = new GraphIterables<>()
+    private final GraphIterables<Long, LongLongPair> iterables = new GraphIterables<>()
     {
         @Override
         public ImmutableDirectedBigGraphAdapter getGraph()
@@ -359,6 +359,6 @@ public class ImmutableDirectedBigGraphAdapter
     @Override
     public GraphIterables<Long, LongLongPair> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

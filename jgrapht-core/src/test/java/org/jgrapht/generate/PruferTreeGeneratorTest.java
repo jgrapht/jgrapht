@@ -139,9 +139,9 @@ public class PruferTreeGeneratorTest
     public void testRandomSizes()
     {
         Random random = new Random(0x88);
-        final int NUM_TESTS = 500;
+        final int numTests = 500;
 
-        for (int test = 0; test < NUM_TESTS; test++) {
+        for (int test = 0; test < numTests; test++) {
             Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 

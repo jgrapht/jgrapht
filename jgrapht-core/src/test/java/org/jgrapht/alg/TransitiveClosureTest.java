@@ -37,14 +37,14 @@ public class TransitiveClosureTest
         SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        int N = 10;
-        LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(N);
+        int n = 10;
+        LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(n);
         gen.generateGraph(graph);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
-        assertEquals(true, graph.edgeSet().size() == ((N * (N - 1)) / 2));
-        for (int i = 0; i < N; ++i) {
-            for (int j = i + 1; j < N; ++j) {
+        assertEquals(true, graph.edgeSet().size() == ((n * (n - 1)) / 2));
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
                 assertEquals(true, graph.getEdge(i, j) != null);
             }
         }
@@ -56,14 +56,14 @@ public class TransitiveClosureTest
         SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        int N = 10;
-        RingGraphGenerator<Integer, DefaultEdge> gen = new RingGraphGenerator<>(N);
+        int n = 10;
+        RingGraphGenerator<Integer, DefaultEdge> gen = new RingGraphGenerator<>(n);
         gen.generateGraph(graph);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
-        assertEquals(true, graph.edgeSet().size() == (N * (N - 1)));
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
+        assertEquals(true, graph.edgeSet().size() == (n * (n - 1)));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
                 assertEquals(true, (i == j) || (graph.getEdge(i, j) != null));
             }
         }

@@ -337,10 +337,10 @@ public class HeavyPathDecompositionTest
     @Category(SlowTests.class)
     public void testRandomTrees()
     {
-        final int NUM_TESTS = 100;
+        final int numTests = 100;
         Random random = new Random(0x2882);
 
-        for (int test = 0; test < NUM_TESTS; test++) {
+        for (int test = 0; test < numTests; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(0), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
@@ -362,10 +362,10 @@ public class HeavyPathDecompositionTest
     @Category(SlowTests.class)
     public void testRandomForests()
     {
-        final int NUM_TESTS = 1000;
+        final int numTests = 1000;
         Random random = new Random(0x1881);
 
-        for (int test = 0; test < NUM_TESTS; test++) {
+        for (int test = 0; test < numTests; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(0), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 

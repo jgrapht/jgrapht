@@ -44,7 +44,7 @@ public class ConnectivityInspectorTest
     DefaultEdge e1;
     DefaultEdge e2;
     DefaultEdge e3;
-    DefaultEdge e3_b;
+    DefaultEdge e3B;
     DefaultEdge u;
 
     // ~ Methods ----------------------------------------------------------------
@@ -79,9 +79,9 @@ public class ConnectivityInspectorTest
         e3 = g.addEdge(V3, V1);
         assertEquals(3, g.edgeSet().size());
 
-        e3_b = g.addEdge(V3, V1);
+        e3B = g.addEdge(V3, V1);
         assertEquals(4, g.edgeSet().size());
-        assertNotNull(e3_b);
+        assertNotNull(e3B);
 
         u = g.addEdge(V1, V1);
         assertEquals(5, g.edgeSet().size());

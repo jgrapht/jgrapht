@@ -50,8 +50,8 @@ public class HawickJamesSimpleCycles<V, E>
 
     // The main state of the algorithm
     private Integer start = 0;
-    private List<Integer>[] Ak = null;
-    private List<Integer>[] B = null;
+    private List<Integer>[] aK = null;
+    private List<Integer>[] b = null;
     private boolean[] blocked = null;
     private ArrayDeque<Integer> stack = null;
 
@@ -92,9 +92,9 @@ public class HawickJamesSimpleCycles<V, E>
         blocked = new boolean[nVertices];
         stack = new ArrayDeque<>(nVertices);
 
-        B = new ArrayList[nVertices];
+        b = new ArrayList[nVertices];
         for (int i = 0; i < nVertices; i++) {
-            B[i] = new ArrayList<>();
+            b[i] = new ArrayList<>();
         }
 
         iToV = (V[]) graph.vertexSet().toArray();
@@ -103,7 +103,7 @@ public class HawickJamesSimpleCycles<V, E>
             vToI.put(iToV[i], i);
         }
 
-        Ak = buildAdjacencyList();
+        aK = buildAdjacencyList();
 
         stack.clear();
     }
@@ -111,29 +111,29 @@ public class HawickJamesSimpleCycles<V, E>
     @SuppressWarnings("unchecked")
     private List<Integer>[] buildAdjacencyList()
     {
-        @SuppressWarnings("rawtypes") List[] Ak = new ArrayList[nVertices];
+        @SuppressWarnings("rawtypes") List[] listAk = new ArrayList[nVertices];
         for (int j = 0; j < nVertices; j++) {
             V v = iToV[j];
             List<V> s = Graphs.successorListOf(graph, v);
-            Ak[j] = new ArrayList<Integer>(s.size());
+            listAk[j] = new ArrayList<Integer>(s.size());
 
             for (V value : s) {
-                Ak[j].add(vToI.get(value));
+                listAk[j].add(vToI.get(value));
             }
         }
 
-        return Ak;
+        return listAk;
     }
 
     private void clearState()
     {
-        Ak = null;
+        aK = null;
         nVertices = 0;
         blocked = null;
         stack = null;
         iToV = null;
         vToI = null;
-        B = null;
+        b = null;
         operation = () -> {
         };
     }
@@ -145,7 +145,7 @@ public class HawickJamesSimpleCycles<V, E>
         stack.push(v);
         blocked[v] = true;
 
-        for (Integer w : Ak[v]) {
+        for (Integer w : aK[v]) {
             if (w < start) {
                 continue;
             }
@@ -164,13 +164,13 @@ public class HawickJamesSimpleCycles<V, E>
         if (f) {
             unblock(v);
         } else {
-            for (Integer w : Ak[v]) {
+            for (Integer w : aK[v]) {
                 if (w < start) {
                     continue;
                 }
 
-                if (!B[w].contains(v)) {
-                    B[w].add(v);
+                if (!b[w].contains(v)) {
+                    b[w].add(v);
                 }
             }
         }
@@ -184,12 +184,12 @@ public class HawickJamesSimpleCycles<V, E>
     {
         blocked[u] = false;
 
-        for (int wPos = 0; wPos < B[u].size(); wPos++) {
-            Integer w = B[u].get(wPos);
+        for (int wPos = 0; wPos < b[u].size(); wPos++) {
+            Integer w = b[u].get(wPos);
 
-            int sizeBeforeRemove = B[u].size();
-            B[u].removeAll(singletonList(w));
-            wPos -= (sizeBeforeRemove - B[u].size());
+            int sizeBeforeRemove = b[u].size();
+            b[u].removeAll(singletonList(w));
+            wPos -= (sizeBeforeRemove - b[u].size());
 
             if (blocked[w]) {
                 unblock(w);
@@ -285,7 +285,7 @@ public class HawickJamesSimpleCycles<V, E>
         for (int i = 0; i < nVertices; i++) {
             for (int j = 0; j < nVertices; j++) {
                 blocked[j] = false;
-                B[j].clear();
+                b[j].clear();
             }
 
             start = vToI.get(iToV[i]);

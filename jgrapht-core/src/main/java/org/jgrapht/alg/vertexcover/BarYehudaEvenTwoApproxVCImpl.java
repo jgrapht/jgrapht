@@ -85,9 +85,9 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
         Graph<V, E> copy = new AsSubgraph<>(graph, null, null);
-        Map<V, Double> W = new HashMap<>();
+        Map<V, Double> w = new HashMap<>();
         for (V v : graph.vertexSet())
-            W.put(v, vertexWeightMap.get(v));
+            w.put(v, vertexWeightMap.get(v));
 
         // Main loop
         Set<E> edgeSet = copy.edgeSet();
@@ -97,13 +97,13 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
             V p = copy.getEdgeSource(e);
             V q = copy.getEdgeTarget(e);
 
-            if (W.get(p) <= W.get(q)) {
-                W.put(q, W.get(q) - W.get(p));
+            if (w.get(p) <= w.get(q)) {
+                w.put(q, w.get(q) - w.get(p));
                 cover.add(p);
                 weight += vertexWeightMap.get(p);
                 copy.removeVertex(p);
             } else {
-                W.put(p, W.get(p) - W.get(q));
+                w.put(p, w.get(p) - w.get(q));
                 cover.add(q);
                 weight += vertexWeightMap.get(q);
                 copy.removeVertex(q);

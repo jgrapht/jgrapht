@@ -184,20 +184,20 @@ public class BergeGraphInspectorTest
         stimulus.addEdge(1, 4);
         stimulus.addEdge(1, 2);
         stimulus.addEdge(1, 3);
-        Set<Integer> X = new HashSet<>();
-        X.add(2);
-        X.add(3);
-        X.add(4);
-        assertTrue(dut.isYXComplete(stimulus, 1, X));
+        Set<Integer> x = new HashSet<>();
+        x.add(2);
+        x.add(3);
+        x.add(4);
+        assertTrue(dut.isYXComplete(stimulus, 1, x));
 
         stimulus.removeEdge(1, 4);
-        assertFalse(dut.isYXComplete(stimulus, 1, X));
+        assertFalse(dut.isYXComplete(stimulus, 1, x));
         stimulus.addEdge(1, 4);
 
-        X.clear();
-        X.add(2);
-        X.add(1);
-        assertFalse(dut.isYXComplete(stimulus, 3, X));
+        x.clear();
+        x.add(2);
+        x.add(1);
+        assertFalse(dut.isYXComplete(stimulus, 3, x));
 
     }
 

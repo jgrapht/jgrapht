@@ -175,14 +175,14 @@ public class AHUForestIsomorphismInspectorTest
     @Category(SlowTests.class)
     public void testHugeNumberOfChildren()
     {
-        final int N = 100_000;
+        final int n = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 2; i <= N; i++) {
+        for (int i = 2; i <= n; i++) {
             tree1.addEdge(1, i);
         }
 
@@ -206,12 +206,12 @@ public class AHUForestIsomorphismInspectorTest
     public void testRandomForests()
     {
         Random random = new Random(0x2312);
-        final int NUM_TESTS = 1000;
+        final int numTests = 1000;
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 10 + random.nextInt(200);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 10 + random.nextInt(200);
 
-            Graph<Integer, DefaultEdge> tree1 = generateForest(N, random);
+            Graph<Integer, DefaultEdge> tree1 = generateForest(n, random);
 
             Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
                 generateIsomorphicGraph(tree1, random);
@@ -238,8 +238,8 @@ public class AHUForestIsomorphismInspectorTest
     @Category(SlowTests.class)
     public void testHugeRandomForest()
     {
-        final int N = 50_000;
-        Graph<Integer, DefaultEdge> tree1 = generateForest(N, new Random(0x88));
+        final int n = 50_000;
+        Graph<Integer, DefaultEdge> tree1 = generateForest(n, new Random(0x88));
 
         Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
             generateIsomorphicGraph(tree1, new Random(0x88));

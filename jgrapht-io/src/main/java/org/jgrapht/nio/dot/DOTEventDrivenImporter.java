@@ -54,7 +54,7 @@ public class DOTEventDrivenImporter
     public static final String DEFAULT_GRAPH_ID_KEY = "ID";
 
     // identifier unescape rule
-    private final CharSequenceTranslator UNESCAPE_ID;
+    private final CharSequenceTranslator unescapeId;
 
     private boolean notifyVertexAttributesOutOfOrder;
     private boolean notifyEdgeAttributesOutOfOrder;
@@ -84,7 +84,7 @@ public class DOTEventDrivenImporter
         lookupMap.put("\\\"", "\"");
         lookupMap.put("\\'", "'");
         lookupMap.put("\\", "");
-        UNESCAPE_ID = new AggregateTranslator(new LookupTranslator(lookupMap));
+        unescapeId = new AggregateTranslator(new LookupTranslator(lookupMap));
 
         this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
         this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
@@ -784,12 +784,12 @@ public class DOTEventDrivenImporter
      */
     private String unescapeId(String input)
     {
-        final char QUOTE = '"';
-        if (input.charAt(0) != QUOTE || input.charAt(input.length() - 1) != QUOTE) {
+        final char quote = '"';
+        if (input.charAt(0) != quote || input.charAt(input.length() - 1) != quote) {
             return input;
         }
         String noQuotes = input.subSequence(1, input.length() - 1).toString();
-        String unescaped = UNESCAPE_ID.translate(noQuotes);
+        String unescaped = unescapeId.translate(noQuotes);
         return unescaped;
     }
 

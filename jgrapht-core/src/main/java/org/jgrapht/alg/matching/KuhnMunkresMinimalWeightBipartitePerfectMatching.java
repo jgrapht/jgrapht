@@ -163,29 +163,29 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         /**
          * Construct new instance
          * 
-         * @param G the input graph
-         * @param S first partition of the vertex set
-         * @param T second partition of the vertex set
+         * @param g the input graph
+         * @param s first partition of the vertex set
+         * @param t second partition of the vertex set
          */
         public KuhnMunkresMatrixImplementation(
-            final Graph<V, E> G, final List<? extends V> S, final List<? extends V> T)
+            final Graph<V, E> g, final List<? extends V> s, final List<? extends V> t)
         {
-            int partition = S.size();
+            int partition = s.size();
 
             // Build an excess-matrix corresponding to the supplied weighted
             // complete bipartite graph
 
             costMatrix = new double[partition][];
 
-            for (int i = 0; i < S.size(); ++i) {
-                V source = S.get(i);
+            for (int i = 0; i < s.size(); ++i) {
+                V source = s.get(i);
                 costMatrix[i] = new double[partition];
-                for (int j = 0; j < T.size(); ++j) {
-                    V target = T.get(j);
+                for (int j = 0; j < t.size(); ++j) {
+                    V target = t.get(j);
                     if (source.equals(target)) {
                         continue;
                     }
-                    costMatrix[i][j] = G.getEdgeWeight(G.getEdge(source, target));
+                    costMatrix[i][j] = g.getEdgeWeight(g.getEdge(source, target));
                 }
             }
         }

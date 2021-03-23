@@ -151,20 +151,20 @@ public class BarabasiAlbertForestGeneratorTest
     {
         Random random = new Random(0x88);
 
-        final int NUM_TESTS = 10_000;
+        final int numTests = 10_000;
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 10 + random.nextInt(100);
-            final int T = 1 + random.nextInt(N);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 10 + random.nextInt(100);
+            final int t = 1 + random.nextInt(n);
 
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
-                new BarabasiAlbertForestGenerator<>(T, N);
+                new BarabasiAlbertForestGenerator<>(t, n);
             Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             gen.generateGraph(g);
 
-            assertEquals(N, g.vertexSet().size());
-            assertEquals(T, new ConnectivityInspector<>(g).connectedSets().size());
+            assertEquals(n, g.vertexSet().size());
+            assertEquals(t, new ConnectivityInspector<>(g).connectedSets().size());
         }
     }
 }

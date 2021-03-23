@@ -183,23 +183,26 @@ public class SimpleGEXFEventDrivenImporter
         }
     }
 
+    private static final List<String> GRAPH_ATTRS =
+        List.of("defaultedgetype", "timeformat", "mode", "start", "end");
+    private static final List<String> NODE_ATTRS = List.of("label", "pid");
+    private static final List<String> EDGE_ATTRS = List.of("type", "label");
+
     // content handler
     private class GEXFHandler
         extends
         DefaultHandler
     {
         private static final String GRAPH = "graph";
-        private final List<String> GRAPH_ATTRS =
-            List.of("defaultedgetype", "timeformat", "mode", "start", "end");
+
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
-        private final List<String> NODE_ATTRS = List.of("label", "pid");
+
         private static final String EDGE = "edge";
         private static final String EDGE_ID = "id";
         private static final String EDGE_SOURCE = "source";
         private static final String EDGE_TARGET = "target";
         private static final String EDGE_WEIGHT = "weight";
-        private final List<String> EDGE_ATTRS = List.of("type", "label");
 
         private static final String ATTRIBUTES = "attributes";
         private static final String ATTRIBUTES_CLASS = "class";

@@ -51,13 +51,13 @@ public class RatioVertex<V>
     /**
      * Create a new ratio vertex
      * 
-     * @param ID unique id
+     * @param id unique id
      * @param v the vertex
      * @param weight the vertex weight
      */
-    public RatioVertex(int ID, V v, double weight)
+    public RatioVertex(int id, V v, double weight)
     {
-        this.ID = ID;
+        this.ID = id;
         this.v = v;
         this.weight = weight;
         neighbors = new LinkedHashMap<>();

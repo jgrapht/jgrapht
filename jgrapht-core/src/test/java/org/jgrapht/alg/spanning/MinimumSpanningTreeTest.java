@@ -49,13 +49,13 @@ public abstract class MinimumSpanningTreeTest
 
     // ~ Instance fields --------------------------------------------------------
 
-    public static DefaultWeightedEdge AB;
-    public static DefaultWeightedEdge AC;
-    public static DefaultWeightedEdge BD;
-    public static DefaultWeightedEdge DE;
-    public static DefaultWeightedEdge EG;
-    public static DefaultWeightedEdge GH;
-    public static DefaultWeightedEdge FH;
+    public static DefaultWeightedEdge ab;
+    public static DefaultWeightedEdge ac;
+    public static DefaultWeightedEdge bd;
+    public static DefaultWeightedEdge de;
+    public static DefaultWeightedEdge eg;
+    public static DefaultWeightedEdge gh;
+    public static DefaultWeightedEdge fh;
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -64,7 +64,7 @@ public abstract class MinimumSpanningTreeTest
     {
         testMinimumSpanningTreeBuilding(
             createSolver(createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
+            Arrays.asList(ab, ac, bd, eg, gh, fh), 60.0);
     }
 
     @Test
@@ -72,7 +72,7 @@ public abstract class MinimumSpanningTreeTest
     {
         testMinimumSpanningTreeBuilding(
             createSolver(createSimpleConnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, DE), 15.0);
+            Arrays.asList(ab, ac, bd, de), 15.0);
     }
 
     @Test
@@ -132,9 +132,9 @@ public abstract class MinimumSpanningTreeTest
         g.addVertex(C);
         g.addVertex(D);
 
-        AB = Graphs.addEdge(g, A, B, 5);
-        AC = Graphs.addEdge(g, A, C, 10);
-        BD = Graphs.addEdge(g, B, D, 15);
+        ab = Graphs.addEdge(g, A, B, 5);
+        ac = Graphs.addEdge(g, A, C, 10);
+        bd = Graphs.addEdge(g, B, D, 15);
         Graphs.addEdge(g, C, D, 20);
 
         g.addVertex(E);
@@ -143,9 +143,9 @@ public abstract class MinimumSpanningTreeTest
         g.addVertex(H);
 
         Graphs.addEdge(g, E, F, 20);
-        EG = Graphs.addEdge(g, E, G, 15);
-        GH = Graphs.addEdge(g, G, H, 10);
-        FH = Graphs.addEdge(g, F, H, 5);
+        eg = Graphs.addEdge(g, E, G, 15);
+        gh = Graphs.addEdge(g, G, H, 10);
+        fh = Graphs.addEdge(g, F, H, 5);
 
         return g;
     }
@@ -164,11 +164,11 @@ public abstract class MinimumSpanningTreeTest
         g.addVertex(D);
         g.addVertex(E);
 
-        AB = Graphs.addEdge(g, A, B, bias * 2);
-        AC = Graphs.addEdge(g, A, C, bias * 3);
-        BD = Graphs.addEdge(g, B, D, bias * 5);
+        ab = Graphs.addEdge(g, A, B, bias * 2);
+        ac = Graphs.addEdge(g, A, C, bias * 3);
+        bd = Graphs.addEdge(g, B, D, bias * 5);
         Graphs.addEdge(g, C, D, bias * 20);
-        DE = Graphs.addEdge(g, D, E, bias * 5);
+        de = Graphs.addEdge(g, D, E, bias * 5);
         Graphs.addEdge(g, A, E, bias * 100);
 
         return g;

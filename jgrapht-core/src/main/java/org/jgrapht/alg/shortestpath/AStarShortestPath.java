@@ -201,8 +201,8 @@ public class AStarShortestPath<V, E>
                 continue;
             }
 
-            double gScore_current = gScoreMap.get(currentNode.getValue());
-            double tentativeGScore = gScore_current + graph.getEdgeWeight(edge);
+            double gScore = gScoreMap.get(currentNode.getValue());
+            double tentativeGScore = gScore + graph.getEdgeWeight(edge);
             double fScore =
                 tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex);
 

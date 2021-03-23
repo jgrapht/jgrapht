@@ -154,10 +154,10 @@ public class TransitiveReduction
             final V v1 = directedGraph.getEdgeSource(edge);
             final V v2 = directedGraph.getEdgeTarget(edge);
 
-            final int v_1 = vertices.indexOf(v1);
-            final int v_2 = vertices.indexOf(v2);
+            final int i1 = vertices.indexOf(v1);
+            final int i2 = vertices.indexOf(v2);
 
-            originalMatrix[v_1].set(v_2);
+            originalMatrix[i1].set(i2);
         }
 
         // create path matrix from original matrix

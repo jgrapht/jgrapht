@@ -267,7 +267,7 @@ public class ImmutableDirectedGraphAdapter
             immutableGraph.copy(), immutableTranspose != null ? immutableTranspose.copy() : null);
     }
 
-    private final GraphIterables<Integer, IntIntPair> ITERABLES = new GraphIterables<>()
+    private final GraphIterables<Integer, IntIntPair> iterables = new GraphIterables<>()
     {
         @Override
         public ImmutableDirectedGraphAdapter getGraph()
@@ -417,6 +417,6 @@ public class ImmutableDirectedGraphAdapter
     @Override
     public GraphIterables<Integer, IntIntPair> iterables()
     {
-        return ITERABLES;
+        return iterables;
     }
 }

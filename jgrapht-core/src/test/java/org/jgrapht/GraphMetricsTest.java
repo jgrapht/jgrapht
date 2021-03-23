@@ -265,18 +265,18 @@ public class GraphMetricsTest
     @Test
     public void testCountTriangles()
     {
-        final int NUM_TESTS = 300;
+        final int numTests = 300;
         Random random = new Random(0x88_88);
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 20 + random.nextInt(100);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 20 + random.nextInt(100);
 
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
             BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
                 new BarabasiAlbertGraphGenerator<>(
-                    10 + random.nextInt(10), 1 + random.nextInt(7), N, random);
+                    10 + random.nextInt(10), 1 + random.nextInt(7), n, random);
 
             generator.generateGraph(graph);
 
@@ -288,17 +288,17 @@ public class GraphMetricsTest
     @Test
     public void testCountTriangles2()
     {
-        final int NUM_TESTS = 100;
+        final int numTests = 100;
         Random random = new Random(0x88_88);
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 1 + random.nextInt(100);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 1 + random.nextInt(100);
 
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
             GraphGenerator<Integer, DefaultEdge, Integer> generator =
-                new GnpRandomGraphGenerator<>(N, .55, random.nextInt());
+                new GnpRandomGraphGenerator<>(n, .55, random.nextInt());
 
             generator.generateGraph(graph);
 

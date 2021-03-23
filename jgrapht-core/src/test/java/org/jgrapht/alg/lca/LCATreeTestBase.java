@@ -181,7 +181,7 @@ public abstract class LCATreeTestBase
     @Test
     public void testGraphAllPossibleQueries()
     {
-        final int N = 100;
+        final int n = 100;
 
         Random random = new Random(0x88_88);
 
@@ -189,7 +189,7 @@ public abstract class LCATreeTestBase
             SupplierUtil.createIntegerSupplier(0), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-            new BarabasiAlbertForestGenerator<>(1, N, random);
+            new BarabasiAlbertForestGenerator<>(1, n, random);
 
         generator.generateGraph(g, null);
 
@@ -204,10 +204,10 @@ public abstract class LCATreeTestBase
         else
             lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, Collections.singleton(root));
 
-        List<Pair<Integer, Integer>> queries = new ArrayList<>(N * N);
+        List<Pair<Integer, Integer>> queries = new ArrayList<>(n * n);
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 queries.add(Pair.of(i, j));
             }
         }
@@ -223,28 +223,28 @@ public abstract class LCATreeTestBase
     @Test
     public void testLongChain()
     {
-        final int N = 2_000;
-        final int Q = 100_000;
+        final int n = 2_000;
+        final int q = 100_000;
 
         Random random = new Random(0x88);
 
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++)
+        for (int i = 1; i <= n; i++)
             g.addVertex(i);
 
-        for (int i = 1; i < N; i++)
+        for (int i = 1; i < n; i++)
             g.addEdge(i, i + 1);
 
         List<Pair<Integer, Integer>> queries =
-            generateQueries(Q, new ArrayList<>(g.vertexSet()), random);
+            generateQueries(q, new ArrayList<>(g.vertexSet()), random);
 
         LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm =
-            createSolver(g, Collections.singleton(N));
+            createSolver(g, Collections.singleton(n));
 
         List<Integer> lcas = lcaAlgorithm.getBatchLCA(queries);
 
-        for (int i = 0; i < Q; i++) {
+        for (int i = 0; i < q; i++) {
             int a = queries.get(i).getFirst();
             int b = queries.get(i).getSecond();
 
@@ -403,8 +403,8 @@ public abstract class LCATreeTestBase
     @Test
     public void randomHugeConnectedTree()
     {
-        final int N = 100_000;
-        final int Q = 200_000;
+        final int n = 100_000;
+        final int q = 200_000;
 
         Random random = new Random(0x88);
 
@@ -412,7 +412,7 @@ public abstract class LCATreeTestBase
             SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-            new BarabasiAlbertForestGenerator<>(1, N, random);
+            new BarabasiAlbertForestGenerator<>(1, n, random);
 
         generator.generateGraph(g, null);
 
@@ -427,21 +427,21 @@ public abstract class LCATreeTestBase
         else
             lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, vertexList.get(0));
 
-        List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
+        List<Pair<Integer, Integer>> queries = generateQueries(q, vertexList, random);
 
         List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
         List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
-        for (int i = 0; i < Q; i++) {
+        for (int i = 0; i < q; i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
 
-    public static <V> List<Pair<V, V>> generateQueries(int Q, List<V> vertexList, Random random)
+    public static <V> List<Pair<V, V>> generateQueries(int q, List<V> vertexList, Random random)
     {
-        List<Pair<V, V>> queries = new ArrayList<>(Q);
+        List<Pair<V, V>> queries = new ArrayList<>(q);
 
-        for (int i = 0; i < Q; i++) {
+        for (int i = 0; i < q; i++) {
             V a = vertexList.get(random.nextInt(vertexList.size()));
             V b = vertexList.get(random.nextInt(vertexList.size()));
 
@@ -454,18 +454,18 @@ public abstract class LCATreeTestBase
     @Test
     public void randomHugePossiblyDisconnectedTree()
     {
-        final int N = 100_000;
-        final int Q = 200_000;
+        final int n = 100_000;
+        final int q = 200_000;
 
         Random random = new Random(0x55);
 
-        final int NUM_TREES = 100 + random.nextInt(200);
+        final int numTrees = 100 + random.nextInt(200);
 
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-            new BarabasiAlbertForestGenerator<>(NUM_TREES, N, random);
+            new BarabasiAlbertForestGenerator<>(numTrees, n, random);
 
         generator.generateGraph(g, null);
 
@@ -487,12 +487,12 @@ public abstract class LCATreeTestBase
         else
             lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
-        List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
+        List<Pair<Integer, Integer>> queries = generateQueries(q, vertexList, random);
 
         List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
         List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
-        for (int i = 0; i < Q; i++) {
+        for (int i = 0; i < q; i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
@@ -501,14 +501,14 @@ public abstract class LCATreeTestBase
     public void testSmallConnectedTrees()
     {
         Random random = new Random(0x88);
-        final int TESTS = 10_000;
-        final int Q = 50;
+        final int tests = 10_000;
+        final int q = 50;
 
-        for (int test = 0; test < TESTS; test++) {
-            final int N = 10 + random.nextInt(100);
+        for (int test = 0; test < tests; test++) {
+            final int n = 10 + random.nextInt(100);
 
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
-                new BarabasiAlbertForestGenerator<>(1, N, random.nextInt());
+                new BarabasiAlbertForestGenerator<>(1, n, random.nextInt());
 
             Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
@@ -526,12 +526,12 @@ public abstract class LCATreeTestBase
             else
                 lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
-            List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
+            List<Pair<Integer, Integer>> queries = generateQueries(q, vertexList, random);
 
             List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
             List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
-            for (int i = 0; i < Q; i++) {
+            for (int i = 0; i < q; i++) {
                 Assert.assertEquals(lcas1.get(i), lcas2.get(i));
             }
         }
@@ -541,14 +541,14 @@ public abstract class LCATreeTestBase
     public void testSmallDisconnectedTrees()
     {
         Random random = new Random(0x88);
-        final int TESTS = 10_000;
-        final int Q = 50;
+        final int tests = 10_000;
+        final int q = 50;
 
-        for (int test = 0; test < TESTS; test++) {
-            final int N = 10 + random.nextInt(200);
+        for (int test = 0; test < tests; test++) {
+            final int n = 10 + random.nextInt(200);
 
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
-                new BarabasiAlbertForestGenerator<>(N / 10, N, random.nextInt());
+                new BarabasiAlbertForestGenerator<>(n / 10, n, random.nextInt());
 
             Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
@@ -567,12 +567,12 @@ public abstract class LCATreeTestBase
                 lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
             List<Pair<Integer, Integer>> queries =
-                generateQueries(Q, new ArrayList<>(g.vertexSet()), random);
+                generateQueries(q, new ArrayList<>(g.vertexSet()), random);
 
             List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
             List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
-            for (int i = 0; i < Q; i++) {
+            for (int i = 0; i < q; i++) {
                 Assert.assertEquals(lcas1.get(i), lcas2.get(i));
             }
         }

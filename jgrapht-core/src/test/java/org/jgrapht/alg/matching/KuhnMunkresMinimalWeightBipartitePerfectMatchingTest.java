@@ -36,7 +36,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     /**
      * First partition
      */
-    private enum FIRST_PARTITION
+    private enum FirstPartition
         implements
         V
     {
@@ -64,12 +64,12 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         V
     }
 
-    private static List<? extends V> firstPartition = Arrays.asList(FIRST_PARTITION.values());
+    private static List<? extends V> firstPartition = Arrays.asList(FirstPartition.values());
 
     /**
      * Second partition
      */
-    private enum SECOND_PARTITION
+    private enum SecondPartition
         implements
         V
     {
@@ -97,7 +97,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         V
     }
 
-    private static List<? extends V> secondPartition = Arrays.asList(SECOND_PARTITION.values());
+    private static List<? extends V> secondPartition = Arrays.asList(SecondPartition.values());
 
     private static Matching<V, DefaultWeightedEdge> match(
         final double[][] costMatrix, final int partitionCardinality)

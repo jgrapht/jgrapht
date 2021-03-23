@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 public abstract class GoldbergMaximumDensitySubgraphTestBase<V, E>
 {
 
-    protected final double DEFAULT_EPS = Math.pow(10, -5);
+    protected static final double DEFAULT_EPS = Math.pow(10, -5);
     protected V s, t;
 
     public GoldbergMaximumDensitySubgraphTestBase()

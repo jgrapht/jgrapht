@@ -99,7 +99,7 @@ public class GEXFExporterTest
 
         graph.addVertex("v1");
         graph.addVertex("v2");
-        DefaultEdge e_1_2 = graph.addEdge("v1", "v2");
+        DefaultEdge e12 = graph.addEdge("v1", "v2");
         graph.addVertex("v3");
         graph.addEdge("v3", "v1");
 
@@ -128,7 +128,7 @@ public class GEXFExporterTest
 
         exporter.setEdgeAttributeProvider(e -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
-            if (e == e_1_2) {
+            if (e == e12) {
                 map.put("label", DefaultAttribute.createAttribute("Edge from node 1 to node 2"));
                 map.put("length", DefaultAttribute.createAttribute("100.0"));
             }
@@ -201,10 +201,10 @@ public class GEXFExporterTest
 
         graph.addVertex("v1");
         graph.addVertex("v2");
-        DefaultEdge e_1_2 = graph.addEdge("v1", "v2");
+        DefaultEdge e12 = graph.addEdge("v1", "v2");
         graph.addVertex("v3");
-        DefaultEdge e_3_1 = graph.addEdge("v3", "v1");
-        graph.setEdgeWeight(e_3_1, 13.5d);
+        DefaultEdge e31 = graph.addEdge("v3", "v1");
+        graph.setEdgeWeight(e31, 13.5d);
 
         GEXFExporter<String, DefaultEdge> exporter = new GEXFExporter<>();
         exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
@@ -228,11 +228,11 @@ public class GEXFExporterTest
 
         exporter.setEdgeAttributeProvider(e -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
-            if (e == e_1_2) {
+            if (e == e12) {
                 map.put("label", DefaultAttribute.createAttribute("Edge from node 1 to node 2"));
                 map.put("length", DefaultAttribute.createAttribute("100.0"));
             }
-            if (e == e_3_1) {
+            if (e == e31) {
                 map.put("length", DefaultAttribute.createAttribute("30.0"));
             }
             return map;

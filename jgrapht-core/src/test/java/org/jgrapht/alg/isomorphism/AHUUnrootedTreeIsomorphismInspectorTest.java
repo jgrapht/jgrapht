@@ -360,14 +360,14 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     @Category(SlowTests.class)
     public void testLineGraph()
     {
-        final int N = 20_000;
+        final int n = 20_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 1; i <= N - 1; i++) {
+        for (int i = 1; i <= n - 1; i++) {
             tree1.addEdge(i, i + 1);
         }
 
@@ -389,14 +389,14 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     @Category(SlowTests.class)
     public void testHugeNumberOfChildren()
     {
-        final int N = 100_000;
+        final int n = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 2; i <= N; i++) {
+        for (int i = 2; i <= n; i++) {
             tree1.addEdge(1, i);
         }
 
@@ -417,8 +417,8 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     @Category(SlowTests.class)
     public void testHugeRandomTree()
     {
-        final int N = 50_000;
-        Graph<Integer, DefaultEdge> tree1 = generateTree(N, new Random(0x88));
+        final int n = 50_000;
+        Graph<Integer, DefaultEdge> tree1 = generateTree(n, new Random(0x88));
 
         Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
             generateIsomorphicGraph(tree1, new Random(0x88));
@@ -443,12 +443,12 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     public void testRandomTrees()
     {
         Random random = new Random(0x88_88);
-        final int NUM_TESTS = 1500;
+        final int numTests = 1500;
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 10 + random.nextInt(100);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 10 + random.nextInt(100);
 
-            Graph<Integer, DefaultEdge> tree1 = generateTree(N, random);
+            Graph<Integer, DefaultEdge> tree1 = generateTree(n, random);
 
             Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
                 generateIsomorphicGraph(tree1, random);

@@ -24,7 +24,7 @@ import java.util.*;
 
 public class SubgraphIsomorphismTestUtils
 {
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     public static boolean allMatchingsCorrect(
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2, Graph<Integer, DefaultEdge> g1,

@@ -110,29 +110,29 @@ public class DegeneracyBronKerboschCliqueFinder<V, E>
                     viNeighbors.add(Graphs.getOppositeVertex(graph, e, vi));
                 }
 
-                Set<V> P = new HashSet<>();
+                Set<V> p = new HashSet<>();
                 for (int j = i + 1; j < n; j++) {
                     V vj = ordering.get(j);
                     if (viNeighbors.contains(vj)) {
-                        P.add(vj);
+                        p.add(vj);
                     }
                 }
 
-                Set<V> R = new HashSet<>();
-                R.add(vi);
+                Set<V> r = new HashSet<>();
+                r.add(vi);
 
-                Set<V> X = new HashSet<>();
+                Set<V> x = new HashSet<>();
                 for (int j = 0; j < i; j++) {
                     V vj = ordering.get(j);
                     if (viNeighbors.contains(vj)) {
-                        X.add(vj);
+                        x.add(vj);
                     }
                 }
 
                 /*
                  * Call the pivot version
                  */
-                findCliques(P, R, X, nanosTimeLimit);
+                findCliques(p, r, x, nanosTimeLimit);
             }
         }
     }

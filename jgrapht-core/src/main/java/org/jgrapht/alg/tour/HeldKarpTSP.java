@@ -53,34 +53,34 @@ public class HeldKarpTSP<V, E>
     HamiltonianCycleAlgorithmBase<V, E>
 {
 
-    private double memo(int previousNode, int state, double[][] C, double[][] W)
+    private double memo(int previousNode, int state, double[][] c, double[][] w)
     {
         // have we seen this state before?
-        if (C[previousNode][state] != Double.MIN_VALUE) {
-            return C[previousNode][state];
+        if (c[previousNode][state] != Double.MIN_VALUE) {
+            return c[previousNode][state];
         }
 
         // no cycle has been found yet
         double totalCost = Double.MAX_VALUE;
 
         // check if all nodes have been visited (i.e. state + 1 == 2^n)
-        if (state == (1 << W.length) - 1) {
+        if (state == (1 << w.length) - 1) {
             // check if there is a return edge we can use
-            if (W[previousNode][0] != Double.MAX_VALUE) {
-                totalCost = W[previousNode][0];
+            if (w[previousNode][0] != Double.MAX_VALUE) {
+                totalCost = w[previousNode][0];
             }
         } else {
             // try to find the 'best' next (i.e. unvisited and adjacent to previousNode) node in the
             // tour
-            for (int i = 0; i < W.length; i++) {
-                if (((state >> i) & 1) == 0 && W[previousNode][i] != Double.MAX_VALUE) {
+            for (int i = 0; i < w.length; i++) {
+                if (((state >> i) & 1) == 0 && w[previousNode][i] != Double.MAX_VALUE) {
                     totalCost =
-                        Math.min(totalCost, W[previousNode][i] + memo(i, state ^ (1 << i), C, W));
+                        Math.min(totalCost, w[previousNode][i] + memo(i, state ^ (1 << i), c, w));
                 }
             }
         }
 
-        return C[previousNode][state] = totalCost;
+        return c[previousNode][state] = totalCost;
     }
 
     /**
@@ -112,22 +112,22 @@ public class HeldKarpTSP<V, E>
         VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
 
         // W[u, v] = the cost of the minimum weight between u and v
-        double[][] W = computeMinimumWeights(vertexToIntegerMapping.getVertexMap(), graph);
+        double[][] w = computeMinimumWeights(vertexToIntegerMapping.getVertexMap(), graph);
 
         // C[prevNode, state] = the minimum cost of a tour that ends in prevNode and contains all
         // nodes in the bitmask state
-        double[][] C = new double[n][1 << n];
-        fill(C, Double.MIN_VALUE);
+        double[][] c = new double[n][1 << n];
+        fill(c, Double.MIN_VALUE);
 
         // start the tour from node 0 (because the tour is a cycle the start vertex does not matter)
-        double tourWeight = memo(0, 1, C, W);
+        double tourWeight = memo(0, 1, c, w);
 
         // check if there is no tour
         if (tourWeight == Double.MAX_VALUE) {
             return null;
         }
 
-        List<V> vertexList = reconstructTour(vertexToIntegerMapping.getIndexList(), W, C);
+        List<V> vertexList = reconstructTour(vertexToIntegerMapping.getIndexList(), w, c);
         return vertexListToTour(vertexList, graph);
     }
 
@@ -135,8 +135,8 @@ public class HeldKarpTSP<V, E>
     {
         final int n = vertexMap.size();
 
-        double[][] W = new double[n][n];
-        fill(W, Double.MAX_VALUE);
+        double[][] w = new double[n][n];
+        fill(w, Double.MAX_VALUE);
 
         for (E e : graph.edgeSet()) {
             V source = graph.getEdgeSource(e);
@@ -146,14 +146,14 @@ public class HeldKarpTSP<V, E>
             int v = vertexMap.get(target);
 
             // use Math.min in case we deal with a multigraph
-            W[u][v] = Math.min(W[u][v], graph.getEdgeWeight(e));
+            w[u][v] = Math.min(w[u][v], graph.getEdgeWeight(e));
 
             // If the graph is undirected we need to also consider the reverse edge
             if (graph.getType().isUndirected()) {
-                W[v][u] = Math.min(W[v][u], graph.getEdgeWeight(e));
+                w[v][u] = Math.min(w[v][u], graph.getEdgeWeight(e));
             }
         }
-        return W;
+        return w;
     }
 
     private static void fill(double[][] array, double value)
@@ -163,7 +163,7 @@ public class HeldKarpTSP<V, E>
         }
     }
 
-    private List<V> reconstructTour(List<V> indexList, double[][] W, double[][] C)
+    private List<V> reconstructTour(List<V> indexList, double[][] w, double[][] c)
     {
         final int n = indexList.size();
         List<V> vertexList = new ArrayList<>(n);
@@ -176,12 +176,12 @@ public class HeldKarpTSP<V, E>
         for (int step = 1; step < n; step++) {
             int nextNode = -1;
             for (int node = 1; node < n; node++) {
-                if ((lastState & (1 << node)) == 0 && W[lastNode][node] != Double.MAX_VALUE
-                    && C[node][lastState ^ (1 << node)] != Double.MIN_VALUE
+                if ((lastState & (1 << node)) == 0 && w[lastNode][node] != Double.MAX_VALUE
+                    && c[node][lastState ^ (1 << node)] != Double.MIN_VALUE
                     && Double
                         .compare(
-                            C[node][lastState ^ (1 << node)] + W[lastNode][node],
-                            C[lastNode][lastState]) == 0)
+                            c[node][lastState ^ (1 << node)] + w[lastNode][node],
+                            c[lastNode][lastState]) == 0)
                 {
                     nextNode = node;
                     break;

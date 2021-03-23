@@ -184,7 +184,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
     public CapacityScalingMinimumCostFlow(int scalingFactor)
     {
         this.scalingFactor = scalingFactor;
-        Node.ID = 0; // for debug
+        Node.nextID = 0; // for debug
     }
 
     /**
@@ -261,9 +261,9 @@ public class CapacityScalingMinimumCostFlow<V, E>
         init();
         if (scalingFactor > 1) {
             // run with scaling
-            int U = getU();
+            int u = getU();
             int delta = scalingFactor;
-            while (U >= delta) {
+            while (u >= delta) {
                 delta *= scalingFactor;
             }
             delta /= scalingFactor;
@@ -493,8 +493,8 @@ public class CapacityScalingMinimumCostFlow<V, E>
      */
     private void pushDijkstra(Node start, Set<Node> negativeExcessNodes, int delta)
     {
-        int TEMPORARILY_LABELED = counter++;
-        int PERMANENTLY_LABELED = counter++;
+        int temporarilyLabeledType = counter++;
+        int permanentlyLabeledType = counter++;
         AddressableHeap.Handle<Double, Node> currentFibNode;
         AddressableHeap<Double, Node> heap = new PairingHeap<>();
         List<Node> permanentlyLabeled = new LinkedList<>();
@@ -526,7 +526,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
                 }
                 return;
             }
-            currentNode.labelType = PERMANENTLY_LABELED; // currentNode becomes permanently labeled
+            currentNode.labelType = permanentlyLabeledType; // currentNode becomes permanently labeled
             permanentlyLabeled.add(currentNode);
             for (Arc currentArc = currentNode.firstNonSaturated; currentArc != null;
                 currentArc = currentArc.next)
@@ -536,8 +536,8 @@ public class CapacityScalingMinimumCostFlow<V, E>
                     continue;
                 }
                 Node opposite = currentArc.head;
-                if (opposite.labelType != PERMANENTLY_LABELED) {
-                    if (opposite.labelType == TEMPORARILY_LABELED) {
+                if (opposite.labelType != permanentlyLabeledType) {
+                    if (opposite.labelType == temporarilyLabeledType) {
                         // opposite has been labeled already
                         if (distance + currentArc.getReducedCost() < opposite.handle.getKey()) {
                             opposite.handle.decreaseKey(distance + currentArc.getReducedCost());
@@ -545,7 +545,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
                         }
                     } else {
                         // opposite is encountered for the first time
-                        opposite.labelType = TEMPORARILY_LABELED;
+                        opposite.labelType = temporarilyLabeledType;
                         opposite.handle =
                             heap.insert(distance + currentArc.getReducedCost(), opposite);
                         opposite.parentArc = currentArc;
@@ -670,7 +670,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
         /**
          * Variable for debug purposes
          */
-        private static int ID = 0;
+        private static int nextID = 0;
         /**
          * Reference to the {@link FibonacciHeapNode} this node is contained in
          */
@@ -708,7 +708,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
         /**
          * Variable for debug purposes
          */
-        private int id = ID++;
+        private int id = nextID++;
 
         /**
          * Constructs a new node with {@code excess}

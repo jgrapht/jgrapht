@@ -52,7 +52,7 @@ public class JohnsonSimpleCycles<V, E>
     private ArrayDeque<V> stack = null;
 
     // The state of the embedded Tarjan SCC algorithm.
-    private List<Set<V>> SCCs = null;
+    private List<Set<V>> foundSCCs = null;
     private int index = 0;
     private Map<V, Integer> vIndex = null;
     private Map<V, Integer> vLowlink = null;
@@ -121,12 +121,12 @@ public class JohnsonSimpleCycles<V, E>
          */
         initMinSCGState();
 
-        List<Set<V>> SCCs = findSCCS(startIndex);
+        List<Set<V>> foundSCCs = findSCCS(startIndex);
 
         // find the SCC with the minimum index
         int minIndexFound = Integer.MAX_VALUE;
         Set<V> minSCC = null;
-        for (Set<V> scc : SCCs) {
+        for (Set<V> scc : foundSCCs) {
             for (V v : scc) {
                 int t = toI(v);
                 if (t < minIndexFound) {
@@ -182,8 +182,8 @@ public class JohnsonSimpleCycles<V, E>
                 getSCCs(startIndex, vI);
             }
         }
-        List<Set<V>> result = SCCs;
-        SCCs = null;
+        List<Set<V>> result = foundSCCs;
+        foundSCCs = null;
         return result;
     }
 
@@ -221,10 +221,10 @@ public class JohnsonSimpleCycles<V, E>
             if (result.size() == 1) {
                 V v = result.iterator().next();
                 if (graph.containsEdge(vertex, v)) {
-                    SCCs.add(result);
+                    foundSCCs.add(result);
                 }
             } else {
-                SCCs.add(result);
+                foundSCCs.add(result);
             }
         }
     }
@@ -306,7 +306,7 @@ public class JohnsonSimpleCycles<V, E>
     private void initMinSCGState()
     {
         index = 0;
-        SCCs = new ArrayList<>();
+        foundSCCs = new ArrayList<>();
         vIndex = new HashMap<>();
         vLowlink = new HashMap<>();
         path = new ArrayDeque<>();
@@ -316,7 +316,7 @@ public class JohnsonSimpleCycles<V, E>
     private void clearMinSCCState()
     {
         index = 0;
-        SCCs = null;
+        foundSCCs = null;
         vIndex = null;
         vLowlink = null;
         path = null;

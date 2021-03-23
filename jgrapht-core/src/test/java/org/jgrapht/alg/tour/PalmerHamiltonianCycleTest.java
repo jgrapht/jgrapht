@@ -83,8 +83,8 @@ public class PalmerHamiltonianCycleTest
 
     private void testRandomGraphs(Random random)
     {
-        final int NUM_TESTS = 500;
-        for (int test = 0; test < NUM_TESTS; test++) {
+        final int numTests = 500;
+        for (int test = 0; test < numTests; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             final int n = 3 + random.nextInt(150);
 
@@ -133,8 +133,8 @@ public class PalmerHamiltonianCycleTest
 
     private void testRandomGraphs2(Random random)
     {
-        final int NUM_TESTS = 500;
-        for (int test = 0; test < NUM_TESTS; test++) {
+        final int numTests = 500;
+        for (int test = 0; test < numTests; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             final int n = 3 + random.nextInt(150);
 

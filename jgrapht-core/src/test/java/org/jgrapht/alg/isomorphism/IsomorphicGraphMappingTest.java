@@ -97,13 +97,13 @@ public class IsomorphicGraphMappingTest
     @Test
     public void testCompositionOfRandomMappings()
     {
-        final int NUM_TESTS = 1000;
+        final int numTests = 1000;
         Random random = new Random(0x11_88_11);
 
-        for (int test = 0; test < NUM_TESTS; test++) {
-            final int N = 10 + random.nextInt(150);
+        for (int test = 0; test < numTests; test++) {
+            final int n = 10 + random.nextInt(150);
 
-            Graph<Integer, DefaultEdge> tree1 = generateTree(N, random);
+            Graph<Integer, DefaultEdge> tree1 = generateTree(n, random);
             Graph<Integer, DefaultEdge> tree2 = generateIsomorphicGraph(tree1, random).getFirst();
             Graph<Integer, DefaultEdge> tree3 = generateIsomorphicGraph(tree2, random).getFirst();
 

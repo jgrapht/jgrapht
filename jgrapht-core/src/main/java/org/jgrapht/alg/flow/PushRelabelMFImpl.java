@@ -78,7 +78,7 @@ public class PushRelabelMFImpl<V, E>
     private PushRelabelDiagnostic diagnostic;
 
     // number of vertices
-    private final int N;
+    private final int n;
 
     private final VertexExtension[] vertexExtension;
 
@@ -116,8 +116,8 @@ public class PushRelabelMFImpl<V, E>
             this.diagnostic = new PushRelabelDiagnostic();
         }
 
-        this.N = network.vertexSet().size();
-        this.vertexExtension = (VertexExtension[]) Array.newInstance(VertexExtension.class, N);
+        this.n = network.vertexSet().size();
+        this.vertexExtension = (VertexExtension[]) Array.newInstance(VertexExtension.class, n);
     }
 
     private void enqueue(VertexExtension vx)
@@ -139,7 +139,7 @@ public class PushRelabelMFImpl<V, E>
     {
         super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
-        this.countHeight = new int[2 * N + 1];
+        this.countHeight = new int[2 * n + 1];
 
         int id = 0;
         for (V v : network.vertexSet()) {
@@ -162,19 +162,19 @@ public class PushRelabelMFImpl<V, E>
     {
         this.activeVertices = active;
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             vertexExtension[i].excess = 0;
             vertexExtension[i].height = 0;
             vertexExtension[i].active = false;
             vertexExtension[i].currentArc = 0;
         }
 
-        source.height = N;
+        source.height = n;
         source.active = true;
         sink.active = true;
 
-        countHeight[N] = 1;
-        countHeight[0] = N - 1;
+        countHeight[n] = 1;
+        countHeight[0] = n - 1;
 
         for (AnnotatedFlowEdge ex : source.getOutgoing()) {
             source.excess += ex.capacity;
@@ -213,7 +213,7 @@ public class PushRelabelMFImpl<V, E>
 
         init(source, sink);
 
-        this.activeVertices = new ArrayDeque<>(N);
+        this.activeVertices = new ArrayDeque<>(n);
         initialize(getVertexExtension(source), getVertexExtension(sink), this.activeVertices);
 
         //
@@ -282,10 +282,10 @@ public class PushRelabelMFImpl<V, E>
 
     private void gapHeuristic(int l)
     {
-        for (int i = 0; i < N; i++) {
-            if (l < vertexExtension[i].height && vertexExtension[i].height < N) {
+        for (int i = 0; i < n; i++) {
+            if (l < vertexExtension[i].height && vertexExtension[i].height < n) {
                 countHeight[vertexExtension[i].height]--;
-                vertexExtension[i].height = Math.max(vertexExtension[i].height, N + 1);
+                vertexExtension[i].height = Math.max(vertexExtension[i].height, n + 1);
                 countHeight[vertexExtension[i].height]++;
             }
         }
@@ -305,7 +305,7 @@ public class PushRelabelMFImpl<V, E>
         // Increase the height of u; u.h = 1 + min(v.h : (u, v) in Ef)
 
         countHeight[ux.height]--;
-        ux.height = 2 * N;
+        ux.height = 2 * n;
 
         for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
             if (ex.hasCapacity()) {
@@ -321,7 +321,7 @@ public class PushRelabelMFImpl<V, E>
              * |V| for which there is no node u such that u.height = h, then any node v with h <
              * v.height < |V| has been disconnected from sink and can be relabeled to (|V| + 1).
              */
-            if (0 < oldHeight && oldHeight < N && countHeight[oldHeight] == 0) {
+            if (0 < oldHeight && oldHeight < n && countHeight[oldHeight] == 0) {
                 gapHeuristic(oldHeight);
             }
         }
@@ -358,17 +358,17 @@ public class PushRelabelMFImpl<V, E>
     {
         Arrays.fill(countHeight, 0);
 
-        Queue<Integer> queue = new ArrayDeque<>(N);
-        boolean[] visited = new boolean[N];
+        Queue<Integer> queue = new ArrayDeque<>(n);
+        boolean[] visited = new boolean[n];
 
-        for (int i = 0; i < N; i++) {
-            vertexExtension[i].height = 2 * N;
+        for (int i = 0; i < n; i++) {
+            vertexExtension[i].height = 2 * n;
         }
 
         final int sinkID = getVertexExtension(getCurrentSink()).id;
         final int sourceID = getVertexExtension(getCurrentSource()).id;
 
-        vertexExtension[sourceID].height = N;
+        vertexExtension[sourceID].height = n;
         visited[sourceID] = true;
 
         vertexExtension[sinkID].height = 0;
@@ -380,7 +380,7 @@ public class PushRelabelMFImpl<V, E>
         queue.add(sourceID);
         bfs(queue, visited);
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             ++countHeight[vertexExtension[i].height];
         }
     }
@@ -401,10 +401,10 @@ public class PushRelabelMFImpl<V, E>
                 if (USE_GLOBAL_RELABELING_HEURISTIC) {
                     // If we already relabeled |V| vertices, then we do a global relabeling
                     // Note: Global relabelings are performed periodically
-                    if ((++relabelCounter) == N) {
+                    if ((++relabelCounter) == n) {
                         recomputeHeightsHeuristic();
 
-                        for (int i = 0; i < N; i++)
+                        for (int i = 0; i < n; i++)
                             vertexExtension[i].currentArc = 0;
 
                         relabelCounter = 0;

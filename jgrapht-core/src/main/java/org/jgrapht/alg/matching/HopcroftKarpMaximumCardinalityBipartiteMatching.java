@@ -67,9 +67,9 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
     private int matchedVertices;
 
     /* Dummy vertex. All vertices are initially matched against this dummy vertex */
-    private final int DUMMY = 0;
+    private static final int DUMMY = 0;
     /* Infinity */
-    private final int INF = Integer.MAX_VALUE;
+    private static final int INF = Integer.MAX_VALUE;
 
     /* Array keeping track of the matching. */
     private int[] matching;

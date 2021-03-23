@@ -102,7 +102,7 @@ public abstract class GraphMetrics
      */
     public static <V, E> int getGirth(Graph<V, E> graph)
     {
-        final int NIL = -1;
+        final int nil = -1;
         final boolean isAllowingMultipleEdges = graph.getType().isAllowingMultipleEdges();
 
         // Ordered sequence of vertices
@@ -139,8 +139,8 @@ public abstract class GraphMetrics
             for (int i = 0; i < vertices.size() - 2 && girth > 3; i++) {
 
                 // Reset data structures
-                Arrays.fill(depth, NIL);
-                Arrays.fill(parent, NIL);
+                Arrays.fill(depth, nil);
+                Arrays.fill(parent, nil);
                 queue.clear();
 
                 depth[i] = 0;
@@ -163,7 +163,7 @@ public abstract class GraphMetrics
                         }
 
                         int depthV = depth[indexV];
-                        if (depthV == NIL) { // New neighbor discovered
+                        if (depthV == nil) { // New neighbor discovered
                             queue.add(v);
                             depth[indexV] = depthU + 1;
                             parent[indexV] = indexU;
@@ -177,7 +177,7 @@ public abstract class GraphMetrics
             for (int i = 0; i < vertices.size() - 1 && girth > 2; i++) {
 
                 // Reset data structures
-                Arrays.fill(depth, NIL);
+                Arrays.fill(depth, nil);
                 queue.clear();
 
                 depth[i] = 0;
@@ -194,7 +194,7 @@ public abstract class GraphMetrics
                         int indexV = indexMap.get(v);
 
                         int depthV = depth[indexV];
-                        if (depthV == NIL) { // New neighbor discovered
+                        if (depthV == nil) { // New neighbor discovered
                             queue.add(v);
                             depth[indexV] = depthU + 1;
                         } else if (depthV == 0) { // Rediscover root: found cycle.

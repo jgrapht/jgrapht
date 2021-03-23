@@ -60,18 +60,18 @@ public class EdgeBetweennessCentralityTest
         g.addEdge("B", "D");
         g.addEdge("C", "D");
 
-        DefaultEdge e_D_E = g.addEdge("D", "E");
+        DefaultEdge edgeDE = g.addEdge("D", "E");
 
         g.addEdge("E", "F");
-        DefaultEdge e_E_G = g.addEdge("E", "G");
+        DefaultEdge edgeEG = g.addEdge("E", "G");
         g.addEdge("F", "G");
         g.addEdge("F", "H");
         g.addEdge("G", "H");
 
         EdgeBetweennessCentrality<String, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g);
 
-        assertEquals(16.0, ebc.getEdgeScore(e_D_E), 1e-9);
-        assertEquals(7.5, ebc.getEdgeScore(e_E_G), 1e-9);
+        assertEquals(16.0, ebc.getEdgeScore(edgeDE), 1e-9);
+        assertEquals(7.5, ebc.getEdgeScore(edgeEG), 1e-9);
     }
 
     @Test
@@ -217,23 +217,23 @@ public class EdgeBetweennessCentralityTest
         g.addEdge("B", "D");
         g.addEdge("C", "D");
 
-        DefaultEdge e_D_E = g.addEdge("D", "E");
-        g.setEdgeWeight(e_D_E, 1000.0); // very large
+        DefaultEdge edgeDE = g.addEdge("D", "E");
+        g.setEdgeWeight(edgeDE, 1000.0); // very large
 
-        DefaultEdge e_D_F = g.addEdge("D", "F");
+        DefaultEdge edgeDF = g.addEdge("D", "F");
 
         g.addEdge("E", "F");
-        DefaultEdge e_E_G = g.addEdge("E", "G");
-        DefaultEdge e_F_G = g.addEdge("F", "G");
+        DefaultEdge edgeEG = g.addEdge("E", "G");
+        DefaultEdge edgeFG = g.addEdge("F", "G");
         g.addEdge("F", "H");
         g.addEdge("G", "H");
 
         EdgeBetweennessCentrality<String, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g);
 
-        assertEquals(0.0, ebc.getEdgeScore(e_D_E), 1e-9);
-        assertEquals(16.0, ebc.getEdgeScore(e_D_F), 1e-9);
-        assertEquals(1.5, ebc.getEdgeScore(e_E_G), 1e-9);
-        assertEquals(5.0, ebc.getEdgeScore(e_F_G), 1e-9);
+        assertEquals(0.0, ebc.getEdgeScore(edgeDE), 1e-9);
+        assertEquals(16.0, ebc.getEdgeScore(edgeDF), 1e-9);
+        assertEquals(1.5, ebc.getEdgeScore(edgeEG), 1e-9);
+        assertEquals(5.0, ebc.getEdgeScore(edgeFG), 1e-9);
     }
 
 }

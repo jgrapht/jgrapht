@@ -272,10 +272,10 @@ public class ChordalityInspectorTest
     @Test
     public void testIsChordal11()
     {
-        Graph<Integer, DefaultEdge> schläfli = NamedGraphGenerator.schläfliGraph();
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(schläfli);
+        Graph<Integer, DefaultEdge> schlaefli = NamedGraphGenerator.schläfliGraph();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(schlaefli);
         assertFalse(inspector.isChordal());
-        assertIsHole(schläfli, inspector.getHole());
+        assertIsHole(schlaefli, inspector.getHole());
     }
 
     @Test
