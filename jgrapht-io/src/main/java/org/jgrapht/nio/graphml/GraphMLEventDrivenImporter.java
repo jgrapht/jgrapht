@@ -184,8 +184,8 @@ public class GraphMLEventDrivenImporter
             xmlReader.parse(new InputSource(input));
             handler.notifyInterestedParties();
             notifyImportEvent(ImportEvent.END);
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GraphML", se);
+        } catch (Exception e) {
+            throw new ImportException("Failed to parse GraphML", e);
         }
     }
 
@@ -224,8 +224,8 @@ public class GraphMLEventDrivenImporter
 
             // create reader
             return saxParser.getXMLReader();
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GraphML", se);
+        } catch (Exception e) {
+            throw new ImportException("Failed to parse GraphML", e);
         }
     }
 

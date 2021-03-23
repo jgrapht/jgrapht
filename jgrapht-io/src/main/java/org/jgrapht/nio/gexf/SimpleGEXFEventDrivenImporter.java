@@ -143,8 +143,8 @@ public class SimpleGEXFEventDrivenImporter
             notifyImportEvent(ImportEvent.START);
             xmlReader.parse(new InputSource(input));
             notifyImportEvent(ImportEvent.END);
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GEXF", se);
+        } catch (Exception e) {
+            throw new ImportException("Failed to parse GEXF", e);
         }
     }
 
@@ -178,8 +178,8 @@ public class SimpleGEXFEventDrivenImporter
 
             // create reader
             return saxParser.getXMLReader();
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GEXF", se);
+        } catch (Exception e) {
+            throw new ImportException("Failed to parse GEXF", e);
         }
     }
 

@@ -149,12 +149,8 @@ public class JSONEventDrivenImporter
             notifyImportEvent(ImportEvent.START);
             walker.walk(listener, graphContext);
             notifyImportEvent(ImportEvent.END);
-        } catch (IOException e) {
+        } catch (IOException | ParseCancellationException | IllegalArgumentException e) {
             throw new ImportException("Failed to import json graph: " + e.getMessage(), e);
-        } catch (ParseCancellationException pe) {
-            throw new ImportException("Failed to import json graph: " + pe.getMessage(), pe);
-        } catch (IllegalArgumentException iae) {
-            throw new ImportException("Failed to import json graph: " + iae.getMessage(), iae);
         }
     }
 
