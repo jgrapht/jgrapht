@@ -209,8 +209,10 @@ public class UnmodifiableUnionSetTest
         smaller.clearCallCounts();
         bigger.clearCallCounts();
 
-        int count = union.size();
-
+        int count = 0;
+        for (Integer i : union) {
+            count++;
+        }
         assertEquals(10, count);
         assertEquals(1, smaller.getSizeCallCount());
         assertEquals(1, bigger.getSizeCallCount());
