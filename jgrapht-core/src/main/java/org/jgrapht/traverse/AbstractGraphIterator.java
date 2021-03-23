@@ -42,7 +42,7 @@ public abstract class AbstractGraphIterator<V, E>
     // event firing calls can be skipped.
     protected int nListeners = 0;
 
-    protected final FlyweightEdgeEvent<V, E> reusableEdgeEvent;
+    protected final FlyweightEdgeEvent<E> reusableEdgeEvent;
     protected final FlyweightVertexEvent<V> reusableVertexEvent;
     protected final Graph<V, E> graph;
     protected boolean crossComponentTraversal;
@@ -224,9 +224,9 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @author Barak Naveh
      */
-    static class FlyweightEdgeEvent<VV, localE>
+    static class FlyweightEdgeEvent<E>
         extends
-        EdgeTraversalEvent<localE>
+        EdgeTraversalEvent<E>
     {
         private static final long serialVersionUID = 4051327833765000755L;
 
@@ -236,7 +236,7 @@ public abstract class AbstractGraphIterator<V, E>
          * @param eventSource the source of the event.
          * @param edge the traversed edge.
          */
-        public FlyweightEdgeEvent(Object eventSource, localE edge)
+        public FlyweightEdgeEvent(Object eventSource, E edge)
         {
             super(eventSource, edge);
         }
@@ -246,7 +246,7 @@ public abstract class AbstractGraphIterator<V, E>
          *
          * @param edge the edge to be set.
          */
-        protected void setEdge(localE edge)
+        protected void setEdge(E edge)
         {
             this.edge = edge;
         }
@@ -257,9 +257,9 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @author Barak Naveh
      */
-    static class FlyweightVertexEvent<VV>
+    static class FlyweightVertexEvent<V>
         extends
-        VertexTraversalEvent<VV>
+        VertexTraversalEvent<V>
     {
         private static final long serialVersionUID = 3834024753848399924L;
 
@@ -269,7 +269,7 @@ public abstract class AbstractGraphIterator<V, E>
          * @param eventSource the source of the event.
          * @param vertex the traversed vertex.
          */
-        public FlyweightVertexEvent(Object eventSource, VV vertex)
+        public FlyweightVertexEvent(Object eventSource, V vertex)
         {
             super(eventSource, vertex);
         }
@@ -279,7 +279,7 @@ public abstract class AbstractGraphIterator<V, E>
          *
          * @param vertex the vertex to be set.
          */
-        protected void setVertex(VV vertex)
+        protected void setVertex(V vertex)
         {
             this.vertex = vertex;
         }

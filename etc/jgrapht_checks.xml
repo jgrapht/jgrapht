@@ -41,7 +41,13 @@
         <!-- Checks for naming convention -->
         <!-- See https://checkstyle.sourceforge.io/config_naming.html -->
         <module name="CatchParameterName" />
+        <module name="ClassTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z1-9]?$" />
+        </module>
         <module name="ConstantName" />
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z1-9]?$" />
+        </module>
         <module name="IllegalIdentifierName" />
         <module name="LambdaParameterName" />
         <module name="LocalFinalVariableName">
@@ -77,10 +83,16 @@
             <property name="id" value="MethodNameTest" />
             <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$" />
         </module>
+        <module name="MethodTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z1-9]?$" />
+        </module>
         <module name="PackageName" />
         <module name="ParameterName" />
         <module name="PatternVariableName" />
         <module name="RecordComponentName" />
+        <module name="RecordTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z1-9]?$" />
+        </module>
         <module name="StaticVariableName" />
         <module name="TypeName">
             <!-- Use the default configuration, but consider Unicode characters and not only ASCII. -->
