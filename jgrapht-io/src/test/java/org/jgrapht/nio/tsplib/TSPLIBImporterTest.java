@@ -22,7 +22,6 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
-import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
 import org.junit.*;
 
@@ -102,8 +101,8 @@ public class TSPLIBImporterTest
         fileContent.add("NODE_COORD_SECTION");
         fileContent.add("1 10.2 15.0");
         fileContent.add("2 14.2 15.0");
-        fileContent.add("3 14.8 20.0");
-        fileContent.add("4 10.8 20.0");
+        fileContent.add("3  14.8    20.0"); // also use other white-space than just a single space
+        fileContent.add("4\t10.8\t\t20.0");
         fileContent.add("EOF");
         return fileContent;
     }

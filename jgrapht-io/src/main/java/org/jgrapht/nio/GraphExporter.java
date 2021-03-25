@@ -69,7 +69,7 @@ public interface GraphExporter<V, E>
      */
     default void exportGraph(Graph<V, E> g, File file)
     {
-        try (FileWriter writer = new FileWriter(file)) {
+        try (Writer writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             exportGraph(g, writer);
         } catch (IOException e) {
             throw new ExportException(e);

@@ -24,10 +24,12 @@ import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.ArrayList;
 import java.util.function.*;
+import java.util.regex.*;
 import java.util.stream.*;
 
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
 
 /**
  * Importer for files in the
@@ -319,10 +321,7 @@ public class TSPLIBImporter<V, E>
                     double[] coordinates = node.getCoordinates();
                     // Arrays.equals checks identity. Conversion to a List<Double> and use of a
                     // HashSet has linear runtime. Unlike with a TreeSet using a comparator.
-                    Double[] coordinateObj = new Double[coordinates.length];
-                    for (int i = 0; i < coordinates.length; i++) {
-                        coordinateObj[i] = Double.valueOf(coordinates[i]);
-                    }
+                    Double[] coordinateObj = stream(coordinates).boxed().toArray(Double[]::new);
                     if (!distinctCoordinates.add(Arrays.asList(coordinateObj))) {
                         hasDistinctLocations = Boolean.FALSE;
                         return hasDistinctLocations;
@@ -619,9 +618,11 @@ public class TSPLIBImporter<V, E>
         return nodes;
     }
 
+    private static final Pattern WHITE_SPACE = Pattern.compile("[ \t]+");
+
     private Node parseNode(String line)
     {
-        String[] elements = line.split(" ");
+        String[] elements = WHITE_SPACE.split(line);
         if (elements.length != vectorLength + 1) {
             throw new IllegalArgumentException(
                 "Unexpected number of elements <" + elements.length + "> in line: " + line);
