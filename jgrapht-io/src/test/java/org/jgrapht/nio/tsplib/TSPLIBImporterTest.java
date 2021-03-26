@@ -167,12 +167,12 @@ public class TSPLIBImporterTest
         fileContent.add("NAME : theNameOfThisFile");
         fileContent.add("TYPE : TSP (Some comment)");
         fileContent.add("DIMENSION : 4 (Comment: number of elements)");
-        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D #use 2D edges");
         fileContent.add("NODE_COORD_TYPE: THREED_COORDS");
         fileContent.add("CAPACITY : 7 # Capacitated vehicle routing problem data");
         fileContent.add("EDGE_WEIGHT_FORMAT: FULL_MATRIX");
         fileContent.add("EDGE_DATA_FORMAT: ADJ_LIST");
-        fileContent.add("DISPLAY_DATA_TYPE : WOD_DISPLAY");
+        fileContent.add("DISPLAY_DATA_TYPE : TWOD_DISPLAY");
         fileContent.add("NODE_COORD_SECTION");
         fileContent.add("1   10.2\t15.0");
         fileContent.add("EOF");
