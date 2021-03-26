@@ -815,6 +815,7 @@ public class TSPLIBImporter<V, E>
 
     private String requireValidValue(String value, List<String> validValues, String valueType)
     {
+        value = extractValueBeforeWhitespace(value);
         for (String validValue : validValues) {
             if (validValue.equalsIgnoreCase(value)) {
                 return validValue; // always use the upper case version
@@ -825,12 +826,18 @@ public class TSPLIBImporter<V, E>
 
     private Integer parseInteger(String valueStr, String valueType)
     {
+        valueStr = extractValueBeforeWhitespace(valueStr);
         try {
             return Integer.valueOf(valueStr);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(
                 "Invalid " + valueType + " integer value <" + valueStr + ">", e);
         }
+    }
+
+    public String extractValueBeforeWhitespace(String value)
+    {
+        return WHITE_SPACE.split(value, 2)[0]; // discard everything after first white-space
     }
 
     // read utilities

@@ -23,6 +23,7 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
+import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
 import org.junit.*;
 
 import java.io.*;
@@ -145,6 +146,43 @@ public class TSPLIBImporterTest
         assertEquals("TSP", spec.getType());
         assertEquals(
             Arrays.asList("The first line of the comment", "A second line"), spec.getComments());
+        assertEquals(Integer.valueOf(4), spec.getDimension());
+        assertEquals(Integer.valueOf(7), spec.getCapacity());
+        assertEquals("EUC_2D", spec.getEdgeWeightType());
+        assertEquals("FULL_MATRIX", spec.getEdgeWeightFormat());
+        assertEquals("ADJ_LIST", spec.getEdgeDataFormat());
+        assertEquals("THREED_COORDS", spec.getNodeCoordType());
+        assertEquals("TWOD_DISPLAY", spec.getDisplayDataType());
+
+        assertTrue(metaData.hasDistinctNodeLocations());
+        assertTrue(metaData.hasDistinctNeighborDistances());
+    }
+
+    @Test
+    public void testMetaDataValues_slightyOfSpecMetadata()
+    {
+        // The metadata/specification section of the following file is slightly off the standard
+        // containing changes that were observed in the wild.
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("NAME : theNameOfThisFile");
+        fileContent.add("TYPE : TSP (Some comment)");
+        fileContent.add("DIMENSION : 4 (Comment: number of elements)");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("NODE_COORD_TYPE: THREED_COORDS");
+        fileContent.add("CAPACITY : 7 # Capacitated vehicle routing problem data");
+        fileContent.add("EDGE_WEIGHT_FORMAT: FULL_MATRIX");
+        fileContent.add("EDGE_DATA_FORMAT: ADJ_LIST");
+        fileContent.add("DISPLAY_DATA_TYPE : WOD_DISPLAY");
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1   10.2\t15.0");
+        fileContent.add("EOF");
+
+        Metadata<Object, DefaultWeightedEdge> metaData =
+            importGraphFromFile(fileContent).getSecond();
+
+        Specification spec = metaData.getSpecification();
+        assertEquals("theNameOfThisFile", spec.getName());
+        assertEquals("TSP", spec.getType());
         assertEquals(Integer.valueOf(4), spec.getDimension());
         assertEquals(Integer.valueOf(7), spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
@@ -545,10 +583,10 @@ public class TSPLIBImporterTest
     public void testImportGraph_invalidSpecificationValue_ImportException()
     {
         StringJoiner fileContent = new StringJoiner(System.lineSeparator());
-        fileContent.add("EDGE_WEIGHT_FORMAT : some String");
+        fileContent.add("EDGE_WEIGHT_FORMAT : some_String");
 
         RuntimeException expectedCause =
-            new IllegalArgumentException("Invalid EDGE_WEIGHT_FORMAT value <some String>");
+            new IllegalArgumentException("Invalid EDGE_WEIGHT_FORMAT value <some_String>");
 
         expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
     }
