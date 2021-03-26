@@ -837,7 +837,7 @@ public class TSPLIBImporter<V, E>
 
     public String extractValueBeforeWhitespace(String value)
     {
-        return WHITE_SPACE.split(value, 2)[0]; // discard everything after first white-space
+        return WHITE_SPACE.split(value.strip(), 2)[0]; // discard everything after first white-space
     }
 
     // read utilities
@@ -853,7 +853,7 @@ public class TSPLIBImporter<V, E>
         try {
             String line = reader.readLine();
             if (line != null) {
-                line = line.trim();
+                line = line.strip();
                 return "EOF".equals(line) ? null : line;
             }
             return null;
@@ -864,7 +864,7 @@ public class TSPLIBImporter<V, E>
 
     private static String getKey(String[] keyValue)
     {
-        return keyValue[0].trim().toUpperCase();
+        return keyValue[0].strip().toUpperCase();
     }
 
     private String getValue(String[] keyValue)
@@ -872,7 +872,7 @@ public class TSPLIBImporter<V, E>
         if (keyValue.length < 2) {
             throw new IllegalStateException("Missing value for key " + getKey(keyValue));
         }
-        return keyValue[1].trim();
+        return keyValue[1].strip();
     }
 
     private void requireNotSet(Object target, String keyName)
