@@ -429,7 +429,7 @@ public class BergeGraphInspectorTest
 
     @Test
     @Category(OptionalTests.class)
-    public void checkMöbiusKantorGraph()
+    public void checkMoebiusKantorGraph()
     {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateMöbiusKantorGraph(stimulus);
@@ -465,7 +465,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    public void checkGrötzschGraph()
+    public void checkGroetzschGraph()
     {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateGrötzschGraph(stimulus);

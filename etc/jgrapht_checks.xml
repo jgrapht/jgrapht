@@ -84,6 +84,12 @@
 
         <module name="EqualsHashCode" />
         <module name="StringLiteralEquality" />
+
+        <module name="SuppressWithNearbyCommentFilter">
+            <property name="commentFormat" value="@CS\.suppress\[(\w+(\|\w+)*)\]" /> <!--  \w[-\.'`,:;\w ]{14,} -->
+            <property name="checkFormat" value="$1" />
+            <property name="influenceFormat" value="1" />
+        </module>
     </module>
 
     <module name="JavadocPackage" />

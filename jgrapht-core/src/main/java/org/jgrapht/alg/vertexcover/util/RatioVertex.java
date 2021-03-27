@@ -39,8 +39,16 @@ public class RatioVertex<V>
     /** weight of the vertex **/
     public double weight;
 
+    /**
+     * unique id, used to guarantee that compareTo never returns 0
+     * 
+     * @deprecated use {@link #id} instead
+     **/
+    @Deprecated(since = "1.5.2", forRemoval = true)
+    public final int ID; // @CS.suppress[MemberName]
+
     /** unique id, used to guarantee that compareTo never returns 0 **/
-    public final int ID;
+    public final int id;
 
     /** degree of this vertex **/
     protected int degree = 0;
@@ -57,7 +65,7 @@ public class RatioVertex<V>
      */
     public RatioVertex(int id, V v, double weight)
     {
-        this.ID = id;
+        this.id = this.ID = id;
         this.v = v;
         this.weight = weight;
         neighbors = new LinkedHashMap<>();
@@ -113,11 +121,11 @@ public class RatioVertex<V>
     @Override
     public int compareTo(RatioVertex<V> other)
     {
-        if (this.ID == other.ID) // Same vertex
+        if (this.id == other.id) // Same vertex
             return 0;
         int result = Double.compare(this.getRatio(), other.getRatio());
         if (result == 0) // If vertices have the same value, resolve tie by an ID comparison
-            return Integer.compare(this.ID, other.ID);
+            return Integer.compare(this.id, other.id);
         else
             return result;
     }
@@ -125,7 +133,7 @@ public class RatioVertex<V>
     @Override
     public int hashCode()
     {
-        return ID;
+        return id;
     }
 
     @Override
@@ -136,12 +144,12 @@ public class RatioVertex<V>
         else if (!(o instanceof RatioVertex))
             return false;
         RatioVertex<V> other = TypeUtil.uncheckedCast(o);
-        return this.ID == other.ID;
+        return this.id == other.id;
     }
 
     @Override
     public String toString()
     {
-        return "v" + ID + "(" + degree + ")";
+        return "v" + id + "(" + degree + ")";
     }
 }

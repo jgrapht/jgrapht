@@ -57,7 +57,7 @@ public class GeneralizedPetersenGraphGeneratorTest
     }
 
     @Test
-    public void testDürerGraphGraph()
+    public void testDuererGraphGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.dürerGraph();
         this.validateBasics(g, 12, 18, 3, 4, 3);
@@ -91,7 +91,7 @@ public class GeneralizedPetersenGraphGeneratorTest
     }
 
     @Test
-    public void testMöbiusKantorGraph()
+    public void testMoebiusKantorGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.möbiusKantorGraph();
         this.validateBasics(g, 16, 24, 4, 4, 6);

@@ -36,7 +36,7 @@ public class DefaultAttribute<T>
     /**
      * The null attribute.
      */
-    public static Attribute NULL = new DefaultAttribute<>(null, AttributeType.NULL);
+    public static final Attribute NULL = new DefaultAttribute<>(null, AttributeType.NULL);
 
     private T value;
     private AttributeType type;

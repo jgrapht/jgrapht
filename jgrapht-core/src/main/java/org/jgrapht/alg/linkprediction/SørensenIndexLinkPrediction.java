@@ -50,7 +50,7 @@ import org.jgrapht.alg.util.Pair;
  * 
  * @author Dimitrios Michail
  */
-public class SørensenIndexLinkPrediction<V, E>
+public class SørensenIndexLinkPrediction<V, E> // @CS.suppress[TypeName]
     implements
     LinkPredictionAlgorithm<V, E>
 {

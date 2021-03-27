@@ -77,7 +77,7 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
-    public void testGrötzschGraph()
+    public void testGroetzschGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.grötzschGraph();
         this.validateBasics(g, 11, 20, 2, 2, 4);
@@ -300,7 +300,7 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
-    public void testSchläfliGraph()
+    public void testSchlaefliGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.schläfliGraph();
         this.validateBasics(g, 27, 216, 2, 2, 3);

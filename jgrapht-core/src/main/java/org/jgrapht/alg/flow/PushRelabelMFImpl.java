@@ -63,8 +63,30 @@ public class PushRelabelMFImpl<V, E>
     // Diagnostic
     private static final boolean DIAGNOSTIC_ENABLED = false;
 
-    public static boolean USE_GLOBAL_RELABELING_HEURISTIC = true;
-    public static boolean USE_GAP_RELABELING_HEURISTIC = true;
+    /**
+     * @deprecated use {@link #setUseGlobalRelabelingHeuristic(boolean)} instead
+     */
+    @Deprecated(since = "1.5.2", forRemoval = true)
+    public static boolean USE_GLOBAL_RELABELING_HEURISTIC = true; // @CS.suppress[StaticVariableName]
+    // TODO: make this static field private, rename it to "useGapRelabelingHeuristic" to comply
+    // with checkstyle naming rules and remove the // @CS.supress comment
+    /**
+     * @deprecated use {@link #setUseGapRelabelingHeuristic(boolean)} instead
+     */
+    @Deprecated(since = "1.5.2", forRemoval = true)
+    public static boolean USE_GAP_RELABELING_HEURISTIC = true; // @CS.suppress[StaticVariableName]
+    // TODO: make this static field private, rename it to "useGapRelabelingHeuristic" to comply
+    // with checkstyle naming rules and remove the // @CS.supress comment
+
+    public static void setUseGlobalRelabelingHeuristic(boolean useGlobalRelabelingHeuristic)
+    {
+        USE_GLOBAL_RELABELING_HEURISTIC = useGlobalRelabelingHeuristic;
+    }
+
+    public static void setUseGapRelabelingHeuristic(boolean useGapRelabelingHeuristic)
+    {
+        USE_GAP_RELABELING_HEURISTIC = useGapRelabelingHeuristic;
+    }
 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;

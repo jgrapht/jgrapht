@@ -150,7 +150,7 @@ public class GreedyVCImpl<V, E>
             weight += vertexWeightMap.get(vx.v);
             assert (workingGraph
                 .parallelStream().noneMatch(
-                    ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
+                    ux -> ux.id == vx.id)) : "vx should no longer exist in the working graph";
         }
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
