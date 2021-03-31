@@ -65,6 +65,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
+		<sonar.projectKey>AISS-2021-L7-G02_jgrapht</sonar.projectKey>
+		<sonar.moduleKey>${artifactId}</sonar.moduleKey>
+		<sonar.organization>aiss-2021-l7-g02</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencyManagement>

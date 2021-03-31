@@ -67,7 +67,7 @@ public class PreferentialAttachmentLinkPrediction<V, E>
         int du = graph.outDegreeOf(u);
         int dv = graph.outDegreeOf(v);
 
-        return du * dv;
+        return (double) du * dv;
     }
 
 }
