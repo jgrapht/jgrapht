@@ -122,7 +122,7 @@ public class SuccinctDirectedGraph
                     + Integer.MAX_VALUE);
 
         cumulativeOutdegrees = new EliasFanoIndexedMonotoneLongBigList(
-            n + 1, m, new CumulativeDegrees(n, graph::outDegreeOf));
+           (long) (n + 1), m, new CumulativeDegrees(n, graph::outDegreeOf));
         assert cumulativeOutdegrees.getLong(cumulativeOutdegrees.size64() - 1) == m;
 
         successors = new EliasFanoIndexedMonotoneLongBigList(
@@ -131,7 +131,7 @@ public class SuccinctDirectedGraph
 
         if (incomingEdgesSupport) {
             cumulativeIndegrees = new EliasFanoMonotoneLongBigList(
-                n + 1, m, new CumulativeDegrees(n, graph::inDegreeOf));
+            (long) (n + 1), m, new CumulativeDegrees(n, graph::inDegreeOf));
             assert cumulativeIndegrees.getLong(cumulativeIndegrees.size64() - 1) == m;
 
             predecessors = new EliasFanoIndexedMonotoneLongBigList(

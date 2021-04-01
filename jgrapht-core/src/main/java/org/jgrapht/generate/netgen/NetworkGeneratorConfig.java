@@ -289,7 +289,7 @@ public class NetworkGeneratorConfig {
      * @return minimum number of nodes this network can contain.
      */
     public long getMinimumArcNum() {
-        return getTransshipNodeNum() + Math.max(getSourceNum(), getSinkNum());
+        return (long) (getTransshipNodeNum() + Math.max(getSourceNum(), getSinkNum()));
     }
 
     /**

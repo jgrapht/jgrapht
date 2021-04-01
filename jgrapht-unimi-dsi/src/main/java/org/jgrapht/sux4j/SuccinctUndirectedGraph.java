@@ -116,9 +116,9 @@ public class SuccinctUndirectedGraph
                     + Integer.MAX_VALUE);
 
         cumulativeOutdegrees = new EliasFanoIndexedMonotoneLongBigList(
-            n + 1, m, new CumulativeDegrees<>(graph, true, iterables::edgesOf));
+            (long) (n + 1), m, new CumulativeDegrees<>(graph, true, iterables::edgesOf));
         cumulativeIndegrees = new EliasFanoMonotoneLongBigList(
-            n + 1, m, new CumulativeDegrees<>(graph, false, iterables::edgesOf));
+        	(long) (n + 1), m, new CumulativeDegrees<>(graph, false, iterables::edgesOf));
         assert cumulativeOutdegrees.getLong(cumulativeOutdegrees.size64() - 1) == m;
         assert cumulativeIndegrees.getLong(cumulativeIndegrees.size64() - 1) == m;
 

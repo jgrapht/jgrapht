@@ -128,9 +128,9 @@ public class PalmerHamiltonianCycle<V, E>
                             {
                                 R[u] = L[u];
                                 L[u] = p;
-                                R[v] = R[v];
+//                                R[v] = R[v];
                                 L[v] = q;
-                                L[p] = L[p];
+//                                L[p] = L[p];
                                 R[p] = u;
                                 L[q] = R[q];
                                 R[q] = v;
