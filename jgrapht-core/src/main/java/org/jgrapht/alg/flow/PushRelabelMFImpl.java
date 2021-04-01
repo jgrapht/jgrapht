@@ -69,14 +69,16 @@ public class PushRelabelMFImpl<V, E>
     @Deprecated(since = "1.5.2", forRemoval = true)
     public static boolean USE_GLOBAL_RELABELING_HEURISTIC = true; // @CS.suppress[StaticVariableName]
     // TODO: make this static field private, rename it to "useGapRelabelingHeuristic" to comply
-    // with checkstyle naming rules and remove the // @CS.supress comment
+    // with checkstyle naming rules and remove the // @CS.supress comment and in jgrapht_checks.xml
+    // the rule SuppressWithNearbyCommentFilter
     /**
      * @deprecated use {@link #setUseGapRelabelingHeuristic(boolean)} instead
      */
     @Deprecated(since = "1.5.2", forRemoval = true)
     public static boolean USE_GAP_RELABELING_HEURISTIC = true; // @CS.suppress[StaticVariableName]
     // TODO: make this static field private, rename it to "useGapRelabelingHeuristic" to comply
-    // with checkstyle naming rules and remove the // @CS.supress comment
+    // with checkstyle naming rules and remove the // @CS.supress comment and in jgrapht_checks.xml
+    // the rule SuppressWithNearbyCommentFilter
 
     public static void setUseGlobalRelabelingHeuristic(boolean useGlobalRelabelingHeuristic)
     {

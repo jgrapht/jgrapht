@@ -69,7 +69,8 @@
         </module>
         <module name="MethodName">
             <property name="id" value="MethodNameMain" />
-            <!-- Use the default configuration in main code -->
+            <!-- Use the default configuration, but consider Unicode characters and not only ASCII. -->
+            <property name="format" value="^\p{Ll}[\p{Ll}\p{Lu}0-9]*$" />
         </module>
         <module name="MethodName">
             <property name="id" value="MethodNameTest" />
@@ -80,13 +81,23 @@
         <module name="PatternVariableName" />
         <module name="RecordComponentName" />
         <module name="StaticVariableName" />
-        <module name="TypeName" />
+        <module name="TypeName">
+            <!-- Use the default configuration, but consider Unicode characters and not only ASCII. -->
+            <property name="format" value="^\p{Lu}[\p{Ll}\p{Lu}0-9]*$" />
+        </module>
+
+        <!-- Checks that only characters of the Unicode blocks BASIC_LATIN (ASCII) and LATIN_1_SUPPLEMENT are used. -->
+        <module name="IllegalIdentifierName">
+            <property name="format" value="^[\p{block=BASIC_LATIN}\p{block=LATIN_1_SUPPLEMENT}]+$" />
+        </module>
+
 
         <module name="EqualsHashCode" />
         <module name="StringLiteralEquality" />
 
         <module name="SuppressWithNearbyCommentFilter">
-            <property name="commentFormat" value="@CS\.suppress\[(\w+(\|\w+)*)\]" /> <!--  \w[-\.'`,:;\w ]{14,} -->
+            <!-- TODO: remove this after next release -->
+            <property name="commentFormat" value="@CS\.suppress\[(\w+(\|\w+)*)\]" />
             <property name="checkFormat" value="$1" />
             <property name="influenceFormat" value="1" />
         </module>

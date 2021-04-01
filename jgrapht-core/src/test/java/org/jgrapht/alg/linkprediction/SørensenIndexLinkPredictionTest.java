@@ -31,7 +31,7 @@ import org.junit.Test;
  *
  * @author Dimitrios Michail
  */
-public class SørensenIndexLinkPredictionTest // @CS.suppress[TypeName]
+public class SørensenIndexLinkPredictionTest 
 {
 
     @Test

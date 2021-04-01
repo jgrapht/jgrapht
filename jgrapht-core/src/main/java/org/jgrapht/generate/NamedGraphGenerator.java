@@ -160,7 +160,7 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Dürer Graph
      */
-    public static Graph<Integer, DefaultEdge> dürerGraph() // @CS.suppress[MethodName]
+    public static Graph<Integer, DefaultEdge> dürerGraph()
     {
         return generalizedPetersenGraph(6, 2);
     }
@@ -174,7 +174,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateDürerGraph(Graph<V, E> targetGraph) // @CS.suppress[MethodName]
+    public void generateDürerGraph(Graph<V, E> targetGraph)
     {
         generateGeneralizedPetersenGraph(targetGraph, 6, 2);
     }
@@ -260,7 +260,7 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Möbius-Kantor Graph
      */
-    public static Graph<Integer, DefaultEdge> möbiusKantorGraph() // @CS.suppress[MethodName]
+    public static Graph<Integer, DefaultEdge> möbiusKantorGraph()
     {
         return generalizedPetersenGraph(8, 3);
     }
@@ -274,7 +274,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateMöbiusKantorGraph(Graph<V, E> targetGraph) // @CS.suppress[MethodName]
+    public void generateMöbiusKantorGraph(Graph<V, E> targetGraph)
     {
         generateGeneralizedPetersenGraph(targetGraph, 8, 3);
     }
@@ -468,7 +468,7 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Grötzsch Graph
      */
-    public static Graph<Integer, DefaultEdge> grötzschGraph() // @CS.suppress[MethodName]
+    public static Graph<Integer, DefaultEdge> grötzschGraph()
     {
         Graph<Integer,
             DefaultEdge> g = GraphTypeBuilder
@@ -487,7 +487,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateGrötzschGraph(Graph<V, E> targetGraph) // @CS.suppress[MethodName]
+    public void generateGrötzschGraph(Graph<V, E> targetGraph)
     {
         vertexMap.clear();
         for (int i = 1; i < 6; i++)
@@ -1581,7 +1581,7 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Schläfli Graph
      */
-    public static Graph<Integer, DefaultEdge> schläfliGraph() // @CS.suppress[MethodName]
+    public static Graph<Integer, DefaultEdge> schläfliGraph()
     {
         Graph<Integer,
             DefaultEdge> g = GraphTypeBuilder
@@ -1600,7 +1600,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateSchläfliGraph(Graph<V, E> targetGraph) // @CS.suppress[MethodName]
+    public void generateSchläfliGraph(Graph<V, E> targetGraph)
     {
         vertexMap.clear();
         int[][] edges = { { 0, 11 }, { 0, 12 }, { 0, 13 }, { 0, 14 }, { 0, 15 }, { 0, 16 },
@@ -1777,10 +1777,7 @@ public class NamedGraphGenerator<V, E>
     // --------------Helper methods-----------------/
     private V addVertex(Graph<V, E> targetGraph, int i)
     {
-        if (!vertexMap.containsKey(i)) {
-            vertexMap.put(i, targetGraph.addVertex());
-        }
-        return vertexMap.get(i);
+        return vertexMap.computeIfAbsent(i, i1 -> targetGraph.addVertex());
     }
 
     private void addEdge(Graph<V, E> targetGraph, int i, int j)
