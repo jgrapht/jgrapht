@@ -133,7 +133,7 @@ public class ImmutableDirectedBigGraphAdapter
     @Override
     public int degreeOf(final Long vertex)
     {
-        final long d = inDegreeOf(vertex) + outDegreeOf(vertex);
+        final long d =(long) (inDegreeOf(vertex) + outDegreeOf(vertex));
         if (d > Integer.MAX_VALUE)
             throw new ArithmeticException();
         return (int) d;
