@@ -76,7 +76,7 @@ public final class HelloJGraphT
         // @example:findVertex:begin
         URI start = hrefGraph
             .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
-            .get();
+            .orElse(null);
         // @example:findVertex:end
 
         // @example:traverse:end

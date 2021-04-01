@@ -114,9 +114,9 @@ public class GreedyWeightedMatching<V, E>
         List<E> allEdges = new ArrayList<>(graph.edgeSet());
         if (normalizeEdgeCosts) {
             allEdges.sort((e1, e2) -> {
-                double degreeE1 = graph.degreeOf(graph.getEdgeSource(e1))
+                double degreeE1 = (double) graph.degreeOf(graph.getEdgeSource(e1))
                     + graph.degreeOf(graph.getEdgeTarget(e1));
-                double degreeE2 = graph.degreeOf(graph.getEdgeSource(e2))
+                double degreeE2 = (double) graph.degreeOf(graph.getEdgeSource(e2))
                     + graph.degreeOf(graph.getEdgeTarget(e2));
                 return comparator
                     .compare(

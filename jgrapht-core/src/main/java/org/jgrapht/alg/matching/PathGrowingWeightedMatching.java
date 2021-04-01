@@ -168,7 +168,7 @@ public class PathGrowingWeightedMatching<V, E>
         int i = 1;
         while (!visibleVertex.isEmpty()) {
             // find vertex arbitrarily
-            V x = visibleVertex.stream().findAny().get();
+            V x = visibleVertex.stream().findAny().orElse(null);
 
             // grow path from x
             while (x != null) {
@@ -240,7 +240,7 @@ public class PathGrowingWeightedMatching<V, E>
         // run algorithm
         while (!visibleVertex.isEmpty()) {
             // find vertex arbitrarily
-            V x = visibleVertex.stream().findAny().get();
+            V x = visibleVertex.stream().findAny().orElse(null);
 
             // grow path from x
             LinkedList<E> path = new LinkedList<>();

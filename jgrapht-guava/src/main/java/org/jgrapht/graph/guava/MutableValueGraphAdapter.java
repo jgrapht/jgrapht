@@ -331,7 +331,7 @@ public class MutableValueGraphAdapter<V, W>
             V v = e.nodeV();
             oos.writeObject(u);
             oos.writeObject(v);
-            oos.writeObject(valueGraph.edgeValue(u, v).get());
+            oos.writeObject(valueGraph.edgeValue(u, v).orElse(null));
         }
     }
 

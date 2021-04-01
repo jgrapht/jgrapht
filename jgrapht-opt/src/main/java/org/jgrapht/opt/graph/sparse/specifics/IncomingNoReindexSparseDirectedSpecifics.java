@@ -70,7 +70,7 @@ public class IncomingNoReindexSparseDirectedSpecifics
         if (inIncidenceMatrix == null) {
             indexIncomingEdges();
         }
-        return outIncidenceMatrix.nonZeros(vertex) + inIncidenceMatrix.nonZeros(vertex);
+        return (long) (outIncidenceMatrix.nonZeros(vertex) + inIncidenceMatrix.nonZeros(vertex));
     }
 
     @Override

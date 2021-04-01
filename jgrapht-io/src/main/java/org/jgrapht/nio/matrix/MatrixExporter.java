@@ -246,7 +246,7 @@ public class MatrixExporter<V, E>
 
                 for (V to : neighbors) {
                     String toName = getVertexId(to);
-                    double value = -1 / Math.sqrt(g.degreeOf(from) * g.degreeOf(to));
+                    double value = -1 / Math.sqrt(g.degreeOf(from) * (double) g.degreeOf(to));
                     exportEntry(out, fromName, toName, Double.toString(value));
                 }
             }

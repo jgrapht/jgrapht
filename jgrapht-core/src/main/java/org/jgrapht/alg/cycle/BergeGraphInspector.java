@@ -645,7 +645,7 @@ public class BergeGraphInspector<V, E>
                         GraphPath<V, E> rx3y2 = getPathAvoidingX(g, x3, y2, X);
                         GraphPath<V, E> rx1y2 = getPathAvoidingX(g, x1, y2, X);
                         if (rx3y1 != null && rx3y2 != null && rx1y2 != null
-                            && rx2y1.getLength() == (n = rx1y1.getLength() + 1)
+                            && rx2y1.getLength() == (n = rx1y1.getLength() + 1.)
                             && n == rx1y2.getLength() && rx3y1.getLength() >= n
                             && rx3y2.getLength() >= n)
                         {

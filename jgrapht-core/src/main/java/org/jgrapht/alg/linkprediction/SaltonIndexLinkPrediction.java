@@ -83,7 +83,7 @@ public class SaltonIndexLinkPrediction<V, E>
         Set<V> intersection = new HashSet<>(gu);
         intersection.retainAll(gv);
 
-        return (double) intersection.size() / Math.sqrt(du * dv);
+        return (double) intersection.size() / Math.sqrt((double) (du * dv));
     }
 
 }
