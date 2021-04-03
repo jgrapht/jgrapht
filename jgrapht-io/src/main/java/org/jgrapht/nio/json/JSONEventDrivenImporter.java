@@ -48,9 +48,9 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
- * 
+ *
  * Below is a small example of a graph in JSON format.
- * 
+ *
  * <pre>
  * {
  *   "nodes": [
@@ -64,17 +64,17 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
  *   ]
  * }
  * </pre>
- * 
+ *
  * <p>
  * In case the graph is weighted then the importer also reads edge weights. Otherwise the default
  * edge weight is returned. The importer also supports reading additional string attributes such as
  * label or custom user attributes.
- * 
+ *
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
  * of the graph. Moreover, complicated nested structures which are inside vertices or edges are
  * simply returned as a whole. For example, in the following graph
- * 
+ *
  * <pre>
  * {
  *   "nodes": [
@@ -86,10 +86,10 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
  *   ]
  * }
  * </pre>
- * 
+ *
  * the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same
  * is done for arrays or any other arbitrary nested structure.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class JSONEventDrivenImporter
@@ -111,7 +111,7 @@ public class JSONEventDrivenImporter
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
      *        even if they appear together in the input
      * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
@@ -181,6 +181,7 @@ public class JSONEventDrivenImporter
         private static final String GRAPH = "graph";
         private static final String NODES = "nodes";
         private static final String EDGES = "edges";
+        private static final String LINKS = "links";
         private static final String ID = "id";
 
         private static final String WEIGHT = "weight";
@@ -328,6 +329,8 @@ public class JSONEventDrivenImporter
                     insideNodes = true;
                 } else if (EDGES.equals(name)) {
                     insideEdges = true;
+                } else if (LINKS.equals(name)) {
+                    insideEdges = true;
                 }
             }
 
@@ -343,6 +346,8 @@ public class JSONEventDrivenImporter
                 if (NODES.equals(name)) {
                     insideNodes = false;
                 } else if (EDGES.equals(name)) {
+                    insideEdges = false;
+                } else if (LINKS.equals(name)) {
                     insideEdges = false;
                 }
             }
