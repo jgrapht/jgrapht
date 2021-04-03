@@ -69,6 +69,10 @@
 		<sonar.moduleKey>${artifactId}</sonar.moduleKey>
 		<sonar.organization>aiss-2021-l7-g02</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.language>java</sonar.language>
+        <jacoco.version>0.8.6</jacoco.version>       
+        <test.jacoco.includeNoLocationClasses>true</test.jacoco.includeNoLocationClasses>
     </properties>
 
     <dependencyManagement>
@@ -313,7 +317,28 @@
                       <artifactId>maven-source-plugin</artifactId>
                       <version>3.2.1</version>
                  </plugin>
-          </plugins>
+        <plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>            
+					<executions>
+						<execution>
+							<id>prepare-agent</id>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+							<phase>test-compile</phase>
+						</execution>
+						<execution>
+							<id>report</id>
+							<phase>package</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+		</plugin>
+      </plugins>
     </build>
 
     <modules>
