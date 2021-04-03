@@ -176,6 +176,7 @@ public class ClosestFirstIterator<V, E>
         initialized = true;
         if (!crossComponentTraversal) {
             // prime the heap by processing the first start vertex
+        	hasNext();
             Iterator<V> iter = startVertices.iterator();
             if (iter.hasNext()) {
                 // discard the first since we already primed it above
