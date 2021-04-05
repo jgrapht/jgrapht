@@ -637,4 +637,42 @@ public class JSONImporterTest
         assertTrue(graph.containsEdge("e2"));
     }
 
+    @Test
+    public void testUndirectedUnweightedWithLinksKey()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "{\n"
+                     + "  \"nodes\": [\n"    
+                     + "  { \"id\":\"1\" },\n"
+                     + "  { \"id\":\"2\" },\n"
+                     + "  { \"id\":\"3\" },\n"
+                     + "  { \"id\":\"4\" }\n"
+                     + "  ],\n"
+                     + "  \"links\": [\n"    
+                     + "  { \"source\":\"1\", \"target\":\"2\" },\n"
+                     + "  { \"source\":\"1\", \"target\":\"3\" }\n"
+                     + "  ]\n"
+                     + "}";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(2, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("1", "3"));
+    }
+
 }
