@@ -83,7 +83,7 @@ public class DegeneracyOrderingIteratorTest
             String v = it.next();
             sb.append("," + v);
         }
-        assertEquals(",v8,v6,v7,v5,v9,v10,v1,v2,v3,v4", sb.toString());
+        assertEquals(",v8,v6,v7,v5,v9,v10,v3,v4,v1,v2", sb.toString());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class DegeneracyOrderingIteratorTest
             it.next();
         }
         assertEquals(
-            ",s_a,f_a,s_b,f_b,s_d,f_d,s_c,f_c,s_j,f_j,s_i,f_i,s_k,f_k,s_e,f_e,s_f,f_f,s_g,f_g,s_h,f_h",
+            ",s_a,f_a,s_b,f_b,s_d,f_d,s_c,f_c,s_j,f_j,s_k,f_k,s_i,f_i,s_g,f_g,s_h,f_h,s_e,f_e,s_f,f_f",
             listener.toString());
     }
 

@@ -17,10 +17,15 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
-import java.lang.reflect.*;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 
 /**
  * A degeneracy ordering iterator.
@@ -88,7 +93,7 @@ public class DegeneracyOrderingIterator<V, E>
          */
         this.buckets = (Set<V>[]) Array.newInstance(Set.class, maxDegree + 1);
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new HashSet<>();
+            buckets[i] = new LinkedHashSet<>();
         }
         for (V v : graph.vertexSet()) {
             buckets[degrees.get(v)].add(v);

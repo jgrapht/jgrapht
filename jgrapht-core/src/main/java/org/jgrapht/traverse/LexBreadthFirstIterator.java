@@ -17,10 +17,17 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.util.CollectionUtil;
 
 /**
  * A lexicographical breadth-first iterator for an undirected graph.
@@ -162,7 +169,7 @@ public class LexBreadthFirstIterator<V, E>
      */
     private Set<V> getUnvisitedNeighbours(V vertex)
     {
-        Set<V> unmapped = new HashSet<>();
+        Set<V> unmapped = new LinkedHashSet<>();
         Set<E> edges = graph.edgesOf(vertex);
         for (E edge : edges) {
             V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
@@ -311,7 +318,7 @@ public class LexBreadthFirstIterator<V, E>
              */
             Bucket(Collection<V> vertices)
             {
-                this.vertices = new HashSet<>(vertices);
+                this.vertices = new LinkedHashSet<>(vertices);
             }
 
             /**
@@ -321,7 +328,7 @@ public class LexBreadthFirstIterator<V, E>
              */
             Bucket(V vertex)
             {
-                this.vertices = new HashSet<>();
+                this.vertices = new LinkedHashSet<>();
                 vertices.add(vertex);
             }
 
