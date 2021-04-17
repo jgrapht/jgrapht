@@ -707,10 +707,13 @@ public class TSPLIBImporter<V, E>
 
         while (lines.hasNext()) {
             String lineContent = lines.next();
-            if ("-1".equals(lineContent)) {
-                break;
+            for (String element : WHITE_SPACE.split(lineContent)) {
+                element = element.strip();
+                if ("-1".equals(element)) {
+                    break;
+                }
+                tour.add(Integer.valueOf(element));
             }
-            tour.add(Integer.valueOf(lineContent));
         }
         return tour;
     }

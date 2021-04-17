@@ -144,8 +144,7 @@ public class TSPLIBImporterTest
         Specification spec = metaData.getSpecification();
         assertEquals("theNameOfThisFile", spec.getName());
         assertEquals("TSP", spec.getType());
-        assertEquals(
-            Arrays.asList("The first line of the comment", "A second line"), spec.getComments());
+        assertEquals(List.of("The first line of the comment", "A second line"), spec.getComments());
         assertEquals(Integer.valueOf(4), spec.getDimension());
         assertEquals(Integer.valueOf(7), spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
@@ -241,7 +240,7 @@ public class TSPLIBImporterTest
         expectedVectors.add(new TestVector(4, 10.8, 20.0));
         Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(expectedVectors);
 
-        List<Integer> expectedTour = Arrays.asList(9, 4, 7, 2);
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
 
         Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> importData =
             importGraphFromFile(fileContent);
@@ -258,18 +257,6 @@ public class TSPLIBImporterTest
     @Test
     public void testImportTour_onlyWithTourSection()
     {
-        StringJoiner otherFileContent = new StringJoiner(System.lineSeparator());
-        otherFileContent.add("DIMENSION : 4");
-        otherFileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
-        otherFileContent.add("NODE_COORD_SECTION");
-        otherFileContent.add("7 10.2 15.0");
-        otherFileContent.add("2 14.2 15.0");
-        otherFileContent.add("9 14.8 20.0");
-        otherFileContent.add("4 10.8 20.0");
-
-        Metadata<Object, DefaultWeightedEdge> otherFilesMetaData =
-            importGraphFromFile(otherFileContent).getSecond();
-
         StringJoiner fileContent = new StringJoiner(System.lineSeparator());
         fileContent.add("TYPE : TSP");
         fileContent.add("DIMENSION : 4");
@@ -282,10 +269,75 @@ public class TSPLIBImporterTest
         fileContent.add("-1");
         fileContent.add("EOF");
 
-        List<Integer> expectedTour = Arrays.asList(9, 4, 7, 2);
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    @Test
+    public void testImportTour_singleTourAsRow()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9 4  7\t2  -1");
+        fileContent.add("EOF");
+
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    @Test
+    public void testImportTour_singleTourAsRowWithoutListEndMarker()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9 4  7\t2  ");
+        fileContent.add("EOF");
+
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    @Test
+    public void testImportTour_singleTourAsRowWithoutListEndMarkerAndEOF()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9 4  7\t2  ");
+
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    public static void assertImportedTour(StringJoiner fileContent, List<Integer> expectedTour)
+    {
+        // Create and import another file that contains the corresponding TSP instance
+        StringJoiner otherFileContent = new StringJoiner(System.lineSeparator());
+        otherFileContent.add("DIMENSION : 4");
+        otherFileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        otherFileContent.add("NODE_COORD_SECTION");
+        otherFileContent.add("7 10.2 15.0");
+        otherFileContent.add("2 14.2 15.0");
+        otherFileContent.add("9 14.8 20.0");
+        otherFileContent.add("4 10.8 20.0");
+        Metadata<Object, DefaultWeightedEdge> otherFilesMetaData =
+            importGraphFromFile(otherFileContent).getSecond();
 
         TSPLIBImporter<Object, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
         StringReader reader = new StringReader(fileContent.toString());
+
         List<Object> tour = importer.importTour(otherFilesMetaData, reader);
 
         assertTour(tour, expectedTour, otherFilesMetaData.getVertexToNodeMapping());
