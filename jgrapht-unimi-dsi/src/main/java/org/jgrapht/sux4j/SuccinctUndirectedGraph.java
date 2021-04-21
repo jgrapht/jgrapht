@@ -103,7 +103,7 @@ public class SuccinctUndirectedGraph
         super((int) graph.iterables().vertexCount(), (int) graph.iterables().edgeCount());
 
         if (graph.getType().isDirected())
-            throw new IllegalArgumentException("This class supports directed graphs only");
+            throw new IllegalArgumentException("This class supports undirected graphs only");
         assert graph.getType().isUndirected();
         final GraphIterables<Integer, E> iterables = graph.iterables();
         if (iterables.vertexCount() > Integer.MAX_VALUE)
