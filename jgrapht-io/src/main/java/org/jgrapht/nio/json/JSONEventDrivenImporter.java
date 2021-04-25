@@ -23,8 +23,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.UUID;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
@@ -98,8 +99,19 @@ public class JSONEventDrivenImporter
     implements
     EventDrivenImporter<String, Triple<String, String, Double>>
 {
+    /**
+     * Default name for the vertices collection
+     */
+    public static final String DEFAULT_VERTICES_COLLECTION_NAME = "nodes";
+    /**
+     * Default name for the edges collection
+     */
+    public static final String DEFAULT_EDGES_COLLECTION_NAME = "edges";
+
     private boolean notifyVertexAttributesOutOfOrder;
     private boolean notifyEdgeAttributesOutOfOrder;
+    private String verticesCollectionName = DEFAULT_VERTICES_COLLECTION_NAME;
+    private String edgesCollectionName = DEFAULT_EDGES_COLLECTION_NAME;
 
     /**
      * Constructs a new importer.
@@ -122,6 +134,46 @@ public class JSONEventDrivenImporter
     {
         this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
         this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
+    }
+
+    /**
+     * Get the name used for the vertices collection in the file.
+     * 
+     * @return the name used for the vertices collection in the file.
+     */
+    public String getVerticesCollectionName()
+    {
+        return verticesCollectionName;
+    }
+
+    /**
+     * Set the name used for the vertices collection in the file.
+     * 
+     * @param verticesCollectionName the name
+     */
+    public void setVerticesCollectionName(String verticesCollectionName)
+    {
+        this.verticesCollectionName = Objects.requireNonNull(verticesCollectionName);
+    }
+
+    /**
+     * Get the name used for the edges collection in the file.
+     * 
+     * @return the name used for the edges collection in the file.
+     */
+    public String getEdgesCollectionName()
+    {
+        return edgesCollectionName;
+    }
+
+    /**
+     * Set the name used for the edges collection in the file.
+     * 
+     * @param edgesCollectionName the name
+     */
+    public void setEdgesCollectionName(String edgesCollectionName)
+    {
+        this.edgesCollectionName = Objects.requireNonNull(edgesCollectionName);
     }
 
     @Override
@@ -175,8 +227,6 @@ public class JSONEventDrivenImporter
         JsonBaseListener
     {
         private static final String GRAPH = "graph";
-        private static final String NODES = "nodes";
-        private static final String EDGES = "edges";
         private static final String ID = "id";
 
         private static final String WEIGHT = "weight";
@@ -320,9 +370,9 @@ public class JSONEventDrivenImporter
             String name = unquote(ctx.STRING().getText());
 
             if (objectLevel == 1 && arrayLevel == 0) {
-                if (NODES.equals(name)) {
+                if (verticesCollectionName.equals(name)) {
                     insideNodes = true;
-                } else if (EDGES.equals(name)) {
+                } else if (edgesCollectionName.equals(name)) {
                     insideEdges = true;
                 }
             }
@@ -336,9 +386,9 @@ public class JSONEventDrivenImporter
             String name = unquote(ctx.STRING().getText());
 
             if (objectLevel == 1 && arrayLevel == 0) {
-                if (NODES.equals(name)) {
+                if (verticesCollectionName.equals(name)) {
                     insideNodes = false;
-                } else if (EDGES.equals(name)) {
+                } else if (edgesCollectionName.equals(name)) {
                     insideEdges = false;
                 }
             }

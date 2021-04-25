@@ -17,13 +17,19 @@
  */
 package org.jgrapht.nio.json;
 
-import org.apache.commons.text.*;
-import org.jgrapht.*;
-import org.jgrapht.nio.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
+import org.apache.commons.text.StringEscapeUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.GraphExporter;
+import org.jgrapht.nio.IntegerIdProvider;
 
 /**
  * Exports a graph using <a href="https://tools.ietf.org/html/rfc8259">JSON</a>.
@@ -53,8 +59,20 @@ public class JSONExporter<V, E>
     implements
     GraphExporter<V, E>
 {
+    /**
+     * Default name for the vertices collection
+     */
+    public static final String DEFAULT_VERTICES_COLLECTION_NAME = "nodes";
+    /**
+     * Default name for the edges collection
+     */
+
+    public static final String DEFAULT_EDGES_COLLECTION_NAME = "edges";
+
     private static final String CREATOR = "JGraphT JSON Exporter";
     private static final String VERSION = "1";
+    private String verticesCollectionName = DEFAULT_VERTICES_COLLECTION_NAME;
+    private String edgesCollectionName = DEFAULT_EDGES_COLLECTION_NAME;
 
     /**
      * Creates a new exporter with integers for the vertex identifiers.
@@ -72,6 +90,46 @@ public class JSONExporter<V, E>
     public JSONExporter(Function<V, String> vertexIdProvider)
     {
         super(vertexIdProvider);
+    }
+
+    /**
+     * Get the name used for the vertices collection in the file.
+     * 
+     * @return the name used for the vertices collection in the file.
+     */
+    public String getVerticesCollectionName()
+    {
+        return verticesCollectionName;
+    }
+
+    /**
+     * Set the name used for the vertices collection in the file.
+     * 
+     * @param verticesCollectionName the name
+     */
+    public void setVerticesCollectionName(String verticesCollectionName)
+    {
+        this.verticesCollectionName = Objects.requireNonNull(verticesCollectionName);
+    }
+
+    /**
+     * Get the name used for the edges collection in the file.
+     * 
+     * @return the name used for the edges collection in the file.
+     */
+    public String getEdgesCollectionName()
+    {
+        return edgesCollectionName;
+    }
+
+    /**
+     * Set the name used for the edges collection in the file.
+     * 
+     * @param edgesCollectionName the name
+     */
+    public void setEdgesCollectionName(String edgesCollectionName)
+    {
+        this.edgesCollectionName = Objects.requireNonNull(edgesCollectionName);
     }
 
     @Override
@@ -97,7 +155,7 @@ public class JSONExporter<V, E>
          * Vertices
          */
         out.print(',');
-        out.print(quoted("nodes"));
+        out.print(quoted(verticesCollectionName));
         out.print(':');
         out.print('[');
         boolean printComma = false;
@@ -115,7 +173,7 @@ public class JSONExporter<V, E>
          * Edges
          */
         out.print(',');
-        out.print(quoted("edges"));
+        out.print(quoted(edgesCollectionName));
         out.print(':');
         out.print('[');
         printComma = false;

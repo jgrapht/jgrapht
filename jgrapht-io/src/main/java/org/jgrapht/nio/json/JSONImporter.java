@@ -20,6 +20,7 @@ package org.jgrapht.nio.json;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -117,10 +118,20 @@ public class JSONImporter<V, E>
      * Default key used for vertex ID.
      */
     public static final String DEFAULT_VERTEX_ID_KEY = "ID";
+    /**
+     * Default name for the vertices collection
+     */
+    public static final String DEFAULT_VERTICES_COLLECTION_NAME = "nodes";
+    /**
+     * Default name for the edges collection
+     */
+    public static final String DEFAULT_EDGES_COLLECTION_NAME = "edges";
 
     private Function<String, V> vertexFactory;
     private BiFunction<String, Map<String, Attribute>, V> vertexWithAttributesFactory;
     private Function<Map<String, Attribute>, E> edgeWithAttributesFactory;
+    private String verticesCollectionName = DEFAULT_VERTICES_COLLECTION_NAME;
+    private String edgesCollectionName = DEFAULT_EDGES_COLLECTION_NAME;
 
     /**
      * Construct a new importer
@@ -153,6 +164,8 @@ public class JSONImporter<V, E>
         final boolean edgesOutOfOrder = edgeWithAttributesFactory == null;
         JSONEventDrivenImporter genericImporter =
             new JSONEventDrivenImporter(verticesOutOfOrder, edgesOutOfOrder);
+        genericImporter.setVerticesCollectionName(verticesCollectionName);
+        genericImporter.setEdgesCollectionName(edgesCollectionName);
 
         Consumers consumers = new Consumers(graph);
 
@@ -243,6 +256,46 @@ public class JSONImporter<V, E>
         Function<Map<String, Attribute>, E> edgeWithAttributesFactory)
     {
         this.edgeWithAttributesFactory = edgeWithAttributesFactory;
+    }
+
+    /**
+     * Get the name used for the vertices collection in the file.
+     * 
+     * @return the name used for the vertices collection in the file.
+     */
+    public String getVerticesCollectionName()
+    {
+        return verticesCollectionName;
+    }
+
+    /**
+     * Set the name used for the vertices collection in the file.
+     * 
+     * @param verticesCollectionName the name
+     */
+    public void setVerticesCollectionName(String verticesCollectionName)
+    {
+        this.verticesCollectionName = Objects.requireNonNull(verticesCollectionName);
+    }
+
+    /**
+     * Get the name used for the edges collection in the file.
+     * 
+     * @return the name used for the edges collection in the file.
+     */
+    public String getEdgesCollectionName()
+    {
+        return edgesCollectionName;
+    }
+
+    /**
+     * Set the name used for the edges collection in the file.
+     * 
+     * @param edgesCollectionName the name
+     */
+    public void setEdgesCollectionName(String edgesCollectionName)
+    {
+        this.edgesCollectionName = Objects.requireNonNull(edgesCollectionName);
     }
 
     private class Consumers

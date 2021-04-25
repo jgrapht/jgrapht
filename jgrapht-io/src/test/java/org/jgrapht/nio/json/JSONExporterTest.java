@@ -343,4 +343,37 @@ public class JSONExporterTest
 
     }
 
+    @Test
+    public void testWithOtherNamesForVerticesAndEdges()
+        throws UnsupportedEncodingException
+    {
+        String expected =
+            "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"vertices\":[{\"id\":\"1\"},{\"id\":\"2\"},{\"id\":\"3\"},{\"id\":\"4\"}],\"links\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\"},{\"id\":\"2\",\"source\":\"2\",\"target\":\"3\"},{\"id\":\"3\",\"source\":\"3\",\"target\":\"4\"},{\"id\":\"4\",\"source\":\"1\",\"target\":\"4\"}]}";
+
+        Graph<Integer,
+            DefaultEdge> graph = GraphTypeBuilder
+                .directed().edgeClass(DefaultEdge.class)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
+                .allowingSelfLoops(false).buildGraph();
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(1, 4);
+
+        JSONExporter<Integer, DefaultEdge> exporter = new JSONExporter<>(v -> String.valueOf(v));
+        exporter.setVerticesCollectionName("vertices");
+        exporter.setEdgesCollectionName("links");
+        exporter.setEdgeIdProvider(new IntegerIdProvider<>(1));
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(graph, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        assertEquals(expected, res);
+    }
+    
 }
