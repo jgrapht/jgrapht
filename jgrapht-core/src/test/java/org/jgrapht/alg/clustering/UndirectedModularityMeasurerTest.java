@@ -70,7 +70,7 @@ public class UndirectedModularityMeasurerTest {
 		UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer = new UndirectedModularityMeasurer<>(g);
 
 		List<Set<Integer>> partitions = List.of(Set.of(0, 1, 2, 3, 4), Set.of(5, 6, 7, 8));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(mod, 0.4112426, 1e-6);
 
@@ -111,7 +111,7 @@ public class UndirectedModularityMeasurerTest {
 		UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer = new UndirectedModularityMeasurer<>(g);
 
 		List<Set<Integer>> partitions = List.of(Set.of(0, 1, 2, 3, 4, 5, 6, 7, 8));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(mod, 0.0, 1e-6);
 
@@ -152,7 +152,7 @@ public class UndirectedModularityMeasurerTest {
 		UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer = new UndirectedModularityMeasurer<>(g);
 
 		List<Set<Integer>> partitions = List.of(Set.of(0, 3, 4), Set.of(1, 2, 5, 6, 7, 8));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(mod, 0.118343, 1e-6);
 
@@ -194,7 +194,7 @@ public class UndirectedModularityMeasurerTest {
 
 		List<Set<Integer>> partitions = List.of(Set.of(0), Set.of(3), Set.of(4), Set.of(1), Set.of(2), Set.of(5),
 				Set.of(6), Set.of(7), Set.of(8));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(mod, -0.118343, 1e-6);
 
@@ -239,7 +239,7 @@ public class UndirectedModularityMeasurerTest {
 
 		List<Set<Integer>> partitions = List.of(Set.of(0, 1, 2, 3, 4), Set.of(5, 6, 7), Set.of(8, 9, 10, 11),
 				Set.of(12, 13, 14, 15));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(0.565104, mod, 1e-6);
 
@@ -280,7 +280,7 @@ public class UndirectedModularityMeasurerTest {
 		UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer = new UndirectedModularityMeasurer<>(g);
 
 		List<Set<Integer>> partitions = List.of(Set.of(0, 3, 4), Set.of(1, 2, 5, 7, 8, 9));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(mod, 0.118343, 1e-6);
 
@@ -325,7 +325,7 @@ public class UndirectedModularityMeasurerTest {
 		UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer = new UndirectedModularityMeasurer<>(g);
 
 		List<Set<Integer>> partitions = List.of(Set.of(0, 1, 2, 3, 4), Set.of(5, 6, 7, 8));
-		double mod = measurer.modulariry(partitions);
+		double mod = measurer.modularity(partitions);
 
 		assertEquals(mod, 0.42444444444444446, 1e-6);
 

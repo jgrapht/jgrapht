@@ -70,7 +70,7 @@ public class UndirectedModularityMeasurer<V, E> {
 	 * @param partitions the partitions
 	 * @return the modularity
 	 */
-	public double modulariry(List<Set<V>> partitions) {
+	public double modularity(List<Set<V>> partitions) {
 		// index partitions and count total (weighted) degree inside each partition
 		int totalPartitions = partitions.size();
 		Map<V, Integer> vertexPartition = new HashMap<>();
