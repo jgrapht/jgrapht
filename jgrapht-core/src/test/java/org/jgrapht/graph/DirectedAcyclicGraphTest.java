@@ -601,6 +601,54 @@ public class DirectedAcyclicGraphTest
 
     }
 
+    @Test
+    public void testFastLookupGraphSpecificsStrategyAndArrayUnenforcedSet()
+    {
+        GraphSpecificsStrategy<String, DefaultEdge> graphSpecificsStrategy =
+            new FastLookupGraphSpecificsStrategy<>();
+        DirectedAcyclicGraph<String, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(SupplierUtil.createStringSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, false, graphSpecificsStrategy);
+        String a = "A";
+        String b = "B";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+
+        graph.addEdge(a, b);
+
+        Iterator<String> it = graph.iterator();
+        assertEquals(a, it.next());
+        assertEquals(b, it.next());
+    }
+
+    @Test
+    public void testFastLookupGraphSpecificsStrategyAndHashSet()
+    {
+        GraphSpecificsStrategy<String, DefaultEdge> graphSpecificsStrategy =
+            new FastLookupGraphSpecificsStrategy<>()
+            {
+                @Override public EdgeSetFactory<String, DefaultEdge> getEdgeSetFactory()
+                {
+                    return vertex -> new HashSet<>();
+                }
+            };
+        DirectedAcyclicGraph<String, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(SupplierUtil.createStringSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, false, graphSpecificsStrategy);
+        String a = "A";
+        String b = "B";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+
+        graph.addEdge(a, b);
+
+        Iterator<String> it = graph.iterator();
+        assertEquals(a, it.next());
+        assertEquals(b, it.next());
+    }
+
     // ~ Private Methods ----------------------------------------------------------
 
     private Graph<Long, DefaultEdge> setUpWithSeed(int vertices, int edges, long seed)
