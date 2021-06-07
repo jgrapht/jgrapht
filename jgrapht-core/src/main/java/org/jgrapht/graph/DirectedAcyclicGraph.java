@@ -126,7 +126,25 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param weighted if true the graph will be weighted, otherwise not
+     * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
+     * @param graphSpecificsStrategy strategy for constructing low-level graph specifics
+     */
+    public DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted,
+        boolean allowMultipleEdges, GraphSpecificsStrategy<V, E> graphSpecificsStrategy)
+    {
+        this(
+            vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
+            weighted, allowMultipleEdges, graphSpecificsStrategy);
+    }
+
+    /**
+     * Construct a directed acyclic graph.
+     *
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
      * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
@@ -145,7 +163,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
      * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
@@ -160,11 +178,36 @@ public class DirectedAcyclicGraph<V, E>
         VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
         boolean weighted, boolean allowMultipleEdges)
     {
+        this(
+            vertexSupplier, edgeSupplier, visitedStrategyFactory, topoOrderMap, weighted,
+            allowMultipleEdges, new FastLookupGraphSpecificsStrategy<>());
+    }
+
+    /**
+     * Construct a directed acyclic graph.
+     *
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
+     *        implementation to adjust the performance tradeoffs.
+     * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
+     *        the way this class stores the topological order.
+     * @param weighted if true the graph will be weighted, otherwise not
+     * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
+     * @param graphSpecificsStrategy strategy for constructing low-level graph specifics
+     */
+    protected DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
+        VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
+        boolean weighted, boolean allowMultipleEdges,
+        GraphSpecificsStrategy<V, E> graphSpecificsStrategy)
+    {
         super(
             vertexSupplier, edgeSupplier,
             new DefaultGraphType.Builder()
                 .directed().allowMultipleEdges(allowMultipleEdges).allowSelfLoops(false)
-                .weighted(weighted).allowCycles(false).build());
+                .weighted(weighted).allowCycles(false).build(),
+            graphSpecificsStrategy);
         this.visitedStrategyFactory =
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
@@ -188,7 +231,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier edge supplier for the edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
