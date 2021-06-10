@@ -146,6 +146,7 @@
                                 <failOnWarning>true</failOnWarning>
                                 <compilerArgs>
                                     <arg>-Xlint:all,-deprecation</arg>
+                                    <arg>-Xpkginfo:always</arg>
                                 </compilerArgs>
                             </configuration>
                         </execution>
@@ -260,6 +261,7 @@
                         &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped.png?raw=true" style="height:100px;float:right" &gt;
                         </doctitle>
                         <detectJavaApiLink>false</detectJavaApiLink> <!-- Temporary fix for https://stackoverflow.com/questions/58836862/jdk-11-and-javadoc -->
+                        <notimestamp>true</notimestamp>
                     </configuration>
                     <executions>
                         <execution>
