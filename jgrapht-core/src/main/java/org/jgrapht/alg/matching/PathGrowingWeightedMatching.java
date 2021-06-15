@@ -290,8 +290,6 @@ public class PathGrowingWeightedMatching<V, E>
                         "Set is not a valid matching, please submit a bug report");
                 }
                 matching.add(e);
-                matchedVertices.add(s);
-                matchedVertices.add(t);
             }
         }
 
@@ -314,6 +312,8 @@ public class PathGrowingWeightedMatching<V, E>
             }
             // add edge to matching
             matching.add(e);
+            matchedVertices.add(s);
+            matchedVertices.add(t);
             matchingWeight += edgeWeight;
         }
 
