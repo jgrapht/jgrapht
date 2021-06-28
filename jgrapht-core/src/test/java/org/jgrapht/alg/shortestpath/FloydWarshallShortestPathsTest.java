@@ -162,4 +162,40 @@ public class FloydWarshallShortestPathsTest
         assertEquals(fw.getLastHop("a", "b"), vertexPath.get(vertexPath.size() - 2));
         assertNull(fw.getPath("b", "a"));
     }
+
+    @Test
+    public void testNegativeCycleDetection()
+    {
+        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> negativeCycle =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        negativeCycle.addVertex("a");
+        negativeCycle.addVertex("b");
+        negativeCycle.setEdgeWeight(negativeCycle.addEdge("a", "b"), 0.0);
+        negativeCycle.setEdgeWeight(negativeCycle.addEdge("b", "a"), -1.0);
+        FloydWarshallShortestPaths<String, DefaultWeightedEdge> fw =
+            new FloydWarshallShortestPaths<>(negativeCycle, true);
+        assertTrue(fw.containsNegativeCycle());
+        assertEquals(-1.0, fw.getPathWeight("a", "b"), 0.001);
+        assertEquals(-2.0, fw.getPathWeight("b", "a"), 0.001);
+        assertEquals(-1.0, fw.getPathWeight("a", "a"), 0.001);
+        assertEquals(-2.0, fw.getPathWeight("b", "b"), 0.001);
+    }
+
+    @Test
+    public void testNegCycleDetectionComputesCorrectWeightsWhenNoNegCycle()
+    {
+        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> negativeCycle =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        negativeCycle.addVertex("a");
+        negativeCycle.addVertex("b");
+        negativeCycle.setEdgeWeight(negativeCycle.addEdge("a", "b"), 0.0);
+        negativeCycle.setEdgeWeight(negativeCycle.addEdge("b", "a"), 1.0);
+        FloydWarshallShortestPaths<String, DefaultWeightedEdge> fw =
+            new FloydWarshallShortestPaths<>(negativeCycle, true);
+        assertFalse(fw.containsNegativeCycle());
+        assertEquals(0.0, fw.getPathWeight("a", "b"), 0.001);
+        assertEquals(1.0, fw.getPathWeight("b", "a"), 0.001);
+        assertEquals(0.0, fw.getPathWeight("a", "a"), 0.001);
+        assertEquals(0.0, fw.getPathWeight("b", "b"), 0.001);
+    }
 }
