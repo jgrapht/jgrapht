@@ -35,8 +35,8 @@ import java.util.*;
  * <p>
  * The iterator crosses components but does not track them, it only tracks visited vertices. The
  * iterator will detect (at some point) if the graph is not a directed acyclic graph and throw a
- * {@link IllegalArgumentException}.
- * 
+ * {@link NotDirectedAcyclicGraphException}.
+ *
  * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
@@ -52,8 +52,6 @@ public class TopologicalOrderIterator<V, E>
     extends
     AbstractGraphIterator<V, E>
 {
-    private static final String GRAPH_IS_NOT_A_DAG = "Graph is not a DAG";
-
     private Queue<V> queue;
     private Map<V, ModifiableInteger> inDegreeMap;
     private int remainingVertices;
@@ -106,7 +104,7 @@ public class TopologicalOrderIterator<V, E>
             for (E e : graph.incomingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 if (v.equals(u)) {
-                    throw new IllegalArgumentException(GRAPH_IS_NOT_A_DAG);
+                    throw new NotDirectedAcyclicGraphException();
                 }
                 d++;
             }
@@ -197,7 +195,7 @@ public class TopologicalOrderIterator<V, E>
              * Still expecting some vertices, but no vertex has zero degree.
              */
             if (remainingVertices > 0) {
-                throw new IllegalArgumentException(GRAPH_IS_NOT_A_DAG);
+                throw new NotDirectedAcyclicGraphException();
             }
         }
 

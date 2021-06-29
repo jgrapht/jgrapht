@@ -208,7 +208,7 @@ public class TopologicalOrderIteratorTest
         assertFalse(it.hasNext());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NotDirectedAcyclicGraphException.class)
     public void testWithSelfLoops()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -222,7 +222,7 @@ public class TopologicalOrderIteratorTest
         new TopologicalOrderIterator<>(graph);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NotDirectedAcyclicGraphException.class)
     public void testGraphWithCycle()
     {
         Graph<String, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
