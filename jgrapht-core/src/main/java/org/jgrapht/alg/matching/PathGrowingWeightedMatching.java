@@ -312,6 +312,8 @@ public class PathGrowingWeightedMatching<V, E>
             }
             // add edge to matching
             matching.add(e);
+            matchedVertices.add(s);
+            matchedVertices.add(t);
             matchingWeight += edgeWeight;
         }
 
