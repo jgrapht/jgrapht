@@ -58,12 +58,28 @@ public class FloydWarshallShortestPaths<V, E>
     private Object[][] backtrace = null;
     private Object[][] lastHopMatrix = null;
 
+    // Should the algorithm attempt to find negative cycles
+    private final boolean detectNegativeCycles;
+
     /**
      * Create a new instance of the Floyd-Warshall all-pairs shortest path algorithm.
      * 
      * @param graph the input graph
      */
     public FloydWarshallShortestPaths(Graph<V, E> graph)
+    {
+        this(graph, false);
+    }
+
+    /**
+     * Create a new instance of the Floyd-Warshall all-pairs shortest path algorithm.
+     *
+     * Optionally, detect negative cycles by disabling iteration optimizations.
+     *
+     * @param graph the input graph
+     * @param detectNegativeCycles optionally detect negative cycles
+     */
+    public FloydWarshallShortestPaths(Graph<V, E> graph, boolean detectNegativeCycles)
     {
         super(graph);
 
@@ -99,6 +115,7 @@ public class FloydWarshallShortestPaths<V, E>
         }
         this.minDegreeOne = minDegreeOne;
         this.minDegreeTwo = minDegreeTwo;
+        this.detectNegativeCycles = detectNegativeCycles;
     }
 
     /**
@@ -242,6 +259,24 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
+     * Return whether the graph contains a negative cycle.
+     * This runs in linear time by checking the self-loops of the adjacency matrix.
+     * @return true if a negative cycle is detected, otherwise false
+     *
+     */
+    public boolean containsNegativeCycle()
+    {
+        lazyCalculateMatrix();
+        int n = vertices.size();
+        for (int i = 0; i < n; i++) {
+            if (d[i][i] < 0.0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Calculates the matrix of all shortest paths, but does not populate the last hops matrix.
      */
     private void lazyCalculateMatrix()
@@ -305,11 +340,11 @@ public class FloydWarshallShortestPaths<V, E>
         // run fw alg
         for (int k = minDegreeTwo; k < n; k++) {
             for (int i = minDegreeOne; i < n; i++) {
-                if (i == k) {
+                if (!detectNegativeCycles && i == k) {
                     continue;
                 }
                 for (int j = minDegreeOne; j < n; j++) {
-                    if (i == j || j == k) {
+                    if (!detectNegativeCycles && (i == j || j == k)) {
                         continue;
                     }
 
