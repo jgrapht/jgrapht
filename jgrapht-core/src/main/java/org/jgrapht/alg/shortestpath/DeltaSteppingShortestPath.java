@@ -303,7 +303,7 @@ public class DeltaSteppingShortestPath<V, E>
         numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
         bucketStructure = new ArrayList<>(numOfBuckets);
         for (int i = 0; i < numOfBuckets; i++) {
-            bucketStructure.add(new ConcurrentSkipListSet<>());
+            bucketStructure.add(Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
         fillDistanceAndPredecessorMap();
 
@@ -570,9 +570,8 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Replaces the bucket at the {@code bucketIndex} index with a new instance of the
-     * {@link ConcurrentSkipListSet}. Return the reference to the set that was previously in the
-     * bucket.
+     * Replaces the bucket at the {@code bucketIndex} with a new instance of the concurrent set.
+     * Return the reference to the set that was previously in the bucket.
      *
      * @param bucketIndex bucket index
      * @return content of the bucket
@@ -580,7 +579,7 @@ public class DeltaSteppingShortestPath<V, E>
     private Set<V> getContentAndReplace(int bucketIndex)
     {
         Set<V> result = bucketStructure.get(bucketIndex);
-        bucketStructure.set(bucketIndex, new ConcurrentSkipListSet<V>());
+        bucketStructure.set(bucketIndex, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         return result;
     }
 
