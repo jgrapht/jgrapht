@@ -17,13 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.traverse.*;
-import org.jgrapht.util.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 /**
  * A directed acyclic graph (DAG).
@@ -66,8 +66,6 @@ public class DirectedAcyclicGraph<V, E>
     Iterable<V>
 {
     private static final long serialVersionUID = 4522128427004938150L;
-
-    private static final String EDGE_WOULD_INDUCE_A_CYCLE = "Edge would induce a cycle";
 
     private final Comparator<V> topoComparator;
     private final TopoOrderMap<V> topoOrderMap;
@@ -321,14 +319,12 @@ public class DirectedAcyclicGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        E result;
         try {
             updateDag(sourceVertex, targetVertex);
-            result = super.addEdge(sourceVertex, targetVertex);
+            return super.addEdge(sourceVertex, targetVertex);
         } catch (CycleFoundException e) {
-            throw new IllegalArgumentException(EDGE_WOULD_INDUCE_A_CYCLE);
+            throw new GraphCycleProhibitedException();
         }
-        return result;
     }
 
     /**
@@ -353,14 +349,12 @@ public class DirectedAcyclicGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        boolean result;
         try {
             updateDag(sourceVertex, targetVertex);
-            result = super.addEdge(sourceVertex, targetVertex, e);
+            return super.addEdge(sourceVertex, targetVertex, e);
         } catch (CycleFoundException ex) {
-            throw new IllegalArgumentException(EDGE_WOULD_INDUCE_A_CYCLE);
+            throw new GraphCycleProhibitedException();
         }
-        return result;
     }
 
     /**
@@ -411,6 +405,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return a topological order iterator
      */
+    @Override
     public Iterator<V> iterator()
     {
         return new TopoIterator();
