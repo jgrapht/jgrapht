@@ -22,7 +22,7 @@ package org.jgrapht.graph;
  */
 public class GraphCycleProhibitedException
     extends
-    RuntimeException
+    IllegalArgumentException
 {
     private static final long serialVersionUID = 2440845437318796595L;
 
