@@ -311,7 +311,8 @@ public class DirectedAcyclicGraph<V, E>
      * the "affected region", and should in general be faster than recomputing the whole topological
      * ordering from scratch.
      *
-     * @throws IllegalArgumentException if the edge would induce a cycle in the graph
+     * @throws IllegalArgumentException if the vertex is not in the graph
+     * @throws GraphCycleProhibitedException if the vertex would induce a cycle in the graph
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -335,7 +336,8 @@ public class DirectedAcyclicGraph<V, E>
      * the "affected region", and should in general be faster than recomputing the whole topological
      * ordering from scratch.
      *
-     * @throws IllegalArgumentException if the edge would induce a cycle in the graph
+     * @throws IllegalArgumentException if the vertex is not in the graph
+     * @throws GraphCycleProhibitedException if the vertex would induce a cycle in the graph
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
