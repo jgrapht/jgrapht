@@ -18,6 +18,9 @@
 package org.jgrapht.graph;
 
 /**
+ * Exception indicating that the vertexes supplied to {@link DirectedAcyclicGraph} would cause a
+ * cycle.
+ * 
  * @author EnderCrypt (Magnus Gunnarsson)
  */
 public class GraphCycleProhibitedException
