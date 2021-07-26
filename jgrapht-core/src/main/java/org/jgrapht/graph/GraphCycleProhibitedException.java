@@ -26,13 +26,8 @@ public class GraphCycleProhibitedException
 {
     private static final long serialVersionUID = 2440845437318796595L;
 
-    public GraphCycleProhibitedException(String message)
+    public GraphCycleProhibitedException()
     {
-        super(message);
-    }
-
-    public GraphCycleProhibitedException(String message, Throwable cause)
-    {
-        super(message, cause);
+        super("Edge would induce a cycle");
     }
 }
