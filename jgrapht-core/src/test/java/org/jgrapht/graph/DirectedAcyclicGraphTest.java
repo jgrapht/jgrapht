@@ -66,7 +66,7 @@ public class DirectedAcyclicGraphTest
                 boolean dagRejectedEdge = false;
                 try {
                     dag.addEdge(edgeSource, edgeTarget);
-                } catch (IllegalArgumentException e) {
+                } catch (GraphCycleProhibitedException e) {
                     // okay, it did't add that edge
                     dagRejectedEdge = true;
                 }
