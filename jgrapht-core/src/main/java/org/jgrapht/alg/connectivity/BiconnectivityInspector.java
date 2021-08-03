@@ -318,7 +318,7 @@ public class BiconnectivityInspector<V, E>
                 if (lowNV > discTime.get(v))
                     bridges.add(edge);
 
-                // 1. nonroot vertex v is a cutpoint iff there is a child y of v such that
+                // 1. nonroot vertex v is a cutpoint if there is a child y of v such that
                 // lowpoint(y) >= depth(v)
                 // 2. root vertex v is a cutpoint if it has more than 1 child
                 if ((parent != null && lowNV >= discTime.get(v))
