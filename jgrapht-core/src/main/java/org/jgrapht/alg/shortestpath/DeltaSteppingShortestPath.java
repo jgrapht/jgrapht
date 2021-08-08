@@ -23,6 +23,7 @@ import org.jgrapht.alg.util.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 /**
  * Parallel implementation of a single-source shortest path algorithm: the delta-stepping algorithm.
@@ -120,6 +121,11 @@ public class DeltaSteppingShortestPath<V, E>
      * Buckets structure.
      */
     private List<Set<V>> bucketStructure;
+    /**
+     * Comparator for vertices in the graph which is used to create {@code ConcurrentSkipListSet}
+     * instances for the {@code bucketStructure}.
+     */
+    private Comparator<V> vertexComparator;
 
     /**
      * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to keep
@@ -159,9 +165,40 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}. It
-     * is up to a user of this algorithm to handle the creation and termination of the provided
-     * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * Constructs a new instance of the algorithm for a given {@code graph}, {@code executor}
+     * and {@code vertexComparator}. It is up to a user of this algorithm to handle the creation
+     * and termination of the provided {@code executor}. For utility methods to manage a
+     * {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}. {@code vertexComparator}
+     * provided via this constructor is used to create instances of {@code ConcurrentSkipListSet}
+     * for the individual buckets. This gives a gives a small performance benefit for shortest
+     * paths computation.
+     *
+     * @param graph graph
+     * @param executor executor which will be used for parallelization
+     * @param vertexComparator comparator for vertices of the {@code graph}
+     */
+    public DeltaSteppingShortestPath(Graph<V, E> graph, ThreadPoolExecutor executor, Comparator<V> vertexComparator)
+    {
+        this(graph, 0.0, executor, vertexComparator);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, delta.
+     *
+     * @param graph the graph
+     * @param delta bucket width
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
+     */
+    @Deprecated
+    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta)
+    {
+        this(graph, delta, DEFAULT_PARALLELISM);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph the graph
@@ -171,7 +208,64 @@ public class DeltaSteppingShortestPath<V, E>
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, ThreadPoolExecutor executor)
     {
         super(graph);
-        init(graph, delta, executor);
+        Objects.requireNonNull(executor, "executor must not be null!");
+        init(graph, delta, executor, null);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, delta, {@code executor}
+     * and {@code vertexComparator}. It is up to a user of this algorithm to handle the creation
+     * and termination of the provided {@code executor}. For utility methods to manage a
+     * {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}. {@code vertexComparator}
+     * provided via this constructor is used to create instances of {@code ConcurrentSkipListSet}
+     * for the individual buckets. This gives a gives a small performance benefit for shortest
+     * paths computation.
+     *
+     * @param graph the graph
+     * @param delta bucket width
+     * @param executor executor which will be used for parallelization
+     * @param vertexComparator comparator for vertices of the {@code graph}
+     */
+    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, ThreadPoolExecutor executor,
+                                     Comparator<V> vertexComparator)
+    {
+        super(graph);
+        Objects.requireNonNull(executor, "executor must not be null!");
+        Objects.requireNonNull(executor, "vertexComparator must not be null!");
+        init(graph, delta, executor, vertexComparator);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, parallelism.
+     *
+     * @param graph the graph
+     * @param parallelism maximum number of threads used in the computations
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)}
+     */
+    @Deprecated
+    public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism)
+    {
+        this(graph, 0.0, parallelism);
+    }
+
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, delta, parallelism. If delta is
+     * $0.0$ it will be computed during the algorithm execution. In general if the value of
+     * $\frac{maximum edge weight}{maximum outdegree}$ is known beforehand, it is preferable to
+     * specify it via this constructor, because processing the whole graph to compute this value may
+     * significantly slow down the algorithm.
+     *
+     * @param graph the graph
+     * @param delta bucket width
+     * @param parallelism maximum number of threads used in the computations
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
+     */
+    @Deprecated
+    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism)
+    {
+        super(graph);
+        init(graph, delta, ConcurrencyUtil.createThreadPoolExecutor(parallelism), null);
     }
 
     /**
@@ -183,13 +277,13 @@ public class DeltaSteppingShortestPath<V, E>
      * @param delta bucket width
      * @param executor executor which will be used for parallelization
      */
-    private void init(Graph<V, E> graph, double delta, ThreadPoolExecutor executor)
-    {
+    private void init(Graph<V, E> graph, double delta, ThreadPoolExecutor executor, Comparator<V> vertexComparator){
         if (delta < 0) {
             throw new IllegalArgumentException(DELTA_MUST_BE_NON_NEGATIVE);
         }
         this.delta = delta;
         this.parallelism = executor.getMaximumPoolSize();
+        this.vertexComparator = vertexComparator;
         distanceAndPredecessorMap = new ConcurrentHashMap<>(graph.vertexSet().size());
         completionService = new ExecutorCompletionService<>(executor);
         verticesQueue = new ConcurrentLinkedQueue<>();
@@ -302,8 +396,9 @@ public class DeltaSteppingShortestPath<V, E>
         }
         numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
         bucketStructure = new ArrayList<>(numOfBuckets);
+        Supplier<Set<V>> bucketsSupplier = getBucketsSupplier(source);
         for (int i = 0; i < numOfBuckets; i++) {
-            bucketStructure.add(Collections.newSetFromMap(new ConcurrentHashMap<>()));
+            bucketStructure.add(bucketsSupplier.get());
         }
         fillDistanceAndPredecessorMap();
 
@@ -311,6 +406,23 @@ public class DeltaSteppingShortestPath<V, E>
 
         return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
     }
+
+    /**
+     * Creates a supplier of sets for the {@code bucketStructure}.
+     *
+     * @param vertex a vertex in the graph
+     * @return supplier of buckets
+     */
+    private Supplier<Set<V>> getBucketsSupplier(V vertex) {
+        if(vertexComparator != null){
+            return () -> new ConcurrentSkipListSet<>(vertexComparator);
+        } else if (vertex instanceof Comparable) {
+            return () -> new ConcurrentSkipListSet<>();
+        } else {
+            return () -> Collections.newSetFromMap(new ConcurrentHashMap<>());
+        }
+    }
+
 
     /**
      * Calculates value of {@link #delta}. The value is calculated as the maximal edge weight
