@@ -126,6 +126,10 @@ public class DeltaSteppingShortestPath<V, E>
      * instances for the {@code bucketStructure}.
      */
     private Comparator<V> vertexComparator;
+    /**
+     * Supplier of the buckets for the {@code bucketStructure}.
+     */
+    private Supplier<Set<V>> bucketsSupplier;
 
     /**
      * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to keep
@@ -396,7 +400,7 @@ public class DeltaSteppingShortestPath<V, E>
         }
         numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
         bucketStructure = new ArrayList<>(numOfBuckets);
-        Supplier<Set<V>> bucketsSupplier = getBucketsSupplier(source);
+        bucketsSupplier = getBucketsSupplier(source);
         for (int i = 0; i < numOfBuckets; i++) {
             bucketStructure.add(bucketsSupplier.get());
         }
@@ -691,7 +695,7 @@ public class DeltaSteppingShortestPath<V, E>
     private Set<V> getContentAndReplace(int bucketIndex)
     {
         Set<V> result = bucketStructure.get(bucketIndex);
-        bucketStructure.set(bucketIndex, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        bucketStructure.set(bucketIndex, bucketsSupplier.get());
         return result;
     }
 
