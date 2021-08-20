@@ -109,6 +109,68 @@ public class DeltaSteppingShortestPathTest
     }
 
     @Test
+    public void testSupplyComparator() {
+        Graph<String, DefaultWeightedEdge> graph =
+                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        String v0 = "v0";
+        String v1 = "v1";
+        String v2 = "v2";
+        Graphs.addEdgeWithVertices(graph, v0, v1);
+        Graphs.addEdgeWithVertices(graph, v1, v2);
+
+        DeltaSteppingShortestPath<String, DefaultWeightedEdge> shortestPath
+                = new DeltaSteppingShortestPath<>(graph, executor);
+        GraphPath<String, DefaultWeightedEdge> path = shortestPath.getPath(v0, v2);
+
+        assertEquals(path.getWeight(), 2.0, 1e-9);
+        assertEquals(path.getVertexList(), Arrays.asList(v0, v1, v2));
+    }
+
+    @Test
+    public void testComparableVertices() {
+        class ComparableVertex implements Comparable<ComparableVertex>{
+            @Override
+            public int compareTo(ComparableVertex comparableVertex) {
+                return 0;
+            }
+        }
+        ComparableVertex v1 = new ComparableVertex();
+        ComparableVertex v2 = new ComparableVertex();
+
+        Graph<ComparableVertex, DefaultWeightedEdge> graph =
+                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph, Arrays.asList(v1, v2));
+        Graphs.addEdge(graph, v1, v2, 1.0);
+
+        DeltaSteppingShortestPath<ComparableVertex, DefaultWeightedEdge> shortestPath
+                = new DeltaSteppingShortestPath<>(graph, executor);
+        GraphPath<ComparableVertex, DefaultWeightedEdge> path = shortestPath.getPath(v1, v2);
+
+        assertEquals(path.getWeight(), 1.0, 1e-9);
+        assertEquals(path.getVertexList(), Arrays.asList(v1, v2));
+    }
+
+    @Test
+    public void testNonComparableVertices() {
+        class NonComparableVertex {
+        }
+        NonComparableVertex v1 = new NonComparableVertex();
+        NonComparableVertex v2 = new NonComparableVertex();
+
+        Graph<NonComparableVertex, DefaultWeightedEdge> graph =
+                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph, Arrays.asList(v1, v2));
+        Graphs.addEdge(graph, v1, v2, 1.0);
+
+        DeltaSteppingShortestPath<NonComparableVertex, DefaultWeightedEdge> shortestPath
+                = new DeltaSteppingShortestPath<>(graph, executor);
+        GraphPath<NonComparableVertex, DefaultWeightedEdge> path = shortestPath.getPath(v1, v2);
+
+        assertEquals(path.getWeight(), 1.0, 1e-9);
+        assertEquals(path.getVertexList(), Arrays.asList(v1, v2));
+    }
+
+    @Test
     public void testGetPath()
     {
         Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
