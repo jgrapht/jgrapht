@@ -36,6 +36,12 @@ public class AllDirectedPaths<V, E>
     private final Graph<V, E> graph;
 
     /**
+     * Provides validation for the paths which will be computed. If the validator is {@code null},
+     * this means that all paths are valid.
+     */
+    private final PathValidator<V, E> pathValidator;
+
+    /**
      * Create a new instance.
      *
      * @param graph the input graph
@@ -43,7 +49,24 @@ public class AllDirectedPaths<V, E>
      */
     public AllDirectedPaths(Graph<V, E> graph)
     {
+        this(graph, null);
+    }
+
+    /**
+     * Create a new instance with given {@code pathValidator}.
+     *
+     * If non-{@code null}, the {@code pathValidator} will be used while searching for paths, validating the addition
+     * of any edge to a partial path. Zero-length paths will therefore not be subject to {@code pathValidator};
+     * length-1 paths will.
+     *
+     * @param graph the input graph
+     * @param pathValidator validator for computed paths; may be null
+     * @throws IllegalArgumentException if the graph is not directed
+     */
+    public AllDirectedPaths(Graph<V, E> graph, PathValidator<V, E> pathValidator)
+    {
         this.graph = GraphTests.requireDirected(graph);
+        this.pathValidator = pathValidator;
     }
 
     /**
@@ -208,6 +231,7 @@ public class AllDirectedPaths<V, E>
         // Bootstrap the search with the source vertices
         for (V source : sourceVertices) {
             if (targetVertices.contains(source)) {
+                // pathValidator intentionally not invoked here
                 completePaths.add(GraphWalk.singletonWalk(graph, source, 0d));
             }
 
@@ -218,15 +242,16 @@ public class AllDirectedPaths<V, E>
             for (E edge : graph.outgoingEdgesOf(source)) {
                 assert graph.getEdgeSource(edge).equals(source);
 
-                if (targetVertices.contains(graph.getEdgeTarget(edge))) {
-                    completePaths.add(makePath(Collections.singletonList(edge)));
-                }
+                if (pathValidator == null || pathValidator.isValidPath(GraphWalk.emptyWalk(graph), edge)) {
+                    if (targetVertices.contains(graph.getEdgeTarget(edge))) {
+                        completePaths.add(makePath(Collections.singletonList(edge)));
+                    }
 
-                if (edgeMinDistancesFromTargets.containsKey(edge)
-                    && (maxPathLength == null || maxPathLength > 1))
-                {
-                    List<E> path = Collections.singletonList(edge);
-                    incompletePaths.add(path);
+                    if (edgeMinDistancesFromTargets.containsKey(edge)
+                            && (maxPathLength == null || maxPathLength > 1)) {
+                        List<E> path = Collections.singletonList(edge);
+                        incompletePaths.add(path);
+                    }
                 }
             }
         }
@@ -260,6 +285,11 @@ public class AllDirectedPaths<V, E>
 
                     // If requested, make sure this path isn't self-intersecting
                     if (simplePathsOnly && pathVertices.contains(graph.getEdgeTarget(outEdge))) {
+                        continue;
+                    }
+
+                    // If requested, validate the path
+                    if (pathValidator != null && !pathValidator.isValidPath(makePath(incompletePath), outEdge)) {
                         continue;
                     }
 
