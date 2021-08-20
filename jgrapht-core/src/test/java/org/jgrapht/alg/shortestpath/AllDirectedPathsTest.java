@@ -50,13 +50,8 @@ public class AllDirectedPathsTest
     {
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
-        Set<String> sources = new HashSet<>();
-        sources.add(I1);
-        sources.add(I2);
-
-        Set<String> targets = new HashSet<>();
-        targets.add(O1);
-        targets.add(O2);
+        Set<String> sources = vertexSet(I1, I2);
+        Set<String> targets = vertexSet(O1, O2);
 
         List<GraphPath<String, DefaultEdge>> allPaths =
             pathFindingAlg.getAllPaths(sources, targets, true, null);
@@ -70,12 +65,8 @@ public class AllDirectedPathsTest
         // Verify fix for http://github.com/jgrapht/jgrapht/issues/234.
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
-        Set<String> sources = new HashSet<>();
-        sources.add(I1);
-
-        Set<String> targets = new HashSet<>();
-        targets.add(I1);
-        targets.add(A);
+        Set<String> sources = vertexSet(I1);
+        Set<String> targets = vertexSet(I1, A);
 
         List<GraphPath<String, DefaultEdge>> allPaths =
             pathFindingAlg.getAllPaths(sources, targets, true, 1);
@@ -151,13 +142,8 @@ public class AllDirectedPathsTest
 
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph);
 
-        Set<String> sources = new HashSet<>();
-        sources.add(I1);
-        sources.add(I2);
-
-        Set<String> targets = new HashSet<>();
-        targets.add(O1);
-        targets.add(O2);
+        Set<String> sources = vertexSet(I1, I2);
+        Set<String> targets = vertexSet(O1, O2);
 
         List<GraphPath<String, DefaultEdge>> allPathsWithoutCycle =
             pathFindingAlg.getAllPaths(sources, targets, true, 8);
@@ -180,8 +166,8 @@ public class AllDirectedPathsTest
 
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
-        Set<String> sources = Collections.singleton(I1);
-        Set<String> targets = Collections.singleton(O1);
+        Set<String> sources = vertexSet(I1);
+        Set<String> targets = vertexSet(O1);
 
         try {
             pathFindingAlg.getAllPaths(sources, targets, false, null);
@@ -254,5 +240,9 @@ public class AllDirectedPathsTest
         graph.addEdge(F, O2);
 
         return graph;
+    }
+
+    private static HashSet<String> vertexSet(String... vertices) {
+        return new HashSet<>(Arrays.asList(vertices));
     }
 }
