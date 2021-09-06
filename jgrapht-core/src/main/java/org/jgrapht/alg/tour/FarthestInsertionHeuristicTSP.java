@@ -19,14 +19,15 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.util.ArrayUtil;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
-
-import static org.jgrapht.util.ArrayUtil.swap;
+import java.util.stream.Collectors;
 
 /**
- * The nearest neighbour heuristic algorithm for the TSP problem.
+ * The farthest insertion heuristic algorithm for the TSP problem.
  *
  * <p>
  * The travelling salesman problem (TSP) asks the following question: "Given a list of cities and
@@ -35,30 +36,31 @@ import static org.jgrapht.util.ArrayUtil.swap;
  * </p>
  *
  * <p>
- * This is perhaps the simplest and most straightforward TSP heuristic. The key to this algorithm is
- * to always visit the nearest city.
+ * Insertion heuristics are quite straightforward, and there are many variants to choose from. The
+ * basics of insertion heuristics is to start with a partial tour of a subset of all cities,
+ * and then iteratively an unvisited vertex (a vertex whichis not in the tour) is chosen given a criterion
+ * and inserted in the best position of the partial tour. Per each iteration, the farthest insertion
+ * heuristic selects the farthest unvisited vertex from the partial tour.
+ * This algorithm provides a guarantee to compute tours no more than
+ * 0(log N) times optimum (assuming the triangle inequality). However, regarding practical results,
+ * some references refer to this heuristic as one of the best among the category of insertion heuristics.
+ * This implementation uses the longest edge by default as the initial sub-tour if one is not provided.
  * </p>
  *
  * <p>
- * The tour computed with a {@code Nearest-Neighbor-Heuristic} can vary depending on the first
- * vertex visited. The first vertex for the next or for multiple subsequent tour computations (calls
- * of {@link #getTour(Graph)}) can be specified in the constructors
- * {@link #FarthestInsertionHeuristicTSP(Object)} or {@link #FarthestInsertionHeuristicTSP(Iterable)}.
- * This can be used for example to ensure that the first vertices visited are different for
- * subsequent calls of {@code  getTour(Graph)}. Once each specified first vertex is used, the first
- * vertex in subsequent tour computations is selected randomly from the graph. Alternatively
- * {@link #FarthestInsertionHeuristicTSP(Random)} or {@link #FarthestInsertionHeuristicTSP(long)} can be
- * used to specify a {@code Random} used to randomly select the vertex visited first.
+ * The description of this algorithm can be consulted on: <br>
+ * Johnson, D. S., & McGeoch, L. A. (2007). Experimental Analysis of Heuristics for the STSP.
+ * In G. Gutin & A. P. Punnen (Eds.), The Traveling Salesman Problem and Its Variations (pp. 369–443).
+ * Springer US. https://doi.org/10.1007/0-306-48213-4_9
  * </p>
  *
  * <p>
- * The implementation of this class is based on: <br>
- * Nilsson, Christian. "Heuristics for the traveling salesman problem." Linkoping University 38
- * (2003)
+ * This implementation can also be used in order to augment an existing partial tour. See
+ * constructor {@link #FarthestInsertionHeuristicTSP(GraphPath)}.
  * </p>
  *
  * <p>
- * The runtime complexity of this algorithm is $O(V^2)$.
+ * The runtime complexity of this class is $O(V^2)$.
  * </p>
  *
  * <p>
@@ -67,90 +69,53 @@ import static org.jgrapht.util.ArrayUtil.swap;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * @author Jose Alejandro Cornejo Acosta
+ * @author José Alejandro Cornejo Acosta
  */
 public class FarthestInsertionHeuristicTSP<V, E>
-        extends
-        HamiltonianCycleAlgorithmBase<V, E> {
-
-    private Random rng;
-    /**
-     * Nulled, if it has no next
-     */
-    private Iterator<V> initiaVertex;
+    extends
+    HamiltonianCycleAlgorithmBase<V, E>
+{
 
     /**
-     * Distances from V the tour
+     * Initial vertices in the tour
      */
-    double[] distances = null;
+    private GraphPath<V, E> initialSubtour;
+
+    /**
+     * Distances from unvisited vertices to the partially constructed tour
+     */
+    private double[] distances = null;
+
+    /**
+     * Matrix of distances between all vertices
+     */
+    private double[][] D;
+
+    /**
+     * Mapping of vertices to integers to work on.
+     */
+    private VertexToIntegerMapping<V> mapping;
 
 
     /**
-     * Constructor. By default a random vertex is chosen to start.
+     * Constructor. By default a sub-tour is chosen based on the longest edge
      */
-    public FarthestInsertionHeuristicTSP() {
-        this(null, new Random());
+    public FarthestInsertionHeuristicTSP()
+    {
+        this(null);
     }
 
     /**
      * Constructor
      *
-     * @param first First vertex to visit
-     * @throws NullPointerException if first is null
-     */
-    public FarthestInsertionHeuristicTSP(V first) {
-        this(
-                Collections
-                        .singletonList(
-                                Objects.requireNonNull(first, "Specified initial vertex cannot be null")),
-                new Random());
-    }
-
-    /**
-     * Constructor
+     * Specifies an existing sub-tour that will be augmented to form a complete tour when
+     * {@link #getTour(org.jgrapht.Graph) } is called
      *
-     * @param initialVertices The Iterable of vertices visited first in subsequent tour computations
-     *                        (per call of {@link #getTour(Graph)} another vertex of the Iterable is used as first)
-     * @throws NullPointerException if first is null
+     * @param subtour Initial sub-tour, or null to start with longest edge
      */
-    public FarthestInsertionHeuristicTSP(Iterable<V> initialVertices) {
-        this(
-                Objects.requireNonNull(initialVertices, "Specified initial vertices cannot be null"),
-                new Random());
-    }
-
-    /**
-     * Constructor
-     *
-     * @param seed seed for the random number generator
-     */
-    public FarthestInsertionHeuristicTSP(long seed) {
-        this(null, new Random(seed));
-    }
-
-    /**
-     * Constructor
-     *
-     * @param rng Random number generator
-     * @throws NullPointerException if rng is null
-     */
-    public FarthestInsertionHeuristicTSP(Random rng) {
-        this(null, Objects.requireNonNull(rng, "Random number generator cannot be null"));
-    }
-
-    /**
-     * Constructor
-     *
-     * @param initialVertices The Iterable of vertices visited first in subsequent tour
-     *                        computations, or null to choose at random
-     * @param rng             Random number generator
-     */
-    private FarthestInsertionHeuristicTSP(Iterable<V> initialVertices, Random rng) {
-        if (initialVertices != null) {
-            Iterator<V> iterator = initialVertices.iterator();
-            this.initiaVertex = iterator.hasNext() ? iterator : null;
-        }
-        this.rng = rng;
+    public FarthestInsertionHeuristicTSP(GraphPath<V, E> subtour)
+    {
+        this.initialSubtour = subtour;
     }
 
     // algorithm
@@ -163,188 +128,153 @@ public class FarthestInsertionHeuristicTSP<V, E>
      * @throws IllegalArgumentException if the graph is not undirected
      * @throws IllegalArgumentException if the graph is not complete
      * @throws IllegalArgumentException if the graph contains no vertices
-     * @throws IllegalArgumentException if the specified initial vertex is not in the graph
      */
     @Override
-    public GraphPath<V, E> getTour(Graph<V, E> graph) {
+    public GraphPath<V, E> getTour(Graph<V, E> graph)
+    {
         checkGraph(graph);
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
 
-        Set<V> vertexSet = graph.vertexSet();
-        int n = vertexSet.size();
-        distances = new double[n];
-        Arrays.fill(distances, Double.POSITIVE_INFINITY);
+        mapping = Graphs.getVertexToIntegerMapping(graph);
 
-        double[] edgesTour = new double[n-1];
 
-        @SuppressWarnings("unchecked") V[] path = (V[]) vertexSet.toArray(new Object[n + 1]);
-        List<V> pathList = Arrays.asList(path); // List backed by path-array
+        // Computes matrix of distances
+        E longesEdge = computeDistanceMatrix(graph);
+        if (initialSubtour == null || initialSubtour.getVertexList().isEmpty()) {
+            // If no initial subtour was provided, create one based on the longest edge
+            V v = graph.getEdgeSource(longesEdge);
+            V u = graph.getEdgeTarget(longesEdge);
 
-        // move initial vertex to the beginning
-        int initalIndex = getFirstVertexIndex(pathList);
-        ArrayUtil.swap(path, 0, initalIndex);
-        V k = path[0];
+            // at this point weight does not matter
+            initialSubtour = new GraphWalk<>(graph, List.of(v, u), -1);
+        }
+
+        int n = mapping.getIndexList().size();
+
+        // initialize tour
+        int[] tour = initPartialTour();
+
+        // init distances from unvisited vertices to the partially constructed tour
+        initDistances(tour);
 
         // construct tour
-        for (int i = 1; i < n; i++) {
+        for (int i = initialSubtour.getVertexList().size(); i < n; i++) {
 
-            // Update distances from vertices to the partial path
-            updateDistances(k, path, i, graph);
+            // Find the index of the farthest unvisited vertex.
+            int idxFarthest = getFarthest(i);
+            int k = tour[idxFarthest];
 
-            // Find the farthest unvisited vertex.
-            int farthest = getFarthest(i, n);
-            k = path[farthest];
-
-            // Search for the best position of vertex k in the path
+            // Search for the best position of vertex k in the tour
             double saving = Double.POSITIVE_INFINITY;
             int bestIndex = -1;
-            for (int j = 0; j < i; j++) {
-                V x = path[j];
-                V y = (j == i - 1 ? path[0] : path[j + 1]);
-                double dxk = graph.getEdgeWeight(graph.getEdge(x, k));
-                double dky = graph.getEdgeWeight(graph.getEdge(k, y));
-                double dxy = (x == y ? 0 : graph.getEdgeWeight(graph.getEdge(x, y)));
+            for (int j = 0; j <= i; j++) {
+
+                int x = (j == 0 ? tour[i - 1] : tour[j - 1]);
+                int y = (j == i ? tour[0] : tour[j]);
+
+                double dxk = D[x][k];
+                double dky = D[k][y];
+                double dxy = (x == y ? 0 : D[x][y]);
+
                 double savingTmp = dxk + dky - dxy;
                 if (savingTmp < saving) {
                     saving = savingTmp;
-                    bestIndex = j + 1;
+                    bestIndex = j;
                 }
             }
-            ArrayUtil.swap(path, i, farthest);
-            swap(distances, i, farthest);
+            swap(tour, i, idxFarthest);
+            swap(distances, i, idxFarthest);
 
-            // perform insertion
-            performInsertion(i, bestIndex, path);
-//            for (int j = i; j > bestIndex; j--) {
-//                path[j] = path[j - 1];
-//            }
-//                         if (i - bestIndex >= 0) System.arraycopy(path, bestIndex, path, bestIndex + 1, i - bestIndex);
-            path[bestIndex] = k;
-        }
-
-        path[n] = path[0]; // close tour manually. Arrays.asList does not support add
-        return closedVertexListToTour(pathList, graph);
-    }
-
-    public void performInsertion(int i, int bestIndex, V[] path){
-        for (int j = i; j > bestIndex; j--) {
-            path[j] = path[j - 1];
-        }
-    }
-
-
-//    @Override
-//    public GraphPath<V, E> getTour(Graph<V, E> graph) {
-//        checkGraph(graph);
-//        if (graph.vertexSet().size() == 1) {
-//            return getSingletonTour(graph);
-//        }
-//
-//        Set<V> vertexSet = graph.vertexSet();
-//        int n = vertexSet.size();
-//        distances = new double[n];
-//        Arrays.fill(distances, Double.POSITIVE_INFINITY);
-//
-//        @SuppressWarnings("unchecked") V[] path = (V[]) vertexSet.toArray(new Object[n + 1]);
-//        List<V> pathList = Arrays.asList(path); // List backed by path-array
-//        LinkedList<V> T = new LinkedList<>();
-//
-//        // move initial vertex to the beginning
-//        int initalIndex = getFirstVertexIndex(pathList);
-//        ArrayUtil.swap(path, 0, initalIndex);
-//        V k = path[0];
-//        T.add(k);
-//
-//        // construct tour
-//        for (int i = 1; i < n; i++) {
-//
-//            // Update distances from vertices to the partial path
-//            updateDistances(k, path, i, graph);
-//
-//            // Find the farthest unvisited vertex.
-//            int farthest = getFarthest(i, n);
-//            k = path[farthest];
-//
-//            // Search for the best position of vertex k in the path
-//            double saving = Double.POSITIVE_INFINITY;
-//            int bestIndex = -1;
-//            for (int j = 0; j < i; j++) {
-//                V x = path[j];
-//                V y = (j == i - 1 ? path[0] : path[j + 1]);
-//                double dxk = graph.getEdgeWeight(graph.getEdge(x, k));
-//                double dky = graph.getEdgeWeight(graph.getEdge(k, y));
-//                double dxy = (x == y ? 0 : graph.getEdgeWeight(graph.getEdge(x, y)));
-//                double savingTmp = dxk + dky - dxy;
-//                if (savingTmp < saving) {
-//                    saving = savingTmp;
-//                    bestIndex = j + 1;
-//                }
-//            }
-//            if(T.size()==1){
-//                T.add(k);
-//            }
-//            else{
-//                ListIterator<V> xListItr = null;
-//                var itr = T.listIterator();
-//                while(itr.hasNext()){
-////                    xListItr = itr.next();
-//                }
-//            }
-//            ArrayUtil.swap(path, i, farthest);
-//            swap(distances, i, farthest);
-//
-//            // perform insertion
-//            for (int j = i; j > bestIndex; j--) {
-//                path[j] = path[j - 1];
-//            }
-//            path[bestIndex] = k;
-//        }
-//
-//        T.add(T.getFirst());
-//        path[n] = path[0]; // close tour manually. Arrays.asList does not support add
-//        return closedVertexListToTour(T, graph);
-//    }
-
-    /**
-     * Returns the start vertex of the tour about to compute.
-     *
-     * @param path the initial path, containing all vertices in unspecified order
-     * @return the vertex to start with
-     * @throws IllegalArgumentException if the specified initial vertex is not in the graph
-     */
-    private int getFirstVertexIndex(List<V> path) {
-        if (initiaVertex != null) {
-            V first = initiaVertex.next();
-            if (!initiaVertex.hasNext()) {
-                initiaVertex = null; // release the resource backing the iterator immediately
+            // perform insertion of vertex k
+            for (int j = i; j > bestIndex; j--) {
+                tour[j] = tour[j - 1];
             }
-            int initialIndex = path.indexOf(first);
-            if (initialIndex < 0) {
-                throw new IllegalArgumentException("Specified initial vertex is not in graph");
-            }
-            return initialIndex;
-        } else { // first not specified
-            return rng.nextInt(path.size() - 1); // path has size n+1
+            tour[bestIndex] = k;
+
+            // Update distances from vertices to the partial tour
+            updateDistances(k, i + 1);
         }
+
+        tour[n] = tour[0]; // close tour manually. Arrays.asList does not support add
+
+        // Map the tour from integer values to V values
+        List<V> tourList = Arrays.stream(tour).mapToObj(i -> mapping.getIndexList().get(i))
+            .collect(Collectors.toList());
+        return closedVertexListToTour(tourList, graph);
     }
 
     /**
-     * Find the vertex in the range staring at {@code from} that is closest to the element at index
-     * from-1.
+     * Initialize the partial tour with the vertices of {@code initialSubtour} at the beginning of
+     * the tour.
      *
-     * @param current  the vertex for which the nearest neighbor is searched
-     * @param vertices the vertices of the graph. The unvisited neighbors start at index
-     *                 {@code start}
-     * @param start    the index of the first vertex to consider
-     * @param g        the graph containing the vertices
-     * @return the index of the unvisited vertex closest to the vertex at firstNeighbor-1.
+     * @return a dummy tour with the vertices of {@code initialSubtour} at the beginning.
      */
-    private int getFarthest(int start, int n) {
+    private int[] initPartialTour()
+    {
+        int n = mapping.getVertexMap().size();
+        int[] tour = new int[n + 1];
+        Set<Integer> visited = new HashSet<>();
+        int i = 0;
+        for (var v : initialSubtour.getVertexList()) {
+            int iv = mapping.getVertexMap().get(v);
+            visited.add(iv);
+            tour[i++] = iv;
+        }
+        for (int v = 0; v < n; v++) {
+            if (!visited.contains(v)) {
+                tour[i++] = v;
+            }
+        }
+
+        return tour;
+    }
+
+
+    /**
+     * Computes the matrix of distances by using the already computed {@code mapping}
+     * of vertices to integers
+     *
+     * @param graph the input graph
+     * @return the longest edge to initialize the partial tour if necessary
+     */
+    private E computeDistanceMatrix(Graph<V, E> graph)
+    {
+        E longestEdge = null;
+        double longestEdgeWeight = -1;
+        int n = graph.vertexSet().size();
+        D = new double[n][n];
+        for (var edge : graph.edgeSet()) {
+            V source = graph.getEdgeSource(edge);
+            V target = graph.getEdgeTarget(edge);
+            if (!source.equals(target)) {
+                int i = mapping.getVertexMap().get(source);
+                int j = mapping.getVertexMap().get(target);
+                if (D[i][j] == 0) {
+                    D[i][j] = D[j][i] = graph.getEdgeWeight(edge);
+                    if (longestEdgeWeight < D[i][j]) {
+                        longestEdgeWeight = D[i][j];
+                        longestEdge = edge;
+                    }
+                }
+            }
+        }
+        return longestEdge;
+    }
+
+
+    /**
+     * Find the index of the unvisited vertex which is farthest from the partially constructed tour.
+     *
+     * @param start The unvisited vertices start at index {@code start}
+     * @return the index of the unvisited vertex which is farthest from the partially constructed tour.
+     */
+    private int getFarthest(int start)
+    {
+        int n = distances.length;
         int farthest = -1;
         double maxDist = -1;
-
         for (int i = start; i < n; i++) {
             double dist = distances[i];
             if (dist > maxDist) {
@@ -355,16 +285,34 @@ public class FarthestInsertionHeuristicTSP<V, E>
         return farthest;
     }
 
-    private void updateDistances(V current, V[] vertices, int start, Graph<V, E> g) {
-
-
-        for (int i = start; i < distances.length; i++) {
-            V v = vertices[i];
-
-            double vDist = g.getEdgeWeight(g.getEdge(current, v));
-            if (vDist < distances[i]) {
-                distances[i] = vDist;
+    /**
+     * Initialize distances from the unvisited vertices to the initial subtour
+     *
+     * @param tour a partial tour with {@code initialSubtour} at the beginning
+     */
+    private void initDistances(int[] tour)
+    {
+        int n = mapping.getVertexMap().size();
+        int start = initialSubtour.getVertexList().size();
+        distances = new double[n];
+        Arrays.fill(distances, start, n, Double.POSITIVE_INFINITY);
+        for (int i = start; i < n; i++) {
+            for (int j = 0; j < start; j++) {
+                distances[i] = Math.min(distances[i], D[tour[i]][tour[j]]);
             }
+        }
+    }
+
+    /**
+     * Update the distances from the unvisited vertices to the partially constructed tour
+     *
+     * @param v the last vertex added to the tour
+     * @param start the unvisited vertices start at index {@code start}
+     */
+    private void updateDistances(int v, int start)
+    {
+        for (int i = start; i < distances.length; i++) {
+            distances[i] = Math.min(D[v][i], distances[i]);
         }
     }
 
@@ -372,11 +320,26 @@ public class FarthestInsertionHeuristicTSP<V, E>
      * Swaps the two elements at the specified indices in the given double array.
      *
      * @param arr the array
-     * @param i   the index of the first element
-     * @param j   the index of the second element
+     * @param i the index of the first element
+     * @param j the index of the second element
      */
-    public static void swap(double[] arr, int i, int j) {
+    public static void swap(double[] arr, int i, int j)
+    {
         double tmp = arr[j];
+        arr[j] = arr[i];
+        arr[i] = tmp;
+    }
+
+    /**
+     * Swaps the two elements at the specified indices in the given int array.
+     *
+     * @param arr the array
+     * @param i the index of the first element
+     * @param j the index of the second element
+     */
+    public static void swap(int[] arr, int i, int j)
+    {
+        int tmp = arr[j];
         arr[j] = arr[i];
         arr[i] = tmp;
     }
