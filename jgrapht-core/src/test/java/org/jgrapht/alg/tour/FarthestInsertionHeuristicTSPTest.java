@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2021, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.Graph;
@@ -101,16 +118,16 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testDummyGraph5()
     {
-        int[][] D = {{0, 8, 10, 11, 15},
+        int[][] allDist = {{0, 8, 10, 11, 15},
             {8, 0, 2, 3, 7},
             {10, 2, 0, 1, 5},
             {11, 3, 1, 0, 4},
             {15, 7, 5, 4, 0}
         };
-        Graph<Integer, DefaultWeightedEdge> G = createGraphFromMatrixDistances(D);
+        Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsH = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
 
-        var tour = farthestInsH.getTour(G);
+        var tour = farthestInsH.getTour(graph);
         assertEquals(30, tour.getWeight(), 1e-9);
         assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
             tour.getVertexList().toArray(new Integer[0]));
@@ -119,17 +136,17 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testDummyGraph5WithSubtour()
     {
-        int[][] D = {{0, 8, 10, 11, 15},
+        int[][] allDist = {{0, 8, 10, 11, 15},
             {8, 0, 2, 3, 7},
             {10, 2, 0, 1, 5},
             {11, 3, 1, 0, 4},
             {15, 7, 5, 4, 0}
         };
-        Graph<Integer, DefaultWeightedEdge> G = createGraphFromMatrixDistances(D);
+        Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsH = new FarthestInsertionHeuristicTSP
-            <Integer, DefaultWeightedEdge>(new GraphWalk<>(G, List.of(3, 2, 0, 4), -1));
+            <Integer, DefaultWeightedEdge>(new GraphWalk<>(graph, List.of(3, 2, 0, 4), -1));
 
-        var tour = farthestInsH.getTour(G);
+        var tour = farthestInsH.getTour(graph);
         assertEquals(30, tour.getWeight(), 1e-9);
 
         // vertex 1 should be inserted between vertices 2 and 0
@@ -143,7 +160,7 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testDummyGraph10()
     {
-        int[][] D = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+        int[][] allDist = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
             {1, 0, 10, 11, 12, 13, 14, 15, 16, 17},
             {2, 10, 0, 18, 19, 20, 21, 22, 23, 24},
             {3, 11, 18, 0, 25, 26, 27, 28, 29, 30},
@@ -154,19 +171,19 @@ public class FarthestInsertionHeuristicTSPTest
             {8, 16, 23, 29, 34, 38, 41, 43, 0, 45},
             {9, 17, 24, 30, 35, 39, 42, 44, 45, 0}};
 
-        Graph<Integer, DefaultWeightedEdge> G = createGraphFromMatrixDistances(D);
+        Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsertion = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
-        var tour = farthestInsertion.getTour(G);
+        var tour = farthestInsertion.getTour(graph);
         assertEquals(210, tour.getWeight(), 1e-9);
         assertArrayEquals(new Integer[]{4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
     // utilities
-    static Graph<Integer, DefaultWeightedEdge> createGraphFromMatrixDistances(int[][] D)
+    static Graph<Integer, DefaultWeightedEdge> createGraphFromMatrixDistances(int[][] allDist)
     {
-        int n = D.length;
-        var G = GraphTypeBuilder
+        int n = allDist.length;
+        var graph = GraphTypeBuilder
             .<Integer, DefaultWeightedEdge>undirected().allowingMultipleEdges(false)
             .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
 
@@ -174,10 +191,10 @@ public class FarthestInsertionHeuristicTSPTest
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 if (i != j) {
-                    Graphs.addEdgeWithVertices(G, i, j, D[i][j]);
+                    Graphs.addEdgeWithVertices(graph, i, j, allDist[i][j]);
                 }
             }
         }
-        return G;
+        return graph;
     }
 }

@@ -89,7 +89,7 @@ public class FarthestInsertionHeuristicTSP<V, E>
     /**
      * Matrix of distances between all vertices
      */
-    private double[][] D;
+    private double[][] allDist;
 
     /**
      * Mapping of vertices to integers to work on.
@@ -174,9 +174,9 @@ public class FarthestInsertionHeuristicTSP<V, E>
                 int x = (j == 0 ? tour[i - 1] : tour[j - 1]);
                 int y = (j == i ? tour[0] : tour[j]);
 
-                double dxk = D[x][k];
-                double dky = D[k][y];
-                double dxy = (x == y ? 0 : D[x][y]);
+                double dxk = allDist[x][k];
+                double dky = allDist[k][y];
+                double dxy = (x == y ? 0 : allDist[x][y]);
 
                 double savingTmp = dxk + dky - dxy;
                 if (savingTmp < saving) {
@@ -244,17 +244,17 @@ public class FarthestInsertionHeuristicTSP<V, E>
         E longestEdge = null;
         double longestEdgeWeight = -1;
         int n = graph.vertexSet().size();
-        D = new double[n][n];
+        allDist = new double[n][n];
         for (var edge : graph.edgeSet()) {
             V source = graph.getEdgeSource(edge);
             V target = graph.getEdgeTarget(edge);
             if (!source.equals(target)) {
                 int i = mapping.getVertexMap().get(source);
                 int j = mapping.getVertexMap().get(target);
-                if (D[i][j] == 0) {
-                    D[i][j] = D[j][i] = graph.getEdgeWeight(edge);
-                    if (longestEdgeWeight < D[i][j]) {
-                        longestEdgeWeight = D[i][j];
+                if (allDist[i][j] == 0) {
+                    allDist[i][j] = allDist[j][i] = graph.getEdgeWeight(edge);
+                    if (longestEdgeWeight < allDist[i][j]) {
+                        longestEdgeWeight = allDist[i][j];
                         longestEdge = edge;
                     }
                 }
@@ -298,7 +298,7 @@ public class FarthestInsertionHeuristicTSP<V, E>
         Arrays.fill(distances, start, n, Double.POSITIVE_INFINITY);
         for (int i = start; i < n; i++) {
             for (int j = 0; j < start; j++) {
-                distances[i] = Math.min(distances[i], D[tour[i]][tour[j]]);
+                distances[i] = Math.min(distances[i], allDist[tour[i]][tour[j]]);
             }
         }
     }
@@ -312,7 +312,7 @@ public class FarthestInsertionHeuristicTSP<V, E>
     private void updateDistances(int v, int start)
     {
         for (int i = start; i < distances.length; i++) {
-            distances[i] = Math.min(D[v][i], distances[i]);
+            distances[i] = Math.min(allDist[v][i], distances[i]);
         }
     }
 
