@@ -43,5 +43,5 @@ module org.jgrapht.core
     exports org.jgrapht.util;
 
     requires transitive org.jheaps;
-    requires transitive apfloat;
+    requires transitive org.apfloat;
 }

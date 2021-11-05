@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.apfloat</groupId>
             <artifactId>apfloat</artifactId>
-            <version>1.9.1</version>
+            <version>1.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.junit-toolbox</groupId>
