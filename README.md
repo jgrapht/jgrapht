@@ -76,6 +76,7 @@ The files below make up the table of contents for a release distribution archive
     - `sux4j-x.y.z.jar` Sux4j library
     - `webgraph-x.y.z.jar` Webgraph library
     - `webgraph-big-z.y.z.jar` Webgraph big library
+    - `apfloat-x.x.x.jar` Apfloat library
 
 - `source/` complete source tree used to build this release
 
@@ -155,6 +156,7 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 - [webgraph](http://webgraph.di.unimi.it/) provides a framework for graph compression enabling management of very large graphs. Webgraph is only required by the jgrapht-unimi-dsi module.
 - [sux4j](http://sux.di.unimi.it/) provides implementations of basic succinct data structures. Sux4j is only required by the jgrapht-unimi-dsi module.
 - [jsap](http://www.martiansoftware.com/jsap/) provides a simple argument parser. Jsap is only required by the jgrapht-unimi-dsi module.
+- [apfloat](http://www.apfloat.org/apfloat_java/) provides support for high performance arbitrary precision arithmetic. Apfloat is licensed under the terms of the MIT license.
 
 ## Online Resources
 
