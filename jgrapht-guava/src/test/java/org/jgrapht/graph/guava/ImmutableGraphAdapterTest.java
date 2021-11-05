@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.graph.guava;
 
-import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
+
+import com.google.common.graph.*;
 
 import static org.junit.Assert.*;
 

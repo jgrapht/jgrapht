@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>1.5.2-SNAPSHOT</version>
     </parent>
     <artifactId>jgrapht-io</artifactId>
     <name>JGraphT - I/O</name>
@@ -41,12 +41,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <!-- Suppress import of own exported packages -->
-                        <Import-Package>!org.jgrapht.nio.*,*</Import-Package>
-                    </instructions>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.antlr</groupId>
@@ -152,12 +146,12 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.8-1</version>
+            <version>4.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 </project>

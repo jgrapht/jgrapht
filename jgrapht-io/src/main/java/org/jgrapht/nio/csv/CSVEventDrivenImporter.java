@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -211,12 +211,8 @@ public class CSVEventDrivenImporter
             // Walk it and attach our listener
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(listener, graphContext);
-        } catch (IOException e) {
+        } catch (IOException | ParseCancellationException | IllegalArgumentException e) {
             throw new ImportException("Failed to import CSV graph: " + e.getMessage(), e);
-        } catch (ParseCancellationException pe) {
-            throw new ImportException("Failed to import CSV graph: " + pe.getMessage(), pe);
-        } catch (IllegalArgumentException iae) {
-            throw new ImportException("Failed to import CSV graph: " + iae.getMessage(), iae);
         }
     }
 

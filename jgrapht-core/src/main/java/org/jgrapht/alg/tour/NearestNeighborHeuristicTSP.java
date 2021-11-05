@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Peter Harman and Contributors.
+ * (C) Copyright 2019-2021, by Peter Harman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,9 +18,10 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 import java.util.*;
+
+import static org.jgrapht.util.ArrayUtil.*;
 
 /**
  * The nearest neighbour heuristic algorithm for the TSP problem.
@@ -66,6 +67,7 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Peter Harman
+ * @author Hannes Wellmann
  */
 public class NearestNeighborHeuristicTSP<V, E>
     extends
@@ -169,69 +171,82 @@ public class NearestNeighborHeuristicTSP<V, E>
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
-        // Create Set to contain all but first vertex
-        Set<V> unvisited = new HashSet<>(graph.vertexSet());
-        // Get the initial vertex
-        V current = first(graph);
-        unvisited.remove(current);
-        // Create List to store the tour
-        List<V> visited = new ArrayList<>(unvisited.size() + 1);
-        visited.add(current);
-        // Iterate until tour is complete
-        while (!unvisited.isEmpty()) {
-            // Find the nearest vertex and add to the tour
-            current = nearest(current, unvisited, graph);
-            visited.add(current);
+
+        Set<V> vertexSet = graph.vertexSet();
+        int n = vertexSet.size();
+
+        @SuppressWarnings("unchecked") V[] path = (V[]) vertexSet.toArray(new Object[n + 1]);
+        List<V> pathList = Arrays.asList(path); // List backed by path-array
+
+        // move initial vertex to the beginning
+        int initalIndex = getFirstVertexIndex(pathList);
+        swap(path, 0, initalIndex);
+
+        // search nearest neighbors
+        int limit = n - 1; // last vertex won't be changed -> no need to check it
+        for (int i = 1; i < limit; i++) {
+            V v = path[i - 1];
+            // path before i is established. The element at i must be the closest to element at i-1.
+            // -> get nearest of remaining elements (index >= i) and set it as next in path
+            int nearestNeighbor = getNearestNeighbor(v, path, i, graph);
+
+            swap(path, i, nearestNeighbor);
         }
-        return vertexListToTour(visited, graph);
+
+        path[n] = path[0]; // close tour manually. Arrays.asList does not support add
+        return closedVertexListToTour(pathList, graph);
     }
 
     /**
-     * Get or determine the first vertex
+     * Returns the start vertex of the tour about to compute.
      *
-     * @param graph The graph
-     * @return A suitable vertex to start
+     * @param path the initial path, containing all vertices in unspecified order
+     * @return the vertex to start with
      * @throws IllegalArgumentException if the specified initial vertex is not in the graph
      */
-    private V first(Graph<V, E> graph)
+    private int getFirstVertexIndex(List<V> path)
     {
         if (initiaVertex != null) {
             V first = initiaVertex.next();
             if (!initiaVertex.hasNext()) {
                 initiaVertex = null; // release the resource backing the iterator immediately
             }
-            if (!graph.vertexSet().contains(first)) {
+            int initialIndex = path.indexOf(first);
+            if (initialIndex < 0) {
                 throw new IllegalArgumentException("Specified initial vertex is not in graph");
             }
-            return first;
-        } else {
-            Set<V> vertices = graph.vertexSet();
-            return CollectionUtil.getElement(vertices, rng.nextInt(vertices.size()));
+            return initialIndex;
+        } else { // first not specified
+            return rng.nextInt(path.size() - 1); // path has size n+1
         }
     }
 
     /**
-     * Find the nearest unvisited vertex
+     * Find the vertex in the range staring at {@code from} that is closest to the element at index
+     * from-1.
      *
-     * @param current The last vertex visited
-     * @param unvisited Vertices not visited
-     * @param graph The graph
-     * @return The closest available vertex
+     * @param current the vertex for which the nearest neighbor is searched
+     * @param vertices the vertices of the graph. The unvisited neighbors start at index
+     *        {@code start}
+     * @param start the index of the first vertex to consider
+     * @param g the graph containing the vertices
+     *
+     * @return the index of the unvisited vertex closest to the vertex at firstNeighbor-1.
      */
-    private V nearest(V current, Set<V> unvisited, Graph<V, E> graph)
+    private static <V, E> int getNearestNeighbor(V current, V[] vertices, int start, Graph<V, E> g)
     {
-        Iterator<V> it = unvisited.iterator();
-        V closest = it.next();
-        double minDist = graph.getEdgeWeight(graph.getEdge(current, closest));
-        while (it.hasNext()) {
-            V v = it.next();
-            double vDist = graph.getEdgeWeight(graph.getEdge(current, v));
+        int closest = -1;
+        double minDist = Double.MAX_VALUE;
+
+        int n = vertices.length - 1; // last element in vertices is null
+        for (int i = start; i < n; i++) {
+            V v = vertices[i];
+            double vDist = g.getEdgeWeight(g.getEdge(current, v));
             if (vDist < minDist) {
-                closest = v;
+                closest = i;
                 minDist = vDist;
             }
         }
-        unvisited.remove(closest);
         return closest;
     }
 }

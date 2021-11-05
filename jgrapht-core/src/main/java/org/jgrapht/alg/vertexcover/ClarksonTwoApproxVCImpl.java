@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -142,7 +142,7 @@ public class ClarksonTwoApproxVCImpl<V, E>
             weight += vertexWeightMap.get(vx.v);
             assert (!workingGraph
                 .parallelStream()
-                .anyMatch(ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
+                .anyMatch(ux -> ux.id == vx.id)) : "vx should no longer exist in the working graph";
         }
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }

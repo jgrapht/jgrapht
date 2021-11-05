@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2020, by Fabian Späh and Contributors.
+ * (C) Copyright 2017-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,24 +15,20 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.util;
-
-import java.util.*;
+package org.jgrapht.graph;
 
 /**
- * A default implementation for a check on equality (that always holds)
- *
- * @param <T> type of elements to be compared
- * @deprecated use a lambda like {@code (t1,t2) -> 0} instead
+ * Exception thrown in the event that the path is invalid.
  */
-@Deprecated(forRemoval = true, since = "1.5.1")
-public class AlwaysEqualComparator<T>
-    implements
-    Comparator<T>
+public class InvalidGraphWalkException
+    extends
+    RuntimeException
 {
-    @Override
-    public int compare(T arg0, T arg1)
+    private static final long serialVersionUID = 3811666107707436479L;
+
+    public InvalidGraphWalkException(String message)
     {
-        return 0;
+        super(message);
     }
+
 }

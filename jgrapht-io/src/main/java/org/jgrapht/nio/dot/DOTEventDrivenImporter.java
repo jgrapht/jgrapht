@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -54,27 +54,29 @@ public class DOTEventDrivenImporter
     public static final String DEFAULT_GRAPH_ID_KEY = "ID";
 
     // identifier unescape rule
-    private final CharSequenceTranslator UNESCAPE_ID;
-    
+    private final CharSequenceTranslator unescapeId;
+
     private boolean notifyVertexAttributesOutOfOrder;
     private boolean notifyEdgeAttributesOutOfOrder;
-    
+
     /**
      * Constructs a new importer.
      */
-    public DOTEventDrivenImporter() { 
+    public DOTEventDrivenImporter()
+    {
         this(true, true);
     }
-    
+
     /**
      * Constructs a new importer.
      * 
-     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order even if 
-     *        they appear together in the input
-     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even if 
-     *        they appear together in the input        
+     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
+     *        even if they appear together in the input
+     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
+     *        if they appear together in the input
      */
-    public DOTEventDrivenImporter(boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
+    public DOTEventDrivenImporter(
+        boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
     {
         super();
         Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
@@ -82,8 +84,8 @@ public class DOTEventDrivenImporter
         lookupMap.put("\\\"", "\"");
         lookupMap.put("\\'", "'");
         lookupMap.put("\\", "");
-        UNESCAPE_ID = new AggregateTranslator(new LookupTranslator(lookupMap));
-        
+        unescapeId = new AggregateTranslator(new LookupTranslator(lookupMap));
+
         this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
         this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
     }
@@ -362,13 +364,13 @@ public class DOTEventDrivenImporter
 
                             Pair<String, String> pe = Pair.of(sourceVertex, targetVertex);
 
-                            if (notifyEdgeAttributesOutOfOrder) { 
+                            if (notifyEdgeAttributesOutOfOrder) {
                                 // notify individually
                                 notifyEdge(pe);
-                                for(Entry<String, Attribute> entry: edgeAttrs.entrySet()) { 
+                                for (Entry<String, Attribute> entry : edgeAttrs.entrySet()) {
                                     notifyEdgeAttribute(pe, entry.getKey(), entry.getValue());
                                 }
-                            } else { 
+                            } else {
                                 // notify with all attributes
                                 notifyEdgeWithAttributes(pe, edgeAttrs);
                             }
@@ -451,15 +453,15 @@ public class DOTEventDrivenImporter
                 // append extra attributes
                 defaultAttrs.putAll(attrs);
 
-                if (notifyVertexAttributesOutOfOrder) { 
+                if (notifyVertexAttributesOutOfOrder) {
                     notifyVertex(nodeId);
-                    for(Entry<String, Attribute> entry: defaultAttrs.entrySet()) { 
+                    for (Entry<String, Attribute> entry : defaultAttrs.entrySet()) {
                         notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
                     }
-                } else { 
+                } else {
                     notifyVertexWithAttributes(nodeId, defaultAttrs);
                 }
-                
+
                 vertices.add(nodeId);
                 scope.addVertex(nodeId);
             } else {
@@ -504,16 +506,16 @@ public class DOTEventDrivenImporter
                 SubgraphScope scope = subgraphScopes.element();
                 // find default attributes
                 Map<String, Attribute> defaultAttrs = new HashMap<>(scope.nodeAttrs);
-                
-                if (notifyVertexAttributesOutOfOrder) { 
+
+                if (notifyVertexAttributesOutOfOrder) {
                     notifyVertex(nodeId);
-                    for(Entry<String, Attribute> entry: defaultAttrs.entrySet()) { 
+                    for (Entry<String, Attribute> entry : defaultAttrs.entrySet()) {
                         notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
                     }
-                } else { 
+                } else {
                     notifyVertexWithAttributes(nodeId, defaultAttrs);
                 }
-                
+
                 vertices.add(nodeId);
                 scope.addVertex(nodeId);
             }
@@ -782,12 +784,12 @@ public class DOTEventDrivenImporter
      */
     private String unescapeId(String input)
     {
-        final char QUOTE = '"';
-        if (input.charAt(0) != QUOTE || input.charAt(input.length() - 1) != QUOTE) {
+        final char quote = '"';
+        if (input.charAt(0) != quote || input.charAt(input.length() - 1) != quote) {
             return input;
         }
         String noQuotes = input.subSequence(1, input.length() - 1).toString();
-        String unescaped = UNESCAPE_ID.translate(noQuotes);
+        String unescaped = unescapeId.translate(noQuotes);
         return unescaped;
     }
 

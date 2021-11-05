@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2021, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,10 +42,10 @@ public class SimpleDirectedGraphTest
     private Graph<String, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private Supplier<DefaultEdge> eSupplier;
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-    private String v4 = "v4";
+    private final String v1 = "v1";
+    private final String v2 = "v2";
+    private final String v3 = "v3";
+    private final String v4 = "v4";
     private DefaultEdge e12_1;
     private DefaultEdge e12_2;
     private DefaultEdge e12_3;
@@ -65,29 +65,22 @@ public class SimpleDirectedGraphTest
     @Test
     public void testAddEdgeEdge()
     {
-        try {
-            g1.addEdge(v1, v1, eLoop); // loops not allowed
-            Assert.fail("Should not get here.");
-        } catch (IllegalArgumentException e) {
-        }
+        // loops not allowed
+        assertThrows(IllegalArgumentException.class, () -> g1.addEdge(v1, v1, eLoop));
 
-        try {
-            g3.addEdge(v1, v1, null);
-            Assert.fail("Should not get here.");
-        } catch (NullPointerException e) {
-        }
+        assertThrows(NullPointerException.class, () -> g3.addEdge(v1, v1, null));
 
         DefaultEdge e = eSupplier.get();
 
-        try {
-            g1.addEdge("ya", "ya", e); // no such vertex in graph
-            Assert.fail("Should not get here.");
-        } catch (IllegalArgumentException ile) {
-        }
+        // no such vertex in graph
+        assertThrows(IllegalArgumentException.class, () -> g1.addEdge("ya", "ya", e));
 
-        assertEquals(false, g2.addEdge(v2, v1, e));
-        assertEquals(false, g3.addEdge(v2, v1, e));
-        assertEquals(true, g4.addEdge(v2, v1, e));
+        // supplied edge already in another graph with differing touching vertices
+        assertThrows(IntrusiveEdgeException.class, () -> g4.addEdge(v1, v3, e12_1));
+
+        assertFalse(g2.addEdge(v2, v1, e));
+        assertFalse(g3.addEdge(v2, v1, e));
+        assertTrue(g4.addEdge(v2, v1, e));
     }
 
     /**
@@ -96,23 +89,19 @@ public class SimpleDirectedGraphTest
     @Test
     public void testAddEdgeObjectObject()
     {
-        try {
-            g1.addEdge(v1, v1); // loops not allowed
-            Assert.fail("Should not get here.");
-        } catch (IllegalArgumentException e) {
-        }
+        // loops not allowed
+        assertThrows(IllegalArgumentException.class, () -> g1.addEdge(v1, v1));
 
-        try {
-            g3.addEdge(null, null);
-            Assert.fail("Should not get here.");
-        } catch (NullPointerException e) {
-        }
+        assertThrows(NullPointerException.class, () -> g3.addEdge(null, null));
 
-        try {
-            g1.addEdge(v2, v1); // no such vertex in graph
-            Assert.fail("Should not get here.");
-        } catch (IllegalArgumentException ile) {
-        }
+        // no such vertex in graph
+        assertThrows(IllegalArgumentException.class, () -> g1.addEdge(v2, v1));
+
+        // supplied edge already in another graph with differing touching vertices
+        Graph<Object, DefaultEdge> g5 = new SimpleDirectedGraph<>(null, () -> this.e12_1, false);
+        g5.addVertex(v1);
+        g5.addVertex(v3);
+        assertThrows(IntrusiveEdgeException.class, () -> g5.addEdge(v1, v3));
 
         assertNull(g2.addEdge(v2, v1));
         assertNull(g3.addEdge(v2, v1));

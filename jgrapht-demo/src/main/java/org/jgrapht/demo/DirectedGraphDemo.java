@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2020, by Minh Van Nguyen and Contributors.
+ * (C) Copyright 2008-2021, by Minh Van Nguyen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

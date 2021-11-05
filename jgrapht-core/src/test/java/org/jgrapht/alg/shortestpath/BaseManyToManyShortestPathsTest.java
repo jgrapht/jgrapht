@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2021, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -482,6 +482,24 @@ public abstract class BaseManyToManyShortestPathsTest
         Graphs.addEdgeWithVertices(graph, 1, 6, 21);
 
         return graph;
+    }
+    
+    protected void testNoPathMultiSet()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
+            DefaultWeightedEdge> shortestPaths =
+                getAlgorithm(graph).getManyToManyPaths(Set.of(1), Set.of(2, 3));
+
+        assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 2), 1e-9);
+        assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 3), 1e-9);
+        assertNull(shortestPaths.getPath(1, 2));
+        assertNull(shortestPaths.getPath(1, 3));
     }
 
 }

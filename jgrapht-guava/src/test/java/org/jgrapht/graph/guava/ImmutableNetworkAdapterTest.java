@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -200,7 +200,7 @@ public class ImmutableNetworkAdapterTest
         assertFalse(g.getType().isModifiable());
 
         assertTrue(g.containsEdge("v5", "v2"));
-        
+
         Graph<String, DefaultEdge> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());

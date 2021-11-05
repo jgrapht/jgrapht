@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>1.5.2-SNAPSHOT</version>
     </parent>
     <artifactId>jgrapht-core</artifactId>
     <name>JGraphT - Core</name>
@@ -43,13 +43,13 @@
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
-            <version>1.23</version>
+            <version>1.28</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
-            <version>1.23</version>
+            <version>1.28</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -67,12 +67,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <!-- Suppress import of own exported packages -->
-                        <Import-Package>!org.jgrapht.*,*</Import-Package>
-                    </instructions>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

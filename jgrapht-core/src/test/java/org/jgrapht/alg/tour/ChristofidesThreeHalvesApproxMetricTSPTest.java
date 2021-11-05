@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2021, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -81,7 +81,7 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     @Test
     public void testGetTour3()
     {
-        int[][] edges = {{1, 2, 5}};
+        int[][] edges = { { 1, 2, 5 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =
@@ -97,7 +97,7 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     @Test
     public void testGetTour4()
     {
-        int[][] edges = {{1, 2, 5}, {1, 3, 5}, {2, 3, 9},};
+        int[][] edges = { { 1, 2, 5 }, { 1, 3, 5 }, { 2, 3, 9 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =

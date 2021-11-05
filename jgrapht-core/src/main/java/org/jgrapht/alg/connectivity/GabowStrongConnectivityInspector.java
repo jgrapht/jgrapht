@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2020, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2013-2021, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,19 +31,19 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Sarah Komla-Ebri
+ * @author Hannes Wellmann
  */
 public class GabowStrongConnectivityInspector<V, E>
     extends
     AbstractStrongConnectivityInspector<V, E>
 {
-    // stores the vertices
-    private Deque<VertexNumber<V>> stack = new ArrayDeque<>();
+    // the sequence of (original) vertices encountered but not yet assigned to a component
+    private Deque<VertexNumber<V>> stackS = new ArrayDeque<>();
+    // the boundaries between contracted vertices on the current path of the dfs-tree
+    private Deque<VertexNumber<V>> stackB = new ArrayDeque<>();
 
     // maps vertices to their VertexNumber object
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
-
-    // store the numbers
-    private Deque<Integer> B = new ArrayDeque<>();
 
     // number of vertices
     private int c;
@@ -63,21 +63,21 @@ public class GabowStrongConnectivityInspector<V, E>
     public List<Set<V>> stronglyConnectedSets()
     {
         if (stronglyConnectedSets == null) {
-            stronglyConnectedSets = new Vector<>();
+            stronglyConnectedSets = new ArrayList<>();
 
             // create VertexData objects for all vertices, store them
             createVertexNumber();
 
             // perform DFS
             for (VertexNumber<V> data : vertexToVertexNumber.values()) {
-                if (data.getNumber() == 0) {
-                    dfsVisit(graph, data);
+                if (data.number == 0) {
+                    dfsVisit(data);
                 }
             }
 
             vertexToVertexNumber = null;
-            stack = null;
-            B = null;
+            stackS = null;
+            stackB = null;
         }
 
         return stronglyConnectedSets;
@@ -86,83 +86,80 @@ public class GabowStrongConnectivityInspector<V, E>
     /*
      * Creates a VertexNumber object for every vertex in the graph and stores them in a HashMap.
      */
-
     private void createVertexNumber()
     {
         c = graph.vertexSet().size();
         vertexToVertexNumber = CollectionUtil.newHashMapWithExpectedSize(c);
 
         for (V vertex : graph.vertexSet()) {
-            vertexToVertexNumber.put(vertex, new VertexNumber<>(vertex, 0));
+            vertexToVertexNumber.put(vertex, new VertexNumber<>(vertex));
         }
 
-        stack = new ArrayDeque<>(c);
-        B = new ArrayDeque<>(c);
+        stackS = new ArrayDeque<>(c);
+        stackB = new ArrayDeque<>(c);
     }
 
     /*
      * The subroutine of DFS.
      */
-    private void dfsVisit(Graph<V, E> visitedGraph, VertexNumber<V> v)
+    private void dfsVisit(VertexNumber<V> v)
     {
-        VertexNumber<V> w;
-        stack.add(v);
-        B.add(v.setNumber(stack.size() - 1));
+        stackS.push(v);
+        v.number = stackS.size();
+        stackB.push(v);
 
         // follow all edges
 
-        for (E edge : visitedGraph.outgoingEdgesOf(v.getVertex())) {
-            w = vertexToVertexNumber.get(visitedGraph.getEdgeTarget(edge));
+        for (E edge : graph.outgoingEdgesOf(v.vertex)) {
+            VertexNumber<V> w = vertexToVertexNumber.get(graph.getEdgeTarget(edge));
 
-            if (w.getNumber() == 0) {
-                dfsVisit(graph, w);
+            if (w.number == 0) {
+                dfsVisit(w);
             } else { /* contract if necessary */
-                while (w.getNumber() < B.getLast()) {
-                    B.removeLast();
+                while (w.number < stackB.peek().number) {
+                    stackB.pop();
                 }
             }
         }
-        Set<V> L = new HashSet<>();
-        if (v.getNumber() == (B.getLast())) {
-            /*
-             * number vertices of the next strong component
-             */
-            B.removeLast();
-
+        if (v == stackB.peek()) {
+            // number vertices of the next strong component
+            stackB.pop();
             c++;
-            while (v.getNumber() <= (stack.size() - 1)) {
-                VertexNumber<V> r = stack.removeLast();
-                L.add(r.getVertex());
-                r.setNumber(c);
-            }
-            stronglyConnectedSets.add(L);
+            Set<V> sccVertices = createSCCVertexSetAndNumberVertices(v);
+            stronglyConnectedSets.add(sccVertices);
         }
+    }
+
+    private Set<V> createSCCVertexSetAndNumberVertices(VertexNumber<V> v)
+    {
+        int sccSize = stackS.size() - v.number + 1;
+        // All VertexNumber objects on S above and including v form the current SCC.
+        // To collect them from S, elements have to be popped while the size of S is greater or
+        // equal to v.number. This results in <sccSize> removals(pops) from S.
+        Set<V> scc;
+        if (sccSize == 1) {
+            VertexNumber<V> r = stackS.pop();
+            scc = Collections.singleton(r.vertex);
+            r.number = c;
+        } else {
+            scc = CollectionUtil.newHashSetWithExpectedSize(sccSize);
+            for (int i = 0; i < sccSize; i++) {
+                VertexNumber<V> r = stackS.pop();
+                scc.add(r.vertex);
+                r.number = c;
+            }
+        }
+        return scc;
     }
 
     private static final class VertexNumber<V>
     {
-        V vertex;
-        int number;
+        private final V vertex;
+        private int number = 0;
 
-        private VertexNumber(V vertex, int number)
+        private VertexNumber(V vertex)
         {
             this.vertex = vertex;
-            this.number = number;
-        }
-
-        int getNumber()
-        {
-            return number;
-        }
-
-        V getVertex()
-        {
-            return vertex;
-        }
-
-        Integer setNumber(int n)
-        {
-            return number = n;
         }
     }
 }

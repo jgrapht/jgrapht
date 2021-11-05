@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2020, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2021, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,8 +28,8 @@ import static org.junit.Assert.assertTrue;
 
 public class DirectedSimpleCyclesTest
 {
-    private static int MAX_SIZE = 9;
-    private static int[] RESULTS = { 0, 1, 3, 8, 24, 89, 415, 2372, 16072, 125673 };
+    private static final int MAX_SIZE = 9;
+    private static final int[] RESULTS = { 0, 1, 3, 8, 24, 89, 415, 2372, 16072, 125673 };
 
     @Test
     public void test()

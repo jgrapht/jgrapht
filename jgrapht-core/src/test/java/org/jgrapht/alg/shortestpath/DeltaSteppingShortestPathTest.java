@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Semen Chudakov and Contributors.
+ * (C) Copyright 2018-2021, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,18 +19,16 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.Triple;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
-import org.junit.rules.*;
 
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Test case for {@link DeltaSteppingShortestPath}.
@@ -50,24 +48,24 @@ public class DeltaSteppingShortestPathTest
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
-
 
     private static final String S = "S";
     private static final String T = "T";
     private static final String Y = "Y";
     private static final String X = "X";
     private static final String Z = "Z";
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testEmptyGraph()
@@ -87,21 +85,23 @@ public class DeltaSteppingShortestPathTest
         Graphs.addAllVertices(graph, Arrays.asList(S, T));
         Graphs.addEdge(graph, S, T, -10.0);
 
-        exception.expect(IllegalArgumentException.class);
-        new DeltaSteppingShortestPath<>(graph, executor).getPaths(S);
+        DeltaSteppingShortestPath<String, DefaultWeightedEdge> shortestPath =
+            new DeltaSteppingShortestPath<>(graph, executor);
+        assertThrows(IllegalArgumentException.class, () -> shortestPath.getPaths(S));
     }
 
     @Test
-    public void testLineGraph() {
+    public void testLineGraph()
+    {
         int maxNumberOfVertices = 10;
         for (int numberOfVertices = 2; numberOfVertices < maxNumberOfVertices; ++numberOfVertices) {
-            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>>
-                    testInput = generateLineGraphTestInput(numberOfVertices);
+            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>,
+                List<DefaultWeightedEdge>> testInput = generateLineGraphTestInput(numberOfVertices);
             Graph<Integer, DefaultWeightedEdge> graph = testInput.getFirst();
             List<Integer> vertices = testInput.getSecond();
             List<DefaultWeightedEdge> edges = testInput.getThird();
             GraphPath<Integer, DefaultWeightedEdge> shortestPath =
-                    new DeltaSteppingShortestPath<>(graph, executor).getPath(0, numberOfVertices - 1);
+                new DeltaSteppingShortestPath<>(graph, executor).getPath(0, numberOfVertices - 1);
             assertEquals(numberOfVertices - 1, shortestPath.getWeight(), 1e-9);
             assertEquals(vertices, shortestPath.getVertexList());
             assertEquals(edges, shortestPath.getEdgeList());
@@ -114,7 +114,8 @@ public class DeltaSteppingShortestPathTest
         Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
         assertEquals(
-            Arrays.asList(S), new DeltaSteppingShortestPath<>(graph, executor).getPath(S, S).getVertexList());
+            Arrays.asList(S),
+            new DeltaSteppingShortestPath<>(graph, executor).getPath(S, S).getVertexList());
         assertEquals(
             Arrays.asList(S, Y, T),
             new DeltaSteppingShortestPath<>(graph, executor).getPath(S, T).getVertexList());
@@ -222,9 +223,11 @@ public class DeltaSteppingShortestPathTest
         return graph;
     }
 
-    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>>
-    generateLineGraphTestInput(int numberOfVertices) {
-        Graph<Integer, DefaultWeightedEdge> result = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>,
+        List<DefaultWeightedEdge>> generateLineGraphTestInput(int numberOfVertices)
+    {
+        Graph<Integer, DefaultWeightedEdge> result =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         List<Integer> vertices = new ArrayList<>(numberOfVertices);
         List<DefaultWeightedEdge> edges = new ArrayList<>(numberOfVertices - 1);
         for (int i = 0; i < numberOfVertices - 1; ++i) {
@@ -244,7 +247,8 @@ public class DeltaSteppingShortestPathTest
         graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-            new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1, random, true, true);
+            new GnmRandomGraphGenerator<>(
+                numOfVertices, numOfEdges - numOfVertices + 1, random, true, true);
         generator.generateGraph(graph);
         makeConnected(graph);
         addEdgeWeights(graph, random);

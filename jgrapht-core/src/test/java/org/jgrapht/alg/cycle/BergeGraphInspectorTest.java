@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Philipp S. Kaesgen and Contributors.
+ * (C) Copyright 2016-2021, by Philipp S. Kaesgen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -184,20 +184,20 @@ public class BergeGraphInspectorTest
         stimulus.addEdge(1, 4);
         stimulus.addEdge(1, 2);
         stimulus.addEdge(1, 3);
-        Set<Integer> X = new HashSet<>();
-        X.add(2);
-        X.add(3);
-        X.add(4);
-        assertTrue(dut.isYXComplete(stimulus, 1, X));
+        Set<Integer> x = new HashSet<>();
+        x.add(2);
+        x.add(3);
+        x.add(4);
+        assertTrue(dut.isYXComplete(stimulus, 1, x));
 
         stimulus.removeEdge(1, 4);
-        assertFalse(dut.isYXComplete(stimulus, 1, X));
+        assertFalse(dut.isYXComplete(stimulus, 1, x));
         stimulus.addEdge(1, 4);
 
-        X.clear();
-        X.add(2);
-        X.add(1);
-        assertFalse(dut.isYXComplete(stimulus, 3, X));
+        x.clear();
+        x.add(2);
+        x.add(1);
+        assertFalse(dut.isYXComplete(stimulus, 3, x));
 
     }
 
@@ -429,7 +429,7 @@ public class BergeGraphInspectorTest
 
     @Test
     @Category(OptionalTests.class)
-    public void checkMöbiusKantorGraph()
+    public void checkMoebiusKantorGraph()
     {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateMöbiusKantorGraph(stimulus);
@@ -465,7 +465,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    public void checkGrötzschGraph()
+    public void checkGroetzschGraph()
     {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateGrötzschGraph(stimulus);

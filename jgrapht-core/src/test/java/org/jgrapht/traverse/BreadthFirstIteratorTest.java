@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2020, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2021, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,8 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link BreadthFirstIterator} class.
@@ -157,8 +156,8 @@ public class BreadthFirstIteratorTest
         assertEquals(e3, bfs.getSpanningTreeEdge(3));
 
         assertNull(bfs.getParent(0));
-        assertEquals(new Integer(0), bfs.getParent(1));
-        assertEquals(new Integer(1), bfs.getParent(2));
-        assertEquals(new Integer(2), bfs.getParent(3));
+        assertEquals(Integer.valueOf(0), bfs.getParent(1));
+        assertEquals(Integer.valueOf(1), bfs.getParent(2));
+        assertEquals(Integer.valueOf(2), bfs.getParent(3));
     }
 }

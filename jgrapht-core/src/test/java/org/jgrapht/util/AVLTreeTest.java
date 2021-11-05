@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2021, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -206,12 +206,6 @@ public class AVLTreeTest
 
             assertEquals(i, node.getValue().intValue());
         }
-    }
-
-    private List<TreeNode<Integer>> fillNodes(AVLTree<Integer> tree)
-    {
-        final int nodeNum = 100;
-        return fillNodes(tree, 0, nodeNum);
     }
 
     private List<TreeNode<Integer>> fillNodes(AVLTree<Integer> tree, int from, int to)

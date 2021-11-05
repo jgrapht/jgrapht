@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -74,7 +74,7 @@ public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
     {
         super(partition, vertexComparator, vertical);
     }
-    
+
     @Override
     protected void drawSecondPartition(Graph<V, E> graph, List<V> partition, LayoutModel2D<V> model)
     {

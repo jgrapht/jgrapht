@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2012-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

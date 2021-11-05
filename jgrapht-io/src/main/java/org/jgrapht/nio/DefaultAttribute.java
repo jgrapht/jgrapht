@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -36,7 +36,7 @@ public class DefaultAttribute<T>
     /**
      * The null attribute.
      */
-    public static Attribute NULL = new DefaultAttribute<>(null, AttributeType.NULL);
+    public static final Attribute NULL = new DefaultAttribute<>(null, AttributeType.NULL);
 
     private T value;
     private AttributeType type;

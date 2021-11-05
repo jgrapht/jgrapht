@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.opt.graph.sparse;
+package org.jgrapht.opt.graph.sparse.specifics;
 
 import org.jgrapht.alg.util.*;
 

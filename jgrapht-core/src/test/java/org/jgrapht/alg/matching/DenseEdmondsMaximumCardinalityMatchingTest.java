@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -185,8 +185,7 @@ public final class DenseEdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(m1));
 
         // Not a maximum matching: augmenting path exists
-        Matching<Integer, DefaultEdge> m2 =
-            new MatchingAlgorithm.MatchingImpl<>(g, Set.of(e12), 2);
+        Matching<Integer, DefaultEdge> m2 = new MatchingAlgorithm.MatchingImpl<>(g, Set.of(e12), 2);
         assertFalse(matcher.isMaximumMatching(m2));
     }
 

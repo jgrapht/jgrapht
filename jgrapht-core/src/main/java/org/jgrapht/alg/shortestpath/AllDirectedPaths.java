@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2020, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2015-2021, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

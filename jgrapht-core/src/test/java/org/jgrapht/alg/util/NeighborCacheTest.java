@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2021, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,12 +20,11 @@ package org.jgrapht.alg.util;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
-import org.junit.rules.*;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
 /**
@@ -40,9 +39,6 @@ public class NeighborCacheTest
     private static final String V1 = "v1";
     private static final String V2 = "v2";
     private static final String V3 = "v3";
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -139,35 +135,35 @@ public class NeighborCacheTest
         ListenableGraph<String, DefaultEdge> graph =
             new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
 
-        final String A = "A";
-        final String B = "B";
-        final String C = "C";
-        final String D = "D";
+        final String a = "A";
+        final String b = "B";
+        final String c = "C";
+        final String d = "D";
 
         NeighborCache<String, DefaultEdge> cache = new NeighborCache<>(graph);
 
         graph.addGraphListener(cache);
 
-        graph.addVertex(A);
-        graph.addVertex(B);
-        graph.addVertex(C);
-        graph.addVertex(D);
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
 
-        graph.addEdge(D, A);
-        graph.addEdge(D, B);
-        graph.addEdge(D, C);
+        graph.addEdge(d, a);
+        graph.addEdge(d, b);
+        graph.addEdge(d, c);
 
-        Set<String> neighborsOfD = cache.neighborsOf(D);
-        Set<String> neighborsOfC = cache.neighborsOf(C);
-        Set<String> neighborsOfB = cache.neighborsOf(B);
-        Set<String> neighborsOfA = cache.neighborsOf(A);
+        Set<String> neighborsOfD = cache.neighborsOf(d);
+        Set<String> neighborsOfC = cache.neighborsOf(c);
+        Set<String> neighborsOfB = cache.neighborsOf(b);
+        Set<String> neighborsOfA = cache.neighborsOf(a);
 
-        assertThat(neighborsOfD, hasItems(A, B, C));
+        assertThat(neighborsOfD, hasItems(a, b, c));
         assertThat(neighborsOfA.size(), is(1));
         assertThat(neighborsOfB.size(), is(1));
         assertThat(neighborsOfC.size(), is(1));
 
-        graph.removeVertex(D);
+        graph.removeVertex(d);
 
         assertTrue(neighborsOfD.isEmpty());
 
@@ -183,42 +179,40 @@ public class NeighborCacheTest
         ListenableGraph<String, DefaultEdge> graph =
             new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
 
-        final String A = "A";
-        final String B = "B";
-        final String C = "C";
-        final String D = "D";
+        final String a = "A";
+        final String b = "B";
+        final String c = "C";
+        final String d = "D";
 
         NeighborCache<String, DefaultEdge> cache = new NeighborCache<>(graph);
 
         graph.addGraphListener(cache);
 
-        graph.addVertex(A);
-        graph.addVertex(B);
-        graph.addVertex(C);
-        graph.addVertex(D);
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
 
-        graph.addEdge(D, A);
-        graph.addEdge(D, B);
-        graph.addEdge(D, C);
+        graph.addEdge(d, a);
+        graph.addEdge(d, b);
+        graph.addEdge(d, c);
 
-        assertThat(cache.neighborListOf(B), hasItems(D));
-        assertThat(cache.neighborListOf(B).size(), is(1));
+        assertThat(cache.neighborListOf(b), hasItems(d));
+        assertThat(cache.neighborListOf(b).size(), is(1));
 
-        graph.addEdge(A, B);
+        graph.addEdge(a, b);
 
-        assertThat(cache.neighborListOf(B), hasItems(A, D));
-        assertThat(cache.neighborListOf(B).size(), is(2));
+        assertThat(cache.neighborListOf(b), hasItems(a, d));
+        assertThat(cache.neighborListOf(b).size(), is(2));
 
-        graph.removeEdge(D, B);
+        graph.removeEdge(d, b);
 
-        assertThat(cache.neighborListOf(B), hasItems(A));
-        assertThat(cache.neighborListOf(B).size(), is(1));
+        assertThat(cache.neighborListOf(b), hasItems(a));
+        assertThat(cache.neighborListOf(b).size(), is(1));
 
-        graph.removeVertex(B);
+        graph.removeVertex(b);
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("no such vertex");
-        cache.neighborListOf(B);
+        assertThrows(IllegalArgumentException.class, () -> cache.neighborListOf(b));
     }
 
 }

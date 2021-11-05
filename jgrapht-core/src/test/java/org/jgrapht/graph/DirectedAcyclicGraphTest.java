@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2020, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2021, by Peter Giles and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

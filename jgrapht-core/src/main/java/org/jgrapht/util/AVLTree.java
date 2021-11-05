@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2021, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

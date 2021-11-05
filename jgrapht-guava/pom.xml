@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>1.5.2-SNAPSHOT</version>
     </parent>
     <artifactId>jgrapht-guava</artifactId>
     <name>JGraphT - Guava Adapter</name>
@@ -41,12 +41,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <!-- Suppress import of own exported packages -->
-                        <Import-Package>!org.jgrapht.guava.*,*</Import-Package>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -58,7 +52,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
+            <version>30.1.1-jre</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.code.findbugs</groupId>

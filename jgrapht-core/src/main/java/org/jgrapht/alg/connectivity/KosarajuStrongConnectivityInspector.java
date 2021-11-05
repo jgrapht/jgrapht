@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2020, by Christian Soltenborn and Contributors.
+ * (C) Copyright 2005-2021, by Christian Soltenborn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -64,8 +64,8 @@ public class KosarajuStrongConnectivityInspector<V, E>
     public List<Set<V>> stronglyConnectedSets()
     {
         if (stronglyConnectedSets == null) {
-            orderedVertices = new LinkedList<VertexData<V>>();
-            stronglyConnectedSets = new Vector<Set<V>>();
+            orderedVertices = new LinkedList<>();
+            stronglyConnectedSets = new ArrayList<>();
 
             // create VertexData objects for all vertices, store them
             createVertexData();
@@ -79,7 +79,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
             }
 
             // 'create' inverse graph (i.e. every edge is reversed)
-            Graph<V, E> inverseGraph = new EdgeReversedGraph<V, E>(graph);
+            Graph<V, E> inverseGraph = new EdgeReversedGraph<>(graph);
 
             // get ready for next dfs round
             resetVertexData();
@@ -90,7 +90,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
             for (VertexData<V> data : orderedVertices) {
                 if (!data.isDiscovered()) {
                     // new strongly connected set
-                    Set<V> set = new HashSet<V>();
+                    Set<V> set = new HashSet<>();
                     stronglyConnectedSets.add(set);
                     dfsVisit(inverseGraph, data, set);
                 }
@@ -112,7 +112,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
         vertexToVertexData = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         for (V vertex : graph.vertexSet()) {
-            vertexToVertexData.put(vertex, new VertexData2<V>(vertex, false, false));
+            vertexToVertexData.put(vertex, new VertexData2<>(vertex, false, false));
         }
     }
 
@@ -123,7 +123,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
      */
     private void dfsVisit(Graph<V, E> visitedGraph, VertexData<V> vertexData, Set<V> vertices)
     {
-        Deque<VertexData<V>> stack = new ArrayDeque<VertexData<V>>();
+        Deque<VertexData<V>> stack = new ArrayDeque<>();
         stack.add(vertexData);
 
         while (!stack.isEmpty()) {
@@ -136,7 +136,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
                     vertices.add(data.getVertex());
                 }
 
-                stack.add(new VertexData1<V>(data, true, true));
+                stack.add(new VertexData1<>(data, true, true));
 
                 // follow all edges
                 for (E edge : visitedGraph.outgoingEdgesOf(data.getVertex())) {
@@ -148,10 +148,8 @@ public class KosarajuStrongConnectivityInspector<V, E>
                         stack.add(targetData);
                     }
                 }
-            } else if (data.isFinished()) {
-                if (vertices == null) {
-                    orderedVertices.addFirst(data.getFinishedData());
-                }
+            } else if (data.isFinished() && vertices == null) {
+                orderedVertices.addFirst(data.getFinishedData());
             }
         }
     }
@@ -170,7 +168,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
     /*
      * Lightweight class storing some data for every vertex.
      */
-    private static abstract class VertexData<V>
+    private abstract static class VertexData<V>
     {
         private byte bitfield;
 

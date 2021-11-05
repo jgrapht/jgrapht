@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2021, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,7 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link ClusteringCoefficient}
@@ -120,8 +120,7 @@ public class ClusteringCoefficientTest
     @Test(expected = NullPointerException.class)
     public void testNullGraphClusteringCoefficient()
     {
-        ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-            new ClusteringCoefficient<>(null);
+        new ClusteringCoefficient<>(null);
     }
 
     @Test

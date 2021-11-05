@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2021, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,19 @@ import java.util.*;
 public class RadixSort
 {
 
-    public static int CUT_OFF = 40;
+    /**
+     * @deprecated use {@link #setCutOff(int)} instead
+     */
+    @Deprecated(since = "1.5.2", forRemoval = true)
+    public static int CUT_OFF = 40; // @CS.suppress[StaticVariableName]
+    // TODO: make this static field private, rename it to "cutOff" to comply
+    // with checkstyle naming rules and remove the // @CS.supress comment and in jgrapht_checks.xml
+    // the rule SuppressWithNearbyCommentFilter
+
+    public static void setCutOff(int cutOff)
+    {
+        CUT_OFF = cutOff;
+    }
 
     private static final int MAX_DIGITS = 32;
     private static final int MAX_D = 4;

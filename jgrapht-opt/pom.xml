@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>1.5.2-SNAPSHOT</version>
     </parent>
     <artifactId>jgrapht-opt</artifactId>
     <name>JGraphT - Optimized Graphs</name>
@@ -41,12 +41,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <!-- Suppress import of own exported packages -->
-                        <Import-Package>!org.jgrapht.opt.*,*</Import-Package>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -58,7 +52,7 @@
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
-            <version>8.3.1</version>
+            <version>8.5.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

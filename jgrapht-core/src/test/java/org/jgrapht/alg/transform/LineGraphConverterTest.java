@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Nikhil Sharma and Contributors.
+ * (C) Copyright 2018-2021, by Nikhil Sharma and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

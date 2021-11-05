@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2020, by France Telecom and Contributors.
+ * (C) Copyright 2007-2021, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

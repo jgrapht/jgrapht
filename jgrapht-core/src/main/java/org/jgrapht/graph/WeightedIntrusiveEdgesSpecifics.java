@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2021, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -53,22 +53,20 @@ public class WeightedIntrusiveEdgesSpecifics<V, E>
     @Override
     public boolean add(E e, V sourceVertex, V targetVertex)
     {
-        if (edgeMap.containsKey(e)) {
+        if (e instanceof IntrusiveWeightedEdge) {
+            return addIntrusiveEdge(e, sourceVertex, targetVertex, (IntrusiveWeightedEdge) e);
+
+        } else {
+            int previousSize = edgeMap.size();
+            IntrusiveWeightedEdge intrusiveEdge =
+                edgeMap.computeIfAbsent(e, i -> new IntrusiveWeightedEdge());
+            if (previousSize < edgeMap.size()) { // edge was added
+                intrusiveEdge.source = sourceVertex;
+                intrusiveEdge.target = targetVertex;
+                return true;
+            }
             return false;
         }
-
-        IntrusiveWeightedEdge intrusiveEdge;
-        if (e instanceof IntrusiveWeightedEdge) {
-            intrusiveEdge = (IntrusiveWeightedEdge) e;
-        } else {
-            intrusiveEdge = new IntrusiveWeightedEdge();
-        }
-
-        intrusiveEdge.source = sourceVertex;
-        intrusiveEdge.target = targetVertex;
-
-        edgeMap.put(e, intrusiveEdge);
-        return true;
     }
 
     @Override

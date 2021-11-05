@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,7 @@ import org.jgrapht.alg.drawing.model.Point2D;
 
 /**
  * A layout algorithm which re-scales vertex positions to (center-scale,center+scale) in all
- * dimensions. 
+ * dimensions.
  * 
  * The algorithm first subtracts the mean on each axis separately, then all values are adjusted so
  * that the maximum magnitude becomes scale. The result is finally translated back to the old

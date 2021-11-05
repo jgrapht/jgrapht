@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2020, by Graeme Ahokas and Contributors.
+ * (C) Copyright 2015-2021, by Graeme Ahokas and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

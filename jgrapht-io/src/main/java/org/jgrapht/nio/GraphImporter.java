@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -69,10 +69,7 @@ public interface GraphImporter<V, E>
      */
     default void importGraph(Graph<V, E> g, File file)
     {
-        try (
-            InputStreamReader reader =
-                new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))
-        {
+        try (Reader reader = new FileReader(file, StandardCharsets.UTF_8)) {
             importGraph(g, reader);
         } catch (IOException e) {
             throw new ImportException(e);

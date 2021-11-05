@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Szabolcs Besenyei and Contributors.
+ * (C) Copyright 2017-2021, by Szabolcs Besenyei and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

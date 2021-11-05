@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Dimitrios Michail, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2016-2021, by Dimitrios Michail, Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -92,8 +92,8 @@ public class BipartitePartitioning<V, E>
             return cachedPartitioning;
         }
 
-        Set<V> unknown = new HashSet<>(graph.vertexSet());
-        Set<V> odd = new HashSet<>();
+        Set<V> unknown = new LinkedHashSet<>(graph.vertexSet());
+        Set<V> odd = new LinkedHashSet<>();
         Deque<V> queue = new ArrayDeque<>();
 
         while (!unknown.isEmpty()) {
@@ -119,7 +119,7 @@ public class BipartitePartitioning<V, E>
             }
         }
 
-        Set<V> even = new HashSet<>(graph.vertexSet());
+        Set<V> even = new LinkedHashSet<>(graph.vertexSet());
         even.removeAll(odd);
 
         computed = true;

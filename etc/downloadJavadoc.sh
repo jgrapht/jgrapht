@@ -4,9 +4,9 @@
 
 set -e
 
-: ${TRAVIS_BUILD_DIR?"variable value required"}
+: ${GITHUB_WORKSPACE?"variable value required"}
 
-pushd ${TRAVIS_BUILD_DIR}
+pushd ${GITHUB_WORKSPACE}
 
 rm -rf docs/javadoc*
 git clone https://github.com/jgrapht/jgrapht-javadoc.git
@@ -16,7 +16,7 @@ rm -rf jgrapht-javadoc
 emit() {
     module=$1
     stripped=${2#"./"}
-    file=${TRAVIS_BUILD_DIR}/docs/javadoc/$stripped
+    file=${GITHUB_WORKSPACE}/docs/javadoc/$stripped
     mkdir -p $(dirname "$file")
     echo "---" > $file
     echo "redirect_to: " https://jgrapht.org/javadoc/$module/$stripped >> $file

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2020, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2021, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -98,7 +98,8 @@ public class CloneTest
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             return super.hashCode();
         }
     }

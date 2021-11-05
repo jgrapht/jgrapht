@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2020, by Nikolay Ognyanov, Dimitrios Michail and Contributors.
+ * (C) Copyright 2013-2021, by Nikolay Ognyanov, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,8 @@ import static org.junit.Assert.assertTrue;
 
 public class PatonCycleBaseTest
 {
-    private static int MAX_SIZE = 10;
-    private static int[] RESULTS = { 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36 };
+    private static final int MAX_SIZE = 10;
+    private static final int[] RESULTS = { 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36 };
 
     @Test
     public void testAlgorithm()

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Dimitrios Michail, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2016-2021, by Dimitrios Michail, Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -231,11 +231,11 @@ public class BipartitePartitioningTest
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-            final int T = 10 + random.nextInt(50);
-            final int N = 100 + random.nextInt(200);
+            final int t = 10 + random.nextInt(50);
+            final int n = 100 + random.nextInt(200);
 
             BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertForestGenerator<>(T, N);
+                new BarabasiAlbertForestGenerator<>(t, n);
             generator.generateGraph(graph);
 
             BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);

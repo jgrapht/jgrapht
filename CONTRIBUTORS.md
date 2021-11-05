@@ -144,6 +144,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Baljit Singh](https://github.com/singhbaljit)
 - [Sebastiano Vigna](https://github.com/vigna)
 - [Florentin Dörre](https://github.com/FlorentinD)
+- [Rostislav Svoboda](https://github.com/rsvoboda)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 

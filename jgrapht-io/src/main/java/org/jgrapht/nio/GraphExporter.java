@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -69,7 +69,7 @@ public interface GraphExporter<V, E>
      */
     default void exportGraph(Graph<V, E> g, File file)
     {
-        try (FileWriter writer = new FileWriter(file)) {
+        try (Writer writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             exportGraph(g, writer);
         } catch (IOException e) {
             throw new ExportException(e);

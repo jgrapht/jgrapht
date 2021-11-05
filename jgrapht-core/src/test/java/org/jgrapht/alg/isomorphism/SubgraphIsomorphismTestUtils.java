@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2020, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2021, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,7 +24,7 @@ import java.util.*;
 
 public class SubgraphIsomorphismTestUtils
 {
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     public static boolean allMatchingsCorrect(
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2, Graph<Integer, DefaultEdge> g1,

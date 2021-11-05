@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -44,11 +44,11 @@ public class GeneralizedPetersenGraphGenerator<V, E>
     /**
      * Key used to access the star polygon vertices in the resultMap
      */
-    public final String STAR = "star";
+    public static final String STAR = "star";
     /**
      * Key used to access the regular polygon vertices in the resultMap
      */
-    public final String REGULAR = "regular";
+    public static final String REGULAR = "regular";
 
     /**
      * Constructs a GeneralizedPetersenGraphGenerator used to generate a Generalized Petersen graphs

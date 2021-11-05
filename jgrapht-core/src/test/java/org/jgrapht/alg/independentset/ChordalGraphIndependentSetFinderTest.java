@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2021, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,7 +41,7 @@ public class ChordalGraphIndependentSetFinderTest
     public void testGetMaximumIndependentSet1()
     {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+        new ChordalityInspector<>(graph);
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNotNull(set);
         assertEquals(0, set.size());
@@ -53,7 +53,7 @@ public class ChordalGraphIndependentSetFinderTest
     @Test
     public void testGetMaximumIndependentSet2()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
@@ -67,7 +67,7 @@ public class ChordalGraphIndependentSetFinderTest
     @Test
     public void testGetMaximumIndependentSet3()
     {
-        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {3, 4},};
+        int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
@@ -80,12 +80,11 @@ public class ChordalGraphIndependentSetFinderTest
     @Test
     public void testGetMaximumIndependentSet4()
     {
-        int[][] edges = {{1, 1}, {1, 2}, {1, 2}, {2, 3}, {2, 3}, {1, 3},
-                {3, 3}, {3, 4}, {3, 4}, {4, 4}, {4, 4}, {4, 5},
-                {4, 5},};
+        int[][] edges = { { 1, 1 }, { 1, 2 }, { 1, 2 }, { 2, 3 }, { 2, 3 }, { 1, 3 }, { 3, 3 },
+            { 3, 4 }, { 3, 4 }, { 4, 4 }, { 4, 4 }, { 4, 5 }, { 4, 5 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
 
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+        new ChordalityInspector<>(graph);
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNotNull(set);
         assertEquals(2, set.size());

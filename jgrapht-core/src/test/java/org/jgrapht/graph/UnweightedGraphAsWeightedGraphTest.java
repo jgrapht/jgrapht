@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2021, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

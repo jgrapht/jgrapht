@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -246,10 +246,10 @@ public class LabelPropagationClustering<V, E>
          */
         private boolean updateLabel(V v)
         {
-            if (graph.degreeOf(v) == 0) { 
+            if (graph.degreeOf(v) == 0) {
                 return false;
             }
-            
+
             Pair<Map<String, Integer>, Integer> labelCountsAndMaximum =
                 getNeighborLabelCountsAndMaximum(v);
             Map<String, Integer> counts = labelCountsAndMaximum.getFirst();

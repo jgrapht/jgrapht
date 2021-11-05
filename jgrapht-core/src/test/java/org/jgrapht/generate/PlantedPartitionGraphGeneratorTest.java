@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Emilio Cruciani and Contributors.
+ * (C) Copyright 2018-2021, by Emilio Cruciani and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  */
 public class PlantedPartitionGraphGeneratorTest
 {
-    private final long SEED = 5;
+    private static final long SEED = 5;
 
     /* bad inputs */
 
@@ -335,11 +335,8 @@ public class PlantedPartitionGraphGeneratorTest
 
         PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        try {
-            List<Set<Integer>> communities = gen.getCommunities();
-            fail("gen.getCommunities() did not throw an IllegalStateException as expected");
-        } catch (IllegalStateException e) {
-        }
+
+        assertThrows(IllegalStateException.class, () -> gen.getCommunities());
     }
 
     @Test
@@ -357,11 +354,8 @@ public class PlantedPartitionGraphGeneratorTest
         gen.generateGraph(g);
         Graph<Integer, DefaultEdge> f = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
-        try {
-            gen.generateGraph(f);
-            fail("gen.getCommunities() did not throw an IllegalStateException as expected");
-        } catch (IllegalStateException e) {
-        }
+
+        assertThrows(IllegalStateException.class, () -> gen.generateGraph(f));
     }
 
 }

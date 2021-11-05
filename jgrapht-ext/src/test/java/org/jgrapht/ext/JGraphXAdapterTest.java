@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2021, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,15 @@
  */
 package org.jgrapht.ext;
 
-import com.mxgraph.model.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.fail;
+import com.mxgraph.model.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test methods for the class JGraphXAdapter.
@@ -298,8 +299,8 @@ public class JGraphXAdapterTest
         final int expectedEdges = 3;
         jGraphT.addEdge(v1, v2, edge1);
         jGraphT.addEdge(v1, v2, new DefaultEdge());
-        jGraphT.addEdge(v1, v3, edge1);
-        jGraphT.addEdge(v1, v4, edge1);
+        assertThrows(IntrusiveEdgeException.class, () -> jGraphT.addEdge(v1, v3, edge1));
+        assertThrows(IntrusiveEdgeException.class, () -> jGraphT.addEdge(v1, v4, edge1));
         jGraphT.addEdge(v2, v3);
         jGraphT.addEdge(v3, v4);
 

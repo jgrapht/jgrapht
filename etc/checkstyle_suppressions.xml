@@ -1,15 +1,24 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE suppressions PUBLIC
-    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
-    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
     <!-- Ignore header checks for package-info.java files -->
-    <suppress files="package-info\.java" checks="Header"/>
+    <suppress files="package-info\.java" checks="Header" />
 
     <!-- Suppression of Javadoc related checks for test files -->
-    <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocMethod"/>
-    <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocType"/>
-    <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocPackage"/>
+    <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocMethod" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocType" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocPackage" />
+    <!-- Suppress main-checks in test-code and test-checks in main-code -->
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="LocalFinalVariableNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="LocalFinalVariableNameTest" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="LocalVariableNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="LocalVariableNameTest" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="MemberNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="MemberNameTest" />
+    <suppress files="[/\\]src[/\\]test[/\\].*" id="MethodNameMain" />
+    <suppress files="[/\\]src[/\\]main[/\\].*" id="MethodNameTest" />
 </suppressions>

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2021, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,6 +20,8 @@ package org.jgrapht.alg.tour;
 import org.jgrapht.*;
 
 import java.util.*;
+
+import static org.jgrapht.util.ArrayUtil.*;
 
 /**
  * Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition. Ore gave
@@ -60,6 +62,7 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Alexandru Valeanu
+ * @author Hannes Wellmann
  */
 public class PalmerHamiltonianCycle<V, E>
     extends
@@ -82,91 +85,65 @@ public class PalmerHamiltonianCycle<V, E>
             throw new IllegalArgumentException("Graph doesn't have Ore's property");
         }
 
-        List<V> indexList = new ArrayList<>(graph.vertexSet());
+        Set<V> vertices = graph.vertexSet();
+        final int n = vertices.size(); // number of vertices
+        @SuppressWarnings("unchecked") V[] tour = (V[]) vertices.toArray(new Object[n + 1]);
 
-        // n - number of vertices
-        final int n = indexList.size();
-
-        int[] L = new int[n]; // L[u] = the node just before u (in the cycle)
-        int[] R = new int[n]; // R[u] = the node after u (in the cycle)
-
-        // arrange nodes in a cycle: 0, 1, 2, ..., n - 1, 0
-        for (int i = 0; i < n - 1; i++) {
-            L[i + 1] = i; // L = [n-1, 0, ..., n-2]
-            R[i] = i + 1; // R = [1, ..., n-1, 0]
+        while (searchAndCloseGap(tour, n, graph)) {
+            // repeat until not gap exists anymore
         }
-        L[0] = n - 1;
-        R[n - 1] = 0;
 
-        boolean changed;
-        do {
-            changed = false;
+        tour[n] = tour[0]; // close tour manually. Arrays.asList does not support add
+        return closedVertexListToTour(Arrays.asList(tour), graph);
+    }
 
-            // search for a gap, i.e.: two consecutive vertices x and R[x] that are not adjacent
-            // (connected by a edge) in the graph
-            int x = 0;
+    private static <V, E> boolean searchAndCloseGap(V[] tour, final int n, Graph<V, E> graph)
+    {
+        // search for a gap, i.e.: two consecutive vertices v and vN that are not adjacent in the
+        // graph (connected by an edge)
 
-            search: do {
-                // check if we found a gap in our cycle
-                if (!containsEdge(x, R[x], graph, indexList)) {
-                    changed = true;
+        V v = tour[n - 1]; // start with last so "last to first"-connection is checked first
+        for (int i = 0; i < n; i++) {
+            V vN = tour[i]; // vN - the successor of v, i - its index
 
-                    /*
-                     * Search for a node y such that the four vertices x, R[x], y, and R[y] are all
-                     * distinct and such that the graph contains edges from x to y and from R[y] to
-                     * R[x] ("a pair of crossing chords from the vertices of the gap to some other
-                     * pair of consecutive vertices that may or may not be adjacent" )
-                     */
-                    int y = 0;
-                    do {
-                        int u = x, v = R[x];
-                        int p = y, q = R[y];
+            // check if we found a gap in our cycle
+            if (!graph.containsEdge(v, vN)) {
 
-                        if (v != p && u != p && u != q) {
-                            if (containsEdge(u, p, graph, indexList)
-                                && containsEdge(v, q, graph, indexList))
-                            {
-                                R[u] = L[u];
-                                L[u] = p;
-                                R[v] = R[v];
-                                L[v] = q;
-                                L[p] = L[p];
-                                R[p] = u;
-                                L[q] = R[q];
-                                R[q] = v;
+                // Search for a node 'u' such that the four vertices v, vN, u, and uN are all
+                // distinct and that the graph contains edges from v to u and from vN to uN
+                // ("a pair of crossing chords from the vertices of the gap to some other pair of
+                // consecutive vertices that may or may not be adjacent")
 
-                                for (int z = R[u]; z != q; z = R[z]) {
-                                    int tmp = R[z];
-                                    R[z] = L[z];
-                                    L[z] = tmp;
-                                }
-                                break search;
-                            }
-                        }
-                        y = R[y];
-                    } while (y != 0);
+                V u = tour[n - 1]; // again, start with last vertex
+                for (int j = 0; j < n; j++) {
+                    V uN = tour[j]; // uN - the successor of u, j - its index
+
+                    boolean distinct = v != u && vN != u && v != uN; // v != u implies vN != uN
+                    if (distinct && graph.containsEdge(v, u) && graph.containsEdge(vN, uN)) {
+                        // found "a pair of crossing chords"
+                        reverseInCircle(tour, i, j - 1);
+                        return true;
+                    }
+                    u = uN;
                 }
-                x = R[x];
-            } while (x != 0);
-
-        } while (changed);
-
-        return buildTour(R, indexList, graph);
+                throw new IllegalStateException("Found a gap but no mean to close it");
+            }
+            v = vN;
+        }
+        return false;
     }
 
-    private static <V, E> boolean containsEdge(int u, int v, Graph<V, E> graph, List<V> indexList)
+    private static <V> void reverseInCircle(V[] array, int start, int end)
     {
-        return graph.containsEdge(indexList.get(u), indexList.get(v));
-    }
+        if (start < end) { // interval to reverse is completely contained in the array bounds
+            reverse(array, start, end);
 
-    private GraphPath<V, E> buildTour(int[] R, List<V> indexList, Graph<V, E> graph)
-    {
-        List<V> vertexList = new ArrayList<>(indexList.size() + 1);
-        int x = 0;
-        do {
-            vertexList.add(indexList.get(x));
-            x = R[x];
-        } while (x != 0);
-        return vertexListToTour(vertexList, graph);
+        } else { // interval to reverse wraps around the array end
+
+            // Happens if the first gap to swap is closer to the "end" than the second gap.
+            // Since it is all relative, instead of swapping "over the end" the opposite segment
+            // (within the array) is swapped.
+            reverse(array, end + 1, start - 1);
+        }
     }
 }

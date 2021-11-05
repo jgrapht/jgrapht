@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,35 @@
  */
 package org.jgrapht.nio.json;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
-import org.apache.commons.text.*;
-import org.jgrapht.*;
-import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.*;
-import org.jgrapht.nio.json.JsonParser.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.UUID;
 
-import java.io.*;
-import java.util.*;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.apache.commons.text.StringEscapeUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Triple;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
+import org.jgrapht.nio.ImportException;
+import org.jgrapht.nio.json.JsonParser.JsonContext;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
@@ -82,11 +100,80 @@ public class JSONEventDrivenImporter
     EventDrivenImporter<String, Triple<String, String, Double>>
 {
     /**
+     * Default name for the vertices collection
+     */
+    public static final String DEFAULT_VERTICES_COLLECTION_NAME = "nodes";
+    /**
+     * Default name for the edges collection
+     */
+    public static final String DEFAULT_EDGES_COLLECTION_NAME = "edges";
+
+    private boolean notifyVertexAttributesOutOfOrder;
+    private boolean notifyEdgeAttributesOutOfOrder;
+    private String verticesCollectionName = DEFAULT_VERTICES_COLLECTION_NAME;
+    private String edgesCollectionName = DEFAULT_EDGES_COLLECTION_NAME;
+
+    /**
      * Constructs a new importer.
      */
     public JSONEventDrivenImporter()
     {
-        super();
+        this(true, true);
+    }
+
+    /**
+     * Constructs a new importer.
+     * 
+     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
+     *        even if they appear together in the input
+     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
+     *        if they appear together in the input
+     */
+    public JSONEventDrivenImporter(
+        boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
+    {
+        this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
+        this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
+    }
+
+    /**
+     * Get the name used for the vertices collection in the file.
+     * 
+     * @return the name used for the vertices collection in the file.
+     */
+    public String getVerticesCollectionName()
+    {
+        return verticesCollectionName;
+    }
+
+    /**
+     * Set the name used for the vertices collection in the file.
+     * 
+     * @param verticesCollectionName the name
+     */
+    public void setVerticesCollectionName(String verticesCollectionName)
+    {
+        this.verticesCollectionName = Objects.requireNonNull(verticesCollectionName);
+    }
+
+    /**
+     * Get the name used for the edges collection in the file.
+     * 
+     * @return the name used for the edges collection in the file.
+     */
+    public String getEdgesCollectionName()
+    {
+        return edgesCollectionName;
+    }
+
+    /**
+     * Set the name used for the edges collection in the file.
+     * 
+     * @param edgesCollectionName the name
+     */
+    public void setEdgesCollectionName(String edgesCollectionName)
+    {
+        this.edgesCollectionName = Objects.requireNonNull(edgesCollectionName);
     }
 
     @Override
@@ -114,12 +201,8 @@ public class JSONEventDrivenImporter
             notifyImportEvent(ImportEvent.START);
             walker.walk(listener, graphContext);
             notifyImportEvent(ImportEvent.END);
-        } catch (IOException e) {
+        } catch (IOException | ParseCancellationException | IllegalArgumentException e) {
             throw new ImportException("Failed to import json graph: " + e.getMessage(), e);
-        } catch (ParseCancellationException pe) {
-            throw new ImportException("Failed to import json graph: " + pe.getMessage(), pe);
-        } catch (IllegalArgumentException iae) {
-            throw new ImportException("Failed to import json graph: " + iae.getMessage(), iae);
         }
     }
 
@@ -144,8 +227,6 @@ public class JSONEventDrivenImporter
         JsonBaseListener
     {
         private static final String GRAPH = "graph";
-        private static final String NODES = "nodes";
-        private static final String EDGES = "edges";
         private static final String ID = "id";
 
         private static final String WEIGHT = "weight";
@@ -216,9 +297,13 @@ public class JSONEventDrivenImporter
                     if (nodeId == null) {
                         nodeId = "Singleton_" + singletonsUUID + "_" + (singletons++);
                     }
-                    notifyVertex(nodeId);
-                    for (String key : attributes.keySet()) {
-                        notifyVertexAttribute(nodeId, key, attributes.get(key));
+                    if (notifyVertexAttributesOutOfOrder) {
+                        notifyVertex(nodeId);
+                        for (Entry<String, Attribute> entry : attributes.entrySet()) {
+                            notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
+                        }
+                    } else {
+                        notifyVertexWithAttributes(nodeId, attributes);
                     }
                     insideNode = false;
                     attributes = null;
@@ -228,17 +313,22 @@ public class JSONEventDrivenImporter
                         Attribute attributeWeight = attributes.get(WEIGHT);
                         if (attributeWeight != null) {
                             AttributeType type = attributeWeight.getType();
-                            if (type.equals(AttributeType.INT) || 
-                                type.equals(AttributeType.FLOAT)
+                            if (type.equals(AttributeType.INT) || type.equals(AttributeType.FLOAT)
                                 || type.equals(AttributeType.DOUBLE))
                             {
                                 weight = Double.parseDouble(attributeWeight.getValue());
                             }
                         }
                         Triple<String, String, Double> et = Triple.of(sourceId, targetId, weight);
-                        notifyEdge(et);
-                        for (String key : attributes.keySet()) {
-                            notifyEdgeAttribute(et, key, attributes.get(key));
+                        if (notifyEdgeAttributesOutOfOrder) {
+                            // notify individually
+                            notifyEdge(et);
+                            for (Entry<String, Attribute> entry : attributes.entrySet()) {
+                                notifyEdgeAttribute(et, entry.getKey(), entry.getValue());
+                            }
+                        } else {
+                            // notify with all attributes
+                            notifyEdgeWithAttributes(et, attributes);
                         }
                     } else if (sourceId == null) {
                         throw new IllegalArgumentException("Edge with missing source detected");
@@ -280,9 +370,9 @@ public class JSONEventDrivenImporter
             String name = unquote(ctx.STRING().getText());
 
             if (objectLevel == 1 && arrayLevel == 0) {
-                if (NODES.equals(name)) {
+                if (verticesCollectionName.equals(name)) {
                     insideNodes = true;
-                } else if (EDGES.equals(name)) {
+                } else if (edgesCollectionName.equals(name)) {
                     insideEdges = true;
                 }
             }
@@ -296,9 +386,9 @@ public class JSONEventDrivenImporter
             String name = unquote(ctx.STRING().getText());
 
             if (objectLevel == 1 && arrayLevel == 0) {
-                if (NODES.equals(name)) {
+                if (verticesCollectionName.equals(name)) {
                     insideNodes = false;
-                } else if (EDGES.equals(name)) {
+                } else if (edgesCollectionName.equals(name)) {
                     insideEdges = false;
                 }
             }

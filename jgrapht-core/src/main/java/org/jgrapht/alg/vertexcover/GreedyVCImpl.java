@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -109,8 +109,8 @@ public class GreedyVCImpl<V, E>
             vx.addNeighbor(ux);
 
             assert (ux.neighbors.get(vx).intValue() == vx.neighbors
-                .get(
-                    ux).intValue()) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+                .get(ux)
+                .intValue()) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
         TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
@@ -150,7 +150,7 @@ public class GreedyVCImpl<V, E>
             weight += vertexWeightMap.get(vx.v);
             assert (workingGraph
                 .parallelStream().noneMatch(
-                    ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
+                    ux -> ux.id == vx.id)) : "vx should no longer exist in the working graph";
         }
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }

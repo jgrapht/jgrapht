@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,23 @@
  */
 package org.jgrapht.nio.json;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.nio.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.io.*;
-import java.util.*;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.ImportException;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Tests for {@link JsonImporter}.
@@ -529,7 +535,7 @@ public class JSONImporterTest
         assertEquals(1, g.edgeSet().size());
 
     }
-    
+
     @Test
     public void testNegativeIntegerWeights()
         throws ImportException
@@ -562,4 +568,113 @@ public class JSONImporterTest
         assertEquals(-2.0, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
     }
 
+    @Test
+    public void testCreateVerticesWithAttributes()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "{\n"
+                     + "  \"nodes\": [\n"    
+                     + "  { \"id\":\"a0\", \"color\":\"gray\" },\n"
+                     + "  { \"id\":\"a1\", \"color\":\"green\" },\n"
+                     + "  { \"id\":\"a2\", \"color\":\"white\" }\n"
+                     + "  ],"
+                     + "  \"edges\": [\n"    
+                     + "  { \"source\":\"a0\", \"target\":\"a1\" },\n"
+                     + "  { \"source\":\"a0\", \"target\":\"a2\" }\n"
+                     + "  ]\n"
+                     + "}";
+        // @formatter:on
+
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+
+        importer.setVertexWithAttributesFactory((id, attrs) -> {
+            return id + "-" + attrs.get("color").getValue();
+        });
+
+        DirectedPseudograph<String, DefaultEdge> graph = new DirectedPseudograph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        importer.importGraph(graph, new StringReader(input));
+
+        assertTrue(graph.containsVertex("a0-gray"));
+        assertTrue(graph.containsVertex("a1-green"));
+        assertTrue(graph.containsVertex("a2-white"));
+    }
+
+    @Test
+    public void testCreateEdgesWithAttributes()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "{\n"
+                     + "  \"nodes\": [\n"    
+                     + "  { \"id\":\"a0\", \"color\":\"gray\" },\n"
+                     + "  { \"id\":\"a1\", \"color\":\"green\" },\n"
+                     + "  { \"id\":\"a2\", \"color\":\"white\" }\n"
+                     + "  ],"
+                     + "  \"edges\": [\n"    
+                     + "  { \"source\":\"a0\", \"target\":\"a1\", \"label\":\"e1\" },\n"
+                     + "  { \"source\":\"a0\", \"target\":\"a2\", \"label\":\"e2\" }\n"
+                     + "  ]\n"
+                     + "}";
+        // @formatter:on
+
+        JSONImporter<String, String> importer = new JSONImporter<>();
+
+        importer.setVertexWithAttributesFactory((id, attrs) -> {
+            return id + "-" + attrs.get("color").getValue();
+        });
+
+        importer.setEdgeWithAttributesFactory((attrs) -> {
+            return attrs.get("label").getValue();
+        });
+
+        DirectedPseudograph<String, String> graph =
+            new DirectedPseudograph<>(SupplierUtil.createStringSupplier(), null, false);
+        importer.importGraph(graph, new StringReader(input));
+
+        assertTrue(graph.containsEdge("e1"));
+        assertTrue(graph.containsEdge("e2"));
+    }
+
+    @Test
+    public void testWithOtherNameForVerticesAndEdgesCollection()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "{\n"
+                     + "  \"vertices\": [\n"    
+                     + "  { \"id\":\"1\" },\n"
+                     + "  { \"id\":\"2\" },\n"
+                     + "  { \"id\":\"3\" },\n"
+                     + "  { \"id\":\"4\" }\n"
+                     + "  ],\n"
+                     + "  \"rels\": [\n"    
+                     + "  { \"source\":\"1\", \"target\":\"2\" },\n"
+                     + "  { \"source\":\"1\", \"target\":\"3\" }\n"
+                     + "  ]\n"
+                     + "}";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+        importer.setVerticesCollectionName("vertices");
+        importer.setEdgesCollectionName("rels");
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(2, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("1", "3"));
+    }
+    
 }

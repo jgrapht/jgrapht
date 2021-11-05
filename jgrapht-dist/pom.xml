@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>1.5.2-SNAPSHOT</version>
     </parent>
     <artifactId>jgrapht-dist</artifactId>
     <name>JGraphT - Distributable Archives</name>
@@ -48,6 +48,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>jgrapht-opt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-unimi-dsi</artifactId>
+        </dependency>        
     </dependencies>
     <build>
         <plugins>

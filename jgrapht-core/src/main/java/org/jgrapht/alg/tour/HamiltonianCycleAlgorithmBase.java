@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Peter Harman and Contributors.
+ * (C) Copyright 2019-2021, by Peter Harman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,6 +35,7 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Peter Harman
+ * @author Hannes Wellmann
  */
 public abstract class HamiltonianCycleAlgorithmBase<V, E>
     implements

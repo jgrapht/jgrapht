@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2020, by Tom Larkworthy and Contributors.
+ * (C) Copyright 2009-2021, by Tom Larkworthy and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

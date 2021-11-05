@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Andrew Gainer-Dewar and Contributors.
+ * (C) Copyright 2016-2021, by Andrew Gainer-Dewar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -61,6 +61,7 @@ public class MaskEdgeSetTest
     }
 
     @Test
+    @SuppressWarnings("unlikely-arg-type")
     public void testContains()
     {
         assertFalse(testMaskedEdgeSet.contains(e1));

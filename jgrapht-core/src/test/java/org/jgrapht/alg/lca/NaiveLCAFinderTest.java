@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2021, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,8 +19,6 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.util.*;
@@ -216,14 +214,12 @@ public class NaiveLCAFinderTest
      * See issue #953
      */
     @Test
-    public void testLca(){
+    public void testLca()
+    {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         /*
-         *       a-->b-->c
-         *       |       ^
-         *       V       |
-         *       d-->e-->f
+         * a-->b-->c | ^ V | d-->e-->f
          *
          */
         Graphs.addEdgeWithVertices(g, "a", "b");

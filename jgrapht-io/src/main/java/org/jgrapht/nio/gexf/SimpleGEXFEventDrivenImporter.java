@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -143,8 +143,8 @@ public class SimpleGEXFEventDrivenImporter
             notifyImportEvent(ImportEvent.START);
             xmlReader.parse(new InputSource(input));
             notifyImportEvent(ImportEvent.END);
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GEXF", se);
+        } catch (Exception e) {
+            throw new ImportException("Failed to parse GEXF", e);
         }
     }
 
@@ -178,10 +178,15 @@ public class SimpleGEXFEventDrivenImporter
 
             // create reader
             return saxParser.getXMLReader();
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GEXF", se);
+        } catch (Exception e) {
+            throw new ImportException("Failed to parse GEXF", e);
         }
     }
+
+    private static final List<String> GRAPH_ATTRS =
+        List.of("defaultedgetype", "timeformat", "mode", "start", "end");
+    private static final List<String> NODE_ATTRS = List.of("label", "pid");
+    private static final List<String> EDGE_ATTRS = List.of("type", "label");
 
     // content handler
     private class GEXFHandler
@@ -189,17 +194,15 @@ public class SimpleGEXFEventDrivenImporter
         DefaultHandler
     {
         private static final String GRAPH = "graph";
-        private final List<String> GRAPH_ATTRS =
-            List.of("defaultedgetype", "timeformat", "mode", "start", "end");
+
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
-        private final List<String> NODE_ATTRS = List.of("label", "pid");
+
         private static final String EDGE = "edge";
         private static final String EDGE_ID = "id";
         private static final String EDGE_SOURCE = "source";
         private static final String EDGE_TARGET = "target";
         private static final String EDGE_WEIGHT = "weight";
-        private final List<String> EDGE_ATTRS = List.of("type", "label");
 
         private static final String ATTRIBUTES = "attributes";
         private static final String ATTRIBUTES_CLASS = "class";

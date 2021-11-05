@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2021, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -55,8 +55,7 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test(expected = NullPointerException.class)
     public void testNullGraphs()
     {
-        AHURootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHURootedTreeIsomorphismInspector<>(null, null, null, null);
+        new AHURootedTreeIsomorphismInspector<>(null, null, null, null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -64,8 +63,7 @@ public class AHURootedTreeIsomorphismInspectorTest
     {
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        AHURootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHURootedTreeIsomorphismInspector<>(tree1, null, null, null);
+        new AHURootedTreeIsomorphismInspector<>(tree1, null, null, null);
     }
 
     @Test
@@ -315,14 +313,14 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test
     public void testLineGraph()
     {
-        final int N = 20_000;
+        final int n = 20_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 1; i <= N - 1; i++) {
+        for (int i = 1; i <= n - 1; i++) {
             tree1.addEdge(i, i + 1);
         }
 
@@ -343,14 +341,14 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test
     public void testHugeNumberOfChildren()
     {
-        final int N = 100_000;
+        final int n = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             tree1.addVertex(i);
         }
 
-        for (int i = 2; i <= N; i++) {
+        for (int i = 2; i <= n; i++) {
             tree1.addEdge(1, i);
         }
 

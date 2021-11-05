@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011-2020, by Robby McKilliam and Contributors.
+ * (C) Copyright 2011-2021, by Robby McKilliam and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

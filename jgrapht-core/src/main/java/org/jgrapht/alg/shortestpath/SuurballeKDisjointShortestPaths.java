@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2018-2021, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 /*
- * (C) Copyright 2018-2020, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2018-2021, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

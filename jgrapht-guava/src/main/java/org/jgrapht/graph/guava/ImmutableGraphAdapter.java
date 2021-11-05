@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -217,7 +217,7 @@ public class ImmutableGraphAdapter<V>
 
         // setup the vertex order
         vertexOrder = createVertexOrder(vertexOrderMethod);
-        
+
         // setup the immutable copy
         this.graph = ImmutableGraph.copyOf(mutableGraph);
     }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -1747,7 +1747,7 @@ public class NamedGraphGenerator<V, E>
     }
 
     // -------------Zachary's Karate Club Graph-----------//
-    
+
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Zachary%27s_karate_club">Zachary's
      * karate club Graph</a>.
@@ -1773,14 +1773,11 @@ public class NamedGraphGenerator<V, E>
         for (int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
-    
+
     // --------------Helper methods-----------------/
     private V addVertex(Graph<V, E> targetGraph, int i)
     {
-        if (!vertexMap.containsKey(i)) {
-            vertexMap.put(i, targetGraph.addVertex());
-        }
-        return vertexMap.get(i);
+        return vertexMap.computeIfAbsent(i, i1 -> targetGraph.addVertex());
     }
 
     private void addEdge(Graph<V, E> targetGraph, int i, int j)

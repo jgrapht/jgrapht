@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2020, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2017-2021, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -547,7 +547,7 @@ public class BetweennessCentralityTest
 
         return g;
     }
-    
+
     @Test(expected = ArithmeticException.class)
     public void testOverflow()
     {
@@ -580,6 +580,5 @@ public class BetweennessCentralityTest
         assertEquals(scores.get(3289), Double.NaN, 1e-9);
         assertEquals(scores.get(3290), 0d, 1e-9);
     }
-
 
 }

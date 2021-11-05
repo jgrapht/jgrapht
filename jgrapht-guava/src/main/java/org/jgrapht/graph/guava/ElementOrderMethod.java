@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -76,7 +76,7 @@ public class ElementOrderMethod<T>
     {
         return new ElementOrderMethod<T>(Type.COMPARATOR, comparator);
     }
-    
+
     /**
      * Get the guava comparator ordering method.
      * 
@@ -123,7 +123,7 @@ public class ElementOrderMethod<T>
          */
         NATURAL,
         /**
-         * Use the Guava node order comparator. 
+         * Use the Guava node order comparator.
          */
         GUAVA_COMPARATOR,
         /**

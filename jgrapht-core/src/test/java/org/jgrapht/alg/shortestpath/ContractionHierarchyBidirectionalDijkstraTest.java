@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2021, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,17 +19,16 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
-import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link ContractionHierarchyBidirectionalDijkstra}.
@@ -42,18 +41,22 @@ public class ContractionHierarchyBidirectionalDijkstraTest
     private static final long SEED = 19L;
 
     /**
-     * Executor which is supplied to the {@link ContractionHierarchyBidirectionalDijkstra}
-     * algorithm in this test case.
+     * Executor which is supplied to the {@link ContractionHierarchyBidirectionalDijkstra} algorithm
+     * in this test case.
      */
     private static ThreadPoolExecutor executor;
 
     @BeforeClass
-    public static void createExecutor(){
-        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    public static void createExecutor()
+    {
+        executor =
+            ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
-    public static void shutdownExecutor() throws InterruptedException {
+    public static void shutdownExecutor()
+        throws InterruptedException
+    {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
@@ -66,8 +69,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
+        new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
     }
 
     @Test(expected = IllegalArgumentException.class)

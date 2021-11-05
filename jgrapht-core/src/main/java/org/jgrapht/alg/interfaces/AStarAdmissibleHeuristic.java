@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2020, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ * (C) Copyright 2015-2021, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -65,9 +65,9 @@ public interface AStarAdmissibleHeuristic<V>
                 double weight = graph.getEdgeWeight(e);
                 V edgeSource = graph.getEdgeSource(e);
                 V edgeTarget = graph.getEdgeTarget(e);
-                double h_x = getCostEstimate(edgeSource, targetVertex);
-                double h_y = getCostEstimate(edgeTarget, targetVertex);
-                if (h_x > weight + h_y)
+                double hX = getCostEstimate(edgeSource, targetVertex);
+                double hY = getCostEstimate(edgeTarget, targetVertex);
+                if (hX > weight + hY)
                     return false;
             }
         }

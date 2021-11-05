@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2021, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,6 +38,7 @@ public class BlossomVTreeTest
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
     @Test
+    @SuppressWarnings("unused")
     public void testTreeNodeIterator()
     {
         Graph<Integer, DefaultWeightedEdge> graph =

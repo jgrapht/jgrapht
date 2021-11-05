@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2020, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2021, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

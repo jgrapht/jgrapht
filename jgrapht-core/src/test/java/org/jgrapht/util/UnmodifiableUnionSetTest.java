@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -257,15 +257,17 @@ public class UnmodifiableUnionSetTest
         public Iterator<E> iterator()
         {
             iteratorCalls++;
-            return new Iterator<E>()
+            return new Iterator<>()
             {
                 private Iterator<E> delegateIterator = delegate.iterator();
 
+                @Override
                 public boolean hasNext()
                 {
                     return delegateIterator.hasNext();
                 }
 
+                @Override
                 public E next()
                 {
                     iteratorNextCalls++;

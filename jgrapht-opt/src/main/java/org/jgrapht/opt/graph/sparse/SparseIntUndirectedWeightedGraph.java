@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,15 @@
  */
 package org.jgrapht.opt.graph.sparse;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 
 /**
  * Sparse undirected weighted graph.
@@ -80,19 +83,30 @@ public class SparseIntUndirectedWeightedGraph
     public SparseIntUndirectedWeightedGraph(
         int numVertices, List<Triple<Integer, Integer, Double>> edges)
     {
+        this(numVertices, edges.size(), () -> edges.stream());
+    }
+
+    /**
+     * Create a new graph from an edge stream
+     * 
+     * @param numVertices number of vertices
+     * @param numEdges number of edges
+     * @param edges a supplier of an edge stream with weights
+     */
+    public SparseIntUndirectedWeightedGraph(
+        int numVertices, int numEdges, Supplier<Stream<Triple<Integer, Integer, Double>>> edges)
+    {
         super(
-            numVertices,
-            edges
-                .stream().map(e -> Pair.of(e.getFirst(), e.getSecond()))
-                .collect(Collectors.toList()));
+            numVertices, numEdges,
+            () -> edges.get().map(e -> Pair.of(e.getFirst(), e.getSecond())));
 
-        this.weights = new double[edges.size()];
+        this.weights = new double[numEdges];
 
-        int eIndex = 0;
-        for (Triple<Integer, Integer, Double> e : edges) {
+        int[] eIndex = new int[1];
+        edges.get().forEach(e -> {
             double edgeWeight = e.getThird() != null ? e.getThird() : Graph.DEFAULT_EDGE_WEIGHT;
-            weights[eIndex++] = edgeWeight;
-        }
+            weights[eIndex[0]++] = edgeWeight;
+        });
     }
 
     @Override
@@ -104,14 +118,14 @@ public class SparseIntUndirectedWeightedGraph
     @Override
     public double getEdgeWeight(Integer e)
     {
-        assertEdgeExist(e);
+        specifics.assertEdgeExist(e);
         return weights[e];
     }
 
     @Override
     public void setEdgeWeight(Integer e, double weight)
     {
-        assertEdgeExist(e);
+        specifics.assertEdgeExist(e);
         weights[e] = weight;
     }
 

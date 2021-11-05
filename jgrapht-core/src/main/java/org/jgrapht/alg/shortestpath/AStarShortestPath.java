@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2020, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ * (C) Copyright 2015-2021, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -201,8 +201,8 @@ public class AStarShortestPath<V, E>
                 continue;
             }
 
-            double gScore_current = gScoreMap.get(currentNode.getValue());
-            double tentativeGScore = gScore_current + graph.getEdgeWeight(edge);
+            double gScore = gScoreMap.get(currentNode.getValue());
+            double tentativeGScore = gScore + graph.getEdgeWeight(edge);
             double fScore =
                 tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex);
 

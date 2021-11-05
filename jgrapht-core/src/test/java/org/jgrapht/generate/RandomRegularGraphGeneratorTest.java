@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Emilio Cruciani and Contributors.
+ * (C) Copyright 2018-2021, by Emilio Cruciani and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,7 @@ import static org.junit.Assert.fail;
  */
 public class RandomRegularGraphGeneratorTest
 {
-    private final long SEED = 5;
+    private static final long SEED = 5;
 
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeN()

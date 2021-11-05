@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2021, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,10 +35,7 @@ public class PruferTreeGeneratorTest
     @Test(expected = IllegalArgumentException.class)
     public void testNullPruferSequence()
     {
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(null);
+        new PruferTreeGenerator<>(null);
     }
 
     @Test
@@ -57,11 +54,7 @@ public class PruferTreeGeneratorTest
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidPruferSequence()
     {
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        PruferTreeGenerator<Integer, DefaultEdge> generator =
-            new PruferTreeGenerator<>(new int[] { 10 });
+        new PruferTreeGenerator<>(new int[] { 10 });
     }
 
     @Test
@@ -86,19 +79,13 @@ public class PruferTreeGeneratorTest
     @Test(expected = IllegalArgumentException.class)
     public void testZeroVertices()
     {
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(0);
+        new PruferTreeGenerator<>(0);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNullRNG()
     {
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(100, null);
+        new PruferTreeGenerator<>(100, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -152,9 +139,9 @@ public class PruferTreeGeneratorTest
     public void testRandomSizes()
     {
         Random random = new Random(0x88);
-        final int NUM_TESTS = 500;
+        final int numTests = 500;
 
-        for (int test = 0; test < NUM_TESTS; test++) {
+        for (int test = 0; test < numTests; test++) {
             Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 

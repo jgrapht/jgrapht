@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Hannes Wellmann and Contributors.
+ * (C) Copyright 2020-2021, by Hannes Wellmann and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,10 +24,12 @@ import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.ArrayList;
 import java.util.function.*;
+import java.util.regex.*;
 import java.util.stream.*;
 
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
 
 /**
  * Importer for files in the
@@ -319,10 +321,7 @@ public class TSPLIBImporter<V, E>
                     double[] coordinates = node.getCoordinates();
                     // Arrays.equals checks identity. Conversion to a List<Double> and use of a
                     // HashSet has linear runtime. Unlike with a TreeSet using a comparator.
-                    Double[] coordinateObj = new Double[coordinates.length];
-                    for (int i = 0; i < coordinates.length; i++) {
-                        coordinateObj[i] = Double.valueOf(coordinates[i]);
-                    }
+                    Double[] coordinateObj = stream(coordinates).boxed().toArray(Double[]::new);
                     if (!distinctCoordinates.add(Arrays.asList(coordinateObj))) {
                         hasDistinctLocations = Boolean.FALSE;
                         return hasDistinctLocations;
@@ -619,9 +618,11 @@ public class TSPLIBImporter<V, E>
         return nodes;
     }
 
+    private static final Pattern WHITE_SPACE = Pattern.compile("[ \t]+");
+
     private Node parseNode(String line)
     {
-        String[] elements = line.split(" ");
+        String[] elements = WHITE_SPACE.split(line);
         if (elements.length != vectorLength + 1) {
             throw new IllegalArgumentException(
                 "Unexpected number of elements <" + elements.length + "> in line: " + line);
@@ -814,6 +815,7 @@ public class TSPLIBImporter<V, E>
 
     private String requireValidValue(String value, List<String> validValues, String valueType)
     {
+        value = extractValueBeforeWhitespace(value);
         for (String validValue : validValues) {
             if (validValue.equalsIgnoreCase(value)) {
                 return validValue; // always use the upper case version
@@ -824,12 +826,18 @@ public class TSPLIBImporter<V, E>
 
     private Integer parseInteger(String valueStr, String valueType)
     {
+        valueStr = extractValueBeforeWhitespace(valueStr);
         try {
             return Integer.valueOf(valueStr);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(
                 "Invalid " + valueType + " integer value <" + valueStr + ">", e);
         }
+    }
+
+    public String extractValueBeforeWhitespace(String value)
+    {
+        return WHITE_SPACE.split(value.strip(), 2)[0]; // discard everything after first white-space
     }
 
     // read utilities
@@ -845,7 +853,7 @@ public class TSPLIBImporter<V, E>
         try {
             String line = reader.readLine();
             if (line != null) {
-                line = line.trim();
+                line = line.strip();
                 return "EOF".equals(line) ? null : line;
             }
             return null;
@@ -856,7 +864,7 @@ public class TSPLIBImporter<V, E>
 
     private static String getKey(String[] keyValue)
     {
-        return keyValue[0].trim().toUpperCase();
+        return keyValue[0].strip().toUpperCase();
     }
 
     private String getValue(String[] keyValue)
@@ -864,7 +872,7 @@ public class TSPLIBImporter<V, E>
         if (keyValue.length < 2) {
             throw new IllegalStateException("Missing value for key " + getKey(keyValue));
         }
-        return keyValue[1].trim();
+        return keyValue[1].strip();
     }
 
     private void requireNotSet(Object target, String keyName)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -43,10 +43,10 @@ public class HubDepressedIndexLinkPredictionTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         TestUtil
-        .constructGraph(
-            g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
-                { 3, 4 }, { 3, 5 }, { 4, 5 } });
-        
+            .constructGraph(
+                g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
+                    { 3, 4 }, { 3, 5 }, { 4, 5 } });
+
         HubDepressedIndexLinkPrediction<Integer, DefaultEdge> alg =
             new HubDepressedIndexLinkPrediction<>(g);
 
