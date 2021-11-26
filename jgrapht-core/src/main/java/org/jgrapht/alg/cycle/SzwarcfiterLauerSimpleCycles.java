@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's algorithm.
@@ -44,7 +45,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     private Graph<V, E> graph;
 
     // The state of the algorithm.
-    private List<List<V>> cycles = null;
+    private Consumer<List<V>> cycleConsumer = null;
     private V[] iToV = null;
     private Map<V, Integer> vToI = null;
     private Map<V, Set<V>> bSets = null;
@@ -77,7 +78,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     /**
      * Get the graph
-     * 
+     *
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -87,7 +88,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     /**
      * Set the graph
-     * 
+     *
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -99,14 +100,14 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public void findSimpleCycles(Consumer<List<V>> consumer)
     {
         // Just a straightforward implementation of
         // the algorithm.
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
         }
-        initState();
+        initState(consumer);
         KosarajuStrongConnectivityInspector<V, E> inspector =
             new KosarajuStrongConnectivityInspector<>(graph);
         List<Set<V>> sccs = inspector.stronglyConnectedSets();
@@ -127,9 +128,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
             cycle(toI(vertex), 0);
         }
 
-        List<List<V>> result = cycles;
         clearState();
-        return result;
     }
 
     private boolean cycle(int v, int q)
@@ -177,7 +176,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
                         break;
                     }
                 }
-                cycles.add(cycle);
+                cycleConsumer.accept(cycle);
             } else {
                 noCycle(v, w);
             }
@@ -219,9 +218,9 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     }
 
     @SuppressWarnings("unchecked")
-    private void initState()
+    private void initState(Consumer<List<V>> consumer)
     {
-        cycles = new ArrayList<>();
+        cycleConsumer = consumer;
         iToV = (V[]) graph.vertexSet().toArray();
         vToI = new HashMap<>();
         bSets = new HashMap<>();
@@ -240,7 +239,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     private void clearState()
     {
-        cycles = null;
+        cycleConsumer = null;
         iToV = null;
         vToI = null;
         bSets = null;

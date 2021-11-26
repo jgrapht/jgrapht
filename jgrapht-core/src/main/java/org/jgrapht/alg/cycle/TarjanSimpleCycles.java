@@ -20,6 +20,7 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Find all simple cycles of a directed graph using the Tarjan's algorithm.
@@ -40,7 +41,7 @@ public class TarjanSimpleCycles<V, E>
 {
     private Graph<V, E> graph;
 
-    private List<List<V>> cycles;
+    private Consumer<List<V>> cycleConsumer = null;
     private Set<V> marked;
     private ArrayDeque<V> markedStack;
     private ArrayDeque<V> pointStack;
@@ -69,7 +70,7 @@ public class TarjanSimpleCycles<V, E>
 
     /**
      * Get the graph
-     * 
+     *
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -79,7 +80,7 @@ public class TarjanSimpleCycles<V, E>
 
     /**
      * Set the graph
-     * 
+     *
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -91,12 +92,12 @@ public class TarjanSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public void findSimpleCycles(Consumer<List<V>> consumer)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
         }
-        initState();
+        initState(consumer);
 
         for (V start : graph.vertexSet()) {
             backtrack(start, start);
@@ -105,9 +106,7 @@ public class TarjanSimpleCycles<V, E>
             }
         }
 
-        List<List<V>> result = cycles;
         clearState();
-        return result;
     }
 
     private boolean backtrack(V start, V vertex)
@@ -140,7 +139,7 @@ public class TarjanSimpleCycles<V, E>
                 while (it.hasNext()) {
                     cycle.add(it.next());
                 }
-                cycles.add(cycle);
+                cycleConsumer.accept(cycle);
             } else if (!marked.contains(currentVertex)) {
                 boolean gotCycle = backtrack(start, currentVertex);
                 foundCycle = foundCycle || gotCycle;
@@ -158,9 +157,9 @@ public class TarjanSimpleCycles<V, E>
         return foundCycle;
     }
 
-    private void initState()
+    private void initState(Consumer<List<V>> consumer)
     {
-        cycles = new ArrayList<>();
+        cycleConsumer = consumer;
         marked = new HashSet<>();
         markedStack = new ArrayDeque<>();
         pointStack = new ArrayDeque<>();
@@ -174,7 +173,7 @@ public class TarjanSimpleCycles<V, E>
 
     private void clearState()
     {
-        cycles = null;
+        cycleConsumer = null;
         marked = null;
         markedStack = null;
         pointStack = null;

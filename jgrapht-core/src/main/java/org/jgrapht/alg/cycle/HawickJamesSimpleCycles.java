@@ -20,6 +20,7 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -46,7 +47,6 @@ public class HawickJamesSimpleCycles<V, E>
 
     private int nVertices = 0;
     private long nCycles = 0;
-    private List<List<V>> cycles = null;
 
     // The main state of the algorithm
     private Integer start = 0;
@@ -199,7 +199,7 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Get the graph
-     * 
+     *
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -209,7 +209,7 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Set the graph
-     * 
+     *
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -221,7 +221,7 @@ public class HawickJamesSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public void findSimpleCycles(Consumer<List<V>> consumer)
         throws IllegalArgumentException
     {
         if (graph == null) {
@@ -229,16 +229,13 @@ public class HawickJamesSimpleCycles<V, E>
         }
 
         initState();
-        cycles = new ArrayList<>();
         operation = () -> {
             List<V> cycle = stack.stream().map(v -> iToV[v]).collect(toList());
             Collections.reverse(cycle);
-            cycles.add(cycle);
+            consumer.accept(cycle);
         };
         analyzeCircuits();
-        List<List<V>> result = cycles;
         clearState();
-        return result;
     }
 
     /**
@@ -263,7 +260,7 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Count the number of simple cycles. It can count up to Long.MAX cycles in a graph.
-     * 
+     *
      * @return the number of simple cycles
      */
     public long countSimpleCycles()

@@ -20,6 +20,7 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Find all simple cycles of a directed graph using the Tiernan's algorithm.
@@ -62,7 +63,7 @@ public class TiernanSimpleCycles<V, E>
 
     /**
      * Get the graph
-     * 
+     *
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -72,7 +73,7 @@ public class TiernanSimpleCycles<V, E>
 
     /**
      * Set the graph
-     * 
+     *
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -84,7 +85,7 @@ public class TiernanSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public void findSimpleCycles(Consumer<List<V>> consumer)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -93,7 +94,6 @@ public class TiernanSimpleCycles<V, E>
         List<V> path = new ArrayList<>();
         Set<V> pathSet = new HashSet<>();
         Map<V, Set<V>> blocked = new HashMap<>();
-        List<List<V>> cycles = new LinkedList<>();
 
         int index = 0;
         for (V v : graph.vertexSet()) {
@@ -103,7 +103,7 @@ public class TiernanSimpleCycles<V, E>
 
         Iterator<V> vertexIterator = graph.vertexSet().iterator();
         if (!vertexIterator.hasNext()) {
-            return cycles;
+            return;
         }
 
         V startOfPath;
@@ -141,7 +141,7 @@ public class TiernanSimpleCycles<V, E>
             startOfPath = path.get(0);
             if (graph.containsEdge(endOfPath, startOfPath)) {
                 List<V> cycle = new ArrayList<>(path);
-                cycles.add(cycle);
+                consumer.accept(cycle);
             }
 
             // vertex closure
@@ -173,7 +173,5 @@ public class TiernanSimpleCycles<V, E>
             // terminate
             break;
         }
-
-        return cycles;
     }
 }

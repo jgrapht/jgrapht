@@ -18,6 +18,7 @@
 package org.jgrapht.alg.cycle;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * A common interface for classes implementing algorithms for enumeration of the simple cycles of a
@@ -35,5 +36,17 @@ public interface DirectedSimpleCycles<V, E>
      *
      * @return The list of all simple cycles. Possibly empty but never <code>null</code>.
      */
-    List<List<V>> findSimpleCycles();
+    default List<List<V>> findSimpleCycles()
+    {
+        List<List<V>> result = new ArrayList<>();
+        findSimpleCycles(result::add);
+        return result;
+    }
+
+    /**
+     * Find the simple cycles of the graph.
+     *
+     * @param consumer Consumer that will be called with each cycle found.
+     */
+    void findSimpleCycles(Consumer<List<V>> consumer);
 }

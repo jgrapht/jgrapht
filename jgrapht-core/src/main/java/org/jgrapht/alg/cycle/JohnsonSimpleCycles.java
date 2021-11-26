@@ -22,6 +22,7 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.builder.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.
@@ -44,7 +45,7 @@ public class JohnsonSimpleCycles<V, E>
     private Graph<V, E> graph;
 
     // The main state of the algorithm.
-    private List<List<V>> cycles = null;
+    private Consumer<List<V>> cycleConsumer = null;
     private V[] iToV = null;
     private Map<V, Integer> vToI = null;
     private Set<V> blocked = null;
@@ -79,12 +80,12 @@ public class JohnsonSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public void findSimpleCycles(Consumer<List<V>> consumer)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
         }
-        initState();
+        initState(consumer);
 
         int startIndex = 0;
         int size = graph.vertexSet().size();
@@ -106,9 +107,7 @@ public class JohnsonSimpleCycles<V, E>
             }
         }
 
-        List<List<V>> result = cycles;
         clearState();
-        return result;
     }
 
     private Pair<Graph<V, E>, Integer> findMinSCSG(int startIndex)
@@ -245,7 +244,7 @@ public class JohnsonSimpleCycles<V, E>
             if (successorIndex == startIndex) {
                 List<V> cycle = new ArrayList<>(stack.size());
                 stack.descendingIterator().forEachRemaining(cycle::add);
-                cycles.add(cycle);
+                cycleConsumer.accept(cycle);
                 foundCycle = true;
             } else if (!blocked.contains(successor)) {
                 boolean gotCycle = findCyclesInSCG(startIndex, successorIndex, scg);
@@ -279,9 +278,9 @@ public class JohnsonSimpleCycles<V, E>
     }
 
     @SuppressWarnings("unchecked")
-    private void initState()
+    private void initState(Consumer<List<V>> consumer)
     {
-        cycles = new LinkedList<>();
+        cycleConsumer = consumer;
         iToV = (V[]) graph.vertexSet().toArray();
         vToI = new HashMap<>();
         blocked = new HashSet<>();
@@ -295,7 +294,7 @@ public class JohnsonSimpleCycles<V, E>
 
     private void clearState()
     {
-        cycles = null;
+        cycleConsumer = null;
         iToV = null;
         vToI = null;
         blocked = null;
