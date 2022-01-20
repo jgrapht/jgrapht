@@ -22,7 +22,6 @@ import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -334,11 +333,51 @@ public class HawickJamesSimpleCyclesTest
         List<List<String>> cycles = hjsc.findSimpleCycles();
         assertEquals(2, cycles.size());
 
-        String cycle0 = cycles.get(0).stream().collect(Collectors.joining(","));
-        String cycle1 = cycles.get(1).stream().collect(Collectors.joining(","));
+        String cycle0 = String.join(",", cycles.get(0));
+        String cycle1 = String.join(",", cycles.get(1));
 
-        assertEquals(cycle0, "0,1,2,3");
-        assertEquals(cycle1, "0,1,4,5,2,3");
+        assertEquals("0,1,2,3", cycle0);
+        assertEquals("0,1,4,5,2,3", cycle1);
     }
 
+    @Test
+    public void testConsumerAPI()
+    {
+        SampleVertex vertexA = new SampleVertex("A", true);
+        SampleVertex vertexB = new SampleVertex("B", true);
+        SampleVertex vertexC = new SampleVertex("C", false);
+
+        Graph<SampleVertex, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(vertexA);
+        graph.addVertex(vertexB);
+        graph.addVertex(vertexC);
+
+        graph.addEdge(vertexA, vertexB);
+        graph.addEdge(vertexB, vertexA);
+        graph.addEdge(vertexB, vertexC);
+        graph.addEdge(vertexC, vertexA);
+
+        List<List<SampleVertex>> invalidCycles = new ArrayList<>();
+
+        new HawickJamesSimpleCycles<>(graph).findSimpleCycles(cycle -> {
+            if (cycle.stream().anyMatch(vertex -> !vertex.allowedInCycles)) {
+                invalidCycles.add(cycle);
+            }
+        });
+
+        assertEquals(1, invalidCycles.size());
+        assertEquals(asList(vertexA, vertexB, vertexC), invalidCycles.get(0));
+    }
+
+    static class SampleVertex
+    {
+        final String name;
+        final boolean allowedInCycles;
+
+        SampleVertex(String name, boolean allowedInCycles)
+        {
+            this.name = name;
+            this.allowedInCycles = allowedInCycles;
+        }
+    }
 }
