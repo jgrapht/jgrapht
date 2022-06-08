@@ -27,28 +27,29 @@ import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
 
 /**
- * The Naive Greedy algorithm.
+ * The Naive Greedy Modularity algorithm.
  * 
  * <p>
  * The algorithm is capable of detecting communities in a graph by calculating 
  * the <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a>
- * of possible communities.
+ * of possible communities. It takes as input a graph and returns the communities 
+ * of the graph which produce the highest modularity.
  * </p>
  * 
  * @author Antonia Tsiftsi
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class NaiveGreedyAlgorithm<V, E> implements ClusteringAlgorithm<V>
+public class NaiveGreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V>
 {
     private final Graph<V, E> graph;
 
     /**
-     * Create a new clustering algorithm.
+     * Create a new Naive Greedy clustering algorithm.
      * 
      * @param graph the graph
      */
-    public NaiveGreedyAlgorithm(Graph<V, E> graph)
+    public NaiveGreedyModularityAlgorithm(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireUndirected(graph);
     }
@@ -71,7 +72,7 @@ public class NaiveGreedyAlgorithm<V, E> implements ClusteringAlgorithm<V>
         // greedily merge communities until no improvement is possible
         while(isNull(oldModularity) || oldModularity < curModularity){
             oldModularity = curModularity;
-            List<Set<V>> bestCommunities = null;
+            List<Set<V>> bestCommunities = null; 
                      
             for (i=0; i<communities.size(); i++) {
                 for (j=0; j<communities.size(); j++) {
@@ -97,7 +98,6 @@ public class NaiveGreedyAlgorithm<V, E> implements ClusteringAlgorithm<V>
                     double trialModularity = measurer.modularity(trialCommunities);
                     if(trialModularity>=curModularity){
                         curModularity = trialModularity;
-                        
                         bestCommunities=trialCommunities;
                     }
                 }
