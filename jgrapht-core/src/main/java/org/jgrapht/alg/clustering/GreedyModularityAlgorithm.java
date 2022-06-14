@@ -142,8 +142,6 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V>
             Set<V> bothNbrs = new HashSet<V>(nbrsI);
             bothNbrs.retainAll(nbrsJ);
             
-            // join communities
-            
             // update DQ 
             for(V k:allNbrs){
                 Double DQik = communityI.get(k);
@@ -158,10 +156,29 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V>
                 communityJ.put(k, DQjk);
             }
             
+             // join communities
+            communityJ.putAll(communityI);
+            communityI.clear();
+            
             // update DQHeap
+            for(V vi: allNbrs){
+                AddressableHeap<Double, Pair<V,V>> heap = new PairingHeap<>(Comparator.reverseOrder());
+                Map<V, Double> columns =DQ.get(vi);
+                for(V vj: columns.keySet()){
+                    double dq = columns.get(vj);
+                    Pair<V,V> pair = new Pair<>(vi, vj);
+                    heap.insert(dq,pair);
+                }
+                DQHeap.put(vi, heap);
+            }
             
             // update maxHeapH
             maxHeapH.deleteMin();
+            for(V vi: allNbrs){
+                double dq = DQHeap.get(vi).findMin().getKey();
+                Pair<V,V> pair = DQHeap.get(vi).findMin().getValue();
+                maxHeapH.insert(dq, pair);
+            }
             
             // update Ai
             double ai=0;
