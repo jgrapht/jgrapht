@@ -113,12 +113,10 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			maxHeapH.insert(dq, pair);
 		}
 
-		// 3: Map of ai
-		Map<V, Double> Ai = new HashMap<>();
+		// 3: Map of a
+		Map<V, Double> a = new HashMap<>();
 		for (V v : graph.vertexSet()) {
-			int k = graph.degreeOf(v);
-			double a = k / (2 * m);
-			Ai.put(v, a);
+			a.put(v, (double) graph.degreeOf(v) / (2 * m));
 		}
 
 		while (DQ.size() != 1) {
@@ -148,9 +146,9 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 				if (bothNbrs.contains(k)) { // k community connected to both i and j
 					DQjk += DQik;
 				} else if (nbrsI.contains(k)) { // k community connected only to i
-					DQjk = DQik - 2 * Ai.get(i) * Ai.get(k);
+					DQjk = DQik - 2 * a.get(i) * a.get(k);
 				} else { // k community connected only to j
-					DQjk -= 2 * Ai.get(i) * Ai.get(k);
+					DQjk -= 2 * a.get(i) * a.get(k);
 				}
 				communityJ.put(k, DQjk);
 			}
@@ -181,10 +179,9 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 
 			// update Ai
 			double ai = 0;
-			double aj = Ai.get(j);
-			double a = ai + aj;
-			Ai.put(i, ai);
-			Ai.put(j, a);
+			double aj = a.get(j);
+			a.put(i, ai);
+			a.put(j, ai + aj);
 
 			// increment Q by DQ
 			Q += max.getKey();
