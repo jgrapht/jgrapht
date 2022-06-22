@@ -84,12 +84,20 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			kj = graph.degreeOf(vj);
 			// calculation of DQ
 			double dq = (1.0 / (2 * m)) - ((ki * kj) / ((4.0 * m * m)));
-			Map<V, Double> columns = DQ.get(vi);
-			if (columns == null) {
-				columns = new TreeMap<>();
-				DQ.put(vi, columns);
+			
+			Map<V, Double> columnsI = DQ.get(vi);
+			if (columnsI == null) {
+				columnsI = new TreeMap<>();
+				DQ.put(vi, columnsI);
 			}
-			columns.put(vj, dq);
+			columnsI.put(vj, dq);
+
+			Map<V, Double> columnsJ = DQ.get(vj);
+			if (columnsJ == null) {
+				columnsJ = new TreeMap<>();
+				DQ.put(vj, columnsJ);
+			}
+			columnsJ.put(vi, dq);			
 		}
 
 		// 1: Pairing Heap of DQs
@@ -122,14 +130,12 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 		while (DQ.size() != 1) {
 			// initialization
 			AddressableHeap.Handle<Double, Pair<V, V>> max = maxHeapH.findMin();
+			System.out.println("Max dq = " + max.getKey());
 			V i = max.getValue().getFirst();
 			V j = max.getValue().getSecond();
 
-			Map<V, Double> communityI = DQ.get(i);
-			Map<V, Double> communityJ = DQ.get(j);
-
-			Set<V> nbrsI = communityI.keySet();
-			Set<V> nbrsJ = communityJ.keySet();
+			Set<V> nbrsI = DQ.get(i).keySet();
+			Set<V> nbrsJ = DQ.get(j).keySet();
 
 			Set<V> allNbrs = new HashSet<V>(nbrsI);
 			allNbrs.addAll(nbrsJ);
@@ -141,21 +147,22 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 
 			// update DQ
 			for (V k : allNbrs) {
-				Double DQik = communityI.get(k);
-				Double DQjk = communityJ.get(k);
+				double DQik = DQ.get(i).get(k);
+				double DQjk = DQ.get(j).get(k);
+				double newDQjk;
 				if (bothNbrs.contains(k)) { // k community connected to both i and j
-					DQjk += DQik;
+					newDQjk = DQik + DQjk;
 				} else if (nbrsI.contains(k)) { // k community connected only to i
-					DQjk = DQik - 2 * a.get(i) * a.get(k);
+					newDQjk = DQik - 2 * a.get(j) * a.get(k);
 				} else { // k community connected only to j
-					DQjk -= 2 * a.get(i) * a.get(k);
+					newDQjk = DQjk - 2 * a.get(i) * a.get(k);
 				}
-				communityJ.put(k, DQjk);
+				DQ.get(j).put(k, newDQjk);
 			}
 
 			// join communities
-			communityJ.putAll(communityI);
-			communityI.clear();
+			DQ.get(j).putAll(DQ.get(i));
+			DQ.get(i).clear();
 
 			// update DQHeap
 			for (V vi : allNbrs) {
@@ -177,11 +184,9 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 				maxHeapH.insert(dq, pair);
 			}
 
-			// update Ai
-			double ai = 0;
-			double aj = a.get(j);
-			a.put(i, ai);
-			a.put(j, ai + aj);
+			// update a
+			a.put(j, a.get(i) + a.get(j));
+			a.put(i, 0d);
 
 			// increment Q by DQ
 			Q += max.getKey();
