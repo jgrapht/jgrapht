@@ -70,6 +70,11 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			Set<V> set = Set.of(v);
 			communities.add(set);
 		}
+                /*Map<V, Set<V>> communities = new HashMap<>();
+                for (V v : graph.iterables().vertices()) {
+			Set<V> set = Set.of(v);
+			communities.put(v, set);
+		}*/
 
 		// initialization of Q
 		UndirectedModularityMeasurer<V, E> measurer = new UndirectedModularityMeasurer<>(graph);
@@ -137,12 +142,12 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			Set<V> nbrsI = DQ.get(i).keySet();
 			Set<V> nbrsJ = DQ.get(j).keySet();
 
-			Set<V> allNbrs = new HashSet<V>(nbrsI);
+			Set<V> allNbrs = new HashSet<>(nbrsI);
 			allNbrs.addAll(nbrsJ);
 			allNbrs.remove(i);
 			allNbrs.remove(j);
 
-			Set<V> bothNbrs = new HashSet<V>(nbrsI);
+			Set<V> bothNbrs = new HashSet<>(nbrsI);
 			bothNbrs.retainAll(nbrsJ);
 
 			// update DQ
@@ -157,12 +162,25 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 				} else { // k community connected only to j
 					newDQjk = DQjk - 2 * a.get(i) * a.get(k);
 				}
+                                // update DQ
 				DQ.get(j).put(k, newDQjk);
+                                DQ.get(k).put(j, newDQjk);
 			}
 
 			// join communities
-			DQ.get(j).putAll(DQ.get(i));
-			DQ.get(i).clear();
+                        for(V v: DQ.get(i).keySet()){
+                            if(!v.equals(j) && !bothNbrs.contains(v)){
+                                DQ.get(j).put(v, DQ.get(i).get(v));
+                            }
+                        }
+                        
+                        // clear i row and column
+			for(V v: DQ.keySet()){
+                            if(DQ.get(v).keySet().contains(i)){
+                                DQ.get(v).remove(i);
+                            }
+                        }
+                        DQ.remove(i);
 
 			// update DQHeap
 			for (V vi : allNbrs) {
@@ -173,11 +191,12 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 					Pair<V, V> pair = new Pair<>(vi, vj);
 					heap.insert(dq, pair);
 				}
-				DQHeap.put(vi, heap);
+                                DQHeap.replace(vi, heap);
+                                DQHeap.remove(i);
 			}
 
 			// update maxHeapH
-			maxHeapH.deleteMin();
+			maxHeapH.deleteMin(); 
 			for (V vi : allNbrs) {
 				double dq = DQHeap.get(vi).findMin().getKey();
 				Pair<V, V> pair = DQHeap.get(vi).findMin().getValue();
