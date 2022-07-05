@@ -70,12 +70,13 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			Set<V> set = Set.of(v);
 			communities.add(set);
 		}
-                /*Map<V, Set<V>> communities = new HashMap<>();
+                
+                Map<V, Set<V>> communitiesMap = new HashMap<>();
                 for (V v : graph.iterables().vertices()) {
 			Set<V> set = Set.of(v);
-			communities.put(v, set);
-		}*/
-
+			communitiesMap.put(v, set);
+		} 
+                                
 		// initialization of Q
 		UndirectedModularityMeasurer<V, E> measurer = new UndirectedModularityMeasurer<>(graph);
 		double Q = measurer.modularity(communities);
@@ -104,7 +105,7 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			}
 			columnsJ.put(vi, dq);			
 		}
-
+                
 		// 1: Pairing Heap of DQs
 		Map<V, AddressableHeap<Double, Pair<V, V>>> DQHeap = new HashMap<>();
 		for (V vi : DQ.keySet()) {
@@ -152,19 +153,27 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 
 			// update DQ
 			for (V k : allNbrs) {
-				double DQik = DQ.get(i).get(k);
-				double DQjk = DQ.get(j).get(k);
 				double newDQjk;
 				if (bothNbrs.contains(k)) { // k community connected to both i and j
+                                        double DQik = DQ.get(i).get(k);
+                                        double DQjk = DQ.get(j).get(k);
 					newDQjk = DQik + DQjk;
 				} else if (nbrsI.contains(k)) { // k community connected only to i
+                                        double DQik = DQ.get(i).get(k);
 					newDQjk = DQik - 2 * a.get(j) * a.get(k);
 				} else { // k community connected only to j
+                                        double DQjk = DQ.get(j).get(k);
 					newDQjk = DQjk - 2 * a.get(i) * a.get(k);
 				}
                                 // update DQ
-				DQ.get(j).put(k, newDQjk);
-                                DQ.get(k).put(j, newDQjk);
+                                if(nbrsJ.contains(k)){
+                                    DQ.get(j).put(k, newDQjk);
+                                    DQ.get(k).put(j, newDQjk);
+                                }else if(nbrsI.contains(k)){
+                                    DQ.get(i).put(k, newDQjk);
+                                    DQ.get(k).put(i, newDQjk);
+                                }
+				
 			}
 
 			// join communities
@@ -182,34 +191,57 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
                         }
                         DQ.remove(i);
 
-			// update DQHeap
-			for (V vi : allNbrs) {
+			// update DQHeap for k
+			for (V k : allNbrs) {
 				AddressableHeap<Double, Pair<V, V>> heap = new PairingHeap<>(Comparator.reverseOrder());
-				Map<V, Double> columns = DQ.get(vi);
+				Map<V, Double> columns = DQ.get(k);
 				for (V vj : columns.keySet()) {
 					double dq = columns.get(vj);
-					Pair<V, V> pair = new Pair<>(vi, vj);
+					Pair<V, V> pair = new Pair<>(k, vj);
 					heap.insert(dq, pair);
 				}
-                                DQHeap.replace(vi, heap);
-                                DQHeap.remove(i);
+                                DQHeap.replace(k, heap);
 			}
-
+                        // update DQHeap for j
+                        AddressableHeap<Double, Pair<V, V>> heap = new PairingHeap<>(Comparator.reverseOrder());
+                        Map<V, Double> columns = DQ.get(j);
+                        for (V v : columns.keySet()) {
+                                double dq = columns.get(v);
+                                Pair<V, V> pair = new Pair<>(j, v);
+                                heap.insert(dq, pair);
+                        }
+                        DQHeap.replace(j, heap);
+                        // remove i heap
+                        DQHeap.remove(i);
+                        
 			// update maxHeapH
 			maxHeapH.deleteMin(); 
-			for (V vi : allNbrs) {
-				double dq = DQHeap.get(vi).findMin().getKey();
-				Pair<V, V> pair = DQHeap.get(vi).findMin().getValue();
+			for (V k : allNbrs) {
+				double dq = DQHeap.get(k).findMin().getKey();
+				Pair<V, V> pair = DQHeap.get(k).findMin().getValue();
 				maxHeapH.insert(dq, pair);
 			}
-
+                                               
 			// update a
 			a.put(j, a.get(i) + a.get(j));
 			a.put(i, 0d);
 
 			// increment Q by DQ
 			Q += max.getKey();
+                        
+                        //after while ?
+                        // update communitiesMap
+                        /*for(V v: DQ.keySet()){
+                            Set<V> set = DQ.get(v).keySet();
+                            communitiesMap.put(v, set);
+                        }*/
 		}
+                
+                // update communities list based on DQ
+                for(V v: communitiesMap.keySet()){
+                    Set<V> set = communitiesMap.get(v);
+                    communities.add(set);
+                }
 
 		ClusteringAlgorithm.ClusteringImpl<V> clustering = new ClusteringAlgorithm.ClusteringImpl<>(communities);
 		return clustering;
