@@ -38,7 +38,7 @@ import java.util.function.ToDoubleFunction;
  * 1245-1262. 10.1137/0218082.
  *
  * <p>
- * The time complexity of the algorithm if $O(|T_1|\cdot|T_2|\cdot min(depth(T_1),leaves(T_1)) \cdot
+ * The time complexity of the algorithm is $O(|T_1|\cdot|T_2|\cdot min(depth(T_1),leaves(T_1)) \cdot
  * min(depth(T_2),leaves(T_2)))$. Space complexity is $O(|T_1|\cdot |T_2|)$, where $|T_1|$ and
  * $|T_2|$ denote number of vertices in trees $T_1$ and $T_2$ correspondingly, $leaves()$ function
  * returns number of leaf vertices in a tree.
