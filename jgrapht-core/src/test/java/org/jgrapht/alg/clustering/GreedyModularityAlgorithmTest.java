@@ -132,7 +132,9 @@ public class GreedyModularityAlgorithmTest {
 //		assertEquals(2, clustering.getNumberClusters());
 //		assertEquals(Set.of(8, 9, 10, 11, 12, 13, 14, 15), clustering.getClusters().get(0));
 //		assertEquals(Set.of(0, 1, 2, 3, 4, 5, 6, 7), clustering.getClusters().get(1));
+//              Clusters: [[1, 2, 4], [0, 3, 5], [6, 7], [8, 9, 12, 14, 15], [10, 11, 13]]
 	}
+        
         @Test
 	public void testZacharyKarateClub() {
 		Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected()
@@ -266,6 +268,7 @@ public class GreedyModularityAlgorithmTest {
 //		assertEquals(Set.of(32, 33, 34, 9, 15, 16, 19, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31),
 //				clustering.getClusters().get(1));
 //		assertEquals(Set.of(1, 5, 6, 7, 11, 12, 17, 20), clustering.getClusters().get(2));
+//              Clusters: [[17, 1, 5, 6, 7, 11, 12], [3, 4, 8, 10, 13, 14], [18, 2, 20, 22], [32, 25, 26, 29], [33, 34, 9, 15, 16, 19, 21, 23, 24, 27, 28, 30, 31]]
 	}
 
 	@Test
@@ -369,10 +372,9 @@ public class GreedyModularityAlgorithmTest {
 
 		System.out.println("Number of clusters: " + clustering.getNumberClusters());
 		System.out.println("Clusters: " + clustering.getClusters());
-//		assertEquals(3, clustering.getNumberClusters());
-//		assertEquals(Set.of(9, 10), clustering.getClusters().get(0));
-//		assertEquals(Set.of(1, 2, 3, 4), clustering.getClusters().get(1));
-//		assertEquals(Set.of(5, 6, 7, 8), clustering.getClusters().get(2));
-//              Clusters: [[1, 2, 3, 4], [5, 6, 7, 8, 9], [10]]
+		assertEquals(3, clustering.getNumberClusters());
+		assertEquals(Set.of(1, 2, 3, 4), clustering.getClusters().get(0));
+		assertEquals(Set.of(5, 6, 7, 8), clustering.getClusters().get(1));
+                assertEquals(Set.of(9, 10), clustering.getClusters().get(2));
 	}
 }
