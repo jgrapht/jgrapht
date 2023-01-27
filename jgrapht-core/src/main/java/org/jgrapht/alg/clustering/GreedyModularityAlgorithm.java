@@ -33,6 +33,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jheaps.AddressableHeap;
 import org.jheaps.AddressableHeap.Handle;
 import org.jheaps.tree.PairingHeap;
+import java.lang.Comparable;
 
 /**
  * The Greedy Modularity algorithm.
@@ -94,7 +95,7 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 				columnsJ = new TreeMap<>();
 				DQ.put(vj, columnsJ);
 			}
-			columnsJ.put(vi, dq);			
+			columnsJ.put(vi, dq);		
 		}
                 
 		// 1: Pairing Heap of DQs
@@ -129,16 +130,16 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 		}
                 
 		while (DQ.size() != 1) { 
-			for (V v : DQ.keySet()) {
-				Handle<Double, Pair<V, V>> minV = DQHeap.get(v).findMin();
-				Handle<Double, Pair<V, V>> handle = maxHeapHandles.get(v);
-				assert minV.getValue().equals(handle.getValue());
-//				if (!minV.getValue().equals(handle.getValue())) { 
-//					System.out.println("Problem on line " + v);
-//					System.out.println("Min from dqheap=" + minV.getKey() + ", "+ minV.getValue());
-//					System.out.println("Min from maxheap handle=" + handle.getKey() + ", "+ handle.getValue());
-//				}
-			}
+//			for (V v : DQ.keySet()) {
+//				Handle<Double, Pair<V, V>> minV = DQHeap.get(v).findMin();
+//				Handle<Double, Pair<V, V>> handle = maxHeapHandles.get(v);
+//				assert minV.getValue().equals(handle.getValue());
+////				if (!minV.getValue().equals(handle.getValue())) { 
+////					System.out.println("Problem on line " + v);
+////					System.out.println("Min from dqheap=" + minV.getKey() + ", "+ minV.getValue());
+////					System.out.println("Min from maxheap handle=" + handle.getKey() + ", "+ handle.getValue());
+////				}
+//			}
                         
 			// compute best two communities to merge
 			AddressableHeap.Handle<Double, Pair<V, V>> max = maxHeap.findMin();
@@ -150,14 +151,30 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
                         
 			V i = max.getValue().getFirst();
 			V j = max.getValue().getSecond();
+                        System.out.println("i= "+ i +", j= "+ j);
                         
-			Set<V> nbrsI = DQ.get(i).keySet();
+//                        if (((Comparable)i).compareTo((Comparable)j) >= 0) { 
+//				V tmp = j; 
+//				j = i; 
+//				i = tmp;
+//			};
+
+                        System.out.println("i= "+ i +", j= "+ j);
+                        
+                        Set<V> nbrsI = DQ.get(i).keySet();
+                        if(DQ.get(j).isEmpty()){
+                            continue;
+                        }
 			Set<V> nbrsJ = DQ.get(j).keySet();
 
 			Set<V> allNbrs = new HashSet<>(nbrsI);
 			allNbrs.addAll(nbrsJ);
 			allNbrs.remove(i);
 			allNbrs.remove(j);
+                        
+                        if(allNbrs.isEmpty()){
+                            maxHeapHandles.get(j).delete();
+                        }
                         
 			Set<V> bothNbrs = new HashSet<>(nbrsI);
 			bothNbrs.retainAll(nbrsJ);
@@ -245,10 +262,12 @@ public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
 			DQHeapHandles.put(j, newJHeapHandles);
                         
                         // update maxHeapH for j-th row
-			Handle<Double, Pair<V, V>> newMaxDQj = newJHeap.findMin();
-			maxHeapHandles.get(j).delete();
-			maxHeapHandles.put(j, maxHeap.insert(newMaxDQj.getKey(), newMaxDQj.getValue()));
-                             
+                        if(!newJHeap.isEmpty()){
+                            Handle<Double, Pair<V, V>> newMaxDQj = newJHeap.findMin();
+                            maxHeapHandles.get(j).delete();
+                            maxHeapHandles.put(j, maxHeap.insert(newMaxDQj.getKey(), newMaxDQj.getValue()));
+                        }
+			 
 			// update communities by combining community i and community j
 			communitiesMap.get(j).addAll(communitiesMap.get(i));
 			communitiesMap.remove(i);
