@@ -262,10 +262,10 @@ public class GreedyModularityAlgorithmTest {
 
 		System.out.println("Number of clusters: " + clustering.getNumberClusters());
 		System.out.println("Clusters: " + clustering.getClusters());
-//		assertEquals(3, clustering.getNumberClusters());
-//		assertEquals(Set.of(2, 3, 4, 8, 10, 13, 14, 18, 22), clustering.getClusters().get(0));
-//		assertEquals(Set.of(1, 5, 6, 7, 11, 12, 17, 20), clustering.getClusters().get(1));
-//		assertEquals(Set.of(32, 33, 34, 9, 15, 16, 19, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31),clustering.getClusters().get(2));
+		assertEquals(3, clustering.getNumberClusters());
+		assertEquals(Set.of(2, 3, 4, 8, 10, 13, 14, 18, 22), clustering.getClusters().get(0));
+		assertEquals(Set.of(1, 5, 6, 7, 11, 12, 17, 20), clustering.getClusters().get(1));
+		assertEquals(Set.of(32, 33, 34, 9, 15, 16, 19, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31),clustering.getClusters().get(2));
 	}
 
 	@Test
@@ -368,9 +368,149 @@ public class GreedyModularityAlgorithmTest {
 
 		System.out.println("Number of clusters: " + clustering.getNumberClusters());
 		System.out.println("Clusters: " + clustering.getClusters());
-//		assertEquals(3, clustering.getNumberClusters());
-//		assertEquals(Set.of(1, 2, 3, 4), clustering.getClusters().get(0));
-//		assertEquals(Set.of(5, 6, 7, 8), clustering.getClusters().get(1));
-//                assertEquals(Set.of(9, 10), clustering.getClusters().get(2));
+                assertEquals(2, clustering.getNumberClusters());
+		assertEquals(Set.of(1, 2, 3, 4), clustering.getClusters().get(0));
+		assertEquals(Set.of(5, 6, 7, 8, 9, 10), clustering.getClusters().get(1));
 	}               
+        
+        @Test
+	public void test6() {
+		Graph<Integer, DefaultEdge> g = GraphTypeBuilder.directed()
+				.vertexSupplier(SupplierUtil.createIntegerSupplier())
+				.edgeSupplier(SupplierUtil.createDefaultEdgeSupplier())
+                                .buildGraph();
+
+		g.addVertex(1);
+		g.addVertex(2);
+		g.addVertex(3);
+		g.addVertex(4);
+		g.addVertex(5);
+		g.addVertex(6);
+		g.addVertex(7);
+		g.addVertex(8);
+		g.addVertex(9);
+		g.addVertex(10);
+                g.addVertex(11);
+                g.addVertex(12);
+
+		g.addEdge(1,12);
+                g.addEdge(2, 3);
+                g.addEdge(3, 8);
+                g.addEdge(4, 3);
+                g.addEdge(4, 5);
+                g.addEdge(5, 7);
+                g.addEdge(6, 3);
+                g.addEdge(7, 9);
+                g.addEdge(8, 1);
+                g.addEdge(8, 2);
+                g.addEdge(8, 7);
+                g.addEdge(9, 1);
+                g.addEdge(9, 10);
+                g.addEdge(10, 6);
+                g.addEdge(10, 11);
+                g.addEdge(11, 9);
+                
+		System.out.println("Graph: " + g);
+
+		ClusteringAlgorithm<Integer> alg = new GreedyModularityAlgorithm<>(g);
+		ClusteringAlgorithm.Clustering<Integer> clustering = alg.getClustering();
+
+		System.out.println("Number of clusters: " + clustering.getNumberClusters());
+		System.out.println("Clusters: " + clustering.getClusters());
+                assertEquals(4, clustering.getNumberClusters());
+		assertEquals(Set.of(2, 3, 8), clustering.getClusters().get(0));
+		assertEquals(Set.of(4, 5, 7), clustering.getClusters().get(1));
+                assertEquals(Set.of(6, 9, 10, 11), clustering.getClusters().get(2));
+                assertEquals(Set.of(1, 12), clustering.getClusters().get(3));
+	}               
+        
+        @Test
+	public void test7() {
+		Graph<Integer, DefaultEdge> g = GraphTypeBuilder.directed().allowingSelfLoops(true)
+				.vertexSupplier(SupplierUtil.createIntegerSupplier())
+				.edgeSupplier(SupplierUtil.createDefaultEdgeSupplier())
+                                .buildGraph();
+
+		g.addVertex(1);
+		g.addVertex(2);
+		g.addVertex(3);
+		g.addVertex(4);
+		g.addVertex(5);
+		g.addVertex(6);
+		g.addVertex(7);
+		g.addVertex(8);
+		g.addVertex(9);
+		g.addVertex(10);
+
+		g.addEdge(1, 2);
+                g.addEdge(1, 10);
+                g.addEdge(3, 2);
+                g.addEdge(3, 8);
+                g.addEdge(4, 6);
+                g.addEdge(6, 3);
+                g.addEdge(6, 5);
+                g.addEdge(7, 6);
+                g.addEdge(8, 6);
+                g.addEdge(9, 3);
+                g.addEdge(9, 10);
+                
+		System.out.println("Graph: " + g);
+
+		ClusteringAlgorithm<Integer> alg = new GreedyModularityAlgorithm<>(g);
+		ClusteringAlgorithm.Clustering<Integer> clustering = alg.getClustering();
+
+		System.out.println("Number of clusters: " + clustering.getNumberClusters());
+		System.out.println("Clusters: " + clustering.getClusters());
+                assertEquals(3, clustering.getNumberClusters());
+		assertEquals(Set.of(1, 2, 10), clustering.getClusters().get(0));
+		assertEquals(Set.of(4, 5, 6, 7), clustering.getClusters().get(1));
+                assertEquals(Set.of(3, 8, 9), clustering.getClusters().get(2));
+	}  
+        
+        @Test
+	public void test8() {
+		Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingSelfLoops(true)
+				.vertexSupplier(SupplierUtil.createIntegerSupplier())
+				.edgeSupplier(SupplierUtil.createDefaultEdgeSupplier())
+                                .buildGraph();
+
+		g.addVertex(1);
+		g.addVertex(2);
+		g.addVertex(3);
+		g.addVertex(4);
+		g.addVertex(5);
+		g.addVertex(6);
+		g.addVertex(7);
+		g.addVertex(8);
+		g.addVertex(9);
+		g.addVertex(10);
+		g.addVertex(11);
+                
+		g.addEdge(1, 1);
+                g.addEdge(1, 2);
+                g.addEdge(1, 4);
+                g.addEdge(1, 6);
+                g.addEdge(2, 4);
+                g.addEdge(3, 4);
+                g.addEdge(5, 6);
+                g.addEdge(5, 5);
+                g.addEdge(6, 7);
+                g.addEdge(6, 11);
+                g.addEdge(7, 8);
+                g.addEdge(7, 10);
+                g.addEdge(8, 10);
+                g.addEdge(9, 10);
+                
+		System.out.println("Graph: " + g);
+
+		ClusteringAlgorithm<Integer> alg = new GreedyModularityAlgorithm<>(g);
+		ClusteringAlgorithm.Clustering<Integer> clustering = alg.getClustering();
+
+		System.out.println("Number of clusters: " + clustering.getNumberClusters());
+		System.out.println("Clusters: " + clustering.getClusters());
+                assertEquals(3, clustering.getNumberClusters());
+		assertEquals(Set.of(1, 2, 3, 4), clustering.getClusters().get(0));
+		assertEquals(Set.of(5, 6, 11), clustering.getClusters().get(1));
+                assertEquals(Set.of(7, 8, 9, 10), clustering.getClusters().get(2));
+	}  
 }
