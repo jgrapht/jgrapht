@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * Harmonic centrality.
- * 
+ *
  * <p>
  * The harmonic centrality of a vertex $x$ is defined as $H(x)=\sum_{y \neq x} 1/d(x,y)$, where
  * $d(x,y)$ is the shortest path distance from $x$ to $y$. In case a distance $d(x,y)=\infinity$,
@@ -44,25 +44,25 @@ import java.util.*;
  * <p>
  * This implementation computes by default the centrality using outgoing paths and normalizes the
  * scores. This behavior can be adjusted by the constructor arguments.
- * 
+ *
  * <p>
  * Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
  * whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m
  * + n \log n))$ or $O(n^3)$ respectively, where $n$ is the number of vertices and $m$ the number of
  * edges of the graph.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public final class HarmonicCentrality<V, E>
+public class HarmonicCentrality<V, E>
     extends ClosenessCentrality<V, E>
 {
     /**
      * Construct a new instance. By default the centrality is normalized and computed using outgoing
      * paths.
-     * 
+     *
      * @param graph the input graph
      */
     public HarmonicCentrality(Graph<V, E> graph)
@@ -72,7 +72,7 @@ public final class HarmonicCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param incoming if true incoming paths are used, otherwise outgoing paths
      * @param normalize whether to normalize by dividing the closeness by $n-1$, where $n$ is the
