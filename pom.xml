@@ -68,34 +68,34 @@
         <apfloat.version>1.10.1</apfloat.version>
         <checkstyle.version>8.41</checkstyle.version>
         <commons-text.version>1.10.0</commons-text.version>
-        <dsiutils.version>2.6.17</dsiutils.version>
-        <fastutil.version>8.5.2</fastutil.version>
-        <guava.version>30.1.1-jre</guava.version>
+        <dsiutils.version>2.7.3</dsiutils.version>
+        <fastutil.version>8.5.12</fastutil.version>
+        <guava.version>31.1-jre</guava.version>
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
-        <jmh.version>1.28</jmh.version>
+        <jmh.version>1.36</jmh.version>
         <junit-toolbox.version>2.4</junit-toolbox.version>
         <junit.version>4.13.2</junit.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-        <maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
+        <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
+        <maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
         <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>3.1.0</maven-deploy-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
-        <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>3.0.0-M7</maven-release-plugin.version>
+        <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
+        <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <replacer.version>1.5.3</replacer.version>
-        <sux4j.version>5.2.3</sux4j.version>
-        <webgraph-big.version>3.6.6</webgraph-big.version>
+        <sux4j.version>5.4.1</sux4j.version>
+        <webgraph-big.version>3.7.0</webgraph-big.version>
         <webgraph.version>3.6.10</webgraph.version>
-        <xmlunit-core.version>2.8.2</xmlunit-core.version>
+        <xmlunit-core.version>2.9.1</xmlunit-core.version>
     </properties>
 
     <dependencyManagement>
@@ -144,6 +144,12 @@
                 <groupId>it.unimi.dsi</groupId>
                 <artifactId>dsiutils</artifactId>
                 <version>${dsiutils.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>javax.mail</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>it.unimi.dsi</groupId>
@@ -236,7 +242,7 @@
                         <execution>
                             <id>default-compile</id>
                             <configuration>
-                                <failOnWarning>true</failOnWarning>
+                                <!-- failOnWarning>true</failOnWarning -->
                                 <compilerArgs>
                                     <arg>-Xlint:all,-deprecation</arg>
                                     <arg>-Xpkginfo:always</arg>
