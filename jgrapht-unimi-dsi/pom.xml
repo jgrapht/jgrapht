@@ -56,12 +56,10 @@
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
-            <version>8.5.2</version>
         </dependency>
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>dsiutils</artifactId>
-            <version>2.6.17</version>
             <exclusions>
                 <exclusion>
                      <groupId>org.apache.commons</groupId>
@@ -84,7 +82,6 @@
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>sux4j</artifactId>
-            <version>5.2.3</version>
             <exclusions>
                 <exclusion>
                      <groupId>org.apache.commons</groupId>
@@ -111,7 +108,6 @@
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>webgraph</artifactId>
-            <version>3.6.10</version>
             <exclusions>
                 <exclusion>
                      <groupId>net.sf.jung</groupId>
@@ -138,7 +134,6 @@
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>webgraph-big</artifactId>
-            <version>3.6.6</version>
             <exclusions>
                 <exclusion>
                      <groupId>net.sf.jung</groupId>
@@ -161,7 +156,7 @@
                      <artifactId>commons-lang3</artifactId>
                  </exclusion>
             </exclusions>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

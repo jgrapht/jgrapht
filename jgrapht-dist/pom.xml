@@ -51,7 +51,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jgrapht-unimi-dsi</artifactId>
-        </dependency>        
+        </dependency>
     </dependencies>
     <build>
         <plugins>

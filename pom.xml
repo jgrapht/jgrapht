@@ -65,6 +65,37 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
+        <apfloat.version>1.10.1</apfloat.version>
+        <checkstyle.version>8.41</checkstyle.version>
+        <commons-text.version>1.10.0</commons-text.version>
+        <dsiutils.version>2.6.17</dsiutils.version>
+        <fastutil.version>8.5.2</fastutil.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <jgraphx.version>4.2.2</jgraphx.version>
+        <jheaps.version>0.14</jheaps.version>
+        <jmh.version>1.28</jmh.version>
+        <junit-toolbox.version>2.4</junit-toolbox.version>
+        <junit.version>4.13.2</junit.version>
+        <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
+        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+        <maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
+        <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <replacer.version>1.5.3</replacer.version>
+        <sux4j.version>5.2.3</sux4j.version>
+        <webgraph-big.version>3.6.6</webgraph-big.version>
+        <webgraph.version>3.6.10</webgraph.version>
+        <xmlunit-core.version>2.8.2</xmlunit-core.version>
     </properties>
 
     <dependencyManagement>
@@ -105,21 +136,83 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>it.unimi.dsi</groupId>
+                <artifactId>fastutil</artifactId>
+                <version>${fastutil.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.unimi.dsi</groupId>
+                <artifactId>dsiutils</artifactId>
+                <version>${dsiutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.unimi.dsi</groupId>
+                <artifactId>sux4j</artifactId>
+                <version>${sux4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.unimi.dsi</groupId>
+                <artifactId>webgraph</artifactId>
+                <version>${webgraph.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.unimi.dsi</groupId>
+                <artifactId>webgraph-big</artifactId>
+                <version>${webgraph-big.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jheaps</groupId>
+                <artifactId>jheaps</artifactId>
+                <version>${jheaps.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apfloat</groupId>
+                <artifactId>apfloat</artifactId>
+                <version>${apfloat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.vlsi.mxgraph</groupId>
+                <artifactId>jgraphx</artifactId>
+                <version>${jgraphx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-core</artifactId>
+                <version>${jmh.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-annprocess</artifactId>
+                <version>${jmh.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.xmlunit</groupId>
                 <artifactId>xmlunit-core</artifactId>
-                <version>2.8.2</version>
+                <version>${xmlunit-core.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.13.2</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                     <groupId>com.googlecode.junit-toolbox</groupId>
                     <artifactId>junit-toolbox</artifactId>
-                    <version>2.4</version>
+                    <version>${junit-toolbox.version}</version>
                     <scope>test</scope>
             </dependency>
         </dependencies>
@@ -131,7 +224,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <release>11</release>
                         <compilerArgs>
@@ -155,7 +248,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <testFailureIgnore>false</testFailureIgnore>
                         <useSystemClassLoader>false</useSystemClassLoader>
@@ -163,12 +256,12 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                     <version>3.0.0-M5</version>
+                     <version>${maven-failsafe-plugin.version}</version>
                      <dependencies>
                           <dependency>
                                <groupId>org.apache.maven.surefire</groupId>
                                <artifactId>surefire-junit47</artifactId>
-                               <version>3.0.0-M5</version>
+                               <version>${maven-failsafe-plugin.version}</version>
                           </dependency>
                      </dependencies>
                     <executions>
@@ -184,12 +277,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>${maven-jar-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>5.1.1</version>
+                    <version>${maven-bundle-plugin.version}</version>
                     <configuration>
                         <instructions>
                             <!-- Suppress import of own exported packages -->
@@ -208,22 +301,22 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>${maven-assembly-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.4</version>
+                    <version>${maven-shade-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>${maven-resources-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>${maven-release-plugin.version}</version>
                     <configuration>
                         <mavenExecutorId>forked-path</mavenExecutorId>
                     </configuration>
@@ -231,11 +324,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>${maven-deploy-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -248,6 +342,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
                     <configuration>
                         <show>protected</show>
                         <windowtitle>JGraphT : a free Java graph library</windowtitle>
@@ -277,7 +372,7 @@
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
+                    <version>${lifecycle-mapping.version}</version>
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
@@ -304,18 +399,21 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>com.google.code.maven-replacer-plugin</groupId>
+                    <artifactId>replacer</artifactId>
+                    <version>${replacer.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
                 <plugin>
                       <groupId>org.apache.maven.plugins</groupId>
                       <artifactId>maven-javadoc-plugin</artifactId>
-                      <version>3.2.0</version>
                  </plugin>
                  <plugin>
                       <groupId>org.apache.maven.plugins</groupId>
                       <artifactId>maven-source-plugin</artifactId>
-                      <version>3.2.1</version>
                  </plugin>
           </plugins>
     </build>
@@ -339,12 +437,12 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <version>${maven-checkstyle-plugin.version}</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.puppycrawl.tools</groupId>
                                 <artifactId>checkstyle</artifactId>
-                                <version>8.41</version>
+                                <version>${checkstyle.version}</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -381,7 +479,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
