@@ -162,6 +162,9 @@ public class SimpleGEXFEventDrivenImporter
 
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
+        // disable DOCTYPE declaration
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
         return factory.newSchema(sources);
     }
 
