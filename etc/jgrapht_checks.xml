@@ -27,9 +27,8 @@
     </module>
 
     <module name="TreeWalker">
-        <!-- Defining scope as protected means public and protected scopes are checked. -->
         <module name="JavadocMethod">
-            <property name="scope" value="protected" />
+            <property name="accessModifiers" value="public, protected" />
         </module>
         <module name="JavadocType">
             <property name="scope" value="public" />
