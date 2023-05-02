@@ -279,7 +279,8 @@ extends java.lang.Object</pre>
                          double&nbsp;delta)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">replaced with <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
+<div class="deprecationComment">replaced with
+             <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
 </div>
 </td>
 </tr>
@@ -289,7 +290,8 @@ extends java.lang.Object</pre>
                          int&nbsp;parallelism)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">replaced with <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
+<div class="deprecationComment">replaced with
+             <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
 </div>
 </td>
 </tr>
@@ -307,8 +309,8 @@ extends java.lang.Object</pre>
                          java.util.concurrent.ThreadPoolExecutor&nbsp;executor,
                          java.util.Comparator&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&gt;&nbsp;vertexComparator)</code></th>
 <td class="colLast">
-<div class="block">Constructs a new instance of the algorithm for a given graph, delta, <code>executor</code>
- and <code>vertexComparator</code>.</div>
+<div class="block">Constructs a new instance of the algorithm for a given graph, delta, <code>executor</code> and
+ <code>vertexComparator</code>.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -332,8 +334,8 @@ extends java.lang.Object</pre>
                          java.util.concurrent.ThreadPoolExecutor&nbsp;executor,
                          java.util.Comparator&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&gt;&nbsp;vertexComparator)</code></th>
 <td class="colLast">
-<div class="block">Constructs a new instance of the algorithm for a given <code>graph</code>, <code>executor</code>
- and <code>vertexComparator</code>.</div>
+<div class="block">Constructs a new instance of the algorithm for a given <code>graph</code>, <code>executor</code> and
+ <code>vertexComparator</code>.</div>
 </td>
 </tr>
 </table>
@@ -499,13 +501,13 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;DeltaSteppingShortestPath&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>,&#8203;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">E</a>&gt;&nbsp;graph,
                                  java.util.concurrent.ThreadPoolExecutor&nbsp;executor,
                                  java.util.Comparator&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&gt;&nbsp;vertexComparator)</pre>
-<div class="block">Constructs a new instance of the algorithm for a given <code>graph</code>, <code>executor</code>
- and <code>vertexComparator</code>. It is up to a user of this algorithm to handle the creation
- and termination of the provided <code>executor</code>. For utility methods to manage a
- <code>ThreadPoolExecutor</code> see <a href="../../util/ConcurrencyUtil.html" title="class in org.jgrapht.util"><code>ConcurrencyUtil</code></a>. <code>vertexComparator</code>
- provided via this constructor is used to create instances of <code>ConcurrentSkipListSet</code>
- for the individual buckets. This gives a gives a small performance benefit for shortest
- paths computation.</div>
+<div class="block">Constructs a new instance of the algorithm for a given <code>graph</code>, <code>executor</code> and
+ <code>vertexComparator</code>. It is up to a user of this algorithm to handle the creation and
+ termination of the provided <code>executor</code>. For utility methods to manage a
+ <code>ThreadPoolExecutor</code> see <a href="../../util/ConcurrencyUtil.html" title="class in org.jgrapht.util"><code>ConcurrencyUtil</code></a>. <code>vertexComparator</code> provided via
+ this constructor is used to create instances of <code>ConcurrentSkipListSet</code> for the
+ individual buckets. This gives a gives a small performance benefit for shortest paths
+ computation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - graph</dd>
@@ -524,7 +526,8 @@ extends java.lang.Object</pre>
 public&nbsp;DeltaSteppingShortestPath&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>,&#8203;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">E</a>&gt;&nbsp;graph,
                                  double&nbsp;delta)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">replaced with <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
+<div class="deprecationComment">replaced with
+             <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
 </div>
 <div class="block">Constructs a new instance of the algorithm for a given graph, delta.</div>
 <dl>
@@ -543,9 +546,9 @@ public&nbsp;DeltaSteppingShortestPath&#8203;(<a href="../../Graph.html" title="i
 <pre>public&nbsp;DeltaSteppingShortestPath&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>,&#8203;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">E</a>&gt;&nbsp;graph,
                                  double&nbsp;delta,
                                  java.util.concurrent.ThreadPoolExecutor&nbsp;executor)</pre>
-<div class="block">Constructs a new instance of the algorithm for a given graph, delta and <code>executor</code>.
- It is up to a user of this algorithm to handle the creation and termination of the
- provided <code>executor</code>. For utility methods to manage a <code>ThreadPoolExecutor</code> see
+<div class="block">Constructs a new instance of the algorithm for a given graph, delta and <code>executor</code>. It
+ is up to a user of this algorithm to handle the creation and termination of the provided
+ <code>executor</code>. For utility methods to manage a <code>ThreadPoolExecutor</code> see
  <a href="../../util/ConcurrencyUtil.html" title="class in org.jgrapht.util"><code>ConcurrencyUtil</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -565,13 +568,13 @@ public&nbsp;DeltaSteppingShortestPath&#8203;(<a href="../../Graph.html" title="i
                                  double&nbsp;delta,
                                  java.util.concurrent.ThreadPoolExecutor&nbsp;executor,
                                  java.util.Comparator&lt;<a href="DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&gt;&nbsp;vertexComparator)</pre>
-<div class="block">Constructs a new instance of the algorithm for a given graph, delta, <code>executor</code>
- and <code>vertexComparator</code>. It is up to a user of this algorithm to handle the creation
- and termination of the provided <code>executor</code>. For utility methods to manage a
- <code>ThreadPoolExecutor</code> see <a href="../../util/ConcurrencyUtil.html" title="class in org.jgrapht.util"><code>ConcurrencyUtil</code></a>. <code>vertexComparator</code>
- provided via this constructor is used to create instances of <code>ConcurrentSkipListSet</code>
- for the individual buckets. This gives a gives a small performance benefit for shortest
- paths computation.</div>
+<div class="block">Constructs a new instance of the algorithm for a given graph, delta, <code>executor</code> and
+ <code>vertexComparator</code>. It is up to a user of this algorithm to handle the creation and
+ termination of the provided <code>executor</code>. For utility methods to manage a
+ <code>ThreadPoolExecutor</code> see <a href="../../util/ConcurrencyUtil.html" title="class in org.jgrapht.util"><code>ConcurrencyUtil</code></a>. <code>vertexComparator</code> provided via
+ this constructor is used to create instances of <code>ConcurrentSkipListSet</code> for the
+ individual buckets. This gives a gives a small performance benefit for shortest paths
+ computation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the graph</dd>
@@ -612,7 +615,8 @@ public&nbsp;DeltaSteppingShortestPath&#8203;(<a href="../../Graph.html" title="i
                                  double&nbsp;delta,
                                  int&nbsp;parallelism)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">replaced with <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
+<div class="deprecationComment">replaced with
+             <a href="#%3Cinit%3E(org.jgrapht.Graph,double,java.util.concurrent.ThreadPoolExecutor)"><code>DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)</code></a></div>
 </div>
 <div class="block">Constructs a new instance of the algorithm for a given graph, delta, parallelism. If delta is
  $0.0$ it will be computed during the algorithm execution. In general if the value of

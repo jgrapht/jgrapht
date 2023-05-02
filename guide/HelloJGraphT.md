@@ -56,8 +56,7 @@ public final class HelloJGraphT
      * @throws ExportException if graph cannot be exported.
      */
     public static void main(String[] args)
-        throws URISyntaxException,
-        ExportException
+        throws URISyntaxException, ExportException
     {
         Graph<String, DefaultEdge> stringGraph = createStringGraph();
 

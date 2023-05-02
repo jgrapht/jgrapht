@@ -10,8 +10,7 @@ with each edge.  This can be accomplished efficiently via a custom edge class:
 
 ```java
 class RelationshipEdge
-    extends
-    DefaultEdge
+    extends DefaultEdge
 {
     private String label;
 
