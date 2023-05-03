@@ -95,7 +95,8 @@ public class DOTExporter<V, E>
             out.print(INDENT);
             out.print(attr.getKey());
             out.print('=');
-            out.print(attr.getValue());
+            Attribute attribute = attr.getValue();
+            out.print(attribute.getValue());
             out.println(";");
         }
 
