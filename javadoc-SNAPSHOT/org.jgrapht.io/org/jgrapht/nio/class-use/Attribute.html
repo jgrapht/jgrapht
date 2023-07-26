@@ -121,6 +121,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="#org.jgrapht.nio.gml">org.jgrapht.nio.gml</a></th>
+<td class="colLast">
+<div class="block">GML importers/exporters</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#org.jgrapht.nio.json">org.jgrapht.nio.json</a></th>
 <td class="colLast">
 <div class="block">Json importers/exporters</div>
@@ -595,6 +601,60 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><span class="typeNameLabel">DOTImporter.</span><code><span class="memberNameLink"><a href="../dot/DOTImporter.html#setVertexWithAttributesFactory(java.util.function.BiFunction)">setVertexWithAttributesFactory</a></span>&#8203;(java.util.function.BiFunction&lt;java.lang.String,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;,&#8203;<a href="../dot/DOTImporter.html" title="type parameter in DOTImporter">V</a>&gt;&nbsp;vertexWithAttributesFactory)</code></th>
 <td class="colLast">
 <div class="block">Set the user custom vertex factory with attributes.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</li>
+<li class="blockList">
+<section><a id="org.jgrapht.nio.gml">
+<!--   -->
+</a>
+<h3>Uses of <a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a> in <a href="../gml/package-summary.html">org.jgrapht.nio.gml</a></h3>
+<table class="useSummary">
+<caption><span>Fields in <a href="../gml/package-summary.html">org.jgrapht.nio.gml</a> with type parameters of type <a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.util.Optional&lt;java.util.function.Function&lt;<a href="../gml/GmlExporter.html" title="type parameter in GmlExporter">V</a>,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">GmlExporter.</span><code><span class="memberNameLink"><a href="../gml/GmlExporter.html#vertexGraphicsAttributeProvider">vertexGraphicsAttributeProvider</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary">
+<caption><span>Methods in <a href="../gml/package-summary.html">org.jgrapht.nio.gml</a> that return types with arguments of type <a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.util.Optional&lt;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">GmlExporter.</span><code><span class="memberNameLink"><a href="../gml/GmlExporter.html#getVertexGraphicsAttributes(V)">getVertexGraphicsAttributes</a></span>&#8203;(<a href="../gml/GmlExporter.html" title="type parameter in GmlExporter">V</a>&nbsp;v)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary">
+<caption><span>Method parameters in <a href="../gml/package-summary.html">org.jgrapht.nio.gml</a> with type arguments of type <a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">GmlExporter.</span><code><span class="memberNameLink"><a href="../gml/GmlExporter.html#setVertexGraphicsAttributeProvider(java.util.function.Function)">setVertexGraphicsAttributeProvider</a></span>&#8203;(java.util.function.Function&lt;<a href="../gml/GmlExporter.html" title="type parameter in GmlExporter">V</a>,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&nbsp;vertexGraphicsAttributeProvider)</code></th>
+<td class="colLast">
+<div class="block">Set node craphics section provider</div>
 </td>
 </tr>
 </tbody>

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -157,7 +157,7 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
  <p>
  For a description of the format see <a href="https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing/blob/master/GML/gml-technical-report.pdf">
  https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing/blob/master/GML/gml-technical-report.pdf</a>.
- 
+
  <p>
  The behavior of the exporter such as whether to print vertex labels, edge labels, and/or edge
  weights can be adjusted using the <a href="#setParameter(org.jgrapht.nio.gml.GmlExporter.Parameter,boolean)"><code>setParameter</code></a> method.
@@ -204,6 +204,19 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.util.Optional&lt;java.util.function.Function&lt;<a href="GmlExporter.html" title="type parameter in GmlExporter">V</a>,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vertexGraphicsAttributeProvider">vertexGraphicsAttributeProvider</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.org.jgrapht.nio.BaseExporter">
 <!--   -->
@@ -266,18 +279,30 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected java.util.Optional&lt;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVertexGraphicsAttributes(V)">getVertexGraphicsAttributes</a></span>&#8203;(<a href="GmlExporter.html" title="type parameter in GmlExporter">V</a>&nbsp;v)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isParameter(org.jgrapht.nio.gml.GmlExporter.Parameter)">isParameter</a></span>&#8203;(<a href="GmlExporter.Parameter.html" title="enum in org.jgrapht.nio.gml">GmlExporter.Parameter</a>&nbsp;p)</code></th>
 <td class="colLast">
 <div class="block">Return if a particular parameter of the exporter is enabled</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setParameter(org.jgrapht.nio.gml.GmlExporter.Parameter,boolean)">setParameter</a></span>&#8203;(<a href="GmlExporter.Parameter.html" title="enum in org.jgrapht.nio.gml">GmlExporter.Parameter</a>&nbsp;p,
             boolean&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Set the value of a parameter of the exporter</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVertexGraphicsAttributeProvider(java.util.function.Function)">setVertexGraphicsAttributeProvider</a></span>&#8203;(java.util.function.Function&lt;<a href="GmlExporter.html" title="type parameter in GmlExporter">V</a>,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&nbsp;vertexGraphicsAttributeProvider)</code></th>
+<td class="colLast">
+<div class="block">Set node craphics section provider</div>
 </td>
 </tr>
 </table>
@@ -311,6 +336,25 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section>
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="vertexGraphicsAttributeProvider">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>vertexGraphicsAttributeProvider</h4>
+<pre>protected&nbsp;java.util.Optional&lt;java.util.function.Function&lt;<a href="GmlExporter.html" title="type parameter in GmlExporter">V</a>,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&gt; vertexGraphicsAttributeProvider</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section>
 <ul class="blockList">
@@ -389,7 +433,7 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
 <a id="setParameter(org.jgrapht.nio.gml.GmlExporter.Parameter,boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setParameter</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setParameter&#8203;(<a href="GmlExporter.Parameter.html" title="enum in org.jgrapht.nio.gml">GmlExporter.Parameter</a>&nbsp;p,
@@ -400,6 +444,31 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
 <dd><code>p</code> - the parameter</dd>
 <dd><code>value</code> - the value to set</dd>
 </dl>
+</li>
+</ul>
+<a id="setVertexGraphicsAttributeProvider(java.util.function.Function)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVertexGraphicsAttributeProvider</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setVertexGraphicsAttributeProvider&#8203;(java.util.function.Function&lt;<a href="GmlExporter.html" title="type parameter in GmlExporter">V</a>,&#8203;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&nbsp;vertexGraphicsAttributeProvider)</pre>
+<div class="block">Set node craphics section provider</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>vertexGraphicsAttributeProvider</code> - the graphics section attributes provider</dd>
+</dl>
+</li>
+</ul>
+<a id="getVertexGraphicsAttributes(java.lang.Object)">
+<!--   -->
+</a><a id="getVertexGraphicsAttributes(V)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getVertexGraphicsAttributes</h4>
+<pre class="methodSignature">protected&nbsp;java.util.Optional&lt;java.util.Map&lt;java.lang.String,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;&gt;&nbsp;getVertexGraphicsAttributes&#8203;(<a href="GmlExporter.html" title="type parameter in GmlExporter">V</a>&nbsp;v)</pre>
 </li>
 </ul>
 </li>
@@ -463,7 +532,7 @@ implements <a href="../GraphExporter.html" title="interface in org.jgrapht.nio">
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
