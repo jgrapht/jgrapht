@@ -149,10 +149,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;java.lang.Double&gt;</code></dd>
 </dl>
 <hr>
-<pre>public final class <span class="typeNameLabel">HarmonicCentrality&lt;V,&#8203;E&gt;</span>
+<pre>public class <span class="typeNameLabel">HarmonicCentrality&lt;V,&#8203;E&gt;</span>
 extends <a href="ClosenessCentrality.html" title="class in org.jgrapht.alg.scoring">ClosenessCentrality</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Harmonic centrality.
- 
+
  <p>
  The harmonic centrality of a vertex $x$ is defined as $H(x)=\sum_{y \neq x} 1/d(x,y)$, where
  $d(x,y)$ is the shortest path distance from $x$ to $y$. In case a distance $d(x,y)=\infinity$,
@@ -171,7 +171,7 @@ extends <a href="ClosenessCentrality.html" title="class in org.jgrapht.alg.scori
  <p>
  This implementation computes by default the centrality using outgoing paths and normalizes the
  scores. This behavior can be adjusted by the constructor arguments.
- 
+
  <p>
  Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
  whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m

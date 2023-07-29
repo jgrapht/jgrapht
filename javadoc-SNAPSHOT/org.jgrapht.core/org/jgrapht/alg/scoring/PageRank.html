@@ -144,11 +144,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;java.lang.Double&gt;</code></dd>
 </dl>
 <hr>
-<pre>public final class <span class="typeNameLabel">PageRank&lt;V,&#8203;E&gt;</span>
+<pre>public class <span class="typeNameLabel">PageRank&lt;V,&#8203;E&gt;</span>
 extends java.lang.Object
 implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;java.lang.Double&gt;</pre>
 <div class="block">PageRank implementation.
- 
+
  <p>
  The <a href="https://en.wikipedia.org/wiki/PageRank">wikipedia</a> article contains a nice
  description of PageRank. The method can be found on the article: Sergey Brin and Larry Page: The
@@ -156,7 +156,7 @@ implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface 
  Conference, Brisbane, Australia, April 1998. See also the following
  <a href="http://infolab.stanford.edu/~backrub/google.html">page</a>.
  </p>
- 
+
  <p>
  This is a simple iterative implementation of PageRank which stops after a given number of
  iterations or if the PageRank values between two iterations do not change more than a predefined
@@ -169,7 +169,7 @@ implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface 
  $m$ the number of edges of the graph. The maximum number of iterations can be adjusted by the
  caller. The default value is <a href="#MAX_ITERATIONS_DEFAULT"><code>MAX_ITERATIONS_DEFAULT</code></a>.
  </p>
- 
+
  <p>
  If the graph is a weighted graph, a weighted variant is used where the probability of following
  an edge e out of node $v$ is equal to the weight of $e$ over the sum of weights of all outgoing

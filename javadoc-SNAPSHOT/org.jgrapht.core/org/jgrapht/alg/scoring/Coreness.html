@@ -144,11 +144,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;java.lang.Integer&gt;</code></dd>
 </dl>
 <hr>
-<pre>public final class <span class="typeNameLabel">Coreness&lt;V,&#8203;E&gt;</span>
+<pre>public class <span class="typeNameLabel">Coreness&lt;V,&#8203;E&gt;</span>
 extends java.lang.Object
 implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;java.lang.Integer&gt;</pre>
 <div class="block">Computes the coreness of each vertex in an undirected graph.
- 
+
  <p>
  A $k$-core of a graph $G$ is a maximal connected subgraph of $G$ in which all vertices have
  degree at least $k$. Equivalently, it is one of the connected components of the subgraph of $G$
@@ -329,7 +329,7 @@ implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface 
 <h4>getDegeneracy</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getDegeneracy()</pre>
 <div class="block">Compute the degeneracy of a graph.
- 
+
  <p>
  The degeneracy of a graph is the smallest value of $k$ for which it is $k$-degenerate. In
  graph theory, a $k$-degenerate graph is an undirected graph in which every subgraph has a
