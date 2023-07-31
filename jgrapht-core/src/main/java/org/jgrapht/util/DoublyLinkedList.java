@@ -58,7 +58,6 @@ import java.util.function.*;
  */
 public class DoublyLinkedList<E>
     extends AbstractSequentialList<E>
-    implements Deque<E>
 {
     /** The first element of the list, {@code null} if this list is empty. */
     private ListNodeImpl<E> head = null;
@@ -652,48 +651,28 @@ public class DoublyLinkedList<E>
 
     // Deque methods
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void addFirst(E e)
     {
         addElementFirst(e);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void addLast(E e)
     {
         addElementLast(e);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean offerFirst(E e)
     {
         addElementFirst(e);
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean offerLast(E e)
     {
         addElementLast(e);
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E removeFirst()
     {
         if (isEmpty()) {
@@ -705,10 +684,6 @@ public class DoublyLinkedList<E>
         return node.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E removeLast()
     {
         if (isEmpty()) {
@@ -720,10 +695,6 @@ public class DoublyLinkedList<E>
         return node.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E pollFirst()
     {
         if (isEmpty()) {
@@ -734,10 +705,6 @@ public class DoublyLinkedList<E>
         return node.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E pollLast()
     {
         if (isEmpty()) {
@@ -748,46 +715,26 @@ public class DoublyLinkedList<E>
         return node.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E getFirst()
     {
         return getFirstNode().getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E getLast()
     {
         return getLastNode().getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E peekFirst()
     {
         return isEmpty() ? null : getFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E peekLast()
     {
         return isEmpty() ? null : getLast();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean removeFirstOccurrence(Object o)
     {
         ListNode<E> node = nodeOf(o);
@@ -798,10 +745,6 @@ public class DoublyLinkedList<E>
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean removeLastOccurrence(Object o)
     {
         ListNode<E> node = lastNodeOf(o);
@@ -814,46 +757,26 @@ public class DoublyLinkedList<E>
 
     // Queue methods
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean offer(E e)
     {
         return offerLast(e);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E remove()
     {
         return removeFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E poll()
     {
         return pollFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E element()
     {
         return getFirst();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E peek()
     {
         return peekFirst();
@@ -861,19 +784,11 @@ public class DoublyLinkedList<E>
 
     // Stack methods
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void push(E e)
     {
         addFirst(e);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E pop()
     {
         return removeFirst();
@@ -1003,10 +918,6 @@ public class DoublyLinkedList<E>
         return reverseIterator(new ListNodeIteratorImpl(size, startNode.next));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public NodeIterator<E> descendingIterator()
     {
         return reverseIterator(listIterator(size));
