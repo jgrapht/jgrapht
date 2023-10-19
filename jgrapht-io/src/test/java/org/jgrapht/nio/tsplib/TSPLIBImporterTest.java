@@ -31,6 +31,7 @@ import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
+import static org.jgrapht.nio.tsplib.TSPLIBImporter.*;
 import static org.junit.Assert.*;
 
 public class TSPLIBImporterTest
@@ -106,11 +107,34 @@ public class TSPLIBImporterTest
         return fileContent;
     }
 
+    private static StringJoiner getGeoPointsFileContent()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : " + "GEO");
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.2 15.0");
+        fileContent.add("2 14.2 15.0");
+        fileContent.add("3  14.6    20.0"); // also use other white-space than just a single space
+        fileContent.add("4\t10.1\t\t20.0");
+        fileContent.add("EOF");
+        return fileContent;
+    }
+
     private static List<TestVector> getExpected2DPoints()
     {
         return Arrays.asList(
             new TestVector(1, 10.2, 15.0), new TestVector(2, 14.2, 15.0),
             new TestVector(3, 14.8, 20.0), new TestVector(4, 10.8, 20.0));
+    }
+
+    private static List<TestVector> getExpectedGeoPoints()
+    {
+        return Arrays
+            .asList(
+                new TestVector(1, 10.2, 15.0), new TestVector(2, 14.2, 15.0),
+                new TestVector(3, 14.6, 20.0), new TestVector(4, 10.1, 20.0));
     }
 
     // ----------------------------------------------------------------------
@@ -141,8 +165,7 @@ public class TSPLIBImporterTest
         Specification spec = metaData.getSpecification();
         assertEquals("theNameOfThisFile", spec.getName());
         assertEquals("TSP", spec.getType());
-        assertEquals(
-            Arrays.asList("The first line of the comment", "A second line"), spec.getComments());
+        assertEquals(List.of("The first line of the comment", "A second line"), spec.getComments());
         assertEquals(Integer.valueOf(4), spec.getDimension());
         assertEquals(Integer.valueOf(7), spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
@@ -238,7 +261,7 @@ public class TSPLIBImporterTest
         expectedVectors.add(new TestVector(4, 10.8, 20.0));
         Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(expectedVectors);
 
-        List<Integer> expectedTour = Arrays.asList(9, 4, 7, 2);
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
 
         Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> importData =
             importGraphFromFile(fileContent);
@@ -255,18 +278,6 @@ public class TSPLIBImporterTest
     @Test
     public void testImportTour_onlyWithTourSection()
     {
-        StringJoiner otherFileContent = new StringJoiner(System.lineSeparator());
-        otherFileContent.add("DIMENSION : 4");
-        otherFileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
-        otherFileContent.add("NODE_COORD_SECTION");
-        otherFileContent.add("7 10.2 15.0");
-        otherFileContent.add("2 14.2 15.0");
-        otherFileContent.add("9 14.8 20.0");
-        otherFileContent.add("4 10.8 20.0");
-
-        Metadata<Object, DefaultWeightedEdge> otherFilesMetaData =
-            importGraphFromFile(otherFileContent).getSecond();
-
         StringJoiner fileContent = new StringJoiner(System.lineSeparator());
         fileContent.add("TYPE : TSP");
         fileContent.add("DIMENSION : 4");
@@ -279,10 +290,75 @@ public class TSPLIBImporterTest
         fileContent.add("-1");
         fileContent.add("EOF");
 
-        List<Integer> expectedTour = Arrays.asList(9, 4, 7, 2);
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    @Test
+    public void testImportTour_singleTourAsRow()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9 4  7\t2  -1");
+        fileContent.add("EOF");
+
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    @Test
+    public void testImportTour_singleTourAsRowWithoutListEndMarker()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9 4  7\t2  ");
+        fileContent.add("EOF");
+
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    @Test
+    public void testImportTour_singleTourAsRowWithoutListEndMarkerAndEOF()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9 4  7\t2  ");
+
+        List<Integer> expectedTour = List.of(9, 4, 7, 2);
+
+        assertImportedTour(fileContent, expectedTour);
+    }
+
+    public static void assertImportedTour(StringJoiner fileContent, List<Integer> expectedTour)
+    {
+        // Create and import another file that contains the corresponding TSP instance
+        StringJoiner otherFileContent = new StringJoiner(System.lineSeparator());
+        otherFileContent.add("DIMENSION : 4");
+        otherFileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        otherFileContent.add("NODE_COORD_SECTION");
+        otherFileContent.add("7 10.2 15.0");
+        otherFileContent.add("2 14.2 15.0");
+        otherFileContent.add("9 14.8 20.0");
+        otherFileContent.add("4 10.8 20.0");
+        Metadata<Object, DefaultWeightedEdge> otherFilesMetaData =
+            importGraphFromFile(otherFileContent).getSecond();
 
         TSPLIBImporter<Object, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
         StringReader reader = new StringReader(fileContent.toString());
+
         List<Object> tour = importer.importTour(otherFilesMetaData, reader);
 
         assertTour(tour, expectedTour, otherFilesMetaData.getVertexToNodeMapping());
@@ -462,18 +538,18 @@ public class TSPLIBImporterTest
     @Test
     public void testImportGraph_EdgeWeightTypeGEO()
     {
-        List<TestVector> vertices = getExpected2DPoints();
+        List<TestVector> vertices = getExpectedGeoPoints();
         Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 446);
-        Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 727);
+        Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 752);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(3), 549);
-        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(2), 541);
-        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 680);
-        Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 446);
+        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(2), 544);
+        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 715);
+        Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 539);
 
         Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
-            importGraphFromFile(get2DPointsFileContent("GEO"));
+            importGraphFromFile(getGeoPointsFileContent());
 
         // Check coordinates, weights and complete connection
         assertEqualGraphData(expectedGraph, graphData);
@@ -487,8 +563,7 @@ public class TSPLIBImporterTest
     {
         TSPLIBImporter<TestVector, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
 
-        int halfCircleCircumfence = (int) (TSPLIBImporter.PI * TSPLIBImporter.RRR);
-        int quarterCircleCircumfence = (int) (TSPLIBImporter.PI * TSPLIBImporter.RRR / 2);
+        int quarterCircleCircumfence = (int) (PI * RRR / 2);
 
         int d0 = importer.compute2DGeographicalDistance(node(0.0, 0.0), node(0.0, 90.0));
         assertEquals(quarterCircleCircumfence, d0, 1.0);
@@ -496,20 +571,38 @@ public class TSPLIBImporterTest
         int d1 = importer.compute2DGeographicalDistance(node(23.0, 15.0), node(-23.0, 105.0));
         assertEquals(10997, d1, 1.0);
 
-        int d2 = importer.compute2DGeographicalDistance(node(0.0, -90.2), node(0.0, 89.8));
-        assertEquals(halfCircleCircumfence, d2, 1.0);
+        int d2 = importer.compute2DGeographicalDistance(node(0.0, -90.4), node(0.0, 89.6));
+        assertEquals(19965, d2); // due to rounding-errors the value is not PI * RRR
 
-        int d3 = importer.compute2DGeographicalDistance(node(20.0, -90.7), node(-20.0, 89.3));
-        assertEquals(halfCircleCircumfence, d3, 1.0);
+        int d3 = importer.compute2DGeographicalDistance(node(20.0, -90.5), node(-20.0, 89.5));
+        assertEquals(19969, d3); // due to rounding-errors the value is not PI * RRR
 
         int d4 = importer.compute2DGeographicalDistance(node(20.0, -70.0), node(-20.0, 110.0));
-        assertEquals(halfCircleCircumfence, d4, 1.0);
+        assertEquals(20039, d4); // due to rounding-errors the value is not PI * RRR
 
         int d5 = importer.compute2DGeographicalDistance(node(40.48, -74.0), node(52.3, 13.24));
         assertEquals(6386, d5, 1.0);
 
         int d6 = importer.compute2DGeographicalDistance(node(1.48, 113.24), node(-6.36, -65.24));
         assertEquals(19488, d6, 1.0);
+
+        // test conversion from sexagesimal/base60 degree value to decimal radians values
+
+        for (int i = 0; i <= 6; i++) {
+            double base60Degree = 10. + i / 10.0;
+            double decimalRadians = (10 + i / 6.) / 180.0 * PI;
+            assertEquals(decimalRadians, TSPLIBImporter.computeRadiansAngle(base60Degree), 1.e-10);
+        }
+        for (int i = 0; i <= 6; i++) {
+            double base60Degree = -(10. + i / 10.0);
+            double decimalRadians = -(10 + i / 6.) / 180.0 * PI;
+            assertEquals(decimalRadians, TSPLIBImporter.computeRadiansAngle(base60Degree), 1.e-10);
+        }
+
+        assertThrows(
+            IllegalArgumentException.class, () -> TSPLIBImporter.computeRadiansAngle(10.61));
+        assertThrows(
+            IllegalArgumentException.class, () -> TSPLIBImporter.computeRadiansAngle(-10.61));
     }
 
     private static Node node(double... elements)

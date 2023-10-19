@@ -706,10 +706,13 @@ public class TSPLIBImporter<V, E>
 
         while (lines.hasNext()) {
             String lineContent = lines.next();
-            if ("-1".equals(lineContent)) {
-                break;
+            for (String element : WHITE_SPACE.split(lineContent)) {
+                element = element.strip();
+                if ("-1".equals(element)) {
+                    break;
+                }
+                tour.add(Integer.valueOf(element));
             }
-            tour.add(Integer.valueOf(lineContent));
         }
         return tour;
     }
@@ -980,12 +983,20 @@ public class TSPLIBImporter<V, E>
     static final double PI = 3.141592; // constants according to TSPLIB95
     static final double RRR = 6378.388; // constants according to TSPLIB95
 
-    private static double computeRadiansAngle(double x)
+    static double computeRadiansAngle(double x)
     { // computation according to TSPLIB95 chapter 2.4 - Geographical distance
       // First computes decimal angle from degrees and minutes, then converts it into radian
-        double deg = Math.round(x);
-        double min = x - deg;
-        return PI * (deg + 5.0 * min / 3.0) / 180.0;
+      // See also the question regarding type GEO in TSPLIB - FAQ:
+      // http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/TSPFAQ.html
+
+        double deg = (int) x; // integer degree part
+        double min = x - deg; // decimal part represents the minutes of arc
+        if (0.60 < Math.abs(min)) {
+            throw new IllegalArgumentException(
+                "Absolute of minutes of arc must not be greater 0.6, but x=" + x);
+        }
+        double degreeDecimal = deg + 5.0 * min / 3.0;
+        return PI * degreeDecimal / 180.0;
     }
 
     /**
