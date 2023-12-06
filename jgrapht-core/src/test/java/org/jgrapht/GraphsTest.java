@@ -17,8 +17,10 @@
  */
 package org.jgrapht;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
@@ -81,8 +83,8 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, x);
 
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertFalse(vertexHasBeenRemoved);
+        assertEquals(expectedGraph, graph);
+        assertFalse(vertexHasBeenRemoved);
     }
 
     //@formatter:off
@@ -134,8 +136,8 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
 
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertTrue(vertexHasBeenRemoved);
+        assertEquals(expectedGraph, graph);
+        assertTrue(vertexHasBeenRemoved);
     }
 
     //@formatter:off
@@ -168,8 +170,8 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, a);
 
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertTrue(vertexHasBeenRemoved);
+        assertEquals(expectedGraph, graph);
+        assertTrue(vertexHasBeenRemoved);
     }
 
     //@formatter:off
@@ -202,8 +204,8 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
 
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertTrue(vertexHasBeenRemoved);
+        assertEquals(expectedGraph, graph);
+        assertTrue(vertexHasBeenRemoved);
     }
 
     //@formatter:off
@@ -249,7 +251,7 @@ public class GraphsTest
 
         Graphs.addOutgoingEdges(graph, a, targets);
 
-        Assert.assertEquals(expectedGraph, graph);
+        assertEquals(expectedGraph, graph);
     }
 
     //@formatter:off
@@ -295,7 +297,7 @@ public class GraphsTest
 
         Graphs.addIncomingEdges(graph, a, targets);
 
-        Assert.assertEquals(expectedGraph, graph);
+        assertEquals(expectedGraph, graph);
     }
 
     //@formatter:off
@@ -328,7 +330,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertTrue(Graphs.vertexHasSuccessors(graph, b));
+        assertTrue(Graphs.vertexHasSuccessors(graph, b));
     }
 
     //@formatter:off
@@ -361,7 +363,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertFalse(Graphs.vertexHasSuccessors(graph, c));
+        assertFalse(Graphs.vertexHasSuccessors(graph, c));
     }
 
     //@formatter:off
@@ -394,7 +396,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertTrue(Graphs.vertexHasPredecessors(graph, b));
+        assertTrue(Graphs.vertexHasPredecessors(graph, b));
     }
 
     //@formatter:off
@@ -427,7 +429,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertFalse(Graphs.vertexHasPredecessors(graph, a));
+        assertFalse(Graphs.vertexHasPredecessors(graph, a));
     }
 
     @Test
@@ -443,7 +445,7 @@ public class GraphsTest
         graph.addEdge(3, 4);
         graph.addEdge(1, 4);
         Set<Integer> neighborSet = Graphs.neighborSetOf(graph, 1);
-        Assert.assertEquals(Set.of(2, 4), neighborSet);
+        assertEquals(Set.of(2, 4), neighborSet);
     }
 
 }

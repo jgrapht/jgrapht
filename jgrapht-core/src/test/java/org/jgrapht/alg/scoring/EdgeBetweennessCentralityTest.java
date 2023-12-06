@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.scoring;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import org.jgrapht.alg.scoring.EdgeBetweennessCentrality.OverflowStrategy;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link EdgeBetweennessCentrality}

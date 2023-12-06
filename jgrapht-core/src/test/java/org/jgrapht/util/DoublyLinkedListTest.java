@@ -18,7 +18,7 @@
 package org.jgrapht.util;
 
 import org.jgrapht.util.DoublyLinkedList.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 import org.junit.runners.Parameterized.*;
@@ -27,7 +27,7 @@ import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link DoublyLinkedList}.

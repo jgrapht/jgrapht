@@ -22,7 +22,7 @@ import org.jheaps.*;
 
 import java.util.*;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * This class contains auxiliary methods for testing {@link KolmogorovWeightedPerfectMatching} and

@@ -20,14 +20,14 @@ package org.jgrapht.alg.flow.mincost;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link CapacityScalingMinimumCostFlow}

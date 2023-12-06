@@ -19,11 +19,11 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VF2SubgraphIsomorphismInspectorTest
 {
@@ -67,21 +67,21 @@ public class VF2SubgraphIsomorphismInspectorTest
         /* GT-0 test graph=null */
         try {
             new VF2SubgraphIsomorphismInspector<>(null, sg1);
-            Assert.fail("Expected NullPointerException");
+            fail("Expected NullPointerException");
         } catch (NullPointerException ex) {
         }
 
         /* GT-1: multigraphs */
         try {
             new VF2SubgraphIsomorphismInspector<>(mg1, mg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
         /* GT-2: pseudographs */
         try {
             new VF2SubgraphIsomorphismInspector<>(pg1, pg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
@@ -99,42 +99,42 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         try {
             new VF2SubgraphIsomorphismInspector<>(sg1, mg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
         /* GT-6: simple graph + pseudograph */
         try {
             new VF2SubgraphIsomorphismInspector<>(sg1, pg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
         /* GT-7: directed graph + multigraph */
         try {
             new VF2SubgraphIsomorphismInspector<>(dg1, mg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
         /* GT-8: directed graph + pseudograph */
         try {
             new VF2SubgraphIsomorphismInspector<>(dg1, pg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
         /* GT-9: pseudograph + multigraph */
         try {
             new VF2SubgraphIsomorphismInspector<>(pg1, mg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
 
         /* GT-10: simple graph + directed graph */
         try {
             new VF2SubgraphIsomorphismInspector<>(sg1, dg1);
-            Assert.fail("Expected IllegalArgumentException");
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }
     }

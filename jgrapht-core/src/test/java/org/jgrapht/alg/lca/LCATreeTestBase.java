@@ -24,10 +24,12 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for LCA algorithms on rooted trees and forests
@@ -65,7 +67,7 @@ public abstract class LCATreeTestBase
         g.addEdge("a", "b");
         g.addEdge("a", "c");
 
-        Assert.assertNull(createSolver(g, Collections.singleton("a")).getLCA("a", "d"));
+        assertNull(createSolver(g, Collections.singleton("a")).getLCA("a", "d"));
     }
 
     @Test
@@ -74,7 +76,7 @@ public abstract class LCATreeTestBase
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
 
-        Assert.assertEquals("a", createSolver(g, Collections.singleton("a")).getLCA("a", "a"));
+        assertEquals("a", createSolver(g, Collections.singleton("a")).getLCA("a", "a"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -125,10 +127,10 @@ public abstract class LCATreeTestBase
         LowestCommonAncestorAlgorithm<String> lcaAlgorithm =
             createSolver(g, Collections.singleton("a"));
 
-        Assert.assertNull(lcaAlgorithm.getLCA("a", "b"));
-        Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
-        Assert.assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
-        Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
+        assertNull(lcaAlgorithm.getLCA("a", "b"));
+        assertNull(lcaAlgorithm.getLCA("b", "a"));
+        assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
+        assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
     }
 
     @Test
@@ -142,14 +144,14 @@ public abstract class LCATreeTestBase
         LowestCommonAncestorAlgorithm<String> lcaAlgorithm =
             createSolver(g, Collections.singleton("a"));
 
-        Assert.assertNull(lcaAlgorithm.getLCA("b", "c"));
-        Assert.assertNull(lcaAlgorithm.getLCA("c", "b"));
-        Assert.assertNull(lcaAlgorithm.getLCA("c", "a"));
-        Assert.assertNull(lcaAlgorithm.getLCA("a", "c"));
-        Assert.assertNull(lcaAlgorithm.getLCA("a", "b"));
-        Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
-        Assert.assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
-        Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
+        assertNull(lcaAlgorithm.getLCA("b", "c"));
+        assertNull(lcaAlgorithm.getLCA("c", "b"));
+        assertNull(lcaAlgorithm.getLCA("c", "a"));
+        assertNull(lcaAlgorithm.getLCA("a", "c"));
+        assertNull(lcaAlgorithm.getLCA("a", "b"));
+        assertNull(lcaAlgorithm.getLCA("b", "a"));
+        assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
+        assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -216,7 +218,7 @@ public abstract class LCATreeTestBase
         List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
         for (int i = 0; i < queries.size(); i++) {
-            Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+            assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
 
@@ -248,7 +250,7 @@ public abstract class LCATreeTestBase
             int a = queries.get(i).getFirst();
             int b = queries.get(i).getSecond();
 
-            Assert.assertEquals((int) lcas.get(i), Math.max(a, b));
+            assertEquals((int) lcas.get(i), Math.max(a, b));
         }
     }
 
@@ -271,9 +273,9 @@ public abstract class LCATreeTestBase
         LowestCommonAncestorAlgorithm<String> lcaAlgorithm =
             createSolver(g, Collections.singleton("a"));
 
-        Assert.assertEquals("b", lcaAlgorithm.getLCA("c", "e"));
-        Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "d"));
-        Assert.assertEquals("d", lcaAlgorithm.getLCA("d", "e"));
+        assertEquals("b", lcaAlgorithm.getLCA("c", "e"));
+        assertEquals("b", lcaAlgorithm.getLCA("b", "d"));
+        assertEquals("d", lcaAlgorithm.getLCA("d", "e"));
     }
 
     @Test
@@ -298,15 +300,15 @@ public abstract class LCATreeTestBase
         LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm =
             createSolver(graph, Collections.singleton(1));
 
-        Assert.assertEquals(3, (int) lcaAlgorithm.getLCA(10, 11));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(8, 9));
-        Assert.assertEquals(1, (int) lcaAlgorithm.getLCA(5, 11));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(5, 6));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(4, 2));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(4, 5));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(2, 2));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(8, 6));
-        Assert.assertEquals(4, (int) lcaAlgorithm.getLCA(7, 8));
+        assertEquals(3, (int) lcaAlgorithm.getLCA(10, 11));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(8, 9));
+        assertEquals(1, (int) lcaAlgorithm.getLCA(5, 11));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(5, 6));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(4, 2));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(4, 5));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(2, 2));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(8, 6));
+        assertEquals(4, (int) lcaAlgorithm.getLCA(7, 8));
     }
 
     @Test
@@ -340,16 +342,16 @@ public abstract class LCATreeTestBase
         LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm =
             createSolver(graph, Collections.singleton(1));
 
-        Assert.assertEquals(1, (int) lcaAlgorithm.getLCA(9, 14));
-        Assert.assertEquals(1, (int) lcaAlgorithm.getLCA(10, 9));
-        Assert.assertEquals(15, (int) lcaAlgorithm.getLCA(15, 15));
-        Assert.assertEquals(1, (int) lcaAlgorithm.getLCA(1, 17));
-        Assert.assertEquals(3, (int) lcaAlgorithm.getLCA(3, 3));
-        Assert.assertEquals(1, (int) lcaAlgorithm.getLCA(3, 1));
-        Assert.assertEquals(1, (int) lcaAlgorithm.getLCA(11, 14));
-        Assert.assertEquals(6, (int) lcaAlgorithm.getLCA(18, 19));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(12, 2));
-        Assert.assertEquals(2, (int) lcaAlgorithm.getLCA(16, 14));
+        assertEquals(1, (int) lcaAlgorithm.getLCA(9, 14));
+        assertEquals(1, (int) lcaAlgorithm.getLCA(10, 9));
+        assertEquals(15, (int) lcaAlgorithm.getLCA(15, 15));
+        assertEquals(1, (int) lcaAlgorithm.getLCA(1, 17));
+        assertEquals(3, (int) lcaAlgorithm.getLCA(3, 3));
+        assertEquals(1, (int) lcaAlgorithm.getLCA(3, 1));
+        assertEquals(1, (int) lcaAlgorithm.getLCA(11, 14));
+        assertEquals(6, (int) lcaAlgorithm.getLCA(18, 19));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(12, 2));
+        assertEquals(2, (int) lcaAlgorithm.getLCA(16, 14));
     }
 
     @Test
@@ -381,9 +383,9 @@ public abstract class LCATreeTestBase
         LowestCommonAncestorAlgorithm<String> lcaAlgorithm =
             createSolver(g, Collections.singleton("a"));
 
-        Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "h"));
-        Assert.assertEquals("b", lcaAlgorithm.getLCA("j", "f"));
-        Assert.assertEquals("c", lcaAlgorithm.getLCA("j", "h"));
+        assertEquals("b", lcaAlgorithm.getLCA("b", "h"));
+        assertEquals("b", lcaAlgorithm.getLCA("j", "f"));
+        assertEquals("c", lcaAlgorithm.getLCA("j", "h"));
 
         // now all together in one call
 
@@ -394,10 +396,10 @@ public abstract class LCATreeTestBase
 
         List<String> lcas = lcaAlgorithm.getBatchLCA(queries);
 
-        Assert.assertEquals(Arrays.asList("b", "b", "c"), lcas);
+        assertEquals(Arrays.asList("b", "b", "c"), lcas);
 
         // test it the other way around and starting from b
-        Assert.assertEquals("b", createSolver(g, Collections.singleton("b")).getLCA("h", "b"));
+        assertEquals("b", createSolver(g, Collections.singleton("b")).getLCA("h", "b"));
     }
 
     @Test
@@ -433,7 +435,7 @@ public abstract class LCATreeTestBase
         List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
         for (int i = 0; i < q; i++) {
-            Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+            assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
 
@@ -493,7 +495,7 @@ public abstract class LCATreeTestBase
         List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
         for (int i = 0; i < q; i++) {
-            Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+            assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
 
@@ -532,7 +534,7 @@ public abstract class LCATreeTestBase
             List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
             for (int i = 0; i < q; i++) {
-                Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+                assertEquals(lcas1.get(i), lcas2.get(i));
             }
         }
     }
@@ -573,7 +575,7 @@ public abstract class LCATreeTestBase
             List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
             for (int i = 0; i < q; i++) {
-                Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+                assertEquals(lcas1.get(i), lcas2.get(i));
             }
         }
     }

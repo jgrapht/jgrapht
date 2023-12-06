@@ -19,9 +19,9 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * A unit test for graph generic vertex/edge parameters.

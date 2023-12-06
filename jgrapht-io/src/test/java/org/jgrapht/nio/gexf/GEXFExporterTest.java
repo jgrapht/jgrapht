@@ -23,14 +23,14 @@ import org.jgrapht.graph.builder.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.gexf.GEXFExporter.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.xmlunit.builder.*;
 import org.xmlunit.diff.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests

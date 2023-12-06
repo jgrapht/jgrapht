@@ -19,12 +19,12 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -240,10 +240,10 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultEdge>> paths = new AllDirectedPaths<>(graph)
             .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
 
-        Assert.assertFalse("We should find at least some paths!", paths.isEmpty());
+        assertFalse("We should find at least some paths!", paths.isEmpty());
 
         paths.forEach(
-            path -> Assert.assertEquals(
+            path -> assertEquals(
                 String.format(
                     "The path %s has length %d even though we requested only paths of length 0",
                     path, path.getLength()),

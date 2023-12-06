@@ -20,13 +20,13 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the {@link ChordalityInspector}

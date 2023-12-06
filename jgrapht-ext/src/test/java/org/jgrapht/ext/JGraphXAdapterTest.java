@@ -19,13 +19,13 @@ package org.jgrapht.ext;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import com.mxgraph.model.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test methods for the class JGraphXAdapter.
@@ -71,17 +71,17 @@ public class JGraphXAdapterTest
 
         Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         int edgesCount = graphX.getCellToEdgeMap().values().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
 
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
     }
 
     /**
@@ -124,17 +124,17 @@ public class JGraphXAdapterTest
 
         Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         int edgesCount = graphX.getCellToEdgeMap().values().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
 
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
 
         // remove some data from the jgraphT graph
         jGraphT.removeVertex(v4);
@@ -150,17 +150,17 @@ public class JGraphXAdapterTest
 
         realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         edgesCount = graphX.getCellToEdgeMap().values().size();
-        Assert.assertEquals(expectedEdgesAfterRemove, edgesCount);
+        assertEquals(expectedEdgesAfterRemove, edgesCount);
 
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
-        Assert.assertEquals(expectedEdgesAfterRemove, edgesCount);
+        assertEquals(expectedEdgesAfterRemove, edgesCount);
     }
 
     /**
@@ -174,7 +174,7 @@ public class JGraphXAdapterTest
             fail("Expected illegal argument exception");
         } catch (IllegalArgumentException e) {
             // expected result
-            Assert.assertTrue(true);
+            assertTrue(true);
         } catch (Exception e) {
             fail("Unexpected error encountered during " + " creation of JGraphXAdapter with null");
         }
@@ -250,17 +250,17 @@ public class JGraphXAdapterTest
 
         Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         int edgesCount = graphX.getCellToEdgeMap().values().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
 
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
     }
 
     /**
@@ -312,17 +312,17 @@ public class JGraphXAdapterTest
 
         Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
-        Assert.assertArrayEquals(expectedArray, realArray);
+        assertArrayEquals(expectedArray, realArray);
 
         int edgesCount = graphX.getCellToEdgeMap().values().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
 
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
-        Assert.assertEquals(expectedEdges, edgesCount);
+        assertEquals(expectedEdges, edgesCount);
     }
 
     // ========================Helper Methods===============================

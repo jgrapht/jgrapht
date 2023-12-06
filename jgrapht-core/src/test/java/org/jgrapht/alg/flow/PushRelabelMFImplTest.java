@@ -20,9 +20,9 @@ package org.jgrapht.alg.flow;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PushRelabelMFImplTest
     extends MaximumFlowAlgorithmTest
@@ -65,7 +65,7 @@ public class PushRelabelMFImplTest
 
         PushRelabelMFImpl<Integer, DefaultEdge> mf = new PushRelabelMFImpl<>(graph);
 
-        Assert.assertEquals(2.0, mf.calculateMinCut(-1, -2), 1e-9);
+        assertEquals(2.0, mf.calculateMinCut(-1, -2), 1e-9);
     }
 
     @Test

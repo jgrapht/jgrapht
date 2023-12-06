@@ -21,7 +21,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,7 +31,7 @@ import java.util.Set;
 
 import static org.jgrapht.alg.similarity.ZhangShashaTreeEditDistance.EditOperation;
 import static org.jgrapht.alg.similarity.ZhangShashaTreeEditDistance.OperationType;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link ZhangShashaTreeEditDistance}.

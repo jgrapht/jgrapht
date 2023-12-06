@@ -17,7 +17,7 @@
  */
 package org.jgrapht.generate.netgen;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import static org.jgrapht.generate.netgen.NetworkGenerator.*;
 

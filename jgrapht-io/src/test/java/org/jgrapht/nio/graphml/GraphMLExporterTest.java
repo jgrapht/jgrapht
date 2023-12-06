@@ -21,15 +21,15 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.graphml.GraphMLExporter.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.xmlunit.builder.*;
 import org.xmlunit.diff.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests

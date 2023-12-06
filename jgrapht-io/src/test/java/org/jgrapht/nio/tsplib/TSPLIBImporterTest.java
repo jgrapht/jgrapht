@@ -24,14 +24,14 @@ import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TSPLIBImporterTest
 {

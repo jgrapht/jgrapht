@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.drawing.model;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test {@link Point2D}.

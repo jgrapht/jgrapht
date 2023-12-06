@@ -20,9 +20,11 @@ package org.jgrapht.generate;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link PruferTreeGenerator}
@@ -48,7 +50,7 @@ public class PruferTreeGeneratorTest
             new PruferTreeGenerator<>(new int[] {});
 
         generator.generateGraph(tree);
-        Assert.assertEquals(2, tree.vertexSet().size());
+        assertEquals(2, tree.vertexSet().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -68,12 +70,12 @@ public class PruferTreeGeneratorTest
 
         generator.generateGraph(tree);
 
-        Assert.assertEquals(6, tree.vertexSet().size());
+        assertEquals(6, tree.vertexSet().size());
 
         int[] degrees = tree.vertexSet().stream().mapToInt(tree::degreeOf).toArray();
         Arrays.sort(degrees);
 
-        Assert.assertArrayEquals(new int[] { 1, 1, 1, 1, 2, 4 }, degrees);
+        assertArrayEquals(new int[] { 1, 1, 1, 1, 2, 4 }, degrees);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -116,7 +118,7 @@ public class PruferTreeGeneratorTest
         PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(1, 0x99);
 
         generator.generateGraph(tree);
-        Assert.assertTrue(GraphTests.isTree(tree));
+        assertTrue(GraphTests.isTree(tree));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -149,7 +151,7 @@ public class PruferTreeGeneratorTest
                 new PruferTreeGenerator<>(1 + random.nextInt(5000), random);
 
             generator.generateGraph(tree);
-            Assert.assertTrue(GraphTests.isTree(tree));
+            assertTrue(GraphTests.isTree(tree));
         }
     }
 
@@ -163,6 +165,6 @@ public class PruferTreeGeneratorTest
             new PruferTreeGenerator<>(100_000, 0x99);
 
         generator.generateGraph(tree);
-        Assert.assertTrue(GraphTests.isTree(tree));
+        assertTrue(GraphTests.isTree(tree));
     }
 }

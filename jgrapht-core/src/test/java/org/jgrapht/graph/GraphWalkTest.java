@@ -20,9 +20,11 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -126,11 +128,11 @@ public class GraphWalkTest
         paths.add(new GraphWalk<>(graph, null, null, Collections.emptyList(), 0));
         paths.add(new GraphWalk<>(graph, Collections.emptyList(), 0));
         for (GraphWalk<Integer, DefaultEdge> path : paths) {
-            Assert.assertEquals(0, path.getLength());
-            Assert.assertEquals(Collections.emptyList(), path.getVertexList());
-            Assert.assertEquals(Collections.emptyList(), path.getEdgeList());
-            Assert.assertTrue(path.isEmpty());
-            Assert.assertEquals(GraphWalk.emptyWalk(graph), path);
+            assertEquals(0, path.getLength());
+            assertEquals(Collections.emptyList(), path.getVertexList());
+            assertEquals(Collections.emptyList(), path.getEdgeList());
+            assertTrue(path.isEmpty());
+            assertEquals(GraphWalk.emptyWalk(graph), path);
         }
     }
 
@@ -148,18 +150,18 @@ public class GraphWalkTest
         for (int i = 0; i < vertexList.size() - 1; i++)
             edgeList.add(completeGraph.getEdge(vertexList.get(i), vertexList.get(i + 1)));
         GraphPath<Integer, DefaultEdge> p1 = new GraphWalk<>(completeGraph, 0, 4, edgeList, 10);
-        Assert.assertEquals(0, p1.getStartVertex().intValue());
-        Assert.assertEquals(4, p1.getEndVertex().intValue());
-        Assert.assertEquals(vertexList, p1.getVertexList());
-        Assert.assertEquals(edgeList.size(), p1.getLength());
-        Assert.assertEquals(10.0, p1.getWeight(), 0.0000000001);
+        assertEquals(0, p1.getStartVertex().intValue());
+        assertEquals(4, p1.getEndVertex().intValue());
+        assertEquals(vertexList, p1.getVertexList());
+        assertEquals(edgeList.size(), p1.getLength());
+        assertEquals(10.0, p1.getWeight(), 0.0000000001);
 
         GraphPath<Integer, DefaultEdge> p2 = new GraphWalk<>(completeGraph, vertexList, 10);
-        Assert.assertEquals(0, p2.getStartVertex().intValue());
-        Assert.assertEquals(4, p2.getEndVertex().intValue());
-        Assert.assertEquals(edgeList, p2.getEdgeList());
-        Assert.assertEquals(edgeList.size(), p2.getLength());
-        Assert.assertEquals(10.0, p2.getWeight(), 0.0000000001);
+        assertEquals(0, p2.getStartVertex().intValue());
+        assertEquals(4, p2.getEndVertex().intValue());
+        assertEquals(edgeList, p2.getEdgeList());
+        assertEquals(edgeList.size(), p2.getLength());
+        assertEquals(10.0, p2.getWeight(), 0.0000000001);
     }
 
     @Test
@@ -184,13 +186,13 @@ public class GraphWalkTest
 
         GraphWalk<Integer, DefaultWeightedEdge> revPath =
             new GraphWalk<>(graph, 3, 0, null, Arrays.asList(e3, e2, e1), 9);
-        Assert.assertEquals(revPath, rev1);
-        Assert.assertEquals(revPath, rev2);
+        assertEquals(revPath, rev1);
+        assertEquals(revPath, rev2);
 
         rev1 = gw1.reverse();
-        Assert.assertEquals(9.0, gw1.getWeight(), 0.0000000001);
+        assertEquals(9.0, gw1.getWeight(), 0.0000000001);
         rev2 = gw2.reverse();
-        Assert.assertEquals(9.0, gw2.getWeight(), 0.0000000001);
+        assertEquals(9.0, gw2.getWeight(), 0.0000000001);
     }
 
     @Test(expected = InvalidGraphWalkException.class)
@@ -230,11 +232,11 @@ public class GraphWalkTest
         GraphWalk<Integer, DefaultWeightedEdge> revPath =
             new GraphWalk<>(graph, 3, 0, null, Arrays.asList(e1, e2, e3), 15);
 
-        Assert.assertEquals(revPath, rev1);
-        Assert.assertEquals(15, rev1.getWeight(), 0.00000001);
+        assertEquals(revPath, rev1);
+        assertEquals(15, rev1.getWeight(), 0.00000001);
 
         GraphWalk<Integer, DefaultWeightedEdge> rev2 = gw1.reverse();
-        Assert.assertEquals(15, rev2.getWeight(), 0.00000001);
+        assertEquals(15, rev2.getWeight(), 0.00000001);
     }
 
     /**
@@ -283,8 +285,8 @@ public class GraphWalkTest
 
         GraphWalk<Integer, DefaultEdge> expected =
             new GraphWalk<>(graph, 0, 1, Arrays.asList(0, 1, 2, 3, 1), null, 12);
-        Assert.assertEquals(expected, gw3);
-        Assert.assertEquals(12, gw3.getWeight(), 0.00000001);
+        assertEquals(expected, gw3);
+        assertEquals(12, gw3.getWeight(), 0.00000001);
     }
 
     @Test
@@ -300,7 +302,7 @@ public class GraphWalkTest
             gw1.concat(gw2, gw -> gw1.getWeight() + gw2.getWeight());
         gw3.verify();
         // Concatenation with singleton shouldn't result in a different path.
-        Assert.assertEquals(gw1, gw3);
+        assertEquals(gw1, gw3);
     }
 
     @Test
@@ -312,7 +314,7 @@ public class GraphWalkTest
         Graph<Integer, DefaultEdge> graph2 = new SimpleGraph<>(DefaultEdge.class);
         graph2.addVertex(0);
         GraphWalk<Integer, DefaultEdge> gw2 = GraphWalk.singletonWalk(graph2, 0);
-        Assert.assertNotEquals(gw1, gw2);
+        assertNotEquals(gw1, gw2);
     }
 
 }

@@ -17,11 +17,13 @@
  */
 package org.jgrapht.util;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link VertexToIntegerMapping}
@@ -42,8 +44,8 @@ public class VertexToIntegerMappingTest
     {
         VertexToIntegerMapping<Integer> mapping = new VertexToIntegerMapping<>(new HashSet<>());
 
-        Assert.assertTrue(mapping.getIndexList().isEmpty());
-        Assert.assertTrue(mapping.getVertexMap().isEmpty());
+        assertTrue(mapping.getIndexList().isEmpty());
+        assertTrue(mapping.getVertexMap().isEmpty());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -69,15 +71,15 @@ public class VertexToIntegerMappingTest
             Map<String, Integer> vertexMap = mapping.getVertexMap();
             List<String> indexList = mapping.getIndexList();
 
-            Assert.assertEquals(n, vertexMap.size());
-            Assert.assertEquals(n, indexList.size());
+            assertEquals(n, vertexMap.size());
+            assertEquals(n, indexList.size());
 
             for (int i = 0; i < indexList.size(); i++) {
-                Assert.assertEquals(i, vertexMap.get(indexList.get(i)).intValue());
+                assertEquals(i, vertexMap.get(indexList.get(i)).intValue());
             }
 
             for (Map.Entry<String, Integer> entry : vertexMap.entrySet()) {
-                Assert.assertEquals(indexList.get(entry.getValue()), entry.getKey());
+                assertEquals(indexList.get(entry.getValue()), entry.getKey());
             }
         }
     }

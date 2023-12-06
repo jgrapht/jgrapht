@@ -18,11 +18,11 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * A unit test for the AsDirectedGraph view.
@@ -52,7 +52,7 @@ public class AsUndirectedGraphTest
     {
         try {
             undirected.addEdge(v3, v4);
-            Assert.fail(); // should not get here
+            fail(); // should not get here
         } catch (UnsupportedOperationException e) {
         }
 

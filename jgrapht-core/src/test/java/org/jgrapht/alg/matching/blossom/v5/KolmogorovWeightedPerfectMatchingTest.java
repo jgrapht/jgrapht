@@ -22,7 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -31,7 +31,7 @@ import java.util.*;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link KolmogorovWeightedPerfectMatching}

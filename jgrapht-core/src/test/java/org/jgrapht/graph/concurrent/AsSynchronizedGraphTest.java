@@ -21,11 +21,11 @@ import junit.extensions.*;
 import junit.framework.*;
 import junit.textui.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class AsSynchronizedGraph.

@@ -19,7 +19,7 @@ package org.jgrapht.opt.graph.fastutil;
 
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link FastutilMapGraph}.

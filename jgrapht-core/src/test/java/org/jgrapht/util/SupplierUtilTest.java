@@ -18,7 +18,7 @@
 package org.jgrapht.util;
 
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -27,7 +27,7 @@ import java.util.function.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.jgrapht.graph.SerializationTestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SupplierUtilTest
 {
@@ -63,7 +63,7 @@ public class SupplierUtilTest
         // SimpleGraph has no no-argument constructor
         @SuppressWarnings("rawtypes") Supplier<SimpleGraph> supplier =
             SupplierUtil.createSupplier(SimpleGraph.class);
-        org.junit.Assert.assertThrows(SupplierException.class, () -> supplier.get());
+        assertThrows(SupplierException.class, () -> supplier.get());
     }
 
     @Test

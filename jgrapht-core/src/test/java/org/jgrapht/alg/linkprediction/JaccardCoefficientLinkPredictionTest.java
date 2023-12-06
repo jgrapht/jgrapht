@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.linkprediction;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.jgrapht.Graph;
 import org.jgrapht.TestUtil;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the {@link JaccardCoefficientLinkPrediction}
