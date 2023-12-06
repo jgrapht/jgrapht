@@ -30,6 +30,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -362,38 +363,39 @@ public class SimpleGEXFImporterTest
             new DefaultAttribute<>("333.0", AttributeType.DOUBLE));
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testValidate()
-        throws ImportException
     {
-        // @formatter:off
-        String input = 
-              "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
-            + "      version=\"1.2\" "
-            + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
-            + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "  <graph defaultedgetype=\"undirected\">" + NL
-            + "    <node id=\"1\" label=\"1\"/>" + NL 
-            + "    <node id=\"2\" label=\"2\"/>" + NL
-            + "    <node id=\"3\" label=\"3\"/>" + NL 
-            + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
-            + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
-            + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
-            + "    </edges>" + NL
-            + "  </graph>" + NL 
-            + "</gexf>";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = 
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+                + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
+                + "      version=\"1.2\" "
+                + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
+                + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+                + "  <graph defaultedgetype=\"undirected\">" + NL
+                + "    <node id=\"1\" label=\"1\"/>" + NL 
+                + "    <node id=\"2\" label=\"2\"/>" + NL
+                + "    <node id=\"3\" label=\"3\"/>" + NL 
+                + "    <edges>" + NL
+                + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+                + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
+                + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
+                + "    </edges>" + NL
+                + "  </graph>" + NL 
+                + "</gexf>";
+            // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+            Graph<String,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .vertexSupplier(SupplierUtil.createStringSupplier())
+                    .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
-        new SimpleGEXFImporter<String, DefaultEdge>()
-            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+            new SimpleGEXFImporter<String, DefaultEdge>()
+                .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        });
     }
 
     @Test

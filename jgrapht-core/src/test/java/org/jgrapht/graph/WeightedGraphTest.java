@@ -57,20 +57,24 @@ public class WeightedGraphTest
         assertFalse(g.containsEdge("1-2"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidEdgeOnWeightedGraph()
     {
-        WeightedPseudograph<Integer, String> g =
-            new WeightedPseudograph<Integer, String>(String.class);
-        g.getEdgeWeight("1-2");
+        assertThrows(IllegalArgumentException.class, () -> {
+            WeightedPseudograph<Integer, String> g =
+                new WeightedPseudograph<Integer, String>(String.class);
+            g.getEdgeWeight("1-2");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidEdgeOnWeightedGraphSet()
     {
-        WeightedPseudograph<Integer, String> g =
-            new WeightedPseudograph<Integer, String>(String.class);
-        g.setEdgeWeight("1-2", 2d);
+        assertThrows(IllegalArgumentException.class, () -> {
+            WeightedPseudograph<Integer, String> g =
+                new WeightedPseudograph<Integer, String>(String.class);
+            g.setEdgeWeight("1-2", 2d);
+        });
     }
 
     public void testInvalidEdgeOnUnweightedGraph()

@@ -25,6 +25,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -93,25 +94,29 @@ public class BoyerMyrvoldPlanarityInspectorTest
         assertEquals(2 * graph.edgeSet().size(), degreeSum);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNonPlanarGraphNoEmbedding()
     {
-        int[][] k_5 = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 0, 4 }, { 1, 2 }, { 1, 3 }, { 1, 4 },
-            { 2, 3 }, { 2, 4 }, { 3, 4 }, };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(k_5);
-        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm =
-            new BoyerMyrvoldPlanarityInspector<>(graph);
-        algorithm.getEmbedding();
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] k_5 = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 0, 4 }, { 1, 2 }, { 1, 3 }, { 1, 4 },
+                { 2, 3 }, { 2, 4 }, { 3, 4 }, };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(k_5);
+            PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm =
+                new BoyerMyrvoldPlanarityInspector<>(graph);
+            algorithm.getEmbedding();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testPlanarGraphNoKuratowskiSubdivision()
     {
-        int[][] k_4 = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(k_4);
-        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm =
-            new BoyerMyrvoldPlanarityInspector<>(graph);
-        algorithm.getKuratowskiSubdivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] k_4 = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(k_4);
+            PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm =
+                new BoyerMyrvoldPlanarityInspector<>(graph);
+            algorithm.getKuratowskiSubdivision();
+        });
     }
 
     @Test

@@ -315,11 +315,13 @@ public class HeldKarpTSPTest
         assertNull(tour);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidInstanceEmpty()
     {
-        Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        new HeldKarpTSP<String, DefaultEdge>().getTour(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+            new HeldKarpTSP<String, DefaultEdge>().getTour(g);
+        });
     }
 
     @Test

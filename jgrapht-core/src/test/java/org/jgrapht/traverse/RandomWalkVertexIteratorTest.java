@@ -21,6 +21,7 @@ package org.jgrapht.traverse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -48,11 +49,13 @@ public class RandomWalkVertexIteratorTest
     /**
      * Tests invalid vertex
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidVertex()
     {
-        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-        new RandomWalkVertexIterator<>(graph, "unknown", 100);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+            new RandomWalkVertexIterator<>(graph, "unknown", 100);
+        });
     }
 
     /**

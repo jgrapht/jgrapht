@@ -26,6 +26,7 @@ import org.junit.jupiter.api.*;
 import org.junit.experimental.categories.*;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -116,25 +117,28 @@ public class TwoOptHeuristicTSPTest
         assertTrue(2 * mstWeight >= tourWeight);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidInstanceDirected()
     {
-        new TwoOptHeuristicTSP<String, DefaultEdge>()
-            .getTour(new SimpleDirectedGraph<>(DefaultEdge.class));
+        assertThrows(IllegalArgumentException.class, () -> new TwoOptHeuristicTSP<String, DefaultEdge>()
+            .getTour(new SimpleDirectedGraph<>(DefaultEdge.class)));
+        
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidInstanceNotComplete()
     {
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        g.addVertex("A");
-        g.addVertex("B");
-        g.addVertex("C");
-        g.setEdgeWeight(g.addEdge("A", "B"), 20d);
-        g.setEdgeWeight(g.addEdge("A", "C"), 42d);
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            g.addVertex("A");
+            g.addVertex("B");
+            g.addVertex("C");
+            g.setEdgeWeight(g.addEdge("A", "B"), 20d);
+            g.setEdgeWeight(g.addEdge("A", "C"), 42d);
 
-        new TwoOptHeuristicTSP<String, DefaultWeightedEdge>().getTour(g);
+            new TwoOptHeuristicTSP<String, DefaultWeightedEdge>().getTour(g);
+        });
     }
 
 }

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -60,16 +61,18 @@ public class MaximumCardinalityIteratorTest
     /**
      * Tests iterator on empty graph.
      */
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testMaximumCardinalityIterator1()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        MaximumCardinalityIterator<Integer, DefaultEdge> iterator =
-            new MaximumCardinalityIterator<>(graph);
+        assertThrows(NoSuchElementException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+            MaximumCardinalityIterator<Integer, DefaultEdge> iterator =
+                new MaximumCardinalityIterator<>(graph);
 
-        assertFalse(iterator.hasNext());
+            assertFalse(iterator.hasNext());
 
-        iterator.next();
+            iterator.next();
+        });
     }
 
     /**

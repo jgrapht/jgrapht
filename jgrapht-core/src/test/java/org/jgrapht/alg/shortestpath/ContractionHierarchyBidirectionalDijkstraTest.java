@@ -72,26 +72,30 @@ public class ContractionHierarchyBidirectionalDijkstraTest
         new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testSourceNotPresent()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(2);
-        ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
-        dijkstra.getPath(1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(2);
+            ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
+                new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
+            dijkstra.getPath(1, 2);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTargetNotPresent()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
-        dijkstra.getPath(1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
+                new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
+            dijkstra.getPath(1, 2);
+        });
     }
 
     @Test

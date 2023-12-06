@@ -549,109 +549,113 @@ public class GmlExporterTest
         assertEquals(UNDIRECTED_WITH_VERTEX_LABELS_AND_CUSTOM_ATTRIBUTES, res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadCustomVertexAttributes()
-        throws UnsupportedEncodingException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimpleGraph<String, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            g.addVertex(V1);
+            g.addVertex(V2);
 
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
-        exporter.setEdgeIdProvider(new IntegerIdProvider<>());
-        exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES, true);
+            GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
+            exporter.setEdgeIdProvider(new IntegerIdProvider<>());
+            exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES, true);
 
-        exporter.setVertexAttributeProvider(v -> {
-            Map<String, Attribute> map = new HashMap<>();
-            if (v.equals(V1)) {
-                map.put("id", DefaultAttribute.createAttribute("custom-id"));
-            }
-            return map;
+            exporter.setVertexAttributeProvider(v -> {
+                Map<String, Attribute> map = new HashMap<>();
+                if (v.equals(V1)) {
+                    map.put("id", DefaultAttribute.createAttribute("custom-id"));
+                }
+                return map;
+            });
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            exporter.exportGraph(g, os);
         });
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.exportGraph(g, os);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadCustomEdgeAttributeId()
-        throws UnsupportedEncodingException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        DefaultWeightedEdge e1 = g.addEdge(V1, V2);
-        g.setEdgeWeight(e1, 2.0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimpleGraph<String, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            g.addVertex(V1);
+            g.addVertex(V2);
+            DefaultWeightedEdge e1 = g.addEdge(V1, V2);
+            g.setEdgeWeight(e1, 2.0);
 
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
-        exporter.setEdgeIdProvider(new IntegerIdProvider<>());
-        exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
+            GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
+            exporter.setEdgeIdProvider(new IntegerIdProvider<>());
+            exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
 
-        exporter.setEdgeAttributeProvider(e -> {
-            Map<String, Attribute> map = new HashMap<>();
-            if (e.equals(e1)) {
-                map.put("id", DefaultAttribute.createAttribute("id"));
-            }
-            return map;
+            exporter.setEdgeAttributeProvider(e -> {
+                Map<String, Attribute> map = new HashMap<>();
+                if (e.equals(e1)) {
+                    map.put("id", DefaultAttribute.createAttribute("id"));
+                }
+                return map;
+            });
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            exporter.exportGraph(g, os);
         });
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.exportGraph(g, os);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadCustomEdgeAttributeSource()
-        throws UnsupportedEncodingException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        DefaultWeightedEdge e1 = g.addEdge(V1, V2);
-        g.setEdgeWeight(e1, 2.0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimpleGraph<String, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            g.addVertex(V1);
+            g.addVertex(V2);
+            DefaultWeightedEdge e1 = g.addEdge(V1, V2);
+            g.setEdgeWeight(e1, 2.0);
 
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
-        exporter.setEdgeIdProvider(new IntegerIdProvider<>());
-        exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
+            GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
+            exporter.setEdgeIdProvider(new IntegerIdProvider<>());
+            exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
 
-        exporter.setEdgeAttributeProvider(e -> {
-            Map<String, Attribute> map = new HashMap<>();
-            if (e.equals(e1)) {
-                map.put("source", DefaultAttribute.createAttribute("source"));
-            }
-            return map;
+            exporter.setEdgeAttributeProvider(e -> {
+                Map<String, Attribute> map = new HashMap<>();
+                if (e.equals(e1)) {
+                    map.put("source", DefaultAttribute.createAttribute("source"));
+                }
+                return map;
+            });
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            exporter.exportGraph(g, os);
         });
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.exportGraph(g, os);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadCustomEdgeAttributeTarget()
-        throws UnsupportedEncodingException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        DefaultWeightedEdge e1 = g.addEdge(V1, V2);
-        g.setEdgeWeight(e1, 2.0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimpleGraph<String, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            g.addVertex(V1);
+            g.addVertex(V2);
+            DefaultWeightedEdge e1 = g.addEdge(V1, V2);
+            g.setEdgeWeight(e1, 2.0);
 
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
-        exporter.setEdgeIdProvider(new IntegerIdProvider<>());
-        exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
+            GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
+            exporter.setEdgeIdProvider(new IntegerIdProvider<>());
+            exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
 
-        exporter.setEdgeAttributeProvider(e -> {
-            Map<String, Attribute> map = new HashMap<>();
-            if (e.equals(e1)) {
-                map.put("target", DefaultAttribute.createAttribute("target"));
-            }
-            return map;
+            exporter.setEdgeAttributeProvider(e -> {
+                Map<String, Attribute> map = new HashMap<>();
+                if (e.equals(e1)) {
+                    map.put("target", DefaultAttribute.createAttribute("target"));
+                }
+                return map;
+            });
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            exporter.exportGraph(g, os);
         });
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.exportGraph(g, os);
     }
 }

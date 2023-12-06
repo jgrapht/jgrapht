@@ -208,41 +208,45 @@ public class TopologicalOrderIteratorTest
         assertFalse(it.hasNext());
     }
 
-    @Test(expected = NotDirectedAcyclicGraphException.class)
+    @Test
     public void testWithSelfLoops()
     {
-        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        assertThrows(NotDirectedAcyclicGraphException.class, () -> {
+            Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
-        Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2"));
-        graph.addEdge("v0", "v1");
-        graph.addEdge("v0", "v2");
-        graph.addEdge("v1", "v2");
-        graph.addEdge("v2", "v2");
+            Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2"));
+            graph.addEdge("v0", "v1");
+            graph.addEdge("v0", "v2");
+            graph.addEdge("v1", "v2");
+            graph.addEdge("v2", "v2");
 
-        new TopologicalOrderIterator<>(graph);
+            new TopologicalOrderIterator<>(graph);
+        });
     }
 
-    @Test(expected = NotDirectedAcyclicGraphException.class)
+    @Test
     public void testGraphWithCycle()
     {
-        Graph<String, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
+        assertThrows(NotDirectedAcyclicGraphException.class, () -> {
+            Graph<String, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
 
-        Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2", "v3", "v4", "v5"));
-        graph.addEdge("v0", "v1");
-        graph.addEdge("v0", "v1");
-        graph.addEdge("v0", "v2");
-        graph.addEdge("v1", "v4");
-        graph.addEdge("v2", "v4");
-        graph.addEdge("v2", "v4");
-        graph.addEdge("v3", "v2");
-        graph.addEdge("v3", "v4");
-        graph.addEdge("v4", "v5");
-        graph.addEdge("v5", "v2");
+            Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2", "v3", "v4", "v5"));
+            graph.addEdge("v0", "v1");
+            graph.addEdge("v0", "v1");
+            graph.addEdge("v0", "v2");
+            graph.addEdge("v1", "v4");
+            graph.addEdge("v2", "v4");
+            graph.addEdge("v2", "v4");
+            graph.addEdge("v3", "v2");
+            graph.addEdge("v3", "v4");
+            graph.addEdge("v4", "v5");
+            graph.addEdge("v5", "v2");
 
-        Iterator<String> it = new TopologicalOrderIterator<>(graph);
-        while (it.hasNext()) {
-            it.next();
-        }
+            Iterator<String> it = new TopologicalOrderIterator<>(graph);
+            while (it.hasNext()) {
+                it.next();
+            }
+        });
     }
 
     @Test
@@ -276,11 +280,13 @@ public class TopologicalOrderIteratorTest
         assertFalse(it.hasNext());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTryToDisableCrossComponent()
     {
-        Graph<Integer, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
-        new TopologicalOrderIterator<>(graph).setCrossComponentTraversal(false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
+            new TopologicalOrderIterator<>(graph).setCrossComponentTraversal(false);
+        });
     }
 
 }

@@ -56,23 +56,25 @@ public class DistributorTest
         assertEquals(List.of(3, 4, 2), distribution);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDistributor_NoUpperBounds_NoValidDistribution()
     {
-        Distributor<Integer> distributor = new Distributor<>(rng);
-        distributor.addLowerBound(element -> {
-            switch (element) {
-            case 1:
-                return 5;
-            case 2:
-                return 6;
-            case 3:
-                return 2;
-            default:
-                return 0;
-            }
+        assertThrows(IllegalArgumentException.class, () -> {
+            Distributor<Integer> distributor = new Distributor<>(rng);
+            distributor.addLowerBound(element -> {
+                switch (element) {
+                case 1:
+                    return 5;
+                case 2:
+                    return 6;
+                case 3:
+                    return 2;
+                default:
+                    return 0;
+                }
+            });
+            distributor.getDistribution(List.of(1, 2, 3), 12);
         });
-        distributor.getDistribution(List.of(1, 2, 3), 12);
     }
 
     @Test
@@ -97,24 +99,26 @@ public class DistributorTest
         assertEquals(List.of(3, 5, 2), distribution);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDistributor_NoLowerBounds_NoValidDistribution()
     {
-        Distributor<Integer> distributor = new Distributor<>(rng);
-        distributor.addLowerBound(element -> {
-            switch (element) {
-            case 1:
-                return 3;
-            case 2:
-                return 4;
-            case 3:
-                return 2;
-            default:
-                return 0;
-            }
-        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Distributor<Integer> distributor = new Distributor<>(rng);
+            distributor.addLowerBound(element -> {
+                switch (element) {
+                case 1:
+                    return 3;
+                case 2:
+                    return 4;
+                case 3:
+                    return 2;
+                default:
+                    return 0;
+                }
+            });
 
-        distributor.getDistribution(List.of(1, 2, 3), 8);
+            distributor.getDistribution(List.of(1, 2, 3), 8);
+        });
     }
 
     @Test

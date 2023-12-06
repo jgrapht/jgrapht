@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link CHManyToManyShortestPaths}.
@@ -62,16 +63,16 @@ public class CHManyToManyShortestPathsTest
         super.testEmptyGraph();
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSourcesIsNull()
     {
-        super.testSourcesIsNull();
+        assertThrows(NullPointerException.class, () -> super.testSourcesIsNull());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testTargetsIsNull()
     {
-        super.testTargetsIsNull();
+        assertThrows(NullPointerException.class, () -> super.testTargetsIsNull());
     }
 
     @Test

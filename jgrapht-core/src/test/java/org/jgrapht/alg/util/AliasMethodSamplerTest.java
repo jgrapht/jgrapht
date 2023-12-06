@@ -22,6 +22,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test {@link AliasMethodSampler}.
@@ -68,11 +69,13 @@ public class AliasMethodSamplerTest
         assertEquals(799990, counts[4]);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNonValid()
     {
-        double[] prob = { 0.5, 0.6 };
-        new AliasMethodSampler(prob, new Random(15));
+        assertThrows(IllegalArgumentException.class, () -> {
+            double[] prob = { 0.5, 0.6 };
+            new AliasMethodSampler(prob, new Random(15));
+        });
     }
 
 }

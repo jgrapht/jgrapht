@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link EppsteinKShortestPath} class.
@@ -40,13 +41,15 @@ public class EppsteinKShortestPathTest
     final int[][] cyclicGraph3 = { { 1, 2, 1 }, { 2, 3, 1 }, { 3, 4, 1 }, { 3, 4, 1 }, { 4, 3, 1 },
         { 4, 5, 1 }, { 5, 4, 1 } };
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeK()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        new EppsteinKShortestPath<>(graph).getPaths(1, 2, -1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            Graphs.addEdgeWithVertices(graph, 1, 2);
+            new EppsteinKShortestPath<>(graph).getPaths(1, 2, -1);
+        });
     }
 
     /**
@@ -65,22 +68,26 @@ public class EppsteinKShortestPathTest
         assertEquals(0, paths.size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSourceGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(2);
-        new EppsteinKShortestPath<>(graph).getPaths(1, 2, 1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(2);
+            new EppsteinKShortestPath<>(graph).getPaths(1, 2, 1);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSinkGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        new EppsteinKShortestPath<>(graph).getPaths(1, 2, 1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            new EppsteinKShortestPath<>(graph).getPaths(1, 2, 1);
+        });
     }
 
     @Test

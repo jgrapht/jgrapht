@@ -18,6 +18,7 @@
 package org.jgrapht.alg.linkprediction;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.jgrapht.Graph;
 import org.jgrapht.TestUtil;
@@ -68,21 +69,23 @@ public class LeichtHolmeNewmanIndexLinkPredictionTest
 
     }
 
-    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
+    @Test
     public void testInvalidPrediction()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        assertThrows(LinkPredictionIndexNotWellDefinedException.class, () -> {
+            Graph<Integer,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        g.addVertex(0);
-        g.addVertex(1);
+            g.addVertex(0);
+            g.addVertex(1);
 
-        LeichtHolmeNewmanIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new LeichtHolmeNewmanIndexLinkPrediction<>(g);
+            LeichtHolmeNewmanIndexLinkPrediction<Integer, DefaultEdge> alg =
+                new LeichtHolmeNewmanIndexLinkPrediction<>(g);
 
-        alg.predict(0, 1);
+            alg.predict(0, 1);
+        });
     }
 
 }

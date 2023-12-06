@@ -18,6 +18,7 @@
 package org.jgrapht.alg.scoring;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
@@ -133,43 +134,49 @@ public class EigenvectorCentralityTest
         assertEquals(pr.getVertexScore("d"), 0.299750298600000, 0.0001);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNonExistantVertex()
     {
-        final DirectedPseudograph<String, DefaultEdge> g =
-            new DirectedPseudograph<>(DefaultEdge.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final DirectedPseudograph<String, DefaultEdge> g =
+                new DirectedPseudograph<>(DefaultEdge.class);
 
-        g.addVertex("center");
-        g.addVertex("a");
-        g.addVertex("b");
-        g.addVertex("c");
-        g.addVertex("d");
+            g.addVertex("center");
+            g.addVertex("a");
+            g.addVertex("b");
+            g.addVertex("c");
+            g.addVertex("d");
 
-        g.addEdge("center", "a");
-        g.addEdge("center", "b");
-        g.addEdge("center", "c");
+            g.addEdge("center", "a");
+            g.addEdge("center", "b");
+            g.addEdge("center", "c");
 
-        final VertexScoringAlgorithm<String, Double> pr = new EigenvectorCentrality<>(g);
+            final VertexScoringAlgorithm<String, Double> pr = new EigenvectorCentrality<>(g);
 
-        pr.getVertexScore("unknown");
+            pr.getVertexScore("unknown");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadParameters1()
     {
-        final DirectedPseudograph<String, DefaultEdge> g =
-            new DirectedPseudograph<>(DefaultEdge.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final DirectedPseudograph<String, DefaultEdge> g =
+                new DirectedPseudograph<>(DefaultEdge.class);
 
-        new EigenvectorCentrality<>(g, -1);
+            new EigenvectorCentrality<>(g, -1);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadParameters2()
     {
-        final DirectedPseudograph<String, DefaultEdge> g =
-            new DirectedPseudograph<>(DefaultEdge.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final DirectedPseudograph<String, DefaultEdge> g =
+                new DirectedPseudograph<>(DefaultEdge.class);
 
-        new EigenvectorCentrality<>(g, 1, 0);
+            new EigenvectorCentrality<>(g, 1, 0);
+        });
     }
 
 }

@@ -117,10 +117,10 @@ public class ClusteringCoefficientTest
         assertEquals(0, clusteringCoefficient.getAverageClusteringCoefficient(), 0.0);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraphClusteringCoefficient()
     {
-        new ClusteringCoefficient<>(null);
+        assertThrows(NullPointerException.class, () -> new ClusteringCoefficient<>(null));
     }
 
     @Test

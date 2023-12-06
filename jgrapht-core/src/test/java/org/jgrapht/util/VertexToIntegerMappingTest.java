@@ -33,10 +33,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VertexToIntegerMappingTest
 {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullSet()
     {
-        new VertexToIntegerMapping<>((Set<Integer>) null);
+        assertThrows(NullPointerException.class, () -> new VertexToIntegerMapping<>((Set<Integer>) null));
     }
 
     @Test
@@ -48,10 +48,10 @@ public class VertexToIntegerMappingTest
         assertTrue(mapping.getVertexMap().isEmpty());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNotUniqueElements()
     {
-        new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1));
+        assertThrows(IllegalArgumentException.class, () -> new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1)));
     }
 
     @Test

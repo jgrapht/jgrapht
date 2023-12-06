@@ -1984,150 +1984,162 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a graph with odd number of vertices
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetMatching41()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> matching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        matching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> matching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            matching.getMatching();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetMatching42()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            graph.addVertex(2);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on a $K_{3}$ with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetMatching43()
     {
-        int[][] edges = { { 1, 2, 1 }, { 1, 3, 2 }, { 2, 3, 3 }, };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(4);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = { { 1, 2, 1 }, { 1, 3, 2 }, { 2, 3, 3 }, };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(4);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on triangulation of 9 points with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetMatching44()
     {
-        int[][] edges = new int[][] { { 1, 2, 3 }, { 1, 3, 5 }, { 2, 3, 7 }, { 1, 4, 6 },
-            { 3, 4, 1 }, { 1, 0, 11 }, { 0, 4, 7 }, { 3, 5, 3 }, { 4, 5, 2 }, { 4, 6, 3 },
-            { 5, 6, 1 }, { 4, 7, 3 }, { 0, 7, 7 }, { 6, 7, 1 }, { 6, 8, 9 }, { 5, 8, 8 },
-            { 7, 8, 10 }, { 3, 8, 7 }, { 2, 8, 4 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(9);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 1, 2, 3 }, { 1, 3, 5 }, { 2, 3, 7 }, { 1, 4, 6 },
+                { 3, 4, 1 }, { 1, 0, 11 }, { 0, 4, 7 }, { 3, 5, 3 }, { 4, 5, 2 }, { 4, 6, 3 },
+                { 5, 6, 1 }, { 4, 7, 3 }, { 0, 7, 7 }, { 6, 7, 1 }, { 6, 8, 9 }, { 5, 8, 8 },
+                { 7, 8, 10 }, { 3, 8, 7 }, { 2, 8, 4 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(9);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on triangulation of 9 points with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetMatching45()
     {
-        int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 9 }, { 1, 2, 1 }, { 0, 3, 4 },
-            { 1, 3, 5 }, { 0, 4, 4 }, { 3, 4, 2 }, { 0, 5, 5 }, { 4, 5, 2 }, { 4, 6, 7 },
-            { 5, 6, 6 }, { 1, 7, 9 }, { 2, 7, 9 }, { 3, 7, 8 }, { 4, 7, 7 }, { 6, 7, 2 },
-            { 6, 8, 4 }, { 7, 8, 2 }, { 2, 8, 10 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(9);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 9 }, { 1, 2, 1 }, { 0, 3, 4 },
+                { 1, 3, 5 }, { 0, 4, 4 }, { 3, 4, 2 }, { 0, 5, 5 }, { 4, 5, 2 }, { 4, 6, 7 },
+                { 5, 6, 6 }, { 1, 7, 9 }, { 2, 7, 9 }, { 3, 7, 8 }, { 4, 7, 7 }, { 6, 7, 2 },
+                { 6, 8, 4 }, { 7, 8, 2 }, { 2, 8, 10 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(9);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on triangulation of 99 points with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetMatching46()
     {
-        int[][] edges = new int[][] { { 1, 2, 22 }, { 1, 3, 8 }, { 2, 3, 16 }, { 0, 1, 46 },
-            { 0, 5, 24 }, { 1, 5, 24 }, { 0, 4, 20 }, { 4, 5, 4 }, { 0, 6, 5 }, { 0, 7, 7 },
-            { 6, 7, 3 }, { 0, 8, 19 }, { 6, 8, 16 }, { 0, 9, 17 }, { 4, 9, 8 }, { 0, 10, 10 },
-            { 7, 10, 6 }, { 9, 10, 11 }, { 4, 11, 10 }, { 5, 11, 7 }, { 9, 11, 13 }, { 5, 12, 16 },
-            { 1, 12, 13 }, { 11, 12, 11 }, { 1, 13, 10 }, { 3, 13, 9 }, { 12, 13, 12 },
-            { 11, 14, 8 }, { 12, 14, 5 }, { 9, 15, 6 }, { 10, 15, 7 }, { 7, 16, 14 },
-            { 10, 16, 17 }, { 6, 16, 14 }, { 8, 16, 8 }, { 11, 17, 5 }, { 14, 17, 6 },
-            { 10, 18, 6 }, { 15, 18, 4 }, { 16, 18, 20 }, { 11, 19, 5 }, { 9, 19, 14 },
-            { 17, 19, 3 }, { 15, 20, 4 }, { 18, 20, 3 }, { 3, 21, 16 }, { 13, 21, 12 },
-            { 2, 21, 19 }, { 16, 22, 5 }, { 8, 22, 11 }, { 15, 23, 6 }, { 20, 23, 4 },
-            { 13, 24, 9 }, { 21, 24, 10 }, { 12, 24, 15 }, { 16, 25, 20 }, { 18, 25, 5 },
-            { 22, 25, 22 }, { 20, 25, 5 }, { 23, 25, 4 }, { 9, 26, 13 }, { 19, 26, 11 },
-            { 15, 26, 11 }, { 23, 26, 8 }, { 23, 27, 4 }, { 25, 27, 5 }, { 26, 27, 7 },
-            { 17, 28, 17 }, { 19, 28, 19 }, { 14, 28, 15 }, { 12, 28, 14 }, { 24, 28, 7 },
-            { 8, 29, 21 }, { 22, 29, 15 }, { 25, 30, 7 }, { 27, 30, 5 }, { 26, 30, 9 },
-            { 24, 31, 10 }, { 28, 31, 6 }, { 25, 33, 28 }, { 22, 33, 12 }, { 30, 33, 30 },
-            { 29, 33, 8 }, { 29, 32, 4 }, { 32, 33, 4 }, { 33, 34, 4 }, { 32, 34, 3 },
-            { 29, 34, 6 }, { 33, 35, 4 }, { 34, 35, 2 }, { 26, 36, 10 }, { 30, 36, 9 },
-            { 19, 36, 19 }, { 24, 37, 13 }, { 31, 37, 10 }, { 21, 37, 15 }, { 19, 38, 23 },
-            { 36, 38, 24 }, { 28, 38, 12 }, { 31, 38, 8 }, { 31, 39, 9 }, { 37, 39, 11 },
-            { 38, 39, 4 }, { 37, 40, 5 }, { 39, 40, 9 }, { 33, 41, 11 }, { 35, 41, 9 },
-            { 38, 42, 20 }, { 36, 42, 11 }, { 39, 43, 9 }, { 40, 43, 9 }, { 40, 45, 9 },
-            { 43, 45, 7 }, { 37, 45, 13 }, { 34, 46, 15 }, { 29, 46, 18 }, { 35, 46, 14 },
-            { 41, 46, 11 }, { 41, 44, 8 }, { 41, 47, 12 }, { 44, 47, 6 }, { 33, 47, 20 },
-            { 30, 47, 25 }, { 42, 48, 6 }, { 42, 49, 6 }, { 48, 49, 3 }, { 38, 49, 20 },
-            { 41, 50, 11 }, { 44, 50, 13 }, { 46, 50, 3 }, { 48, 51, 4 }, { 49, 51, 1 },
-            { 44, 53, 4 }, { 47, 53, 6 }, { 50, 53, 13 }, { 47, 54, 8 }, { 53, 54, 12 },
-            { 30, 54, 24 }, { 42, 55, 21 }, { 36, 55, 23 }, { 48, 55, 19 }, { 30, 55, 24 },
-            { 54, 55, 4 }, { 45, 56, 9 }, { 43, 56, 7 }, { 45, 52, 4 }, { 52, 56, 9 },
-            { 21, 57, 35 }, { 2, 57, 48 }, { 45, 57, 19 }, { 52, 57, 18 }, { 37, 57, 26 },
-            { 49, 58, 11 }, { 51, 58, 11 }, { 38, 58, 20 }, { 39, 58, 19 }, { 43, 58, 18 },
-            { 56, 58, 15 }, { 52, 59, 8 }, { 56, 59, 4 }, { 53, 60, 14 }, { 50, 60, 8 },
-            { 46, 60, 11 }, { 51, 61, 11 }, { 58, 61, 6 }, { 52, 62, 10 }, { 59, 62, 9 },
-            { 59, 63, 6 }, { 62, 63, 7 }, { 52, 64, 14 }, { 62, 64, 7 }, { 52, 65, 14 },
-            { 64, 65, 1 }, { 57, 65, 13 }, { 59, 66, 9 }, { 63, 66, 6 }, { 56, 66, 11 },
-            { 58, 66, 14 }, { 48, 67, 19 }, { 55, 67, 21 }, { 51, 67, 19 }, { 61, 67, 15 },
-            { 58, 68, 14 }, { 61, 68, 12 }, { 66, 68, 11 }, { 64, 69, 9 }, { 65, 69, 9 },
-            { 62, 69, 11 }, { 63, 69, 14 }, { 53, 70, 22 }, { 60, 70, 24 }, { 55, 70, 21 },
-            { 67, 70, 23 }, { 54, 70, 21 }, { 67, 71, 4 }, { 70, 71, 22 }, { 67, 72, 10 },
-            { 71, 72, 9 }, { 61, 72, 14 }, { 68, 72, 12 }, { 63, 73, 14 }, { 69, 73, 5 },
-            { 71, 74, 5 }, { 72, 74, 5 }, { 66, 75, 16 }, { 68, 75, 20 }, { 63, 75, 15 },
-            { 73, 75, 3 }, { 69, 76, 6 }, { 73, 76, 7 }, { 65, 76, 13 }, { 57, 76, 24 },
-            { 71, 77, 6 }, { 74, 77, 6 }, { 70, 78, 13 }, { 60, 78, 24 }, { 73, 79, 8 },
-            { 75, 79, 6 }, { 76, 79, 9 }, { 70, 80, 10 }, { 78, 80, 11 }, { 70, 81, 19 },
-            { 80, 81, 16 }, { 71, 81, 12 }, { 77, 81, 8 }, { 79, 82, 7 }, { 76, 82, 9 },
-            { 80, 83, 5 }, { 81, 83, 13 }, { 80, 84, 8 }, { 83, 84, 4 }, { 81, 84, 14 },
-            { 76, 85, 14 }, { 82, 85, 8 }, { 72, 86, 19 }, { 74, 86, 20 }, { 68, 86, 21 },
-            { 77, 86, 23 }, { 81, 86, 25 }, { 82, 87, 7 }, { 85, 87, 4 }, { 80, 88, 12 },
-            { 78, 88, 11 }, { 75, 89, 18 }, { 79, 89, 15 }, { 68, 89, 24 }, { 86, 89, 12 },
-            { 80, 90, 11 }, { 84, 90, 8 }, { 88, 90, 4 }, { 76, 91, 19 }, { 57, 91, 38 },
-            { 85, 91, 6 }, { 88, 92, 2 }, { 90, 92, 4 }, { 78, 92, 13 }, { 60, 92, 36 },
-            { 79, 93, 14 }, { 89, 93, 15 }, { 82, 93, 11 }, { 87, 93, 6 }, { 87, 94, 8 },
-            { 93, 94, 10 }, { 85, 94, 6 }, { 91, 94, 3 }, { 89, 95, 13 }, { 93, 95, 10 },
-            { 94, 95, 18 }, { 90, 96, 12 }, { 92, 96, 13 }, { 84, 96, 14 }, { 84, 97, 23 },
-            { 81, 97, 23 }, { 96, 97, 18 }, { 81, 98, 26 }, { 86, 98, 19 }, { 97, 98, 9 },
-            { 89, 98, 27 }, { 95, 98, 31 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(99);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 1, 2, 22 }, { 1, 3, 8 }, { 2, 3, 16 }, { 0, 1, 46 },
+                { 0, 5, 24 }, { 1, 5, 24 }, { 0, 4, 20 }, { 4, 5, 4 }, { 0, 6, 5 }, { 0, 7, 7 },
+                { 6, 7, 3 }, { 0, 8, 19 }, { 6, 8, 16 }, { 0, 9, 17 }, { 4, 9, 8 }, { 0, 10, 10 },
+                { 7, 10, 6 }, { 9, 10, 11 }, { 4, 11, 10 }, { 5, 11, 7 }, { 9, 11, 13 }, { 5, 12, 16 },
+                { 1, 12, 13 }, { 11, 12, 11 }, { 1, 13, 10 }, { 3, 13, 9 }, { 12, 13, 12 },
+                { 11, 14, 8 }, { 12, 14, 5 }, { 9, 15, 6 }, { 10, 15, 7 }, { 7, 16, 14 },
+                { 10, 16, 17 }, { 6, 16, 14 }, { 8, 16, 8 }, { 11, 17, 5 }, { 14, 17, 6 },
+                { 10, 18, 6 }, { 15, 18, 4 }, { 16, 18, 20 }, { 11, 19, 5 }, { 9, 19, 14 },
+                { 17, 19, 3 }, { 15, 20, 4 }, { 18, 20, 3 }, { 3, 21, 16 }, { 13, 21, 12 },
+                { 2, 21, 19 }, { 16, 22, 5 }, { 8, 22, 11 }, { 15, 23, 6 }, { 20, 23, 4 },
+                { 13, 24, 9 }, { 21, 24, 10 }, { 12, 24, 15 }, { 16, 25, 20 }, { 18, 25, 5 },
+                { 22, 25, 22 }, { 20, 25, 5 }, { 23, 25, 4 }, { 9, 26, 13 }, { 19, 26, 11 },
+                { 15, 26, 11 }, { 23, 26, 8 }, { 23, 27, 4 }, { 25, 27, 5 }, { 26, 27, 7 },
+                { 17, 28, 17 }, { 19, 28, 19 }, { 14, 28, 15 }, { 12, 28, 14 }, { 24, 28, 7 },
+                { 8, 29, 21 }, { 22, 29, 15 }, { 25, 30, 7 }, { 27, 30, 5 }, { 26, 30, 9 },
+                { 24, 31, 10 }, { 28, 31, 6 }, { 25, 33, 28 }, { 22, 33, 12 }, { 30, 33, 30 },
+                { 29, 33, 8 }, { 29, 32, 4 }, { 32, 33, 4 }, { 33, 34, 4 }, { 32, 34, 3 },
+                { 29, 34, 6 }, { 33, 35, 4 }, { 34, 35, 2 }, { 26, 36, 10 }, { 30, 36, 9 },
+                { 19, 36, 19 }, { 24, 37, 13 }, { 31, 37, 10 }, { 21, 37, 15 }, { 19, 38, 23 },
+                { 36, 38, 24 }, { 28, 38, 12 }, { 31, 38, 8 }, { 31, 39, 9 }, { 37, 39, 11 },
+                { 38, 39, 4 }, { 37, 40, 5 }, { 39, 40, 9 }, { 33, 41, 11 }, { 35, 41, 9 },
+                { 38, 42, 20 }, { 36, 42, 11 }, { 39, 43, 9 }, { 40, 43, 9 }, { 40, 45, 9 },
+                { 43, 45, 7 }, { 37, 45, 13 }, { 34, 46, 15 }, { 29, 46, 18 }, { 35, 46, 14 },
+                { 41, 46, 11 }, { 41, 44, 8 }, { 41, 47, 12 }, { 44, 47, 6 }, { 33, 47, 20 },
+                { 30, 47, 25 }, { 42, 48, 6 }, { 42, 49, 6 }, { 48, 49, 3 }, { 38, 49, 20 },
+                { 41, 50, 11 }, { 44, 50, 13 }, { 46, 50, 3 }, { 48, 51, 4 }, { 49, 51, 1 },
+                { 44, 53, 4 }, { 47, 53, 6 }, { 50, 53, 13 }, { 47, 54, 8 }, { 53, 54, 12 },
+                { 30, 54, 24 }, { 42, 55, 21 }, { 36, 55, 23 }, { 48, 55, 19 }, { 30, 55, 24 },
+                { 54, 55, 4 }, { 45, 56, 9 }, { 43, 56, 7 }, { 45, 52, 4 }, { 52, 56, 9 },
+                { 21, 57, 35 }, { 2, 57, 48 }, { 45, 57, 19 }, { 52, 57, 18 }, { 37, 57, 26 },
+                { 49, 58, 11 }, { 51, 58, 11 }, { 38, 58, 20 }, { 39, 58, 19 }, { 43, 58, 18 },
+                { 56, 58, 15 }, { 52, 59, 8 }, { 56, 59, 4 }, { 53, 60, 14 }, { 50, 60, 8 },
+                { 46, 60, 11 }, { 51, 61, 11 }, { 58, 61, 6 }, { 52, 62, 10 }, { 59, 62, 9 },
+                { 59, 63, 6 }, { 62, 63, 7 }, { 52, 64, 14 }, { 62, 64, 7 }, { 52, 65, 14 },
+                { 64, 65, 1 }, { 57, 65, 13 }, { 59, 66, 9 }, { 63, 66, 6 }, { 56, 66, 11 },
+                { 58, 66, 14 }, { 48, 67, 19 }, { 55, 67, 21 }, { 51, 67, 19 }, { 61, 67, 15 },
+                { 58, 68, 14 }, { 61, 68, 12 }, { 66, 68, 11 }, { 64, 69, 9 }, { 65, 69, 9 },
+                { 62, 69, 11 }, { 63, 69, 14 }, { 53, 70, 22 }, { 60, 70, 24 }, { 55, 70, 21 },
+                { 67, 70, 23 }, { 54, 70, 21 }, { 67, 71, 4 }, { 70, 71, 22 }, { 67, 72, 10 },
+                { 71, 72, 9 }, { 61, 72, 14 }, { 68, 72, 12 }, { 63, 73, 14 }, { 69, 73, 5 },
+                { 71, 74, 5 }, { 72, 74, 5 }, { 66, 75, 16 }, { 68, 75, 20 }, { 63, 75, 15 },
+                { 73, 75, 3 }, { 69, 76, 6 }, { 73, 76, 7 }, { 65, 76, 13 }, { 57, 76, 24 },
+                { 71, 77, 6 }, { 74, 77, 6 }, { 70, 78, 13 }, { 60, 78, 24 }, { 73, 79, 8 },
+                { 75, 79, 6 }, { 76, 79, 9 }, { 70, 80, 10 }, { 78, 80, 11 }, { 70, 81, 19 },
+                { 80, 81, 16 }, { 71, 81, 12 }, { 77, 81, 8 }, { 79, 82, 7 }, { 76, 82, 9 },
+                { 80, 83, 5 }, { 81, 83, 13 }, { 80, 84, 8 }, { 83, 84, 4 }, { 81, 84, 14 },
+                { 76, 85, 14 }, { 82, 85, 8 }, { 72, 86, 19 }, { 74, 86, 20 }, { 68, 86, 21 },
+                { 77, 86, 23 }, { 81, 86, 25 }, { 82, 87, 7 }, { 85, 87, 4 }, { 80, 88, 12 },
+                { 78, 88, 11 }, { 75, 89, 18 }, { 79, 89, 15 }, { 68, 89, 24 }, { 86, 89, 12 },
+                { 80, 90, 11 }, { 84, 90, 8 }, { 88, 90, 4 }, { 76, 91, 19 }, { 57, 91, 38 },
+                { 85, 91, 6 }, { 88, 92, 2 }, { 90, 92, 4 }, { 78, 92, 13 }, { 60, 92, 36 },
+                { 79, 93, 14 }, { 89, 93, 15 }, { 82, 93, 11 }, { 87, 93, 6 }, { 87, 94, 8 },
+                { 93, 94, 10 }, { 85, 94, 6 }, { 91, 94, 3 }, { 89, 95, 13 }, { 93, 95, 10 },
+                { 94, 95, 18 }, { 90, 96, 12 }, { 92, 96, 13 }, { 84, 96, 14 }, { 84, 97, 23 },
+                { 81, 97, 23 }, { 96, 97, 18 }, { 81, 98, 26 }, { 86, 98, 19 }, { 97, 98, 9 },
+                { 89, 98, 27 }, { 95, 98, 31 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(99);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
 
     }
 

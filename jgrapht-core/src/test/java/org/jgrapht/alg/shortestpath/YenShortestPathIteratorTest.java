@@ -27,6 +27,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for the {@link YenShortestPathIterator}.
@@ -34,22 +35,26 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class YenShortestPathIteratorTest
     extends BaseKShortestPathTest
 {
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSourceGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(2);
-        new YenShortestPathIterator<>(graph, 1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(2);
+            new YenShortestPathIterator<>(graph, 1, 2);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSinkGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        new YenShortestPathIterator<>(graph, 1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            new YenShortestPathIterator<>(graph, 1, 2);
+        });
     }
 
     @Test
@@ -64,17 +69,19 @@ public class YenShortestPathIteratorTest
         assertFalse(it.hasNext());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testNoPathLeft()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
-        YenShortestPathIterator<Integer, DefaultWeightedEdge> it =
-            new YenShortestPathIterator<>(graph, 1, 2);
-        assertFalse(it.hasNext());
-        it.next();
+        assertThrows(NoSuchElementException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            graph.addVertex(2);
+            YenShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new YenShortestPathIterator<>(graph, 1, 2);
+            assertFalse(it.hasNext());
+            it.next();
+        });
     }
 
     @Test

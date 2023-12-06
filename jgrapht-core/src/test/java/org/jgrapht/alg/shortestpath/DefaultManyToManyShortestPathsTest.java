@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
@@ -36,16 +38,16 @@ public class DefaultManyToManyShortestPathsTest
         super.testEmptyGraph();
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSourcesIsNull()
     {
-        super.testSourcesIsNull();
+        assertThrows(NullPointerException.class, () -> super.testSourcesIsNull());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testTargetsIsNull()
     {
-        super.testTargetsIsNull();
+        assertThrows(NullPointerException.class, () -> super.testTargetsIsNull());
     }
 
     @Test

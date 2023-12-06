@@ -122,23 +122,26 @@ public class DoublyLinkedListTest
         assertSameContent(list, expectedList);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeFirst_nodeInOtherList_IllegalArgumentException()
     {
-        ListNode<String> node = createListNodeInOtherList();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = createListNodeInOtherList();
 
-        list.addNodeFirst(node);
+            list.addNodeFirst(node);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeFirst_nodeOfThisList_IllegalArgumentException()
     {
-        if (size == 0) {
-            throw new IllegalArgumentException(); // throw expected exception to skip for empty list
-        }
-        ListNode<String> node = list.getNode(size / 2);
+        if (size == 0)
+            return; // skip for empty list
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = list.getNode(size / 2);
 
-        list.addNodeFirst(node);
+            list.addNodeFirst(node);
+        });
     }
 
     /** Test for {@link DoublyLinkedList#addNodeLast(DoublyLinkedList.ListNode)}. */
@@ -157,23 +160,27 @@ public class DoublyLinkedListTest
         assertSameContent(list, expectedList);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeLast_nodeInOtherList_IllegalArgumentException()
     {
-        ListNode<String> node = createListNodeInOtherList();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = createListNodeInOtherList();
 
-        list.addNodeLast(node);
+            list.addNodeLast(node);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeLast_nodeOfThisList_IllegalArgumentException()
     {
         if (size == 0) {
-            throw new IllegalArgumentException(); // throw expected exception to skip for empty list
+            return; // skip for empty list
         }
-        ListNode<String> node = list.getNode(size / 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = list.getNode(size / 2);
 
-        list.addNodeLast(node);
+            list.addNodeLast(node);
+        });
     }
 
     /** Test for {@link DoublyLinkedList#addNode(int, DoublyLinkedList.ListNode)}. */
@@ -192,23 +199,27 @@ public class DoublyLinkedListTest
         assertSameContent(list, expectedList);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNode_nodeInOtherList_IllegalArgumentException()
     {
-        ListNode<String> node = createListNodeInOtherList();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = createListNodeInOtherList();
 
-        list.addNode(size / 2, node);
+            list.addNode(size / 2, node);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNode_nodeOfThisList_IllegalArgumentException()
     {
         if (size == 0) {
-            throw new IllegalArgumentException(); // throw expected exception to skip for empty list
+            return; // skip for empty list
         }
-        ListNode<String> node = list.getLastNode();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = list.getLastNode();
 
-        list.addNode(size / 2, node);
+            list.addNode(size / 2, node);
+        });
     }
 
     /**
@@ -234,46 +245,53 @@ public class DoublyLinkedListTest
         assertSameContent(list, expectedList);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeBefore_freeNodeBeforeNodeInOtherList_IllegalArgumentException()
     {
-        ListNode<String> node = createFreeListNode("another");
-        ListNode<String> beforeNode = createListNodeInOtherList();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = createFreeListNode("another");
+            ListNode<String> beforeNode = createListNodeInOtherList();
 
-        list.addNodeBefore(node, beforeNode);
+            list.addNodeBefore(node, beforeNode);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeBefore_freeNodeBeforeFreeNode_IllegalArgumentException()
     {
-        ListNode<String> node = createFreeListNode("another");
-        ListNode<String> beforeNode = createFreeListNode("another");
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = createFreeListNode("another");
+            ListNode<String> beforeNode = createFreeListNode("another");
 
-        list.addNodeBefore(node, beforeNode);
+            list.addNodeBefore(node, beforeNode);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeBefore_nodeInOtherListBeforeNodeOfList_IllegalArgumentException()
     {
-        if (size == 0) {
-            throw new IllegalArgumentException(); // throw expected exception to skip for empty list
-        }
-        ListNode<String> node = createListNodeInOtherList();
-        ListNode<String> beforeNode = list.getNode(size / 2);
+        if (size == 0)
+            return; // skip for empty list
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = createListNodeInOtherList();
+            ListNode<String> beforeNode = list.getNode(size / 2);
 
-        list.addNodeBefore(node, beforeNode);
+            list.addNodeBefore(node, beforeNode);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNodeBefore_nodeInThisListBeforeNodeOfList_IllegalArgumentException()
     {
         if (size == 0) {
-            throw new IllegalArgumentException(); // throw expected exception to skip for empty list
+            return; // skip for empty list
         }
-        ListNode<String> node = list.getFirstNode();
-        ListNode<String> beforeNode = list.getNode(size / 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            ListNode<String> node = list.getFirstNode();
+            ListNode<String> beforeNode = list.getNode(size / 2);
 
-        list.addNodeBefore(node, beforeNode);
+            list.addNodeBefore(node, beforeNode);
+        });
     }
 
     /** Test for {@link DoublyLinkedList#getFirstNode()}. */
@@ -319,16 +337,16 @@ public class DoublyLinkedListTest
         }
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void testGetNode_indexSize_IndexOutOfBoundsException()
     {
-        list.getNode(size);
+        assertThrows(IndexOutOfBoundsException.class, () -> list.getNode(size));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void testGetNode_indexNegative_IndexOutOfBoundsException()
     {
-        list.getNode(-1);
+        assertThrows(IndexOutOfBoundsException.class, () -> list.getNode(-1));
     }
 
     /** Test for {@link DoublyLinkedList#indexOfNode(DoublyLinkedList.ListNode)}. */
@@ -643,22 +661,26 @@ public class DoublyLinkedListTest
         assertSameContent(list, expectedList);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddElementBeforeNode_sucessorInOtherList_IllegalStateException()
     {
-        String another = "another";
+        assertThrows(IllegalArgumentException.class, () -> {
+            String another = "another";
 
-        ListNode<String> nodeBefore = createListNodeInOtherList();
-        list.addElementBeforeNode(nodeBefore, another);
+            ListNode<String> nodeBefore = createListNodeInOtherList();
+            list.addElementBeforeNode(nodeBefore, another);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddElementBeforeNode_sucessorInNoList_IllegalStateException()
     {
-        String another = "another";
+        assertThrows(IllegalArgumentException.class, () -> {
+            String another = "another";
 
-        ListNode<String> nodeBefore = createFreeListNode("another");
-        list.addElementBeforeNode(nodeBefore, another);
+            ListNode<String> nodeBefore = createFreeListNode("another");
+            list.addElementBeforeNode(nodeBefore, another);
+        });
     }
 
     // test List methods
@@ -1393,14 +1415,16 @@ public class DoublyLinkedListTest
         assertThrows(NoSuchElementException.class, () -> iterator.previous());
     }
 
-    @Test(expected = ConcurrentModificationException.class)
+    @Test
     public void testListIterator_concurrentAdd_ConcurrentModificationException()
     {
-        ListNodeIterator<String> listIterator = list.listIterator();
+        assertThrows(ConcurrentModificationException.class, () -> {
+            ListNodeIterator<String> listIterator = list.listIterator();
 
-        list.add("another");
+            list.add("another");
 
-        listIterator.next();
+            listIterator.next();
+        });
     }
 
     @Test
@@ -1465,10 +1489,10 @@ public class DoublyLinkedListTest
         assertTrue(list.isEmpty());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testListIteratorRemove_notMovedListIterator_IllegalStateException()
     {
-        list.listIterator().remove();
+        assertThrows(IllegalStateException.class, () -> list.listIterator().remove());
     }
 
     @Test
@@ -1664,19 +1688,23 @@ public class DoublyLinkedListTest
         assertSameContent(list, expectedList);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testListIteratorSet_NotMovedListIterator_IllegalstateException()
     {
-        ListNodeIterator<String> listIterator = list.listIterator();
-        listIterator.set("another");
+        assertThrows(IllegalStateException.class, () -> {
+            ListNodeIterator<String> listIterator = list.listIterator();
+            listIterator.set("another");
+        });
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testListIteratorSet_setAfterAdd_IllegalstateException()
     {
-        ListNodeIterator<String> listIterator = list.listIterator();
-        listIterator.add("another");
-        listIterator.set("another");
+        assertThrows(IllegalStateException.class, () -> {
+            ListNodeIterator<String> listIterator = list.listIterator();
+            listIterator.add("another");
+            listIterator.set("another");
+        });
     }
 
     @Test

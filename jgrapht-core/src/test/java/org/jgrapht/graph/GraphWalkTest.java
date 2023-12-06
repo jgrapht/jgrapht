@@ -33,64 +33,74 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GraphWalkTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidPath1()
     {
-        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        graph.addVertex(0);
-        graph.addEdge(0, 0);
-        // Invalid: the path's edgeList should contain the edge (0,0)
-        new GraphWalk<>(graph, 0, 0, Arrays.asList(0, 0), Collections.emptyList(), 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+            graph.addVertex(0);
+            graph.addEdge(0, 0);
+            // Invalid: the path's edgeList should contain the edge (0,0)
+            new GraphWalk<>(graph, 0, 0, Arrays.asList(0, 0), Collections.emptyList(), 0);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidPath2()
     {
-        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        graph.addVertex(0);
-        // Invalid: the path's vertexList and edgeList cannot both be empty
-        new GraphWalk<>(graph, 0, 0, Collections.emptyList(), Collections.emptyList(), 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+            graph.addVertex(0);
+            // Invalid: the path's vertexList and edgeList cannot both be empty
+            new GraphWalk<>(graph, 0, 0, Collections.emptyList(), Collections.emptyList(), 0);
+        });
     }
 
-    @Test(expected = InvalidGraphWalkException.class)
+    @Test
     public void testInvalidPath3()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        graph.addVertex(0);
-        // Invalid: The graph does not contain a self loop from 0 to 0.
-        GraphWalk<Integer, DefaultEdge> gw =
-            new GraphWalk<>(graph, 0, 0, Arrays.asList(0, 0), null, 0);
-        gw.verify();
+        assertThrows(InvalidGraphWalkException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            graph.addVertex(0);
+            // Invalid: The graph does not contain a self loop from 0 to 0.
+            GraphWalk<Integer, DefaultEdge> gw =
+                new GraphWalk<>(graph, 0, 0, Arrays.asList(0, 0), null, 0);
+            gw.verify();
+        });
     }
 
-    @Test(expected = InvalidGraphWalkException.class)
+    @Test
     public void testInvalidPath4()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
+        assertThrows(InvalidGraphWalkException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
+            graph.addEdge(0, 1);
+            graph.addEdge(1, 2);
+            graph.addEdge(2, 3);
 
-        // Invalid: The graph does not contain an edge from 1 to 3
-        GraphWalk<Integer, DefaultEdge> gw =
-            new GraphWalk<>(graph, 0, 2, Arrays.asList(0, 1, 3, 2), null, 0);
-        gw.verify();
+            // Invalid: The graph does not contain an edge from 1 to 3
+            GraphWalk<Integer, DefaultEdge> gw =
+                new GraphWalk<>(graph, 0, 2, Arrays.asList(0, 1, 3, 2), null, 0);
+            gw.verify();
+        });
     }
 
-    @Test(expected = InvalidGraphWalkException.class)
+    @Test
     public void testInvalidPath5()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
-        DefaultEdge e1 = graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        DefaultEdge e3 = graph.addEdge(2, 3);
+        assertThrows(InvalidGraphWalkException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
+            DefaultEdge e1 = graph.addEdge(0, 1);
+            graph.addEdge(1, 2);
+            DefaultEdge e3 = graph.addEdge(2, 3);
 
-        // Invalid: the path jumps from vertex 1 to vertex 2 (edge (1,2) is skipped)
-        GraphWalk<Integer, DefaultEdge> gw =
-            new GraphWalk<>(graph, 0, 2, null, Arrays.asList(e1, e3), 0);
-        gw.verify();
+            // Invalid: the path jumps from vertex 1 to vertex 2 (edge (1,2) is skipped)
+            GraphWalk<Integer, DefaultEdge> gw =
+                new GraphWalk<>(graph, 0, 2, null, Arrays.asList(e1, e3), 0);
+            gw.verify();
+        });
     }
 
     @Test
@@ -195,19 +205,21 @@ public class GraphWalkTest
         assertEquals(9.0, gw2.getWeight(), 0.0000000001);
     }
 
-    @Test(expected = InvalidGraphWalkException.class)
+    @Test
     public void testReverseInvalidPathDirected()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
+        assertThrows(InvalidGraphWalkException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+            Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
+            graph.addEdge(0, 1);
+            graph.addEdge(1, 2);
+            graph.addEdge(2, 3);
 
-        GraphWalk<Integer, DefaultEdge> gw1 =
-            new GraphWalk<>(graph, 0, 3, Arrays.asList(0, 1, 2, 3), null, 0);
-        // Walk cannot be reversed since reverse arcs do not exist
-        gw1.reverse(gw -> gw.edgeList.stream().mapToDouble(gw.graph::getEdgeWeight).sum());
+            GraphWalk<Integer, DefaultEdge> gw1 =
+                new GraphWalk<>(graph, 0, 3, Arrays.asList(0, 1, 2, 3), null, 0);
+            // Walk cannot be reversed since reverse arcs do not exist
+            gw1.reverse(gw -> gw.edgeList.stream().mapToDouble(gw.graph::getEdgeWeight).sum());
+        });
     }
 
     @Test
@@ -242,28 +254,32 @@ public class GraphWalkTest
     /**
      * Cannot extend empty path
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIllegalConcatPath1()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
-        graph.addVertex(0);
-        GraphWalk<Integer, DefaultEdge> gw1 = GraphWalk.emptyWalk(graph);
-        GraphWalk<Integer, DefaultEdge> gw2 = GraphWalk.singletonWalk(graph, 0, 10);
-        gw1.concat(gw2, gw -> gw1.getWeight() + gw2.getWeight());
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+            graph.addVertex(0);
+            GraphWalk<Integer, DefaultEdge> gw1 = GraphWalk.emptyWalk(graph);
+            GraphWalk<Integer, DefaultEdge> gw2 = GraphWalk.singletonWalk(graph, 0, 10);
+            gw1.concat(gw2, gw -> gw1.getWeight() + gw2.getWeight());
+        });
     }
 
     /**
      * Cannot concat two paths which do not end/start at the same vertex
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIllegalConcatPath2()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
-        graph.addVertex(0);
-        graph.addVertex(1);
-        GraphWalk<Integer, DefaultEdge> gw1 = GraphWalk.singletonWalk(graph, 0, 10);
-        GraphWalk<Integer, DefaultEdge> gw2 = GraphWalk.singletonWalk(graph, 1, 12);
-        gw1.concat(gw2, gw -> gw1.getWeight() + gw2.getWeight());
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+            graph.addVertex(0);
+            graph.addVertex(1);
+            GraphWalk<Integer, DefaultEdge> gw1 = GraphWalk.singletonWalk(graph, 0, 10);
+            GraphWalk<Integer, DefaultEdge> gw2 = GraphWalk.singletonWalk(graph, 1, 12);
+            gw1.concat(gw2, gw -> gw1.getWeight() + gw2.getWeight());
+        });
     }
 
     @Test

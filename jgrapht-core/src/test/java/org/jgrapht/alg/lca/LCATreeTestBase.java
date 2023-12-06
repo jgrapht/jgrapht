@@ -41,18 +41,20 @@ public abstract class LCATreeTestBase
 
     abstract <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidNode()
     {
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        g.addVertex("b");
-        g.addVertex("a");
-        g.addVertex("c");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            g.addVertex("b");
+            g.addVertex("a");
+            g.addVertex("c");
 
-        g.addEdge("a", "b");
-        g.addEdge("a", "c");
+            g.addEdge("a", "b");
+            g.addEdge("a", "c");
 
-        createSolver(g, Collections.singleton("a")).getLCA("d", "d");
+            createSolver(g, Collections.singleton("a")).getLCA("d", "d");
+        });
     }
 
     @Test
@@ -79,42 +81,46 @@ public abstract class LCATreeTestBase
         assertEquals("a", createSolver(g, Collections.singleton("a")).getLCA("a", "a"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTwoRootsInTheSameTree()
     {
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        g.addVertex("b");
-        g.addVertex("a");
-        g.addVertex("c");
-        g.addVertex("d");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            g.addVertex("b");
+            g.addVertex("a");
+            g.addVertex("c");
+            g.addVertex("d");
 
-        g.addEdge("a", "b");
-        g.addEdge("c", "d");
+            g.addEdge("a", "b");
+            g.addEdge("c", "d");
 
-        LinkedHashSet<String> roots = new LinkedHashSet<>();
-        roots.add("a");
-        roots.add("b");
+            LinkedHashSet<String> roots = new LinkedHashSet<>();
+            roots.add("a");
+            roots.add("b");
 
-        createSolver(g, roots).getLCA("a", "b");
+            createSolver(g, roots).getLCA("a", "b");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTwoRootsInTheSameTree2()
     {
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        g.addVertex("b");
-        g.addVertex("a");
-        g.addVertex("c");
-        g.addVertex("d");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            g.addVertex("b");
+            g.addVertex("a");
+            g.addVertex("c");
+            g.addVertex("d");
 
-        g.addEdge("a", "b");
-        g.addEdge("c", "d");
+            g.addEdge("a", "b");
+            g.addEdge("c", "d");
 
-        LinkedHashSet<String> roots = new LinkedHashSet<>();
-        roots.add("b");
-        roots.add("a");
+            LinkedHashSet<String> roots = new LinkedHashSet<>();
+            roots.add("b");
+            roots.add("a");
 
-        createSolver(g, roots).getLCA("a", "b");
+            createSolver(g, roots).getLCA("a", "b");
+        });
     }
 
     @Test
@@ -154,30 +160,36 @@ public abstract class LCATreeTestBase
         assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptyGraph()
     {
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
-        createSolver(g, Collections.singleton("a"));
+            createSolver(g, Collections.singleton("a"));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptySetOfRoots()
     {
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        g.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            g.addVertex("a");
 
-        createSolver(g, Collections.emptySet());
+            createSolver(g, Collections.emptySet());
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRootNotInGraph()
     {
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        g.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () ->  {
+            Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            g.addVertex("a");
 
-        createSolver(g, Collections.singleton("b"));
+            createSolver(g, Collections.singleton("b"));
+        });
     }
 
     @Test
