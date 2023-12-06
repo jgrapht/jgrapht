@@ -75,7 +75,7 @@
         <jheaps.version>0.14</jheaps.version>
         <jmh.version>1.36</jmh.version>
         <junit-toolbox.version>2.4</junit-toolbox.version>
-        <junit.version>4.13.2</junit.version>
+        <junit.version>5.10.1</junit.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
         <maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
@@ -90,7 +90,7 @@
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
         <replacer.version>1.5.3</replacer.version>
         <sux4j.version>5.4.1</sux4j.version>
         <webgraph-big.version>3.7.0</webgraph-big.version>
@@ -210,8 +210,8 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
