@@ -20,7 +20,7 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.junit.jupiter.api.*;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

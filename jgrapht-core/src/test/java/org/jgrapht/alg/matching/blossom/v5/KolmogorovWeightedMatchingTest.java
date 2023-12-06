@@ -25,8 +25,8 @@ import org.junit.jupiter.api.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;

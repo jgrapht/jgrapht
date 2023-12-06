@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 import java.util.function.*;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
