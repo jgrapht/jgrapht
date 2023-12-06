@@ -37,17 +37,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AHUUnrootedTreeIsomorphismInspectorTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptyGraph()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree1);
+            AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree1);
 
-        assertTrue(isomorphism.isomorphismExists());
-        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
-        assertTrue(areIsomorphic(tree1, tree1, treeMapping));
+            assertTrue(isomorphism.isomorphismExists());
+            IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+            assertTrue(areIsomorphic(tree1, tree1, treeMapping));
+        });
     }
 
     @Test
@@ -67,19 +69,21 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
         assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraphs()
     {
-        new AHUUnrootedTreeIsomorphismInspector<>(null, null);
+        assertThrows(NullPointerException.class, () -> new AHUUnrootedTreeIsomorphismInspector<>(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOnlyOneNullGraph()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("a");
+        assertThrows(NullPointerException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("a");
 
-        new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);
+            new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);
+        });
     }
 
     @Test
@@ -342,19 +346,21 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
         assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidRoot()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("a");
 
-        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("A");
+            Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("A");
 
-        AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree2);
+            AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree2);
 
-        isomorphism.getMapping();
+            isomorphism.getMapping();
+        });
     }
 
     @Test

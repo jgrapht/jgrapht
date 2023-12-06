@@ -103,13 +103,15 @@ public class ChordalityInspectorTest
     /**
      * Tests whether returned list is unmodifiable
      */
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testUnmodifiableList()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
-        List<Integer> perfectEliminationOrder = inspector.getPerfectEliminationOrder();
-        perfectEliminationOrder.add(0);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+            ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+            List<Integer> perfectEliminationOrder = inspector.getPerfectEliminationOrder();
+            perfectEliminationOrder.add(0);
+        });
     }
 
     /**

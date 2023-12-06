@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -98,19 +99,21 @@ public class CyclesTest
         assertUndirectedCycle(graphPath.getGraph(), graphPath.getEdgeList());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testUndirectedNotSimple1()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        List<DefaultEdge> cycle = new ArrayList<>();
-        cycle.add(Graphs.addEdgeWithVertices(graph, 0, 1));
-        cycle.add(Graphs.addEdgeWithVertices(graph, 1, 2));
-        cycle.add(Graphs.addEdgeWithVertices(graph, 2, 0));
-        cycle.add(Graphs.addEdgeWithVertices(graph, 2, 3));
-        cycle.add(Graphs.addEdgeWithVertices(graph, 3, 4));
-        cycle.add(Graphs.addEdgeWithVertices(graph, 4, 2));
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            List<DefaultEdge> cycle = new ArrayList<>();
+            cycle.add(Graphs.addEdgeWithVertices(graph, 0, 1));
+            cycle.add(Graphs.addEdgeWithVertices(graph, 1, 2));
+            cycle.add(Graphs.addEdgeWithVertices(graph, 2, 0));
+            cycle.add(Graphs.addEdgeWithVertices(graph, 2, 3));
+            cycle.add(Graphs.addEdgeWithVertices(graph, 3, 4));
+            cycle.add(Graphs.addEdgeWithVertices(graph, 4, 2));
 
-        Cycles.simpleCycleToGraphPath(graph, cycle);
+            Cycles.simpleCycleToGraphPath(graph, cycle);
+        });
     }
 
     // assert that a list of edges is a cycle (without respecting edge directions)

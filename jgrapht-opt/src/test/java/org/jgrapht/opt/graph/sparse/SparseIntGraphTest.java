@@ -71,10 +71,10 @@ public class SparseIntGraphTest
         testDirectedNoIncoming((vc, edges) -> new SparseIntDirectedGraph(vc, edges, IncomingEdgesSupport.NO_INCOMING_EDGES));
     }
     
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testDirectedLazyNoIncomingFail()
     {
-        testDirected((vc, edges) -> new SparseIntDirectedGraph(vc, edges, IncomingEdgesSupport.NO_INCOMING_EDGES));
+        assertThrows(UnsupportedOperationException.class, () -> testDirected((vc, edges) -> new SparseIntDirectedGraph(vc, edges, IncomingEdgesSupport.NO_INCOMING_EDGES)));
     }
 
     @Test

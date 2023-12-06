@@ -53,18 +53,20 @@ public class AHURootedTreeIsomorphismInspectorTest
         assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraphs()
     {
-        new AHURootedTreeIsomorphismInspector<>(null, null, null, null);
+        assertThrows(NullPointerException.class, () -> new AHURootedTreeIsomorphismInspector<>(null, null, null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOnlyOneNullGraph()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        assertThrows(NullPointerException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        new AHURootedTreeIsomorphismInspector<>(tree1, null, null, null);
+            new AHURootedTreeIsomorphismInspector<>(tree1, null, null, null);
+        });
     }
 
     @Test
@@ -296,19 +298,21 @@ public class AHURootedTreeIsomorphismInspectorTest
         assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidRoot()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("a");
 
-        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("A");
+            Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("A");
 
-        AHURootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHURootedTreeIsomorphismInspector<>(tree1, "b", tree2, "A");
+            AHURootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHURootedTreeIsomorphismInspector<>(tree1, "b", tree2, "A");
 
-        isomorphism.getMapping();
+            isomorphism.getMapping();
+        });
     }
 
     @Test

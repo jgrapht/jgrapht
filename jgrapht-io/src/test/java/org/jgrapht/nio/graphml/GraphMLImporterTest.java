@@ -1039,30 +1039,31 @@ public class GraphMLImporterTest
         }
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testNonValidNoVertexId()
-        throws ImportException
     {
-        // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL + 
-                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL + 
-                 "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
-            "<graph id=\"G\" edgedefault=\"directed\">" + NL +
-                "<node />" + NL + 
-            "</graph>" + NL +
-            "</graphml>";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = 
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL + 
+                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL + 
+                    "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+                "<graph id=\"G\" edgedefault=\"directed\">" + NL +
+                    "<node />" + NL + 
+                "</graph>" + NL +
+                "</graphml>";
+            // @formatter:on
 
-        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<String, DefaultEdge> g = new DirectedPseudograph<>(
+                SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<>();
+            GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<>();
 
-        importer.setSchemaValidation(false);
+            importer.setSchemaValidation(false);
 
-        importer.importGraph(g, new StringReader(input));
+            importer.importGraph(g, new StringReader(input));
+        });
     }
 
     public <E> Graph<String, E> readGraph(

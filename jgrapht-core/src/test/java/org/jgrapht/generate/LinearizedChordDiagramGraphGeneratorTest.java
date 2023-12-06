@@ -23,6 +23,7 @@ import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -60,48 +61,56 @@ public class LinearizedChordDiagramGraphGeneratorTest
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testMultiGraph()
     {
-        final long seed = 5;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen =
-            new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new Multigraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        gen.generateGraph(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final long seed = 5;
+            GraphGenerator<Integer, DefaultEdge, Integer> gen =
+                new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
+            Graph<Integer, DefaultEdge> g = new Multigraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testSimpleGraph()
     {
-        final long seed = 5;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen =
-            new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        gen.generateGraph(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final long seed = 5;
+            GraphGenerator<Integer, DefaultEdge, Integer> gen =
+                new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDirectedMultiGraph()
     {
-        final long seed = 5;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen =
-            new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new DirectedMultigraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        gen.generateGraph(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final long seed = 5;
+            GraphGenerator<Integer, DefaultEdge, Integer> gen =
+                new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
+            Graph<Integer, DefaultEdge> g = new DirectedMultigraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDirectedSimpleGraph()
     {
-        final long seed = 5;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen =
-            new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        gen.generateGraph(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            final long seed = 5;
+            GraphGenerator<Integer, DefaultEdge, Integer> gen =
+                new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
+            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
+        });
     }
 
     @Test

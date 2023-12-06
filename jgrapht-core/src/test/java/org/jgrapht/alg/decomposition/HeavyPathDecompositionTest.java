@@ -186,28 +186,32 @@ public class HeavyPathDecompositionTest
         return countMaxPath(graph, decomposition) <= log2(graph.vertexSet().size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraph()
     {
-        new HeavyPathDecomposition<>(null, 1);
+        assertThrows(NullPointerException.class, () -> new HeavyPathDecomposition<>(null, 1));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullRoot()
     {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        String s = null;
+        assertThrows(NullPointerException.class, () -> {
+            Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            String s = null;
 
-        new HeavyPathDecomposition<>(graph, s);
+            new HeavyPathDecomposition<>(graph, s);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRootNotInTree()
     {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        graph.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            graph.addVertex("a");
 
-        new HeavyPathDecomposition<>(graph, "b");
+            new HeavyPathDecomposition<>(graph, "b");
+        });
     }
 
     @Test

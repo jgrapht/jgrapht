@@ -36,40 +36,40 @@ public class PlantedPartitionGraphGeneratorTest
 
     /* bad inputs */
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeL()
     {
-        new PlantedPartitionGraphGenerator<>(-5, 10, 0.5, 0.1);
+        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(-5, 10, 0.5, 0.1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeK()
     {
-        new PlantedPartitionGraphGenerator<>(5, -10, 0.5, 0.1);
+        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, -10, 0.5, 0.1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeP()
     {
-        new PlantedPartitionGraphGenerator<>(5, 10, -0.5, 0.1);
+        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, -0.5, 0.1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeQ()
     {
-        new PlantedPartitionGraphGenerator<>(5, 10, 0.5, -0.1);
+        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, 0.5, -0.1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTooLargeP()
     {
-        new PlantedPartitionGraphGenerator<>(5, 10, 1.5, 0.1);
+        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, 1.5, 0.1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTooLargeQ()
     {
-        new PlantedPartitionGraphGenerator<>(5, 10, 0.5, 1.1);
+        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, 0.5, 1.1));
     }
 
     @Test
@@ -79,11 +79,7 @@ public class PlantedPartitionGraphGeneratorTest
             new PlantedPartitionGraphGenerator<>(5, 10, 0.5, 0.1, true);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
-        try {
-            gen.generateGraph(g);
-            fail("gen.generateGraph() did not throw an IllegalArgumentException as expected");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> gen.generateGraph(g));
     }
 
     /* empty graphs */

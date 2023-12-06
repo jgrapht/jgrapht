@@ -128,10 +128,10 @@ public class TransitiveReductionTest
 
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReduceNull()
     {
-        TransitiveReduction.INSTANCE.reduce(null);
+        assertThrows(NullPointerException.class, () -> TransitiveReduction.INSTANCE.reduce(null));
     }
 
     @Test

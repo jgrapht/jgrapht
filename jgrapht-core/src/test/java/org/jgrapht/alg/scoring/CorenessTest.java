@@ -133,21 +133,13 @@ public class CorenessTest
 
         VertexScoringAlgorithm<String, Integer> pr = new Coreness<>(g);
 
-        try {
-            pr.getVertexScore("unknown");
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> pr.getVertexScore("unknown"));
     }
 
     @Test
     public void testBadParameters()
     {
-        try {
-            new Coreness<>(null);
-            fail("No!");
-        } catch (NullPointerException e) {
-        }
+        assertThrows(NullPointerException.class, () -> new Coreness<>(null));
     }
 
 }

@@ -31,12 +31,14 @@ import java.util.*;
 public class ChinesePostmanTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGraphNoVertices()
     {
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        ChinesePostman<Integer, DefaultEdge> alg = new ChinesePostman<>();
-        alg.getCPPSolution(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+            ChinesePostman<Integer, DefaultEdge> alg = new ChinesePostman<>();
+            alg.getCPPSolution(g);
+        });
     }
 
     @Test

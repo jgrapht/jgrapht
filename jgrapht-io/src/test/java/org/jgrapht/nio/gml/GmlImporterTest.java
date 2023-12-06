@@ -516,90 +516,96 @@ public class GmlImporterTest
 
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testNodeIdBadType()
         throws ImportException
     {
-        // @formatter:off
-        String input = "graph [\n"
-                     + "  comment \"Sample Graph\"\n"
-                     + "  directed 1\n"
-                     + "  node [\n"
-                     + "    id \"1\"\n"
-                     + "  ]\n"
-                     + "]";
-        // @formatter:on
-        readGraph(input, DefaultEdge.class, false, false);
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "graph [\n"
+                        + "  comment \"Sample Graph\"\n"
+                        + "  directed 1\n"
+                        + "  node [\n"
+                        + "    id \"1\"\n"
+                        + "  ]\n"
+                        + "]";
+            // @formatter:on
+            readGraph(input, DefaultEdge.class, false, false);
+        });
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testEdgeSourceBadType()
         throws ImportException
     {
-        // @formatter:off
-        String input = "graph [\n"
-                     + "  comment \"Sample Graph\"\n"
-                     + "  directed 1\n"
-                     + "  node [\n"
-                     + "    id 1\n"
-                     + "  ]\n"
-                     + "  node [\n"
-                     + "    id 2\n"
-                     + "  ]\n"
-                     + "  edge [\n"
-                     + "    source \"1\"\n"
-                     + "    target 2\n"
-                     + "  ]\n"
-                     + "]";
-        // @formatter:on
-        readGraph(input, DefaultEdge.class, false, false);
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "graph [\n"
+                        + "  comment \"Sample Graph\"\n"
+                        + "  directed 1\n"
+                        + "  node [\n"
+                        + "    id 1\n"
+                        + "  ]\n"
+                        + "  node [\n"
+                        + "    id 2\n"
+                        + "  ]\n"
+                        + "  edge [\n"
+                        + "    source \"1\"\n"
+                        + "    target 2\n"
+                        + "  ]\n"
+                        + "]";
+            // @formatter:on
+            readGraph(input, DefaultEdge.class, false, false);
+        });
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testEdgeTargetBadType()
-        throws ImportException
     {
-        // @formatter:off
-        String input = "graph [\n"
-                     + "  comment \"Sample Graph\"\n"
-                     + "  directed 1\n"
-                     + "  node [\n"
-                     + "    id 1\n"
-                     + "  ]\n"
-                     + "  node [\n"
-                     + "    id 2\n"
-                     + "  ]\n"
-                     + "  edge [\n"
-                     + "    source 1\n"
-                     + "    target \"2\"\n"
-                     + "  ]\n"
-                     + "]";
-        // @formatter:on
-        readGraph(input, DefaultEdge.class, false, false);
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "graph [\n"
+                        + "  comment \"Sample Graph\"\n"
+                        + "  directed 1\n"
+                        + "  node [\n"
+                        + "    id 1\n"
+                        + "  ]\n"
+                        + "  node [\n"
+                        + "    id 2\n"
+                        + "  ]\n"
+                        + "  edge [\n"
+                        + "    source 1\n"
+                        + "    target \"2\"\n"
+                        + "  ]\n"
+                        + "]";
+            // @formatter:on
+            readGraph(input, DefaultEdge.class, false, false);
+        });
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testEdgeWeightBadType()
-        throws ImportException
     {
-        // @formatter:off
-        String input = "graph [\n"
-                     + "  comment \"Sample Graph\"\n"
-                     + "  directed 1\n"
-                     + "  node [\n"
-                     + "    id 1\n"
-                     + "  ]\n"
-                     + "  node [\n"
-                     + "    id 2\n"
-                     + "  ]\n"
-                     + "  edge [\n"
-                     + "    source 1\n"
-                     + "    target 2\n"
-                     + "    weight \"2.0\"\n"
-                     + "  ]\n"
-                     + "]";
-        // @formatter:on
-        readGraph(input, DefaultEdge.class, false, false);
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "graph [\n"
+                        + "  comment \"Sample Graph\"\n"
+                        + "  directed 1\n"
+                        + "  node [\n"
+                        + "    id 1\n"
+                        + "  ]\n"
+                        + "  node [\n"
+                        + "    id 2\n"
+                        + "  ]\n"
+                        + "  edge [\n"
+                        + "    source 1\n"
+                        + "    target 2\n"
+                        + "    weight \"2.0\"\n"
+                        + "  ]\n"
+                        + "]";
+            // @formatter:on
+            readGraph(input, DefaultEdge.class, false, false);
+        });
     }
 
     @Test

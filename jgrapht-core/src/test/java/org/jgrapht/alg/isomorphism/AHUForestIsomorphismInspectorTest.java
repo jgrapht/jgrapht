@@ -39,33 +39,37 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AHUForestIsomorphismInspectorTest
 {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testMissingSupplier()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("1");
-        tree1.addVertex("2");
-        tree1.addEdge("1", "2");
-        tree1.addVertex("3");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("1");
+            tree1.addVertex("2");
+            tree1.addEdge("1", "2");
+            tree1.addVertex("3");
 
-        AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
-            new AHUForestIsomorphismInspector<>(tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
+            AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
+                new AHUForestIsomorphismInspector<>(tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
 
-        forestIsomorphism.isomorphismExists();
+            forestIsomorphism.isomorphismExists();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptyGraph()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        Set<String> roots = new HashSet<>();
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            Set<String> roots = new HashSet<>();
 
-        AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHUForestIsomorphismInspector<>(tree1, roots, tree1, roots);
+            AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHUForestIsomorphismInspector<>(tree1, roots, tree1, roots);
 
-        assertTrue(isomorphism.isomorphismExists());
-        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
-        assertTrue(areIsomorphic(tree1, tree1, treeMapping));
+            assertTrue(isomorphism.isomorphismExists());
+            IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+            assertTrue(areIsomorphic(tree1, tree1, treeMapping));
+        });
     }
 
     @Test
@@ -86,26 +90,28 @@ public class AHUForestIsomorphismInspectorTest
         assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraphs()
     {
-        new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null);
+        assertThrows(NullPointerException.class, () -> new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidRoot()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("a");
 
-        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("A");
+            Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("A");
 
-        AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHUForestIsomorphismInspector<>(
-                tree1, Collections.singleton("b"), tree2, Collections.singleton("A"));
+            AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHUForestIsomorphismInspector<>(
+                    tree1, Collections.singleton("b"), tree2, Collections.singleton("A"));
 
-        isomorphism.getMapping();
+            isomorphism.getMapping();
+        });
     }
 
     @Test

@@ -28,8 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test JSONExporter
@@ -199,37 +198,38 @@ public class JSONExporterTest
         assertEquals(expected, res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNotAllowedNanDouble()
-        throws Exception
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph = GraphTypeBuilder
-                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
-                .allowingSelfLoops(false).buildGraph();
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer,
+                DefaultWeightedEdge> graph = GraphTypeBuilder
+                    .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                    .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
+                    .allowingSelfLoops(false).buildGraph();
 
-        graph.addVertex(1);
+            graph.addVertex(1);
 
-        Function<Integer, Map<String, Attribute>> vertexAttributeProvider = v -> {
-            Map<String, Attribute> map = new LinkedHashMap<>();
-            switch (v) {
-            case 1:
-                map.put("NaNAttribute", DefaultAttribute.createAttribute(Double.NaN));
-                break;
-            default:
-                break;
-            }
-            return map;
-        };
+            Function<Integer, Map<String, Attribute>> vertexAttributeProvider = v -> {
+                Map<String, Attribute> map = new LinkedHashMap<>();
+                switch (v) {
+                case 1:
+                    map.put("NaNAttribute", DefaultAttribute.createAttribute(Double.NaN));
+                    break;
+                default:
+                    break;
+                }
+                return map;
+            };
 
-        JSONExporter<Integer, DefaultWeightedEdge> exporter =
-            new JSONExporter<>(new IntegerIdProvider<>(1));
-        exporter.setEdgeIdProvider(new IntegerIdProvider<>(1));
-        exporter.setVertexAttributeProvider(vertexAttributeProvider);
+            JSONExporter<Integer, DefaultWeightedEdge> exporter =
+                new JSONExporter<>(new IntegerIdProvider<>(1));
+            exporter.setEdgeIdProvider(new IntegerIdProvider<>(1));
+            exporter.setVertexAttributeProvider(vertexAttributeProvider);
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.exportGraph(graph, os);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            exporter.exportGraph(graph, os);
+        });
     }
 
     @Test

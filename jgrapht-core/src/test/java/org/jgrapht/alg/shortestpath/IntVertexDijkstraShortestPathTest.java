@@ -251,11 +251,7 @@ public class IntVertexDijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(1, 2);
         g.setEdgeWeight(we12, -100.0);
 
-        try {
-            new IntVertexDijkstraShortestPath<>(g).getPath(1, 2);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new IntVertexDijkstraShortestPath<>(g).getPath(1, 2));
     }
 
 }

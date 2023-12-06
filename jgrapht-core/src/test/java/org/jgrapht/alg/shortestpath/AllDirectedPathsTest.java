@@ -23,8 +23,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -218,12 +217,7 @@ public class AllDirectedPathsTest
         Set<String> sources = vertexSet(I1);
         Set<String> targets = vertexSet(O1);
 
-        try {
-            pathFindingAlg.getAllPaths(sources, targets, false, null);
-            fail("Expected an IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            // This is the expected outcome, so the test passes
-        }
+        assertThrows(IllegalArgumentException.class, () -> pathFindingAlg.getAllPaths(sources, targets, false, null));
     }
 
     @Test

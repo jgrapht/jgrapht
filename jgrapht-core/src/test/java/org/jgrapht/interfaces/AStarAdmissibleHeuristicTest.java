@@ -23,6 +23,7 @@ import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -33,11 +34,13 @@ public class AStarAdmissibleHeuristicTest
     extends BaseHeuristicSearchTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNullValue()
     {
-        AStarAdmissibleHeuristic<Integer> heuristic = (sourceVertex, targetVertex) -> 0;
-        heuristic.isConsistent(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            AStarAdmissibleHeuristic<Integer> heuristic = (sourceVertex, targetVertex) -> 0;
+            heuristic.isConsistent(null);
+        });
     }
 
     @Test

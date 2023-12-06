@@ -417,12 +417,7 @@ public class GnmRandomGraphGeneratorTest
             DefaultEdge> graph = new SimpleDirectedGraph<>(
                 SupplierUtil.createSupplier(String.class), SupplierUtil.createDefaultEdgeSupplier(),
                 false);
-        try {
-            randomGen.generateGraph(graph);
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> randomGen.generateGraph(graph));
     }
 
     /**

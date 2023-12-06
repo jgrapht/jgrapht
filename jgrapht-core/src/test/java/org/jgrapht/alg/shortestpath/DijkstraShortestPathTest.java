@@ -154,11 +154,7 @@ public class DijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(V1, V2);
         g.setEdgeWeight(we12, -100.0);
 
-        try {
-            new DijkstraShortestPath<>(g).getPath(V1, V2);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new DijkstraShortestPath<>(g).getPath(V1, V2));
     }
 
 }

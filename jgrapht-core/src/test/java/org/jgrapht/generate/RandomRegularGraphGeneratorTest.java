@@ -24,7 +24,7 @@ import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link RandomRegularGraphGenerator}.
@@ -35,28 +35,28 @@ public class RandomRegularGraphGeneratorTest
 {
     private static final long SEED = 5;
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeN()
     {
-        new RandomRegularGraphGenerator<>(-10, 1);
+        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(-10, 1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeD()
     {
-        new RandomRegularGraphGenerator<>(10, -1);
+        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(10, -1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDGreaterThanN()
     {
-        new RandomRegularGraphGenerator<>(10, 15);
+        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(10, 15));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testOddDTimesN()
     {
-        new RandomRegularGraphGenerator<>(5, 3);
+        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(5, 3));
     }
 
     @Test
@@ -66,11 +66,7 @@ public class RandomRegularGraphGeneratorTest
             new RandomRegularGraphGenerator<>(10, 2);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
-        try {
-            gen.generateGraph(g);
-            fail("gen.generateGraph() did not throw an IllegalArgumentException as expected");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> gen.generateGraph(g));
     }
 
     @Test
