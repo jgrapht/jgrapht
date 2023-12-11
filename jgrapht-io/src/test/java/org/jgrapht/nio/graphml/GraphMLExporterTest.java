@@ -87,7 +87,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -130,7 +130,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -170,7 +170,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -213,7 +213,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -259,7 +259,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -307,7 +307,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -410,7 +410,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -491,7 +491,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -592,7 +592,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -650,7 +650,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
 }

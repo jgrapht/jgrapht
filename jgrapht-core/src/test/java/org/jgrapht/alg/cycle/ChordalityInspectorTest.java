@@ -317,12 +317,12 @@ public class ChordalityInspectorTest
         ChordalityInspector<Integer, DefaultEdge> inspector =
             new ChordalityInspector<>(graph, iterationOrder);
         assertFalse(
-            "Not a perfect elimination order: cycle 1->2->3->4->1 has non chord",
-            inspector.isPerfectEliminationOrder(order));
+            inspector.isPerfectEliminationOrder(order),
+            "Not a perfect elimination order: cycle 1->2->3->4->1 has non chord");
         graph.addEdge(2, 4);
         assertTrue(
-            "Valid perfect elimination order: no induced cycles of length > 3",
-            inspector.isPerfectEliminationOrder(order));
+            inspector.isPerfectEliminationOrder(order),
+            "Valid perfect elimination order: no induced cycles of length > 3");
     }
 
     /**
@@ -360,8 +360,8 @@ public class ChordalityInspectorTest
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         assertTrue(
-            "Valid perfect elimination order",
-            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
+            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order),
+            "Valid perfect elimination order");
     }
 
     /**
@@ -376,8 +376,8 @@ public class ChordalityInspectorTest
 
         List<Integer> order = Arrays.asList(1, 2, 5, 6, 4, 3);
         assertFalse(
-            "Graph is chordal, order isn't perfect elimination order",
-            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
+            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order),
+            "Graph is chordal, order isn't perfect elimination order");
     }
 
     /**
@@ -392,8 +392,8 @@ public class ChordalityInspectorTest
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         assertFalse(
-            "Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order",
-            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
+            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order),
+            "Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order");
     }
 
     /**

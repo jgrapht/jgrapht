@@ -710,7 +710,7 @@ public class TSPLIBImporterTest
 
         // assert if the computed edge weights/ distances are as expected
         Set<DefaultWeightedEdge> expectedEdgeSet = expectedGraph.edgeSet();
-        assertEquals("Unequal edgeSet size", expectedEdgeSet.size(), graph.edgeSet().size());
+        assertEquals(expectedEdgeSet.size(), graph.edgeSet().size(), "Unequal edgeSet size");
 
         Map<Integer, V> number2vertex = new HashMap<>();
         metadata.getVertexToNodeMapping().forEach((v, n) -> number2vertex.put(n.getNumber(), v));

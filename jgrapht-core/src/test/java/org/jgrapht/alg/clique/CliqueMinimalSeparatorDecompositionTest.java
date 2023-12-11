@@ -442,7 +442,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             }
         }
         for (int i = 0; i < atomsFound.length; ++i)
-            assertTrue("atom " + i, atomsFound[i]);
+            assertTrue(atomsFound[i], "atom " + i);
 
         // check seprators
         assertEquals(6, cmsd.getSeparators().size());
@@ -463,7 +463,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             }
         }
         for (int i = 0; i < separatorsFound.length; ++i)
-            assertTrue("separator " + i, separatorsFound[i]);
+            assertTrue(separatorsFound[i], "separator " + i);
 
         // check component counts
         assertEquals(6, cmsd.getFullComponentCount().size());

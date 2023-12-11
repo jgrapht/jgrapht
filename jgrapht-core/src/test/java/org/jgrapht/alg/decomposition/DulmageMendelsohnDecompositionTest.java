@@ -119,27 +119,27 @@ public class DulmageMendelsohnDecompositionTest
             E> perfectMatching = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(
                 new AsSubgraph<>(graph, allPerfectlyMatched), partition1PerfectlyMatched,
                 partition2PerfectlyMatched).getMatching();
-        assertTrue("Core of decomposition must perfectly match", perfectMatching.isPerfect());
+        assertTrue(perfectMatching.isPerfect(), "Core of decomposition must perfectly match");
         // Do all the vertices in the graph appear in the decomposition, and only in one part of it?
         for (V v : graph.vertexSet()) {
             if (allPerfectlyMatched.contains(v)) {
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition1DominatedSet().contains(v));
+                    decomposition.getPartition1DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition2DominatedSet().contains(v));
+                    decomposition.getPartition2DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
             } else if (decomposition.getPartition1DominatedSet().contains(v)) {
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    allPerfectlyMatched.contains(v));
+                    allPerfectlyMatched.contains(v),
+                    "Vertex appears in multiple sets in decomposition");
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition2DominatedSet().contains(v));
+                    decomposition.getPartition2DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
             } else {
                 assertTrue(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition2DominatedSet().contains(v));
+                    decomposition.getPartition2DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
             }
         }
         ;
@@ -154,8 +154,8 @@ public class DulmageMendelsohnDecompositionTest
             }
         }
         assertTrue(
-            "Partition 1 dominated set is not dominated by partition 1",
-            n1 > n2 || (n1 == 0 && n2 == 0));
+            n1 > n2 || (n1 == 0 && n2 == 0),
+            "Partition 1 dominated set is not dominated by partition 1");
         n1 = 0;
         n2 = 0;
         for (V v : decomposition.getPartition2DominatedSet()) {
@@ -166,8 +166,8 @@ public class DulmageMendelsohnDecompositionTest
             }
         }
         assertTrue(
-            "Partition 2 dominated set is not dominated by partition 2",
-            n1 < n2 || (n1 == 0 && n2 == 0));
+            n1 < n2 || (n1 == 0 && n2 == 0),
+            "Partition 2 dominated set is not dominated by partition 2");
     }
 
     /**

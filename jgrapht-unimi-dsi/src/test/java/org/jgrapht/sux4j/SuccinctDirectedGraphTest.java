@@ -223,9 +223,9 @@ public class SuccinctDirectedGraphTest
         r.generateGraph(s);
         final SuccinctDirectedGraph t = new SuccinctDirectedGraph(s);
         for (final IntIntPair e : t.edgeSet())
-            assertTrue(e.toString(), s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)));
+            assertTrue(s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)), e.toString());
         for (final DefaultEdge e : s.edgeSet())
-            assertTrue(e.toString(), t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)));
+            assertTrue(t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)), e.toString());
         final XoRoShiRo128PlusPlusRandomGenerator random =
             new XoRoShiRo128PlusPlusRandomGenerator();
         final int n = (int) s.iterables().vertexCount();
@@ -255,9 +255,9 @@ public class SuccinctDirectedGraphTest
         r.generateGraph(s);
         final SuccinctDirectedGraph t = new SuccinctDirectedGraph(s);
         for (final IntIntPair e : t.edgeSet())
-            assertTrue(e.toString(), s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)));
+            assertTrue(s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)), e.toString());
         for (final DefaultEdge e : s.edgeSet())
-            assertTrue(e.toString(), t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)));
+            assertTrue(t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)), e.toString());
         final XoRoShiRo128PlusPlusRandomGenerator random =
             new XoRoShiRo128PlusPlusRandomGenerator();
         final int n = (int) s.iterables().vertexCount();

@@ -358,8 +358,8 @@ public class DOTImporter1Test
             SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         importer.importGraph(result, new StringReader(input));
 
-        assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
-        assertEquals("wrong size of edgeSet", 1, result.edgeSet().size());
+        assertEquals(2, result.vertexSet().size(), "wrong size of vertexSet");
+        assertEquals(1, result.edgeSet().size(), "wrong size of edgeSet");
 
         assertEquals(attrs.get("0").get("ID").getValue(), "1");
         assertEquals(attrs.get("0").get("label").getValue(), "bob");
@@ -452,13 +452,13 @@ public class DOTImporter1Test
             SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         importer.importGraph(result, new StringReader(input));
 
-        assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
-        assertEquals("wrong size of edgeSet", 1, result.edgeSet().size());
+        assertEquals(2, result.vertexSet().size(), "wrong size of vertexSet");
+        assertEquals(1, result.edgeSet().size(), "wrong size of edgeSet");
         for (String v : result.vertexSet()) {
             if ("0".equals(v)) {
-                assertEquals("wrong number of attributes", 2, attrs.get(v).size());
+                assertEquals(2, attrs.get(v).size(), "wrong number of attributes");
             } else {
-                assertEquals("attributes are populated", 1, attrs.get(v).size());
+                assertEquals(1, attrs.get(v).size(), "attributes are populated");
             }
         }
 
@@ -478,8 +478,8 @@ public class DOTImporter1Test
         DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
 
         importer.importGraph(result, new StringReader(input));
-        assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
-        assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
+        assertEquals(1, result.vertexSet().size(), "wrong size of vertexSet");
+        assertEquals(0, result.edgeSet().size(), "wrong size of edgeSet");
     }
 
     @Test
@@ -506,8 +506,8 @@ public class DOTImporter1Test
 
         importer.importGraph(result, new StringReader(input));
 
-        assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
-        assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
+        assertEquals(1, result.vertexSet().size(), "wrong size of vertexSet");
+        assertEquals(0, result.edgeSet().size(), "wrong size of edgeSet");
         assertEquals(attrs.get("0").get("ID").getValue(), "node0");
         assertEquals(
             attrs.get("0").get("label").getValue(),
@@ -527,8 +527,8 @@ public class DOTImporter1Test
 
         importer.importGraph(result, new StringReader(input));
 
-        assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
-        assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
+        assertEquals(2, result.vertexSet().size(), "wrong size of vertexSet");
+        assertEquals(0, result.edgeSet().size(), "wrong size of edgeSet");
     }
 
     @Test

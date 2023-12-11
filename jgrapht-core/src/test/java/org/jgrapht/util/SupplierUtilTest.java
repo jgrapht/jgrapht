@@ -147,7 +147,7 @@ public class SupplierUtilTest
         for (T expectedValue : expectedValues) {
             T value = supplier.get();
             assertThat(value, is(equalTo(expectedValue)));
-            assertTrue("Equal value supplied multiple times", suppliedValues.add(value));
+            assertTrue(suppliedValues.add(value), "Equal value supplied multiple times");
             suppliedValues.add(value);
         }
 
@@ -170,7 +170,7 @@ public class SupplierUtilTest
         Set<T> suppliedValues = new LinkedHashSet<>();
         while (suppliedValues.size() < TESTED_SUPPLIED_VALUES) {
             T value = supplier.get();
-            assertTrue("Equal value supplied multiple times", suppliedValues.add(value));
+            assertTrue(suppliedValues.add(value), "Equal value supplied multiple times");
         }
 
         Supplier<T> deserializeSupplier = serializeAndDeserialize(supplier);

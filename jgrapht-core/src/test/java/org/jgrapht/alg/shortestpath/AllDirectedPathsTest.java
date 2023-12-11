@@ -55,7 +55,7 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultEdge>> allPaths =
             pathFindingAlg.getAllPaths(sources, targets, true, null);
 
-        assertEquals("Toy network should have correct number of simple paths", 7, allPaths.size());
+        assertEquals(7, allPaths.size(), "Toy network should have correct number of simple paths");
     }
 
     @Test
@@ -74,8 +74,8 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, true, null);
 
         assertEquals(
-            "Toy network should have correct number of simple paths using path validator", 3,
-            allPaths.size());
+            3, allPaths.size(),
+            "Toy network should have correct number of simple paths using path validator");
     }
 
     @Test
@@ -91,7 +91,7 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, true, 1);
 
         assertEquals(
-            "Toy network should have correct number of trivial simple paths", 2, allPaths.size());
+            2, allPaths.size(), "Toy network should have correct number of trivial simple paths");
         assertEquals(Arrays.asList(I1), allPaths.get(0).getVertexList());
         assertEquals(Arrays.asList(I1, A), allPaths.get(1).getVertexList());
     }
@@ -169,7 +169,7 @@ public class AllDirectedPathsTest
         allPaths.sort(Comparator.comparing(GraphPath::getWeight));
 
         assertEquals(
-            "Example weighted graph has 3 paths of length no greater than 2", 3, allPaths.size());
+            3, allPaths.size(), "Example weighted graph has 3 paths of length no greater than 2");
         ;
 
         assertEquals(Arrays.asList("A", "D"), allPaths.get(0).getVertexList());
@@ -200,11 +200,11 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, false, 8);
 
         assertEquals(
-            "Toy network with cycle should have correct number of paths with cycle", 13,
-            allPathsWithCycle.size());
+            13, allPathsWithCycle.size(),
+            "Toy network with cycle should have correct number of paths with cycle");
         assertEquals(
-            "Toy network with cycle should have correct number of simple paths", 7,
-            allPathsWithoutCycle.size());
+            7, allPathsWithoutCycle.size(),
+            "Toy network with cycle should have correct number of simple paths");
     }
 
     @Test
@@ -234,14 +234,14 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultEdge>> paths = new AllDirectedPaths<>(graph)
             .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
 
-        assertFalse("We should find at least some paths!", paths.isEmpty());
+        assertFalse(paths.isEmpty(), "We should find at least some paths!");
 
         paths.forEach(
             path -> assertEquals(
+                0, path.getLength(),
                 String.format(
                     "The path %s has length %d even though we requested only paths of length 0",
-                    path, path.getLength()),
-                0, path.getLength()));
+                    path, path.getLength())));
     }
 
     private static Graph<String, DefaultEdge> toyGraph()
