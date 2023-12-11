@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  */
@@ -42,10 +43,10 @@ public class TransitiveClosureTest
         gen.generateGraph(graph);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
-        assertEquals(true, graph.edgeSet().size() == ((n * (n - 1)) / 2));
+        assertEquals((n * (n - 1)) / 2, graph.edgeSet().size());
         for (int i = 0; i < n; ++i) {
             for (int j = i + 1; j < n; ++j) {
-                assertEquals(true, graph.getEdge(i, j) != null);
+                assertNotNull(graph.getEdge(i, j));
             }
         }
     }
@@ -61,10 +62,10 @@ public class TransitiveClosureTest
         gen.generateGraph(graph);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
-        assertEquals(true, graph.edgeSet().size() == (n * (n - 1)));
+        assertEquals(n * (n - 1), graph.edgeSet().size());
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
-                assertEquals(true, (i == j) || (graph.getEdge(i, j) != null));
+                assertTrue((i == j) || (graph.getEdge(i, j) != null));
             }
         }
     }

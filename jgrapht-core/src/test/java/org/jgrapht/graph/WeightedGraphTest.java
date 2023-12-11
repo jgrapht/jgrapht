@@ -94,8 +94,8 @@ public class WeightedGraphTest
         assertEquals(g.getEdgeWeight(e), 1d, 1e-9);
         g.setEdgeWeight(e, 3d);
         assertEquals(g.getEdgeWeight(e), 3d, 1e-9);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(e));
-        assertEquals(Integer.valueOf(2), g.getEdgeTarget(e));
+        assertEquals(1, g.getEdgeSource(e));
+        assertEquals(2, g.getEdgeTarget(e));
     }
 
 }

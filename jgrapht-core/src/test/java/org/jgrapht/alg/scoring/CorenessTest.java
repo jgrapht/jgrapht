@@ -51,14 +51,14 @@ public class CorenessTest
 
         Coreness<String, DefaultEdge> pr = new Coreness<String, DefaultEdge>(g);
 
-        assertEquals(Integer.valueOf(0), pr.getVertexScore("a"));
-        assertEquals(Integer.valueOf(1), pr.getVertexScore("b"));
-        assertEquals(Integer.valueOf(1), pr.getVertexScore("c"));
-        assertEquals(Integer.valueOf(1), pr.getVertexScore("d"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("e"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("f"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("g"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("h"));
+        assertEquals(0, pr.getVertexScore("a"));
+        assertEquals(1, pr.getVertexScore("b"));
+        assertEquals(1, pr.getVertexScore("c"));
+        assertEquals(1, pr.getVertexScore("d"));
+        assertEquals(3, pr.getVertexScore("e"));
+        assertEquals(3, pr.getVertexScore("f"));
+        assertEquals(3, pr.getVertexScore("g"));
+        assertEquals(3, pr.getVertexScore("h"));
 
         assertEquals(3, pr.getDegeneracy());
     }
@@ -86,17 +86,17 @@ public class CorenessTest
 
         Coreness<String, DefaultEdge> pr = new Coreness<String, DefaultEdge>(g);
 
-        assertEquals(Integer.valueOf(0), pr.getVertexScore("a"));
-        assertEquals(Integer.valueOf(1), pr.getVertexScore("b"));
-        assertEquals(Integer.valueOf(1), pr.getVertexScore("c"));
-        assertEquals(Integer.valueOf(1), pr.getVertexScore("d"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("e"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("f"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("g"));
-        assertEquals(Integer.valueOf(3), pr.getVertexScore("h"));
-        assertEquals(Integer.valueOf(2), pr.getVertexScore("i"));
-        assertEquals(Integer.valueOf(2), pr.getVertexScore("j"));
-        assertEquals(Integer.valueOf(2), pr.getVertexScore("k"));
+        assertEquals(0, pr.getVertexScore("a"));
+        assertEquals(1, pr.getVertexScore("b"));
+        assertEquals(1, pr.getVertexScore("c"));
+        assertEquals(1, pr.getVertexScore("d"));
+        assertEquals(3, pr.getVertexScore("e"));
+        assertEquals(3, pr.getVertexScore("f"));
+        assertEquals(3, pr.getVertexScore("g"));
+        assertEquals(3, pr.getVertexScore("h"));
+        assertEquals(2, pr.getVertexScore("i"));
+        assertEquals(2, pr.getVertexScore("j"));
+        assertEquals(2, pr.getVertexScore("k"));
 
         assertEquals(3, pr.getDegeneracy());
     }
@@ -110,7 +110,7 @@ public class CorenessTest
 
         Coreness<String, DefaultEdge> pr = new Coreness<String, DefaultEdge>(g);
 
-        assertEquals(Integer.valueOf(0), pr.getVertexScore("a"));
+        assertEquals(0, pr.getVertexScore("a"));
         assertEquals(0, pr.getDegeneracy());
     }
 

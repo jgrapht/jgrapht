@@ -59,13 +59,13 @@ public class VF2GraphIsomorphismInspectorTest
             Arrays.asList(
                 "[v1=v1 v2=v2 v3=v3]", "[v1=v1 v2=v3 v3=v2]", "[v1=v2 v2=v1 v3=v3]",
                 "[v1=v2 v2=v3 v3=v1]", "[v1=v3 v2=v1 v3=v2]", "[v1=v3 v2=v2 v3=v1]"));
-        assertEquals(true, mappings.remove(iter.next().toString()));
-        assertEquals(true, mappings.remove(iter.next().toString()));
-        assertEquals(true, mappings.remove(iter.next().toString()));
-        assertEquals(true, mappings.remove(iter.next().toString()));
-        assertEquals(true, mappings.remove(iter.next().toString()));
-        assertEquals(true, mappings.remove(iter.next().toString()));
-        assertEquals(false, iter.hasNext());
+        assertTrue(mappings.remove(iter.next().toString()));
+        assertTrue(mappings.remove(iter.next().toString()));
+        assertTrue(mappings.remove(iter.next().toString()));
+        assertTrue(mappings.remove(iter.next().toString()));
+        assertTrue(mappings.remove(iter.next().toString()));
+        assertTrue(mappings.remove(iter.next().toString()));
+        assertFalse(iter.hasNext());
 
         /*
          * 1 ---> 2 <--- 3
@@ -99,7 +99,7 @@ public class VF2GraphIsomorphismInspectorTest
 
         VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf2 =
             new VF2GraphIsomorphismInspector<>(g1, g2);
-        assertEquals(false, vf2.isomorphismExists());
+        assertFalse(vf2.isomorphismExists());
     }
 
     @Test
@@ -182,9 +182,9 @@ public class VF2GraphIsomorphismInspectorTest
             vf3 = new VF2GraphIsomorphismInspector<>(g1, g2),
             vf4 = new VF2GraphIsomorphismInspector<>(g3, g4);
 
-        assertEquals(false, vf2.isomorphismExists());
-        assertEquals(false, vf3.isomorphismExists());
-        assertEquals(false, vf4.isomorphismExists());
+        assertFalse(vf2.isomorphismExists());
+        assertFalse(vf3.isomorphismExists());
+        assertFalse(vf4.isomorphismExists());
     }
 
 }

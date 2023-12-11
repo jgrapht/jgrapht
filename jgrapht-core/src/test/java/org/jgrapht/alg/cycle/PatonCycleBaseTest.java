@@ -87,7 +87,7 @@ public class PatonCycleBaseTest
 
     private void checkResult(CycleBasisAlgorithm<Integer, DefaultEdge> finder, int size)
     {
-        assertTrue(finder.getCycleBasis().getCycles().size() == size);
+        assertEquals(size, finder.getCycleBasis().getCycles().size());
     }
 
     @Test

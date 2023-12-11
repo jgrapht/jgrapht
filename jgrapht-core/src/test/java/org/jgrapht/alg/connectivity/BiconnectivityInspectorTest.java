@@ -252,17 +252,17 @@ public class BiconnectivityInspectorTest
         assertFalse(bi.isBiconnected());
 
         Set<Integer> cutpoints = bi.getCutpoints();
-        assertTrue(cutpoints.size() == 1);
+        assertEquals(1, cutpoints.size());
         assertTrue(cutpoints.contains(0));
 
         Set<DefaultEdge> bridges = bi.getBridges();
-        assertTrue(bridges.size() == 1);
+        assertEquals(1, bridges.size());
         assertTrue(bridges.contains(e03));
 
-        assertTrue(bi.getBlocks(0).size() == 2);
-        assertTrue(bi.getBlocks(1).size() == 1);
-        assertTrue(bi.getBlocks(2).size() == 1);
-        assertTrue(bi.getBlocks(3).size() == 1);
-        assertTrue(bi.getBlocks().size() == 2);
+        assertEquals(2, bi.getBlocks(0).size());
+        assertEquals(1, bi.getBlocks(1).size());
+        assertEquals(1, bi.getBlocks(2).size());
+        assertEquals(1, bi.getBlocks(3).size());
+        assertEquals(2, bi.getBlocks().size());
     }
 }

@@ -22,7 +22,9 @@ import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * .
@@ -108,11 +110,11 @@ public class ConnectivityInspectorTest
         ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(g);
         g.addGraphListener(inspector);
 
-        assertEquals(false, inspector.isConnected());
+        assertFalse(inspector.isConnected());
 
         g.addEdge(V1, V3);
 
-        assertEquals(true, inspector.isConnected());
+        assertTrue(inspector.isConnected());
     }
 
     /**
@@ -124,11 +126,11 @@ public class ConnectivityInspectorTest
         Pseudograph<String, DefaultEdge> g = create();
         ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(g);
 
-        assertEquals(false, inspector.isConnected());
+        assertFalse(inspector.isConnected());
 
         g.removeVertex(V4);
         inspector = new ConnectivityInspector<>(g);
-        assertEquals(true, inspector.isConnected());
+        assertTrue(inspector.isConnected());
 
         g.removeVertex(V1);
         assertEquals(1, g.edgeSet().size());
@@ -138,7 +140,7 @@ public class ConnectivityInspectorTest
         assertEquals(1, g.edgeSet().size());
 
         inspector = new ConnectivityInspector<>(g);
-        assertEquals(false, inspector.isConnected());
+        assertFalse(inspector.isConnected());
     }
 
 }

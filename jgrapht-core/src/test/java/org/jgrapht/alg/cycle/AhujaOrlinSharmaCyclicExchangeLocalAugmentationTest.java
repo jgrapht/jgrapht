@@ -241,8 +241,8 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentationTest
 
         assertEquals(-2, calculatedCycle1.getWeight(), 0.0000001);
         assertEquals(cycle, calculatedCycle1.getVertexList());
-        assertEquals(Integer.valueOf(0), calculatedCycle1.getStartVertex());
-        assertEquals(Integer.valueOf(0), calculatedCycle1.getEndVertex());
+        assertEquals(0, calculatedCycle1.getStartVertex());
+        assertEquals(0, calculatedCycle1.getEndVertex());
     }
 
     @Test

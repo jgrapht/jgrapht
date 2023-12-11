@@ -769,10 +769,10 @@ public class HierholzerEulerianCycleTest
 
         if (g.vertexSet().isEmpty()) {
             // we do not consider the null-graph to be connected
-            assertTrue(false);
+            fail();
         } else if (GraphTests.isEmpty(g)) {
-            assertTrue(cycle.getStartVertex() == null);
-            assertTrue(cycle.getEndVertex() == null);
+            assertNull(cycle.getStartVertex());
+            assertNull(cycle.getEndVertex());
             assertTrue(cycle.getEdgeList().isEmpty());
         } else {
             boolean isDirected = g.getType().isDirected();

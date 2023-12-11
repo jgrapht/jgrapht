@@ -58,8 +58,8 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(1, pathList.size());
         assertEquals(1, pathList.get(0).getLength());
         assertTrue(pathList.get(0).getEdgeList().contains(edge));
-        assertEquals(Integer.valueOf(2), pathList.get(0).getEndVertex());
-        assertEquals(Integer.valueOf(1), pathList.get(0).getStartVertex());
+        assertEquals(2, pathList.get(0).getEndVertex());
+        assertEquals(1, pathList.get(0).getStartVertex());
         assertEquals(2, pathList.get(0).getVertexList().size());
         assertTrue(pathList.get(0).getVertexList().contains(1));
         assertTrue(pathList.get(0).getVertexList().contains(2));

@@ -144,20 +144,20 @@ public class SparseIntGraphTest
         assertEquals(Set.of(0), g.incomingEdgesOf(5));
         assertEquals(Set.of(0), g.outgoingEdgesOf(5));
 
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(0));
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(1));
-        assertEquals(Integer.valueOf(2), g.getEdgeTarget(1));
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(2));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(2));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(3));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(3));
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(4));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(4));
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(5));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(5));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(6));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(6));
+        assertEquals(0, g.getEdgeSource(0));
+        assertEquals(5, g.getEdgeTarget(0));
+        assertEquals(0, g.getEdgeSource(1));
+        assertEquals(2, g.getEdgeTarget(1));
+        assertEquals(3, g.getEdgeSource(2));
+        assertEquals(4, g.getEdgeTarget(2));
+        assertEquals(1, g.getEdgeSource(3));
+        assertEquals(4, g.getEdgeTarget(3));
+        assertEquals(0, g.getEdgeSource(4));
+        assertEquals(1, g.getEdgeTarget(4));
+        assertEquals(3, g.getEdgeSource(5));
+        assertEquals(1, g.getEdgeTarget(5));
+        assertEquals(2, g.getEdgeSource(6));
+        assertEquals(4, g.getEdgeTarget(6));
 
         assertEquals(
             IntStream.range(0, edges.size()).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
@@ -178,7 +178,7 @@ public class SparseIntGraphTest
 
         int i = 0;
         for (Pair<Integer, Integer> p : edges) {
-            assertEquals(Integer.valueOf(i), g.getEdge(p.getFirst(), p.getSecond()));
+            assertEquals(i, g.getEdge(p.getFirst(), p.getSecond()));
             i++;
         }
 
@@ -236,20 +236,20 @@ public class SparseIntGraphTest
         assertEquals(Set.of(), g.incomingEdgesOf(3));
         assertEquals(Set.of(), g.outgoingEdgesOf(3));
 
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
-        assertEquals(Integer.valueOf(0), g.getEdgeTarget(0));
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(1));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(1));
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(2));
-        assertEquals(Integer.valueOf(2), g.getEdgeTarget(2));
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(3));
-        assertEquals(Integer.valueOf(0), g.getEdgeTarget(3));
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(4));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(4));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(5));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(5));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(6));
-        assertEquals(Integer.valueOf(2), g.getEdgeTarget(6));
+        assertEquals(0, g.getEdgeSource(0));
+        assertEquals(0, g.getEdgeTarget(0));
+        assertEquals(0, g.getEdgeSource(1));
+        assertEquals(1, g.getEdgeTarget(1));
+        assertEquals(0, g.getEdgeSource(2));
+        assertEquals(2, g.getEdgeTarget(2));
+        assertEquals(0, g.getEdgeSource(3));
+        assertEquals(0, g.getEdgeTarget(3));
+        assertEquals(0, g.getEdgeSource(4));
+        assertEquals(1, g.getEdgeTarget(4));
+        assertEquals(1, g.getEdgeSource(5));
+        assertEquals(1, g.getEdgeTarget(5));
+        assertEquals(1, g.getEdgeSource(6));
+        assertEquals(2, g.getEdgeTarget(6));
 
         assertEquals(
             IntStream.range(0, edges.size()).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
@@ -332,26 +332,26 @@ public class SparseIntGraphTest
         assertEquals(Set.of(0), g.incomingEdgesOf(5));
         assertEquals(Set.of(0), g.outgoingEdgesOf(5));
 
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(0));
+        assertEquals(0, g.getEdgeSource(0));
+        assertEquals(5, g.getEdgeTarget(0));
         assertEquals(1d, g.getEdgeWeight(0), 1e-16);
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(1));
-        assertEquals(Integer.valueOf(2), g.getEdgeTarget(1));
+        assertEquals(0, g.getEdgeSource(1));
+        assertEquals(2, g.getEdgeTarget(1));
         assertEquals(2d, g.getEdgeWeight(1), 1e-16);
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(2));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(2));
+        assertEquals(3, g.getEdgeSource(2));
+        assertEquals(4, g.getEdgeTarget(2));
         assertEquals(3d, g.getEdgeWeight(2), 1e-16);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(3));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(3));
+        assertEquals(1, g.getEdgeSource(3));
+        assertEquals(4, g.getEdgeTarget(3));
         assertEquals(4d, g.getEdgeWeight(3), 1e-16);
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(4));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(4));
+        assertEquals(0, g.getEdgeSource(4));
+        assertEquals(1, g.getEdgeTarget(4));
         assertEquals(5d, g.getEdgeWeight(4), 1e-16);
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(5));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(5));
+        assertEquals(3, g.getEdgeSource(5));
+        assertEquals(1, g.getEdgeTarget(5));
         assertEquals(6d, g.getEdgeWeight(5), 1e-16);
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(6));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(6));
+        assertEquals(2, g.getEdgeSource(6));
+        assertEquals(4, g.getEdgeTarget(6));
         assertEquals(7d, g.getEdgeWeight(6), 1e-16);
 
         assertEquals(5d, g.getEdgeWeight(4), 1e-16);
@@ -377,7 +377,7 @@ public class SparseIntGraphTest
 
         int i = 0;
         for (Triple<Integer, Integer, Double> p : edges) {
-            assertEquals(Integer.valueOf(i), g.getEdge(p.getFirst(), p.getSecond()));
+            assertEquals(i, g.getEdge(p.getFirst(), p.getSecond()));
             i++;
         }
 
@@ -471,32 +471,32 @@ public class SparseIntGraphTest
         assertEquals(Set.of(12), g.incomingEdgesOf(7));
         assertEquals(Set.of(11, 12), g.outgoingEdgesOf(7));
 
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(0));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(1));
-        assertEquals(Integer.valueOf(0), g.getEdgeTarget(1));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(2));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(2));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(3));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(3));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(4));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(4));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(5));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(5));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(6));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(6));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(7));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(7));
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(8));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(8));
-        assertEquals(Integer.valueOf(4), g.getEdgeSource(9));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(9));
-        assertEquals(Integer.valueOf(5), g.getEdgeSource(10));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(10));
-        assertEquals(Integer.valueOf(7), g.getEdgeSource(11));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(11));
-        assertEquals(Integer.valueOf(7), g.getEdgeSource(12));
-        assertEquals(Integer.valueOf(7), g.getEdgeTarget(12));
+        assertEquals(0, g.getEdgeSource(0));
+        assertEquals(1, g.getEdgeTarget(0));
+        assertEquals(1, g.getEdgeSource(1));
+        assertEquals(0, g.getEdgeTarget(1));
+        assertEquals(1, g.getEdgeSource(2));
+        assertEquals(4, g.getEdgeTarget(2));
+        assertEquals(1, g.getEdgeSource(3));
+        assertEquals(5, g.getEdgeTarget(3));
+        assertEquals(1, g.getEdgeSource(4));
+        assertEquals(6, g.getEdgeTarget(4));
+        assertEquals(2, g.getEdgeSource(5));
+        assertEquals(4, g.getEdgeTarget(5));
+        assertEquals(2, g.getEdgeSource(6));
+        assertEquals(4, g.getEdgeTarget(6));
+        assertEquals(2, g.getEdgeSource(7));
+        assertEquals(4, g.getEdgeTarget(7));
+        assertEquals(3, g.getEdgeSource(8));
+        assertEquals(4, g.getEdgeTarget(8));
+        assertEquals(4, g.getEdgeSource(9));
+        assertEquals(5, g.getEdgeTarget(9));
+        assertEquals(5, g.getEdgeSource(10));
+        assertEquals(6, g.getEdgeTarget(10));
+        assertEquals(7, g.getEdgeSource(11));
+        assertEquals(6, g.getEdgeTarget(11));
+        assertEquals(7, g.getEdgeSource(12));
+        assertEquals(7, g.getEdgeTarget(12));
 
         GraphType type = g.getType();
         assertTrue(type.isAllowingCycles());
@@ -508,27 +508,27 @@ public class SparseIntGraphTest
         assertFalse(type.isMixed());
         assertFalse(type.isWeighted());
 
-        assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
+        assertEquals(0, g.getEdge(0, 1));
         assertEquals(Set.of(0), g.getAllEdges(0, 1));
-        assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
+        assertEquals(1, g.getEdge(1, 0));
         assertEquals(Set.of(1), g.getAllEdges(1, 0));
-        assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
+        assertEquals(2, g.getEdge(1, 4));
         assertEquals(Set.of(2), g.getAllEdges(1, 4));
-        assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
+        assertEquals(3, g.getEdge(1, 5));
         assertEquals(Set.of(3), g.getAllEdges(1, 5));
-        assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
+        assertEquals(4, g.getEdge(1, 6));
         assertEquals(Set.of(4), g.getAllEdges(1, 6));
-        assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
+        assertEquals(5, g.getEdge(2, 4));
         assertEquals(Set.of(5, 6, 7), g.getAllEdges(2, 4));
-        assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
+        assertEquals(8, g.getEdge(3, 4));
         assertEquals(Set.of(8), g.getAllEdges(3, 4));
-        assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
+        assertEquals(9, g.getEdge(4, 5));
         assertEquals(Set.of(9), g.getAllEdges(4, 5));
-        assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
+        assertEquals(10, g.getEdge(5, 6));
         assertEquals(Set.of(10), g.getAllEdges(5, 6));
-        assertEquals(Integer.valueOf(11), g.getEdge(7, 6));
+        assertEquals(11, g.getEdge(7, 6));
         assertEquals(Set.of(11), g.getAllEdges(7, 6));
-        assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
+        assertEquals(12, g.getEdge(7, 7));
         assertEquals(Set.of(12), g.getAllEdges(7, 7));
 
     }
@@ -583,32 +583,32 @@ public class SparseIntGraphTest
         assertEquals(2, g.outDegreeOf(7));
         assertEquals(new HashSet<>(Arrays.asList(11, 12)), g.outgoingEdgesOf(7));
 
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(0));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(1));
-        assertEquals(Integer.valueOf(0), g.getEdgeTarget(1));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(2));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(2));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(3));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(3));
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(4));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(4));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(5));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(5));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(6));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(6));
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(7));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(7));
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(8));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(8));
-        assertEquals(Integer.valueOf(4), g.getEdgeSource(9));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(9));
-        assertEquals(Integer.valueOf(5), g.getEdgeSource(10));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(10));
-        assertEquals(Integer.valueOf(7), g.getEdgeSource(11));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(11));
-        assertEquals(Integer.valueOf(7), g.getEdgeSource(12));
-        assertEquals(Integer.valueOf(7), g.getEdgeTarget(12));
+        assertEquals(0, g.getEdgeSource(0));
+        assertEquals(1, g.getEdgeTarget(0));
+        assertEquals(1, g.getEdgeSource(1));
+        assertEquals(0, g.getEdgeTarget(1));
+        assertEquals(1, g.getEdgeSource(2));
+        assertEquals(4, g.getEdgeTarget(2));
+        assertEquals(1, g.getEdgeSource(3));
+        assertEquals(5, g.getEdgeTarget(3));
+        assertEquals(1, g.getEdgeSource(4));
+        assertEquals(6, g.getEdgeTarget(4));
+        assertEquals(2, g.getEdgeSource(5));
+        assertEquals(4, g.getEdgeTarget(5));
+        assertEquals(2, g.getEdgeSource(6));
+        assertEquals(4, g.getEdgeTarget(6));
+        assertEquals(2, g.getEdgeSource(7));
+        assertEquals(4, g.getEdgeTarget(7));
+        assertEquals(3, g.getEdgeSource(8));
+        assertEquals(4, g.getEdgeTarget(8));
+        assertEquals(4, g.getEdgeSource(9));
+        assertEquals(5, g.getEdgeTarget(9));
+        assertEquals(5, g.getEdgeSource(10));
+        assertEquals(6, g.getEdgeTarget(10));
+        assertEquals(7, g.getEdgeSource(11));
+        assertEquals(6, g.getEdgeTarget(11));
+        assertEquals(7, g.getEdgeSource(12));
+        assertEquals(7, g.getEdgeTarget(12));
 
         GraphType type = g.getType();
         assertTrue(type.isAllowingCycles());
@@ -620,27 +620,27 @@ public class SparseIntGraphTest
         assertFalse(type.isMixed());
         assertFalse(type.isWeighted());
 
-        assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
+        assertEquals(0, g.getEdge(0, 1));
         assertEquals(Collections.singleton(Integer.valueOf(0)), g.getAllEdges(0, 1));
-        assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
+        assertEquals(1, g.getEdge(1, 0));
         assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));
-        assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
+        assertEquals(2, g.getEdge(1, 4));
         assertEquals(Collections.singleton(Integer.valueOf(2)), g.getAllEdges(1, 4));
-        assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
+        assertEquals(3, g.getEdge(1, 5));
         assertEquals(Collections.singleton(Integer.valueOf(3)), g.getAllEdges(1, 5));
-        assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
+        assertEquals(4, g.getEdge(1, 6));
         assertEquals(Collections.singleton(Integer.valueOf(4)), g.getAllEdges(1, 6));
-        assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
+        assertEquals(5, g.getEdge(2, 4));
         assertEquals(new HashSet<>(Arrays.asList(5, 6, 7)), g.getAllEdges(2, 4));
-        assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
+        assertEquals(8, g.getEdge(3, 4));
         assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));
-        assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
+        assertEquals(9, g.getEdge(4, 5));
         assertEquals(Collections.singleton(Integer.valueOf(9)), g.getAllEdges(4, 5));
-        assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
+        assertEquals(10, g.getEdge(5, 6));
         assertEquals(Collections.singleton(Integer.valueOf(10)), g.getAllEdges(5, 6));
-        assertEquals(Integer.valueOf(11), g.getEdge(7, 6));
+        assertEquals(11, g.getEdge(7, 6));
         assertEquals(Collections.singleton(Integer.valueOf(11)), g.getAllEdges(7, 6));
-        assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
+        assertEquals(12, g.getEdge(7, 7));
         assertEquals(Collections.singleton(Integer.valueOf(12)), g.getAllEdges(7, 7));
 
     }
@@ -730,50 +730,50 @@ public class SparseIntGraphTest
         assertEquals(Set.of(12), g.incomingEdgesOf(7));
         assertEquals(Set.of(11, 12), g.outgoingEdgesOf(7));
 
-        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
-        assertEquals(Integer.valueOf(1), g.getEdgeTarget(0));
+        assertEquals(0, g.getEdgeSource(0));
+        assertEquals(1, g.getEdgeTarget(0));
         assertEquals(0d, g.getEdgeWeight(0), 1e-16);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(1));
-        assertEquals(Integer.valueOf(0), g.getEdgeTarget(1));
+        assertEquals(1, g.getEdgeSource(1));
+        assertEquals(0, g.getEdgeTarget(1));
         assertEquals(1d, g.getEdgeWeight(1), 1e-16);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(2));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(2));
+        assertEquals(1, g.getEdgeSource(2));
+        assertEquals(4, g.getEdgeTarget(2));
         assertEquals(2d, g.getEdgeWeight(2), 1e-16);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(3));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(3));
+        assertEquals(1, g.getEdgeSource(3));
+        assertEquals(5, g.getEdgeTarget(3));
         assertEquals(3d, g.getEdgeWeight(3), 1e-16);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(4));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(4));
+        assertEquals(1, g.getEdgeSource(4));
+        assertEquals(6, g.getEdgeTarget(4));
         assertEquals(4d, g.getEdgeWeight(4), 1e-16);
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(5));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(5));
+        assertEquals(2, g.getEdgeSource(5));
+        assertEquals(4, g.getEdgeTarget(5));
         assertEquals(5d, g.getEdgeWeight(5), 1e-16);
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(6));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(6));
+        assertEquals(2, g.getEdgeSource(6));
+        assertEquals(4, g.getEdgeTarget(6));
         assertEquals(6d, g.getEdgeWeight(6), 1e-16);
-        assertEquals(Integer.valueOf(2), g.getEdgeSource(7));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(7));
+        assertEquals(2, g.getEdgeSource(7));
+        assertEquals(4, g.getEdgeTarget(7));
         assertEquals(7d, g.getEdgeWeight(7), 1e-16);
-        assertEquals(Integer.valueOf(3), g.getEdgeSource(8));
-        assertEquals(Integer.valueOf(4), g.getEdgeTarget(8));
+        assertEquals(3, g.getEdgeSource(8));
+        assertEquals(4, g.getEdgeTarget(8));
         assertEquals(8d, g.getEdgeWeight(8), 1e-16);
-        assertEquals(Integer.valueOf(4), g.getEdgeSource(9));
-        assertEquals(Integer.valueOf(5), g.getEdgeTarget(9));
+        assertEquals(4, g.getEdgeSource(9));
+        assertEquals(5, g.getEdgeTarget(9));
         assertEquals(9d, g.getEdgeWeight(9), 1e-16);
-        assertEquals(Integer.valueOf(5), g.getEdgeSource(10));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(10));
+        assertEquals(5, g.getEdgeSource(10));
+        assertEquals(6, g.getEdgeTarget(10));
         assertEquals(10d, g.getEdgeWeight(10), 1e-16);
-        assertEquals(Integer.valueOf(7), g.getEdgeSource(11));
-        assertEquals(Integer.valueOf(6), g.getEdgeTarget(11));
+        assertEquals(7, g.getEdgeSource(11));
+        assertEquals(6, g.getEdgeTarget(11));
         assertEquals(11d, g.getEdgeWeight(11), 1e-16);
-        assertEquals(Integer.valueOf(7), g.getEdgeSource(12));
-        assertEquals(Integer.valueOf(7), g.getEdgeTarget(12));
+        assertEquals(7, g.getEdgeSource(12));
+        assertEquals(7, g.getEdgeTarget(12));
         assertEquals(12d, g.getEdgeWeight(12), 1e-16);
 
         for (int i = 0; i < edges.size(); i++) {
-            assertEquals(Double.valueOf(i), g.getEdgeWeight(i), 1e-16);
+            assertEquals(i, g.getEdgeWeight(i), 1e-16);
             g.setEdgeWeight(i, 100 + g.getEdgeWeight(i));
-            assertEquals(Double.valueOf(i) + 100, g.getEdgeWeight(i), 1e-16);
+            assertEquals(i + 100, g.getEdgeWeight(i), 1e-16);
         }
 
         GraphType type = g.getType();
@@ -786,27 +786,27 @@ public class SparseIntGraphTest
         assertFalse(type.isUndirected());
         assertFalse(type.isMixed());
 
-        assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
+        assertEquals(0, g.getEdge(0, 1));
         assertEquals(Set.of(0), g.getAllEdges(0, 1));
-        assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
+        assertEquals(1, g.getEdge(1, 0));
         assertEquals(Set.of(1), g.getAllEdges(1, 0));
-        assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
+        assertEquals(2, g.getEdge(1, 4));
         assertEquals(Set.of(2), g.getAllEdges(1, 4));
-        assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
+        assertEquals(3, g.getEdge(1, 5));
         assertEquals(Set.of(3), g.getAllEdges(1, 5));
-        assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
+        assertEquals(4, g.getEdge(1, 6));
         assertEquals(Set.of(4), g.getAllEdges(1, 6));
-        assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
+        assertEquals(5, g.getEdge(2, 4));
         assertEquals(Set.of(5, 6, 7), g.getAllEdges(2, 4));
-        assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
+        assertEquals(8, g.getEdge(3, 4));
         assertEquals(Set.of(8), g.getAllEdges(3, 4));
-        assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
+        assertEquals(9, g.getEdge(4, 5));
         assertEquals(Set.of(9), g.getAllEdges(4, 5));
-        assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
+        assertEquals(10, g.getEdge(5, 6));
         assertEquals(Set.of(10), g.getAllEdges(5, 6));
-        assertEquals(Integer.valueOf(11), g.getEdge(7, 6));
+        assertEquals(11, g.getEdge(7, 6));
         assertEquals(Set.of(11), g.getAllEdges(7, 6));
-        assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
+        assertEquals(12, g.getEdge(7, 7));
         assertEquals(Set.of(12), g.getAllEdges(7, 7));
 
     }

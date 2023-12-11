@@ -62,12 +62,12 @@ public class SaturationDegreeColoringTest
         Coloring<Integer> coloring = new SaturationDegreeColoring<>(g).getColoring();
         assertEquals(3, coloring.getNumberColors());
         Map<Integer, Integer> colors = coloring.getColors();
-        assertEquals(0, colors.get(1).intValue());
-        assertEquals(0, colors.get(2).intValue());
-        assertEquals(1, colors.get(3).intValue());
-        assertEquals(1, colors.get(4).intValue());
-        assertEquals(0, colors.get(5).intValue());
-        assertEquals(2, colors.get(6).intValue());
+        assertEquals(0, colors.get(1));
+        assertEquals(0, colors.get(2));
+        assertEquals(1, colors.get(3));
+        assertEquals(1, colors.get(4));
+        assertEquals(0, colors.get(5));
+        assertEquals(2, colors.get(6));
     }
 
 }

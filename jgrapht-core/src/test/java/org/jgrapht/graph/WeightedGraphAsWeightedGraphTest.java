@@ -23,9 +23,8 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 import java.util.function.*;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WeightedGraphAsWeightedGraphTest
 {
@@ -148,12 +147,7 @@ public class WeightedGraphAsWeightedGraphTest
     public void testGetEdgeWeightOfNull()
     {
         this.setUp(false);
-        try {
-            this.weightedGraph.getEdgeWeight(null);
-            fail("Expected a NullPointerException");
-        } catch (Exception e) {
-            assertTrue(e instanceof NullPointerException);
-        }
+        assertThrows(NullPointerException.class, () -> this.weightedGraph.getEdgeWeight(null));
     }
 
     @Test

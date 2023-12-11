@@ -40,7 +40,7 @@ public class NaiveLCAFinderTest
     {
         Set<V> lcaSet = finder.getLCASet(a, b);
         assertTrue(lcaSet.containsAll(expectedSet));
-        assertEquals(lcaSet.size(), expectedSet.size());
+        assertEquals(expectedSet.size(), lcaSet.size());
     }
 
     @Test

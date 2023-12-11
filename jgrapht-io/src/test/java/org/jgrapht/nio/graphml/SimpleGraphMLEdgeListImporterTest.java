@@ -130,10 +130,10 @@ public class SimpleGraphMLEdgeListImporterTest
         int i = 0;
         for (Integer[] edge : edges) {
             Triple<Integer, Integer, Double> e = collected.get(i);
-            assertEquals(Integer.valueOf(edge[0]), e.getFirst());
-            assertEquals(Integer.valueOf(edge[1]), e.getSecond());
+            assertEquals(edge[0], e.getFirst());
+            assertEquals(edge[1], e.getSecond());
             if (i < 2) {
-                assertEquals(Double.valueOf(edge[2]), collected.get(i).getThird());
+                assertEquals(edge[2], collected.get(i).getThird());
             } else {
                 assertNull(e.getThird());
 

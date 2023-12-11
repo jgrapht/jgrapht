@@ -140,8 +140,8 @@ public class TransitiveReductionTest
         SimpleDirectedGraph<String, DefaultEdge> graph =
             new SimpleDirectedGraph<>(DefaultEdge.class);
         TransitiveReduction.INSTANCE.reduce(graph);
-        assertEquals(graph.vertexSet().size(), 0);
-        assertEquals(graph.edgeSet().size(), 0);
+        assertEquals(0, graph.vertexSet().size());
+        assertEquals(0, graph.edgeSet().size());
     }
 
     @Test
@@ -168,8 +168,8 @@ public class TransitiveReductionTest
         graph.addEdge("x", "y");
         graph.addEdge("y", "z");
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 2);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(2, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
@@ -232,8 +232,8 @@ public class TransitiveReductionTest
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 6);
-        assertEquals(graph.edgeSet().size(), 5);
+        assertEquals(6, graph.vertexSet().size());
+        assertEquals(5, graph.edgeSet().size());
 
         assertTrue(graph.containsEdge("a", "b"));
         assertTrue(graph.containsEdge("b", "c"));
@@ -260,8 +260,8 @@ public class TransitiveReductionTest
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 5);
-        assertEquals(graph.edgeSet().size(), 4);
+        assertEquals(5, graph.vertexSet().size());
+        assertEquals(4, graph.edgeSet().size());
 
         // equivalent spot tests on the reduced graph
         assertFalse(graph.containsEdge(0, 0));

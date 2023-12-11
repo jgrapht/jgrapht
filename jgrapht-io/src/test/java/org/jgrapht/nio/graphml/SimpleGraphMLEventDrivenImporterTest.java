@@ -72,8 +72,8 @@ public class SimpleGraphMLEventDrivenImporterTest
         int i = 0;
         for (int[] edge : edges) {
             Pair<Integer, Integer> e = collected.get(i);
-            assertEquals(Integer.valueOf(edge[0]), e.getFirst());
-            assertEquals(Integer.valueOf(edge[1]), e.getSecond());
+            assertEquals(edge[0], e.getFirst());
+            assertEquals(edge[1], e.getSecond());
             i++;
         }
     }

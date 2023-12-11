@@ -49,13 +49,13 @@ public class JohnsonSimpleCyclesTest
 
         List<List<Integer>> cycles = new JohnsonSimpleCycles<>(g).findSimpleCycles();
 
-        assertTrue(cycles.size() == 2);
+        assertEquals(2, cycles.size());
 
         List<Integer> cycle0 = cycles.get(0);
-        assertEquals(cycle0, Arrays.asList(1, 2, 3, 4, 5, 6));
+        assertEquals(Arrays.asList(1, 2, 3, 4, 5, 6), cycle0);
 
         List<Integer> cycle1 = cycles.get(1);
-        assertEquals(cycle1, Arrays.asList(1, 2, 5, 6));
+        assertEquals(Arrays.asList(1, 2, 5, 6), cycle1);
     }
 
 }

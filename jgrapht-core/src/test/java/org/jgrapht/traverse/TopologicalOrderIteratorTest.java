@@ -270,13 +270,13 @@ public class TopologicalOrderIteratorTest
 
         Iterator<Integer> it = new TopologicalOrderIterator<>(graph, cf);
         assertTrue(it.hasNext());
-        assertEquals(Integer.valueOf(2), it.next());
+        assertEquals(2, it.next());
         assertTrue(it.hasNext());
-        assertEquals(Integer.valueOf(3), it.next());
+        assertEquals(3, it.next());
         assertTrue(it.hasNext());
-        assertEquals(Integer.valueOf(0), it.next());
+        assertEquals(0, it.next());
         assertTrue(it.hasNext());
-        assertEquals(Integer.valueOf(1), it.next());
+        assertEquals(1, it.next());
         assertFalse(it.hasNext());
     }
 

@@ -155,12 +155,12 @@ public class CycleDetectorTest
         assertEquals(cyclicSet, detector.findCycles());
 
         for (String v : cyclicSet) {
-            assertEquals(true, detector.detectCyclesContainingVertex(v));
+            assertTrue(detector.detectCyclesContainingVertex(v));
             assertEquals(cyclicSet, detector.findCyclesContainingVertex(v));
         }
 
         for (String v : acyclicSet) {
-            assertEquals(false, detector.detectCyclesContainingVertex(v));
+            assertFalse(detector.detectCyclesContainingVertex(v));
             assertEquals(emptySet, detector.findCyclesContainingVertex(v));
         }
     }

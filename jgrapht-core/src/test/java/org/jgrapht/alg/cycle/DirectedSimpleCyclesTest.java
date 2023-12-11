@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.function.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DirectedSimpleCyclesTest
@@ -63,18 +64,18 @@ public class DirectedSimpleCyclesTest
         }
         DirectedSimpleCycles<Integer, DefaultEdge> alg = algProvider.apply(graph);
         graph.addEdge(0, 0);
-        assertTrue(alg.findSimpleCycles().size() == 1);
+        assertEquals(1, alg.findSimpleCycles().size());
         graph.addEdge(1, 1);
-        assertTrue(alg.findSimpleCycles().size() == 2);
+        assertEquals(2, alg.findSimpleCycles().size());
         graph.addEdge(0, 1);
         graph.addEdge(1, 0);
-        assertTrue(alg.findSimpleCycles().size() == 3);
+        assertEquals(3, alg.findSimpleCycles().size());
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(3, 0);
-        assertTrue(alg.findSimpleCycles().size() == 4);
+        assertEquals(4, alg.findSimpleCycles().size());
         graph.addEdge(6, 6);
-        assertTrue(alg.findSimpleCycles().size() == 5);
+        assertEquals(5, alg.findSimpleCycles().size());
 
         for (int size = 1; size <= MAX_SIZE; size++) {
             graph = new DefaultDirectedGraph<>(
@@ -88,7 +89,7 @@ public class DirectedSimpleCyclesTest
                 }
             }
             alg = algProvider.apply(graph);
-            assertTrue(alg.findSimpleCycles().size() == RESULTS[size]);
+            assertEquals(RESULTS[size], alg.findSimpleCycles().size());
         }
     }
 
@@ -103,18 +104,18 @@ public class DirectedSimpleCyclesTest
         }
         DirectedSimpleCycles<Integer, DefaultWeightedEdge> alg = algProvider.apply(graph);
         graph.addEdge(0, 0);
-        assertTrue(alg.findSimpleCycles().size() == 1);
+        assertEquals(1, alg.findSimpleCycles().size());
         graph.addEdge(1, 1);
-        assertTrue(alg.findSimpleCycles().size() == 2);
+        assertEquals(2, alg.findSimpleCycles().size());
         graph.addEdge(0, 1);
         graph.addEdge(1, 0);
-        assertTrue(alg.findSimpleCycles().size() == 3);
+        assertEquals(3, alg.findSimpleCycles().size());
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(3, 0);
-        assertTrue(alg.findSimpleCycles().size() == 4);
+        assertEquals(4, alg.findSimpleCycles().size());
         graph.addEdge(6, 6);
-        assertTrue(alg.findSimpleCycles().size() == 5);
+        assertEquals(5, alg.findSimpleCycles().size());
 
         for (int size = 1; size <= MAX_SIZE; size++) {
             graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -127,7 +128,7 @@ public class DirectedSimpleCyclesTest
                 }
             }
             alg = algProvider.apply(graph);
-            assertTrue(alg.findSimpleCycles().size() == RESULTS[size]);
+            assertEquals(RESULTS[size], alg.findSimpleCycles().size());
         }
     }
 

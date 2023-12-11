@@ -140,7 +140,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 12);
+        assertEquals(12, w);
     }
 
     @Test
@@ -153,7 +153,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 15);
+        assertTrue(15, w);
 
     }
 
@@ -168,7 +168,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 10);
+        assertEquals(10, w);
 
     }
 
@@ -194,7 +194,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 12);
+        assertEquals(12, w);
 
     }
 
@@ -213,7 +213,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 21);
+        assertEquals(21, w);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 19);
+        assertEquals(19, w);
     }
 
     @Test
@@ -251,7 +251,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(w == 12);
+        assertEquals(12, w);
     }
 
     @Test

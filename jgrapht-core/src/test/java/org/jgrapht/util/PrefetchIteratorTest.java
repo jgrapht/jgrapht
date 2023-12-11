@@ -22,6 +22,8 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PrefetchIteratorTest
@@ -33,17 +35,11 @@ public class PrefetchIteratorTest
     {
         Iterator<Integer> iterator = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
-            assertEquals(true, iterator.hasNext());
+            assertTrue(iterator.hasNext());
             assertEquals(i, iterator.next().intValue());
         }
-        assertEquals(false, iterator.hasNext());
-        Exception exceptionThrown = null;
-        try {
-            iterator.next();
-        } catch (Exception e) {
-            exceptionThrown = e;
-        }
-        assertTrue(exceptionThrown instanceof NoSuchElementException);
+        assertFalse(iterator.hasNext());
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
     }
 
     @Test
@@ -51,17 +47,11 @@ public class PrefetchIteratorTest
     {
         Enumeration<Integer> enumuration = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
-            assertEquals(true, enumuration.hasMoreElements());
+            assertTrue(enumuration.hasMoreElements());
             assertEquals(i, enumuration.nextElement().intValue());
         }
-        assertEquals(false, enumuration.hasMoreElements());
-        Exception exceptionThrown = null;
-        try {
-            enumuration.nextElement();
-        } catch (Exception e) {
-            exceptionThrown = e;
-        }
-        assertTrue(exceptionThrown instanceof NoSuchElementException);
+        assertFalse(enumuration.hasMoreElements());
+        assertThrows(NoSuchElementException.class, ()-> enumuration.nextElement());
     }
 
     // ~ Inner Classes ----------------------------------------------------------

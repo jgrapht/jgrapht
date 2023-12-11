@@ -155,8 +155,8 @@ public class BreadthFirstIteratorTest
         assertEquals(e3, bfs.getSpanningTreeEdge(3));
 
         assertNull(bfs.getParent(0));
-        assertEquals(Integer.valueOf(0), bfs.getParent(1));
-        assertEquals(Integer.valueOf(1), bfs.getParent(2));
-        assertEquals(Integer.valueOf(2), bfs.getParent(3));
+        assertEquals(0, bfs.getParent(1));
+        assertEquals(1, bfs.getParent(2));
+        assertEquals(2, bfs.getParent(3));
     }
 }

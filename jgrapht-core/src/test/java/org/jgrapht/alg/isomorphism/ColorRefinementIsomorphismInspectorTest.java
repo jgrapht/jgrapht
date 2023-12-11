@@ -58,13 +58,7 @@ public class ColorRefinementIsomorphismInspectorTest
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
             new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        boolean testOK = false;
-        try {
-            isomorphismInspector.isomorphismExists();
-        } catch (IsomorphismUndecidableException e) {
-            testOK = true;
-        }
-        assertTrue(testOK);
+        assertThrows(IsomorphismUndecidableException.class, () -> isomorphismInspector.isomorphismExists());
 
         assertFalse(isomorphismInspector.getMappings().hasNext());
 
@@ -104,7 +98,7 @@ public class ColorRefinementIsomorphismInspectorTest
         try {
             assertTrue(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
-            fail();
+            fail(e);
         }
         assertFalse(isomorphismInspector.isColoringDiscrete());
         assertTrue(isomorphismInspector.isForest());
@@ -214,7 +208,7 @@ public class ColorRefinementIsomorphismInspectorTest
         try {
             assertTrue(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
-            fail();
+            fail(e);
         }
         assertTrue(isomorphismInspector.isColoringDiscrete());
         assertFalse(isomorphismInspector.isForest());
@@ -323,7 +317,7 @@ public class ColorRefinementIsomorphismInspectorTest
         try {
             assertTrue(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
-            fail();
+            fail(e);
         }
         assertFalse(isomorphismInspector.isColoringDiscrete());
         assertTrue(isomorphismInspector.isForest());
@@ -385,7 +379,7 @@ public class ColorRefinementIsomorphismInspectorTest
         try {
             assertFalse(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
-            fail();
+            fail(e);
         }
         assertFalse(isomorphismInspector.isColoringDiscrete());
         assertFalse(isomorphismInspector.isForest());

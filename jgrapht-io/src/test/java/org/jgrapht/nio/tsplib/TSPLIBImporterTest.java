@@ -143,8 +143,8 @@ public class TSPLIBImporterTest
         assertEquals("TSP", spec.getType());
         assertEquals(
             Arrays.asList("The first line of the comment", "A second line"), spec.getComments());
-        assertEquals(Integer.valueOf(4), spec.getDimension());
-        assertEquals(Integer.valueOf(7), spec.getCapacity());
+        assertEquals(4, spec.getDimension());
+        assertEquals(7, spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
         assertEquals("FULL_MATRIX", spec.getEdgeWeightFormat());
         assertEquals("ADJ_LIST", spec.getEdgeDataFormat());
@@ -180,8 +180,8 @@ public class TSPLIBImporterTest
         Specification spec = metaData.getSpecification();
         assertEquals("theNameOfThisFile", spec.getName());
         assertEquals("TSP", spec.getType());
-        assertEquals(Integer.valueOf(4), spec.getDimension());
-        assertEquals(Integer.valueOf(7), spec.getCapacity());
+        assertEquals(4, spec.getDimension());
+        assertEquals(7, spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
         assertEquals("FULL_MATRIX", spec.getEdgeWeightFormat());
         assertEquals("ADJ_LIST", spec.getEdgeDataFormat());
@@ -723,7 +723,7 @@ public class TSPLIBImporterTest
 
             DefaultWeightedEdge actualEdge = graph.getEdge(source, target);
 
-            assertTrue(actualEdge != null);
+            assertNotNull(actualEdge);
             assertEquals(
                 expectedGraph.getEdgeWeight(expectedEdge), graph.getEdgeWeight(actualEdge), 1e-5);
         }
@@ -748,15 +748,7 @@ public class TSPLIBImporterTest
             TestVector expectedVector = expectedSortedVectors.get(i);
             Node actualNode = sortedVertexNodes.get(i);
             assertEquals(expectedVector.getIndex(), actualNode.getNumber());
-            assertEqualElements(expectedVector.getElementValues(), actualNode.getCoordinates());
-        }
-    }
-
-    private static void assertEqualElements(double[] expected, double[] actual)
-    {
-        if (!Arrays.equals(actual, expected)) {
-            fail(
-                "Expected is " + Arrays.toString(expected) + " but was " + Arrays.toString(actual));
+            assertArrayEquals(expectedVector.getElementValues(), actualNode.getCoordinates());
         }
     }
 

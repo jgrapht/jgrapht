@@ -23,6 +23,8 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -70,8 +72,8 @@ public class AsUndirectedGraphTest
         String v5 = "v5";
 
         undirected.addVertex(v5);
-        assertEquals(true, undirected.containsVertex(v5));
-        assertEquals(true, directed.containsVertex(v5));
+        assertTrue(undirected.containsVertex(v5));
+        assertTrue(directed.containsVertex(v5));
     }
 
     /**
@@ -180,8 +182,8 @@ public class AsUndirectedGraphTest
     public void testRemoveEdge()
     {
         undirected.removeEdge(loop);
-        assertEquals(false, undirected.containsEdge(loop));
-        assertEquals(false, directed.containsEdge(loop));
+        assertFalse(undirected.containsEdge(loop));
+        assertFalse(directed.containsEdge(loop));
     }
 
     /**
@@ -191,8 +193,8 @@ public class AsUndirectedGraphTest
     public void testRemoveVertex()
     {
         undirected.removeVertex(v4);
-        assertEquals(false, undirected.containsVertex(v4));
-        assertEquals(false, directed.containsVertex(v4));
+        assertFalse(undirected.containsVertex(v4));
+        assertFalse(directed.containsVertex(v4));
     }
 
     /**
