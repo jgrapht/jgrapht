@@ -25,6 +25,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and

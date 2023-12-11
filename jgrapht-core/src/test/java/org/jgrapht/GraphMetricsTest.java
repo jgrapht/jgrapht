@@ -279,8 +279,7 @@ public class GraphMetricsTest
 
             generator.generateGraph(graph);
 
-            Assert
-                .assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
+            assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
         }
     }
 
@@ -301,8 +300,7 @@ public class GraphMetricsTest
 
             generator.generateGraph(graph);
 
-            Assert
-                .assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
+            assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
         }
     }
 

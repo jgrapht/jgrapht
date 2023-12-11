@@ -23,6 +23,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * A unit test for the AsDirectedGraph view.
