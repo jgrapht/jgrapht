@@ -23,8 +23,8 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
@@ -38,38 +38,8 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Timofey Chudakov
  */
-@RunWith(Parameterized.class)
 public class KolmogorovWeightedPerfectMatchingTest
 {
-    /**
-     * Algorithm options
-     */
-    private BlossomVOptions options;
-    /**
-     * The objective sense of the algorithm
-     */
-    private ObjectiveSense objectiveSense;
-
-    public KolmogorovWeightedPerfectMatchingTest(
-        BlossomVOptions options, ObjectiveSense objectiveSense)
-    {
-        this.options = options;
-        this.objectiveSense = objectiveSense;
-    }
-
-    @Parameterized.Parameters
-    public static Object[][] params()
-    {
-        BlossomVOptions[] options = BlossomVOptions.ALL_OPTIONS;
-        Object[][] params = new Object[2 * options.length][2];
-        for (int i = 0; i < options.length; i++) {
-            params[2 * i][0] = options[i];
-            params[2 * i][1] = MAXIMIZE;
-            params[2 * i + 1][0] = options[i];
-            params[2 * i + 1][1] = MINIMIZE;
-        }
-        return params;
-    }
 
     /**
      * Checks complementary slackness conditions
@@ -159,8 +129,9 @@ public class KolmogorovWeightedPerfectMatchingTest
         }
     }
 
-    @Test
-    public void testInvalidDualSolution()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testInvalidDualSolution(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = { { 1, 2, 7 }, { 2, 3, 4 }, { 3, 4, 3 }, { 4, 1, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
@@ -180,22 +151,24 @@ public class KolmogorovWeightedPerfectMatchingTest
      * Test on a triangulation of 8 points Points: (2, 10), (9, 11), (10, 4), (11, 15), (12, 5),
      * (12, 6), (13, 12), (14, 11)
      */
-    @Test
-    public void testGetMatching0()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching0(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 10 }, { 1, 2, 8 }, { 0, 3, 11 },
             { 1, 3, 5 }, { 2, 5, 3 }, { 1, 5, 6 }, { 2, 4, 3 }, { 4, 5, 1 }, { 1, 6, 5 },
             { 3, 6, 4 }, { 3, 7, 5 }, { 6, 7, 2 }, { 5, 7, 6 }, { 4, 7, 7 }, { 1, 7, 5 } };
         double maxWeight = 27;
         double minWeight = 18;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on an empty graph
      */
-    @Test
-    public void testGetMatching1()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching1(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -212,223 +185,240 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Smoke test
      */
-    @Test
-    public void testGetMatching2()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching2(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 2, 5 } };
         double maxWeight = 5;
         double minWeight = 5;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a graph with an odd cycle
      */
-    @Test
-    public void testGetMatching3()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching3(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 1, 2, 8 }, { 2, 3, 8 }, { 3, 4, 8 }, { 4, 1, 8 }, { 2, 4, 2 } };
         double maxWeight = 16;
         double minWeight = 16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{2,2}$
      */
-    @Test
-    public void testGetMatching4()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching4(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 3, 11 }, { 1, 4, 8 }, { 2, 3, 8 }, { 2, 4, 2 } };
         double maxWeight = 16;
         double minWeight = 13;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{3,3}$
      */
-    @Test
-    public void testGetMatching5()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching5(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 3, 7 }, { 0, 4, 5 }, { 0, 5, 2 }, { 1, 3, 1 },
             { 1, 4, 3 }, { 1, 5, 4 }, { 2, 3, 7 }, { 2, 4, 10 }, { 2, 5, 7 } };
         double maxWeight = 21;
         double minWeight = 12;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{3,3}$
      */
-    @Test
-    public void testGetMatching6()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching6(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 3, 7 }, { 0, 4, 3 }, { 0, 5, 9 }, { 1, 3, 8 },
             { 1, 4, 2 }, { 1, 5, 9 }, { 2, 3, 6 }, { 2, 4, 1 }, { 2, 5, 10 } };
         double maxWeight = 21;
         double minWeight = 17;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{4}$
      */
-    @Test
-    public void testGetMatching7()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching7(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 2 }, { 0, 2, 5 }, { 0, 3, 1 }, { 1, 2, 5 },
             { 1, 3, 2 }, { 2, 3, 1 } };
         double maxWeight = 7;
         double minWeight = 3;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (2,5)
      */
-    @Test
-    public void testGetMatching8()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching8(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 1 }, { 0, 2, 4 }, { 0, 3, 7 }, { 0, 4, 10 }, { 1, 2, 5 },
                 { 1, 3, 7 }, { 1, 4, 10 }, { 2, 3, 10 }, { 2, 4, 2 }, { 3, 4, 3 }, { 2, 5, 8 } };
         double maxWeight = 25;
         double minWeight = 12;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching9()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching9(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 1 }, { 0, 2, 6 }, { 0, 3, 1 }, { 0, 4, 1 }, { 1, 2, 6 },
                 { 1, 3, 6 }, { 1, 4, 5 }, { 2, 3, 7 }, { 2, 4, 8 }, { 3, 4, 8 }, { 0, 5, 8 } };
         double maxWeight = 22;
         double minWeight = 20;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching10()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching10(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 4 }, { 0, 2, 4 }, { 0, 3, 6 }, { 0, 4, 8 }, { 1, 2, 8 },
                 { 1, 3, 10 }, { 1, 4, 8 }, { 2, 3, 4 }, { 2, 4, 9 }, { 3, 4, 4 }, { 0, 5, 9 } };
         double maxWeight = 28;
         double minWeight = 21;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching11()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching11(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 5 }, { 0, 2, 1 }, { 0, 3, 8 }, { 0, 4, 1 }, { 1, 2, 2 },
                 { 1, 3, 8 }, { 1, 4, 1 }, { 2, 3, 8 }, { 2, 4, 5 }, { 3, 4, 10 }, { 0, 5, 8 } };
         double maxWeight = 21;
         double minWeight = 17;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching12()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching12(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 2 }, { 0, 2, 6 }, { 0, 3, 3 }, { 0, 4, 2 }, { 1, 2, 7 },
                 { 1, 3, 7 }, { 1, 4, 7 }, { 2, 3, 4 }, { 2, 4, 4 }, { 3, 4, 2 }, { 0, 5, 2 } };
         double maxWeight = 13;
         double minWeight = 11;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (4,3)
      */
-    @Test
-    public void testGetMatching13()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching13(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 2, 0, 5 }, { 2, 1, 9 }, { 3, 0, 2 }, { 3, 1, 6 },
             { 3, 2, 7 }, { 4, 0, 3 }, { 4, 1, 5 }, { 4, 2, 5 }, { 4, 3, 7 }, { 5, 4, 6 } };
         double maxWeight = 17;
         double minWeight = 17;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (4,0)
      */
-    @Test
-    public void testGetMatching14()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching14(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 1, 0, 9 }, { 2, 0, 8 }, { 2, 1, 3 }, { 3, 0, 5 }, { 3, 1, 4 },
                 { 3, 2, 10 }, { 4, 0, 3 }, { 4, 1, 2 }, { 4, 2, 4 }, { 4, 3, 8 }, { 5, 1, 4 } };
         double maxWeight = 20;
         double minWeight = 13;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (4,0)
      */
-    @Test
-    public void testGetMatching15()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching15(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 1, 0, 8 }, { 2, 0, 7 }, { 2, 1, 10 }, { 3, 0, 8 }, { 3, 1, 5 },
                 { 3, 2, 3 }, { 4, 0, 9 }, { 4, 1, 5 }, { 4, 2, 4 }, { 4, 3, 10 }, { 5, 1, 4 } };
         double maxWeight = 21;
         double minWeight = 16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{6}$ with edges with zero weight
      */
-    @Test
-    public void testGetMatching16()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching16(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 3 }, { 0, 2, 2 }, { 0, 3, 8 }, { 0, 4, 10 },
             { 0, 5, 8 }, { 1, 2, 1 }, { 1, 3, 4 }, { 1, 4, 8 }, { 1, 5, 0 }, { 2, 3, 8 },
             { 2, 4, 5 }, { 2, 5, 0 }, { 3, 4, 7 }, { 3, 5, 0 }, { 4, 5, 0 } };
         double maxWeight = 24;
         double minWeight = 6;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 8 points
      */
-    @Test
-    public void testGetMatching17()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching17(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 7 }, { 1, 2, 3 }, { 0, 2, 7 }, { 0, 3, 9 },
             { 0, 4, 9 }, { 3, 4, 2 }, { 0, 5, 9 }, { 4, 5, 8 }, { 2, 5, 6 }, { 5, 6, 5 },
             { 2, 6, 6 }, { 1, 6, 9 }, { 3, 7, 8 }, { 4, 7, 6 }, { 5, 7, 5 }, { 6, 7, 9 } };
         double maxWeight = 32;
         double minWeight = 20;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points
      */
-    @Test
-    public void testGetMatching18()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching18(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 10 }, { 0, 2, 7 }, { 1, 2, 4 }, { 2, 3, 1 },
             { 1, 3, 3 }, { 3, 4, 1 }, { 1, 4, 2 }, { 3, 5, 1 }, { 4, 5, 2 }, { 2, 5, 2 },
@@ -436,15 +426,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 6, 8, 3 }, { 2, 8, 4 }, { 7, 8, 3 }, { 7, 9, 3 }, { 0, 9, 7 }, { 8, 9, 8 } };
         double maxWeight = 27;
         double minWeight = 16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 2), (1, 8), (3, 5), (3, 11), (3, 12), (5,
      * 3), (10, 6), (10, 11), (14, 8), (15, 1)
      */
-    @Test
-    public void testGetMatching19()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching19(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 6 }, { 0, 2, 4 }, { 1, 2, 4 }, { 2, 3, 6 },
             { 1, 3, 4 }, { 1, 4, 5 }, { 3, 4, 1 }, { 0, 5, 5 }, { 2, 5, 3 }, { 2, 6, 8 },
@@ -452,15 +443,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 8, 5 }, { 6, 9, 8 }, { 5, 9, 11 }, { 8, 9, 9 }, { 0, 9, 15 } };
         double maxWeight = 37;
         double minWeight = 23;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 7), (1, 11), (4, 5), (6, 5), (7, 8), (9, 1),
      * (11, 7), (13, 7), (13, 10), (15, 9)
      */
-    @Test
-    public void testGetMatching20()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching20(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 2, 3, 2 }, { 2, 4, 5 }, { 3, 4, 4 }, { 0, 2, 4 },
             { 0, 4, 7 }, { 0, 1, 4 }, { 1, 4, 7 }, { 2, 5, 7 }, { 3, 5, 5 }, { 0, 5, 10 },
@@ -468,15 +460,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 1, 8, 13 }, { 6, 8, 4 }, { 7, 8, 3 }, { 7, 9, 3 }, { 8, 9, 3 }, { 5, 9, 10 } };
         double maxWeight = 37;
         double minWeight = 19;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (4, 5), (5, 14), (6, 12), (7, 11), (9, 1), (9,
      * 8), (10, 15), (12, 6), (13, 12), (14, 6)
      */
-    @Test
-    public void testGetMatching21()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching21(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 10 }, { 0, 2, 8 }, { 1, 2, 3 }, { 0, 3, 7 },
             { 2, 3, 2 }, { 0, 4, 7 }, { 0, 5, 6 }, { 4, 5, 7 }, { 3, 5, 4 }, { 2, 6, 5 },
@@ -484,15 +477,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 3, 8, 7 }, { 6, 8, 5 }, { 8, 9, 7 }, { 7, 9, 2 }, { 4, 9, 8 } };
         double maxWeight = 34;
         double minWeight = 21;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (3, 3), (3, 10), (4, 12), (5, 13), (8, 4), (10,
      * 3), (11, 5), (11, 9), (11, 13), (14, 11)
      */
-    @Test
-    public void testGetMatching22()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching22(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 7 }, { 1, 4, 8 }, { 0, 4, 6 }, { 0, 5, 7 },
             { 4, 5, 3 }, { 4, 6, 4 }, { 5, 6, 3 }, { 4, 7, 6 }, { 6, 7, 4 }, { 2, 3, 2 },
@@ -500,15 +494,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 9, 4 }, { 8, 9, 5 }, { 6, 9, 7 } };
         double maxWeight = 38;
         double minWeight = 21;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 15), (4, 2), (7, 13), (8, 15), (9, 5), (10,
      * 7), (11, 11), (12, 4), (12, 9), (13, 11)
      */
-    @Test
-    public void testGetMatching23()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching23(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 14 }, { 1, 2, 12 }, { 0, 2, 7 }, { 0, 3, 7 },
             { 2, 3, 3 }, { 2, 4, 9 }, { 1, 4, 6 }, { 2, 5, 7 }, { 4, 5, 3 }, { 2, 6, 5 },
@@ -516,15 +511,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 8, 5 }, { 6, 8, 3 }, { 3, 9, 7 }, { 6, 9, 2 }, { 8, 9, 3 }, { 7, 9, 8 } };
         double maxWeight = 40;
         double minWeight = 25;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 6), (2, 14), (5, 5), (7, 10), (9, 8), (9,
      * 10), (12, 4), (13, 8), (13, 12), (14, 10)
      */
-    @Test
-    public void testGetMatching24()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching24(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 2, 5 }, { 0, 3, 8 }, { 2, 3, 6 }, { 0, 1, 9 },
             { 1, 3, 7 }, { 2, 4, 5 }, { 3, 4, 3 }, { 3, 5, 2 }, { 4, 5, 2 }, { 1, 5, 9 },
@@ -532,15 +528,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 1, 8, 12 }, { 7, 8, 4 }, { 7, 9, 3 }, { 8, 9, 3 }, { 6, 9, 7 } };
         double maxWeight = 37;
         double minWeight = 22;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1,4), (5, 10), (5, 13), (8, 7), (9, 8), (10,
      * 6), (11, 2), (11, 13), (14, 3), (15, 13)
      */
-    @Test
-    public void testGetMatching25()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching25(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 10 }, { 1, 2, 3 }, { 0, 3, 8 },
             { 1, 3, 5 }, { 1, 4, 5 }, { 3, 4, 2 }, { 4, 5, 3 }, { 3, 5, 3 }, { 3, 6, 6 },
@@ -548,14 +545,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 6, 8, 4 }, { 5, 9, 8 }, { 8, 9, 10 }, { 4, 9, 8 }, { 7, 9, 5 } };
         double maxWeight = 36;
         double minWeight = 23;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points
      */
-    @Test
-    public void testGetMatching26()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching26(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 5 }, { 0, 2, 5 }, { 1, 2, 3 }, { 1, 3, 4 },
             { 2, 3, 3 }, { 2, 4, 5 }, { 3, 4, 6 }, { 0, 4, 5 }, { 3, 5, 5 }, { 4, 5, 3 },
@@ -563,15 +561,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 5, 8, 5 }, { 7, 8, 11 }, { 6, 8, 2 }, { 7, 9, 13 }, { 8, 9, 5 }, { 6, 9, 5 } };
         double maxWeight = 39;
         double minWeight = 26;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (2, 9), (4, 13), (6, 5), (6, 12), (8, 4), (8,
      * 9), (8, 14), (10, 15), (14, 10), (15, 4)
      */
-    @Test
-    public void testGetMatching27()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching27(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 5 }, { 0, 3, 5 }, { 1, 3, 3 }, { 2, 4, 3 },
             { 2, 5, 5 }, { 4, 5, 5 }, { 0, 2, 6 }, { 0, 5, 6 }, { 3, 5, 4 }, { 5, 6, 5 },
@@ -579,7 +578,7 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 8, 7 }, { 4, 8, 9 }, { 8, 9, 7 }, { 4, 9, 7 } };
         double maxWeight = 30;
         double minWeight = 22;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
@@ -587,8 +586,9 @@ public class KolmogorovWeightedPerfectMatchingTest
      * 4), (15, 3), (15, 5), (17, 5), (19, 27), (20, 16), (23, 1), (23, 8), (23, 12), (24, 14), (25,
      * 21), (27, 3), (27, 11), (30, 23), (30, 28)
      */
-    @Test
-    public void testGetMatching28()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching28(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 2, 5 }, { 0, 3, 3 }, { 2, 3, 3 }, { 0, 1, 17 },
             { 0, 4, 13 }, { 1, 4, 5 }, { 2, 4, 10 }, { 4, 5, 9 }, { 1, 5, 8 }, { 5, 7, 6 },
@@ -601,14 +601,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 15, 18, 6 }, { 16, 18, 21 }, { 15, 19, 9 }, { 9, 19, 12 }, { 18, 19, 5 } };
         double maxWeight = 117;
         double minWeight = 57;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 50 points
      */
-    @Test
-    public void testGetMatching29()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching29(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 2, 44 }, { 0, 3, 50 }, { 2, 3, 6 }, { 2, 4, 6 },
             { 3, 4, 7 }, { 3, 5, 6 }, { 4, 5, 5 }, { 0, 1, 16 }, { 0, 6, 15 }, { 1, 6, 15 },
@@ -639,14 +640,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 43, 48, 24 }, { 40, 48, 18 }, { 44, 48, 8 }, { 44, 49, 8 }, { 48, 49, 1 } };
         double maxWeight = 605;
         double minWeight = 279;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 50 points
      */
-    @Test
-    public void testGetMatching30()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching30(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 34 }, { 0, 2, 146 }, { 1, 2, 113 }, { 1, 3, 34 },
             { 2, 3, 80 }, { 1, 5, 18 }, { 3, 5, 36 }, { 0, 5, 39 }, { 0, 4, 34 }, { 0, 7, 29 },
@@ -678,14 +680,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 4, 49, 175 }, { 34, 49, 38 } };
         double maxWeight = 1426;
         double minWeight = 496;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 100 points
      */
-    @Test
-    public void testGetMatching31()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching31(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 118 }, { 0, 2, 125 }, { 1, 2, 7 }, { 0, 3, 66 },
             { 1, 3, 54 }, { 0, 4, 41 }, { 3, 4, 27 }, { 0, 5, 19 }, { 4, 5, 30 }, { 5, 6, 16 },
@@ -746,14 +749,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 97, 99, 128 }, { 98, 99, 74 }, { 91, 99, 63 }, { 87, 99, 22 }, { 84, 99, 37 } };
         double maxWeight = 1781;
         double minWeight = 693;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 100 points
      */
-    @Test
-    public void testGetMatching32()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching32(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 48 }, { 0, 3, 23 }, { 1, 3, 27 }, { 1, 6, 14 },
             { 3, 6, 16 }, { 0, 2, 80 }, { 0, 7, 53 }, { 2, 7, 28 }, { 3, 8, 13 }, { 6, 8, 5 },
@@ -813,14 +817,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 95, 99, 29 }, { 91, 99, 27 }, { 97, 99, 44 }, { 98, 99, 69 } };
         double maxWeight = 1576;
         double minWeight = 728;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 200 points
      */
-    @Test
-    public void testGetMatching33()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching33(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 2, 47 }, { 1, 3, 33 }, { 2, 3, 15 }, { 1, 5, 18 },
             { 3, 5, 16 }, { 1, 4, 26 }, { 1, 6, 68 }, { 4, 6, 43 }, { 1, 0, 129 }, { 0, 6, 63 },
@@ -944,14 +949,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 175, 199, 46 }, { 176, 199, 40 }, { 178, 199, 35 } };
         double maxWeight = 2461;
         double minWeight = 974;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 300 points
      */
-    @Test
-    public void testGetMatching34()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching34(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 14 }, { 0, 6, 13 }, { 1, 6, 3 }, { 3, 4, 16 },
             { 3, 7, 13 }, { 4, 7, 5 }, { 7, 8, 2 }, { 4, 8, 3 }, { 0, 10, 10 }, { 6, 10, 4 },
@@ -1127,14 +1133,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 298, 299, 3 } };
         double maxWeight = 670;
         double minWeight = 316;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 400 points
      */
-    @Test
-    public void testGetMatching35()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching35(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 3, 4, 8 }, { 3, 8, 8 }, { 4, 8, 2 }, { 4, 5, 4 },
             { 4, 9, 3 }, { 5, 9, 3 }, { 5, 6, 2 }, { 5, 10, 2 }, { 6, 10, 2 }, { 9, 10, 3 },
@@ -1370,14 +1377,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 373, 399, 4 }, { 398, 399, 1 }, { 316, 399, 11 }, { 220, 399, 21 } };
         double maxWeight = 827;
         double minWeight = 367;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 500 points
      */
-    @Test
-    public void testGetMatching36()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching36(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 4, 5, 4 }, { 4, 14, 3 }, { 5, 14, 3 }, { 5, 6, 4 },
             { 5, 15, 2 }, { 6, 15, 4 }, { 14, 15, 3 }, { 10, 11, 1 }, { 10, 16, 2 }, { 11, 16, 3 },
@@ -1669,14 +1677,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 489, 499, 2 }, { 490, 499, 5 }, { 488, 499, 3 }, { 498, 499, 7 }, { 478, 499, 3 } };
         double maxWeight = 866;
         double minWeight = 425;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on an unweighted $K_{50}$
      */
-    @Test
-    public void testGetMatching37()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching37(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -1698,8 +1707,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a weighted $K_{50}$
      */
-    @Test
-    public void testGetMatching38()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching38(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 597 }, { 2, 0, 614 }, { 2, 1, 57 }, { 3, 0, 554 },
             { 3, 1, 883 }, { 3, 2, 883 }, { 4, 0, 752 }, { 4, 1, 191 }, { 4, 2, 972 },
@@ -1948,14 +1958,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 49, 45, 38 }, { 49, 46, 172 }, { 49, 47, 144 }, { 49, 48, 164 } };
         double maxWeight = 24192;
         double minWeight = 933;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a small pseudograph
      */
-    @Test
-    public void testGetMatching39()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching39(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 1, 1 }, { 1, 2, 5 }, { 1, 2, 10 }, };
         double maxWeight = 10;
@@ -1968,8 +1979,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a pseudograph
      */
-    @Test
-    public void testGetMatching40()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching40(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 1, 1 }, { 2, 2, 1 }, { 3, 3, 1 }, { 4, 4, 1 },
             { 1, 2, 5 }, { 1, 2, 10 }, { 1, 3, 2 }, { 1, 3, 5 }, { 1, 4, 4 }, { 1, 4, 6 },
@@ -1984,8 +1996,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a graph with odd number of vertices
      */
-    @Test
-    public void testGetMatching41()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching41(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             Graph<Integer, DefaultWeightedEdge> graph =
@@ -1998,8 +2011,9 @@ public class KolmogorovWeightedPerfectMatchingTest
         });
     }
 
-    @Test
-    public void testGetMatching42()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching42(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             Graph<Integer, DefaultWeightedEdge> graph =
@@ -2016,8 +2030,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a $K_{3}$ with a zero-degree vertex
      */
-    @Test
-    public void testGetMatching43()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching43(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = { { 1, 2, 1 }, { 1, 3, 2 }, { 2, 3, 3 }, };
@@ -2033,8 +2048,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on triangulation of 9 points with a zero-degree vertex
      */
-    @Test
-    public void testGetMatching44()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching44(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 1, 2, 3 }, { 1, 3, 5 }, { 2, 3, 7 }, { 1, 4, 6 },
@@ -2053,8 +2069,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on triangulation of 9 points with a zero-degree vertex
      */
-    @Test
-    public void testGetMatching45()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching45(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 9 }, { 1, 2, 1 }, { 0, 3, 4 },
@@ -2073,8 +2090,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on triangulation of 99 points with a zero-degree vertex
      */
-    @Test
-    public void testGetMatching46()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching46(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 1, 2, 22 }, { 1, 3, 8 }, { 2, 3, 16 }, { 0, 1, 46 },
@@ -2146,8 +2164,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a 3-regular graph with no perfect matching
      */
-    @Test
-    public void testGetMatching47()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching47(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 0, 2, 18 }, { 1, 2, 27 }, { 0, 3, 68 }, { 1, 3, 15 },
@@ -2166,8 +2185,9 @@ public class KolmogorovWeightedPerfectMatchingTest
      * Test on a 7-regular graph without perfect matching: |V| = 64, |max. cardinality matching| =
      * 29
      */
-    @Test
-    public void testGetMatching48()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching48(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 0, 2, 72 }, { 1, 2, 85 }, { 0, 3, 5 }, { 1, 3, 59 },
@@ -2227,8 +2247,9 @@ public class KolmogorovWeightedPerfectMatchingTest
      * Test on a 9-regular graph without perfect matching: |V| = 100, |max. cardinality matching| =
      * 46
      */
-    @Test
-    public void testGetMatching49()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching49(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 0, 2, 87 }, { 1, 2, 56 }, { 0, 3, 21 }, { 1, 3, 81 },
@@ -2332,8 +2353,9 @@ public class KolmogorovWeightedPerfectMatchingTest
      * Test on a 11-regular graph without perfect matching: |V| = 144, |max. cardinality matching| =
      * 67
      */
-    @Test
-    public void testGetMatching50()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching50(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         assertThrows(IllegalArgumentException.class, () -> {
             int[][] edges = new int[][] { { 0, 2, 44 }, { 1, 2, 27 }, { 0, 3, 2 }, { 1, 3, 73 },
@@ -2513,10 +2535,10 @@ public class KolmogorovWeightedPerfectMatchingTest
      * @param result the expected weight of a resulting matching
      * @param objectiveSense objective sense of the algorithm
      */
-    private void test(int[][] edges, double result, ObjectiveSense objectiveSense)
+    private void test(BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         test(
-            new DefaultUndirectedWeightedGraph<>(DefaultEdge.class), edges, result, objectiveSense);
+            options, new DefaultUndirectedWeightedGraph<>(DefaultEdge.class), edges, result, objectiveSense);
     }
 
     /**
@@ -2528,6 +2550,7 @@ public class KolmogorovWeightedPerfectMatchingTest
      * @param objectiveSense objective sense of the algorithm
      */
     private void test(
+        BlossomVOptions options,
         Graph<Integer, DefaultEdge> graph, int[][] edges, double result,
         ObjectiveSense objectiveSense)
     {

@@ -21,8 +21,8 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
@@ -34,47 +34,41 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Timofey Chudakov
  */
-@RunWith(Parameterized.class)
 public class CapacityScalingMinimumCostFlowTest
 {
 
     private static final double EPS = 1e-9;
-    private int scalingFactor;
 
-    public CapacityScalingMinimumCostFlowTest(int scalingFactor)
-    {
-        this.scalingFactor = scalingFactor;
+    private static int[] scalingFactors() {
+        return new int[] {1, 2, 3, 4, 5};
     }
 
-    @Parameterized.Parameters
-    public static Object[] params()
-    {
-        return new Integer[] { 1, 2, 3, 4, 5 };
-    }
-
-    @Test
-    public void testGetMinimumCostFlow1()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow1(int scalingFactor)
     {
         int[][] testCase = new int[][] { { 1, 3 }, { 2, -3 }, { 1, 2, 0, 4, 5 } };
-        test(testCase, 15);
+        test(testCase, scalingFactor, 15);
     }
 
-    @Test
-    public void testGetMinimumCostFlow2()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow2(int scalingFactor)
     {
         int[][] testCase = new int[][] { { 1, 4 }, { 4, -4 }, { 1, 2, 0, 4, 2 }, { 1, 3, 0, 1, 3 },
             { 2, 3, 0, 1, 1 }, { 2, 4, 0, 5, 6 }, { 3, 4, 0, 4, 2 } };
-        test(testCase, 26);
+        test(testCase, scalingFactor, 26);
     }
 
-    @Test
-    public void testGetMinimumCostFlow3()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow3(int scalingFactor)
     {
         int[][] testCase =
             new int[][] { { 1, 2 }, { 2, 5 }, { 6, -7 }, { 1, 5, 0, 3, 6 }, { 3, 6, 0, 3, 9 },
                 { 3, 1, 0, 3, 6 }, { 5, 3, 0, 3, 4 }, { 5, 6, 0, 7, 4 }, { 2, 4, 0, 5, 10 },
                 { 2, 3, 0, 1, 3 }, { 4, 6, 0, 5, 10 }, { 4, 1, 0, 5, 3 }, { 4, 3, 0, 1, 8 }, };
-        test(testCase, 112);
+        test(testCase, scalingFactor, 112);
     }
 
     /**
@@ -82,15 +76,16 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 2, supply = 10, min. capacity = 1, max. capacity = 10, min. cost = 1, max. cost = 10,
      * capacitated = 50%, seed = 1
      */
-    @Test
-    public void testGetMinimumCostFlow4()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow4(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 2731 }, { 2, 414 }, { 3, -1264 }, { 4, 216 },
             { 5, -1785 }, { 6, -312 }, { 1, 4, 910, 2147483647, 10 }, { 1, 5, 957, 2147483647, 1 },
             { 1, 3, 863, 2147483647, 3 }, { 3, 5, 1, 1, -5 }, { 3, 6, 1, 1, 10 }, { 3, 4, 1, 9, 2 },
             { 4, 3, 1, 1, 8 }, { 4, 5, 820, 2147483647, 4 }, { 4, 6, 306, 2147483647, 7 },
             { 2, 5, 1, 9, 7 }, { 2, 6, 1, 9, 10 }, { 2, 3, 403, 2147483647, 6 }, };
-        test(testCase, 20594);
+        test(testCase, scalingFactor, 20594);
     }
 
     /**
@@ -98,8 +93,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 2, supply = 15, min. capacity = 1, max. capacity = 10, min. cost = 1, max. cost = 10,
      * capacitated = 50%, seed = 1
      */
-    @Test
-    public void testGetMinimumCostFlow5()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow5(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 635 }, { 2, 980 }, { 3, 1658 }, { 4, -462 },
             { 5, -821 }, { 6, -1123 }, { 7, -13 }, { 8, -854 }, { 1, 5, 625, 2147483647, 10 },
@@ -108,7 +104,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 5, 3, 1, 9, 1 }, { 5, 7, 1, 4, 3 }, { 2, 6, 973, 2147483647, 10 }, { 2, 4, 1, 4, 10 },
             { 6, 7, 1, 6, 10 }, { 6, 8, 1, 6, 8 }, { 6, 3, 1, 6, 2 }, { 6, 5, 1, 10, 5 },
             { 6, 4, 701, 2147483647, 2 }, };
-        test(testCase, 33206);
+        test(testCase, scalingFactor, 33206);
     }
 
     /**
@@ -116,15 +112,16 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 2, supply = 10, min. capacity = 1, max. capacity = 10, min. cost = 1, max. cost = 10,
      * capacitated = 50%, seed = 1
      */
-    @Test
-    public void testGetMinimumCostFlow6()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow6(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 10 }, { 2, 6 }, { 3, -211 }, { 4, 506 }, { 5, -10 },
             { 6, -301 }, { 1, 3, 1, 7, 10 }, { 1, 5, 1, 2, 4 }, { 1, 4, 1, 1, 6 },
             { 3, 4, 1, 7, 3 }, { 3, 6, 295, 2147483647, 10 }, { 3, 5, 1, 8, 1 }, { 4, 5, 1, 7, 10 },
             { 4, 3, 506, 2147483647, 8 }, { 4, 6, 1, 1, -10 }, { 2, 5, 1, 3, 2 },
             { 2, 6, 1, 3, 10 }, { 2, 3, 1, 10, 10 }, };
-        test(testCase, 7154);
+        test(testCase, scalingFactor, 7154);
     }
 
     /**
@@ -135,13 +132,13 @@ public class CapacityScalingMinimumCostFlowTest
     @Test
     public void testGetMinimumCostFlow7()
     {
-        scalingFactor = 2;
+        int scalingFactor = 2;
         int testCase[][] = new int[][] { { 1, 7 }, { 2, 1430 }, { 3, -1350 }, { 4, 840 },
             { 5, -499 }, { 6, -428 }, { 1, 3, 1, 4, 10 }, { 1, 4, 1, 10, 10 }, { 1, 5, 1, 10, 9 },
             { 3, 4, 1, 4, 10 }, { 3, 6, 1, 1, -3 }, { 3, 5, 489, 2147483647, 6 },
             { 4, 6, 1, 4, 10 }, { 4, 5, 1, 4, 1 }, { 4, 3, 840, 2147483647, 10 },
             { 2, 6, 423, 2147483647, 10 }, { 2, 5, 1, 6, 10 }, { 2, 3, 1000, 2147483647, 9 }, };
-        test(testCase, 24717);
+        test(testCase, scalingFactor, 24717);
     }
 
     /**
@@ -149,15 +146,16 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 2, supply = 10, min. capacity = 1, max. capacity = 10, min. cost = 1, max. cost = 10,
      * capacitated = 100%, seed = 1
      */
-    @Test
-    public void testGetMinimumCostFlow8()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow8(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 7 }, { 2, 1294 }, { 3, -332 }, { 4, 265 },
             { 5, -460 }, { 6, -774 }, { 1, 3, 1, 4, 10 }, { 1, 4, 1, 10, 10 }, { 1, 5, 1, 10, 9 },
             { 3, 4, 1, 4, 10 }, { 3, 6, 1, 8, 3 }, { 3, 5, 450, 2147483647, 6 },
             { 4, 6, 1, 4, -10 }, { 4, 5, 1, 4, 1 }, { 4, 3, 265, 2147483647, 10 },
             { 2, 6, 769, 2147483647, 10 }, { 2, 5, 1, 6, 10 }, { 2, 3, 518, 2147483647, 9 }, };
-        test(testCase, 17819);
+        test(testCase, scalingFactor, 17819);
     }
 
     /**
@@ -165,15 +163,16 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 2, supply = 10, min. capacity = 1, max. capacity = 10, min. cost = 1, max. cost = 10,
      * capacitated = 50%, seed = 1
      */
-    @Test
-    public void testGetMinimumCostFlow9()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow9(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 7 }, { 2, 763 }, { 3, -637 }, { 4, 164 }, { 5, -138 },
             { 6, -159 }, { 1, 3, 1, 4, 10 }, { 1, 4, 1, 2, -10 }, { 1, 5, 1, 10, 9 },
             { 3, 4, 1, 4, 10 }, { 3, 6, 1, 8, 3 }, { 3, 5, 128, 2147483647, 6 }, { 4, 6, 1, 4, 10 },
             { 4, 5, 1, 4, 1 }, { 4, 3, 164, 2147483647, 10 }, { 2, 6, 154, 2147483647, 10 },
             { 2, 5, 1, 6, 10 }, { 2, 3, 602, 2147483647, 9 }, };
-        test(testCase, 9487);
+        test(testCase, scalingFactor, 9487);
     }
 
     /**
@@ -181,8 +180,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 3, supply = 30, min. capacity = 1, max. capacity = 50, min. cost = 1, max. cost = 50,
      * capacitated = 50%, seed = 268101079
      */
-    @Test
-    public void testGetMinimumCostFlow10()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow10(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 8 }, { 2, 16 }, { 3, 6 }, { 8, -16 }, { 9, -6 },
             { 10, -8 }, { 1, 5, 0, 2147483647, 50 }, { 1, 7, 0, 5, 32 }, { 1, 9, 0, 18, 33 },
@@ -195,7 +195,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 4, 7, 0, 2147483647, 18 }, { 4, 10, 0, 16, 33 }, { 4, 8, 0, 2147483647, 6 },
             { 4, 9, 0, 12, 13 }, { 7, 9, 0, 16, 50 }, { 7, 8, 0, 2147483647, 50 },
             { 3, 10, 0, 6, 21 }, { 3, 8, 0, 6, 50 }, { 3, 7, 0, 33, 37 }, };
-        test(testCase, 802);
+        test(testCase, scalingFactor, 802);
     }
 
     /**
@@ -203,8 +203,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 3, supply = 30, min. capacity = 1, max. capacity = 50, min. cost = 1, max. cost =
      * 100, capacitated = 50%, seed = 651272247
      */
-    @Test
-    public void testGetMinimumCostFlow11()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow11(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 1 }, { 2, 23 }, { 3, 6 }, { 8, -17 }, { 9, -9 },
             { 10, -4 }, { 1, 7, 0, 1, 100 }, { 1, 6, 0, 10, 15 }, { 1, 4, 0, 37, 72 },
@@ -219,7 +220,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 4, 8, 0, 2147483647, 100 }, { 4, 7, 0, 2147483647, 1 }, { 4, 6, 0, 2147483647, 59 },
 
         };
-        test(testCase, 2286);
+        test(testCase, scalingFactor, 2286);
     }
 
     /**
@@ -227,8 +228,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 5, supply = 50, min. capacity = 1, max. capacity = 100, min. cost = 1, max. cost =
      * 100, capacitated = 100%, seed = 1685408561
      */
-    @Test
-    public void testGetMinimumCostFlow12()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow12(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 8 }, { 2, 10 }, { 3, 9 }, { 4, 18 }, { 5, 5 },
             { 26, -9 }, { 27, -15 }, { 28, -4 }, { 29, -6 }, { 30, -16 },
@@ -268,7 +270,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 25, 22, 0, 5, 100 }, { 25, 14, 0, 2147483647, 73 },
 
         };
-        test(testCase, 4067);
+        test(testCase, scalingFactor, 4067);
     }
 
     /**
@@ -276,8 +278,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 5, supply = 50, min. capacity = 1, max. capacity = 100, min. cost = 1, max. cost =
      * 100, capacitated = 50%, seed = 843930509
      */
-    @Test
-    public void testGetMinimumCostFlow13()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow13(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 1391 }, { 2, 790 }, { 3, 1671 }, { 4, 815 },
             { 5, 342 }, { 6, -148 }, { 7, 1254 }, { 8, 848 }, { 9, 169 }, { 10, -282 }, { 11, 978 },
@@ -322,7 +325,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 12, 19, 1, 51, 39 }, { 12, 21, 944, 2147483647, 29 },
             { 15, 28, 340, 2147483647, 100 }, { 15, 29, 743, 2147483647, 48 },
             { 15, 26, 484, 2147483647, 100 }, };
-        test(testCase, 1982153);
+        test(testCase, scalingFactor, 1982153);
     }
 
     /**
@@ -330,8 +333,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 20, supply = 200, min. capacity = 1, max. capacity = 1000, min. cost = 1, max. cost =
      * 100, capacitated = 10%, seed = 1342893451
      */
-    @Test
-    public void testGetMinimumCostFlow14()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow14(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 11 }, { 2, 25 }, { 3, 9 }, { 4, 10 }, { 5, 10 },
             { 6, 5 }, { 7, 6 }, { 8, 10 }, { 9, 4 }, { 10, 18 }, { 11, 7 }, { 12, 9 }, { 13, 8 },
@@ -393,7 +397,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 28, 40, 0, 13, 100 }, { 20, 27, 0, 5, 100 }, { 27, 39, 0, 2147483647, 60 },
             { 27, 38, 0, 2147483647, 100 }, { 27, 47, 0, 5, 24 }, { 27, 32, 0, 2147483647, 6 },
             { 27, 41, 0, 2147483647, 100 }, { 27, 48, 0, 5, 100 }, };
-        test(testCase, 9919);
+        test(testCase, scalingFactor, 9919);
     }
 
     /**
@@ -401,8 +405,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 20, supply = 200, min. capacity = 1, max. capacity = 1000, min. cost = 1, max. cost =
      * 100, capacitated = 70%, seed = 684190206
      */
-    @Test
-    public void testGetMinimumCostFlow15()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow15(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 2795 }, { 2, 756 }, { 3, 1215 }, { 4, 16 },
             { 5, 1955 }, { 6, 334 }, { 7, 716 }, { 8, 1414 }, { 9, 482 }, { 10, 320 }, { 11, 369 },
@@ -471,7 +476,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 18, 46, 1, 15, 61 }, { 19, 43, 132, 2147483647, 100 }, { 19, 39, 1, 1, 65 },
             { 20, 38, 1, 5, 21 }, { 20, 32, 790, 2147483647, 27 },
             { 20, 25, 786, 2147483647, 47 }, };
-        test(testCase, 2223579);
+        test(testCase, scalingFactor, 2223579);
     }
 
     /**
@@ -479,8 +484,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 25, supply = 200, min. capacity = 1, max. capacity = 1000, min. cost = 1, max. cost =
      * 20, capacitated = 60%, seed = 1787733798
      */
-    @Test
-    public void testGetMinimumCostFlow16()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow16(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 4633 }, { 2, 2319 }, { 3, 4198 }, { 4, 5 },
             { 5, 632 }, { 6, 712 }, { 7, 1391 }, { 8, 352 }, { 9, 451 }, { 10, 6187 }, { 11, 387 },
@@ -753,7 +759,7 @@ public class CapacityScalingMinimumCostFlowTest
             { 25, 51, 709, 2147483647, 8 }, { 25, 68, 929, 2147483647, 15 }, { 61, 99, 1, 11, 20 },
             { 61, 82, 497, 2147483647, 20 }, { 61, 86, 1, 11, 19 }, { 61, 90, 1, 11, 17 },
             { 61, 91, 468, 2147483647, 20 }, { 61, 95, 1, 11, 20 }, };
-        test(testCase, 2000171);
+        test(testCase, scalingFactor, 2000171);
     }
 
     /**
@@ -761,8 +767,9 @@ public class CapacityScalingMinimumCostFlowTest
      * sinks = 50, supply = 1000, min. capacity = 1, max. capacity = 10000, min. cost = 1, max. cost
      * = 20, capacitated = 60%, seed = 346867034
      */
-    @Test
-    public void testGetMinimumCostFlow17()
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
+    public void testGetMinimumCostFlow17(int scalingFactor)
     {
         int testCase[][] = new int[][] { { 1, 2474 }, { 2, 2676 }, { 3, 4366 }, { 4, 7126 },
             { 5, 1006 }, { 6, 3683 }, { 7, 3081 }, { 8, 2395 }, { 9, 3372 }, { 10, 2421 },
@@ -1421,10 +1428,10 @@ public class CapacityScalingMinimumCostFlowTest
             { 100, 108, 539, 2147483647, 15 }, { 100, 89, 141, 2147483647, 8 },
             { 124, 100, 1, 26, 15 }, { 124, 198, 629, 2147483647, 9 },
             { 124, 163, 22, 2147483647, 8 }, };
-        test(testCase, 4610258);
+        test(testCase, scalingFactor, 4610258);
     }
 
-    private void test(int[][] testCase, double cost)
+    private void test(int[][] testCase, int scalingFactor, double cost)
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);

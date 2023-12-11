@@ -22,8 +22,8 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,31 +36,15 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
  *
  * @author Timofey Chudakov
  */
-@RunWith(Parameterized.class)
 
 public class KolmogorovWeightedMatchingTest
 {
-    /**
-     * Algorithm options
-     */
-    private BlossomVOptions options;
-    /**
-     * Objective sense of the algorithm
-     */
-    private ObjectiveSense objectiveSense;
-
-    public KolmogorovWeightedMatchingTest(BlossomVOptions options, ObjectiveSense objectiveSense)
-    {
-        this.options = options;
-        this.objectiveSense = objectiveSense;
-    }
 
     /**
      * Generate all combinations of options and algorithm objective sense.
      *
      * @return all combinations of options and algorithm objective sense.
      */
-    @Parameterized.Parameters
     public static Object[][] params()
     {
         BlossomVOptions[] options = BlossomVOptions.ALL_OPTIONS;
@@ -74,42 +58,46 @@ public class KolmogorovWeightedMatchingTest
         return params;
     }
 
-    @Test
-    public void testGetMatching1()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching1(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, -1 }, { 1, 2, 1 }, { 2, 3, -1 }, { 3, 0, 1 }, };
         double maxWeight = 2;
         double minWeight = -2;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
-    @Test
-    public void testGetMatching2()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching2(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 3 }, { 1, 2, 2 }, { 2, 3, 1 }, { 3, 0, 5 },
             { 0, 2, 15 }, { 1, 3, -15 } };
         double maxWeight = 15;
         double minWeight = -15;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Triangulation of 3 points with randomly negated edge weights
      */
-    @Test
-    public void testGetMatching3()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching3(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 2, 0, -2 }, { 1, 2, 2 }, { 0, 1, 3 }, };
         double maxWeight = 3;
         double minWeight = -2;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Triangulation of 10 points with randomly negated edge weights
      */
-    @Test
-    public void testGetMatching4()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching4(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 9, 4, 4 }, { 7, 9, 4 }, { 4, 7, -4 }, { 6, 4, -2 },
             { 9, 6, 2 }, { 8, 9, -2 }, { 6, 8, 1 }, { 4, 5, 3 }, { 6, 3, 3 }, { 1, 6, 6 },
@@ -117,14 +105,15 @@ public class KolmogorovWeightedMatchingTest
             { 3, 0, -5 }, { 1, 3, -3 }, { 5, 7, -2 }, { 2, 5, 4 }, { 7, 2, -6 }, };
         double maxWeight = 19;
         double minWeight = -16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Triangulation of 10 points with randomly negated edge weights
      */
-    @Test
-    public void testGetMatching5()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching5(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 9, 5, 4 }, { 8, 9, -4 }, { 8, 5, -4 }, { 5, 7, 4 },
             { 6, 7, 2 }, { 5, 6, -4 }, { 8, 4, 4 }, { 3, 8, -4 }, { 5, 2, 3 }, { 7, 9, 2 },
@@ -132,14 +121,15 @@ public class KolmogorovWeightedMatchingTest
             { 4, 1, 2 }, { 3, 4, -1 }, { 1, 3, 2 }, { 0, 6, 6 }, };
         double maxWeight = 17;
         double minWeight = -14;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Triangulation of 50 points with randomly negated edge weights
      */
-    @Test
-    public void testGetMatching6()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching6(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 48, 49, 30 }, { 48, 47, -30 }, { 48, 42, 17 },
             { 48, 40, 17 }, { 45, 40, -19 }, { 43, 44, 8 }, { 47, 49, 2 }, { 34, 47, 27 },
@@ -170,14 +160,15 @@ public class KolmogorovWeightedMatchingTest
             { 3, 6, 5 }, { 0, 3, 12 }, { 1, 2, -10 }, };
         double maxWeight = 417;
         double minWeight = -436;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Triangulation of 100 points with randomly negated edge weights
      */
-    @Test
-    public void testGetMatching7()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching7(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 97, 99, 28 }, { 99, 96, -17 }, { 99, 93, -15 },
             { 98, 99, -25 }, { 96, 94, -16 }, { 95, 97, -24 }, { 99, 92, -44 }, { 94, 99, 33 },
@@ -239,26 +230,28 @@ public class KolmogorovWeightedMatchingTest
             { 4, 1, 19 }, { 2, 4, 54 }, { 1, 2, 73 }, };
         double maxWeight = 731;
         double minWeight = -745;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 4 vertices and 4 edges
      */
-    @Test
-    public void testGetMatching8()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching8(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 7 }, { 3, 2, 9 }, { 3, 0, -8 }, { 1, 2, 7 }, };
         double maxWeight = 16;
         double minWeight = -8;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 10 vertices and 20 edges
      */
-    @Test
-    public void testGetMatching9()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching9(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 7, 10 }, { 8, 1, 10 }, { 0, 9, 10 }, { 6, 3, 10 },
             { 8, 5, 10 }, { 3, 1, 1 }, { 8, 6, -7 }, { 7, 6, -5 }, { 5, 3, 1 }, { 1, 2, -8 },
@@ -266,14 +259,15 @@ public class KolmogorovWeightedMatchingTest
             { 6, 2, 7 }, { 3, 2, 9 }, { 8, 7, -8 }, { 5, 1, 7 }, };
         double maxWeight = 39;
         double minWeight = -27;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 15 vertices and 40 edges
      */
-    @Test
-    public void testGetMatching10()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching10(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 3, 1, 0 }, { 8, 13, 10 }, { 10, 14, 8 }, { 5, 14, 6 },
             { 8, 7, 3 }, { 11, 8, 9 }, { 10, 6, -8 }, { 5, 8, -2 }, { 1, 8, -10 }, { 10, 9, -8 },
@@ -284,14 +278,15 @@ public class KolmogorovWeightedMatchingTest
             { 11, 13, 10 }, { 13, 6, -8 }, { 1, 14, 7 }, { 6, 7, 9 }, { 2, 5, -8 }, { 0, 4, 7 }, };
         double maxWeight = 64;
         double minWeight = -43;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 30 vertices and 100 edges
      */
-    @Test
-    public void testGetMatching11()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching11(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 19, 24, 6 }, { 29, 23, 5 }, { 14, 27, 9 }, { 29, 14, 4 },
             { 25, 12, 6 }, { 21, 22, 3 }, { 16, 23, 0 }, { 20, 9, -1 }, { 6, 17, -1 }, { 3, 19, 0 },
@@ -314,14 +309,15 @@ public class KolmogorovWeightedMatchingTest
             { 1, 11, 7 }, { 9, 18, 9 }, { 17, 3, -8 }, { 7, 3, 7 }, };
         double maxWeight = 112;
         double minWeight = -98;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 50 vertices and 100 edges
      */
-    @Test
-    public void testGetMatching12()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching12(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 7, 28, 6 }, { 6, 29, 5 }, { 32, 5, 9 }, { 4, 27, 4 },
             { 23, 4, 6 }, { 25, 43, 3 }, { 36, 19, 0 }, { 37, 36, -1 }, { 33, 25, -1 },
@@ -345,14 +341,15 @@ public class KolmogorovWeightedMatchingTest
             { 8, 20, 9 }, { 31, 18, -8 }, { 12, 18, 7 }, };
         double maxWeight = 146;
         double minWeight = -127;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 100 vertices and 100 edges
      */
-    @Test
-    public void testGetMatching13()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching13(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 98, 6, 6 }, { 53, 82, 5 }, { 0, 7, 9 }, { 57, 91, 4 },
             { 69, 41, 6 }, { 18, 15, 3 }, { 84, 38, 0 }, { 43, 57, -1 }, { 31, 81, -1 },
@@ -376,14 +373,15 @@ public class KolmogorovWeightedMatchingTest
             { 49, 79, -8 }, { 16, 8, 7 }, { 93, 36, 9 }, { 74, 8, -8 }, { 0, 39, 7 }, };
         double maxWeight = 208;
         double minWeight = -152;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 100 vertices and 200 edges
      */
-    @Test
-    public void testGetMatching14()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching14(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 27, 92, -22 }, { 23, 54, -33 }, { 27, 28, 46 },
             { 7, 89, -98 }, { 48, 36, -23 }, { 87, 39, -6 }, { 40, 70, -21 }, { 34, 60, 14 },
@@ -428,14 +426,15 @@ public class KolmogorovWeightedMatchingTest
             { 42, 63, -73 }, { 35, 93, 63 }, };
         double maxWeight = 2748;
         double minWeight = -2402;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 100 vertices and 400 edges
      */
-    @Test
-    public void testGetMatching15()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching15(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 96, 57, 84 }, { 82, 47, 59 }, { 13, 22, -28 },
             { 6, 17, 64 }, { 81, 24, 74 }, { 64, 41, 2 }, { 20, 28, -21 }, { 6, 42, 2 },
@@ -520,14 +519,15 @@ public class KolmogorovWeightedMatchingTest
             { 68, 62, -73 }, { 12, 51, 63 }, };
         double maxWeight = 3267;
         double minWeight = -3239;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 200 vertices and 500 edges
      */
-    @Test
-    public void testGetMatching16()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching16(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 120, 6, -58 }, { 133, 125, -8 }, { 32, 184, 94 },
             { 160, 198, -53 }, { 89, 168, -44 }, { 104, 138, 16 }, { 194, 195, -31 },
@@ -634,14 +634,15 @@ public class KolmogorovWeightedMatchingTest
             { 71, 22, 67 }, { 185, 4, 82 }, { 57, 65, -73 }, { 160, 30, 63 }, };
         double maxWeight = 5229;
         double minWeight = -5301;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 400 vertices and 1000 edges
      */
-    @Test
-    public void testGetMatching17()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching17(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 226, 265, -38 }, { 346, 351, 23 }, { 247, 266, -32 },
             { 296, 345, -49 }, { 204, 302, -87 }, { 12, 363, 67 }, { 48, 148, -98 },
@@ -868,14 +869,15 @@ public class KolmogorovWeightedMatchingTest
             { 109, 29, 63 }, };
         double maxWeight = 10613;
         double minWeight = -10726;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 500 vertices and 1500 edges
      */
-    @Test
-    public void testGetMatching18()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching18(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 183, 286, 85 }, { 469, 315, -39 }, { 347, 142, 24 },
             { 374, 143, -82 }, { 375, 437, 28 }, { 463, 13, -61 }, { 131, 93, 42 },
@@ -1226,14 +1228,15 @@ public class KolmogorovWeightedMatchingTest
             { 412, 359, -73 }, { 221, 99, 63 }, };
         double maxWeight = 14655;
         double minWeight = -14892;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Random graph with 1500 vertices and 1500 edges
      */
-    @Test
-    public void testGetMatching19()
+    @ParameterizedTest
+    @MethodSource("params")
+    public void testGetMatching19(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 678, 385, 85 }, { 786, 1109, -39 }, { 1164, 937, 24 },
             { 40, 365, -82 }, { 892, 879, 28 }, { 1284, 231, -61 }, { 812, 246, 42 },
@@ -1611,10 +1614,10 @@ public class KolmogorovWeightedMatchingTest
             { 320, 1272, 67 }, { 263, 480, 82 }, { 295, 820, -73 }, { 577, 27, 63 }, };
         double maxWeight = 23875;
         double minWeight = -24426;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
-    private void test(int[][] edges, double result, ObjectiveSense objectiveSense)
+    private void test(BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         DefaultUndirectedGraph<Integer, DefaultEdge> graph =
             (DefaultUndirectedGraph<Integer, DefaultEdge>) TestUtil.createUndirected(edges);

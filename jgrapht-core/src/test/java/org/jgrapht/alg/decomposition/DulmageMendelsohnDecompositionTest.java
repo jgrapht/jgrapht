@@ -23,10 +23,8 @@ import org.jgrapht.alg.matching.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.jupiter.api.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Parameterized.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
@@ -39,22 +37,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Peter Harman
  * @author Joris Kinable
  */
-@RunWith(Parameterized.class)
 public class DulmageMendelsohnDecompositionTest
 {
 
-    private final GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator;
-
-    public DulmageMendelsohnDecompositionTest(
-        GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator)
+    public static List<GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge>> generators()
     {
-        this.generator = generator;
-    }
-
-    @Parameters
-    public static Collection<Object[]> generators()
-    {
-        Collection<Object[]> out = new ArrayList<>();
+        List<GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge>> out = new ArrayList<>();
         Random random = new Random(1);
         for (int vertices = 20; vertices < 120; vertices++) {
             int edges = random.nextInt(maxEdges(vertices) / 2);
@@ -62,13 +50,14 @@ public class DulmageMendelsohnDecompositionTest
             GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
                 new GnmRandomBipartiteGraphGenerator<>(
                     vertices - imbalance, vertices + imbalance, edges, 0);
-            out.add(new Object[] { generator });
+            out.add(generator);
         }
         return out;
     }
 
-    @Test
-    public void testGeneratedGraph()
+    @ParameterizedTest
+    @MethodSource("generators")
+    public void testGeneratedGraph(GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator)
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
