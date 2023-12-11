@@ -28,9 +28,7 @@ import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.ConcurrencyUtil;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,14 +68,14 @@ public class TransitNodeRoutingPrecomputationTest
      */
     private static ThreadPoolExecutor executor;
 
-    @BeforeClass
+    @BeforeAll
     public static void createExecutor()
     {
         executor =
             ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
-    @AfterClass
+    @AfterAll
     public static void shutdownExecutor()
         throws InterruptedException
     {

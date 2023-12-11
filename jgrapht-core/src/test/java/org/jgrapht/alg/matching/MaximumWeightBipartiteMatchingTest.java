@@ -39,7 +39,7 @@ public class MaximumWeightBipartiteMatchingTest
 
     private MaximumWeightBipartiteMatching<String, DefaultWeightedEdge> matcher;
 
-    @Before
+    @BeforeEach
     public void setUpGraph()
     {
         graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);

@@ -50,7 +50,7 @@ public class NearestNeighborHeuristicTSPTest
     private static Graph<Vector2D, DefaultWeightedEdge> graph;
     private static List<GraphPath<Vector2D, DefaultWeightedEdge>> expectedTours;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass()
         throws Exception
     {

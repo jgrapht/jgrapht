@@ -40,7 +40,7 @@ public class MaskVertexSetTest
 
     private MaskVertexSet<String> testMaskVertexSet;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);

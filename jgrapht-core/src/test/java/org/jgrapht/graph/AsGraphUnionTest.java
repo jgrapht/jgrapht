@@ -58,7 +58,7 @@ public class AsGraphUnionTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         undirectedGraph1 = new WeightedPseudograph<>(DefaultWeightedEdge.class);

@@ -39,7 +39,7 @@ public class MaskEdgeSetTest
     private MaskEdgeSet<String, DefaultEdge> testMaskedEdgeSet;
     private DefaultDirectedGraph<String, DefaultEdge> directed;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);

@@ -119,7 +119,7 @@ public class GenericGraphsTest
     /**
      * .
      */
-    @Before
+    @BeforeEach
     public void setUp()
     {
         objectGraph = new DefaultDirectedGraph<>(DefaultEdge.class);

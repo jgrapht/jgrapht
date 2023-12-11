@@ -65,7 +65,7 @@ public class DoublyLinkedListTest
 
     private DoublyLinkedList<String> list;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         list = createDoublyLinkedList(expectedElements);

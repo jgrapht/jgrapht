@@ -561,7 +561,7 @@ public class SimpleDirectedGraphTest
         assertEquals("([v1, v2], [(v2,v1)])", r.toString());
     }
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         gEmpty = new SimpleDirectedGraph<>(

@@ -187,7 +187,7 @@ public class PalmerHamiltonianCycleTest
 
     private static Graph<Integer, DefaultEdge> bigGraph = new SimpleGraph<>(DefaultEdge.class);
 
-    @BeforeClass
+    @BeforeAll
     public static void generateBigGraph()
     {
         Random random = new Random(0xC0FFEE);

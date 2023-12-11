@@ -634,7 +634,7 @@ public class SimpleIdentityDirectedGraphTest
         assertSame(v1, r.getEdgeTarget(e));
     }
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         gEmpty = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);

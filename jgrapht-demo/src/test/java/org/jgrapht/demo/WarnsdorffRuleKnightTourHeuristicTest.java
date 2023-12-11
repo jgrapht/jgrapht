@@ -32,7 +32,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     private KnightTour container;
     private WarnsdorffRuleKnightTourHeuristic solver;
 
-    @Before
+    @BeforeEach
     public void setup()
     {
         container = new KnightTour();

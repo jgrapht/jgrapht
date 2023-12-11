@@ -43,7 +43,7 @@ public class AsUnweightedGraphTest
     /**
      * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    @Before
+    @BeforeEach
     public void setUp()
     {
         Graph<String, DefaultWeightedEdge> undirectedWeightedGraph =

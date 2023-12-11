@@ -48,7 +48,7 @@ public class DinicMFImplTest
         return new DinicMFImpl<>(network);
     }
 
-    @Before
+    @BeforeEach
     public void init()
     {
         g = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);

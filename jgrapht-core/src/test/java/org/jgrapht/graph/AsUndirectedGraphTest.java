@@ -212,7 +212,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
-    @Before
+    @BeforeEach
     public void setUp()
     {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);
