@@ -25,8 +25,6 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -174,7 +172,7 @@ public class DOTExporterTest
         graph.addVertex(quotedNodeId);
         exporter.exportGraph(graph, outputWriter);
 
-        assertThat(outputWriter.toString(), containsString("label=\"\\\"abc\\\"\""));
+        assertTrue(outputWriter.toString().contains("label=\"\\\"abc\\\"\""));
     }
 
     @Test
@@ -194,7 +192,7 @@ public class DOTExporterTest
         graph.addVertex("myVertex");
         exporter.exportGraph(graph, outputWriter);
 
-        assertThat(outputWriter.toString(), containsString("label=<<b>html label</b>>"));
+        assertTrue(outputWriter.toString().contains("label=<<b>html label</b>>"));
     }
 
     @Test
