@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SimpleGraphMLImporterTest
 {
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     @Test
     public void testUndirectedUnweighted()

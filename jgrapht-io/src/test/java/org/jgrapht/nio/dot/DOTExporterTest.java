@@ -25,6 +25,7 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -40,7 +41,7 @@ public class DOTExporterTest
     private static final String V2 = "v2";
     private static final String V3 = "v3";
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     private static final String UNDIRECTED = "graph G {" + NL + "  1 [ label=\"a\" ];" + NL
         + "  2 [ x=\"y\" ];" + NL + "  3;" + NL + "  1 -- 2;" + NL + "  3 -- 1;" + NL + "}" + NL;
@@ -98,7 +99,7 @@ public class DOTExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals((strict) ? "strict " + UNDIRECTED : UNDIRECTED, res);
     }
 
@@ -122,7 +123,7 @@ public class DOTExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(
             (strict) ? "strict " + UNDIRECTED_WITH_GRAPH_ATTRIBUTES
                 : UNDIRECTED_WITH_GRAPH_ATTRIBUTES,
@@ -210,7 +211,7 @@ public class DOTExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(correctResult, res);
     }
 

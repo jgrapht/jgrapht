@@ -25,6 +25,7 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -44,7 +45,7 @@ public class GmlExporterTest
     private static final String V4 = "v4";
     private static final String V5 = "v5";
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     // @formatter:off
     private static final String UNDIRECTED =
@@ -339,7 +340,7 @@ public class GmlExporterTest
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED, res);
     }
 
@@ -359,7 +360,7 @@ public class GmlExporterTest
         exporter.setVertexGraphicsAttributeProvider(v -> Map.of("fill", DefaultAttribute.createAttribute("#FF0000")));
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_GRAPHICS_SECTION, res);
     }
 
@@ -379,7 +380,7 @@ public class GmlExporterTest
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED, res);
     }
 
@@ -403,7 +404,7 @@ public class GmlExporterTest
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(DIRECTED, res);
     }
 
@@ -426,7 +427,7 @@ public class GmlExporterTest
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WEIGHTED, res);
     }
 
@@ -450,7 +451,7 @@ public class GmlExporterTest
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WEIGHTED_WITH_EDGE_LABELS, res);
     }
 
@@ -473,7 +474,7 @@ public class GmlExporterTest
         exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WITH_VERTEX_LABELS, res);
     }
 
@@ -545,7 +546,7 @@ public class GmlExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WITH_VERTEX_LABELS_AND_CUSTOM_ATTRIBUTES, res);
     }
 

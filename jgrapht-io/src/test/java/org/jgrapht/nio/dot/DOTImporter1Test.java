@@ -26,6 +26,7 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -279,7 +280,7 @@ public class DOTImporter1Test
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(start, os);
-        String output = new String(os.toByteArray(), "UTF-8");
+        String output = new String(os.toByteArray(), UTF_8);
 
         DirectedMultigraph<String, DefaultEdge> result = new DirectedMultigraph<>(
             SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);

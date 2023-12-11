@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -481,7 +482,7 @@ public class GmlImporterTest
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g1, os);
-        String output = new String(os.toByteArray(), "UTF-8");
+        String output = new String(os.toByteArray(), UTF_8);
 
         Graph<String, DefaultWeightedEdge> g2 =
             readGraph(output, DefaultWeightedEdge.class, true, true);

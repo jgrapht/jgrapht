@@ -25,9 +25,9 @@ import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
-import java.nio.charset.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GraphMLImporterTest
 {
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     @Test
     public void testUndirectedUnweighted()
@@ -104,7 +104,7 @@ public class GraphMLImporterTest
 
         GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<>();
         importer.setVertexFactory(id -> String.valueOf("node" + id));
-        importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        importer.importGraph(g, new ByteArrayInputStream(input.getBytes(UTF_8)));
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -140,7 +140,7 @@ public class GraphMLImporterTest
 
         Graph<String,
             DefaultEdge> g = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false, false);
 
         assertEquals(3, g.vertexSet().size());
@@ -801,7 +801,7 @@ public class GraphMLImporterTest
         GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g1, os);
-        String output = new String(os.toByteArray(), "UTF-8");
+        String output = new String(os.toByteArray(), UTF_8);
 
         Graph<String, DefaultEdge> g2 = readGraph(output, DefaultEdge.class, true, false);
 

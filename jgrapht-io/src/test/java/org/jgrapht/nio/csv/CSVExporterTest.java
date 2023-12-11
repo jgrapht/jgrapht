@@ -36,7 +36,7 @@ public class CSVExporterTest
     // ~ Static fields/initializers
     // ---------------------------------------------
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
     private static final Function<Integer, String> NAME_PROVIDER = v -> String.valueOf(v);
 
     // @formatter:off

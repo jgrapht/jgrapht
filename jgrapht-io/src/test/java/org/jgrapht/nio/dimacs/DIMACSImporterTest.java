@@ -25,8 +25,8 @@ import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
-import java.nio.charset.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -45,11 +45,7 @@ public class DIMACSImporterTest
             .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(edgeClass).buildGraph();
 
         DIMACSImporter<Integer, E> importer = new DIMACSImporter<>();
-        try {
-            importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            // cannot happen
-        }
+        importer.importGraph(g, new InputStreamReader(in, UTF_8));
 
         return g;
     }
@@ -111,7 +107,7 @@ public class DIMACSImporterTest
 
         Graph<Integer,
             DefaultWeightedEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                new ByteArrayInputStream(input.getBytes(UTF_8)),
                 DefaultWeightedEdge.class, false);
 
         assertEquals(3, graph.vertexSet().size());
@@ -143,13 +139,9 @@ public class DIMACSImporterTest
 
         DIMACSImporter<Integer, DefaultWeightedEdge> importer = new DIMACSImporter<>();
         importer.setVertexFactory(id -> id + 100);
-        try {
-            importer.importGraph(
-                graph, new InputStreamReader(
-                    new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            // cannot happen
-        }
+        importer.importGraph(
+            graph, new InputStreamReader(
+                    new ByteArrayInputStream(input.getBytes(UTF_8)), UTF_8));
 
         assertEquals(3, graph.vertexSet().size());
         assertEquals(3, graph.edgeSet().size());
@@ -173,7 +165,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {
@@ -191,7 +183,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {
@@ -210,7 +202,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {
@@ -229,7 +221,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {

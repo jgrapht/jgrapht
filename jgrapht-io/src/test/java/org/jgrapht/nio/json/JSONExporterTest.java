@@ -28,6 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -63,7 +64,7 @@ public class JSONExporterTest
         exporter.setEdgeIdProvider(new IntegerIdProvider<>(1));
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(expected, res);
     }
 
@@ -136,7 +137,7 @@ public class JSONExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(expected, res);
     }
 
@@ -194,7 +195,7 @@ public class JSONExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(expected, res);
     }
 
@@ -370,7 +371,7 @@ public class JSONExporterTest
         exporter.setEdgeIdProvider(new IntegerIdProvider<>(1));
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(expected, res);
     }
 

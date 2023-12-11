@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class CSVImporterTest
 {
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     public <E> Graph<String, E> readGraph(
         String input, CSVFormat format, Character delimiter, Class<E> edgeClass, boolean directed,

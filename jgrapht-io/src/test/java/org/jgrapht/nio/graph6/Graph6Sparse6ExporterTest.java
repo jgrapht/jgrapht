@@ -25,9 +25,9 @@ import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
-import java.nio.charset.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -203,7 +203,7 @@ public class Graph6Sparse6ExporterTest
         Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(format);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        return new String(os.toByteArray(), "UTF-8");
+        return new String(os.toByteArray(), UTF_8);
     }
 
     private Graph<Integer, DefaultEdge> importGraph(String g6)
@@ -212,7 +212,7 @@ public class Graph6Sparse6ExporterTest
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         Graph6Sparse6Importer<Integer, DefaultEdge> importer = new Graph6Sparse6Importer<>();
-        importer.importGraph(g, new ByteArrayInputStream(g6.getBytes(StandardCharsets.UTF_8)));
+        importer.importGraph(g, new ByteArrayInputStream(g6.getBytes(UTF_8)));
         return g;
     }
 

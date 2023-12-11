@@ -28,6 +28,7 @@ import org.xmlunit.diff.*;
 import java.io.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -46,7 +47,7 @@ public class GraphMLExporterTest
     private static final String V2 = "v2";
     private static final String V3 = "v3";
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     // ~ Methods
     // ----------------------------------------------------------------
@@ -83,7 +84,7 @@ public class GraphMLExporterTest
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -126,7 +127,7 @@ public class GraphMLExporterTest
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -166,7 +167,7 @@ public class GraphMLExporterTest
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -209,7 +210,7 @@ public class GraphMLExporterTest
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -255,7 +256,7 @@ public class GraphMLExporterTest
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -303,7 +304,7 @@ public class GraphMLExporterTest
         exporter.setEdgeWeightAttributeName("value");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -406,7 +407,7 @@ public class GraphMLExporterTest
         exporter.setExportEdgeLabels(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -487,7 +488,7 @@ public class GraphMLExporterTest
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -588,7 +589,7 @@ public class GraphMLExporterTest
             "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -646,7 +647,7 @@ public class GraphMLExporterTest
             "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();

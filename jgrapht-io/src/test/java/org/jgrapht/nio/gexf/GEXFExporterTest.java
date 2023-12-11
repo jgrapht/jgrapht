@@ -30,6 +30,7 @@ import org.xmlunit.diff.*;
 import java.io.*;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
@@ -39,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 public class GEXFExporterTest
 {
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     // ~ Methods
     // ----------------------------------------------------------------
@@ -136,7 +137,7 @@ public class GEXFExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
@@ -239,7 +240,7 @@ public class GEXFExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
