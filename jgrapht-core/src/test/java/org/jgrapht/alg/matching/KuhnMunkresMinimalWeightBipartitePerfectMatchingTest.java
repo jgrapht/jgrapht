@@ -153,7 +153,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        assertTrue(15, w);
+        assertEquals(15, w);
 
     }
 
