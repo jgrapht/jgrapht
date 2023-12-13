@@ -133,7 +133,7 @@ public class SimpleGraphMLEdgeListImporterTest
             assertEquals(edge[0], e.getFirst());
             assertEquals(edge[1], e.getSecond());
             if (i < 2) {
-                assertEquals(edge[2], collected.get(i).getThird());
+                assertEquals(edge[2].intValue(), collected.get(i).getThird());
             } else {
                 assertNull(e.getThird());
 
