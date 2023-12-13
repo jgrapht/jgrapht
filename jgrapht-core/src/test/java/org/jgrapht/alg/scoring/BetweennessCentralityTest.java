@@ -568,7 +568,7 @@ public class BetweennessCentralityTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testIgnoreOverflow()
     {
         final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);

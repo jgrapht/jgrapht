@@ -23,7 +23,6 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -39,7 +38,7 @@ public class FloydWarshallPseudographsTest
 {
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomGraphs()
     {
         final int tests = 20;

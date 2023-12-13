@@ -23,7 +23,6 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -179,7 +178,7 @@ public class AHUForestIsomorphismInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeNumberOfChildren()
     {
         final int n = 100_000;
@@ -209,7 +208,7 @@ public class AHUForestIsomorphismInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomForests()
     {
         Random random = new Random(0x2312);
@@ -242,7 +241,7 @@ public class AHUForestIsomorphismInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeRandomForest()
     {
         final int n = 50_000;

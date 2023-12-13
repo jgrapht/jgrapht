@@ -20,7 +20,6 @@ package org.jgrapht.alg.tour;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 
@@ -128,7 +127,7 @@ public class PalmerHamiltonianCycleTest
      * graph doesn't have Ore's property
      */
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomGraphs()
     {
         testRandomGraphs(new Random(0xC0FFEE));
@@ -179,7 +178,7 @@ public class PalmerHamiltonianCycleTest
      * each node has (n+1)/2 neighbours
      */
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomGraphs2FixedSeed()
     {
         testRandomGraphs2(new Random(0xBEEF));
@@ -221,7 +220,7 @@ public class PalmerHamiltonianCycleTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testBigGraph()
     {
         GraphPath<Integer, DefaultEdge> tour =

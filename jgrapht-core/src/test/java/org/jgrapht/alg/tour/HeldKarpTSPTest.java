@@ -20,7 +20,6 @@ package org.jgrapht.alg.tour;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Alexandru Valeanu
  *
  */
-@Category(SlowTests.class)
+@Tag("slow")
 public class HeldKarpTSPTest
 {
     static Graph<String, DefaultWeightedEdge> directedGraph()

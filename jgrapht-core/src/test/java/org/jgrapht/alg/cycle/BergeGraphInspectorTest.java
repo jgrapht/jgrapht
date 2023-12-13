@@ -22,7 +22,6 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 
@@ -428,7 +427,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void checkMoebiusKantorGraph()
     {
         reset();
@@ -483,7 +482,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void checkFranklinGraph()
     {
         reset();
@@ -502,7 +501,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void checkGoldnerHararyGraph()
     {
         reset();
@@ -512,7 +511,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void checkHeawoodGraph()
     {
         reset();
@@ -522,7 +521,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void checkHerschelGraph()
     {
         reset();
@@ -532,7 +531,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void checkKrackhardtKiteGraph()
     {
         reset();
@@ -551,7 +550,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void checkPappusGraph()
     {
         reset();
@@ -600,7 +599,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void checkBipartiteGraphs()
     {
         int repititions = repititionsPerTestCase;
@@ -622,7 +621,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void checkWheelGraphs()
     {
 
@@ -660,7 +659,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void checkWindmillGraphs()
     {
         int repititions = repititionsPerTestCase;

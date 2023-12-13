@@ -153,14 +153,14 @@ public class MaximumWeightBipartiteMatchingTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomInstancesFixedSeed()
     {
         testRandomInstance(new Random(17), 100, 0.7, 2);
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomInstances()
     {
         Random rng = new Random();

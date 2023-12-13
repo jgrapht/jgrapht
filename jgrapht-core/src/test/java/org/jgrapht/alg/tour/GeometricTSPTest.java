@@ -25,7 +25,6 @@ import org.jgrapht.graph.builder.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 import java.util.PrimitiveIterator.*;
@@ -38,7 +37,7 @@ import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
  *
  * @author Peter Harman
  */
-@Category(SlowTests.class)
+@Tag("slow")
 public class GeometricTSPTest
 {
 

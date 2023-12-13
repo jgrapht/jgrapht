@@ -23,7 +23,6 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * 
  * @author Dimitrios Michail
  */
-@Category(SlowTests.class)
+@Tag("slow")
 public class TwoOptHeuristicTSPTest
 {
 

@@ -19,7 +19,6 @@ package org.jgrapht.util;
 
 import org.jgrapht.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 
@@ -95,14 +94,14 @@ public class RadixSortTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomArrays()
     {
         testRandomArrays(new Random(0x88));
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomArraysWithNoFixedSeed()
     {
         testRandomArrays(new Random());

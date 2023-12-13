@@ -24,7 +24,6 @@ import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -334,7 +333,7 @@ public class HeavyPathDecompositionTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomTrees()
     {
         final int numTests = 100;
@@ -359,7 +358,7 @@ public class HeavyPathDecompositionTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomForests()
     {
         final int numTests = 1000;
@@ -389,7 +388,7 @@ public class HeavyPathDecompositionTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeTree()
     {
         Random random = new Random(0x118811);

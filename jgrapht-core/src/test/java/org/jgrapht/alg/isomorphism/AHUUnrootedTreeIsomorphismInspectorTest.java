@@ -22,7 +22,6 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.util.*;
 
@@ -364,7 +363,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testLineGraph()
     {
         final int n = 20_000;
@@ -393,7 +392,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeNumberOfChildren()
     {
         final int n = 100_000;
@@ -421,7 +420,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeRandomTree()
     {
         final int n = 50_000;
