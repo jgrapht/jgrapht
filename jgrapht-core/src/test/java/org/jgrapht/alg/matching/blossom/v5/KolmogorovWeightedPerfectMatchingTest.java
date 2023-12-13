@@ -1972,7 +1972,7 @@ public class KolmogorovWeightedPerfectMatchingTest
         double maxWeight = 10;
         double minWeight = 5;
         test(
-            new WeightedPseudograph<>(DefaultEdge.class), edges,
+            options, new WeightedPseudograph<>(DefaultEdge.class), edges,
             objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
@@ -1989,7 +1989,7 @@ public class KolmogorovWeightedPerfectMatchingTest
         double maxWeight = 13;
         double minWeight = 6;
         test(
-            new WeightedPseudograph<>(DefaultEdge.class), edges,
+            options, new WeightedPseudograph<>(DefaultEdge.class), edges,
             objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
