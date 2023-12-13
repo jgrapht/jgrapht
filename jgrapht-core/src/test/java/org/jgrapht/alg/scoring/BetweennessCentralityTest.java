@@ -24,7 +24,6 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.Category;
 
 import java.util.*;
 

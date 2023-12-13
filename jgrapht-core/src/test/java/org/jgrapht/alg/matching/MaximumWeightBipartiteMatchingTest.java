@@ -22,7 +22,6 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.categories.*;
 
 import java.math.*;
 import java.util.*;
