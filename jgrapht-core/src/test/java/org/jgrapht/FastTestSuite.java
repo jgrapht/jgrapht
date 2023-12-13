@@ -17,18 +17,15 @@
  */
 package org.jgrapht;
 
-import com.googlecode.junittoolbox.*;
-import org.junit.experimental.categories.*;
-import org.junit.runner.*;
+import org.junit.platform.suite.api.*;
 
 /**
  * Suite of fast unit tests only (as run by mvn test).
  * 
  * @author John Sichi
  */
-@RunWith(ParallelSuite.class)
-@Categories.ExcludeCategory({ SlowTests.class, OptionalTests.class })
-@SuiteClasses({ "**/*Test.class", "!**/perf/**" })
+@ExcludePackages({"org.jgrapht.perf"})
+@ExcludeTags({ "slow", "optional" })
 public class FastTestSuite
 {
 }

@@ -17,17 +17,14 @@
  */
 package org.jgrapht;
 
-import com.googlecode.junittoolbox.*;
-import org.junit.runner.*;
+import org.junit.platform.suite.api.*;
 
 /**
- * Suite of performance tests only. We use WildcardPatternSuite instead of ParallelSuite to avoid
- * running multiple benchmark tests simultaneously.
+ * Suite of performance tests only.
  * 
  * @author John Sichi
  */
-@RunWith(WildcardPatternSuite.class)
-@SuiteClasses({ "**/perf/**/*Test.class" })
+@IncludePackages({"org.jgrapht.perf"})
 public class PerformanceTestSuite
 {
 }

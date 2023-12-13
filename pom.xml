@@ -74,8 +74,8 @@
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
         <jmh.version>1.36</jmh.version>
-        <junit-toolbox.version>2.4</junit-toolbox.version>
         <junit.version>5.10.1</junit.version>
+        <junit.platform.version>1.10.1</junit.platform.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
         <maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
@@ -216,10 +216,10 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                    <groupId>com.googlecode.junit-toolbox</groupId>
-                    <artifactId>junit-toolbox</artifactId>
-                    <version>${junit-toolbox.version}</version>
-                    <scope>test</scope>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-suite-engine</artifactId>
+                <version>${junit.platform.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
