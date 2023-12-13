@@ -71,6 +71,7 @@
         <dsiutils.version>2.7.3</dsiutils.version>
         <fastutil.version>8.5.12</fastutil.version>
         <guava.version>32.1.1-jre</guava.version>
+        <hamcrest.version>2.2</hamcrest.version>
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
         <jmh.version>1.36</jmh.version>
@@ -219,6 +220,12 @@
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-suite-engine</artifactId>
                 <version>${junit.platform.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
