@@ -40,7 +40,7 @@ public class BlossomVDualUpdaterTest
 
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
-    @org.junit.Test
+    @Test
     public void testUpdateDuals1()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
