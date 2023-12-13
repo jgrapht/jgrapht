@@ -81,10 +81,7 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <excludes>
-                                <exclude>**/perf/**</exclude>
-                            </excludes>
-                            <excludedGroups>${excludedGroups}</excludedGroups>
+                            <test>FastTestSuite</test>
                         </configuration>
                     </execution>
                 </executions>
@@ -93,11 +90,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <groups>org.jgrapht.SlowTests</groups>
-                    <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
+                    <test>IntegrationTestSuite</test>
                 </configuration>
             </plugin>
         </plugins>
