@@ -83,7 +83,7 @@
         <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-        <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
+        <maven-failsafe-plugin.version>3.2.2</maven-failsafe-plugin.version>
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
@@ -269,14 +269,14 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                     <version>${maven-failsafe-plugin.version}</version>
-                     <dependencies>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.surefire</groupId>
                             <artifactId>surefire-junit-platform</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
+                            <version>${maven-surefire-plugin.version}</version>
                         </dependency>
-                     </dependencies>
+                    </dependencies>
                     <executions>
                         <execution>
                             <id>integration-test</id>
