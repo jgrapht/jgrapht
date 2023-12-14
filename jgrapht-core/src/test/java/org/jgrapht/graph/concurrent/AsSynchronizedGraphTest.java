@@ -17,13 +17,11 @@
  */
 package org.jgrapht.graph.concurrent;
 
-import junit.extensions.*;
-import junit.framework.*;
-import junit.textui.*;
 import org.jgrapht.graph.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,17 +32,23 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class AsSynchronizedGraphTest
 {
-    private ArrayList<Integer> vertices;
-    private ArrayList<DefaultEdge> edges;
+    private List<Integer> vertices;
+    private List<DefaultEdge> edges;
     private AsSynchronizedGraph<Integer, DefaultEdge> g;
-    private Vector<ArrayList<Order>> ordersList;
+    private List<List<Order>> ordersList;
+
+    @BeforeEach
+    public void setup() {
+        vertices = Collections.synchronizedList(new ArrayList<>());
+        edges = Collections.synchronizedList(new ArrayList<>());
+        ordersList = Collections.synchronizedList(new ArrayList<>());
+    }
 
     @Test
     public void testAddVertex()
     {
         g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
             .build(new SimpleGraph<>(DefaultEdge.class));
-        ordersList = new Vector<>();
         for (int i = 0; i < 20; i++) {
             ordersList.add(new ArrayList<>());
         }
@@ -52,10 +56,10 @@ public class AsSynchronizedGraphTest
             int index = (int) (Math.random() * ordersList.size());
             ordersList.get(index).add(new AddV(i));
         }
-        TestSuite ts = new ActiveTestSuite();
-        for (int i = 0; i < ordersList.size(); i++)
-            ts.addTest(new TestThread("runAsThread"));
-        TestRunner.run(ts);
+        ordersList.parallelStream().forEach(orders -> {
+            for (Order o : orders)
+                o.execute();
+        });
         assertEquals(1000, g.vertexSet().size());
         for (int i = 0; i < 1000; i++) {
             assertTrue(g.containsVertex(i));
@@ -74,7 +78,6 @@ public class AsSynchronizedGraphTest
         ArrayList<DefaultEdge> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
-        ordersList = new Vector<>();
         for (int i = 0; i < 20; i++) {
             ordersList.add(new ArrayList<>());
         }
@@ -84,10 +87,10 @@ public class AsSynchronizedGraphTest
             ordersList.get(index).add(new AddE(i, (i + 1) % 1000, e));
             list.add(e);
         }
-        TestSuite ts = new ActiveTestSuite();
-        for (int i = 0; i < ordersList.size(); i++)
-            ts.addTest(new TestThread("runAsThread"));
-        TestRunner.run(ts);
+        ordersList.parallelStream().forEach(orders -> {
+            for (Order o : orders)
+                o.execute();
+        });
         assertEquals(1000, g.edgeSet().size());
         for (int i = 0; i < 1000; i++)
             assertTrue(g.containsEdge(list.get(i)));
@@ -108,8 +111,6 @@ public class AsSynchronizedGraphTest
     {
         g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
             .cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
-        edges = new ArrayList<>();
-        TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 1000; i++) {
             g.addVertex(i);
         }
@@ -118,10 +119,23 @@ public class AsSynchronizedGraphTest
             g.addEdge(i, (i + 1) % 1000, e);
             edges.add(e);
         }
-        for (int i = 0; i < 5; i++) {
-            ts.addTest(new TestThread("removeEdge"));
+        final AtomicInteger threadCounter = new AtomicInteger(5);
+        for (int i = 0; i < threadCounter.get(); i++) {
+            new Thread(() -> {
+                while (true) {
+                    DefaultEdge e;
+                    if (edges.size() > 400)
+                        e = edges.remove(0);
+                    else {
+                        threadCounter.decrementAndGet();
+                        return;
+                    }
+                    g.removeEdge(e);
+                }
+            }).start();
         }
-        TestRunner.run(ts);
+        while (threadCounter.get() > 0) {
+        }
         assertEquals(400, g.edgeSet().size());
         assertEquals(400, iteratorCnt(g.edgeSet().iterator()));
         g.removeEdge(edges.get(0));
@@ -135,8 +149,6 @@ public class AsSynchronizedGraphTest
     {
         g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
             .cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
-        vertices = new ArrayList<>();
-        TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 100; i++) {
             g.addVertex(i);
             vertices.add(i);
@@ -144,10 +156,23 @@ public class AsSynchronizedGraphTest
         for (int i = 0; i < 100; i++)
             for (int j = 0; j < 100; j++)
                 g.addEdge(i, j);
-        ts.addTest(new TestThread("removeVertex"));
-        ts.addTest(new TestThread("removeVertex"));
-        ts.addTest(new TestThread("removeVertex"));
-        TestRunner.run(ts);
+        final AtomicInteger threadCounter = new AtomicInteger(3);
+        for (int i = 0; i < threadCounter.get(); i++) {
+            new Thread(() -> {
+                while (true) {
+                    int c;
+                    if (vertices.size() > 10)
+                        c = vertices.remove(0);
+                    else {
+                        threadCounter.decrementAndGet();
+                        return;
+                    }
+                    g.removeVertex(c);
+                }
+            }).start();
+        }
+        while (threadCounter.get() > 0) {
+        }
         assertEquals(10, g.vertexSet().size());
         assertEquals(10, iteratorCnt(g.vertexSet().iterator()));
         assertEquals(100, g.edgeSet().size());
@@ -224,7 +249,6 @@ public class AsSynchronizedGraphTest
     public void testScenario()
     {
         g = new AsSynchronizedGraph<>(new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class));
-        TestSuite ts = new ActiveTestSuite();
         ArrayList<Order> order1 = new ArrayList<>();
         ArrayList<Order> order2 = new ArrayList<>();
         ArrayList<Order> order3 = new ArrayList<>();
@@ -246,14 +270,14 @@ public class AsSynchronizedGraphTest
         for (int i = 30; i < 60; i++)
             order4.add(new AddV(i));
         createOrder(order4, 30, 60, true); // add 435 edges
-        ordersList = new Vector<>();
         ordersList.add(order1);
         ordersList.add(order2);
         ordersList.add(order3);
         ordersList.add(order4);
-        for (int i = 0; i < ordersList.size(); i++)
-            ts.addTest(new TestThread("runAsThread"));
-        TestRunner.run(ts);
+        ordersList.parallelStream().forEach(orders -> {
+            for (Order o : orders)
+                o.execute();
+        });
         assertFalse(g.isCacheEnabled());
         assertEquals(60, g.vertexSet().size());
         assertEquals(60, iteratorCnt(g.vertexSet().iterator()));
@@ -275,14 +299,14 @@ public class AsSynchronizedGraphTest
             order3.add(new RmV(i));
         for (int i = 30; i < 40; i++) // rm 10 vertices
             order3.add(new RmV(i));
-        ts = new ActiveTestSuite();
         ordersList.clear();
         ordersList.add(order1);
         ordersList.add(order2);
         ordersList.add(order3);
-        for (int i = 0; i < ordersList.size(); i++)
-            ts.addTest(new TestThread("runAsThread"));
-        TestRunner.run(ts);
+        ordersList.parallelStream().forEach(orders -> {
+            for (Order o : orders)
+                o.execute();
+        });
         assertEquals(38, g.vertexSet().size());
         assertEquals(190, g.edgeSet().size());
         assertEquals(0, g.edgesOf(2).size());
@@ -294,21 +318,51 @@ public class AsSynchronizedGraphTest
     {
         g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
             .setCopyless().build(new Pseudograph<>(DefaultEdge.class));
-        vertices = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             g.addVertex(i);
             vertices.add(i);
         }
-        edges = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             DefaultEdge e = new DefaultEdge();
             g.addEdge(i, (i + 1) % 1000, e);
             edges.add(e);
         }
-        TestSuite ts = new ActiveTestSuite();
-        ts.addTest(new TestThread("verifyEdges"));
-        ts.addTest(new TestThread("removeEdge"));
-        TestRunner.run(ts);
+        final AtomicInteger count = new AtomicInteger(2);
+        new Thread(() -> {
+            while (true) {
+                int c;
+                if (vertices.size() > 10)
+                    c = vertices.remove(0);
+                else {
+                    count.decrementAndGet();
+                    return;
+                }
+                g.getLock().readLock().lock();
+                try {
+                    for (DefaultEdge e : g.edgesOf(c)) {
+                        assertTrue(g.containsEdge(e));
+                    }
+                } finally {
+                    g.getLock().readLock().unlock();
+                }
+            }
+        }, "verifyEdges").run();
+        new Thread(() -> {
+            while (count.get() > 1) {
+            }
+            while (true) {
+                DefaultEdge e;
+                if (edges.size() > 400)
+                        e = edges.remove(0);
+                else {
+                    count.decrementAndGet();
+                    return;
+                }
+                g.removeEdge(e);
+            }
+        }, "removeEdge").run();
+        while(count.get() > 0) {
+        }
     }
 
     private void createOrder(ArrayList<Order> list, int start, int end, boolean add)
@@ -323,6 +377,7 @@ public class AsSynchronizedGraphTest
         }
     }
 
+    @FunctionalInterface
     private interface Order
     {
         void execute();
@@ -420,86 +475,5 @@ public class AsSynchronizedGraphTest
             count++;
         }
         return count;
-    }
-
-    public class TestThread
-        extends TestCase
-    {
-        public TestThread(String s)
-        {
-            super(s);
-        }
-
-        public void addVertex()
-        {
-            while (true) {
-                int id;
-                synchronized (vertices) {
-                    if (vertices.size() != 0)
-                        id = vertices.remove(0);
-                    else
-                        return;
-                }
-                g.addVertex(id);
-            }
-        }
-
-        public void removeEdge()
-        {
-            while (true) {
-                DefaultEdge e;
-                synchronized (edges) {
-                    if (edges.size() > 400)
-                        e = edges.remove(0);
-                    else
-                        return;
-                }
-                g.removeEdge(e);
-            }
-        }
-
-        public void verifyEdges()
-        {
-            while (true) {
-                int c;
-                synchronized (vertices) {
-                    if (vertices.size() > 10) {
-                        c = vertices.remove(0);
-                    } else {
-                        return;
-                    }
-                }
-                g.getLock().readLock().lock();
-                try {
-                    for (DefaultEdge e : g.edgesOf(c)) {
-                        assertTrue(g.containsEdge(e));
-                    }
-                } finally {
-                    g.getLock().readLock().unlock();
-                }
-            }
-        }
-
-        public void removeVertex()
-        {
-            while (true) {
-                int c;
-                synchronized (vertices) {
-                    if (vertices.size() > 10)
-                        c = vertices.remove(0);
-                    else
-                        return;
-                }
-                g.removeVertex(c);
-            }
-        }
-
-        public void runAsThread()
-        {
-            List<Order> orders = ordersList.remove(0);
-            for (Order o : orders) {
-                o.execute();
-            }
-        }
     }
 }
