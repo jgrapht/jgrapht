@@ -204,7 +204,7 @@ public class AVLTreeTest
             assertTrue(it.hasNext());
             TreeNode<Integer> node = it.next();
 
-            assertEquals(i, node.getValue().intValue());
+            assertEquals(i, node.getValue());
         }
     }
 

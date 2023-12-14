@@ -77,15 +77,15 @@ public class SuccinctIntDirectedGraphTest
         assertEquals(2, s.inDegreeOf(3));
         assertEquals(1, s.inDegreeOf(4));
 
-        assertEquals(0, s.getEdge(0, 1).intValue());
-        assertEquals(1, s.getEdge(0, 2).intValue());
-        assertEquals(2, s.getEdge(1, 2).intValue());
-        assertEquals(3, s.getEdge(2, 1).intValue());
-        assertEquals(4, s.getEdge(2, 3).intValue());
-        assertEquals(5, s.getEdge(3, 0).intValue());
-        assertEquals(6, s.getEdge(3, 3).intValue());
-        assertEquals(7, s.getEdge(3, 4).intValue());
-        assertEquals(8, s.getEdge(4, 1).intValue());
+        assertEquals(0, s.getEdge(0, 1));
+        assertEquals(1, s.getEdge(0, 2));
+        assertEquals(2, s.getEdge(1, 2));
+        assertEquals(3, s.getEdge(2, 1));
+        assertEquals(4, s.getEdge(2, 3));
+        assertEquals(5, s.getEdge(3, 0));
+        assertEquals(6, s.getEdge(3, 3));
+        assertEquals(7, s.getEdge(3, 4));
+        assertEquals(8, s.getEdge(4, 1));
 
         assertNull(s.getEdge(0, 0));
         assertNull(s.getEdge(0, 3));
@@ -131,20 +131,20 @@ public class SuccinctIntDirectedGraphTest
         assertFalse(s.containsEdge(4, 2));
         assertFalse(s.containsEdge(4, 3));
 
-        assertEquals(0, s.getEdgeSource(0).intValue());
-        assertEquals(1, s.getEdgeTarget(0).intValue());
+        assertEquals(0, s.getEdgeSource(0));
+        assertEquals(1, s.getEdgeTarget(0));
 
-        assertEquals(0, s.getEdgeSource(1).intValue());
-        assertEquals(2, s.getEdgeTarget(1).intValue());
+        assertEquals(0, s.getEdgeSource(1));
+        assertEquals(2, s.getEdgeTarget(1));
 
-        assertEquals(1, s.getEdgeSource(2).intValue());
-        assertEquals(2, s.getEdgeTarget(2).intValue());
+        assertEquals(1, s.getEdgeSource(2));
+        assertEquals(2, s.getEdgeTarget(2));
 
-        assertEquals(2, s.getEdgeSource(3).intValue());
-        assertEquals(1, s.getEdgeTarget(3).intValue());
+        assertEquals(2, s.getEdgeSource(3));
+        assertEquals(1, s.getEdgeTarget(3));
 
-        assertEquals(2, s.getEdgeSource(4).intValue());
-        assertEquals(3, s.getEdgeTarget(4).intValue());
+        assertEquals(2, s.getEdgeSource(4));
+        assertEquals(3, s.getEdgeTarget(4));
 
         assertEquals(IntSets.fromTo(0, 2), s.outgoingEdgesOf(0));
         assertEquals(IntSets.fromTo(2, 3), s.outgoingEdgesOf(1));
@@ -210,12 +210,12 @@ public class SuccinctIntDirectedGraphTest
         d.addEdge(0, 1);
         d.addEdge(2, 0);
         final SuccinctIntDirectedGraph s = new SuccinctIntDirectedGraph(d);
-        assertEquals(0, s.getEdge(0, 1).intValue());
-        assertEquals(1, s.getEdge(2, 0).intValue());
-        assertEquals(0, s.getEdgeSource(0).intValue());
-        assertEquals(1, s.getEdgeTarget(0).intValue());
-        assertEquals(2, s.getEdgeSource(1).intValue());
-        assertEquals(0, s.getEdgeTarget(1).intValue());
+        assertEquals(0, s.getEdge(0, 1));
+        assertEquals(1, s.getEdge(2, 0));
+        assertEquals(0, s.getEdgeSource(0));
+        assertEquals(1, s.getEdgeTarget(0));
+        assertEquals(2, s.getEdgeSource(1));
+        assertEquals(0, s.getEdgeTarget(1));
     }
 
     @Test

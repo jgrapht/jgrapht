@@ -113,7 +113,7 @@ public abstract class MaximumFlowAlgorithmTest
         Double flowValue = maxFlow.getValue();
         Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlowMap();
 
-        assertEquals(expectedResult, flowValue.intValue());
+        assertEquals(expectedResult, flowValue);
 
         // Verify that every edge is contained in the flow map
         for (DefaultWeightedEdge e : graph.edgeSet())

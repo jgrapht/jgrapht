@@ -94,7 +94,7 @@ public class SparseIntGraphTest
 
         Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
 
-        assertEquals(vertexCount.intValue(), g.vertexSet().size());
+        assertEquals(vertexCount, g.vertexSet().size());
         assertTrue(g.containsVertex(0));
         assertTrue(g.containsVertex(1));
         assertTrue(g.containsVertex(2));
@@ -401,7 +401,7 @@ public class SparseIntGraphTest
 
         Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
 
-        assertEquals(vertexCount.intValue(), g.vertexSet().size());
+        assertEquals(vertexCount, g.vertexSet().size());
         assertEquals(edges.size(), g.edgeSet().size());
 
         assertEquals(
@@ -545,7 +545,7 @@ public class SparseIntGraphTest
 
         Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
 
-        assertEquals(vertexCount.intValue(), g.vertexSet().size());
+        assertEquals(vertexCount, g.vertexSet().size());
         assertEquals(edges.size(), g.edgeSet().size());
 
         assertEquals(

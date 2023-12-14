@@ -178,17 +178,17 @@ public class FloydWarshallPseudographsTest
 
         // test first hop
         assertNull(fw.getFirstHop(1, 1));
-        assertEquals(2, fw.getFirstHop(1, 2).intValue());
-        assertEquals(2, fw.getFirstHop(1, 3).intValue());
-        assertEquals(2, fw.getFirstHop(1, 4).intValue());
+        assertEquals(2, fw.getFirstHop(1, 2));
+        assertEquals(2, fw.getFirstHop(1, 3));
+        assertEquals(2, fw.getFirstHop(1, 4));
         assertNull(fw.getFirstHop(2, 1));
         assertNull(fw.getFirstHop(2, 2));
-        assertEquals(3, fw.getFirstHop(2, 3).intValue());
-        assertEquals(3, fw.getFirstHop(2, 4).intValue());
+        assertEquals(3, fw.getFirstHop(2, 3));
+        assertEquals(3, fw.getFirstHop(2, 4));
         assertNull(fw.getFirstHop(3, 1));
         assertNull(fw.getFirstHop(3, 2));
         assertNull(fw.getFirstHop(3, 3));
-        assertEquals(4, fw.getFirstHop(3, 4).intValue());
+        assertEquals(4, fw.getFirstHop(3, 4));
         assertNull(fw.getFirstHop(4, 1));
         assertNull(fw.getFirstHop(4, 2));
         assertNull(fw.getFirstHop(4, 3));
@@ -196,17 +196,17 @@ public class FloydWarshallPseudographsTest
 
         // test last hop
         assertNull(fw.getLastHop(1, 1));
-        assertEquals(1, fw.getLastHop(1, 2).intValue());
-        assertEquals(2, fw.getLastHop(1, 3).intValue());
-        assertEquals(3, fw.getLastHop(1, 4).intValue());
+        assertEquals(1, fw.getLastHop(1, 2));
+        assertEquals(2, fw.getLastHop(1, 3));
+        assertEquals(3, fw.getLastHop(1, 4));
         assertNull(fw.getLastHop(2, 1));
         assertNull(fw.getLastHop(2, 2));
-        assertEquals(2, fw.getLastHop(2, 3).intValue());
-        assertEquals(3, fw.getLastHop(2, 4).intValue());
+        assertEquals(2, fw.getLastHop(2, 3));
+        assertEquals(3, fw.getLastHop(2, 4));
         assertNull(fw.getLastHop(3, 1));
         assertNull(fw.getLastHop(3, 2));
         assertNull(fw.getLastHop(3, 3));
-        assertEquals(3, fw.getLastHop(3, 4).intValue());
+        assertEquals(3, fw.getLastHop(3, 4));
         assertNull(fw.getLastHop(4, 1));
         assertNull(fw.getLastHop(4, 2));
         assertNull(fw.getLastHop(4, 3));
@@ -270,22 +270,22 @@ public class FloydWarshallPseudographsTest
             new FloydWarshallShortestPaths<>(g);
 
         GraphPath<Integer, DefaultWeightedEdge> p1 = fw.getPath(1, 1);
-        assertEquals(1, p1.getStartVertex().intValue());
-        assertEquals(1, p1.getEndVertex().intValue());
+        assertEquals(1, p1.getStartVertex());
+        assertEquals(1, p1.getEndVertex());
         assertEquals(0, p1.getLength());
         assertEquals(0d, p1.getWeight(), 1e-9);
         assertTrue(p1.getEdgeList().isEmpty());
         assertEquals(1, p1.getVertexList().size());
-        assertEquals(1, p1.getVertexList().get(0).intValue());
+        assertEquals(1, p1.getVertexList().get(0));
 
         GraphPath<Integer, DefaultWeightedEdge> p2 = fw.getPath(2, 2);
-        assertEquals(2, p2.getStartVertex().intValue());
-        assertEquals(2, p2.getEndVertex().intValue());
+        assertEquals(2, p2.getStartVertex());
+        assertEquals(2, p2.getEndVertex());
         assertEquals(0, p2.getLength());
         assertEquals(0d, p2.getWeight(), 1e-9);
         assertTrue(p2.getEdgeList().isEmpty());
         assertEquals(1, p2.getVertexList().size());
-        assertEquals(2, p2.getVertexList().get(0).intValue());
+        assertEquals(2, p2.getVertexList().get(0));
 
         assertEquals(5.0, fw.getPath(1, 2).getWeight(), 1e-9);
         assertEquals(15.0, fw.getPath(2, 1).getWeight(), 1e-9);

@@ -36,7 +36,7 @@ public class PrefetchIteratorTest
         Iterator<Integer> iterator = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
             assertTrue(iterator.hasNext());
-            assertEquals(i, iterator.next().intValue());
+            assertEquals(i, iterator.next());
         }
         assertFalse(iterator.hasNext());
         assertThrows(NoSuchElementException.class, () -> iterator.next());
@@ -48,7 +48,7 @@ public class PrefetchIteratorTest
         Enumeration<Integer> enumuration = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
             assertTrue(enumuration.hasMoreElements());
-            assertEquals(i, enumuration.nextElement().intValue());
+            assertEquals(i, enumuration.nextElement());
         }
         assertFalse(enumuration.hasMoreElements());
         assertThrows(NoSuchElementException.class, ()-> enumuration.nextElement());

@@ -75,7 +75,7 @@ public class VertexToIntegerMappingTest
             assertEquals(n, indexList.size());
 
             for (int i = 0; i < indexList.size(); i++) {
-                assertEquals(i, vertexMap.get(indexList.get(i)).intValue());
+                assertEquals(i, vertexMap.get(indexList.get(i)));
             }
 
             for (Map.Entry<String, Integer> entry : vertexMap.entrySet()) {

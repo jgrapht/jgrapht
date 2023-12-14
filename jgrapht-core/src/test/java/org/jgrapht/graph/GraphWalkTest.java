@@ -160,15 +160,15 @@ public class GraphWalkTest
         for (int i = 0; i < vertexList.size() - 1; i++)
             edgeList.add(completeGraph.getEdge(vertexList.get(i), vertexList.get(i + 1)));
         GraphPath<Integer, DefaultEdge> p1 = new GraphWalk<>(completeGraph, 0, 4, edgeList, 10);
-        assertEquals(0, p1.getStartVertex().intValue());
-        assertEquals(4, p1.getEndVertex().intValue());
+        assertEquals(0, p1.getStartVertex());
+        assertEquals(4, p1.getEndVertex());
         assertEquals(vertexList, p1.getVertexList());
         assertEquals(edgeList.size(), p1.getLength());
         assertEquals(10.0, p1.getWeight(), 0.0000000001);
 
         GraphPath<Integer, DefaultEdge> p2 = new GraphWalk<>(completeGraph, vertexList, 10);
-        assertEquals(0, p2.getStartVertex().intValue());
-        assertEquals(4, p2.getEndVertex().intValue());
+        assertEquals(0, p2.getStartVertex());
+        assertEquals(4, p2.getEndVertex());
         assertEquals(edgeList, p2.getEdgeList());
         assertEquals(edgeList.size(), p2.getLength());
         assertEquals(10.0, p2.getWeight(), 0.0000000001);

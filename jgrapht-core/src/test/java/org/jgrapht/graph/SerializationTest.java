@@ -80,7 +80,7 @@ public class SerializationTest
                 "the size of list of #edges and vertices should match");
         }
         for (int i = 0; i < edges.size(); i++) {
-            assertEquals(edges.get(i).intValue(), graph.edgesOf(vertices.get(i)).size());
+            assertEquals(edges.get(i), graph.edgesOf(vertices.get(i)).size());
         }
     }
 

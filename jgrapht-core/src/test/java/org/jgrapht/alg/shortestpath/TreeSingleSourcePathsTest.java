@@ -66,7 +66,7 @@ public class TreeSingleSourcePathsTest
         TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 =
             new TreeSingleSourcePathsImpl<>(g, 1, map);
 
-        assertEquals(1, t1.getSourceVertex().intValue());
+        assertEquals(1, t1.getSourceVertex());
         assertEquals(0d, t1.getWeight(1), 1e-9);
         assertTrue(t1.getPath(1).getEdgeList().isEmpty());
         assertEquals(Arrays.asList(g.getEdgeSource(e12_1)), t1.getPath(1).getVertexList());

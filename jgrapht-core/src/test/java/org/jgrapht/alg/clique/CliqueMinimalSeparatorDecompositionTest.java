@@ -468,17 +468,17 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check component counts
         assertEquals(6, cmsd.getFullComponentCount().size());
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("d", "e")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("d", "e")));
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e")));
 
-        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("d", "i")).intValue());
+        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("d", "i")));
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("i")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("i")));
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e", "j")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e", "j")));
 
-        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("i", "j")).intValue());
+        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("i", "j")));
     }
 
     /**

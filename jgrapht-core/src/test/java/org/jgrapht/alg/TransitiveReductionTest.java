@@ -153,8 +153,8 @@ public class TransitiveReductionTest
         graph.addVertex("y");
         graph.addVertex("z");
         TransitiveReduction.INSTANCE.reduce(graph);
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 0);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(0, graph.edgeSet().size());
     }
 
     @Test
@@ -174,8 +174,8 @@ public class TransitiveReductionTest
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 2);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(2, graph.edgeSet().size());
 
         assertTrue(graph.containsEdge("x", "y"));
         assertTrue(graph.containsEdge("y", "z"));
@@ -194,14 +194,14 @@ public class TransitiveReductionTest
         graph.addEdge("y", "z");
         graph.addEdge("x", "z"); // <-- reduce me, please
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 3);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(3, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 2);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(2, graph.edgeSet().size());
 
         assertTrue(graph.containsEdge("x", "y"));
         assertTrue(graph.containsEdge("y", "z"));
@@ -226,8 +226,8 @@ public class TransitiveReductionTest
         graph.addEdge("y", "z");
         graph.addEdge("a", "z"); // <-- reduce me, please
 
-        assertEquals(graph.vertexSet().size(), 6);
-        assertEquals(graph.edgeSet().size(), 6);
+        assertEquals(6, graph.vertexSet().size());
+        assertEquals(6, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
@@ -254,8 +254,8 @@ public class TransitiveReductionTest
         assertTrue(graph.containsEdge(2, 4));
         assertTrue(graph.containsEdge(4, 1));
 
-        assertEquals(graph.vertexSet().size(), 5);
-        assertEquals(graph.edgeSet().size(), 6);
+        assertEquals(5, graph.vertexSet().size());
+        assertEquals(6, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);

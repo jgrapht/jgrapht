@@ -105,7 +105,7 @@ public class ColorRefinementIsomorphismInspectorTest
 
         GraphMapping<Integer, DefaultEdge> graphMapping = isomorphismInspector.getMappings().next();
 
-        assertEquals(4, graphMapping.getVertexCorrespondence(1, true).intValue());
+        assertEquals(4, graphMapping.getVertexCorrespondence(1, true));
 
         assertTrue(
             graphMapping.getVertexCorrespondence(2, true) == 2
@@ -135,7 +135,7 @@ public class ColorRefinementIsomorphismInspectorTest
                 || graphMapping.getVertexCorrespondence(7, true) == 6
                 || graphMapping.getVertexCorrespondence(7, true) == 7);
 
-        assertEquals(1, graphMapping.getVertexCorrespondence(4, true).intValue());
+        assertEquals(1, graphMapping.getVertexCorrespondence(4, true));
 
         assertTrue(
             graphMapping.getVertexCorrespondence(2, false) == 2
@@ -168,11 +168,11 @@ public class ColorRefinementIsomorphismInspectorTest
         for (int i = 1; i <= 7; ++i) {
             for (int j = i + 1; j <= 7; ++j) {
                 assertNotEquals(
-                    graphMapping.getVertexCorrespondence(i, true).intValue(),
-                    graphMapping.getVertexCorrespondence(j, true).intValue());
+                    graphMapping.getVertexCorrespondence(i, true),
+                    graphMapping.getVertexCorrespondence(j, true));
                 assertNotEquals(
-                    graphMapping.getVertexCorrespondence(i, false).intValue(),
-                    graphMapping.getVertexCorrespondence(j, false).intValue());
+                    graphMapping.getVertexCorrespondence(i, false),
+                    graphMapping.getVertexCorrespondence(j, false));
             }
         }
     }
@@ -213,19 +213,19 @@ public class ColorRefinementIsomorphismInspectorTest
         assertTrue(isomorphismInspector.isColoringDiscrete());
         assertFalse(isomorphismInspector.isForest());
 
-        assertEquals(graphMapping.getVertexCorrespondence(1, true).intValue(), 3);
-        assertEquals(graphMapping.getVertexCorrespondence(2, true).intValue(), 5);
-        assertEquals(graphMapping.getVertexCorrespondence(3, true).intValue(), 1);
-        assertEquals(graphMapping.getVertexCorrespondence(4, true).intValue(), 2);
-        assertEquals(graphMapping.getVertexCorrespondence(5, true).intValue(), 6);
-        assertEquals(graphMapping.getVertexCorrespondence(6, true).intValue(), 4);
+        assertEquals(3, graphMapping.getVertexCorrespondence(1, true));
+        assertEquals(5, graphMapping.getVertexCorrespondence(2, true));
+        assertEquals(1, graphMapping.getVertexCorrespondence(3, true));
+        assertEquals(2, graphMapping.getVertexCorrespondence(4, true));
+        assertEquals(6, graphMapping.getVertexCorrespondence(5, true));
+        assertEquals(4, graphMapping.getVertexCorrespondence(6, true));
 
-        assertEquals(graphMapping.getVertexCorrespondence(1, false).intValue(), 3);
-        assertEquals(graphMapping.getVertexCorrespondence(2, false).intValue(), 4);
-        assertEquals(graphMapping.getVertexCorrespondence(3, false).intValue(), 1);
-        assertEquals(graphMapping.getVertexCorrespondence(4, false).intValue(), 6);
-        assertEquals(graphMapping.getVertexCorrespondence(5, false).intValue(), 2);
-        assertEquals(graphMapping.getVertexCorrespondence(6, false).intValue(), 5);
+        assertEquals(3, graphMapping.getVertexCorrespondence(1, false));
+        assertEquals(4, graphMapping.getVertexCorrespondence(2, false));
+        assertEquals(1, graphMapping.getVertexCorrespondence(3, false));
+        assertEquals(6, graphMapping.getVertexCorrespondence(4, false));
+        assertEquals(2, graphMapping.getVertexCorrespondence(5, false));
+        assertEquals(5, graphMapping.getVertexCorrespondence(6, false));
     }
 
     @Test

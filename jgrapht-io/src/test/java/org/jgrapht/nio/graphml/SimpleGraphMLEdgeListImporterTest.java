@@ -123,17 +123,17 @@ public class SimpleGraphMLEdgeListImporterTest
         });
         importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
-        Integer[][] edges = { { 0, 2, 2 }, { 0, 1, 3 }, { 1, 2, 1 } };
+        int[][] edges = { { 0, 2, 2 }, { 0, 1, 3 }, { 1, 2, 1 } };
 
-        assertTrue(collected.size() == 3);
+        assertEquals(3, collected.size());
 
         int i = 0;
-        for (Integer[] edge : edges) {
+        for (int[] edge : edges) {
             Triple<Integer, Integer, Double> e = collected.get(i);
             assertEquals(edge[0], e.getFirst());
             assertEquals(edge[1], e.getSecond());
             if (i < 2) {
-                assertEquals(edge[2].intValue(), collected.get(i).getThird());
+                assertEquals(edge[2], collected.get(i).getThird());
             } else {
                 assertNull(e.getThird());
 

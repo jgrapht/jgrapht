@@ -525,10 +525,10 @@ public class HierholzerEulerianCycleTest
         assertEquals(e42, cycle.getEdgeList().get(2));
 
         List<Integer> vl = cycle.getVertexList();
-        assertEquals(2, vl.get(0).intValue());
-        assertEquals(3, vl.get(1).intValue());
-        assertEquals(4, vl.get(2).intValue());
-        assertEquals(2, vl.get(3).intValue());
+        assertEquals(2, vl.get(0));
+        assertEquals(3, vl.get(1));
+        assertEquals(4, vl.get(2));
+        assertEquals(2, vl.get(3));
 
         assertEulerian(cycle);
     }
