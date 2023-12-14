@@ -25,7 +25,7 @@ import java.util.function.*;
 
 /**
  * Provides a weighted view of a graph. The class stores edge weights internally.
- * All @link{getEdgeWeight} calls are handled by this view; all other graph operations are
+ * All {@link #getEdgeWeight()} calls are handled by this view; all other graph operations are
  * propagated to the graph backing this view.
  *
  * <p>
@@ -43,11 +43,11 @@ import java.util.function.*;
  * </ol>
  * In the first way, the map is used to lookup edge weights. In the second way, a function is
  * provided to calculate the weight of an edge. If the map does not contain a particular edge, or
- * the function does not provide a weight for a particular edge, the @link{getEdgeWeight} call is
+ * the function does not provide a weight for a particular edge, the {@link #getEdgeWeight(Object)} call is
  * propagated to the backing graph.
  *
- * Finally, the view provides a @link{setEdgeWeight} method. This method behaves differently
- * depending on how the view is constructed. See @link{setEdgeWeight} for details.
+ * Finally, the view provides a {@link #setEdgeWeight(Object, double)} method. This method behaves differently
+ * depending on how the view is constructed. See {@link #setEdgeWeight(Object, double)} for details.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -65,8 +65,8 @@ public class AsWeightedGraph<V, E>
 
     /**
      * Constructor for AsWeightedGraph where the weights are provided through a map. Invocations of
-     * the @link{setEdgeWeight} method will update the map. Moreover, calls to @link{setEdgeWeight}
-     * are propagated to the underlying graph.
+     * the {@link #setEdgeWeight(Object, double)} method will update the map. Moreover, calls to
+     * {@link #setEdgeWeight(Object, double)} are propagated to the underlying graph.
      *
      * @param graph the backing graph over which a weighted view is to be created.
      * @param weights the map containing the edge weights.
@@ -106,10 +106,10 @@ public class AsWeightedGraph<V, E>
      * the weight of an edge is queried, the weight function is invoked. If
      * {@code cacheWeights} is set to {@code true}, the weight of an edge returned by the
      * {@code weightFunction} after its first invocation is stored in a map. The weight of an
-     * edge returned by subsequent calls to @link{getEdgeWeight} for the same edge will then be
+     * edge returned by subsequent calls to {@link #getEdgeWeight(Object)} for the same edge will then be
      * retrieved directly from the map, instead of re-invoking the weight function. If
      * {@code cacheWeights} is set to {@code false}, each invocation of
-     * the @link{getEdgeWeight} method will invoke the weight function. Caching the edge weights is
+     * the {@link #getEdgeWeight(Object)} method will invoke the weight function. Caching the edge weights is
      * particularly useful when pre-computing all edge weights is expensive and it is expected that
      * the weights of only a subset of all edges will be queried.
      *
@@ -118,7 +118,7 @@ public class AsWeightedGraph<V, E>
      * @param cacheWeights if set to {@code true}, weights are cached once computed by the
      *        weight function
      * @param writeWeightsThrough if set to {@code true}, the weight set directly by
-     *        the @link{setEdgeWeight} method will be propagated to the backing graph.
+     *        the {@link #setEdgeWeight(Object, double)} method will be propagated to the backing graph.
      * @throws NullPointerException if the graph or the weight function is null
      * @throws IllegalArgumentException if {@code writeWeightsThrough} is set to true and
      *         {@code graph} is not a weighted graph
@@ -139,7 +139,7 @@ public class AsWeightedGraph<V, E>
 
     /**
      * Returns the weight assigned to a given edge. If weights are provided through a map, first a
-     * map lookup is performed. If the edge is not found, the @link{getEdgeWeight} method of the
+     * map lookup is performed. If the edge is not found, the {@link #getEdgeWeight(Object)} method of the
      * underlying graph is invoked instead. If, on the other hand, the weights are provided through
      * a function, this method will first attempt to lookup the weight of an edge in the cache (that
      * is, if {@code cacheWeights} is set to {@code true} in the constructor). If caching
