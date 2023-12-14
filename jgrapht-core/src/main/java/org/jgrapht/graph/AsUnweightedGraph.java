@@ -26,8 +26,8 @@ import java.util.*;
  * Provides an unweighted view on a graph.
  *
  * Algorithms designed for unweighted graphs should also work on weighted graphs. This class
- * emulates an unweighted graph based on a weighted one by returning <code>Graph.DEFAULT_EDGE_WEIGHT
- * </code> for each edge weight. The underlying weighted graph is provided at the constructor.
+ * emulates an unweighted graph based on a weighted one by returning {@code Graph.DEFAULT_EDGE_WEIGHT}
+ * for each edge weight. The underlying weighted graph is provided at the constructor.
  * Modifying operations (adding/removing vertexes/edges) are also passed through to the underlying
  * weighted graph. As edge weight, Graph.DEFAULT_EDGE_WEIGHT is used. Setting an edge weight is not
  * supported. The edges are not modified. So, if an edge is asked for, the one from the underlying

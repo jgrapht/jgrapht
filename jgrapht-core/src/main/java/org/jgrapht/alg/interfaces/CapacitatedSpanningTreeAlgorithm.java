@@ -59,16 +59,16 @@ public interface CapacitatedSpanningTreeAlgorithm<V, E>
     {
 
         /**
-         * Tests whether <code>cmst</code> is a CMST on <code>graph</code> with root
-         * <code>root</code>, capacity <code>capacity</code> and demand function
-         * <code>demands</code>.
+         * Tests whether {@code cmst} is a CMST on {@code graph} with root
+         * {@code root}, capacity {@code capacity} and demand function
+         * {@code demands}.
          *
          * @param graph the graph
          * @param root the expected root of cmst
          * @param capacity the expected capacity of cmst
          * @param demands the demand function
          *
-         * @return whether <code>cmst</code> is a CMST
+         * @return whether {@code cmst} is a CMST
          */
         boolean isCapacitatedSpanningTree(
             Graph<V, E> graph, V root, double capacity, Map<V, Double> demands);

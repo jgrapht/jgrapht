@@ -83,14 +83,14 @@ public abstract class CrossComponentIterator<V, E, D>
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
-     * vertex. If the specified start vertex is <code>
-     * null</code>, Iteration will start at an arbitrary graph vertex.
+     * vertex. If the specified start vertex is {@code null},
+     * Iteration will start at an arbitrary graph vertex.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      *
-     * @throws IllegalArgumentException if <code>g==null</code> or does not contain
-     *         <code>startVertex</code>
+     * @throws IllegalArgumentException if {@code g==null} or does not contain
+     *         {@code startVertex}
      */
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
@@ -99,14 +99,14 @@ public abstract class CrossComponentIterator<V, E, D>
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
-     * vertices. If the specified start vertices is <code>
-     * null</code>, Iteration will start at an arbitrary graph vertex.
+     * vertices. If the specified start vertices is {@code null},
+     * Iteration will start at an arbitrary graph vertex.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
      *
-     * @throws IllegalArgumentException if <code>g==null</code> or does not contain
-     *         <code>startVertex</code>
+     * @throws IllegalArgumentException if {@code g==null} or does not contain
+     *         {@code startVertex}
      */
     public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices)
     {
@@ -218,11 +218,11 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * Returns <code>true</code> if there are no more uniterated vertices in the currently iterated
-     * connected component; <code>false</code> otherwise.
+     * Returns {@code true} if there are no more uniterated vertices in the currently iterated
+     * connected component; {@code false} otherwise.
      *
-     * @return <code>true</code> if there are no more uniterated vertices in the currently iterated
-     *         connected component; <code>false</code> otherwise.
+     * @return {@code true} if there are no more uniterated vertices in the currently iterated
+     *         connected component; {@code false} otherwise.
      */
     protected abstract boolean isConnectedComponentExhausted();
 
@@ -236,7 +236,7 @@ public abstract class CrossComponentIterator<V, E, D>
     protected abstract void encounterVertex(V vertex, E edge);
 
     /**
-     * Returns the vertex to be returned in the following call to the iterator <code>next</code>
+     * Returns the vertex to be returned in the following call to the iterator {@code next}
      * method.
      *
      * @return the next vertex to be returned by this iterator.
@@ -248,10 +248,9 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex a vertex which has already been seen.
      *
-     * @return data associated with the seen vertex or <code>null</code> if no data was associated
-     *         with the vertex. A <code>null</code> return can also indicate that the vertex was
-     *         explicitly associated with <code>
-     * null</code>.
+     * @return data associated with the seen vertex or {@code null} if no data was associated
+     *         with the vertex. A {@code null} return can also indicate that the vertex was
+     *         explicitly associated with {@code null}.
      */
     protected D getSeenData(V vertex)
     {
@@ -263,7 +262,7 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex vertex in question
      *
-     * @return <code>true</code> if vertex has already been seen
+     * @return {@code true} if vertex has already been seen
      */
     protected boolean isSeenVertex(V vertex)
     {
@@ -284,10 +283,10 @@ public abstract class CrossComponentIterator<V, E, D>
      * @param vertex a vertex which has been seen.
      * @param data data to be associated with the seen vertex.
      *
-     * @return previous value associated with specified vertex or <code>
-     * null</code> if no data was associated with the vertex. A <code>
-     * null</code> return can also indicate that the vertex was explicitly associated with
-     *         <code>null</code>.
+     * @return previous value associated with specified vertex or {@code null}
+     *         if no data was associated with the vertex. A {@code null} return
+     *         can also indicate that the vertex was explicitly associated with
+     *         {@code null}.
      */
     protected D putSeenData(V vertex, D data)
     {

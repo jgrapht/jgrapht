@@ -30,7 +30,7 @@ import java.util.*;
  * <a href="http://mathworld.wolfram.com/OrientedGraph.html">oriented graph</a>, then the view will
  * be a simple graph; otherwise, it will be a multigraph. Query operations on this graph "read
  * through" to the backing graph. Attempts to add edges will result in an
- * <code>UnsupportedOperationException</code>, but vertex addition/removal and edge removal are all
+ * {@code UnsupportedOperationException}, but vertex addition/removal and edge removal are all
  * supported (and immediately reflected in the backing graph).
  *
  * <p>
@@ -41,7 +41,7 @@ import java.util.*;
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods. This
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This
  * graph will be serializable if the backing graph is serializable.
  * </p>
  *

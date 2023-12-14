@@ -218,7 +218,7 @@ public class BiconnectivityInspector<V, E>
      * method returns true if and only if the inspected graph is <i>weakly</i> connected. An empty
      * graph is <i>not</i> considered connected.
      *
-     * @return <code>true</code> if and only if inspected graph is connected.
+     * @return {@code true} if and only if inspected graph is connected.
      */
     public boolean isConnected()
     {

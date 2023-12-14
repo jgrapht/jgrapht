@@ -145,7 +145,7 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
 
         /**
          * Constructs a new solution representation for the CMST problem based on
-         * <code>labels</code> and <code>partition</code>. All labels have to be positive.
+         * {@code labels} and {@code partition}. All labels have to be positive.
          *
          * @param labels the labels of the subsets in the partition
          * @param partition the partition map
@@ -197,8 +197,8 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Moves <code>vertex</code> from the subset represented by <code>fromLabel</code> to the
-         * subset represented by <code>toLabel</code>.
+         * Moves {@code vertex} from the subset represented by {@code fromLabel} to the
+         * subset represented by {@code toLabel}.
          *
          * @param vertex the vertex to move
          * @param fromLabel the subset to move the vertex from
@@ -225,8 +225,8 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Moves all vertices in <code>vertices</code> from the subset represented by
-         * <code>fromLabel</code> to the subset represented by <code>toLabel</code>.
+         * Moves all vertices in {@code vertices} from the subset represented by
+         * {@code fromLabel} to the subset represented by {@code toLabel}.
          *
          * @param vertices the vertices to move
          * @param fromLabel the subset to move the vertices from
@@ -259,9 +259,9 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
 
         /**
          * Refines the partition by adding new subsets if the designated root has more than one
-         * subtree in the subset <code>label</code> of the partition.
+         * subtree in the subset {@code label} of the partition.
          *
-         * @param vertexSubset the subset represented by <code>label</code>, that is the subset that
+         * @param vertexSubset the subset represented by {@code label}, that is the subset that
          *        has to be refined
          * @param label the label of the subset of the partition that were refined
          *
@@ -357,11 +357,11 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Returns the label of the subset that contains <code>vertex</code>.
+         * Returns the label of the subset that contains {@code vertex}.
          *
          * @param vertex the vertex to return the label from
          *
-         * @return the label of <code>vertex</code>
+         * @return the label of {@code vertex}
          */
         public int getLabel(V vertex)
         {
@@ -379,11 +379,11 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Returns the set of vertices that are in the subset with label <code>label</code>.
+         * Returns the set of vertices that are in the subset with label {@code label}.
          *
          * @param label the label of the subset to return the vertices from
          *
-         * @return the set of vertices that are in the subset with label <code>label</code>
+         * @return the set of vertices that are in the subset with label {@code label}
          */
         public Set<V> getPartitionSet(Integer label)
         {
@@ -392,12 +392,12 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
 
         /**
          * Returns the sum of the weights of all vertices that are in the subset with label
-         * <code>label</code>.
+         * {@code label}.
          *
          * @param label the label of the subset to return the weight from
          *
          * @return the sum of the weights of all vertices that are in the subset with label
-         *         <code>label</code>
+         *         {@code label}
          */
         public double getPartitionWeight(Integer label)
         {

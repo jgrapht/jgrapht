@@ -30,7 +30,7 @@ import java.util.function.*;
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods.
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods.
  * </p>
  *
  * <p>

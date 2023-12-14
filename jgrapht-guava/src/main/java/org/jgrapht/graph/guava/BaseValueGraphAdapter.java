@@ -126,9 +126,9 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * <p>
      * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
-     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * {@code v2} such that {@code v2.equals(v)}.
      * 
      * @param vertexSupplier the vertex supplier
      */
@@ -154,9 +154,9 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * <p>
      * In contrast with the {@link Supplier} interface, the edge supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to
      * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
-     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
      * 
      * @param edgeSupplier the edge supplier
      */

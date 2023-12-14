@@ -341,7 +341,7 @@ public class SuccinctIntDirectedGraph
      * Ensures that the specified edge exists in this graph, or else throws exception.
      *
      * @param e edge
-     * @return <code>true</code> if this assertion holds.
+     * @return {@code true} if this assertion holds.
      * @throws IllegalArgumentException if specified edge does not exist in this graph.
      */
     protected boolean assertEdgeExist(final Integer e)

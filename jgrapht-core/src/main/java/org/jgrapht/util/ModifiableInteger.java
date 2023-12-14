@@ -18,14 +18,14 @@
 package org.jgrapht.util;
 
 /**
- * The <code>ModifiableInteger</code> class wraps a value of the primitive type <code>int</code> in
+ * The {@code ModifiableInteger} class wraps a value of the primitive type {@code int} in
  * an object, similarly to {@link java.lang.Integer}. An object of type
- * <code>ModifiableInteger</code> contains a single field whose type is <code>int</code>.
+ * {@code ModifiableInteger} contains a single field whose type is {@code int}.
  *
  * <p>
- * Unlike <code>java.lang.Integer</code>, the int value which the ModifiableInteger represents can
+ * Unlike {@code java.lang.Integer}, the int value which the ModifiableInteger represents can
  * be modified. It becomes useful when used together with the collection framework. For example, if
- * you want to have a {@link java.util.List} of counters. You could use <code>Integer</code> but
+ * you want to have a {@link java.util.List} of counters. You could use {@code Integer} but
  * that would have became wasteful and inefficient if you frequently had to update the counters.
  * </p>
  *
@@ -33,7 +33,7 @@ package org.jgrapht.util;
  * WARNING: Because instances of this class are mutable, great care must be exercised if used as
  * keys of a {@link java.util.Map} or as values in a {@link java.util.Set} in a manner that affects
  * equals comparisons while the instances are keys in the map (or values in the set). For more see
- * documentation of <code>Map</code> and <code>Set</code>.
+ * documentation of {@code Map} and {@code Set}.
  * </p>
  *
  * @author Barak Naveh
@@ -45,7 +45,7 @@ public class ModifiableInteger
     private static final long serialVersionUID = 3618698612851422261L;
 
     /**
-     * The int value represented by this <code>ModifiableInteger</code>.
+     * The int value represented by this {@code ModifiableInteger}.
      */
     public int value;
 
@@ -65,11 +65,10 @@ public class ModifiableInteger
     }
 
     /**
-     * Constructs a newly allocated <code>ModifiableInteger</code> object that represents the
-     * specified <code>int</code> value.
+     * Constructs a newly allocated {@code ModifiableInteger} object that represents the
+     * specified {@code int} value.
      *
-     * @param value the value to be represented by the <code>
-     * ModifiableInteger</code> object.
+     * @param value the value to be represented by the {@code ModifiableInteger} object.
      */
     public ModifiableInteger(int value)
     {
@@ -114,16 +113,16 @@ public class ModifiableInteger
     }
 
     /**
-     * Compares two <code>ModifiableInteger</code> objects numerically.
+     * Compares two {@code ModifiableInteger} objects numerically.
      *
-     * @param anotherInteger the <code>ModifiableInteger</code> to be compared.
+     * @param anotherInteger the {@code ModifiableInteger} to be compared.
      *
-     * @return the value <code>0</code> if this <code>ModifiableInteger</code> is equal to the
-     *         argument <code>ModifiableInteger</code>; a value less than <code>0</code> if this
-     *         <code>ModifiableInteger</code> is numerically less than the argument
-     *         <code>ModifiableInteger</code>; and a value greater than <code>0</code> if this
-     *         <code>ModifiableInteger</code> is numerically greater than the argument
-     *         <code>ModifiableInteger</code> (signed comparison).
+     * @return the value {@code 0} if this {@code ModifiableInteger} is equal to the
+     *         argument {@code ModifiableInteger}; a value less than {@code 0} if this
+     *         {@code ModifiableInteger} is numerically less than the argument
+     *         {@code ModifiableInteger}; and a value greater than {@code 0} if this
+     *         {@code ModifiableInteger} is numerically greater than the argument
+     *         {@code ModifiableInteger} (signed comparison).
      */
     @Override
     public int compareTo(ModifiableInteger anotherInteger)
@@ -144,14 +143,14 @@ public class ModifiableInteger
     }
 
     /**
-     * Compares this object to the specified object. The result is <code>
-     * true</code> if and only if the argument is not <code>null</code> and is an
-     * <code>ModifiableInteger</code> object that contains the same <code>
-     * int</code> value as this object.
+     * Compares this object to the specified object. The result is {@code 
+     * true} if and only if the argument is not {@code null} and is an
+     * {@code ModifiableInteger} object that contains the same {@code 
+     * int} value as this object.
      *
      * @param o the object to compare with.
      *
-     * @return <code>true</code> if the objects are the same; <code>false</code> otherwise.
+     * @return {@code true} if the objects are the same; {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o)
@@ -173,10 +172,10 @@ public class ModifiableInteger
     }
 
     /**
-     * Returns a hash code for this <code>ModifiableInteger</code>.
+     * Returns a hash code for this {@code ModifiableInteger}.
      *
-     * @return a hash code value for this object, equal to the primitive <code>
-     * int</code> value represented by this <code>ModifiableInteger</code> object.
+     * @return a hash code value for this object, equal to the primitive {@code 
+     * int} value represented by this {@code ModifiableInteger} object.
      */
     @Override
     public int hashCode()
@@ -203,10 +202,10 @@ public class ModifiableInteger
     }
 
     /**
-     * Returns an <code>Integer</code> object representing this <code>
-     * ModifiableInteger</code>'s value.
+     * Returns an {@code Integer} object representing this {@code 
+     * ModifiableInteger}'s value.
      *
-     * @return an <code>Integer</code> representation of the value of this object.
+     * @return an {@code Integer} representation of the value of this object.
      */
     public Integer toInteger()
     {
@@ -214,8 +213,8 @@ public class ModifiableInteger
     }
 
     /**
-     * Returns a <code>String</code> object representing this <code>
-     * ModifiableInteger</code>'s value. The value is converted to signed decimal representation and
+     * Returns a {@code String} object representing this {@code 
+     * ModifiableInteger}'s value. The value is converted to signed decimal representation and
      * returned as a string, exactly as if the integer value were given as an argument to the
      * {@link java.lang.Integer#toString(int)} method.
      *

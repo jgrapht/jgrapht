@@ -82,7 +82,7 @@ public class DepthFirstIterator<V, E>
     /**
      * Creates a new depth-first iterator for the specified graph. Iteration will start at the
      * specified start vertex and will be limited to the connected component that includes that
-     * vertex. If the specified start vertex is <code>null</code>, iteration will start at an
+     * vertex. If the specified start vertex is {@code null}, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
@@ -96,7 +96,7 @@ public class DepthFirstIterator<V, E>
     /**
      * Creates a new depth-first iterator for the specified graph. Iteration will start at the
      * specified start vertices and will be limited to the connected component that includes those
-     * vertices. If the specified start vertices is <code>null</code>, iteration will start at an
+     * vertices. If the specified start vertices is {@code null}, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.

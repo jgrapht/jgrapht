@@ -25,12 +25,12 @@ import java.util.*;
 /**
  * An unmodifiable view of the backing graph specified in the constructor. This graph allows modules
  * to provide users with "read-only" access to internal graphs. Query operations on this graph "read
- * through" to the backing graph, and attempts to modify this graph result in an <code>
- * UnsupportedOperationException</code>.
+ * through" to the backing graph, and attempts to modify this graph result in an
+ * {@code UnsupportedOperationException}.
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods. This
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This
  * graph will be serializable if the backing graph is serializable.
  * </p>
  *

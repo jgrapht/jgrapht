@@ -38,7 +38,7 @@ import java.util.*;
  *
  * This algorithm returns the first or the best found negative subset-disjoint cycle. In the case of
  * the first found cycle, the cycle has minimum number of vertices. It may enumerate all paths up to
- * the length given by the parameter <code>lengthBound</code>, i.e the algorithm runs in exponential
+ * the length given by the parameter {@code lengthBound}, i.e the algorithm runs in exponential
  * time.
  *
  * This algorithm is used to detect valid cyclic exchanges in a cyclic exchange neighborhood for the
@@ -227,7 +227,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
     }
 
     /**
-     * Checks whether <code>path</code> dominates the current minimal cost path with the same head,
+     * Checks whether {@code path} dominates the current minimal cost path with the same head,
      * tail and label set in the set of all paths of length k + 1. Thus, dominated paths are
      * eliminated. This is important out of efficiency reasons, otherwise many unnecessary paths may
      * be considered in further calculations.
@@ -235,7 +235,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
      * @param path the currently calculated path
      * @param pathsLengthKplus1 all before calculated paths of length k + 1
      *
-     * @return whether <code>path</code> dominates the current minimal cost path with the same head,
+     * @return whether {@code path} dominates the current minimal cost path with the same head,
      *         tail and label set.
      */
     private boolean checkDominatedPathsOfLengthKplus1(
@@ -251,14 +251,14 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
     }
 
     /**
-     * Checks whether <code>path</code> is dominated by some path in the previously calculated set
+     * Checks whether {@code path} is dominated by some path in the previously calculated set
      * of paths of length k. This is important out of efficiency reasons, otherwise many unnecessary
      * paths may be considered in further calculations.
      *
      * @param path the currently calculated path
      * @param pathsLengthK all previously calculated paths of length k
      *
-     * @return whether <code>path</code> is dominated by some path in <code>pathsLengthK</code>
+     * @return whether {@code path} is dominated by some path in {@code pathsLengthK}
      */
     private boolean checkDominatedPathsOfLengthK(
         LabeledPath<V> path, Map<PathSetKey<V>, LabeledPath<V>> pathsLengthK)
@@ -281,7 +281,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
 
     /**
      * Adds a path and removes the path, which has the same tail, head and label set, to the data
-     * structure <code>paths</code>, which contains all paths indexed by their head, tail and label
+     * structure {@code paths}, which contains all paths indexed by their head, tail and label
      * set.
      *
      * @param paths the map of paths, which are indexed by head, tail and label set, to add the path

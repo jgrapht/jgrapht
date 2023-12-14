@@ -37,9 +37,9 @@ import org.jgrapht.nio.IntegerIdProvider;
  * <p>
  * The output is one object which contains:
  * <ul>
- * <li>A member named <code>nodes</code> whose value is an array of nodes.
- * <li>A member named <code>edges</code> whose value is an array of edges.
- * <li>Two members named <code>creator</code> and <code>version</code> for metadata.
+ * <li>A member named {@code nodes} whose value is an array of nodes.
+ * <li>A member named {@code edges} whose value is an array of edges.
+ * <li>Two members named {@code creator} and {@code version} for metadata.
  * </ul>
  * 
  * <p>

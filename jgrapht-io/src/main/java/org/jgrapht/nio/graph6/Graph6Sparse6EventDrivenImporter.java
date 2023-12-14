@@ -39,13 +39,13 @@ import java.io.*;
  * Note that a g6/s6 string may contain backslashes '\'. Thus, escaping is required. E.g.
  * 
  * <pre>
- * <code>":?@MnDA\oi"</code>
+ * {@code ":?@MnDA\oi"}
  * </pre>
  * 
  * may result in undefined behavior. This should have been:
  * 
  * <pre>
- * <code>":?@MnDA\\oi"</code>
+ * {@code ":?@MnDA\\oi"}
  * </pre>
  *
  * @author Joris Kinable

@@ -23,7 +23,7 @@ import org.jgrapht.util.*;
 import java.util.*;
 
 /**
- * A skeletal implementation of the <code>Graph</code> interface, to minimize the effort required to
+ * A skeletal implementation of the {@code Graph} interface, to minimize the effort required to
  * implement graph interfaces. This implementation is applicable to both: directed graphs and
  * undirected graphs.
  *
@@ -115,9 +115,9 @@ public abstract class AbstractGraph<V, E>
      *
      * @param v vertex
      *
-     * @return <code>true</code> if this assertion holds.
+     * @return {@code true} if this assertion holds.
      *
-     * @throws NullPointerException if specified vertex is <code>null</code>.
+     * @throws NullPointerException if specified vertex is {@code null}.
      * @throws IllegalArgumentException if specified vertex does not exist in this graph.
      */
     protected boolean assertVertexExist(V v)
@@ -138,7 +138,7 @@ public abstract class AbstractGraph<V, E>
      *
      * @param edges edges to be removed from this graph.
      *
-     * @return <code>true</code> if this graph changed as a result of the call.
+     * @return {@code true} if this graph changed as a result of the call.
      *
      * @see Graph#removeEdge(Object)
      * @see Graph#containsEdge(Object)
@@ -237,13 +237,13 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Indicates whether some other object is "equal to" this graph. Returns <code>true</code> if
+     * Indicates whether some other object is "equal to" this graph. Returns {@code true} if
      * the given object is also a graph, the two graphs are instances of the same graph class, have
      * identical vertices and edges sets with the same weights.
      *
      * @param obj object to be compared for equality with this graph
      *
-     * @return <code>true</code> if the specified object is equal to this graph
+     * @return {@code true} if the specified object is equal to this graph
      *
      * @see Object#equals(Object)
      */

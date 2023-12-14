@@ -79,7 +79,7 @@ public class ColorRefinementIsomorphismInspector<V, E>
 
     /**
      * Constructor for a isomorphism inspector based on color refinement. It checks whether
-     * <code>graph1</code> and <code>graph2</code> are isomorphic.
+     * {@code graph1} and {@code graph2} are isomorphic.
      *
      * @param graph1 the first graph
      * @param graph2 the second graph
@@ -218,7 +218,7 @@ public class ColorRefinementIsomorphismInspector<V, E>
 
     /**
      * Checks whether two coarse colorings are equal. Furthermore, it sets
-     * <code>isColoringDiscrete</code> to true iff the colorings are discrete.
+     * {@code isColoringDiscrete} to true iff the colorings are discrete.
      *
      * @param coloring the coarse coloring of the union graph
      * @return if the given coarse colorings are equal
@@ -346,7 +346,7 @@ public class ColorRefinementIsomorphismInspector<V, E>
 
     /**
      * calculates the graph isomorphism as GraphMapping and assigns it to attribute
-     * <code>isomorphicGraphMapping</code>
+     * {@code isomorphicGraphMapping}
      *
      * @param coloring1 the discrete vertex coloring of graph1
      * @param coloring2 the discrete vertex coloring of graph2
@@ -384,7 +384,7 @@ public class ColorRefinementIsomorphismInspector<V, E>
     }
 
     /**
-     * Calculates and returns a disjoint graph union of <code>graph1</code> and <code>graph2</code>
+     * Calculates and returns a disjoint graph union of {@code graph1} and {@code graph2}
      *
      * @param graph1 the first graph of the disjoint union
      * @param graph2 the second graph of the disjoint union

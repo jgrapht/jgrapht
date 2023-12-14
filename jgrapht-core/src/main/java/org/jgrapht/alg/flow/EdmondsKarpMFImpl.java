@@ -77,11 +77,10 @@ public final class EdmondsKarpMFImpl<V, E>
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
 
     /**
-     * Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
-     * <code>network</code>. Current source and sink are set to <code>null</code>. If
-     * <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
-     * equal to one. Doubles are compared using <code>
-     * DEFAULT_EPSILON</code> tolerance.
+     * Constructs {@code MaximumFlow} instance to work with <i>a copy of</i>
+     * {@code network}. Current source and sink are set to {@code null}. If
+     * {@code network} is weighted, then capacities are weights, otherwise all capacities are
+     * equal to one. Doubles are compared using {@code DEFAULT_EPSILON} tolerance.
      *
      * @param network network, where maximum flow will be calculated
      */
@@ -91,9 +90,9 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
-     * <code>network</code>. Current source and sink are set to <code>null</code>. If
-     * <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
+     * Constructs {@code MaximumFlow} instance to work with <i>a copy of</i>
+     * {@code network}. Current source and sink are set to {@code null}. If
+     * {@code network} is weighted, then capacities are weights, otherwise all capacities are
      * equal to one.
      *
      * @param network network, where maximum flow will be calculated
@@ -120,10 +119,10 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then
-     * calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
-     * <code>source</code> and <code>sink</code> must be vertices of the <code>
-     * network</code> passed to the constructor, and they must be different.
+     * Sets current source to {@code source}, current sink to {@code sink}, then
+     * calculates maximum flow from {@code source} to {@code sink}. Note, that
+     * {@code source} and {@code sink} must be vertices of the {@code network}
+     * passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex
@@ -138,10 +137,10 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then
-     * calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
-     * <code>source</code> and <code>sink</code> must be vertices of the <code>
-     * network</code> passed to the constructor, and they must be different. If desired, a flow map
+     * Sets current source to {@code source}, current sink to {@code sink}, then
+     * calculates maximum flow from {@code source} to {@code sink}. Note, that
+     * {@code source} and {@code sink} must be vertices of the {@code network}
+     * passed to the constructor, and they must be different. If desired, a flow map
      * can be queried afterwards; this will not require a new invocation of the algorithm.
      *
      * @param source source vertex

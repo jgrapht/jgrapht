@@ -57,61 +57,61 @@ public interface GraphType
     boolean isMixed();
 
     /**
-     * Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph.
+     * Returns {@code true} if and only if multiple (parallel) edges are allowed in this graph.
      * The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
      * v2.
      *
-     * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
+     * @return {@code true} if and only if multiple (parallel) edges are allowed.
      */
     boolean isAllowingMultipleEdges();
 
     /**
-     * Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is
+     * Returns {@code true} if and only if self-loops are allowed in this graph. A self loop is
      * an edge that its source and target vertices are the same.
      *
-     * @return <code>true</code> if and only if graph self-loops are allowed.
+     * @return {@code true} if and only if graph self-loops are allowed.
      */
     boolean isAllowingSelfLoops();
 
     /**
-     * Returns <code>true</code> if and only if cycles are allowed in this graph.
+     * Returns {@code true} if and only if cycles are allowed in this graph.
      *
-     * @return <code>true</code> if and only if graph cycles are allowed.
+     * @return {@code true} if and only if graph cycles are allowed.
      */
     boolean isAllowingCycles();
 
     /**
-     * Returns <code>true</code> if and only if the graph supports edge weights.
+     * Returns {@code true} if and only if the graph supports edge weights.
      *
-     * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
+     * @return {@code true} if the graph supports edge weights, {@code false} otherwise.
      */
     boolean isWeighted();
 
     /**
-     * Returns <code>true</code> if the graph is simple, <code>false</code> otherwise.
+     * Returns {@code true} if the graph is simple, {@code false} otherwise.
      * 
-     * @return <code>true</code> if the graph is simple, <code>false</code> otherwise
+     * @return {@code true} if the graph is simple, {@code false} otherwise
      */
     boolean isSimple();
 
     /**
-     * Returns <code>true</code> if the graph is a pseudograph, <code>false</code> otherwise.
+     * Returns {@code true} if the graph is a pseudograph, {@code false} otherwise.
      * 
-     * @return <code>true</code> if the graph is a pseudograph, <code>false</code> otherwise
+     * @return {@code true} if the graph is a pseudograph, {@code false} otherwise
      */
     boolean isPseudograph();
 
     /**
-     * Returns <code>true</code> if the graph is a multigraph, <code>false</code> otherwise.
+     * Returns {@code true} if the graph is a multigraph, {@code false} otherwise.
      * 
-     * @return <code>true</code> if the graph is a multigraph, <code>false</code> otherwise
+     * @return {@code true} if the graph is a multigraph, {@code false} otherwise
      */
     boolean isMultigraph();
 
     /**
-     * Returns <code>true</code> if the graph is modifiable, <code>false</code> otherwise.
+     * Returns {@code true} if the graph is modifiable, {@code false} otherwise.
      * 
-     * @return <code>true</code> if the graph is modifiable, <code>false</code> otherwise
+     * @return {@code true} if the graph is modifiable, {@code false} otherwise
      */
     boolean isModifiable();
 

@@ -76,7 +76,7 @@ public class ScaleFreeGraphGenerator<V, E>
     }
 
     /**
-     * Generates scale-free network with <code>size</code> passed to the constructor.
+     * Generates scale-free network with {@code size} passed to the constructor.
      *
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to

@@ -61,7 +61,7 @@ public class WheelGraphGenerator<V, E>
      * Construct a new WheelGraphGenerator.
      *
      * @param size number of vertices to be generated.
-     * @param inwardSpokes if <code>true</code> and graph is directed, spokes are oriented from rim
+     * @param inwardSpokes if {@code true} and graph is directed, spokes are oriented from rim
      *        to hub; else from hub to rim.
      *
      * @throws IllegalArgumentException in case the number of vertices is negative

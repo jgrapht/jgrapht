@@ -48,7 +48,7 @@ class DOTUtils
      *
      * @param idCandidate the ID candidate.
      *
-     * @return <code>true</code> if it is valid; <code>false</code> otherwise.
+     * @return {@code true} if it is valid; {@code false} otherwise.
      */
     static boolean isValidID(String idCandidate)
     {

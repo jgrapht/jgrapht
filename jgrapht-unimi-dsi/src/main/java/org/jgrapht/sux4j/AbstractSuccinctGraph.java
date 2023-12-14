@@ -76,7 +76,7 @@ public abstract class AbstractSuccinctGraph<E>
      * Ensures that the specified vertex exists in this graph, or else throws exception.
      *
      * @param v vertex
-     * @return <code>true</code> if this assertion holds.
+     * @return {@code true} if this assertion holds.
      * @throws IllegalArgumentException if specified vertex does not exist in this graph.
      */
     @Override

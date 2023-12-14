@@ -84,10 +84,10 @@ public class AsWeightedGraph<V, E>
      * @param graph the backing graph over which an weighted view is to be created
      * @param weights the map containing the edge weights
      * @param writeWeightsThrough if set to true, the weights will get propagated to the backing
-     *        graph in the <code>setEdgeWeight()</code> method.
+     *        graph in the {@code setEdgeWeight()} method.
      * @throws NullPointerException if the graph or the weights are null
-     * @throws IllegalArgumentException if <code>writeWeightsThrough</code> is set to true and
-     *         <code>graph</code> is not a weighted graph
+     * @throws IllegalArgumentException if {@code writeWeightsThrough} is set to true and
+     *         {@code graph} is not a weighted graph
      */
     public AsWeightedGraph(Graph<V, E> graph, Map<E, Double> weights, boolean writeWeightsThrough)
     {
@@ -104,24 +104,24 @@ public class AsWeightedGraph<V, E>
     /**
      * Constructor for AsWeightedGraph which uses a weight function to compute edge weights. When
      * the weight of an edge is queried, the weight function is invoked. If
-     * <code>cacheWeights</code> is set to <code>true</code>, the weight of an edge returned by the
-     * <code>weightFunction</code> after its first invocation is stored in a map. The weight of an
+     * {@code cacheWeights} is set to {@code true}, the weight of an edge returned by the
+     * {@code weightFunction} after its first invocation is stored in a map. The weight of an
      * edge returned by subsequent calls to @link{getEdgeWeight} for the same edge will then be
      * retrieved directly from the map, instead of re-invoking the weight function. If
-     * <code>cacheWeights</code> is set to <code>false</code>, each invocation of
+     * {@code cacheWeights} is set to {@code false}, each invocation of
      * the @link{getEdgeWeight} method will invoke the weight function. Caching the edge weights is
      * particularly useful when pre-computing all edge weights is expensive and it is expected that
      * the weights of only a subset of all edges will be queried.
      *
      * @param graph the backing graph over which an weighted view is to be created
      * @param weightFunction function which maps an edge to a weight
-     * @param cacheWeights if set to <code>true</code>, weights are cached once computed by the
+     * @param cacheWeights if set to {@code true}, weights are cached once computed by the
      *        weight function
-     * @param writeWeightsThrough if set to <code>true</code>, the weight set directly by
+     * @param writeWeightsThrough if set to {@code true}, the weight set directly by
      *        the @link{setEdgeWeight} method will be propagated to the backing graph.
      * @throws NullPointerException if the graph or the weight function is null
-     * @throws IllegalArgumentException if <code>writeWeightsThrough</code> is set to true and
-     *         <code>graph</code> is not a weighted graph
+     * @throws IllegalArgumentException if {@code writeWeightsThrough} is set to true and
+     *         {@code graph} is not a weighted graph
      */
     public AsWeightedGraph(
         Graph<V, E> graph, Function<E, Double> weightFunction, boolean cacheWeights,
@@ -142,7 +142,7 @@ public class AsWeightedGraph<V, E>
      * map lookup is performed. If the edge is not found, the @link{getEdgeWeight} method of the
      * underlying graph is invoked instead. If, on the other hand, the weights are provided through
      * a function, this method will first attempt to lookup the weight of an edge in the cache (that
-     * is, if <code>cacheWeights</code> is set to <code>true</code> in the constructor). If caching
+     * is, if {@code cacheWeights} is set to {@code true} in the constructor). If caching
      * was disabled, or the edge could not be found in the cache, the weight function is invoked. If
      * the function does not provide a weight for a given edge, the call is again propagated to the
      * underlying graph.
@@ -172,9 +172,9 @@ public class AsWeightedGraph<V, E>
     }
 
     /**
-     * Assigns a weight to an edge. If <code>writeWeightsThrough</code> is set to <code>true</code>,
+     * Assigns a weight to an edge. If {@code writeWeightsThrough} is set to {@code true},
      * the same weight is set in the backing graph. If this class was constructed using a weight
-     * function, it only makes sense to invoke this method when <code>cacheWeights</code> is set to
+     * function, it only makes sense to invoke this method when {@code cacheWeights} is set to
      * true. This method can then be used to preset weights in the cache, or to overwrite existing
      * values.
      *

@@ -34,7 +34,7 @@ public interface DirectedSimpleCycles<V, E>
     /**
      * Find the simple cycles of the graph.
      *
-     * @return The list of all simple cycles. Possibly empty but never <code>null</code>.
+     * @return The list of all simple cycles. Possibly empty but never {@code null}.
      */
     default List<List<V>> findSimpleCycles()
     {

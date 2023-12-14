@@ -219,10 +219,10 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then
-     * calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
-     * <code>source</code> and <code>sink</code> must be vertices of the <code>
-     * network</code> passed to the constructor, and they must be different.
+     * Sets current source to {@code source}, current sink to {@code sink}, then
+     * calculates maximum flow from {@code source} to {@code sink}. Note, that
+     * {@code source} and {@code sink} must be vertices of the {@code network}
+     * passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex

@@ -62,7 +62,7 @@ public class ComplementGraphGenerator<V, E>
     /**
      * Complement Graph Generator. If the target graph allows self-loops the complement of $G$ may
      * be defined by adding a self-loop to every vertex that does not have one in $G$. This behavior
-     * can be controlled using the boolean <code>generateSelfLoops</code>.
+     * can be controlled using the boolean {@code generateSelfLoops}.
      *
      * @param graph input graph
      * @param generateSelfLoops indicator whether self loops should be generated. If false, no

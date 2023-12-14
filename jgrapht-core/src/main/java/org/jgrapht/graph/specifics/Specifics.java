@@ -48,8 +48,8 @@ public interface Specifics<V, E>
 
     /**
      * Returns a set of all edges connecting source vertex to target vertex if such vertices exist
-     * in this graph. If any of the vertices does not exist or is <code>null</code>, returns
-     * <code>null</code>. If both vertices exist but no edges found, returns an empty set.
+     * in this graph. If any of the vertices does not exist or is {@code null}, returns
+     * {@code null}. If both vertices exist but no edges found, returns an empty set.
      *
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
@@ -60,8 +60,8 @@ public interface Specifics<V, E>
 
     /**
      * Returns an edge connecting source vertex to target vertex if such vertices and such edge
-     * exist in this graph. Otherwise returns <code>
-     * null</code>. If any of the specified vertices is <code>null</code> returns <code>null</code>
+     * exist in this graph. Otherwise returns {@code null}.
+     * If any of the specified vertices is {@code null} returns {@code null}
      *
      * <p>
      * In undirected graphs, the returned edge may have its source and target vertices in the

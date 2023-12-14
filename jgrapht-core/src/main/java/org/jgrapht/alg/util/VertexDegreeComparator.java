@@ -109,14 +109,14 @@ public class VertexDegreeComparator<V, E>
     }
 
     /**
-     * Compare the degrees of <code>v1</code> and <code>v2</code>, taking into account whether
+     * Compare the degrees of {@code v1} and {@code v2}, taking into account whether
      * ascending or descending order is used.
      *
      * @param v1 the first vertex to be compared.
      * @param v2 the second vertex to be compared.
      *
-     * @return -1 if <code>v1</code> comes before <code>v2</code>, +1 if <code>
-     * v1</code> comes after <code>v2</code>, 0 if equal.
+     * @return -1 if {@code v1} comes before {@code v2}, +1 if {@code v1}
+     *         comes after {@code v2}, 0 if equal.
      * @deprecated use {@link VertexDegreeComparator#of(Graph)}
      */
     @Override
