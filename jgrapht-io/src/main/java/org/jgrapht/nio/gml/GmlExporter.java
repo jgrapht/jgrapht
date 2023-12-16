@@ -283,7 +283,7 @@ public class GmlExporter<V, E>
             }
             if (exportCustomNodeGraphicsAttributes) {
                 getVertexGraphicsAttributes(from).ifPresent(graphicsAttributes -> {
-                    out.println(TAB2 + "graphics\n" + TAB2 + "[");
+                    out.println(TAB2 + "graphics" + System.lineSeparator() + TAB2 + "[");
                     graphicsAttributes.entrySet().stream().forEach(e -> {
                         String customAttributeKey = e.getKey();
                         Attribute customAttributeValue = e.getValue();
