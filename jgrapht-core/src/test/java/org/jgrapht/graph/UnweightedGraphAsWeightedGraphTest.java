@@ -22,7 +22,6 @@ import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.jgrapht.Graph.DEFAULT_EDGE_WEIGHT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
