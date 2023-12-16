@@ -265,11 +265,25 @@
                     <configuration>
                         <testFailureIgnore>false</testFailureIgnore>
                         <useSystemClassLoader>false</useSystemClassLoader>
+                        <properties>
+                            <configurationParameters>
+                                junit.jupiter.testinstance.lifecycle.default = per_class
+                                junit.jupiter.execution.parallel.enabled = true
+                            </configurationParameters>
+                        </properties>
                     </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <properties>
+                            <configurationParameters>
+                                junit.jupiter.testinstance.lifecycle.default = per_class
+                                junit.jupiter.execution.parallel.enabled = true
+                            </configurationParameters>
+                        </properties>
+                    </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.surefire</groupId>
