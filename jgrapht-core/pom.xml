@@ -81,7 +81,7 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <test>FastTestSuite</test>
+                            <include>${project.basedir}/src/test/java/org/jgrapht/FastTestSuite.java</include>
                         </configuration>
                     </execution>
                 </executions>
@@ -90,7 +90,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <test>IntegrationTestSuite</test>
+                    <include>${project.basedir}/src/test/java/org/jgrapht/IntegrationTestSuite.java</include>
                 </configuration>
             </plugin>
         </plugins>
