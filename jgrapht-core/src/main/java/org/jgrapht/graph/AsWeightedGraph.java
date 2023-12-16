@@ -119,7 +119,7 @@ public class AsWeightedGraph<V, E>
      *        weight function
      * @param writeWeightsThrough if set to {@code true}, the weight set directly by
      *        the {@link #setEdgeWeight(Object, double)} method will be propagated to the backing graph.
-     * @throws NullPointerException if the graph or the weight function is null
+     * @throws NullPointerException if the graph or the weight function is {@link null}
      * @throws IllegalArgumentException if {@code writeWeightsThrough} is set to true and
      *         {@code graph} is not a weighted graph
      */
@@ -149,7 +149,7 @@ public class AsWeightedGraph<V, E>
      *
      * @param e edge of interest
      * @return the edge weight
-     * @throws NullPointerException if the edge is null
+     * @throws NullPointerException if the edge is {@link null}
      */
     @Override
     public double getEdgeWeight(E e)

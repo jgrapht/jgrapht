@@ -23,7 +23,7 @@ package org.jgrapht.util;
  * {@code ModifiableInteger} contains a single field whose type is {@code int}.
  *
  * <p>
- * Unlike {@code java.lang.Integer}, the int value which the ModifiableInteger represents can
+ * Unlike {@code java.lang.Integer}, the {@code int} value which the ModifiableInteger represents can
  * be modified. It becomes useful when used together with the collection framework. For example, if
  * you want to have a {@link java.util.List} of counters. You could use {@code Integer} but
  * that would have became wasteful and inefficient if you frequently had to update the counters.

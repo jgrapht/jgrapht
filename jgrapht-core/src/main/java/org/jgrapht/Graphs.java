@@ -233,7 +233,7 @@ public abstract class Graphs
      *
      * @return {@code true} if graph changed as a result of the call
      *
-     * @throws NullPointerException if the specified vertices contains one or more null vertices, or
+     * @throws NullPointerException if the specified vertices contains one or more {@code null} vertices, or
      *         if the specified vertex collection is {@code null}.
      *
      * @see Graph#addVertex(Object)

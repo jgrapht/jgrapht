@@ -80,7 +80,7 @@ public final class EdmondsKarpMFImpl<V, E>
      * Constructs {@code MaximumFlow} instance to work with <i>a copy of</i>
      * {@code network}. Current source and sink are set to {@code null}. If
      * {@code network} is weighted, then capacities are weights, otherwise all capacities are
-     * equal to one. Doubles are compared using {@code DEFAULT_EPSILON} tolerance.
+     * equal to one. Doubles are compared using {@link #DEFAULT_EPSILON} tolerance.
      *
      * @param network network, where maximum flow will be calculated
      */

@@ -53,7 +53,7 @@ public interface AStarAdmissibleHeuristic<V>
      *
      * @param graph graph to test heuristic on
      * @param <E> graph edges type
-     * @return true iff the heuristic is consistent wrt the {@code graph}, false otherwise
+     * @return {@code true} iff the heuristic is consistent wrt the {@code graph}, {@code false} otherwise
      */
     default <E> boolean isConsistent(Graph<V, E> graph)
     {

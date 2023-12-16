@@ -280,7 +280,7 @@ public class AsSubgraph<V, E>
      *
      * @return {@code true} if the vertex was added, otherwise {@code false}.
      *
-     * @throws NullPointerException if v is null
+     * @throws NullPointerException if v is {@code null}
      * @throws IllegalArgumentException if the base graph does not contain the vertex
      *
      * @see AsSubgraph

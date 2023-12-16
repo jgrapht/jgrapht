@@ -36,23 +36,23 @@ package org.jgrapht;
 public interface GraphType
 {
     /**
-     * Returns true if all edges of the graph are directed, false otherwise.
+     * Returns {@code true} if all edges of the graph are directed, false otherwise.
      * 
      * @return true if all edges of the graph are directed, false otherwise
      */
     boolean isDirected();
 
     /**
-     * Returns true if all edges of the graph are undirected, false otherwise.
+     * Returns {@code true} if all edges of the graph are undirected, false otherwise.
      * 
-     * @return true if all edges of the graph are undirected, false otherwise
+     * @return {@code true} if all edges of the graph are undirected, false otherwise
      */
     boolean isUndirected();
 
     /**
-     * Returns true if the graph contain both directed and undirected edges, false otherwise.
+     * Returns {@code true} if the graph contain both directed and undirected edges, false otherwise.
      * 
-     * @return true if the graph contain both directed and undirected edges, false otherwise
+     * @return {@code true} if the graph contain both directed and undirected edges, false otherwise
      */
     boolean isMixed();
 

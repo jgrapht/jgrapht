@@ -26,10 +26,10 @@ import java.util.*;
  * Provides an unweighted view on a graph.
  *
  * Algorithms designed for unweighted graphs should also work on weighted graphs. This class
- * emulates an unweighted graph based on a weighted one by returning {@code Graph.DEFAULT_EDGE_WEIGHT}
+ * emulates an unweighted graph based on a weighted one by returning {@link Graph#DEFAULT_EDGE_WEIGHT}
  * for each edge weight. The underlying weighted graph is provided at the constructor.
  * Modifying operations (adding/removing vertexes/edges) are also passed through to the underlying
- * weighted graph. As edge weight, Graph.DEFAULT_EDGE_WEIGHT is used. Setting an edge weight is not
+ * weighted graph. As edge weight, {@link Graph#DEFAULT_EDGE_WEIGHT} is used. Setting an edge weight is not
  * supported. The edges are not modified. So, if an edge is asked for, the one from the underlying
  * weighted graph is returned. In case the underlying graph is serializable, this one is
  * serializable, too.
@@ -49,7 +49,7 @@ public class AsUnweightedGraph<V, E>
      * Constructor for AsUnweightedGraph.
      *
      * @param g the backing directed graph over which an undirected view is to be created.
-     * @throws NullPointerException if the graph is null
+     * @throws NullPointerException if the graph is {@link null}
      */
     public AsUnweightedGraph(Graph<V, E> g)
     {

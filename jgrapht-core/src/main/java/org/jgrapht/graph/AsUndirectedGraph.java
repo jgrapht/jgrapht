@@ -30,7 +30,7 @@ import java.util.*;
  * <a href="http://mathworld.wolfram.com/OrientedGraph.html">oriented graph</a>, then the view will
  * be a simple graph; otherwise, it will be a multigraph. Query operations on this graph "read
  * through" to the backing graph. Attempts to add edges will result in an
- * {@code UnsupportedOperationException}, but vertex addition/removal and edge removal are all
+ * {@link UnsupportedOperationException}, but vertex addition/removal and edge removal are all
  * supported (and immediately reflected in the backing graph).
  *
  * <p>
