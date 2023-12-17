@@ -81,6 +81,7 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
+                            <argLine>--add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED</argLine>
                             <includes>
                                 <include>**/FastTestSuite.java</include>
                             </includes>
@@ -92,6 +93,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
+                    <argLine>--add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED</argLine>
                     <includes>
                         <include>**/IntegrationTestSuite.java</include>
                     </includes>
