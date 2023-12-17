@@ -218,7 +218,7 @@
             </dependency>
             <dependency>
                 <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-suite-engine</artifactId>
+                <artifactId>junit-platform-suite</artifactId>
                 <version>${junit.platform.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -264,7 +264,6 @@
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <testFailureIgnore>false</testFailureIgnore>
-                        <useSystemClassLoader>false</useSystemClassLoader>
                         <properties>
                             <configurationParameters>
                                 junit.jupiter.testinstance.lifecycle.default = per_class

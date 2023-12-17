@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite-engine</artifactId>
+            <artifactId>junit-platform-suite</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -81,7 +81,9 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <include>${project.basedir}/src/test/java/org/jgrapht/FastTestSuite.java</include>
+                            <includes>
+                                <include>**/FastTestSuite.java</include>
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>
@@ -90,7 +92,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <include>${project.basedir}/src/test/java/org/jgrapht/IntegrationTestSuite.java</include>
+                    <includes>
+                        <include>**/IntegrationTestSuite.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
