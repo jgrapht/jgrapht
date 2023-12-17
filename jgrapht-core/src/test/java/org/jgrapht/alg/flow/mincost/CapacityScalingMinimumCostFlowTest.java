@@ -39,7 +39,7 @@ public class CapacityScalingMinimumCostFlowTest
 
     private static final double EPS = 1e-9;
 
-    private static int[] scalingFactors() {
+    public static int[] scalingFactors() {
         return new int[] {1, 2, 3, 4, 5};
     }
 
