@@ -26,6 +26,7 @@ import org.junit.platform.suite.api.*;
  */
 @ExcludePackages({"org.jgrapht.perf"})
 @ExcludeTags({ "slow", "optional" })
+@SelectPackages({"org.jgrapht"})
 @Suite
 public class FastTestSuite
 {

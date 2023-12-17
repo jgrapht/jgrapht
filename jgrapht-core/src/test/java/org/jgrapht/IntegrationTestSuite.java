@@ -27,6 +27,7 @@ import org.junit.platform.suite.api.*;
  */
 @ExcludePackages({"org.jgrapht.perf"})
 @ExcludeTags({ "optional" })
+@SelectPackages({"org.jgrapht"})
 @Suite
 public class IntegrationTestSuite
 {
