@@ -10,7 +10,7 @@
     <name>JGraphT - Core</name>
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>
-        <excludedGroups>org.jgrapht.SlowTests,org.jgrapht.OptionalTests</excludedGroups>
+        <excludedGroups>slow,optional</excludedGroups>
     </properties>
     <licenses>
         <license>
@@ -82,6 +82,10 @@
                         <id>default-test</id>
                         <configuration>
                             <argLine>--add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED</argLine>
+                            <excludes>
+                                <exclude>**/perf/**</exclude>
+                            </excludes>
+                            <excludedGroups>${excludedGroups}</excludedGroups>
                             <includes>
                                 <include>**/FastTestSuite.java</include>
                             </includes>
@@ -94,8 +98,10 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <argLine>--add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED</argLine>
+                    <excludedGroups>optional</excludedGroups>
+                    <groups>slow</groups>
                     <includes>
-                        <include>**/IntegrationTestSuite.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>
