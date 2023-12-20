@@ -249,7 +249,6 @@
                         <execution>
                             <id>default-compile</id>
                             <configuration>
-                                <!-- failOnWarning>true</failOnWarning -->
                                 <compilerArgs>
                                     <arg>-Xlint:all,-deprecation</arg>
                                     <arg>-Xpkginfo:always</arg>
@@ -263,7 +262,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
-                        <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+                        <!-- <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests> -->
                         <testFailureIgnore>false</testFailureIgnore>
                         <properties>
                             <configurationParameters>
