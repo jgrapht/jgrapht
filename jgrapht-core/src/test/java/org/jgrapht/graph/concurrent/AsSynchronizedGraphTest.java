@@ -56,10 +56,16 @@ public class AsSynchronizedGraphTest
             int index = (int) (Math.random() * ordersList.size());
             ordersList.get(index).add(new AddV(i));
         }
-        ordersList.parallelStream().forEach(orders -> {
-            for (Order o : orders)
-                o.execute();
-        });
+        final AtomicInteger threadCounter = new AtomicInteger(ordersList.size());
+        for (List<Order> orders : ordersList) {
+            new Thread(() -> {
+                for (Order o : orders)
+                    o.execute();
+                threadCounter.decrementAndGet();
+            }).start();
+        }
+        while (threadCounter.get() > 0) {
+        }
         assertEquals(1000, g.vertexSet().size());
         for (int i = 0; i < 1000; i++) {
             assertTrue(g.containsVertex(i));
@@ -87,10 +93,16 @@ public class AsSynchronizedGraphTest
             ordersList.get(index).add(new AddE(i, (i + 1) % 1000, e));
             list.add(e);
         }
-        ordersList.parallelStream().forEach(orders -> {
-            for (Order o : orders)
-                o.execute();
-        });
+        final AtomicInteger threadCounter = new AtomicInteger(ordersList.size());
+        for (List<Order> orders : ordersList) {
+            new Thread(() -> {
+                for (Order o : orders)
+                    o.execute();
+                threadCounter.decrementAndGet();
+            }).start();
+        }
+        while (threadCounter.get() > 0) {
+        }
         assertEquals(1000, g.edgeSet().size());
         for (int i = 0; i < 1000; i++)
             assertTrue(g.containsEdge(list.get(i)));
@@ -274,10 +286,16 @@ public class AsSynchronizedGraphTest
         ordersList.add(order2);
         ordersList.add(order3);
         ordersList.add(order4);
-        ordersList.parallelStream().forEach(orders -> {
-            for (Order o : orders)
-                o.execute();
-        });
+        final AtomicInteger threadCounter = new AtomicInteger(ordersList.size());
+        for (List<Order> orders : ordersList) {
+            new Thread(() -> {
+                for (Order o : orders)
+                    o.execute();
+                threadCounter.decrementAndGet();
+            }).start();
+        }
+        while (threadCounter.get() > 0) {
+        }
         assertFalse(g.isCacheEnabled());
         assertEquals(60, g.vertexSet().size());
         assertEquals(60, iteratorCnt(g.vertexSet().iterator()));
@@ -303,10 +321,16 @@ public class AsSynchronizedGraphTest
         ordersList.add(order1);
         ordersList.add(order2);
         ordersList.add(order3);
-        ordersList.parallelStream().forEach(orders -> {
-            for (Order o : orders)
-                o.execute();
-        });
+        threadCounter.set(ordersList.size());
+        for (List<Order> orders : ordersList) {
+            new Thread(() -> {
+                for (Order o : orders)
+                    o.execute();
+                threadCounter.decrementAndGet();
+            }).start();
+        }
+        while (threadCounter.get() > 0) {
+        }
         assertEquals(38, g.vertexSet().size());
         assertEquals(190, g.edgeSet().size());
         assertEquals(0, g.edgesOf(2).size());
