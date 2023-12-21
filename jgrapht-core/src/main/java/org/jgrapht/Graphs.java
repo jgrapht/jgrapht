@@ -44,6 +44,7 @@ public abstract class Graphs
      *
      * @return The newly created edge if added to the graph, otherwise {@code null}.
      * 
+     * @throws NullPointerException if any one of {@code g}, {@code sourceVertex}, or {@code targetVertex} is {@code null}
      * @throws UnsupportedOperationException if the graph has no edge supplier
      *
      * @see Graph#addEdge(Object, Object)
@@ -76,6 +77,8 @@ public abstract class Graphs
      * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise {@code null}.
+     * 
+     * @throws NullPointerException if any one of the arguments is {@code null}
      */
     public static <V, E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex)
     {
@@ -121,6 +124,8 @@ public abstract class Graphs
      * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise {@code null}.
+     * 
+     * @throws NullPointerException if any one of {@code g}, {@code sourceVertex}, or {@code targetVertex} is {@code null}
      */
     public static <V,
         E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
