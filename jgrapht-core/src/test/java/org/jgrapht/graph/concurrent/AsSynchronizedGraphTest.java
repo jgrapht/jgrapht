@@ -19,6 +19,7 @@ package org.jgrapht.graph.concurrent;
 
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author CHEN Kui
  */
+@Execution(ExecutionMode.SAME_THREAD)
 public class AsSynchronizedGraphTest
 {
     private List<Integer> vertices;
