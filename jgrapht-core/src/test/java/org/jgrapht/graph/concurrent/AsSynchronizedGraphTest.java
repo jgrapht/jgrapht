@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Semaphore;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,16 +58,15 @@ public class AsSynchronizedGraphTest
             int index = (int) (Math.random() * ordersList.size());
             ordersList.get(index).add(new AddV(i));
         }
-        final AtomicInteger threadCounter = new AtomicInteger(ordersList.size());
+        final Semaphore semaphore = new Semaphore(-ordersList.size() + 1);
         for (List<Order> orders : ordersList) {
             new Thread(() -> {
                 for (Order o : orders)
                     o.execute();
-                threadCounter.decrementAndGet();
+                semaphore.release();
             }).start();
         }
-        while (threadCounter.get() > 0) {
-        }
+        semaphore.acquireUninterruptibly();
         assertEquals(1000, g.vertexSet().size());
         for (int i = 0; i < 1000; i++) {
             assertTrue(g.containsVertex(i));
@@ -95,16 +94,15 @@ public class AsSynchronizedGraphTest
             ordersList.get(index).add(new AddE(i, (i + 1) % 1000, e));
             list.add(e);
         }
-        final AtomicInteger threadCounter = new AtomicInteger(ordersList.size());
+        final Semaphore semaphore = new Semaphore(-ordersList.size() + 1);
         for (List<Order> orders : ordersList) {
             new Thread(() -> {
                 for (Order o : orders)
                     o.execute();
-                threadCounter.decrementAndGet();
+                semaphore.release();
             }).start();
         }
-        while (threadCounter.get() > 0) {
-        }
+        semaphore.acquireUninterruptibly();
         assertEquals(1000, g.edgeSet().size());
         for (int i = 0; i < 1000; i++)
             assertTrue(g.containsEdge(list.get(i)));
@@ -133,23 +131,22 @@ public class AsSynchronizedGraphTest
             g.addEdge(i, (i + 1) % 1000, e);
             edges.add(e);
         }
-        final AtomicInteger threadCounter = new AtomicInteger(5);
-        for (int i = 0; i < threadCounter.get(); i++) {
+        final Semaphore semaphore = new Semaphore(-4);
+        for (int i = 0; i < 5; i++) {
             new Thread(() -> {
                 while (true) {
                     DefaultEdge e;
                     if (edges.size() > 400)
                         e = edges.remove(0);
                     else {
-                        threadCounter.decrementAndGet();
+                        semaphore.release();
                         return;
                     }
                     g.removeEdge(e);
                 }
             }).start();
         }
-        while (threadCounter.get() > 0) {
-        }
+        semaphore.acquireUninterruptibly();
         assertEquals(400, g.edgeSet().size());
         assertEquals(400, iteratorCnt(g.edgeSet().iterator()));
         g.removeEdge(edges.get(0));
@@ -170,23 +167,22 @@ public class AsSynchronizedGraphTest
         for (int i = 0; i < 100; i++)
             for (int j = 0; j < 100; j++)
                 g.addEdge(i, j);
-        final AtomicInteger threadCounter = new AtomicInteger(3);
-        for (int i = 0; i < threadCounter.get(); i++) {
+        final Semaphore semaphore = new Semaphore(-2);
+        for (int i = 0; i < 3; i++) {
             new Thread(() -> {
                 while (true) {
                     int c;
                     if (vertices.size() > 10)
                         c = vertices.remove(0);
                     else {
-                        threadCounter.decrementAndGet();
+                        semaphore.release();
                         return;
                     }
                     g.removeVertex(c);
                 }
             }).start();
         }
-        while (threadCounter.get() > 0) {
-        }
+        semaphore.acquireUninterruptibly();
         assertEquals(10, g.vertexSet().size());
         assertEquals(10, iteratorCnt(g.vertexSet().iterator()));
         assertEquals(100, g.edgeSet().size());
@@ -288,16 +284,15 @@ public class AsSynchronizedGraphTest
         ordersList.add(order2);
         ordersList.add(order3);
         ordersList.add(order4);
-        final AtomicInteger threadCounter = new AtomicInteger(ordersList.size());
+        Semaphore semaphore1 = new Semaphore(-ordersList.size() + 1);
         for (List<Order> orders : ordersList) {
             new Thread(() -> {
                 for (Order o : orders)
                     o.execute();
-                threadCounter.decrementAndGet();
+                semaphore1.release();
             }).start();
         }
-        while (threadCounter.get() > 0) {
-        }
+        semaphore1.acquireUninterruptibly();
         assertFalse(g.isCacheEnabled());
         assertEquals(60, g.vertexSet().size());
         assertEquals(60, iteratorCnt(g.vertexSet().iterator()));
@@ -323,16 +318,15 @@ public class AsSynchronizedGraphTest
         ordersList.add(order1);
         ordersList.add(order2);
         ordersList.add(order3);
-        threadCounter.set(ordersList.size());
+        Semaphore semaphore2 = new Semaphore(-ordersList.size() + 1);
         for (List<Order> orders : ordersList) {
             new Thread(() -> {
                 for (Order o : orders)
                     o.execute();
-                threadCounter.decrementAndGet();
+                semaphore2.release();
             }).start();
         }
-        while (threadCounter.get() > 0) {
-        }
+        semaphore2.acquireUninterruptibly();
         assertEquals(38, g.vertexSet().size());
         assertEquals(190, g.edgeSet().size());
         assertEquals(0, g.edgesOf(2).size());
@@ -353,14 +347,14 @@ public class AsSynchronizedGraphTest
             g.addEdge(i, (i + 1) % 1000, e);
             edges.add(e);
         }
-        final AtomicInteger count = new AtomicInteger(2);
+        final Semaphore semaphore = new Semaphore(0, true);
         new Thread(() -> {
             while (true) {
                 int c;
                 if (vertices.size() > 10)
                     c = vertices.remove(0);
                 else {
-                    count.decrementAndGet();
+                    semaphore.release();
                     return;
                 }
                 g.getLock().readLock().lock();
@@ -374,21 +368,19 @@ public class AsSynchronizedGraphTest
             }
         }, "verifyEdges").run();
         new Thread(() -> {
-            while (count.get() > 1) {
-            }
+            semaphore.acquireUninterruptibly();
             while (true) {
                 DefaultEdge e;
                 if (edges.size() > 400)
                         e = edges.remove(0);
                 else {
-                    count.decrementAndGet();
+                    semaphore.release();
                     return;
                 }
                 g.removeEdge(e);
             }
         }, "removeEdge").run();
-        while(count.get() > 0) {
-        }
+        semaphore.acquireUninterruptibly();
     }
 
     private void createOrder(ArrayList<Order> list, int start, int end, boolean add)
