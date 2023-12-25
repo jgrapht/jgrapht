@@ -64,9 +64,26 @@ public class DoublyLinkedList<E>
     private ListNodeImpl<E> head = null;
     private int size;
 
-    private ListNodeImpl<E> tail()
+    /**
+     * Returns the first element of the list.
+     * 
+     * @return the first element of the list
+     * 
+     * @since 1.5.3
+     */
+    ListNode<E> head()
     {
-        return head.prev;
+        return this.head;
+    }
+
+    /**
+     * Returns the last element of the list.
+     * 
+     * @return the last element of the list
+     */
+    ListNode<E> tail()
+    {
+        return head.getPrev();
     }
 
     /**
@@ -141,9 +158,9 @@ public class DoublyLinkedList<E>
     { // call this before any modification of this list is done
 
         for (ListNodeIteratorImpl it = list.new ListNodeIteratorImpl(0); it.hasNext();) {
-            ListNodeImpl<E> node = it.nextNode();
-            assert node.list == list;
-            node.list = this;
+            ListNode<E> node = it.nextNode();
+            assert node.getList() == list;
+            ((ListNodeImpl<E>) node).list = this;
         }
         size += list.size;
         list.size = 0;
@@ -221,9 +238,9 @@ public class DoublyLinkedList<E>
         if (previousSize == 0) {
             head = list.head; // head and tail already linked together
         } else {
-            ListNodeImpl<E> refNode = (index == previousSize) ? head : getNodeAt(index);
+            ListNodeImpl<E> refNode = (ListNodeImpl<E>) ((index == previousSize) ? head() : getNodeAt(index));
 
-            ListNodeImpl<E> listTail = list.tail();
+            ListNodeImpl<E> listTail = (ListNodeImpl<E>) list.tail();
             link(refNode.prev, list.head); // changes list.tail()
             link(listTail, refNode);
 
@@ -284,7 +301,7 @@ public class DoublyLinkedList<E>
         if (index == size) { // also true if this is empty
             linkLast(nodeImpl);
         } else {
-            ListNodeImpl<E> successor = index == 0 ? head : getNodeAt(index);
+            ListNodeImpl<E> successor = (ListNodeImpl<E>) (index == 0 ? head : getNodeAt(index));
             linkBefore(nodeImpl, successor);
             if (head == successor) {
                 head = nodeImpl;
@@ -365,7 +382,7 @@ public class DoublyLinkedList<E>
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        return head;
+        return head();
     }
 
     /**
@@ -409,21 +426,21 @@ public class DoublyLinkedList<E>
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
      */
-    private ListNodeImpl<E> getNodeAt(int index)
+    private ListNode<E> getNodeAt(int index)
     {
         if (index < 0 || size <= index) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-        ListNodeImpl<E> node;
+        ListNode<E> node;
         if (index < size / 2) {
-            node = head;
+            node = head();
             for (int i = 0; i < index; i++) {
-                node = node.next;
+                node = node.getNext();
             }
         } else {
             node = tail();
             for (int i = size - 1; index < i; i--) {
-                node = node.prev;
+                node = node.getPrev();
             }
         }
         return node;
@@ -452,12 +469,12 @@ public class DoublyLinkedList<E>
         if (!containsNode(node)) {
             return -1;
         }
-        ListNodeImpl<E> current = head;
+        ListNode<E> current = head();
         for (int i = 0; i < size; i++) {
             if (current == node) {
                 return i;
             }
-            current = current.next;
+            current = current.getNext();
         }
         // should never happen:
         throw new IllegalStateException("Node contained in list not found: " + node);
@@ -475,7 +492,7 @@ public class DoublyLinkedList<E>
      */
     public boolean containsNode(ListNode<E> node)
     {
-        return ((ListNodeImpl<E>) node).list == this;
+        return Objects.requireNonNull(node).getList() == this;
     }
 
     /**
@@ -508,7 +525,7 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> nodeOf(Object element)
     {
-        return searchNode(() -> head, n -> n.next, element).getFirst();
+        return searchNode(this::head, ListNode::getNext, element).getFirst();
     }
 
     /**
@@ -524,7 +541,7 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> lastNodeOf(Object element)
     {
-        return searchNode(this::tail, n -> n.prev, element).getFirst();
+        return searchNode(this::tail, ListNode::getPrev, element).getFirst();
     }
 
     /**
@@ -543,15 +560,15 @@ public class DoublyLinkedList<E>
      *         equal to {@code element} and its index, or if no such node was found a
      *         {@code Pair.of(null, -1)}
      */
-    private Pair<ListNodeImpl<E>, Integer> searchNode(
-        Supplier<ListNodeImpl<E>> first, UnaryOperator<ListNodeImpl<E>> next, Object element)
+    private Pair<ListNode<E>, Integer> searchNode(
+        Supplier<ListNode<E>> first, UnaryOperator<ListNode<E>> next, Object element)
     {
         if (!isEmpty()) {
             int index = 0;
-            ListNodeImpl<E> firstNode = first.get();
-            ListNodeImpl<E> node = firstNode;
+            ListNode<E> firstNode = first.get();
+            ListNode<E> node = firstNode;
             do {
-                if (Objects.equals(node.value, element)) {
+                if (Objects.equals(node.getValue(), element)) {
                     return Pair.of(node, index);
                 }
                 index++;
@@ -636,7 +653,7 @@ public class DoublyLinkedList<E>
     @Override
     public E get(int index)
     {
-        return getNodeAt(index).value;
+        return getNode(index).getValue();
     }
 
     /**
@@ -886,14 +903,16 @@ public class DoublyLinkedList<E>
      * result in the list $(z,y,x,\dots,c,b,a)$. This method does only pointer manipulation, meaning
      * that all the list nodes allocated for the previously added elements are valid after this
      * method finishes.
+     * 
+     * @see #reversed()
      */
     public void invert()
     {
         if (size < 2) {
             return;
         }
-        ListNodeImpl<E> newHead = tail();
-        ListNodeImpl<E> current = head;
+        ListNodeImpl<E> newHead = (ListNodeImpl<E>) tail();
+        ListNodeImpl<E> current = (ListNodeImpl<E>) head();
         do {
             ListNodeImpl<E> next = current.next;
 
@@ -904,6 +923,219 @@ public class DoublyLinkedList<E>
         } while (current != head);
         head = newHead;
         ++modCount;
+    }
+
+    /**
+     * Returns a reverse-ordered view of this {@code DoublyLinkedList}.
+     * Unlike {@link #invert()} which modifies the called instance,
+     * this method returns a view, while keeping the original instance
+     * unmodified.
+     * 
+     * <p>The returned view is unmodifiable, i.e., any method that
+     * attempts to modify the returned view throws an {@link UnsupportedOperationException}.
+     * 
+     * @return a reverse-ordered view of this {@code DoublyLinkedList}
+     * 
+     * @see #invert()
+     * @since 1.5.3
+     */
+    public DoublyLinkedList<E> reversed() {
+        final DoublyLinkedList<E> orig = this;
+        return new DoublyLinkedList<E>() {
+
+            @Override
+            ListNode<E> head()
+            {
+                return new ReversedListNode<>(orig.tail(), this);
+            }
+
+            @Override
+            ListNode<E> tail()
+            {
+                return new ReversedListNode<>(orig.head(), this);
+            }
+
+            @Override
+            public boolean isEmpty()
+            {
+                return orig.isEmpty();
+            }
+
+            @Override
+            public int size()
+            {
+                return orig.size();
+            }
+
+            @Override
+            public void clear()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void addNode(int index, ListNode<E> node)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void addNodeFirst(ListNode<E> node)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void addNodeLast(ListNode<E> node)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ListNode<E> getNode(int index)
+            {
+                return new ReversedListNode<>(orig.getNodeAt(size() - (1 + index)), this);
+            }
+
+            @Override
+            public ListNode<E> addElementFirst(E element)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ListNode<E> addElementLast(E element)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ListNode<E> addElementBeforeNode(ListNode<E> successor, E element)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void add(int index, E element)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E remove(int index)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void addFirst(E e)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void addLast(E e)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean offerFirst(E e)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean offerLast(E e)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E removeFirst()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E removeLast()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E pollFirst()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E pollLast()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean removeFirstOccurrence(Object o)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean removeLastOccurrence(Object o)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean offer(E e)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean remove(Object o)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E poll()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void push(E e)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public E pop()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void moveFrom(int index, DoublyLinkedList<E> movedList)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void append(DoublyLinkedList<E> movedList)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void prepend(DoublyLinkedList<E> movedList)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+        };
     }
 
     /**
@@ -970,7 +1202,7 @@ public class DoublyLinkedList<E>
      */
     public NodeIterator<E> circularIterator(E firstElement)
     {
-        ListNodeImpl<E> startNode = (ListNodeImpl<E>) nodeOf(firstElement);
+        ListNode<E> startNode = nodeOf(firstElement);
         if (startNode == null) {
             throw new NoSuchElementException();
         }
@@ -996,11 +1228,11 @@ public class DoublyLinkedList<E>
      */
     public NodeIterator<E> reverseCircularIterator(E firstElement)
     {
-        ListNodeImpl<E> startNode = (ListNodeImpl<E>) nodeOf(firstElement);
+        ListNode<E> startNode = nodeOf(firstElement);
         if (startNode == null) {
             throw new NoSuchElementException();
         }
-        return reverseIterator(new ListNodeIteratorImpl(size, startNode.next));
+        return reverseIterator(new ListNodeIteratorImpl(size, startNode.getNext()));
     }
 
     /**
@@ -1051,8 +1283,8 @@ public class DoublyLinkedList<E>
      */
     public ListNodeIterator<E> listIterator(E element)
     {
-        Pair<ListNodeImpl<E>, Integer> startPair = searchNode(() -> head, n -> n.next, element);
-        ListNodeImpl<E> startNode = startPair.getFirst();
+        Pair<ListNode<E>, Integer> startPair = searchNode(this::head, ListNode::getNext, element);
+        ListNode<E> startNode = startPair.getFirst();
         int startIndex = startPair.getSecond();
         if (startNode == null) {
             throw new NoSuchElementException();
@@ -1135,9 +1367,9 @@ public class DoublyLinkedList<E>
         /** Index in this list of the ListNode returned next. */
         private int nextIndex;
         /** ListNode this iterator will return next. Null if this list is empty. */
-        private ListNodeImpl<E> next;
+        private ListNode<E> next;
         /** ListNode this iterator returned last. */
-        private ListNodeImpl<E> last = null;
+        private ListNode<E> last = null;
 
         /**
          * The number of modifications the list have had at the moment when this iterator was
@@ -1148,14 +1380,14 @@ public class DoublyLinkedList<E>
         private ListNodeIteratorImpl(int startIndex)
         {
             this.nextIndex = startIndex;
-            if (startIndex == size) {
-                this.next = isEmpty() ? null : head;
+            if (startIndex == size()) {
+                this.next = isEmpty() ? null : head();
             } else {
                 this.next = getNodeAt(startIndex);
             }
         }
 
-        private ListNodeIteratorImpl(int startIndex, ListNodeImpl<E> startNode)
+        private ListNodeIteratorImpl(int startIndex, ListNode<E> startNode)
         {
             this.nextIndex = startIndex;
             this.next = startNode;
@@ -1167,7 +1399,7 @@ public class DoublyLinkedList<E>
         @Override
         public boolean hasNext()
         {
-            return nextIndex < size;
+            return nextIndex < size();
         }
 
         /**
@@ -1201,7 +1433,7 @@ public class DoublyLinkedList<E>
          * {@inheritDoc}
          */
         @Override
-        public ListNodeImpl<E> nextNode()
+        public ListNode<E> nextNode()
         {
             checkForComodification();
             if (!hasNext()) {
@@ -1209,7 +1441,7 @@ public class DoublyLinkedList<E>
             }
 
             last = next;
-            next = next.next;
+            next = next.getNext();
             nextIndex++;
             return last;
         }
@@ -1225,7 +1457,7 @@ public class DoublyLinkedList<E>
                 throw new NoSuchElementException();
             }
 
-            last = next = next.prev;
+            last = next = next.getPrev();
             nextIndex--;
             return last;
         }
@@ -1238,10 +1470,10 @@ public class DoublyLinkedList<E>
         {
             checkForComodification();
 
-            if (nextIndex == size) {
+            if (nextIndex == size()) {
                 addElementLast(e); // sets head to new node of e if was empty
-                if (size == 1) { // was empty
-                    next = head; // jump over head threshold, so cursor is at the end
+                if (size() == 1) { // was empty
+                    next = head(); // jump over head threshold, so cursor is at the end
                 }
             } else {
                 addElementBeforeNode(next, e);
@@ -1263,7 +1495,7 @@ public class DoublyLinkedList<E>
             checkForComodification();
             // replace node returned last with a new node holding e
 
-            ListNode<E> nextNode = last.next;
+            ListNode<E> nextNode = last.getNext();
             boolean wasLast = last == tail();
             removeNode(last);
             if (wasLast) { // or the sole node
@@ -1285,7 +1517,7 @@ public class DoublyLinkedList<E>
             }
             checkForComodification();
 
-            ListNodeImpl<E> lastsNext = last.next;
+            ListNode<E> lastsNext = last.getNext();
             removeNode(last);
             if (next == last) { // previousNode() called before
                 // removed element after cursor (which would have been next)
@@ -1377,6 +1609,15 @@ public class DoublyLinkedList<E>
          * @return the previous node in the list structure with respect to this node
          */
         ListNode<V> getPrev();
+
+        /**
+         * Returns the list that this node is a member of.
+         * 
+         * @return the list that this node is a member of
+         * 
+         * @since 1.5.3
+         */
+        DoublyLinkedList<V> getList();
     }
 
     /**
@@ -1440,5 +1681,64 @@ public class DoublyLinkedList<E>
         {
             return prev;
         }
+
+        /**
+         * @since 1.5.3
+         */
+        @Override
+        public DoublyLinkedList<V> getList()
+        {
+            return list;
+        }
+    }
+
+    /**
+     * Reversed view of a {@link ListNode}.
+     * 
+     * @since 1.5.3
+     */
+    private static class ReversedListNode<V> implements ListNode<V> {
+        private final ListNode<V> wrapped;
+        private DoublyLinkedList<V> list = null;
+
+        ReversedListNode(ListNode<V> node, DoublyLinkedList<V> list) {
+            this.wrapped = node;
+            this.list = list;
+        }
+        
+        @Override
+        public V getValue()
+        {
+            return wrapped.getValue();
+        }
+
+        @Override
+        public ListNode<V> getNext()
+        {
+            return new ReversedListNode<>(wrapped.getPrev(), this.list);
+        }
+
+        @Override
+        public ListNode<V> getPrev()
+        {
+            return new ReversedListNode<>(wrapped.getNext(), this.list);
+        }
+
+        @Override
+        public DoublyLinkedList<V> getList()
+        {
+            return list;
+        }
+
+        @Override
+        public String toString()
+        {
+            if (list == null) {
+                return " - " + getValue() + " - "; // not in a list
+            } else {
+                return getPrev().getValue() + " -> " + getValue() + " -> " + getNext().getValue();
+            }
+        }
+
     }
 }
