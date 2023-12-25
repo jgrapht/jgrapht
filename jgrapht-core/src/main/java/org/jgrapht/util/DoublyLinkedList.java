@@ -940,202 +940,7 @@ public class DoublyLinkedList<E>
      * @since 1.5.3
      */
     public DoublyLinkedList<E> reversed() {
-        final DoublyLinkedList<E> orig = this;
-        return new DoublyLinkedList<E>() {
-
-            @Override
-            ListNode<E> head()
-            {
-                return new ReversedListNode<>(orig.tail(), this);
-            }
-
-            @Override
-            ListNode<E> tail()
-            {
-                return new ReversedListNode<>(orig.head(), this);
-            }
-
-            @Override
-            public boolean isEmpty()
-            {
-                return orig.isEmpty();
-            }
-
-            @Override
-            public int size()
-            {
-                return orig.size();
-            }
-
-            @Override
-            public void clear()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void addNode(int index, ListNode<E> node)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void addNodeFirst(ListNode<E> node)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void addNodeLast(ListNode<E> node)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public ListNode<E> getNode(int index)
-            {
-                return new ReversedListNode<>(orig.getNodeAt(size() - (1 + index)), this);
-            }
-
-            @Override
-            public ListNode<E> addElementFirst(E element)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public ListNode<E> addElementLast(E element)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public ListNode<E> addElementBeforeNode(ListNode<E> successor, E element)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void add(int index, E element)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E remove(int index)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void addFirst(E e)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void addLast(E e)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean offerFirst(E e)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean offerLast(E e)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E removeFirst()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E removeLast()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E pollFirst()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E pollLast()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean removeFirstOccurrence(Object o)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean removeLastOccurrence(Object o)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean offer(E e)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean remove(Object o)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E poll()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void push(E e)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public E pop()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void moveFrom(int index, DoublyLinkedList<E> movedList)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void append(DoublyLinkedList<E> movedList)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void prepend(DoublyLinkedList<E> movedList)
-            {
-                throw new UnsupportedOperationException();
-            }
-
-        };
+        return new ReversedDoublyLinkedListView<>(this);
     }
 
     /**
@@ -1738,6 +1543,302 @@ public class DoublyLinkedList<E>
             } else {
                 return getPrev().getValue() + " -> " + getValue() + " -> " + getNext().getValue();
             }
+        }
+
+    }
+
+    /**
+     * A reversed view of a {@link DoublyLinkedList}. This view is unmodifiable.
+     * 
+     * @since 1.5.3
+     */
+    private static class ReversedDoublyLinkedListView<E> extends DoublyLinkedList<E> {
+
+        /** Reference to the original list. */
+        private final DoublyLinkedList<E> orig;
+
+        /**
+         * Constructs a new reversed view of the specified {@code DoublyLinkedList}.
+         * 
+         * @param orig the original list
+         * 
+         * @throws NullPointerException if argument is {@code null}
+         */
+        ReversedDoublyLinkedListView(DoublyLinkedList<E> orig) {
+            this.orig = Objects.requireNonNull(orig);
+        }
+
+        @Override
+        ListNode<E> head()
+        {
+            return new ReversedListNode<>(orig.tail(), this);
+        }
+
+        @Override
+        ListNode<E> tail()
+        {
+            return new ReversedListNode<>(orig.head(), this);
+        }
+
+        @Override
+        public boolean isEmpty()
+        {
+            return orig.isEmpty();
+        }
+
+        @Override
+        public int size()
+        {
+            return orig.size();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void clear()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void addNode(int index, ListNode<E> node)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void addNodeFirst(ListNode<E> node)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void addNodeLast(ListNode<E> node)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ListNode<E> getNode(int index)
+        {
+            return new ReversedListNode<>(orig.getNodeAt(size() - (1 + index)), this);
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public ListNode<E> addElementFirst(E element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public ListNode<E> addElementLast(E element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public ListNode<E> addElementBeforeNode(ListNode<E> successor, E element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void add(int index, E element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E remove(int index)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void addFirst(E e)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void addLast(E e)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean offerFirst(E e)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean offerLast(E e)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E removeFirst()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E removeLast()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E pollFirst()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E pollLast()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean removeFirstOccurrence(Object o)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean removeLastOccurrence(Object o)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean offer(E e)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean remove(Object o)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E poll()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void push(E e)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public E pop()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void moveFrom(int index, DoublyLinkedList<E> movedList)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void append(DoublyLinkedList<E> movedList)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void prepend(DoublyLinkedList<E> movedList)
+        {
+            throw new UnsupportedOperationException();
         }
 
     }
