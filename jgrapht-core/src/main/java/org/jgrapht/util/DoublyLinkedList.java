@@ -1818,6 +1818,15 @@ public class DoublyLinkedList<E>
          * @throws UnsupportedOperationException always
          */
         @Override
+        public void invert()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
         public void moveFrom(int index, DoublyLinkedList<E> movedList)
         {
             throw new UnsupportedOperationException();
