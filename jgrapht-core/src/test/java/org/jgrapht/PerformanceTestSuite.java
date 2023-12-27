@@ -24,7 +24,7 @@ import org.junit.platform.suite.api.*;
  * 
  * @author John Sichi
  */
-@IncludePackages({"org.jgrapht.perf"})
+@SelectPackages({"org.jgrapht.perf"})
 @Suite
 public class PerformanceTestSuite
 {
