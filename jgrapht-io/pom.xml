@@ -10,7 +10,7 @@
     <name>JGraphT - I/O</name>
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>
-        <antlr4.version>4.13.0</antlr4.version>
+        <antlr4.version>4.13.1</antlr4.version>
     </properties>
     <licenses>
         <license>
