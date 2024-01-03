@@ -45,7 +45,7 @@ import org.jgrapht.graph.DefaultGraphIterables;
  *
  * <p>
  * Through generics, a graph can be typed to specific classes for vertices {@code V} and edges
- * {@code E&lt;T&gt;}. Such a graph can contain vertices of type {@code V} and all
+ * {@code E<T>}. Such a graph can contain vertices of type {@code V} and all
  * sub-types and Edges of type {@code E} and all sub-types.
  * </p>
  *
