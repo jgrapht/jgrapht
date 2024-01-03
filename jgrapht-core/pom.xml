@@ -81,7 +81,21 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <argLine>--add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED</argLine>
+                            <argLine>
+                                --add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED
+                                <!-- 
+                                    Manually export performance test packages
+                                    Ref: https://github.com/jgrapht/jgrapht/issues/1170
+                                -->
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.clique=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.connectivity=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.flow=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.graph=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.lca=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.matching=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.spanning=ALL-UNNAMED
+                            </argLine>
                             <excludes>
                                 <exclude>**/perf/**</exclude>
                             </excludes>
