@@ -49,7 +49,7 @@ public class AsUnweightedGraph<V, E>
      * Constructor for AsUnweightedGraph.
      *
      * @param g the backing directed graph over which an undirected view is to be created.
-     * @throws NullPointerException if the graph is {@link null}
+     * @throws NullPointerException if the graph is {@code null}
      */
     public AsUnweightedGraph(Graph<V, E> g)
     {
