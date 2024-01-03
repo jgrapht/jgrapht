@@ -355,8 +355,7 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
  <code>network</code>. Current source and sink are set to <code>null</code>. If
  <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
- equal to one. Doubles are compared using <code>
- DEFAULT_EPSILON</code> tolerance.</div>
+ equal to one. Doubles are compared using <a href="MaximumFlowAlgorithmBase.html#DEFAULT_EPSILON"><code>MaximumFlowAlgorithmBase.DEFAULT_EPSILON</code></a> tolerance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>network</code> - network, where maximum flow will be calculated</dd>
@@ -404,8 +403,8 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
                                                           <a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;sink)</pre>
 <div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then
  calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
- <code>source</code> and <code>sink</code> must be vertices of the <code>
- network</code> passed to the constructor, and they must be different.</div>
+ <code>source</code> and <code>sink</code> must be vertices of the <code>network</code>
+ passed to the constructor, and they must be different.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - source vertex</dd>
@@ -427,8 +426,8 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
                                    <a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;sink)</pre>
 <div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then
  calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
- <code>source</code> and <code>sink</code> must be vertices of the <code>
- network</code> passed to the constructor, and they must be different. If desired, a flow map
+ <code>source</code> and <code>sink</code> must be vertices of the <code>network</code>
+ passed to the constructor, and they must be different. If desired, a flow map
  can be queried afterwards; this will not require a new invocation of the algorithm.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

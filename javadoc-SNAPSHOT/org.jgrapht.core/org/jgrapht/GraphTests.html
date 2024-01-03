@@ -490,6 +490,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is empty, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -510,6 +512,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - a graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a graph is simple, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -530,6 +534,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - a graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a graph has self-loops, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -550,6 +556,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - a graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a graph has multiple edges, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -572,6 +580,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is complete, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -599,6 +609,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is connected, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/connectivity/ConnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>ConnectivityInspector</code></a></dd>
 </dl>
@@ -626,6 +638,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is biconnected, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/connectivity/BiconnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>BiconnectivityInspector</code></a></dd>
 </dl>
@@ -651,6 +665,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is weakly connected, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/connectivity/ConnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>ConnectivityInspector</code></a></dd>
 </dl>
@@ -679,6 +695,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is strongly connected, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/connectivity/KosarajuStrongConnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>KosarajuStrongConnectivityInspector</code></a></dd>
 </dl>
@@ -858,6 +876,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is Eulerian, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/cycle/HierholzerEulerianCycle.html#isEulerian(org.jgrapht.Graph)"><code>HierholzerEulerianCycle.isEulerian(Graph)</code></a></dd>
 </dl>
@@ -881,6 +901,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is chordal, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/cycle/ChordalityInspector.html#isChordal()"><code>ChordalityInspector.isChordal()</code></a></dd>
 </dl>
@@ -914,6 +936,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is weakly chordal, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/cycle/WeakChordalityInspector.html#isWeaklyChordal()"><code>WeakChordalityInspector.isWeaklyChordal()</code></a></dd>
 </dl>
@@ -940,6 +964,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the input graph</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph meets Ore's condition, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/tour/PalmerHamiltonianCycle.html" title="class in org.jgrapht.alg.tour"><code>PalmerHamiltonianCycle</code></a></dd>
 </dl>
@@ -985,6 +1011,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the graph reference to check for being perfect or not</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is perfect, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -1009,6 +1037,8 @@ extends java.lang.Object</pre>
 <dd><code>graph</code> - the graph to test planarity of</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the graph is planar, false otherwise</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if graph is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="alg/interfaces/PlanarityTestingAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>PlanarityTestingAlgorithm</code></a>, 
 <a href="alg/planar/BoyerMyrvoldPlanarityInspector.html" title="class in org.jgrapht.alg.planar"><code>BoyerMyrvoldPlanarityInspector</code></a></dd>

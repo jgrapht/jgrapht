@@ -383,10 +383,12 @@ implements <a href="../../../../org.jgrapht.core/org/jgrapht/event/GraphListener
 <pre>public&nbsp;JGraphXAdapter&#8203;(<a href="../../../../org.jgrapht.core/org/jgrapht/ListenableGraph.html" title="interface in org.jgrapht">ListenableGraph</a>&lt;<a href="JGraphXAdapter.html" title="type parameter in JGraphXAdapter">V</a>,&#8203;<a href="JGraphXAdapter.html" title="type parameter in JGraphXAdapter">E</a>&gt;&nbsp;graph)</pre>
 <div class="block">Constructs and draws a new ListenableGraph. If the graph changes through the ListenableGraph,
  the JGraphXAdapter will automatically add/remove the new edge/vertex as it implements the
- GraphListener interface. Throws a IllegalArgumentException if the graph is null.</div>
+ GraphListener interface.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - casted to graph</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code> - if the graph is null.</dd>
 </dl>
 </li>
 </ul>
@@ -399,11 +401,12 @@ implements <a href="../../../../org.jgrapht.core/org/jgrapht/event/GraphListener
 <pre>public&nbsp;JGraphXAdapter&#8203;(<a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="JGraphXAdapter.html" title="type parameter in JGraphXAdapter">V</a>,&#8203;<a href="JGraphXAdapter.html" title="type parameter in JGraphXAdapter">E</a>&gt;&nbsp;graph)</pre>
 <div class="block">Constructs and draws a new mxGraph from a JGraphT graph. Changes on the JGraphT graph will
  not edit this mxGraph any further; use the constructor with the ListenableGraph parameter
- instead or use this graph as a normal mxGraph. Throws an IllegalArgumentException if the
- parameter is null.</div>
+ instead or use this graph as a normal mxGraph.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - is a graph</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code> - if the parameter is null</dd>
 </dl>
 </li>
 </ul>

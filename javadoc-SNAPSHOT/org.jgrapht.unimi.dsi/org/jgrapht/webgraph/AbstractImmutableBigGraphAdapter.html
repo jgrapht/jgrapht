@@ -546,8 +546,8 @@ extends <a href="../../../../org.jgrapht.core/org/jgrapht/graph/AbstractGraph.ht
                  java.lang.Long&nbsp;targetVertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdge(V,V)">Graph</a></code></span></div>
 <div class="block">Returns an edge connecting source vertex to target vertex if such vertices and such edge
- exist in this graph. Otherwise returns <code>
- null</code>. If any of the specified vertices is <code>null</code> returns <code>null</code>
+ exist in this graph. Otherwise returns <code>null</code>.
+ If any of the specified vertices is <code>null</code> returns <code>null</code>
 
  <p>
  In undirected graphs, the returned edge may have its source and target vertices in the
@@ -752,8 +752,8 @@ extends <a href="../../../../org.jgrapht.core/org/jgrapht/graph/AbstractGraph.ht
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)">Graph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
  specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>
- u.equals(v)</code>. If this graph already contains such vertex, the call leaves this graph
+ <code>u</code> such that <code>u.equals(v)</code>.
+ If this graph already contains such vertex, the call leaves this graph
  unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
@@ -776,8 +776,7 @@ extends <a href="../../../../org.jgrapht.core/org/jgrapht/graph/AbstractGraph.ht
 <div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source
  vertex to the target vertex. In undirected graphs the same result is obtained when source and
  target are inverted. If any of the specified vertices does not exist in the graph, or if is
- <code>
- null</code>, returns <code>false</code>.</div>
+ <code>null</code>, returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(V,V)">containsEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;java.lang.Long,&#8203;<a href="AbstractImmutableBigGraphAdapter.html" title="type parameter in AbstractImmutableBigGraphAdapter">E</a> extends it.unimi.dsi.fastutil.longs.LongLongPair&gt;</code></dd>
@@ -854,10 +853,9 @@ extends <a href="../../../../org.jgrapht.core/org/jgrapht/graph/AbstractGraph.ht
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeEdge&#8203;(<a href="AbstractImmutableBigGraphAdapter.html" title="type parameter in AbstractImmutableBigGraphAdapter">E</a>&nbsp;e)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#removeEdge(E)">Graph</a></code></span></div>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code>
- e2</code> such that <code>e2.equals(e)</code>, if the graph contains such edge. Returns
- <code>true</code> if the graph contained the specified edge. (The graph will not contain the
- specified edge once the call returns).
+ is present. More formally, removes an edge <code> e2</code> such that <code>e2.equals(e)</code>,
+ if the graph contains such edge. Returns <code>true</code> if the graph contained
+ the specified edge. (The graph will not contain the specified edge once the call returns).
 
  <p>
  If the specified edge is <code>null</code> returns <code>
@@ -880,15 +878,14 @@ extends <a href="../../../../org.jgrapht.core/org/jgrapht/graph/AbstractGraph.ht
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeVertex&#8203;(java.lang.Long&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#removeVertex(V)">Graph</a></code></span></div>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>
- u</code> such that <code>u.equals(v)</code>, the call removes all edges that touch
- <code>u</code> and then removes <code>u</code> itself. If no such <code>u</code> is found,
- the call leaves the graph unchanged. Returns <code>true</code> if the graph contained the
- specified vertex. (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
+ the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
+ If no such <code>u</code> is found, the call leaves the graph unchanged.
+ Returns <code>true</code> if the graph contained the specified vertex.
+ (The graph will not contain the specified vertex once the call returns).
 
  <p>
- If the specified vertex is <code>null</code> returns <code>
- false</code>.
+ If the specified vertex is <code>null</code> returns <code> false</code>.
  </p></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

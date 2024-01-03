@@ -146,12 +146,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">PrefetchIterator&lt;E&gt;</span>
 extends java.lang.Object
 implements java.util.Iterator&lt;E&gt;, java.util.Enumeration&lt;E&gt;</pre>
-<div class="block">Utility class to help implement an iterator/enumerator in which the hasNext() method needs to
+<div class="block">Utility class to help implement an iterator/enumerator in which the <a href="#hasNext()"><code>hasNext()</code></a> method needs to
  calculate the next elements ahead of time.
 
  <p>
  Many classes which implement an iterator face a common problem: if there is no easy way to
- calculate hasNext() other than to call getNext(), then they save the result for fetching in the
+ calculate <a href="#hasNext()"><code>hasNext()</code></a> other than to call getNext(), then they save the result for fetching in the
  next call to getNext(). This utility helps in doing just that.
 
  <p>
@@ -387,12 +387,13 @@ implements java.util.Iterator&lt;E&gt;, java.util.Enumeration&lt;E&gt;</pre>
 <h4>isEnumerationStartedEmpty</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isEnumerationStartedEmpty()</pre>
 <div class="block">Tests whether the enumeration started as an empty one. It does not matter if it
- hasMoreElements() now, only at initialization time. Efficiency: if nextElements(),
- hasMoreElements() were never used, it activates the hasMoreElements() once. Else it is
- immediately(O(1))</div>
+ <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> now, only at initialization time.
+ 
+ <p>Efficiency: if <code>#nextElements()</code>, <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> were never used,
+ it activates the <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> once. Else it is immediately $(O(1))$</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the enumeration started as an empty one, false otherwise.</dd>
+<dd>{@link true} if the enumeration started as an empty one, {@link false} otherwise.</dd>
 </dl>
 </li>
 </ul>

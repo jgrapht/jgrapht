@@ -142,8 +142,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">Graph&lt;V,&#8203;E&gt;</span></pre>
 <div class="block">The root interface in the graph hierarchy. A mathematical graph-theory graph object
- <code>G(V,E)</code> contains a set <code>V</code> of vertices and a set <code>
- E</code> of edges. Each edge e=(v1,v2) in E connects vertex v1 to vertex v2. for more information
+ <code>G(V,E)</code> contains a set <code>V</code> of vertices and a set <code>E</code> of edges.
+ Each edge e=(v1,v2) in E connects vertex v1 to vertex v2. for more information
  about graphs and their related definitions see <a href="http://mathworld.wolfram.com/Graph.html">
  http://mathworld.wolfram.com/Graph.html</a>.
 
@@ -162,9 +162,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  Through generics, a graph can be typed to specific classes for vertices <code>V</code> and edges
- <code>E&lt;T&gt;</code>. Such a graph can contain vertices of type <code>V</code> and all
- sub-types and Edges of type <code>
- E</code> and all sub-types.
+ <code>E&amp;lt;T&amp;gt;</code>. Such a graph can contain vertices of type <code>V</code> and all
+ sub-types and Edges of type <code>E</code> and all sub-types.
  </p>
 
  <p>
@@ -540,8 +539,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature"><a href="Graph.html" title="type parameter in Graph">E</a>&nbsp;getEdge&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;sourceVertex,
           <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex)</pre>
 <div class="block">Returns an edge connecting source vertex to target vertex if such vertices and such edge
- exist in this graph. Otherwise returns <code>
- null</code>. If any of the specified vertices is <code>null</code> returns <code>null</code>
+ exist in this graph. Otherwise returns <code>null</code>.
+ If any of the specified vertices is <code>null</code> returns <code>null</code>
 
  <p>
  In undirected graphs, the returned edge may have its source and target vertices in the
@@ -758,8 +757,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">boolean&nbsp;addVertex&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;v)</pre>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
  specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>
- u.equals(v)</code>. If this graph already contains such vertex, the call leaves this graph
+ <code>u</code> such that <code>u.equals(v)</code>.
+ If this graph already contains such vertex, the call leaves this graph
  unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
@@ -768,8 +767,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified vertex.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.NullPointerException</code> - if the specified vertex is <code>
- null</code>.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the specified vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -786,8 +784,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source
  vertex to the target vertex. In undirected graphs the same result is obtained when source and
  target are inverted. If any of the specified vertices does not exist in the graph, or if is
- <code>
- null</code>, returns <code>false</code>.</div>
+ <code>null</code>, returns <code>false</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sourceVertex</code> - source vertex of the edge.</dd>
@@ -1041,8 +1038,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph changed as a result of the call</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.NullPointerException</code> - if the specified edge collection is <code>
- null</code>.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the specified edge collection is <code>null</code>.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#removeEdge(E)"><code>removeEdge(Object)</code></a>, 
 <a href="#containsEdge(E)"><code>containsEdge(Object)</code></a></dd>
@@ -1089,8 +1085,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph changed as a result of the call</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.NullPointerException</code> - if the specified vertex collection is <code>
- null</code>.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the specified vertex collection is <code>null</code>.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#removeVertex(V)"><code>removeVertex(Object)</code></a>, 
 <a href="#containsVertex(V)"><code>containsVertex(Object)</code></a></dd>
@@ -1128,10 +1123,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>removeEdge</h4>
 <pre class="methodSignature">boolean&nbsp;removeEdge&#8203;(<a href="Graph.html" title="type parameter in Graph">E</a>&nbsp;e)</pre>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code>
- e2</code> such that <code>e2.equals(e)</code>, if the graph contains such edge. Returns
- <code>true</code> if the graph contained the specified edge. (The graph will not contain the
- specified edge once the call returns).
+ is present. More formally, removes an edge <code> e2</code> such that <code>e2.equals(e)</code>,
+ if the graph contains such edge. Returns <code>true</code> if the graph contained
+ the specified edge. (The graph will not contain the specified edge once the call returns).
 
  <p>
  If the specified edge is <code>null</code> returns <code>
@@ -1155,15 +1149,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>removeVertex</h4>
 <pre class="methodSignature">boolean&nbsp;removeVertex&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;v)</pre>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>
- u</code> such that <code>u.equals(v)</code>, the call removes all edges that touch
- <code>u</code> and then removes <code>u</code> itself. If no such <code>u</code> is found,
- the call leaves the graph unchanged. Returns <code>true</code> if the graph contained the
- specified vertex. (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
+ the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
+ If no such <code>u</code> is found, the call leaves the graph unchanged.
+ Returns <code>true</code> if the graph contained the specified vertex.
+ (The graph will not contain the specified vertex once the call returns).
 
  <p>
- If the specified vertex is <code>null</code> returns <code>
- false</code>.
+ If the specified vertex is <code>null</code> returns <code> false</code>.
  </p></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

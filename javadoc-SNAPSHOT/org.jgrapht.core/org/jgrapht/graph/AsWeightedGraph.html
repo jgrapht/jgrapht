@@ -158,7 +158,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;V,&#8203;E&gt;
 implements java.io.Serializable, <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Provides a weighted view of a graph. The class stores edge weights internally.
- All @link{getEdgeWeight} calls are handled by this view; all other graph operations are
+ All <code>#getEdgeWeight()</code> calls are handled by this view; all other graph operations are
  propagated to the graph backing this view.
 
  <p>
@@ -176,11 +176,11 @@ implements java.io.Serializable, <a href="../Graph.html" title="interface in org
  </ol>
  In the first way, the map is used to lookup edge weights. In the second way, a function is
  provided to calculate the weight of an edge. If the map does not contain a particular edge, or
- the function does not provide a weight for a particular edge, the @link{getEdgeWeight} call is
+ the function does not provide a weight for a particular edge, the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> call is
  propagated to the backing graph.
 
- Finally, the view provides a @link{setEdgeWeight} method. This method behaves differently
- depending on how the view is constructed. See @link{setEdgeWeight} for details.</div>
+ Finally, the view provides a <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method. This method behaves differently
+ depending on how the view is constructed. See <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> for details.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#org.jgrapht.graph.AsWeightedGraph">Serialized Form</a></dd>
@@ -340,8 +340,8 @@ implements java.io.Serializable, <a href="../Graph.html" title="interface in org
 <pre>public&nbsp;AsWeightedGraph&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">V</a>,&#8203;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>&gt;&nbsp;graph,
                        java.util.Map&lt;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>,&#8203;java.lang.Double&gt;&nbsp;weights)</pre>
 <div class="block">Constructor for AsWeightedGraph where the weights are provided through a map. Invocations of
- the @link{setEdgeWeight} method will update the map. Moreover, calls to @link{setEdgeWeight}
- are propagated to the underlying graph.</div>
+ the <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method will update the map. Moreover, calls to
+ <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> are propagated to the underlying graph.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the backing graph over which a weighted view is to be created.</dd>
@@ -389,10 +389,10 @@ implements java.io.Serializable, <a href="../Graph.html" title="interface in org
  the weight of an edge is queried, the weight function is invoked. If
  <code>cacheWeights</code> is set to <code>true</code>, the weight of an edge returned by the
  <code>weightFunction</code> after its first invocation is stored in a map. The weight of an
- edge returned by subsequent calls to @link{getEdgeWeight} for the same edge will then be
+ edge returned by subsequent calls to <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> for the same edge will then be
  retrieved directly from the map, instead of re-invoking the weight function. If
  <code>cacheWeights</code> is set to <code>false</code>, each invocation of
- the @link{getEdgeWeight} method will invoke the weight function. Caching the edge weights is
+ the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> method will invoke the weight function. Caching the edge weights is
  particularly useful when pre-computing all edge weights is expensive and it is expected that
  the weights of only a subset of all edges will be queried.</div>
 <dl>
@@ -402,9 +402,9 @@ implements java.io.Serializable, <a href="../Graph.html" title="interface in org
 <dd><code>cacheWeights</code> - if set to <code>true</code>, weights are cached once computed by the
         weight function</dd>
 <dd><code>writeWeightsThrough</code> - if set to <code>true</code>, the weight set directly by
-        the @link{setEdgeWeight} method will be propagated to the backing graph.</dd>
+        the <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method will be propagated to the backing graph.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.NullPointerException</code> - if the graph or the weight function is null</dd>
+<dd><code>java.lang.NullPointerException</code> - if the graph or the weight function is {@link null}</dd>
 <dd><code>java.lang.IllegalArgumentException</code> - if <code>writeWeightsThrough</code> is set to true and
          <code>graph</code> is not a weighted graph</dd>
 </dl>
@@ -430,7 +430,7 @@ implements java.io.Serializable, <a href="../Graph.html" title="interface in org
 <h4>getEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;getEdgeWeight&#8203;(<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>&nbsp;e)</pre>
 <div class="block">Returns the weight assigned to a given edge. If weights are provided through a map, first a
- map lookup is performed. If the edge is not found, the @link{getEdgeWeight} method of the
+ map lookup is performed. If the edge is not found, the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> method of the
  underlying graph is invoked instead. If, on the other hand, the weights are provided through
  a function, this method will first attempt to lookup the weight of an edge in the cache (that
  is, if <code>cacheWeights</code> is set to <code>true</code> in the constructor). If caching
@@ -447,7 +447,7 @@ implements java.io.Serializable, <a href="../Graph.html" title="interface in org
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the edge weight</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.NullPointerException</code> - if the edge is null</dd>
+<dd><code>java.lang.NullPointerException</code> - if the edge is {@link null}</dd>
 </dl>
 </li>
 </ul>

@@ -787,8 +787,8 @@ implements java.lang.Iterable&lt;V&gt;</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractBaseGraph.html#addVertex(V)">AbstractBaseGraph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
  specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>
- u.equals(v)</code>. If this graph already contains such vertex, the call leaves this graph
+ <code>u</code> such that <code>u.equals(v)</code>.
+ If this graph already contains such vertex, the call leaves this graph
  unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
@@ -814,15 +814,14 @@ implements java.lang.Iterable&lt;V&gt;</pre>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeVertex&#8203;(<a href="DirectedAcyclicGraph.html" title="type parameter in DirectedAcyclicGraph">V</a>&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractBaseGraph.html#removeVertex(V)">AbstractBaseGraph</a></code></span></div>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>
- u</code> such that <code>u.equals(v)</code>, the call removes all edges that touch
- <code>u</code> and then removes <code>u</code> itself. If no such <code>u</code> is found,
- the call leaves the graph unchanged. Returns <code>true</code> if the graph contained the
- specified vertex. (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
+ the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
+ If no such <code>u</code> is found, the call leaves the graph unchanged.
+ Returns <code>true</code> if the graph contained the specified vertex.
+ (The graph will not contain the specified vertex once the call returns).
 
  <p>
- If the specified vertex is <code>null</code> returns <code>
- false</code>.
+ If the specified vertex is <code>null</code> returns <code> false</code>.
  </p></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

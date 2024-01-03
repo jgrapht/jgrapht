@@ -451,9 +451,9 @@ extends java.lang.Object</pre>
 <dd><code>targetVertex</code> - target vertex of the edge</dd>
 <dd><code>weight</code> - weight of the edge</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The newly created edge if added to the graph, otherwise <code>
- null</code>.</dd>
+<dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if any one of <code>g</code>, <code>sourceVertex</code>, or <code>targetVertex</code> is <code>null</code></dd>
 <dd><code>java.lang.UnsupportedOperationException</code> - if the graph has no edge supplier</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a></dd>
@@ -483,8 +483,9 @@ extends java.lang.Object</pre>
 <dd><code>sourceVertex</code> - source vertex of the edge</dd>
 <dd><code>targetVertex</code> - target vertex of the edge</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The newly created edge if added to the graph, otherwise <code>
- null</code>.</dd>
+<dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if any one of the arguments is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -538,8 +539,9 @@ extends java.lang.Object</pre>
 <dd><code>targetVertex</code> - target vertex of the edge</dd>
 <dd><code>weight</code> - weight of the edge</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The newly created edge if added to the graph, otherwise <code>
- null</code>.</dd>
+<dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if any one of <code>g</code>, <code>sourceVertex</code>, or <code>targetVertex</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -649,9 +651,8 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if graph changed as a result of the call</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.NullPointerException</code> - if the specified vertices contains one or more null vertices, or
-         if the specified vertex collection is <code>
- null</code>.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the specified vertices contains one or more <code>null</code> vertices, or
+         if the specified vertex collection is <code>null</code>.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a></dd>
 </dl>

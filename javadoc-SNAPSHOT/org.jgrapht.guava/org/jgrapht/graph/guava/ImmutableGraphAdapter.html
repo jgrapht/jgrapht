@@ -572,8 +572,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)">Graph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
  specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>
- u.equals(v)</code>. If this graph already contains such vertex, the call leaves this graph
+ <code>u</code> such that <code>u.equals(v)</code>.
+ If this graph already contains such vertex, the call leaves this graph
  unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
@@ -619,10 +619,9 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeEdge&#8203;(com.google.common.graph.EndpointPair&lt;<a href="ImmutableGraphAdapter.html" title="type parameter in ImmutableGraphAdapter">V</a>&gt;&nbsp;e)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#removeEdge(E)">Graph</a></code></span></div>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code>
- e2</code> such that <code>e2.equals(e)</code>, if the graph contains such edge. Returns
- <code>true</code> if the graph contained the specified edge. (The graph will not contain the
- specified edge once the call returns).
+ is present. More formally, removes an edge <code> e2</code> such that <code>e2.equals(e)</code>,
+ if the graph contains such edge. Returns <code>true</code> if the graph contained
+ the specified edge. (The graph will not contain the specified edge once the call returns).
 
  <p>
  If the specified edge is <code>null</code> returns <code>
@@ -649,15 +648,14 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeVertex&#8203;(<a href="ImmutableGraphAdapter.html" title="type parameter in ImmutableGraphAdapter">V</a>&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#removeVertex(V)">Graph</a></code></span></div>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>
- u</code> such that <code>u.equals(v)</code>, the call removes all edges that touch
- <code>u</code> and then removes <code>u</code> itself. If no such <code>u</code> is found,
- the call leaves the graph unchanged. Returns <code>true</code> if the graph contained the
- specified vertex. (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
+ the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
+ If no such <code>u</code> is found, the call leaves the graph unchanged.
+ Returns <code>true</code> if the graph contained the specified vertex.
+ (The graph will not contain the specified vertex once the call returns).
 
  <p>
- If the specified vertex is <code>null</code> returns <code>
- false</code>.
+ If the specified vertex is <code>null</code> returns <code> false</code>.
  </p></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
