@@ -1909,6 +1909,31 @@ public class DoublyLinkedListTest
                 ListNode<Integer> node = iterator.nextNode();
                 assertSame(reversedList, node.getList());
                 assertEquals(expected--, node.getValue());
+                assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
+            }
+        }
+
+        @Test
+        public void testListNodeIterator() {
+            ListNodeIterator<Integer> iterator = reversedList.listIterator();
+            int expected = 4;
+            while (iterator.hasNext()) {
+                ListNode<Integer> node = iterator.nextNode();
+                assertSame(reversedList, node.getList());
+                assertEquals(expected--, node.getValue());
+                assertThrows(UnsupportedOperationException.class, () -> iterator.add(6));
+            }
+        }
+
+        @Disabled // temporary
+        @Test
+        public void testDescendingIterator() {
+            NodeIterator<Integer> expectedIterator = list.iterator();
+            NodeIterator<Integer> revDescendingNodeIterator = reversedList.descendingIterator();
+
+            while (expectedIterator.hasNext()) {
+                assertEquals(expectedIterator.next(), revDescendingNodeIterator.next());
+                assertTrue(expectedIterator.hasNext() & revDescendingNodeIterator.hasNext());
             }
         }
     }
