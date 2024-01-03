@@ -1347,6 +1347,100 @@ public class DoublyLinkedList<E>
     }
 
     /**
+     * A wrapper for {@link NodeIterator} that disallows modification
+     * of the underlying list. All getter methods forward the call
+     * to the wrapped iterator.
+     * 
+     * @since 1.5.3
+     */
+    private static class UnmodifiableNodeIterator<E> implements NodeIterator<E> {
+        private NodeIterator<E> orig;
+
+        UnmodifiableNodeIterator(NodeIterator<E> original) {
+            this.orig = original;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return orig.hasNext();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ListNode<E> nextNode() {
+            return orig.nextNode();
+        }
+
+        /**
+         * Returns the wrapped node iterator.
+         * @return the wrapped node iterator
+         */
+        NodeIterator<E> getWrapped() {
+            return orig;
+        }
+    }
+
+
+    /**
+     * A wrapper for {@link ListNodeIterator} that disallows modification
+     * of the underlying list. All setter methods throw
+     * {@link UnsupportedOperationException} and all getter methods
+     * forward the call to the wrapped iterator.
+     * 
+     * @since 1.5.3
+     */
+    private static class UnmodifiableListNodeIterator<E> extends UnmodifiableNodeIterator<E> implements ListNodeIterator<E> {
+
+        UnmodifiableListNodeIterator(ListNodeIterator<E> original) {
+            super(original);
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return getWrapped().hasPrevious();
+        }
+
+        @Override
+        public int nextIndex() {
+            return getWrapped().nextIndex();
+        }
+
+        @Override
+        public int previousIndex() {
+            return getWrapped().previousIndex();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void set(E e) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void add(E e) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ListNode<E> previousNode() {
+            return getWrapped().previousNode();
+        }
+
+        @Override
+        ListNodeIterator<E> getWrapped() {
+            return (ListNodeIterator<E>) super.getWrapped();
+        }
+    }
+
+    /**
      * Returns a {@link NodeIterator} that iterates in reverse order, assuming the cursor of the
      * specified {@link ListNodeIterator} is behind the tail of the list.
      */
@@ -1848,6 +1942,26 @@ public class DoublyLinkedList<E>
         public void prepend(DoublyLinkedList<E> movedList)
         {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public NodeIterator<E> circularIterator(E firstElement) {
+            return new UnmodifiableNodeIterator<>(super.circularIterator(firstElement));
+        }
+
+        @Override
+        public NodeIterator<E> reverseCircularIterator(E firstElement) {
+            return new UnmodifiableNodeIterator<>(super.reverseCircularIterator(firstElement));
+        }
+
+        @Override
+        public ListNodeIterator<E> listIterator(int index) {
+            return new UnmodifiableListNodeIterator<>(super.listIterator(index));
+        }
+
+        @Override
+        public ListNodeIterator<E> listIterator(E element) {
+            return new UnmodifiableListNodeIterator<>(super.listIterator(element));
         }
 
     }
