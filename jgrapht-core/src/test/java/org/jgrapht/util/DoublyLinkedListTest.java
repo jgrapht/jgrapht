@@ -1925,7 +1925,6 @@ public class DoublyLinkedListTest
             }
         }
 
-        @Disabled // temporary
         @Test
         public void testDescendingIterator() {
             NodeIterator<Integer> expectedIterator = list.iterator();

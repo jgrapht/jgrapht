@@ -1037,7 +1037,7 @@ public class DoublyLinkedList<E>
         if (startNode == null) {
             throw new NoSuchElementException();
         }
-        return reverseIterator(new ListNodeIteratorImpl(size, startNode.getNext()));
+        return reverseIterator(new ListNodeIteratorImpl(size(), startNode.getNext()));
     }
 
     /**
@@ -1046,7 +1046,7 @@ public class DoublyLinkedList<E>
     @Override
     public NodeIterator<E> descendingIterator()
     {
-        return reverseIterator(listIterator(size));
+        return reverseIterator(listIterator(size()));
     }
 
     /**
@@ -1965,6 +1965,11 @@ public class DoublyLinkedList<E>
         @Override
         public NodeIterator<E> reverseCircularIterator(E firstElement) {
             return new UnmodifiableNodeIterator<>(super.reverseCircularIterator(firstElement));
+        }
+
+        @Override
+        public NodeIterator<E> descendingIterator() {
+            return super.descendingIterator();
         }
 
         @Override
