@@ -1188,7 +1188,7 @@ public class DoublyLinkedList<E>
             if (startIndex == size()) {
                 this.next = isEmpty() ? null : head();
             } else {
-                this.next = getNodeAt(startIndex);
+                this.next = getNode(startIndex);
             }
         }
 
