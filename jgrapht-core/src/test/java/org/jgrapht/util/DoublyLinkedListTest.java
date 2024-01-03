@@ -1820,7 +1820,7 @@ public class DoublyLinkedListTest
      */
     @DisplayName("Reversed view tests")
     @Nested
-    class ReversedDoublyLinkedListViewTest {
+    public class ReversedDoublyLinkedListViewTest {
         
         private DoublyLinkedList<Integer> list;
         private DoublyLinkedList<Integer> reversedList;
@@ -1939,7 +1939,7 @@ public class DoublyLinkedListTest
 
     // utility methods
 
-    private static <E> DoublyLinkedList<E> createDoublyLinkedList(Collection<E> content)
+    static <E> DoublyLinkedList<E> createDoublyLinkedList(Collection<E> content)
     {
         DoublyLinkedList<E> list = new DoublyLinkedList<>();
         for (E element : content) {
@@ -1964,7 +1964,7 @@ public class DoublyLinkedListTest
     }
 
     /** Returns a {@link ListNode} contained in no {@link DoublyLinkedList}. */
-    private static <E> ListNode<E> createFreeListNode(E element)
+    static <E> ListNode<E> createFreeListNode(E element)
     {
 
         DoublyLinkedList<E> list = createDoublyLinkedList(Collections.singletonList(element));
