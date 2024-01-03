@@ -1722,10 +1722,28 @@ public class DoublyLinkedList<E>
             throw new UnsupportedOperationException();
         }
 
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public void addNodeBefore(ListNode<E> node, ListNode<E> successor)
+        {
+            throw new UnsupportedOperationException();
+        }
+
         @Override
         public ListNode<E> getNode(int index)
         {
             return new ReversedListNode<>(orig.getNodeAt(size() - (1 + index)), this);
+        }
+
+        /**
+         * @throws UnsupportedOperationException always
+         */
+        @Override
+        public boolean removeNode(ListNode<E> node)
+        {
+            throw new UnsupportedOperationException();
         }
 
         /**
