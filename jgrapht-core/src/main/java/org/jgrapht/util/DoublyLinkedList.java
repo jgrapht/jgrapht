@@ -1415,11 +1415,6 @@ public class DoublyLinkedList<E>
         }
 
         @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public void set(E e) {
             throw new UnsupportedOperationException();
         }
