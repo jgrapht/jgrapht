@@ -1932,7 +1932,7 @@ public class DoublyLinkedListTest
 
             while (expectedIterator.hasNext()) {
                 assertEquals(expectedIterator.next(), revDescendingNodeIterator.next());
-                assertTrue(expectedIterator.hasNext() & revDescendingNodeIterator.hasNext());
+                assertEquals(expectedIterator.hasNext(), revDescendingNodeIterator.hasNext());
             }
         }
     }
