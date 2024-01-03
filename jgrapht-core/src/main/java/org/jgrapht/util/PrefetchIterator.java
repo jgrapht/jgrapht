@@ -160,7 +160,7 @@ public class PrefetchIterator<E>
      * Tests whether the enumeration started as an empty one. It does not matter if it
      * {@link #hasMoreElements()} now, only at initialization time.
      * 
-     * <p>Efficiency: if {@link #nextElements()}, {@link #hasMoreElements()} were never used,
+     * <p>Efficiency: if {@link #nextElement()}, {@link #hasMoreElements()} were never used,
      * it activates the {@link #hasMoreElements()} once. Else it is immediately $(O(1))$
      * 
      * @return {@link true} if the enumeration started as an empty one, {@link false} otherwise.

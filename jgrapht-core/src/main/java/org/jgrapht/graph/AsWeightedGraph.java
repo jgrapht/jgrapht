@@ -25,7 +25,7 @@ import java.util.function.*;
 
 /**
  * Provides a weighted view of a graph. The class stores edge weights internally.
- * All {@link #getEdgeWeight()} calls are handled by this view; all other graph operations are
+ * All {@link #getEdgeWeight(Object)} calls are handled by this view; all other graph operations are
  * propagated to the graph backing this view.
  *
  * <p>
