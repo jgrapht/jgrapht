@@ -18,6 +18,7 @@
 package org.jgrapht.util;
 
 import org.jgrapht.util.DoublyLinkedList.*;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -1812,6 +1813,106 @@ public class DoublyLinkedListTest
         assertThrows(IllegalStateException.class, () -> listIterator.set("another"));
     }
 
+    /**
+     * Tests for {@link DoublyLinkedList.ReversedDoublyLinkedListView}.
+     * 
+     * @since 1.5.3
+     */
+    @DisplayName("Reversed view tests")
+    @Nested
+    class ReversedDoublyLinkedListViewTest {
+        
+        private DoublyLinkedList<Integer> list;
+        private DoublyLinkedList<Integer> reversedList;
+        private List<Integer> expected;
+
+        @BeforeEach
+        public void setup() {
+            expected = List.of(0, 1, 2, 3, 4);
+            list = createDoublyLinkedList(expected);
+            reversedList = list.reversed();
+        }
+
+        @Test
+        public void testHead() {
+            ListNode<Integer> revHead = reversedList.head();
+            assertSame(reversedList, revHead.getList());
+            assertEquals(4, revHead.getValue());
+        }
+
+        @Test
+        public void testTail() {
+            ListNode<Integer> revTail = reversedList.tail();
+            assertSame(reversedList, revTail.getList());
+            assertEquals(0, revTail.getValue());
+        }
+
+        @Test
+        public void testEmpty() {
+            assertFalse(reversedList.isEmpty());
+            assertTrue(new DoublyLinkedList<Object>().reversed().isEmpty());
+        }
+
+        @Test
+        public void testSize() {
+            assertEquals(5, reversedList.size());
+            assertEquals(0, new DoublyLinkedList<Object>().reversed().size());
+        }
+
+        @Test
+        public void testModification() {
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.clear());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addNode(0, createFreeListNode(5)));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addNodeFirst(createFreeListNode(5)));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addNodeLast(createFreeListNode(-1)));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addNodeBefore(createFreeListNode(5), reversedList.getNode(0)));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.removeNode(reversedList.getNode(0)));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addElementFirst(5));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addElementLast(-1));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addElementBeforeNode(reversedList.getNode(0), 5));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.add(0, 5));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.remove(0));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addFirst(5));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.addLast(-1));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.offerFirst(4));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.offerLast(3));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.removeFirst());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.removeLast());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.pollFirst());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.pollLast());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.removeFirstOccurrence(2));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.removeLastOccurrence(1));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.offer(5));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.remove(1));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.poll());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.push(5));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.pop());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.invert());
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.moveFrom(0, list));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.append(list));
+            assertThrows(UnsupportedOperationException.class, () -> reversedList.prepend(list));
+        }
+
+        @Test
+        public void testGets() {
+            for (int i = 0; i < expected.size(); i++) {
+                assertEquals(i, reversedList.getNode(reversedList.size() - (1 + i)).getValue());
+                assertEquals(i, reversedList.get(reversedList.size() - (1 + i)));
+            }
+        }
+
+        @Test
+        public void testNodeIterator() {
+            NodeIterator<Integer> iterator = reversedList.iterator();
+            int expected = 4;
+            while (iterator.hasNext()) {
+                ListNode<Integer> node = iterator.nextNode();
+                assertSame(reversedList, node.getList());
+                assertEquals(expected--, node.getValue());
+            }
+        }
+    }
+
     // utility methods
 
     private static <E> DoublyLinkedList<E> createDoublyLinkedList(Collection<E> content)
@@ -1839,12 +1940,12 @@ public class DoublyLinkedListTest
     }
 
     /** Returns a {@link ListNode} contained in no {@link DoublyLinkedList}. */
-    private static ListNode<String> createFreeListNode(String element)
+    private static <E> ListNode<E> createFreeListNode(E element)
     {
 
-        DoublyLinkedList<String> list = createDoublyLinkedList(Collections.singletonList(element));
+        DoublyLinkedList<E> list = createDoublyLinkedList(Collections.singletonList(element));
 
-        ListNode<String> node = list.getNode(0);
+        ListNode<E> node = list.getNode(0);
         list.removeNode(node);
         return node;
     }
