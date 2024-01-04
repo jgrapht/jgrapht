@@ -389,7 +389,7 @@ implements java.util.Iterator&lt;E&gt;, java.util.Enumeration&lt;E&gt;</pre>
 <div class="block">Tests whether the enumeration started as an empty one. It does not matter if it
  <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> now, only at initialization time.
  
- <p>Efficiency: if <code>#nextElements()</code>, <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> were never used,
+ <p>Efficiency: if <a href="#nextElement()"><code>nextElement()</code></a>, <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> were never used,
  it activates the <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> once. Else it is immediately $(O(1))$</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
