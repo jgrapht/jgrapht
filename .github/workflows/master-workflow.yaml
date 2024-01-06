@@ -13,8 +13,17 @@ concurrency:
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+        - name: Windows
+          tag: windows-latest
+        - name: macOS
+          tag: macos-latest
+        - name: Ubuntu
+          tag: ubuntu-latest
+    name: Build (${{ matrix.os.name }})
+    runs-on: ${{ matrix.os.tag }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,10 +36,28 @@ jobs:
           cache: 'maven'
 
       - name: Build with Maven
+        shell: bash
         run: |
           set -e
           mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
 
+  snapshot-publish:
+    name: Publish Snapshot
+    needs: build
+    if: github.action_repository == 'jgrapht/jgrapht'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: |
+          set -e
+          mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn javadoc:aggregate
       - uses: actions/setup-node@v4
         with:
           node-version: 14

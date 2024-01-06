@@ -7,8 +7,18 @@ on:
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - name: Windows
+          tag: windows-latest
+        - name: macOS
+          tag: macos-latest
+        - name: Ubuntu
+          tag: ubuntu-latest
+    name: Build (${{ matrix.os.name }})
+    runs-on: ${{ matrix.os.tag }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 11
@@ -18,6 +28,7 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Build with Maven
+        shell: bash
         run: |
           set -e
           mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
