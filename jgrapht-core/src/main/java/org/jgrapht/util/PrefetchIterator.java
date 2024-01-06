@@ -163,7 +163,7 @@ public class PrefetchIterator<E>
      * <p>Efficiency: if {@link #nextElement()}, {@link #hasMoreElements()} were never used,
      * it activates the {@link #hasMoreElements()} once. Else it is immediately $(O(1))$
      * 
-     * @return {@link true} if the enumeration started as an empty one, {@link false} otherwise.
+     * @return {@code true} if the enumeration started as an empty one, {@code false} otherwise.
      */
     public boolean isEnumerationStartedEmpty()
     {
