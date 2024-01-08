@@ -44,7 +44,7 @@ jobs:
   snapshot-publish:
     name: Publish Snapshot
     needs: build
-    if: github.action_repository == 'jgrapht/jgrapht'
+    if: github.repository == 'jgrapht/jgrapht'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
