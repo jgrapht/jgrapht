@@ -65,7 +65,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
-        <apfloat.version>1.10.1</apfloat.version>
+        <apfloat.version>1.12.0</apfloat.version>
         <checkstyle.version>10.12.7</checkstyle.version>
         <commons-text.version>1.10.0</commons-text.version>
         <dsiutils.version>2.7.3</dsiutils.version>
