@@ -310,18 +310,18 @@ public class CyclicTransitiveReductionTest {
     Be careful when increasing the maximum number of vertices! For allowSyntheticEdges == false, worst-case runtimes
     for CyclicTransitiveReduction.reduce() grow explosively! Typical values on the author's workstation:
 
-    SCC_MAX | no synthetic | synthetic
-    --------|--------------|----------
-         17 |       900 ms |    280 ms
-         18 |     2,500 ms |    400 ms
-         19 |     4,500 ms |    500 ms
-         20 |    18,000 ms |    600 ms
-         21 |    72,000 ms |    800 ms
+    sccMax | no synthetic | synthetic
+    -------|--------------|----------
+        17 |       900 ms |    280 ms
+        18 |     2,500 ms |    400 ms
+        19 |     4,500 ms |    500 ms
+        20 |    18,000 ms |    600 ms
+        21 |    72,000 ms |    800 ms
     */
-    final int SCC_MAX = 18;
+    final int sccMax = 18;
 
     Graph<String, DefaultEdge> graph;
-    for (int sccCount = 3; sccCount <= SCC_MAX; sccCount++) {
+    for (int sccCount = 3; sccCount <= sccMax; sccCount++) {
       graph = createEmptyGraph();
       int sccSize = sccCount;
       populateGraphWithSCCs(graph, sccCount, sccSize);
