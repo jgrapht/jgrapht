@@ -96,12 +96,7 @@ public class DirectedHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBas
     // Calculate Hamiltonian cycle, starting at index 1 (0 is fixed)
     hamiltonian(1);
 
-    if (!cycleFound)
-      throw new RuntimeException("No Hamiltonian cycle (HC) found. " +
-        "This should never happen and indicates an error in the algorithm," +
-        "because the graph is strongly connected and a HC must therefore exist."
-      );
-    return toGraphPath();
+    return cycleFound ? toGraphPath() : null;
   }
 
   /**

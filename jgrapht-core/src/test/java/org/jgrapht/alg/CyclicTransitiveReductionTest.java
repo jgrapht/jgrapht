@@ -200,6 +200,19 @@ public class CyclicTransitiveReductionTest {
   }
 
   @Test
+  public void smallStronglyConnectedGraphWithoutHamiltonianCycle() {
+    Graph<String, DefaultEdge> graph = createEmptyGraph();
+    // Strongly connected graph with Hamiltonian paths, but no Hamiltonian cycles
+    addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("C", "D"), Pair.of("C", "A"), Pair.of("D", "B"));
+    assertEquals(4, graph.vertexSet().size());
+    assertEquals(5, graph.edgeSet().size());
+    new CyclicTransitiveReduction<>(graph).reduce();
+    // Reduction has no effect, vertices and edges are unchanged
+    assertEquals(4, graph.vertexSet().size());
+    assertEquals(5, graph.edgeSet().size());
+  }
+
+  @Test
   public void smallDAG() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"));

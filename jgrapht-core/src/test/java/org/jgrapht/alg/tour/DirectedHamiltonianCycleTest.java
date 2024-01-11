@@ -68,6 +68,17 @@ public class DirectedHamiltonianCycleTest {
   }
 
   @Test
+  public void smallStronglyConnectedGraphWithoutHamiltonianCycle() {
+    Graph<String, DefaultEdge> graph = createEmptyGraph();
+    GraphPath<String, DefaultEdge> tour;
+
+    // Strongly connected graph with Hamiltonian paths, but no Hamiltonian cycles
+    addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("C", "D"), Pair.of("C", "A"), Pair.of("D", "B"));
+    tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+    assertNull(tour);
+  }
+
+  @Test
   public void mediumHamiltonianGraph() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     GraphPath<String, DefaultEdge> tour;

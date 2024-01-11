@@ -201,7 +201,8 @@ public class CyclicTransitiveReduction<V, E> {
       }
       else {
         GraphPath<V, E> graphPath = new DirectedHamiltonianCycle<V, E>().getTour(scComponent);
-        assert graphPath != null;
+        if (graphPath == null)
+          continue;
         Set<E> cycle = new HashSet<>(graphPath.getEdgeList());
         sccEdges.stream()
           .filter(edge -> !cycle.contains(edge))
