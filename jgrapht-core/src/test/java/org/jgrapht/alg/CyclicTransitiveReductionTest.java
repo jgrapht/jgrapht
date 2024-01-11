@@ -18,19 +18,17 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.Graph;
-import org.jgrapht.SlowTests;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
 import static org.jgrapht.TestUtil.*;
 import static org.jgrapht.util.MathUtil.naturalNumberSumGauss;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CyclicTransitiveReductionTest {
   private static final Random RANDOM = new Random();
@@ -101,13 +99,13 @@ public class CyclicTransitiveReductionTest {
     return "S" + sccNumber + "/V" + vertexNumber;
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void nullGraph() {
     Graph<String, DefaultEdge> graph = null;
-    new CyclicTransitiveReduction<>(graph);
+    assertThrows(IllegalArgumentException.class, () -> new CyclicTransitiveReduction<>(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void undirectedGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>undirected()
@@ -115,10 +113,10 @@ public class CyclicTransitiveReductionTest {
       .allowingSelfLoops(false)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    new CyclicTransitiveReduction<>(graph);
+    assertThrows(IllegalArgumentException.class, () -> new CyclicTransitiveReduction<>(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void selfLoopGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>directed()
@@ -126,10 +124,10 @@ public class CyclicTransitiveReductionTest {
       .allowingSelfLoops(true)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    new CyclicTransitiveReduction<>(graph);
+    assertThrows(IllegalArgumentException.class, () -> new CyclicTransitiveReduction<>(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void weightedGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>directed()
@@ -138,10 +136,10 @@ public class CyclicTransitiveReductionTest {
       .allowingSelfLoops(false)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    new CyclicTransitiveReduction<>(graph);
+    assertThrows(IllegalArgumentException.class, () -> new CyclicTransitiveReduction<>(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void multipleEdgesGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>directed()
@@ -149,7 +147,7 @@ public class CyclicTransitiveReductionTest {
       .allowingSelfLoops(false)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    new CyclicTransitiveReduction<>(graph);
+    assertThrows(IllegalArgumentException.class, () -> new CyclicTransitiveReduction<>(graph));
   }
 
   @Test
@@ -281,14 +279,14 @@ public class CyclicTransitiveReductionTest {
   }
 
   @Test
-  @Category(SlowTests.class)
+  @Tag("slow")
   public void randomizedGraphsWithSCCsDifferentSizesNoSynthetic() {
     // This test can be very slow!
     randomizedGraphsWithSCCsDifferentSizes(false);
   }
 
   @Test
-  @Category(SlowTests.class)
+  @Tag("slow")
   public void randomizedGraphsWithSCCsDifferentSizesSynthetic() {
     // This test should be very much faster
     randomizedGraphsWithSCCsDifferentSizes(true);

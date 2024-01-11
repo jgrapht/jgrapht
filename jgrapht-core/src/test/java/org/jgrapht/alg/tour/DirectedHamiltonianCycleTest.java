@@ -19,18 +19,16 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.SlowTests;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.jgrapht.TestUtil.*;
 import static org.jgrapht.alg.CyclicTransitiveReductionTest.populateGraphWithSCCs;
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DirectedHamiltonianCycleTest {
 
@@ -82,13 +80,13 @@ public class DirectedHamiltonianCycleTest {
     assertHamiltonian(graph, tour);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void nullGraph() {
     Graph<String, DefaultEdge> graph = null;
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void undirectedGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>undirected()
@@ -97,10 +95,10 @@ public class DirectedHamiltonianCycleTest {
       .edgeClass(DefaultEdge.class)
       .buildGraph();
     addCycle(graph, "A", "B", "C", "D");
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void selfLoopGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>directed()
@@ -109,10 +107,10 @@ public class DirectedHamiltonianCycleTest {
       .edgeClass(DefaultEdge.class)
       .buildGraph();
     addCycle(graph, "A", "B", "C", "D");
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void weightedGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>directed()
@@ -122,10 +120,10 @@ public class DirectedHamiltonianCycleTest {
       .edgeClass(DefaultEdge.class)
       .buildGraph();
     addCycle(graph, "A", "B", "C", "D");
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void multipleEdgesGraph() {
     Graph<String, DefaultEdge> graph = GraphTypeBuilder
       .<String, DefaultEdge>directed()
@@ -134,24 +132,24 @@ public class DirectedHamiltonianCycleTest {
       .edgeClass(DefaultEdge.class)
       .buildGraph();
     addCycle(graph, "A", "B", "C", "D");
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void emptyGraph() {
-    Graph<String, DefaultEdge> graph = createEmptyGraph();
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void graphTooSmall() {
-    Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addEdges(graph, Pair.of("A", "B"));
-    new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
   }
 
   @Test
-  @Category(SlowTests.class)
+  public void emptyGraph() {
+    Graph<String, DefaultEdge> graph = createEmptyGraph();
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
+  }
+
+  @Test
+  public void graphTooSmall() {
+    Graph<String, DefaultEdge> graph = createEmptyGraph();
+    addEdges(graph, Pair.of("A", "B"));
+    assertThrows(IllegalArgumentException.class, () -> new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph));
+  }
+
+  @Test
+  @Tag("slow")
   public void randomizedHamiltonianGraphsDifferentSizes() {
     Graph<String, DefaultEdge> graph;
     GraphPath<String, DefaultEdge> tour;

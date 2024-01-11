@@ -135,7 +135,7 @@ public class TransitiveReductionTest
         assertThrows(NullPointerException.class, () -> TransitiveReduction.INSTANCE.reduce(null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testCyclicGraph()
     {
         SimpleDirectedGraph<String, DefaultEdge> graph =
@@ -148,7 +148,7 @@ public class TransitiveReductionTest
         graph.addEdge("B", "C");
         graph.addEdge("C", "D");
         graph.addEdge("D", "A");
-        TransitiveReduction.INSTANCE.reduce(graph);
+        assertThrows(IllegalArgumentException.class, () -> TransitiveReduction.INSTANCE.reduce(graph));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class TransitiveReductionTest
         assertNotEquals(correctEdgeCount, graph.edgeSet().size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGraphContainingStronglyConnectedComponent()
     {
         SimpleDirectedGraph<String, DefaultEdge> graph =
@@ -203,7 +203,7 @@ public class TransitiveReductionTest
         graph.addEdge("C", "D");
         graph.addEdge("D", "B");
         graph.addEdge("C", "E");
-        TransitiveReduction.INSTANCE.reduce(graph);
+        assertThrows(IllegalArgumentException.class, () -> TransitiveReduction.INSTANCE.reduce(graph));
     }
 
     @Test
