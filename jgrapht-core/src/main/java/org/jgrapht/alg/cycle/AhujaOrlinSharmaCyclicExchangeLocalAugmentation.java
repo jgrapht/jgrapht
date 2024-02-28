@@ -208,10 +208,8 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
                          * check if paths are dominated, i.e. if the path is definitely worse than
                          * other paths and does not have to be considered in the future
                          */
-                        if (!checkDominatedPathsOfLengthKplus1(newPath, pathsLengthKplus1)) {
-                            if (!checkDominatedPathsOfLengthK(newPath, pathsLengthK)) {
-                                updatePathIndex(pathsLengthKplus1, newPath);
-                            }
+                        if (!checkDominatedPathsOfLengthKplus1(newPath, pathsLengthKplus1) && !checkDominatedPathsOfLengthK(newPath, pathsLengthK)) {
+                            updatePathIndex(pathsLengthKplus1, newPath);
                         }
                     }
                 }
