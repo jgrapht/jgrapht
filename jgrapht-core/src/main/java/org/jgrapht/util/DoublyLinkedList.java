@@ -71,7 +71,7 @@ public class DoublyLinkedList<E>
      * 
      * @since 1.5.3
      */
-    ListNode<E> head()
+    AbstractListNode<E> head()
     {
         return this.head;
     }
@@ -81,7 +81,7 @@ public class DoublyLinkedList<E>
      * 
      * @return the last element of the list
      */
-    ListNode<E> tail()
+    AbstractListNode<E> tail()
     {
         return head.getPrev();
     }
@@ -151,8 +151,8 @@ public class DoublyLinkedList<E>
 
     /**
      * Atomically moves all {@link ListNode ListNodes} from {@code list} to this list as if each
-     * node was removed with {@link #removeListNode(ListNodeImpl)} from {@code list} and
-     * subsequently added to this list by {@link #addListNode(ListNodeImpl)}.
+     * node was removed with {@link #removeListNode(AbstractListNode)} from {@code list} and
+     * subsequently added to this list by {@link #addListNode(AbstractListNode)}.
      */
     private void moveAllListNodes(DoublyLinkedList<E> list)
     { // call this before any modification of this list is done
@@ -196,7 +196,7 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * Establishes the links between the given {@link ListNodeImpl nodes} in such a way that the
+     * Establishes the links between the given {@link AbstractListNode nodes} in such a way that the
      * {@code predecessor} is linked before the {@code successor}.
      * 
      * @param predecessor the first node linked before the other
@@ -238,9 +238,9 @@ public class DoublyLinkedList<E>
         if (previousSize == 0) {
             head = list.head; // head and tail already linked together
         } else {
-            AbstractListNode<E> refNode = (AbstractListNode<E>) ((index == previousSize) ? head() : getNodeAt(index));
+            AbstractListNode<E> refNode = index == previousSize ? head() : getNodeAt(index);
 
-            AbstractListNode<E> listTail = (AbstractListNode<E>) list.tail();
+            AbstractListNode<E> listTail = list.tail();
             link(refNode.getPrev(), list.head); // changes list.tail()
             link(listTail, refNode);
 
@@ -301,7 +301,7 @@ public class DoublyLinkedList<E>
         if (index == size) { // also true if this is empty
             linkLast(nodeImpl);
         } else {
-            AbstractListNode<E> successor = index == 0 ? head : (AbstractListNode<E>) getNodeAt(index);
+            AbstractListNode<E> successor = index == 0 ? head : getNodeAt(index);
             linkBefore(nodeImpl, successor);
             if (head == successor) {
                 head = nodeImpl;
@@ -356,12 +356,11 @@ public class DoublyLinkedList<E>
      */
     public void addNodeBefore(ListNode<E> node, ListNode<E> successor)
     {
-        ListNodeImpl<E> successorImpl = (ListNodeImpl<E>) successor;
-        ListNodeImpl<E> nodeImpl = (ListNodeImpl<E>) node;
-
-        if (successorImpl.getList() != this) {
-            throw new IllegalArgumentException("Node <" + successorImpl + "> not in this list");
+        if (successor.getList() != this) {
+            throw new IllegalArgumentException("Node <" + successor + "> not in this list");
         }
+        AbstractListNode<E> successorImpl = (AbstractListNode<E>) successor;
+        AbstractListNode<E> nodeImpl = (AbstractListNode<E>) node;
         linkBefore(nodeImpl, successorImpl);
         if (head == successorImpl) {
             head = nodeImpl;
@@ -419,19 +418,19 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * Returns the {@link ListNodeImpl node} at the specified position in this list.
+     * Returns the {@link ListNode node} at the specified position in this list.
      * 
      * @param index index of the {@code ListNodeImpl} to return
      * @return the {@code ListNode} at the specified position in this list
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
      */
-    private ListNode<E> getNodeAt(int index)
+    private AbstractListNode<E> getNodeAt(int index)
     {
         if (index < 0 || size <= index) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-        ListNode<E> node;
+        AbstractListNode<E> node;
         if (index < size / 2) {
             node = head();
             for (int i = 0; i < index; i++) {
@@ -509,7 +508,7 @@ public class DoublyLinkedList<E>
      */
     public boolean removeNode(ListNode<E> node)
     {
-        return unlink((ListNodeImpl<E>) node);
+        return unlink((AbstractListNode<E>) node);
     }
 
     /**
@@ -911,8 +910,8 @@ public class DoublyLinkedList<E>
         if (size < 2) {
             return;
         }
-        AbstractListNode<E> newHead = (AbstractListNode<E>) tail();
-        AbstractListNode<E> current = (AbstractListNode<E>) head();
+        AbstractListNode<E> newHead = tail();
+        AbstractListNode<E> current = head();
         do {
             AbstractListNode<E> next = current.getNext();
 
@@ -1306,9 +1305,9 @@ public class DoublyLinkedList<E>
             boolean wasLast = last == tail();
             removeNode(last);
             if (wasLast) { // or the sole node
-                last = (ListNodeImpl<E>) addElementLast(e);
+                last = addElementLast(e);
             } else {
-                last = (ListNodeImpl<E>) addElementBeforeNode(nextNode, e);
+                last = addElementBeforeNode(nextNode, e);
             }
             expectedModCount += 2; // because of unlink and add
         }
@@ -1721,13 +1720,13 @@ public class DoublyLinkedList<E>
         }
 
         @Override
-        ListNode<E> head()
+        ReversedListNode<E> head()
         {
             return new ReversedListNode<>(orig.tail(), this);
         }
 
         @Override
-        ListNode<E> tail()
+        ReversedListNode<E> tail()
         {
             return new ReversedListNode<>(orig.head(), this);
         }
