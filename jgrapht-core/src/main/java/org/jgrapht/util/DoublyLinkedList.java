@@ -1517,7 +1517,7 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * An abstract implementation of a {@code ListNode}. All {@code ListNode}
+     * A skeletal implementation of a {@code ListNode}.
      * 
      * @since 1.5.3
      */
@@ -1536,6 +1536,8 @@ public class DoublyLinkedList<E>
          * Sets the next node to the specified node.
          * 
          * @param next the next node
+         * 
+         * @throws UnsupportedOperationException if this node does not support modification
          */
         protected abstract void setNext(AbstractListNode<V> next);
 
@@ -1543,6 +1545,8 @@ public class DoublyLinkedList<E>
          * Sets the previous node to the specified node.
          * 
          * @param prev the previous node
+         * 
+         * @throws UnsupportedOperationException if this node does not support modification
          */
         protected abstract void setPrev(AbstractListNode<V> prev);
 
@@ -1555,6 +1559,8 @@ public class DoublyLinkedList<E>
          * Sets the list that this node belongs to.
          * 
          * @param list the list to consist of this node
+         * 
+         * @throws UnsupportedOperationException if this node does not support modification
          */
         protected void setList(DoublyLinkedList<V> list) {
             this.list = list;
