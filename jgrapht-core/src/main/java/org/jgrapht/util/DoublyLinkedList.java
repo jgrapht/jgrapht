@@ -1560,7 +1560,7 @@ public class DoublyLinkedList<E>
          * 
          * @throws UnsupportedOperationException if this node does not support modification
          */
-        protected abstract void setNext(AbstractListNode<V> next);
+        abstract void setNext(AbstractListNode<V> next);
 
         /**
          * Sets the previous node to the specified node.
@@ -1569,7 +1569,7 @@ public class DoublyLinkedList<E>
          * 
          * @throws UnsupportedOperationException if this node does not support modification
          */
-        protected abstract void setPrev(AbstractListNode<V> prev);
+        abstract void setPrev(AbstractListNode<V> prev);
 
         /**
          * Sets the list that this node belongs to.
@@ -1578,7 +1578,7 @@ public class DoublyLinkedList<E>
          * 
          * @throws UnsupportedOperationException if this node does not support modification
          */
-        protected void setList(DoublyLinkedList<V> list) {
+        void setList(DoublyLinkedList<V> list) {
             this.list = list;
         }
 
