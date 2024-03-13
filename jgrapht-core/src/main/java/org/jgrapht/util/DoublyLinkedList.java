@@ -1525,6 +1525,17 @@ public class DoublyLinkedList<E>
 
         /** The list that this node is a member of. */
         private DoublyLinkedList<V> list;
+        /** The value stored by this node. */
+        private final V value;
+
+        /**
+         * Constructs a new {@code AbstractListNode} with the specified value;
+         * 
+         * @param value the value to be stored
+         */
+        AbstractListNode(V value) {
+            this.value = value;
+        }
 
         @Override
         public abstract AbstractListNode<V> getNext();
@@ -1535,6 +1546,11 @@ public class DoublyLinkedList<E>
         @Override
         public DoublyLinkedList<V> getList() {
             return this.list;
+        }
+
+        @Override
+        public final V getValue() {
+            return value;
         }
 
         /**
@@ -1588,7 +1604,6 @@ public class DoublyLinkedList<E>
      */
     private static class ListNodeImpl<V> extends AbstractListNode<V>
     {
-        private final V value;
         private AbstractListNode<V> next = null;
         private AbstractListNode<V> prev = null;
 
@@ -1599,16 +1614,7 @@ public class DoublyLinkedList<E>
          */
         ListNodeImpl(V value)
         {
-            this.value = value;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public V getValue()
-        {
-            return value;
+            super(value);
         }
 
         /**
@@ -1650,14 +1656,9 @@ public class DoublyLinkedList<E>
         private final ListNode<V> wrapped;
 
         ReversedListNode(ListNode<V> node, DoublyLinkedList<V> list) {
+            super(node.getValue());
             this.wrapped = node;
             super.setList(list);
-        }
-        
-        @Override
-        public V getValue()
-        {
-            return wrapped.getValue();
         }
 
         @Override
