@@ -1532,6 +1532,11 @@ public class DoublyLinkedList<E>
         @Override
         public abstract AbstractListNode<V> getPrev();
 
+        @Override
+        public DoublyLinkedList<V> getList() {
+            return this.list;
+        }
+
         /**
          * Sets the next node to the specified node.
          * 
@@ -1549,11 +1554,6 @@ public class DoublyLinkedList<E>
          * @throws UnsupportedOperationException if this node does not support modification
          */
         protected abstract void setPrev(AbstractListNode<V> prev);
-
-        @Override
-        public DoublyLinkedList<V> getList() {
-            return this.list;
-        }
 
         /**
          * Sets the list that this node belongs to.
