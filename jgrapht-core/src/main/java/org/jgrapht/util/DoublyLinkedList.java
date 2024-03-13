@@ -933,6 +933,8 @@ public class DoublyLinkedList<E>
      * 
      * <p>The returned view is unmodifiable, i.e., any method that
      * attempts to modify the returned view throws an {@link UnsupportedOperationException}.
+     * The behavior of the view is not defined if the original list is modified after
+     * the creation of the view.
      * 
      * @return a reverse-ordered view of this {@code DoublyLinkedList}
      * 
