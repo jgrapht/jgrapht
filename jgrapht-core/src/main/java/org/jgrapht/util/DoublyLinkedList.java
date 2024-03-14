@@ -61,7 +61,7 @@ public class DoublyLinkedList<E>
     implements Deque<E>
 {
     /** The first element of the list, {@code null} if this list is empty. */
-    private AbstractListNode<E> head = null;
+    private ListNode<E> head = null;
     private int size;
 
     /**
@@ -71,7 +71,7 @@ public class DoublyLinkedList<E>
      * 
      * @since 1.5.3
      */
-    AbstractListNode<E> head()
+    ListNode<E> head()
     {
         return this.head;
     }
@@ -81,7 +81,7 @@ public class DoublyLinkedList<E>
      * 
      * @return the last element of the list
      */
-    AbstractListNode<E> tail()
+    ListNode<E> tail()
     {
         return head.getPrev();
     }
@@ -111,9 +111,9 @@ public class DoublyLinkedList<E>
     public void clear()
     {
         if (!isEmpty()) {
-            AbstractListNode<E> node = head;
+            ListNode<E> node = head;
             do {
-                AbstractListNode<E> next = node.getNext();
+                ListNode<E> next = node.getNext();
                 boolean removed = removeListNode(node); // clears all links of removed node
                 assert removed;
                 node = next;
@@ -137,7 +137,7 @@ public class DoublyLinkedList<E>
      * @throws IllegalArgumentException if {@code node} is already contained in this or another
      *         {@code DoublyLinkedList}
      */
-    private void addListNode(AbstractListNode<E> node)
+    private void addListNode(ListNode<E> node)
     { // call this before any modification of this list is done
         if (node.getList() != null) {
             String list = (node.getList() == this) ? "this" : "other";
@@ -151,8 +151,8 @@ public class DoublyLinkedList<E>
 
     /**
      * Atomically moves all {@link ListNode ListNodes} from {@code list} to this list as if each
-     * node was removed with {@link #removeListNode(AbstractListNode)} from {@code list} and
-     * subsequently added to this list by {@link #addListNode(AbstractListNode)}.
+     * node was removed with {@link #removeListNode(ListNode)} from {@code list} and
+     * subsequently added to this list by {@link #addListNode(ListNode)}.
      */
     private void moveAllListNodes(DoublyLinkedList<E> list)
     { // call this before any modification of this list is done
@@ -160,7 +160,7 @@ public class DoublyLinkedList<E>
         for (ListNodeIteratorImpl it = list.new ListNodeIteratorImpl(0); it.hasNext();) {
             ListNode<E> node = it.nextNode();
             assert node.getList() == list;
-            ((AbstractListNode<E>) node).setList(this);
+            node.setList(this);
         }
         size += list.size;
         list.size = 0;
@@ -180,7 +180,7 @@ public class DoublyLinkedList<E>
      * @param node the node to remove from this list
      * @return true if {@code node} was removed from this list, else false
      */
-    private boolean removeListNode(AbstractListNode<E> node)
+    private boolean removeListNode(ListNode<E> node)
     { // call this before any modification of this list is done
         if (node.list == this) {
 
@@ -196,20 +196,20 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * Establishes the links between the given {@link AbstractListNode nodes} in such a way that the
+     * Establishes the links between the given {@link ListNode nodes} in such a way that the
      * {@code predecessor} is linked before the {@code successor}.
      * 
      * @param predecessor the first node linked before the other
      * @param successor the second node linked after the other
      */
-    private void link(AbstractListNode<E> predecessor, AbstractListNode<E> successor)
+    private void link(ListNode<E> predecessor, ListNode<E> successor)
     {
         predecessor.setNext(successor);
         successor.setPrev(predecessor);
     }
 
     /** Insert non null {@code node} before non null {@code successor} into the list. */
-    private void linkBefore(AbstractListNode<E> node, AbstractListNode<E> successor)
+    private void linkBefore(ListNode<E> node, ListNode<E> successor)
     {
         addListNode(node);
         link(successor.getPrev(), node);
@@ -217,7 +217,7 @@ public class DoublyLinkedList<E>
     }
 
     /** Insert non null {@code node} as last node into the list. */
-    private void linkLast(AbstractListNode<E> node)
+    private void linkLast(ListNode<E> node)
     {
         if (isEmpty()) { // node will be the first and only one
             addListNode(node);
@@ -238,9 +238,9 @@ public class DoublyLinkedList<E>
         if (previousSize == 0) {
             head = list.head; // head and tail already linked together
         } else {
-            AbstractListNode<E> refNode = index == previousSize ? head() : getNodeAt(index);
+            ListNode<E> refNode = index == previousSize ? head() : getNodeAt(index);
 
-            AbstractListNode<E> listTail = list.tail();
+            ListNode<E> listTail = list.tail();
             link(refNode.getPrev(), list.head); // changes list.tail()
             link(listTail, refNode);
 
@@ -253,10 +253,10 @@ public class DoublyLinkedList<E>
     }
 
     /** Remove the non null {@code node} from the list. */
-    private boolean unlink(AbstractListNode<E> node)
+    private boolean unlink(ListNode<E> node)
     {
-        AbstractListNode<E> prev = node.getPrev();
-        AbstractListNode<E> next = node.getNext();
+        ListNode<E> prev = node.getPrev();
+        ListNode<E> next = node.getNext();
         if (removeListNode(node)) { // clears prev and next of node
             if (size == 0) {
                 head = null;
@@ -297,14 +297,13 @@ public class DoublyLinkedList<E>
      */
     public void addNode(int index, ListNode<E> node)
     {
-        AbstractListNode<E> nodeImpl = (AbstractListNode<E>) node;
         if (index == size) { // also true if this is empty
-            linkLast(nodeImpl);
+            linkLast(node);
         } else {
-            AbstractListNode<E> successor = index == 0 ? head : getNodeAt(index);
-            linkBefore(nodeImpl, successor);
+            ListNode<E> successor = index == 0 ? head : getNodeAt(index);
+            linkBefore(node, successor);
             if (head == successor) {
-                head = nodeImpl;
+                head = node;
             }
         }
     }
@@ -359,11 +358,9 @@ public class DoublyLinkedList<E>
         if (successor.getList() != this) {
             throw new IllegalArgumentException("Node <" + successor + "> not in this list");
         }
-        AbstractListNode<E> successorImpl = (AbstractListNode<E>) successor;
-        AbstractListNode<E> nodeImpl = (AbstractListNode<E>) node;
-        linkBefore(nodeImpl, successorImpl);
-        if (head == successorImpl) {
-            head = nodeImpl;
+        linkBefore(node, successor);
+        if (head == successor) {
+            head = node;
         }
     }
 
@@ -425,12 +422,12 @@ public class DoublyLinkedList<E>
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
      */
-    private AbstractListNode<E> getNodeAt(int index)
+    private ListNode<E> getNodeAt(int index)
     {
         if (index < 0 || size <= index) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-        AbstractListNode<E> node;
+        ListNode<E> node;
         if (index < size / 2) {
             node = head();
             for (int i = 0; i < index; i++) {
@@ -508,7 +505,7 @@ public class DoublyLinkedList<E>
      */
     public boolean removeNode(ListNode<E> node)
     {
-        return unlink((AbstractListNode<E>) node);
+        return unlink(node);
     }
 
     /**
@@ -910,10 +907,10 @@ public class DoublyLinkedList<E>
         if (size < 2) {
             return;
         }
-        AbstractListNode<E> newHead = tail();
-        AbstractListNode<E> current = head();
+        ListNode<E> newHead = tail();
+        ListNode<E> current = head();
         do {
-            AbstractListNode<E> next = current.getNext();
+            ListNode<E> next = current.getNext();
 
             current.setNext(current.getPrev());
             current.setPrev(next);
@@ -1482,28 +1479,38 @@ public class DoublyLinkedList<E>
      * 
      * @param <V> the type of the element stored in this node
      */
-    public interface ListNode<V>
+    public abstract static class ListNode<V>
     {
+
+        /** The list that this node is a member of. */
+        private DoublyLinkedList<V> list;
+
+        /**
+         * Constructs a new {@code ListNode}.
+         */
+        ListNode() {
+        }
+
         /**
          * Returns the immutable value this {@code ListNode} contains.
          *
          * @return the value this list node contains
          */
-        V getValue();
+        public abstract V getValue();
 
         /**
          * Returns the next node in the list structure with respect to this node
          *
          * @return the next node in the list structure with respect to this node
          */
-        ListNode<V> getNext();
+        public abstract ListNode<V> getNext();
 
         /**
          * Returns the previous node in the list structure with respect to this node
          *
          * @return the previous node in the list structure with respect to this node
          */
-        ListNode<V> getPrev();
+        public abstract ListNode<V> getPrev();
 
         /**
          * Returns the list that this node is a member of.
@@ -1512,44 +1519,8 @@ public class DoublyLinkedList<E>
          * 
          * @since 1.5.3
          */
-        DoublyLinkedList<V> getList();
-    }
-
-    /**
-     * A skeletal implementation of a {@code ListNode}.
-     * 
-     * @since 1.5.3
-     */
-    protected abstract static class AbstractListNode<V> implements ListNode<V> {
-
-        /** The list that this node is a member of. */
-        private DoublyLinkedList<V> list;
-        /** The value stored by this node. */
-        private final V value;
-
-        /**
-         * Constructs a new {@code AbstractListNode} with the specified value;
-         * 
-         * @param value the value to be stored
-         */
-        AbstractListNode(V value) {
-            this.value = value;
-        }
-
-        @Override
-        public abstract AbstractListNode<V> getNext();
-
-        @Override
-        public abstract AbstractListNode<V> getPrev();
-
-        @Override
         public DoublyLinkedList<V> getList() {
             return this.list;
-        }
-
-        @Override
-        public final V getValue() {
-            return value;
         }
 
         /**
@@ -1559,7 +1530,7 @@ public class DoublyLinkedList<E>
          * 
          * @throws UnsupportedOperationException if this node does not support modification
          */
-        abstract void setNext(AbstractListNode<V> next);
+        abstract void setNext(ListNode<V> next);
 
         /**
          * Sets the previous node to the specified node.
@@ -1568,7 +1539,7 @@ public class DoublyLinkedList<E>
          * 
          * @throws UnsupportedOperationException if this node does not support modification
          */
-        abstract void setPrev(AbstractListNode<V> prev);
+        abstract void setPrev(ListNode<V> prev);
 
         /**
          * Sets the list that this node belongs to.
@@ -1601,10 +1572,13 @@ public class DoublyLinkedList<E>
      * The default {@link ListNode} implementation that enables checks and enforcement of a single
      * container list policy.
      */
-    private static class ListNodeImpl<V> extends AbstractListNode<V>
+    private static class ListNodeImpl<V> extends ListNode<V>
     {
-        private AbstractListNode<V> next = null;
-        private AbstractListNode<V> prev = null;
+        /** The value stored by this node. */
+        private final V value;
+
+        private ListNode<V> next = null;
+        private ListNode<V> prev = null;
 
         /**
          * Creates new list node
@@ -1613,14 +1587,14 @@ public class DoublyLinkedList<E>
          */
         ListNodeImpl(V value)
         {
-            super(value);
+            this.value = value;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public AbstractListNode<V> getNext()
+        public ListNode<V> getNext()
         {
             return next;
         }
@@ -1629,18 +1603,23 @@ public class DoublyLinkedList<E>
          * {@inheritDoc}
          */
         @Override
-        public AbstractListNode<V> getPrev()
+        public ListNode<V> getPrev()
         {
             return prev;
         }
 
         @Override
-        protected void setNext(AbstractListNode<V> next) {
+        public final V getValue() {
+            return value;
+        }
+
+        @Override
+        protected void setNext(ListNode<V> next) {
             this.next = next;
         }
 
         @Override
-        protected void setPrev(AbstractListNode<V> prev) {
+        protected void setPrev(ListNode<V> prev) {
             this.prev = prev;
         }
 
@@ -1651,11 +1630,10 @@ public class DoublyLinkedList<E>
      * 
      * @since 1.5.3
      */
-    private static class ReversedListNode<V> extends AbstractListNode<V> {
+    private static class ReversedListNode<V> extends ListNode<V> {
         private final ListNode<V> wrapped;
 
         ReversedListNode(ListNode<V> node, DoublyLinkedList<V> list) {
-            super(node.getValue());
             this.wrapped = node;
             super.setList(list);
         }
@@ -1672,11 +1650,16 @@ public class DoublyLinkedList<E>
             return new ReversedListNode<>(wrapped.getNext(), this.getList());
         }
 
+        @Override
+        public final V getValue() {
+            return wrapped.getValue();
+        }
+
         /**
          * @throws UnsupportedOperationException always
          */
         @Override
-        protected void setNext(AbstractListNode<V> next) {
+        protected void setNext(ListNode<V> next) {
             throw new UnsupportedOperationException();
         }
 
@@ -1684,7 +1667,7 @@ public class DoublyLinkedList<E>
          * @throws UnsupportedOperationException always
          */
         @Override
-        protected void setPrev(AbstractListNode<V> prev) {
+        protected void setPrev(ListNode<V> prev) {
             throw new UnsupportedOperationException();
         }
 
