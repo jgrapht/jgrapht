@@ -1614,12 +1614,12 @@ public class DoublyLinkedList<E>
         }
 
         @Override
-        protected void setNext(ListNode<V> next) {
+        void setNext(ListNode<V> next) {
             this.next = next;
         }
 
         @Override
-        protected void setPrev(ListNode<V> prev) {
+        void setPrev(ListNode<V> prev) {
             this.prev = prev;
         }
 
@@ -1659,7 +1659,7 @@ public class DoublyLinkedList<E>
          * @throws UnsupportedOperationException always
          */
         @Override
-        protected void setNext(ListNode<V> next) {
+        void setNext(ListNode<V> next) {
             throw new UnsupportedOperationException();
         }
 
@@ -1667,7 +1667,7 @@ public class DoublyLinkedList<E>
          * @throws UnsupportedOperationException always
          */
         @Override
-        protected void setPrev(ListNode<V> prev) {
+        void setPrev(ListNode<V> prev) {
             throw new UnsupportedOperationException();
         }
 
@@ -1675,7 +1675,7 @@ public class DoublyLinkedList<E>
          * @throws UnsupportedOperationException always
          */
         @Override
-        protected void setList(DoublyLinkedList<V> list) {
+        void setList(DoublyLinkedList<V> list) {
             throw new UnsupportedOperationException();
         }
 
