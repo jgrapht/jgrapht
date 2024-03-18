@@ -23,13 +23,11 @@ import org.jgrapht.Graphs;
 import org.jgrapht.TestUtil;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Unit tests for the {@link FarthestInsertionHeuristicTSP}
@@ -41,7 +39,7 @@ public class FarthestInsertionHeuristicTSPTest
     /**
      * Directed graph
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDirectedGraph()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
@@ -49,26 +47,32 @@ public class FarthestInsertionHeuristicTSPTest
         Graphs.addEdgeWithVertices(graph, 1, 2, 5);
         FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge> farthestInsertion =
             new FarthestInsertionHeuristicTSP<>();
-        farthestInsertion.getTour(graph);
+
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            farthestInsertion.getTour(graph);
+        });
+
     }
 
     /**
      * Empty graph
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptyGraph()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge> farthestInsertion =
             new FarthestInsertionHeuristicTSP<>();
-        farthestInsertion.getTour(graph);
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            farthestInsertion.getTour(graph);
+        });
     }
 
     /**
      * Not complete
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoCompleteGraph()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
@@ -77,7 +81,9 @@ public class FarthestInsertionHeuristicTSPTest
         graph.addVertex(1);
         FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge> farthestInsertion =
             new FarthestInsertionHeuristicTSP<>();
-        farthestInsertion.getTour(graph);
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            farthestInsertion.getTour(graph);
+        });
     }
 
     /**
@@ -93,7 +99,7 @@ public class FarthestInsertionHeuristicTSPTest
             new FarthestInsertionHeuristicTSP<>();
         GraphPath<Integer, DefaultEdge> tour = farthestInsertion.getTour(graph);
         assertHamiltonian(graph, tour);
-        assertEquals(10, tour.getWeight(), 1e-9);
+        Assertions.assertEquals(10, tour.getWeight(), 1e-9);
     }
 
     /**
@@ -109,7 +115,7 @@ public class FarthestInsertionHeuristicTSPTest
             new FarthestInsertionHeuristicTSP<>();
         GraphPath<Integer, DefaultEdge> tour = farthestInsertion.getTour(graph);
         assertHamiltonian(graph, tour);
-        assertEquals(19, tour.getWeight(), 1e-9);
+        Assertions.assertEquals(19, tour.getWeight(), 1e-9);
     }
 
     /**
@@ -128,8 +134,8 @@ public class FarthestInsertionHeuristicTSPTest
         var farthestInsH = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
 
         var tour = farthestInsH.getTour(graph);
-        assertEquals(30, tour.getWeight(), 1e-9);
-        assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
+        Assertions.assertEquals(30, tour.getWeight(), 1e-9);
+        Assertions.assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
@@ -147,10 +153,10 @@ public class FarthestInsertionHeuristicTSPTest
             <Integer, DefaultWeightedEdge>(new GraphWalk<>(graph, List.of(3, 2, 0, 4), -1));
 
         var tour = farthestInsH.getTour(graph);
-        assertEquals(30, tour.getWeight(), 1e-9);
+        Assertions.assertEquals(30, tour.getWeight(), 1e-9);
 
         // vertex 1 should be inserted between vertices 2 and 0
-        assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
+        Assertions.assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
@@ -174,8 +180,8 @@ public class FarthestInsertionHeuristicTSPTest
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsertion = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
         var tour = farthestInsertion.getTour(graph);
-        assertEquals(210, tour.getWeight(), 1e-9);
-        assertArrayEquals(new Integer[]{4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4},
+        Assertions.assertEquals(210, tour.getWeight(), 1e-9);
+        Assertions.assertArrayEquals(new Integer[]{4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
