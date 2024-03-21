@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":10,"i1":6,"i2":6,"i3":6,"i4":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -120,9 +120,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="header">
 <div class="subTitle"><span class="moduleLabelInType">Module</span>&nbsp;<a href="../../../module-summary.html">org.jgrapht.core</a></div>
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">org.jgrapht.util</a></div>
-<h2 title="Interface DoublyLinkedList.ListNode" class="title">Interface DoublyLinkedList.ListNode&lt;V&gt;</h2>
+<h2 title="Class DoublyLinkedList.ListNode" class="title">Class DoublyLinkedList.ListNode&lt;V&gt;</h2>
 </div>
 <div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.jgrapht.util.DoublyLinkedList.ListNode&lt;V&gt;</li>
+</ul>
+</li>
+</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
@@ -135,10 +143,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a>&lt;<a href="DoublyLinkedList.html" title="type parameter in DoublyLinkedList">E</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static interface <span class="typeNameLabel">DoublyLinkedList.ListNode&lt;V&gt;</span></pre>
+<pre>public abstract static class <span class="typeNameLabel">DoublyLinkedList.ListNode&lt;V&gt;</span>
+extends java.lang.Object</pre>
 <div class="block">Container for the elements stored in a <a href="DoublyLinkedList.html" title="class in org.jgrapht.util"><code>DoublyLinkedList</code></a>.
  <p>
- A <a href="DoublyLinkedList.ListNode.html" title="interface in org.jgrapht.util"><code>DoublyLinkedList.ListNode</code></a> is either contained exactly once in exactly one <code>DoublyLinkedList</code>
+ A <a href="DoublyLinkedList.ListNode.html" title="class in org.jgrapht.util"><code>DoublyLinkedList.ListNode</code></a> is either contained exactly once in exactly one <code>DoublyLinkedList</code>
  or contained in no <code>DoublyLinkedList</code>.
  </p></div>
 </li>
@@ -155,34 +164,55 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="DoublyLinkedList.ListNode.html" title="interface in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;</code></td>
+<td class="colFirst"><code><a href="DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getList()">getList</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the list that this node is a member of.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>abstract <a href="DoublyLinkedList.ListNode.html" title="class in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNext()">getNext</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the next node in the list structure with respect to this node</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="DoublyLinkedList.ListNode.html" title="interface in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;</code></td>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>abstract <a href="DoublyLinkedList.ListNode.html" title="class in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPrev()">getPrev</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the previous node in the list structure with respect to this node</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a></code></td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>abstract <a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValue()">getValue</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the immutable value this <code>ListNode</code> contains.</div>
 </td>
 </tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the string representation of this list node.</div>
+</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait</code></li>
+</ul>
 </li>
 </ul>
 </section>
@@ -205,7 +235,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre class="methodSignature"><a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&nbsp;getValue()</pre>
+<pre class="methodSignature">public abstract&nbsp;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&nbsp;getValue()</pre>
 <div class="block">Returns the immutable value this <code>ListNode</code> contains.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -219,7 +249,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>getNext</h4>
-<pre class="methodSignature"><a href="DoublyLinkedList.ListNode.html" title="interface in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;&nbsp;getNext()</pre>
+<pre class="methodSignature">public abstract&nbsp;<a href="DoublyLinkedList.ListNode.html" title="class in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;&nbsp;getNext()</pre>
 <div class="block">Returns the next node in the list structure with respect to this node</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -230,14 +260,46 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="getPrev()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getPrev</h4>
-<pre class="methodSignature"><a href="DoublyLinkedList.ListNode.html" title="interface in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;&nbsp;getPrev()</pre>
+<pre class="methodSignature">public abstract&nbsp;<a href="DoublyLinkedList.ListNode.html" title="class in org.jgrapht.util">DoublyLinkedList.ListNode</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;&nbsp;getPrev()</pre>
 <div class="block">Returns the previous node in the list structure with respect to this node</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the previous node in the list structure with respect to this node</dd>
+</dl>
+</li>
+</ul>
+<a id="getList()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getList</h4>
+<pre class="methodSignature">public&nbsp;<a href="DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a>&lt;<a href="DoublyLinkedList.ListNode.html" title="type parameter in DoublyLinkedList.ListNode">V</a>&gt;&nbsp;getList()</pre>
+<div class="block">Returns the list that this node is a member of.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the list that this node is a member of</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>1.5.3</dd>
+</dl>
+</li>
+</ul>
+<a id="toString()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toString</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;toString()</pre>
+<div class="block">Returns the string representation of this list node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the string representation of this list node</dd>
 </dl>
 </li>
 </ul>
