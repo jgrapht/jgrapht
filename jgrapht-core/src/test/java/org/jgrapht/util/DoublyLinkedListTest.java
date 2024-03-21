@@ -1814,6 +1814,18 @@ public class DoublyLinkedListTest
     }
 
     /**
+     * Tests that {@code DoublyLinkedList} implements both {@code java.util.List} and {@code java.util.Deque} interfaces.
+     * 
+     * @since 1.5.3
+     */
+    @Test
+    public void testInheritance() {
+        DoublyLinkedList<?> list = new DoublyLinkedList<>();
+        assertInstanceOf(List.class, list);
+        assertInstanceOf(Deque.class, list);
+    }
+
+    /**
      * Tests for {@link DoublyLinkedList.ReversedDoublyLinkedListView}.
      * 
      * @since 1.5.3
