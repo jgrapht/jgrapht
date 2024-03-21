@@ -74,4 +74,32 @@ public class ArrayUtil
         arr[j] = arr[i];
         arr[i] = tmp;
     }
+
+    /**
+     * Swaps the two elements at the specified indices in the given double array.
+     *
+     * @param arr the array
+     * @param i the index of the first element
+     * @param j the index of the second element
+     */
+    public static void swap(double[] arr, int i, int j)
+    {
+        double tmp = arr[j];
+        arr[j] = arr[i];
+        arr[i] = tmp;
+    }
+
+    /**
+     * Swaps the two elements at the specified indices in the given int array.
+     *
+     * @param arr the array
+     * @param i the index of the first element
+     * @param j the index of the second element
+     */
+    public static void swap(int[] arr, int i, int j)
+    {
+        int tmp = arr[j];
+        arr[j] = arr[i];
+        arr[i] = tmp;
+    }
 }

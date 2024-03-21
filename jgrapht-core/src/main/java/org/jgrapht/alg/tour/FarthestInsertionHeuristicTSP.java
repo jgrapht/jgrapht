@@ -21,6 +21,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.ArrayUtil;
 import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
@@ -184,8 +185,8 @@ public class FarthestInsertionHeuristicTSP<V, E>
                     bestIndex = j;
                 }
             }
-            swap(tour, i, idxFarthest);
-            swap(distances, i, idxFarthest);
+            ArrayUtil.swap(tour, i, idxFarthest);
+            ArrayUtil.swap(distances, i, idxFarthest);
 
             // perform insertion of vertex k
             for (int j = i; j > bestIndex; j--) {
@@ -314,33 +315,5 @@ public class FarthestInsertionHeuristicTSP<V, E>
         for (int i = start; i < distances.length; i++) {
             distances[i] = Math.min(allDist[v][i], distances[i]);
         }
-    }
-
-    /**
-     * Swaps the two elements at the specified indices in the given double array.
-     *
-     * @param arr the array
-     * @param i the index of the first element
-     * @param j the index of the second element
-     */
-    public static void swap(double[] arr, int i, int j)
-    {
-        double tmp = arr[j];
-        arr[j] = arr[i];
-        arr[i] = tmp;
-    }
-
-    /**
-     * Swaps the two elements at the specified indices in the given int array.
-     *
-     * @param arr the array
-     * @param i the index of the first element
-     * @param j the index of the second element
-     */
-    public static void swap(int[] arr, int i, int j)
-    {
-        int tmp = arr[j];
-        arr[j] = arr[i];
-        arr[i] = tmp;
     }
 }
