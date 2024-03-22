@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2021, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2021-2024, by J. Alejandro Cornejo-Acosta and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,7 @@ import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
 /**
  * Unit tests for the {@link FarthestInsertionHeuristicTSP}
  *
- * @author Jose Alejandro Cornejo Acosta
+ * @author J. Alejandro Cornejo-Acosta
  */
 public class FarthestInsertionHeuristicTSPTest
 {

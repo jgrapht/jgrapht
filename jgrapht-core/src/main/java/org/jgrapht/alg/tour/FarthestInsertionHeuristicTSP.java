@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2021, by Peter Harman and Contributors.
+ * (C) Copyright 2021-2024, by J. Alejandro Cornejo-Acosta and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -70,7 +70,7 @@ import java.util.stream.Collectors;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * @author José Alejandro Cornejo Acosta
+ * @author J. Alejandro Cornejo-Acosta
  */
 public class FarthestInsertionHeuristicTSP<V, E>
     extends
