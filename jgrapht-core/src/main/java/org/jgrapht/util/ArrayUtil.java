@@ -81,6 +81,8 @@ public class ArrayUtil
      * @param arr the array
      * @param i the index of the first element
      * @param j the index of the second element
+     * 
+     * @since 1.5.3
      */
     public static void swap(double[] arr, int i, int j)
     {
@@ -95,6 +97,8 @@ public class ArrayUtil
      * @param arr the array
      * @param i the index of the first element
      * @param j the index of the second element
+     * 
+     * @since 1.5.3
      */
     public static void swap(int[] arr, int i, int j)
     {
