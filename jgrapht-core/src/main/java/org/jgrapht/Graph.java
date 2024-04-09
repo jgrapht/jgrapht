@@ -154,9 +154,8 @@ public interface Graph<V, E>
      * {@link #getEdgeSupplier()}). For the new edge to be added {@code e} must <i>not</i> be
      * equal to any other edge the graph (even if the graph allows edge-multiplicity). More
      * formally, the graph must not contain any edge {@code e2} such that
-     * {@code e2.equals(e)}. If such {@code 
-     * e2} is found then the newly created edge {@code e} is abandoned, the method leaves
-     * this graph unchanged and returns {@code null}.
+     * {@code e2.equals(e)}. If such {@code e2} is found then the newly created edge
+     * {@code e} is abandoned, the method leaves this graph unchanged and returns {@code null}.
      * 
      * <p>
      * If the underlying graph implementation's {@link #getEdgeSupplier()} returns
@@ -179,19 +178,12 @@ public interface Graph<V, E>
 
     /**
      * Adds the specified edge to this graph, going from the source vertex to the target vertex.
-     * More formally, adds the specified edge, {@code 
-     * e}, to this graph if this graph contains no edge {@code e2} such that
-     * {@code e2.equals(e)}. If this graph already contains such an edge, the call leaves this
-     * graph unchanged and returns {@code false}. Some graphs do not allow edge-multiplicity.
-     * In such cases, if the graph already contains an edge from the specified source to the
-     * specified target, then this method does not change the graph and returns {@code 
-     * false}. If the edge was added to the graph, returns {@code 
-     * true}.
-     *
-     * <p>
-     * The source and target vertices must already be contained in this graph. If they are not found
-     * in graph IllegalArgumentException is thrown.
-     * </p>
+     * More formally, adds the specified edge, {@code e}, to this graph if this graph contains
+     * no edge {@code e2} such that {@code e2.equals(e)}. If this graph already contains such
+     * an edge, the call leaves this graph unchanged and returns {@code false}. Some graphs
+     * do not allow edge-multiplicity. In such cases, if the graph already contains an edge
+     * from the specified source to the specified target, then this method does not change the
+     * graph and returns {@code false}. If the edge was added to the graph, returns {@code true}.
      *
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
@@ -199,11 +191,12 @@ public interface Graph<V, E>
      *
      * @return {@code true} if this graph did not already contain the specified edge.
      *
-     * @throws IllegalArgumentException if source or target vertices are not found in the graph.
+     * @throws IllegalArgumentException if source or target vertices are not found in the graph
+     *                                  or if there is a property of this graph that prevents the
+     *                                  addition of the edge
      * @throws ClassCastException if the specified edge is not assignment compatible with the class
      *         of edges produced by the edge factory of this graph.
-     * @throws NullPointerException if any of the specified vertices is {@code 
-     * null}.
+     * @throws NullPointerException if any of the arguments is {@code null}.
      *
      * @see #addEdge(Object, Object)
      * @see #getEdgeSupplier()
@@ -237,7 +230,8 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in
      *         the graph
-     * @throws UnsupportedOperationException if the graph was not initialized with a vertex supplier
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     *                                       or if this graph disallows modification
      *
      * @see #getVertexSupplier()
      */
@@ -255,6 +249,7 @@ public interface Graph<V, E>
      *
      * @return {@code true} if this graph did not already contain the specified vertex.
      *
+     * @throws IllegalArgumentException if there is a property that disallows adding the specified vertex (optional operation)
      * @throws NullPointerException if the specified vertex is {@code null}.
      */
     boolean addVertex(V v);
@@ -565,6 +560,8 @@ public interface Graph<V, E>
      *
      * @param e edge of interest
      * @return edge weight
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     double getEdgeWeight(E e);
 
@@ -573,6 +570,8 @@ public interface Graph<V, E>
      *
      * @param e edge on which to set weight
      * @param weight new weight for edge
+     * 
+     * @throws NullPointerException if {@code e} is {@code null}
      * @throws UnsupportedOperationException if the graph does not support weights
      */
     void setEdgeWeight(E e, double weight);

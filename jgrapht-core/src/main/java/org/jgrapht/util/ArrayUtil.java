@@ -36,6 +36,9 @@ public class ArrayUtil
      * @param arr the array
      * @param from the index of the first element (inclusive) inside the range to reverse
      * @param to the index of the last element (inclusive) inside the range to reverse
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code from} or {@code to} is out of bounds
      */
     public static final <V> void reverse(V[] arr, int from, int to)
     {
@@ -50,6 +53,9 @@ public class ArrayUtil
      * @param arr the array
      * @param from the index of the first element (inclusive) inside the range to reverse
      * @param to the index of the last element (inclusive) inside the range to reverse
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code from} or {@code to} is out of bounds
      */
     public static final void reverse(int[] arr, int from, int to)
     {
@@ -67,6 +73,9 @@ public class ArrayUtil
      * @param arr the array
      * @param i the index of the first element
      * @param j the index of the second element
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code i} or {@code j} is out of bounds
      */
     public static final <V> void swap(V[] arr, int i, int j)
     {
@@ -81,6 +90,9 @@ public class ArrayUtil
      * @param arr the array
      * @param i the index of the first element
      * @param j the index of the second element
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code i} or {@code j} is out of bounds
      * 
      * @since 1.5.3
      */
@@ -97,6 +109,9 @@ public class ArrayUtil
      * @param arr the array
      * @param i the index of the first element
      * @param j the index of the second element
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code i} or {@code j} is out of bounds
      * 
      * @since 1.5.3
      */

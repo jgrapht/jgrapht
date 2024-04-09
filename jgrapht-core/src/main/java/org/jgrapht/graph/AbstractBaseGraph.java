@@ -217,7 +217,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -261,7 +263,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -301,6 +304,9 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
+    /**
+     * @throws UnsupportedOperationException {@inheritDoc}
+     */
     @Override
     public V addVertex()
     {
@@ -318,7 +324,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -411,7 +417,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public int degreeOf(V vertex)
@@ -430,7 +437,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public Set<E> edgesOf(V vertex)
@@ -440,7 +448,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public int inDegreeOf(V vertex)
@@ -547,7 +556,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -559,11 +568,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Set an edge weight.
-     * 
-     * @param e the edge
-     * @param weight the weight
-     * @throws UnsupportedOperationException if the graph is not weighted
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public void setEdgeWeight(E e, double weight)

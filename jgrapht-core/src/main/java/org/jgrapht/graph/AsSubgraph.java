@@ -267,6 +267,9 @@ public class AsSubgraph<V, E>
         return edgeSet.add(e);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public V addVertex()
     {
@@ -280,7 +283,7 @@ public class AsSubgraph<V, E>
      *
      * @return {@code true} if the vertex was added, otherwise {@code false}.
      *
-     * @throws NullPointerException if v is {@code null}
+     * @throws NullPointerException {@inheritDoc}
      * @throws IllegalArgumentException if the base graph does not contain the vertex
      *
      * @see AsSubgraph

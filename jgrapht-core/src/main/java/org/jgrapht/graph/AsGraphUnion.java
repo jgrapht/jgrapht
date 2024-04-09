@@ -59,6 +59,8 @@ public class AsGraphUnion<V, E>
      * @param g1 the first graph
      * @param g2 the second graph
      * @param operator the weight combiner (policy for edge weight calculation)
+     * 
+     * @throws NullPointerException if any of the arguments is {@code null}
      */
     public AsGraphUnion(Graph<V, E> g1, Graph<V, E> g2, WeightCombiner operator)
     {
@@ -93,6 +95,8 @@ public class AsGraphUnion<V, E>
      * 
      * @param g1 the first graph
      * @param g2 the second graph
+     * 
+     * @throws NullPointerException if any of the arguments is {@code null}
      */
     public AsGraphUnion(Graph<V, E> g1, Graph<V, E> g2)
     {
