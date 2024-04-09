@@ -1,3 +1,8 @@
+/**
+ * Provides demo applications of the JGraphT library.
+ * 
+ * @since 1.5.0
+ */
 module org.jgrapht.demo
 {
     exports org.jgrapht.demo;

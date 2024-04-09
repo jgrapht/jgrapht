@@ -1,3 +1,8 @@
+/**
+ * Provides I/O extensions for the JGraphT library.
+ * 
+ * @since 1.5.0
+ */
 module org.jgrapht.io
 {
     exports org.jgrapht.nio;
