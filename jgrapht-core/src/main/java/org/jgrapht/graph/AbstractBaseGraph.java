@@ -305,6 +305,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * @throws IllegalArgumentException {@inheritDoc}
      * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
@@ -459,7 +460,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
@@ -469,7 +471,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public int outDegreeOf(V vertex)
@@ -479,7 +482,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)

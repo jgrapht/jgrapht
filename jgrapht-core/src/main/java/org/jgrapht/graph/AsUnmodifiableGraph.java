@@ -50,7 +50,9 @@ public class AsUnmodifiableGraph<V, E>
     /**
      * Creates a new unmodifiable graph based on the specified backing graph.
      *
-     * @param g the backing graph on which an unmodifiable graph is to be created.
+     * @param g the backing graph on which an unmodifiable graph is to be created
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public AsUnmodifiableGraph(Graph<V, E> g)
     {
@@ -58,7 +60,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -67,7 +69,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -76,7 +78,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex()
+     * @throws UnsupportedOperationException always
      */
     @Override
     public V addVertex()
@@ -85,7 +87,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean addVertex(V v)
@@ -94,7 +96,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Collection)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
@@ -103,7 +105,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
@@ -112,7 +114,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllVertices(Collection)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
@@ -121,7 +123,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeEdge(E e)
@@ -130,7 +132,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -139,7 +141,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeVertex(V v)

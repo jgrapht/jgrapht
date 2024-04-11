@@ -73,6 +73,8 @@ public class GraphDelegator<V, E>
      *        backing graph vertex supplier will be used.
      * @param edgeSupplier edge supplier for the delegator. Can be null in which case the backing
      *        graph edge supplier will be used.
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public GraphDelegator(Graph<V, E> graph, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
@@ -134,7 +136,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -150,7 +155,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -159,7 +167,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public V addVertex()
@@ -175,7 +184,9 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -267,7 +278,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)
@@ -276,7 +287,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -285,7 +296,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeVertex(V v)
@@ -330,7 +341,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -339,7 +350,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public void setEdgeWeight(E e, double weight)

@@ -53,7 +53,8 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Collection)
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
@@ -68,7 +69,7 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Object, Object)
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
@@ -83,7 +84,8 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllVertices(Collection)
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
@@ -139,6 +141,9 @@ public abstract class AbstractGraph<V, E>
      * @param edges edges to be removed from this graph.
      *
      * @return {@code true} if this graph changed as a result of the call.
+     * 
+     * @throws NullPointerException if argument is {@code null}
+     * @throws UnsupportedOperationException if this graph disallows modification
      *
      * @see Graph#removeEdge(Object)
      * @see Graph#containsEdge(Object)

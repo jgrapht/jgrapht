@@ -62,6 +62,9 @@ public class AsUnweightedGraph<V, E>
         return Graph.DEFAULT_EDGE_WEIGHT;
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void setEdgeWeight(E e, double weight)
     {

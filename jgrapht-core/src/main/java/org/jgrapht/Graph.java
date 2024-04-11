@@ -165,12 +165,14 @@ public interface Graph<V, E>
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
      *
-     * @return The newly created edge if added to the graph, otherwise {@code 
-     * null}.
+     * @return The newly created edge if added to the graph, otherwise {@code null}.
      *
-     * @throws IllegalArgumentException if source or target vertices are not found in the graph.
+     * @throws IllegalArgumentException if source or target vertices are not found in the graph
+     *                                  or if there is a property of this graph that prevents the
+     *                                  addition of the edge
      * @throws NullPointerException if any of the specified vertices is {@code null}.
      * @throws UnsupportedOperationException if the graph was not initialized with an edge supplier
+     *                                       or if this graph disallows modification
      *
      * @see #getEdgeSupplier()
      */
@@ -196,7 +198,8 @@ public interface Graph<V, E>
      *                                  addition of the edge
      * @throws ClassCastException if the specified edge is not assignment compatible with the class
      *         of edges produced by the edge factory of this graph.
-     * @throws NullPointerException if any of the arguments is {@code null}.
+     * @throws NullPointerException if any of the arguments is {@code null}
+     * @throws UnsupportedOperationException if this graph disallows modification
      *
      * @see #addEdge(Object, Object)
      * @see #getEdgeSupplier()
@@ -210,9 +213,9 @@ public interface Graph<V, E>
      * This method creates the new vertex {@code v} using this graph's vertex supplier (see
      * {@link #getVertexSupplier()}). For the new vertex to be added {@code v} must <i>not</i>
      * be equal to any other vertex in the graph. More formally, the graph must not contain any
-     * vertex {@code v2} such that {@code v2.equals(v)}. If such {@code 
-     * v2} is found then the newly created vertex {@code v} is abandoned, the method
-     * leaves this graph unchanged and throws an {@link IllegalArgumentException}.
+     * vertex {@code v2} such that {@code v2.equals(v)}. If such {@code v2} is found then
+     * the newly created vertex {@code v} is abandoned, the method leaves this graph unchanged
+     * and throws an {@link IllegalArgumentException}.
      * 
      * <p>
      * If the underlying graph implementation's {@link #getVertexSupplier()} returns
@@ -251,6 +254,7 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if there is a property that disallows adding the specified vertex
      * @throws NullPointerException if the specified vertex is {@code null}.
+     * @throws UnsupportedOperationException if this graph disallows modification
      */
     boolean addVertex(V v);
 
@@ -419,7 +423,8 @@ public interface Graph<V, E>
      *
      * @return {@code true} if this graph changed as a result of the call
      *
-     * @throws NullPointerException if the specified edge collection is {@code null}.
+     * @throws NullPointerException if the specified edge collection is {@code null}
+     * @throws UnsupportedOperationException if this graph disallows modification
      *
      * @see #removeEdge(Object)
      * @see #containsEdge(Object)
@@ -437,6 +442,8 @@ public interface Graph<V, E>
      * @param targetVertex target vertex of the edge.
      *
      * @return the removed edges, or {@code null} if either vertex is not part of graph
+     * 
+     * @throws UnsupportedOperationException if this graph disallows modification
      */
     Set<E> removeAllEdges(V sourceVertex, V targetVertex);
 
@@ -450,6 +457,7 @@ public interface Graph<V, E>
      * @return {@code true} if this graph changed as a result of the call
      *
      * @throws NullPointerException if the specified vertex collection is {@code null}.
+     * @throws UnsupportedOperationException if this graph disallows modification
      *
      * @see #removeVertex(Object)
      * @see #containsVertex(Object)
@@ -464,23 +472,26 @@ public interface Graph<V, E>
      * @param targetVertex target vertex of the edge.
      *
      * @return The removed edge, or {@code null} if no edge removed.
+     * 
+     * @throws UnsupportedOperationException if this graph disallows modification
      */
     E removeEdge(V sourceVertex, V targetVertex);
 
     /**
      * Removes the specified edge from the graph. Removes the specified edge from this graph if it
-     * is present. More formally, removes an edge {@code  e2} such that {@code e2.equals(e)},
+     * is present. More formally, removes an edge {@code e2} such that {@code e2.equals(e)},
      * if the graph contains such edge. Returns {@code true} if the graph contained
      * the specified edge. (The graph will not contain the specified edge once the call returns).
      *
      * <p>
-     * If the specified edge is {@code null} returns {@code 
-     * false}.
+     * If the specified edge is {@code null} returns {@code false}.
      * </p>
      *
      * @param e edge to be removed from this graph, if present.
      *
      * @return {@code true} if and only if the graph contained the specified edge.
+     * 
+     * @throws UnsupportedOperationException if this graph disallows modification
      */
     boolean removeEdge(E e);
 
@@ -500,6 +511,8 @@ public interface Graph<V, E>
      *
      * @return {@code true} if the graph contained the specified vertex; {@code false}
      *         otherwise.
+     * 
+     * @throws UnsupportedOperationException if this graph disallows modification
      */
     boolean removeVertex(V v);
 
@@ -573,6 +586,8 @@ public interface Graph<V, E>
      * 
      * @throws NullPointerException if {@code e} is {@code null}
      * @throws UnsupportedOperationException if the graph does not support weights
+     *                                       or if there is a property of this graph that
+     *                                       disallows modification of the weight
      */
     void setEdgeWeight(E e, double weight);
 

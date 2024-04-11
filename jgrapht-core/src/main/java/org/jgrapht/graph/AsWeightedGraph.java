@@ -70,7 +70,8 @@ public class AsWeightedGraph<V, E>
      *
      * @param graph the backing graph over which a weighted view is to be created.
      * @param weights the map containing the edge weights.
-     * @throws NullPointerException if the graph or the weights are null.
+     * 
+     * @throws NullPointerException if either one of the arguments is {@code null}
      */
     public AsWeightedGraph(Graph<V, E> graph, Map<E, Double> weights)
     {
@@ -85,7 +86,8 @@ public class AsWeightedGraph<V, E>
      * @param weights the map containing the edge weights
      * @param writeWeightsThrough if set to true, the weights will get propagated to the backing
      *        graph in the {@code setEdgeWeight()} method.
-     * @throws NullPointerException if the graph or the weights are null
+     * 
+     * @throws NullPointerException if either one of {@code graph} or {@code weight} is {@code null}
      * @throws IllegalArgumentException if {@code writeWeightsThrough} is set to true and
      *         {@code graph} is not a weighted graph
      */
@@ -119,7 +121,8 @@ public class AsWeightedGraph<V, E>
      *        weight function
      * @param writeWeightsThrough if set to {@code true}, the weight set directly by
      *        the {@link #setEdgeWeight(Object, double)} method will be propagated to the backing graph.
-     * @throws NullPointerException if the graph or the weight function is {@code null}
+     * 
+     * @throws NullPointerException if either one of {@code graph} or {@code weightFunction} is {@code null}
      * @throws IllegalArgumentException if {@code writeWeightsThrough} is set to true and
      *         {@code graph} is not a weighted graph
      */
@@ -149,7 +152,8 @@ public class AsWeightedGraph<V, E>
      *
      * @param e edge of interest
      * @return the edge weight
-     * @throws NullPointerException if the edge is {@code null}
+     * 
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -180,7 +184,9 @@ public class AsWeightedGraph<V, E>
      *
      * @param e edge on which to set weight
      * @param weight new weight for edge
-     * @throws NullPointerException if the edge is null
+     * 
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException if a weight function is used and caching is disabled
      */
     @Override
     public void setEdgeWeight(E e, double weight)
