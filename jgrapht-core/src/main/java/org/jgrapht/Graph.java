@@ -249,7 +249,7 @@ public interface Graph<V, E>
      *
      * @return {@code true} if this graph did not already contain the specified vertex.
      *
-     * @throws IllegalArgumentException if there is a property that disallows adding the specified vertex (optional operation)
+     * @throws IllegalArgumentException if there is a property that disallows adding the specified vertex
      * @throws NullPointerException if the specified vertex is {@code null}.
      */
     boolean addVertex(V v);
