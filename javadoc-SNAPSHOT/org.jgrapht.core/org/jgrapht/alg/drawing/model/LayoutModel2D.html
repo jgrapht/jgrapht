@@ -61,7 +61,7 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top">
@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code>java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util" class="externalLink">Map.Entry</a>&lt;V,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;</code></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -140,7 +140,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">LayoutModel2D&lt;V&gt;</span>
-extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;</pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util" class="externalLink">Map.Entry</a>&lt;V,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;</pre>
 <div class="block">A general interface for the 2D layout model.
  
  The layout model provides the necessary components to a <a href="../LayoutAlgorithm2D.html" title="interface in org.jgrapht.alg.drawing"><code>LayoutAlgorithm2D</code></a> in order to
@@ -172,7 +172,7 @@ extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.h
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>default java.util.Map&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;</code></td>
+<td class="colFirst"><code>default <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#collect()">collect</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Collect a map of all vertices locations.</div>
@@ -200,7 +200,7 @@ extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.h
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>java.util.Iterator&lt;java.util.Map.Entry&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util" class="externalLink">Map.Entry</a>&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get an iterator with all vertices' locations.</div>
@@ -234,8 +234,8 @@ extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.h
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Iterable">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;java.lang.Iterable</h3>
-<code>forEach, spliterator</code></li>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true#forEach(java.util.function.Consumer)" title="class or interface in java.lang" class="externalLink">forEach</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true#spliterator()" title="class or interface in java.lang" class="externalLink">spliterator</a></code></li>
 </ul>
 </li>
 </ul>
@@ -370,7 +370,7 @@ extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.h
 <ul class="blockList">
 <li class="blockList">
 <h4>collect</h4>
-<pre class="methodSignature">default&nbsp;java.util.Map&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&nbsp;collect()</pre>
+<pre class="methodSignature">default&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&nbsp;collect()</pre>
 <div class="block">Collect a map of all vertices locations. May return null if the model does not store
  locations.</div>
 <dl>
@@ -385,12 +385,12 @@ extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.h
 <ul class="blockListLast">
 <li class="blockList">
 <h4>iterator</h4>
-<pre class="methodSignature">java.util.Iterator&lt;java.util.Map.Entry&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;&nbsp;iterator()</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util" class="externalLink">Map.Entry</a>&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>,&#8203;<a href="Point2D.html" title="class in org.jgrapht.alg.drawing.model">Point2D</a>&gt;&gt;&nbsp;iterator()</pre>
 <div class="block">Get an iterator with all vertices' locations. May return an empty iterator if the model does
  not store locations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>iterator</code>&nbsp;in interface&nbsp;<code>java.lang.Iterable&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true#iterator()" title="class or interface in java.lang" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="LayoutModel2D.html" title="type parameter in LayoutModel2D">V</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an iterator which returns all vertices with their locations. May return an empty
          iterator if the model does not store locations.</dd>
@@ -427,7 +427,7 @@ extends java.lang.Iterable&lt;java.util.Map.Entry&lt;V,&#8203;<a href="Point2D.h
 <li><a href="../../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_bottom">

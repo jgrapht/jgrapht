@@ -55,7 +55,7 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top">
@@ -125,7 +125,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  <p>
  We provide two classes mimicking <a href="../../../../org.jgrapht.opt/org/jgrapht/opt/graph/sparse/SparseIntDirectedGraph.html" title="class in org.jgrapht.opt.graph.sparse"><code>SparseIntDirectedGraph</code></a> and <a href="../../../../org.jgrapht.opt/org/jgrapht/opt/graph/sparse/SparseIntUndirectedGraph.html" title="class in org.jgrapht.opt.graph.sparse"><code>SparseIntUndirectedGraph</code></a>, in the sense that both vertices and edges are integers (and they are
  numbered contiguously). Thus, by definition these classes cannot represent graphs with more than
- <code>Integer.MAX_VALUE</code> edges.
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a> edges.
 
  <ul>
  <li><a href="SuccinctIntDirectedGraph.html" title="class in org.jgrapht.sux4j"><code>SuccinctIntDirectedGraph</code></a> is an implementation for directed graphs.
@@ -141,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  The sometimes slow behavior of the previous classes is due to a clash between JGraphT's design
- and the need of representing an edge with an <code>Integer</code>, which cannot be
+ and the need of representing an edge with an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>Integer</code></a>, which cannot be
  extended: there is no information that can be carried by the object representing the edge. This
  limitation forces the two classes above to compute two expensive functions that are one the
  inverse of the other.
@@ -163,7 +163,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  Finally, note that the best performance and compression can be obtained by representing the graph
- using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s <code>EFGraph</code> format and then accessing the graph using the suitable <a href="../webgraph/package-summary.html">adapter</a>; in particular, one can represent graphs with more than <code>Integer.MAX_VALUE</code>
+ using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s <code>EFGraph</code> format and then accessing the graph using the suitable <a href="../webgraph/package-summary.html">adapter</a>; in particular, one can represent graphs with more than <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
  vertices. However, the adapters do not provide methods mapping bijectively edges into a
  contiguous set of integers.
 
@@ -259,14 +259,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="SuccinctIntDirectedGraph.html" title="class in org.jgrapht.sux4j">SuccinctIntDirectedGraph</a></th>
 <td class="colLast">
-<div class="block">An immutable directed graph with <code>Integer</code> edges represented using quasi-succinct data
+<div class="block">An immutable directed graph with <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>Integer</code></a> edges represented using quasi-succinct data
  structures.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="SuccinctIntUndirectedGraph.html" title="class in org.jgrapht.sux4j">SuccinctIntUndirectedGraph</a></th>
 <td class="colLast">
-<div class="block">An immutable undirected graph with <code>Integer</code> edges represented using quasi-succinct data
+<div class="block">An immutable undirected graph with <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>Integer</code></a> edges represented using quasi-succinct data
  structures.</div>
 </td>
 </tr>
@@ -304,7 +304,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_bottom">

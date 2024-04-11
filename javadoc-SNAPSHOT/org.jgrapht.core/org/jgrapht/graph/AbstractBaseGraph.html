@@ -61,7 +61,7 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top">
@@ -124,7 +124,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="AbstractGraph.html" title="class in org.jgrapht.graph">org.jgrapht.graph.AbstractGraph</a>&lt;V,&#8203;E&gt;</li>
@@ -146,7 +146,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>java.io.Serializable</code>, <code>java.lang.Cloneable</code>, <code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></code>, <code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</code></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -155,7 +155,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public abstract class <span class="typeNameLabel">AbstractBaseGraph&lt;V,&#8203;E&gt;</span>
 extends <a href="AbstractGraph.html" title="class in org.jgrapht.graph">AbstractGraph</a>&lt;V,&#8203;E&gt;
-implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;, java.lang.Cloneable, java.io.Serializable</pre>
+implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">The most general implementation of the <a href="../Graph.html" title="interface in org.jgrapht"><code>Graph</code></a> interface.
  
  <p>
@@ -166,7 +166,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  <p>
  The behavior of this class can be adjusted by changing the <a href="GraphSpecificsStrategy.html" title="interface in org.jgrapht.graph"><code>GraphSpecificsStrategy</code></a> that is
  provided from the constructor. All implemented strategies guarantee deterministic vertex and edge
- set ordering (via <code>LinkedHashMap</code> and <code>LinkedHashSet</code>). The defaults are reasonable
+ set ordering (via <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>LinkedHashMap</code></a> and <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>LinkedHashSet</code></a>). The defaults are reasonable
  for most use-cases, only change if you know what you are doing.
 
  <p>
@@ -224,8 +224,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Supplier,java.util.function.Supplier,org.jgrapht.GraphType)">AbstractBaseGraph</a></span>&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
-                 java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Supplier,java.util.function.Supplier,org.jgrapht.GraphType)">AbstractBaseGraph</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
+                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
                  <a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Construct a new graph.</div>
@@ -233,8 +233,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected </code></td>
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Supplier,java.util.function.Supplier,org.jgrapht.GraphType,org.jgrapht.graph.GraphSpecificsStrategy)">AbstractBaseGraph</a></span>&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
-                 java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Supplier,java.util.function.Supplier,org.jgrapht.GraphType,org.jgrapht.graph.GraphSpecificsStrategy)">AbstractBaseGraph</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
+                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
                  <a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;type,
                  <a href="GraphSpecificsStrategy.html" title="interface in org.jgrapht.graph">GraphSpecificsStrategy</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;graphSpecificsStrategy)</code></th>
 <td class="colLast">
@@ -292,7 +292,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a shallow copy of this graph instance.</div>
@@ -320,21 +320,21 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#edgeSet()">edgeSet</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a set of the edges contained in this graph.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#edgesOf(V)">edgesOf</a></span>&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</code></th>
 <td class="colLast">
 <div class="block">Returns a set of all edges touching the specified vertex.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAllEdges(V,V)">getAllEdges</a></span>&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;sourceVertex,
            <a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;targetVertex)</code></th>
 <td class="colLast">
@@ -359,7 +359,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEdgeSupplier()">getEdgeSupplier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Return the edge supplier that the graph uses whenever it needs to create new edges.</div>
@@ -387,14 +387,14 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </td>
 </tr>
 <tr id="i17" class="rowColor">
-<td class="colFirst"><code>java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVertexSupplier()">getVertexSupplier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Return the vertex supplier that the graph uses whenever it needs to create new vertices.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#incomingEdgesOf(V)">incomingEdgesOf</a></span>&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</code></th>
 <td class="colLast">
 <div class="block">Returns a set of all edges incoming into the specified vertex.</div>
@@ -422,7 +422,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </td>
 </tr>
 <tr id="i22" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#outgoingEdgesOf(V)">outgoingEdgesOf</a></span>&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</code></th>
 <td class="colLast">
 <div class="block">Returns a set of all edges outgoing from the specified vertex.</div>
@@ -453,7 +453,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEdgeSupplier(java.util.function.Supplier)">setEdgeSupplier</a></span>&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEdgeSupplier(java.util.function.Supplier)">setEdgeSupplier</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier)</code></th>
 <td class="colLast">
 <div class="block">Set the edge supplier that the graph uses whenever it needs to create new edges.</div>
 </td>
@@ -463,18 +463,18 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEdgeWeight(E,double)">setEdgeWeight</a></span>&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&nbsp;e,
              double&nbsp;weight)</code></th>
 <td class="colLast">
-<div class="block">Set an edge weight.</div>
+<div class="block">Assigns a weight to an edge.</div>
 </td>
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVertexSupplier(java.util.function.Supplier)">setVertexSupplier</a></span>&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVertexSupplier(java.util.function.Supplier)">setVertexSupplier</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier)</code></th>
 <td class="colLast">
 <div class="block">Set the vertex supplier that the graph uses whenever it needs to create new vertices.</div>
 </td>
 </tr>
 <tr id="i29" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vertexSet()">vertexSet</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a set of the vertices contained in this graph.</div>
@@ -492,8 +492,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.org.jgrapht.Graph">
@@ -524,8 +524,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>AbstractBaseGraph</h4>
-<pre>protected&nbsp;AbstractBaseGraph&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
-                            java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
+<pre>protected&nbsp;AbstractBaseGraph&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
+                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
                             <a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;type)</pre>
 <div class="block">Construct a new graph.</div>
 <dl>
@@ -534,7 +534,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>edgeSupplier</code> - the edge supplier, can be null</dd>
 <dd><code>type</code> - the graph type</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if the graph type is mixed</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph type is mixed</dd>
 </dl>
 </li>
 </ul>
@@ -544,8 +544,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AbstractBaseGraph</h4>
-<pre>protected&nbsp;AbstractBaseGraph&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
-                            java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
+<pre>protected&nbsp;AbstractBaseGraph&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier,
+                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier,
                             <a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;type,
                             <a href="GraphSpecificsStrategy.html" title="interface in org.jgrapht.graph">GraphSpecificsStrategy</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;graphSpecificsStrategy)</pre>
 <div class="block">Construct a new graph.</div>
@@ -556,7 +556,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>type</code> - the graph type</dd>
 <dd><code>graphSpecificsStrategy</code> - strategy for constructing low-level graph specifics</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if the graph type is mixed</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph type is mixed</dd>
 </dl>
 </li>
 </ul>
@@ -578,8 +578,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>getAllEdges</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;getAllEdges&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;sourceVertex,
-                                    <a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;targetVertex)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;getAllEdges&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;sourceVertex,
+                          <a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;targetVertex)</pre>
 <div class="block">Returns a set of all edges connecting source vertex to target vertex if such vertices exist
  in this graph. If any of the vertices does not exist or is <code>null</code>, returns
  <code>null</code>. If both vertices exist but no edges found, returns an empty set.
@@ -605,7 +605,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>getEdgeSupplier</h4>
-<pre class="methodSignature">public&nbsp;java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;getEdgeSupplier()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;getEdgeSupplier()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getEdgeSupplier()">Graph</a></code></span></div>
 <div class="block">Return the edge supplier that the graph uses whenever it needs to create new edges.
  
@@ -615,7 +615,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  use method <a href="../Graph.html#addEdge(V,V,E)"><code>Graph.addEdge(Object, Object, Object)</code></a> to add the edge.
  
  <p>
- In contrast with the <code>Supplier</code> interface, the edge supplier has the additional
+ In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the edge supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
  specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
  any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
@@ -634,7 +634,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>setEdgeSupplier</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setEdgeSupplier&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setEdgeSupplier&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSupplier)</pre>
 <div class="block">Set the edge supplier that the graph uses whenever it needs to create new edges.
  
  <p>
@@ -643,7 +643,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  use method <a href="../Graph.html#addEdge(V,V,E)"><code>Graph.addEdge(Object, Object, Object)</code></a> to add the edge.
  
  <p>
- In contrast with the <code>Supplier</code> interface, the edge supplier has the additional
+ In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the edge supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
  specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
  any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
@@ -660,7 +660,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>getVertexSupplier</h4>
-<pre class="methodSignature">public&nbsp;java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;getVertexSupplier()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;getVertexSupplier()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getVertexSupplier()">Graph</a></code></span></div>
 <div class="block">Return the vertex supplier that the graph uses whenever it needs to create new vertices.
  
@@ -670,7 +670,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a> to add the vertex.
  
  <p>
- In contrast with the <code>Supplier</code> interface, the vertex supplier has the additional
+ In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the vertex supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
  specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
  to any other vertex in the graph. More formally, the graph must not contain any vertex
@@ -681,7 +681,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  and <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
  in the graph using method <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>, which are going to be returned in
  the future by the supplied vertex supplier. Such a sequence will result into an
- <code>IllegalArgumentException</code> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#getVertexSupplier()">getVertexSupplier</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></dd>
@@ -696,7 +696,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>setVertexSupplier</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setVertexSupplier&#8203;(java.util.function.Supplier&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setVertexSupplier&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSupplier)</pre>
 <div class="block">Set the vertex supplier that the graph uses whenever it needs to create new vertices.
  
  <p>
@@ -705,7 +705,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a> to add the vertex.
  
  <p>
- In contrast with the <code>Supplier</code> interface, the vertex supplier has the additional
+ In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the vertex supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
  specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
  to any other vertex in the graph. More formally, the graph must not contain any vertex
@@ -716,7 +716,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  and <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
  in the graph using method <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>, which are going to be returned in
  the future by the supplied vertex supplier. Such a sequence will result into an
- <code>IllegalArgumentException</code> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vertexSupplier</code> - the vertex supplier</dd>
@@ -762,6 +762,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <h4>addEdge</h4>
 <pre class="methodSignature">public&nbsp;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&nbsp;addEdge&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;sourceVertex,
                  <a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;targetVertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addEdge(V,V)">Graph</a></code></span></div>
 <div class="block">Creates a new edge in this graph, going from the source vertex to the target vertex, and
  returns the created edge. Some graphs do not allow edge-multiplicity. In such cases, if the
  graph already contains an edge from the specified source to the specified target, then this
@@ -769,21 +770,20 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 
  <p>
  The source and target vertices must already be contained in this graph. If they are not found
- in graph <code>IllegalArgumentException</code> is thrown.
+ in graph <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> is thrown.
 
  <p>
  This method creates the new edge <code>e</code> using this graph's edge supplier (see
  <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be
  equal to any other edge the graph (even if the graph allows edge-multiplicity). More
  formally, the graph must not contain any edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If such <code>
- e2</code> is found then the newly created edge <code>e</code> is abandoned, the method leaves
- this graph unchanged and returns <code>null</code>.
+ <code>e2.equals(e)</code>. If such <code>e2</code> is found then the newly created edge
+ <code>e</code> is abandoned, the method leaves this graph unchanged and returns <code>null</code>.
  
  <p>
  If the underlying graph implementation's <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a> returns
  <code>null</code>, then this method cannot create edges and throws an
- <code>UnsupportedOperationException</code>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addEdge(V,V)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></dd>
@@ -791,8 +791,14 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>sourceVertex</code> - source vertex of the edge.</dd>
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The newly created edge if added to the graph, otherwise <code>
- null</code>.</dd>
+<dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph
+                                  or if there is a property of this graph that prevents the
+                                  addition of the edge</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the specified vertices is <code>null</code>.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph was not initialized with an edge supplier
+                                       or if this graph disallows modification</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
 </dl>
@@ -809,20 +815,14 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addEdge&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;sourceVertex,
                        <a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;targetVertex,
                        <a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&nbsp;e)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addEdge(V,V,E)">Graph</a></code></span></div>
 <div class="block">Adds the specified edge to this graph, going from the source vertex to the target vertex.
- More formally, adds the specified edge, <code>
- e</code>, to this graph if this graph contains no edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If this graph already contains such an edge, the call leaves this
- graph unchanged and returns <code>false</code>. Some graphs do not allow edge-multiplicity.
- In such cases, if the graph already contains an edge from the specified source to the
- specified target, then this method does not change the graph and returns <code>
- false</code>. If the edge was added to the graph, returns <code>
- true</code>.
-
- <p>
- The source and target vertices must already be contained in this graph. If they are not found
- in graph IllegalArgumentException is thrown.
- </p></div>
+ More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains
+ no edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such
+ an edge, the call leaves this graph unchanged and returns <code>false</code>. Some graphs
+ do not allow edge-multiplicity. In such cases, if the graph already contains an edge
+ from the specified source to the specified target, then this method does not change the
+ graph and returns <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addEdge(V,V,E)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></dd>
@@ -832,6 +832,11 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>e</code> - edge to be added to this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified edge.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph
+                                  or if there is a property of this graph that prevents the
+                                  addition of the edge</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the arguments is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>, 
 <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
@@ -852,26 +857,31 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  This method creates the new vertex <code>v</code> using this graph's vertex supplier (see
  <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i>
  be equal to any other vertex in the graph. More formally, the graph must not contain any
- vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>
- v2</code> is found then the newly created vertex <code>v</code> is abandoned, the method
- leaves this graph unchanged and throws an <code>IllegalArgumentException</code>.
+ vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then
+ the newly created vertex <code>v</code> is abandoned, the method leaves this graph unchanged
+ and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
  
  <p>
  If the underlying graph implementation's <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> returns
  <code>null</code>, then this method cannot create vertices and throws an
- <code>UnsupportedOperationException</code>.
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
  
  <p>
  Care must also be taken when interchanging calls to methods <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>
  and <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
  in the graph using method <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>, which are going to be returned in
  the future by the supplied vertex supplier. Such a sequence will result into an
- <code>IllegalArgumentException</code> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addVertex()">addVertex</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created vertex if added to the graph.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph supplier returns a vertex which is already in
+         the graph</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph was not initialized with a vertex supplier
+                                       or if this graph disallows modification</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a></dd>
 </dl>
@@ -886,6 +896,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>addVertex</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addVertex&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;v)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addVertex(V)">Graph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
  specified vertex, <code>v</code>, to this graph if this graph contains no vertex
  <code>u</code> such that <code>u.equals(v)</code>.
@@ -899,6 +910,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>v</code> - vertex to be added to this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if the specified vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -950,17 +963,17 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre class="methodSignature">public&nbsp;java.lang.Object&nbsp;clone()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;clone()</pre>
 <div class="block">Returns a shallow copy of this graph instance. Neither edges nor vertices are cloned.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a shallow copy of this graph.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.RuntimeException</code> - in case the clone is not supported</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/RuntimeException.html?is-external=true" title="class or interface in java.lang" class="externalLink">RuntimeException</a></code> - in case the clone is not supported</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>Object.clone()</code></dd>
+<dd><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink"><code>Object.clone()</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -1019,6 +1032,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>degreeOf</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;degreeOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#degreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the degree of the specified vertex.
  
  <p>
@@ -1034,6 +1048,9 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>vertex</code> - vertex whose degree is to be calculated.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the degree of the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1043,14 +1060,14 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>edgeSet</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSet()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgeSet()</pre>
 <div class="block">Returns a set of the edges contained in this graph. The set is backed by the graph, so
  changes to the graph are reflected in the set. If the graph is modified while an iteration
  over the set is in progress, the results of the iteration are undefined.
 
  <p>
  The graph implementation may maintain a particular set ordering (e.g. via
- <code>LinkedHashSet</code>) for deterministic iteration, but this is not required. It is
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>LinkedHashSet</code></a>) for deterministic iteration, but this is not required. It is
  the responsibility of callers who rely on this behavior to only use graph implementations
  which support it.
  </p></div>
@@ -1070,7 +1087,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>edgesOf</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgesOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;edgesOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#edgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges touching the specified vertex. If no edges are touching the
  specified vertex returns an empty set.</div>
 <dl>
@@ -1080,6 +1098,9 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>vertex</code> - the vertex for which a set of touching edges is to be returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a set of all edges touching the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1092,6 +1113,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>inDegreeOf</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;inDegreeOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#inDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "in degree" of the specified vertex.
  
  <p>
@@ -1109,6 +1131,9 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>vertex</code> - vertex whose degree is to be calculated.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the degree of the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1120,7 +1145,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>incomingEdgesOf</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;incomingEdgesOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;incomingEdgesOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#incomingEdgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges incoming into the specified vertex.
 
  <p>
@@ -1133,6 +1159,9 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>vertex</code> - the vertex for which the list of incoming edges to be returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a set of all edges incoming into the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1145,6 +1174,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>outDegreeOf</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;outDegreeOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#outDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "out degree" of the specified vertex.
  
  <p>
@@ -1162,6 +1192,9 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>vertex</code> - vertex whose degree is to be calculated.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the degree of the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1173,7 +1206,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>outgoingEdgesOf</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;outgoingEdgesOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;&nbsp;outgoingEdgesOf&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#outgoingEdgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges outgoing from the specified vertex.
  
  <p>
@@ -1186,6 +1220,9 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>vertex</code> - the vertex for which the list of outgoing edges to be returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a set of all edges outgoing from the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if vertex is <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1222,13 +1259,12 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <h4>removeEdge</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeEdge&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&nbsp;e)</pre>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code> e2</code> such that <code>e2.equals(e)</code>,
+ is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>,
  if the graph contains such edge. Returns <code>true</code> if the graph contained
  the specified edge. (The graph will not contain the specified edge once the call returns).
 
  <p>
- If the specified edge is <code>null</code> returns <code>
- false</code>.
+ If the specified edge is <code>null</code> returns <code>false</code>.
  </p></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1276,14 +1312,14 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <ul class="blockList">
 <li class="blockList">
 <h4>vertexSet</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSet()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>&gt;&nbsp;vertexSet()</pre>
 <div class="block">Returns a set of the vertices contained in this graph. The set is backed by the graph, so
  changes to the graph are reflected in the set. If the graph is modified while an iteration
  over the set is in progress, the results of the iteration are undefined.
 
  <p>
  The graph implementation may maintain a particular set ordering (e.g. via
- <code>LinkedHashSet</code>) for deterministic iteration, but this is not required. It is
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>LinkedHashSet</code></a>) for deterministic iteration, but this is not required. It is
  the responsibility of callers who rely on this behavior to only use graph implementations
  which support it.
  </p></div>
@@ -1304,6 +1340,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>getEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;getEdgeWeight&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&nbsp;e)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getEdgeWeight(E)">Graph</a></code></span></div>
 <div class="block">Returns the weight assigned to a given edge. Unweighted graphs return 1.0 (as defined by
  <a href="../Graph.html#DEFAULT_EDGE_WEIGHT"><code>Graph.DEFAULT_EDGE_WEIGHT</code></a>), allowing weighted-graph algorithms to apply to them when
  meaningful.</div>
@@ -1314,6 +1351,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <dd><code>e</code> - edge of interest</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>edge weight</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -1327,15 +1366,19 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <h4>setEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEdgeWeight&#8203;(<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&nbsp;e,
                           double&nbsp;weight)</pre>
-<div class="block">Set an edge weight.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#setEdgeWeight(E,double)">Graph</a></code></span></div>
+<div class="block">Assigns a weight to an edge.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#setEdgeWeight(E,double)">setEdgeWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">V</a>,&#8203;<a href="AbstractBaseGraph.html" title="type parameter in AbstractBaseGraph">E</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>e</code> - the edge</dd>
-<dd><code>weight</code> - the weight</dd>
+<dd><code>e</code> - edge on which to set weight</dd>
+<dd><code>weight</code> - new weight for edge</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.UnsupportedOperationException</code> - if the graph is not weighted</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>e</code> is <code>null</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph does not support weights
+                                       or if there is a property of this graph that
+                                       disallows modification of the weight</dd>
 </dl>
 </li>
 </ul>
@@ -1406,7 +1449,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_bottom">

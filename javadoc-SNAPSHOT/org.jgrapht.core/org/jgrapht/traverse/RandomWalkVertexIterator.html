@@ -61,7 +61,7 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top">
@@ -124,7 +124,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li>org.jgrapht.traverse.RandomWalkVertexIterator&lt;V,&#8203;E&gt;</li>
@@ -141,12 +141,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>java.util.Iterator&lt;V&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;V&gt;</code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">RandomWalkVertexIterator&lt;V,&#8203;E&gt;</span>
-extends java.lang.Object
-implements java.util.Iterator&lt;V&gt;</pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;V&gt;</pre>
 <div class="block">A random walk iterator.
  
  "Given a graph and a starting point, we select a neighbor of it at random, and move to this
@@ -159,7 +159,7 @@ implements java.util.Iterator&lt;V&gt;</pre>
  of the vertex. In case the user requests a weighted walk, then the probability of each edge is
  equal to its weight divided by the total weight of all outgoing edges. The walk can also be
  bounded by a maximum number of hops (edges traversed). The iterator returns
- <code>NoSuchElementException</code> when this bound is reached.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>NoSuchElementException</code></a> when this bound is reached.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Dimitrios Michail</dd>
@@ -203,7 +203,7 @@ implements java.util.Iterator&lt;V&gt;</pre>
                         <a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&nbsp;vertex,
                         long&nbsp;maxHops,
                         boolean&nbsp;weighted,
-                        java.util.Random&nbsp;rng)</code></th>
+                        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Create a new iterator</div>
 </td>
@@ -241,15 +241,15 @@ implements java.util.Iterator&lt;V&gt;</pre>
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.util.Iterator">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;java.util.Iterator</h3>
-<code>forEachRemaining, remove</code></li>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#forEachRemaining(java.util.function.Consumer)" title="class or interface in java.util" class="externalLink">forEachRemaining</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#remove()" title="class or interface in java.util" class="externalLink">remove</a></code></li>
 </ul>
 </li>
 </ul>
@@ -317,7 +317,7 @@ implements java.util.Iterator&lt;V&gt;</pre>
                                 <a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&nbsp;vertex,
                                 long&nbsp;maxHops,
                                 boolean&nbsp;weighted,
-                                java.util.Random&nbsp;rng)</pre>
+                                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a>&nbsp;rng)</pre>
 <div class="block">Create a new iterator</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -349,7 +349,7 @@ implements java.util.Iterator&lt;V&gt;</pre>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasNext()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>hasNext</code>&nbsp;in interface&nbsp;<code>java.util.Iterator&lt;<a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#hasNext()" title="class or interface in java.util" class="externalLink">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -362,7 +362,7 @@ implements java.util.Iterator&lt;V&gt;</pre>
 <pre class="methodSignature">public&nbsp;<a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&nbsp;next()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>next</code>&nbsp;in interface&nbsp;<code>java.util.Iterator&lt;<a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#next()" title="class or interface in java.util" class="externalLink">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="RandomWalkVertexIterator.html" title="type parameter in RandomWalkVertexIterator">V</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -396,7 +396,7 @@ implements java.util.Iterator&lt;V&gt;</pre>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_bottom">

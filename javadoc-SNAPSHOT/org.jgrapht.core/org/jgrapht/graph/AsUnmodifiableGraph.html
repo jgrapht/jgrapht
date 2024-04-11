@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -61,7 +61,7 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top">
@@ -124,7 +124,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="AbstractGraph.html" title="class in org.jgrapht.graph">org.jgrapht.graph.AbstractGraph</a>&lt;V,&#8203;E&gt;</li>
@@ -151,16 +151,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>java.io.Serializable</code>, <code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">AsUnmodifiableGraph&lt;V,&#8203;E&gt;</span>
 extends <a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;V,&#8203;E&gt;
-implements java.io.Serializable</pre>
+implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">An unmodifiable view of the backing graph specified in the constructor. This graph allows modules
  to provide users with "read-only" access to internal graphs. Query operations on this graph "read
  through" to the backing graph, and attempts to modify this graph result in an
- <code>UnsupportedOperationException</code>.
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
 
  <p>
  This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
@@ -274,13 +274,13 @@ implements java.io.Serializable</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAllEdges(java.util.Collection)">removeAllEdges</a></span>&#8203;(java.util.Collection&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;&nbsp;edges)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAllEdges(java.util.Collection)">removeAllEdges</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;&nbsp;edges)</code></th>
 <td class="colLast">
 <div class="block">Removes all the edges in this graph that are also contained in the specified edge collection.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAllEdges(V,V)">removeAllEdges</a></span>&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
               <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex)</code></th>
 <td class="colLast">
@@ -290,7 +290,7 @@ implements java.io.Serializable</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAllVertices(java.util.Collection)">removeAllVertices</a></span>&#8203;(java.util.Collection&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&gt;&nbsp;vertices)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAllVertices(java.util.Collection)">removeAllVertices</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&gt;&nbsp;vertices)</code></th>
 <td class="colLast">
 <div class="block">Removes all the vertices in this graph that are also contained in the specified vertex
  collection.</div>
@@ -319,13 +319,30 @@ implements java.io.Serializable</pre>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.</div>
 </td>
 </tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEdgeWeight(E,double)">setEdgeWeight</a></span>&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&nbsp;e,
+             double&nbsp;weight)</code></th>
+<td class="colLast">
+<div class="block">Assigns a weight to an edge.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEdgeWeight(V,V,double)">setEdgeWeight</a></span>&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
+             <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex,
+             double&nbsp;weight)</code></th>
+<td class="colLast">
+<div class="block">Assigns a weight to an edge between <code>sourceVertex</code> and <code>targetVertex</code>.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.org.jgrapht.graph.GraphDelegator">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.jgrapht.graph.<a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a></h3>
-<code><a href="GraphDelegator.html#containsEdge(E)">containsEdge</a>, <a href="GraphDelegator.html#containsVertex(V)">containsVertex</a>, <a href="GraphDelegator.html#degreeOf(V)">degreeOf</a>, <a href="GraphDelegator.html#edgeSet()">edgeSet</a>, <a href="GraphDelegator.html#edgesOf(V)">edgesOf</a>, <a href="GraphDelegator.html#getAllEdges(V,V)">getAllEdges</a>, <a href="GraphDelegator.html#getDelegate()">getDelegate</a>, <a href="GraphDelegator.html#getEdge(V,V)">getEdge</a>, <a href="GraphDelegator.html#getEdgeSource(E)">getEdgeSource</a>, <a href="GraphDelegator.html#getEdgeSupplier()">getEdgeSupplier</a>, <a href="GraphDelegator.html#getEdgeTarget(E)">getEdgeTarget</a>, <a href="GraphDelegator.html#getEdgeWeight(E)">getEdgeWeight</a>, <a href="GraphDelegator.html#getVertexSupplier()">getVertexSupplier</a>, <a href="GraphDelegator.html#incomingEdgesOf(V)">incomingEdgesOf</a>, <a href="GraphDelegator.html#inDegreeOf(V)">inDegreeOf</a>, <a href="GraphDelegator.html#outDegreeOf(V)">outDegreeOf</a>, <a href="GraphDelegator.html#outgoingEdgesOf(V)">outgoingEdgesOf</a>, <a href="GraphDelegator.html#setEdgeWeight(E,double)">setEdgeWeight</a>, <a href="GraphDelegator.html#toString()">toString</a>, <a href="GraphDelegator.html#vertexSet()">vertexSet</a></code></li>
+<code><a href="GraphDelegator.html#containsEdge(E)">containsEdge</a>, <a href="GraphDelegator.html#containsVertex(V)">containsVertex</a>, <a href="GraphDelegator.html#degreeOf(V)">degreeOf</a>, <a href="GraphDelegator.html#edgeSet()">edgeSet</a>, <a href="GraphDelegator.html#edgesOf(V)">edgesOf</a>, <a href="GraphDelegator.html#getAllEdges(V,V)">getAllEdges</a>, <a href="GraphDelegator.html#getDelegate()">getDelegate</a>, <a href="GraphDelegator.html#getEdge(V,V)">getEdge</a>, <a href="GraphDelegator.html#getEdgeSource(E)">getEdgeSource</a>, <a href="GraphDelegator.html#getEdgeSupplier()">getEdgeSupplier</a>, <a href="GraphDelegator.html#getEdgeTarget(E)">getEdgeTarget</a>, <a href="GraphDelegator.html#getEdgeWeight(E)">getEdgeWeight</a>, <a href="GraphDelegator.html#getVertexSupplier()">getVertexSupplier</a>, <a href="GraphDelegator.html#incomingEdgesOf(V)">incomingEdgesOf</a>, <a href="GraphDelegator.html#inDegreeOf(V)">inDegreeOf</a>, <a href="GraphDelegator.html#outDegreeOf(V)">outDegreeOf</a>, <a href="GraphDelegator.html#outgoingEdgesOf(V)">outgoingEdgesOf</a>, <a href="GraphDelegator.html#toString()">toString</a>, <a href="GraphDelegator.html#vertexSet()">vertexSet</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.org.jgrapht.graph.AbstractGraph">
@@ -338,15 +355,15 @@ implements java.io.Serializable</pre>
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.org.jgrapht.Graph">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.jgrapht.<a href="../Graph.html" title="interface in org.jgrapht">Graph</a></h3>
-<code><a href="../Graph.html#containsEdge(V,V)">containsEdge</a>, <a href="../Graph.html#iterables()">iterables</a>, <a href="../Graph.html#setEdgeWeight(V,V,double)">setEdgeWeight</a></code></li>
+<code><a href="../Graph.html#containsEdge(V,V)">containsEdge</a>, <a href="../Graph.html#iterables()">iterables</a></code></li>
 </ul>
 </li>
 </ul>
@@ -374,7 +391,9 @@ implements java.io.Serializable</pre>
 <div class="block">Creates a new unmodifiable graph based on the specified backing graph.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>g</code> - the backing graph on which an unmodifiable graph is to be created.</dd>
+<dd><code>g</code> - the backing graph on which an unmodifiable graph is to be created</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -398,7 +417,7 @@ implements java.io.Serializable</pre>
 <h4>addEdge</h4>
 <pre class="methodSignature">public&nbsp;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&nbsp;addEdge&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
                  <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#addEdge(V,V)">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addEdge(V,V)">Graph</a></code></span></div>
 <div class="block">Creates a new edge in this graph, going from the source vertex to the target vertex, and
  returns the created edge. Some graphs do not allow edge-multiplicity. In such cases, if the
  graph already contains an edge from the specified source to the specified target, then this
@@ -406,21 +425,20 @@ implements java.io.Serializable</pre>
 
  <p>
  The source and target vertices must already be contained in this graph. If they are not found
- in graph <code>IllegalArgumentException</code> is thrown.
+ in graph <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> is thrown.
 
  <p>
  This method creates the new edge <code>e</code> using this graph's edge supplier (see
  <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be
  equal to any other edge the graph (even if the graph allows edge-multiplicity). More
  formally, the graph must not contain any edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If such <code>
- e2</code> is found then the newly created edge <code>e</code> is abandoned, the method leaves
- this graph unchanged and returns <code>null</code>.
+ <code>e2.equals(e)</code>. If such <code>e2</code> is found then the newly created edge
+ <code>e</code> is abandoned, the method leaves this graph unchanged and returns <code>null</code>.
  
  <p>
  If the underlying graph implementation's <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a> returns
  <code>null</code>, then this method cannot create edges and throws an
- <code>UnsupportedOperationException</code>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addEdge(V,V)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
@@ -430,10 +448,11 @@ implements java.io.Serializable</pre>
 <dd><code>sourceVertex</code> - source vertex of the edge.</dd>
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The newly created edge if added to the graph, otherwise <code>
- null</code>.</dd>
+<dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a></dd>
+<dd><a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -448,21 +467,14 @@ implements java.io.Serializable</pre>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addEdge&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
                        <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex,
                        <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&nbsp;e)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#addEdge(V,V,E)">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addEdge(V,V,E)">Graph</a></code></span></div>
 <div class="block">Adds the specified edge to this graph, going from the source vertex to the target vertex.
- More formally, adds the specified edge, <code>
- e</code>, to this graph if this graph contains no edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If this graph already contains such an edge, the call leaves this
- graph unchanged and returns <code>false</code>. Some graphs do not allow edge-multiplicity.
- In such cases, if the graph already contains an edge from the specified source to the
- specified target, then this method does not change the graph and returns <code>
- false</code>. If the edge was added to the graph, returns <code>
- true</code>.
-
- <p>
- The source and target vertices must already be contained in this graph. If they are not found
- in graph IllegalArgumentException is thrown.
- </p></div>
+ More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains
+ no edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such
+ an edge, the call leaves this graph unchanged and returns <code>false</code>. Some graphs
+ do not allow edge-multiplicity. In such cases, if the graph already contains an edge
+ from the specified source to the specified target, then this method does not change the
+ graph and returns <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addEdge(V,V,E)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
@@ -474,8 +486,11 @@ implements java.io.Serializable</pre>
 <dd><code>e</code> - edge to be added to this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified edge.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#addEdge(V,V,E)"><code>Graph.addEdge(Object, Object, Object)</code></a></dd>
+<dd><a href="../Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>, 
+<a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -486,28 +501,28 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>addVertex</h4>
 <pre class="methodSignature">public&nbsp;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;addVertex()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#addVertex()">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addVertex()">Graph</a></code></span></div>
 <div class="block">Creates a new vertex in this graph and returns it.
 
  <p>
  This method creates the new vertex <code>v</code> using this graph's vertex supplier (see
  <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i>
  be equal to any other vertex in the graph. More formally, the graph must not contain any
- vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>
- v2</code> is found then the newly created vertex <code>v</code> is abandoned, the method
- leaves this graph unchanged and throws an <code>IllegalArgumentException</code>.
+ vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then
+ the newly created vertex <code>v</code> is abandoned, the method leaves this graph unchanged
+ and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
  
  <p>
  If the underlying graph implementation's <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> returns
  <code>null</code>, then this method cannot create vertices and throws an
- <code>UnsupportedOperationException</code>.
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
  
  <p>
  Care must also be taken when interchanging calls to methods <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>
  and <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
  in the graph using method <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>, which are going to be returned in
  the future by the supplied vertex supplier. Such a sequence will result into an
- <code>IllegalArgumentException</code> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addVertex()">addVertex</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
@@ -515,8 +530,10 @@ implements java.io.Serializable</pre>
 <dd><code><a href="GraphDelegator.html#addVertex()">addVertex</a></code>&nbsp;in class&nbsp;<code><a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created vertex if added to the graph.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a></dd>
+<dd><a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -529,7 +546,7 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>addVertex</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addVertex&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;v)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#addVertex(V)">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addVertex(V)">Graph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
  specified vertex, <code>v</code>, to this graph if this graph contains no vertex
  <code>u</code> such that <code>u.equals(v)</code>.
@@ -545,8 +562,8 @@ implements java.io.Serializable</pre>
 <dd><code>v</code> - vertex to be added to this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified vertex.</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -556,7 +573,7 @@ implements java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAllEdges</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;removeAllEdges&#8203;(java.util.Collection&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;&nbsp;edges)</pre>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;removeAllEdges&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;&nbsp;edges)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeAllEdges(java.util.Collection)">Graph</a></code></span></div>
 <div class="block">Removes all the edges in this graph that are also contained in the specified edge collection.
  After this call returns, this graph will contain no edges in common with the specified edges.
@@ -570,8 +587,11 @@ implements java.io.Serializable</pre>
 <dd><code>edges</code> - edges to be removed from this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph changed as a result of the call</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#removeAllEdges(java.util.Collection)"><code>Graph.removeAllEdges(Collection)</code></a></dd>
+<dd><a href="../Graph.html#removeEdge(E)"><code>Graph.removeEdge(Object)</code></a>, 
+<a href="../Graph.html#containsEdge(E)"><code>Graph.containsEdge(Object)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -583,8 +603,8 @@ implements java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAllEdges</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;&nbsp;removeAllEdges&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
-                                       <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;&nbsp;removeAllEdges&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
+                             <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeAllEdges(V,V)">Graph</a></code></span></div>
 <div class="block">Removes all the edges going from the specified source vertex to the specified target vertex,
  and returns a set of all removed edges. Returns <code>null</code> if any of the specified
@@ -601,8 +621,8 @@ implements java.io.Serializable</pre>
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the removed edges, or <code>null</code> if either vertex is not part of graph</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#removeAllEdges(V,V)"><code>Graph.removeAllEdges(Object, Object)</code></a></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -612,7 +632,7 @@ implements java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAllVertices</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;removeAllVertices&#8203;(java.util.Collection&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&gt;&nbsp;vertices)</pre>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;removeAllVertices&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&gt;&nbsp;vertices)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeAllVertices(java.util.Collection)">Graph</a></code></span></div>
 <div class="block">Removes all the vertices in this graph that are also contained in the specified vertex
  collection. After this call returns, this graph will contain no vertices in common with the
@@ -626,8 +646,11 @@ implements java.io.Serializable</pre>
 <dd><code>vertices</code> - vertices to be removed from this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph changed as a result of the call</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#removeAllVertices(java.util.Collection)"><code>Graph.removeAllVertices(Collection)</code></a></dd>
+<dd><a href="../Graph.html#removeVertex(V)"><code>Graph.removeVertex(Object)</code></a>, 
+<a href="../Graph.html#containsVertex(V)"><code>Graph.containsVertex(Object)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -640,15 +663,14 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>removeEdge</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeEdge&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&nbsp;e)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#removeEdge(E)">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeEdge(E)">Graph</a></code></span></div>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code> e2</code> such that <code>e2.equals(e)</code>,
+ is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>,
  if the graph contains such edge. Returns <code>true</code> if the graph contained
  the specified edge. (The graph will not contain the specified edge once the call returns).
 
  <p>
- If the specified edge is <code>null</code> returns <code>
- false</code>.
+ If the specified edge is <code>null</code> returns <code>false</code>.
  </p></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -659,8 +681,8 @@ implements java.io.Serializable</pre>
 <dd><code>e</code> - edge to be removed from this graph, if present.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if and only if the graph contained the specified edge.</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#removeEdge(E)"><code>Graph.removeEdge(Object)</code></a></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -674,7 +696,7 @@ implements java.io.Serializable</pre>
 <h4>removeEdge</h4>
 <pre class="methodSignature">public&nbsp;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&nbsp;removeEdge&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
                     <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#removeEdge(V,V)">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeEdge(V,V)">Graph</a></code></span></div>
 <div class="block">Removes an edge going from source vertex to target vertex, if such vertices and such edge
  exist in this graph. Returns the edge if removed or <code>null</code> otherwise.</div>
 <dl>
@@ -687,8 +709,8 @@ implements java.io.Serializable</pre>
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The removed edge, or <code>null</code> if no edge removed.</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#removeEdge(V,V)"><code>Graph.removeEdge(Object, Object)</code></a></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -701,7 +723,7 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>removeVertex</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeVertex&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;v)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="GraphDelegator.html#removeVertex(V)">GraphDelegator</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeVertex(V)">Graph</a></code></span></div>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
  More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
  the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
@@ -722,15 +744,15 @@ implements java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if the graph contained the specified vertex; <code>false</code>
          otherwise.</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../Graph.html#removeVertex(V)"><code>Graph.removeVertex(Object)</code></a></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
 <a id="getType()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getType</h4>
 <pre class="methodSignature">public&nbsp;<a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;getType()</pre>
@@ -744,6 +766,65 @@ implements java.io.Serializable</pre>
 <dd><code><a href="GraphDelegator.html#getType()">getType</a></code>&nbsp;in class&nbsp;<code><a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the graph type</dd>
+</dl>
+</li>
+</ul>
+<a id="setEdgeWeight(java.lang.Object,double)">
+<!--   -->
+</a><a id="setEdgeWeight(E,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEdgeWeight</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setEdgeWeight&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&nbsp;e,
+                          double&nbsp;weight)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#setEdgeWeight(E,double)">Graph</a></code></span></div>
+<div class="block">Assigns a weight to an edge.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../Graph.html#setEdgeWeight(E,double)">setEdgeWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="GraphDelegator.html#setEdgeWeight(E,double)">setEdgeWeight</a></code>&nbsp;in class&nbsp;<code><a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>e</code> - edge on which to set weight</dd>
+<dd><code>weight</code> - new weight for edge</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>1.5.3</dd>
+</dl>
+</li>
+</ul>
+<a id="setEdgeWeight(java.lang.Object,java.lang.Object,double)">
+<!--   -->
+</a><a id="setEdgeWeight(V,V,double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setEdgeWeight</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setEdgeWeight&#8203;(<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;sourceVertex,
+                          <a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>&nbsp;targetVertex,
+                          double&nbsp;weight)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#setEdgeWeight(V,V,double)">Graph</a></code></span></div>
+<div class="block">Assigns a weight to an edge between <code>sourceVertex</code> and <code>targetVertex</code>.
+ If no edge exists between <code>sourceVertex</code> and <code>targetVertex</code> or either
+ of these vertices is <code>null</code>, a <code>NullPointerException</code> is thrown.
+ <p>
+ When there exist multiple edges between <code>sourceVertex</code> and
+ <code>targetVertex</code>, consider using <a href="../Graph.html#setEdgeWeight(E,double)"><code>Graph.setEdgeWeight(Object, double)</code></a> instead.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../Graph.html#setEdgeWeight(V,V,double)">setEdgeWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">V</a>,&#8203;<a href="AsUnmodifiableGraph.html" title="type parameter in AsUnmodifiableGraph">E</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sourceVertex</code> - source vertex of the edge</dd>
+<dd><code>targetVertex</code> - target vertex of the edge</dd>
+<dd><code>weight</code> - new weight for edge</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>1.5.3</dd>
 </dl>
 </li>
 </ul>
@@ -777,7 +858,7 @@ implements java.io.Serializable</pre>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
+<div class="aboutLanguage"><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"></script>                         <img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"></div>
 </div>
 <div class="subNav">
 <ul class="navList" id="allclasses_navbar_bottom">
