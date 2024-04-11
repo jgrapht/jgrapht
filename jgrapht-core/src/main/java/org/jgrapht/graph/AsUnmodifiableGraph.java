@@ -155,4 +155,24 @@ public class AsUnmodifiableGraph<V, E>
     {
         return super.getType().asUnmodifiable();
     }
+
+    /**
+     * @throws UnsupportedOperationException always
+     * 
+     * @since 1.5.3
+     */
+    @Override
+    public void setEdgeWeight(E e, double weight) {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    /**
+     * @throws UnsupportedOperationException always
+     * 
+     * @since 1.5.3
+     */
+    @Override
+    public void setEdgeWeight(V sourceVertex, V targetVertex, double weight) {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
 }
