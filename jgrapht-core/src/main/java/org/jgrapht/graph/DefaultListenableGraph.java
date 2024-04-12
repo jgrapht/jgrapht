@@ -183,8 +183,7 @@ public class DefaultListenableGraph<V, E>
             return g;
         } catch (CloneNotSupportedException e) {
             // should never get here since we're Cloneable
-            e.printStackTrace();
-            throw new RuntimeException("internal error");
+            throw new Error("internal error", e);
         }
     }
 

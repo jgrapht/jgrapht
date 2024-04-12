@@ -394,8 +394,7 @@ public abstract class AbstractBaseGraph<V, E>
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
