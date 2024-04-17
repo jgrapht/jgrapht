@@ -22,6 +22,7 @@ import java.io.*;
 /**
  * Binary operator for edge weights. There are some prewritten operators.
  */
+@FunctionalInterface
 public interface WeightCombiner
 {
     /**
