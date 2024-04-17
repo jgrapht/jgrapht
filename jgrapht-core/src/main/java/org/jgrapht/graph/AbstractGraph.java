@@ -59,6 +59,7 @@ public abstract class AbstractGraph<V, E>
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
     {
+        Objects.requireNonNull(edges);
         boolean modified = false;
 
         for (E e : edges) {
@@ -90,6 +91,7 @@ public abstract class AbstractGraph<V, E>
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
     {
+        Objects.requireNonNull(vertices);
         boolean modified = false;
 
         for (V v : vertices) {
@@ -124,10 +126,9 @@ public abstract class AbstractGraph<V, E>
      */
     protected boolean assertVertexExist(V v)
     {
+        Objects.requireNonNull(v);
         if (containsVertex(v)) {
             return true;
-        } else if (v == null) {
-            throw new NullPointerException();
         } else {
             throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
         }

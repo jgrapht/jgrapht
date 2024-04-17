@@ -17,6 +17,8 @@
  */
 package org.jgrapht.util;
 
+import java.util.Objects;
+
 /**
  * Utility class to simplify handling of arrays.
  *
@@ -77,6 +79,7 @@ public class ArrayUtil
      */
     public static final <V> void swap(V[] arr, int i, int j)
     {
+        Objects.requireNonNull(arr);
         V tmp = arr[j];
         arr[j] = arr[i];
         arr[i] = tmp;
@@ -96,6 +99,7 @@ public class ArrayUtil
      */
     public static void swap(double[] arr, int i, int j)
     {
+        Objects.requireNonNull(arr);
         double tmp = arr[j];
         arr[j] = arr[i];
         arr[i] = tmp;
@@ -115,6 +119,7 @@ public class ArrayUtil
      */
     public static void swap(int[] arr, int i, int j)
     {
+        Objects.requireNonNull(arr);
         int tmp = arr[j];
         arr[j] = arr[i];
         arr[i] = tmp;
