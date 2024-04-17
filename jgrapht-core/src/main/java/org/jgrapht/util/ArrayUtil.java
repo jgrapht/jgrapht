@@ -60,9 +60,7 @@ public class ArrayUtil
     public static final void reverse(int[] arr, int from, int to)
     {
         for (int i = from, j = to; i < j; ++i, --j) {
-            int tmp = arr[j];
-            arr[j] = arr[i];
-            arr[i] = tmp;
+            swap(arr, i, j);
         }
     }
 
