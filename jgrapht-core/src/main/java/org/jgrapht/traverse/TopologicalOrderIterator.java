@@ -83,6 +83,8 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param graph the directed graph to be iterated
      * @param comparator comparator in order to break ties in case of partial order
+     * 
+     * @throws NotDirectedAcyclicGraphException if {@code graph} is not a DAG
      */
     public TopologicalOrderIterator(Graph<V, E> graph, Comparator<V> comparator)
     {
