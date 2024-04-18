@@ -43,6 +43,8 @@ public class BreadthFirstIterator<V, E>
      * Creates a new breadth-first iterator for the specified graph.
      *
      * @param g the graph to be iterated.
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public BreadthFirstIterator(Graph<V, E> g)
     {
