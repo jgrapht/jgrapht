@@ -91,8 +91,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Construct a new graph.
      *
-     * @param vertexSupplier the vertex supplier, can be null
-     * @param edgeSupplier the edge supplier, can be null
+     * @param vertexSupplier the vertex supplier, can be {@code null}
+     * @param edgeSupplier the edge supplier, can be {@code null}
      * @param type the graph type
      *
      * @throws IllegalArgumentException if the graph type is mixed
@@ -106,12 +106,15 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Construct a new graph.
      *
-     * @param vertexSupplier the vertex supplier, can be null
-     * @param edgeSupplier the edge supplier, can be null
+     * @param vertexSupplier the vertex supplier, can be {@code null}
+     * @param edgeSupplier the edge supplier, can be {@code null}
      * @param type the graph type
      * @param graphSpecificsStrategy strategy for constructing low-level graph specifics
      *
      * @throws IllegalArgumentException if the graph type is mixed
+     * @throws NullPointerException if either one of {@code type} or {@code graphSpecificsStragegy}
+     *                              is {@code null}, or if {@code graphSpecificsStragegy} generates
+     *                              {@code null}
      */
     protected AbstractBaseGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type,

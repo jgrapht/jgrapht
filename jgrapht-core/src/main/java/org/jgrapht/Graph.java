@@ -574,6 +574,7 @@ public interface Graph<V, E>
      * @param e edge of interest
      * @return edge weight
      * 
+     * @throws IllegalArgumentException if the specified edge is not in this graph
      * @throws NullPointerException if argument is {@code null}
      */
     double getEdgeWeight(E e);

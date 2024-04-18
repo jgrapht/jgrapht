@@ -118,9 +118,7 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Always returns true since the iterator does not care about components.
+     * @return {@code true} always, since this iterator does not care about components
      */
     @Override
     public boolean isCrossComponentTraversal()
@@ -129,10 +127,7 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Trying to disable the cross components nature of this iterator will result into throwing a
-     * {@link IllegalArgumentException}.
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)
