@@ -75,6 +75,8 @@ public abstract class CrossComponentIterator<V, E, D>
      * Creates a new iterator for the specified graph.
      *
      * @param g the graph to be iterated
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public CrossComponentIterator(Graph<V, E> g)
     {
@@ -89,8 +91,8 @@ public abstract class CrossComponentIterator<V, E, D>
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      *
-     * @throws IllegalArgumentException if {@code g==null} or does not contain
-     *         {@code startVertex}
+     * @throws IllegalArgumentException if {@code g} does not contain {@code startVertex}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
@@ -105,8 +107,8 @@ public abstract class CrossComponentIterator<V, E, D>
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
      *
-     * @throws IllegalArgumentException if {@code g==null} or does not contain
-     *         {@code startVertex}
+     * @throws IllegalArgumentException if {@code g} does not contain {@code startVertex}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices)
     {
