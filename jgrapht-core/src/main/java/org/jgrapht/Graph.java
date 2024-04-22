@@ -117,6 +117,8 @@ public interface Graph<V, E>
      * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
      * 
      * @return the vertex supplier or {@code null} if the graph has no such supplier
+     * 
+     * @throws UnsupportedOperationException if this graph disallows access to the vertex supplier
      */
     Supplier<V> getVertexSupplier();
 
@@ -136,6 +138,8 @@ public interface Graph<V, E>
      * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
      * 
      * @return the edge supplier {@code null} if the graph has no such supplier
+     * 
+     * @throws UnsupportedOperationException if this graph disallows access to the edge supplier
      */
     Supplier<E> getEdgeSupplier();
 

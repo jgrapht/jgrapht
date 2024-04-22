@@ -57,9 +57,11 @@ public class GraphDelegator<V, E>
     private final Supplier<E> edgeSupplier;
 
     /**
-     * Constructor
+     * Constructs a new {@code GraphDelegator}.
      *
      * @param graph the backing graph (the delegate).
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public GraphDelegator(Graph<V, E> graph)
     {
@@ -67,6 +69,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Constructs a new {@code GraphDelegator}.
      * 
      * @param graph the backing graph (the delegate).
      * @param vertexSupplier vertex supplier for the delegator. Can be null in which case the
@@ -85,11 +88,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Returns the delegator's vertex supplier or the backing graph's vertex supplier in case of
-     * null.
+     * @return the vertex supplier of this delegator or the backing graph's
+     *         vertex supplier if this delegator does not have a vertex supplier
      */
     @Override
     public Supplier<V> getVertexSupplier()
@@ -102,10 +102,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Returns the delegator's edge supplier or the backing graph's edge supplier in case of null.
+     * @return the edge supplier of this delegator or the backing graph's
+     *         edge supplier if this delegator does not have an edge supplier
      */
     @Override
     public Supplier<E> getEdgeSupplier()
