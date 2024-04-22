@@ -594,8 +594,6 @@ public interface Graph<V, E>
 
     /**
      * Assigns a weight to an edge between {@code sourceVertex} and {@code targetVertex}.
-     * If no edge exists between {@code sourceVertex} and {@code targetVertex} or either
-     * of these vertices is {@code null}, a {@code NullPointerException} is thrown.
      * <p>
      * When there exist multiple edges between {@code sourceVertex} and
      * {@code targetVertex}, consider using {@link #setEdgeWeight(Object, double)} instead.
@@ -603,6 +601,10 @@ public interface Graph<V, E>
      * @param sourceVertex source vertex of the edge
      * @param targetVertex target vertex of the edge
      * @param weight new weight for edge
+     * 
+     * @throws NullPointerException if either one of {@code sourceVertex} or
+     *                              {@code targetVertex} is {@code null}, or
+     *                              if there is no edge between the two vertices
      * @throws UnsupportedOperationException if the graph does not support weights
      */
     default void setEdgeWeight(V sourceVertex, V targetVertex, double weight)
