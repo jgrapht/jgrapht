@@ -71,6 +71,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if {@code network} is {@code null}
      */
     public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
@@ -85,6 +87,9 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is {@code null}
      */
     public BaseNetworkAdapter(
         N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
@@ -267,6 +272,10 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
         return network.outEdges(vertex);
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public double getEdgeWeight(E e)
     {
@@ -290,6 +299,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * 
      * @param vertexOrderMethod method to use
      * @return the vertex order
+     * 
+     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex order
      */
     protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
     {

@@ -31,8 +31,8 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * A base abstract implementation for the graph adapter class using Guava's {@link Graph}. This is a
- * helper class in order to support both mutable and immutable graphs.
+ * A base abstract implementation for the graph adapter class using Guava's {@link com.google.common.graph.Graph Graph}.
+ * This is a helper class in order to support both mutable and immutable graphs.
  * 
  * @author Dimitrios Michail
  *
@@ -61,6 +61,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      * Create a new adapter.
      * 
      * @param graph the graph
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public BaseGraphAdapter(G graph)
     {
@@ -73,6 +75,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      * @param graph the graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public BaseGraphAdapter(
         G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
@@ -88,6 +92,9 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if either one of {@code graph} or {@code vertexOrderMethod} is {@code null}
      */
     public BaseGraphAdapter(
         G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
@@ -277,6 +284,10 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
             collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public double getEdgeWeight(EndpointPair<V> e)
     {
@@ -320,6 +331,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      * 
      * @param vertexOrderMethod method to use
      * @return the vertex order
+     * 
+     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex order
      */
     protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
     {

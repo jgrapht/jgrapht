@@ -62,6 +62,8 @@ public class MutableGraphAdapter<V>
      * Create a new adapter.
      * 
      * @param graph the graph
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public MutableGraphAdapter(MutableGraph<V> graph)
     {
@@ -74,6 +76,8 @@ public class MutableGraphAdapter<V>
      * @param graph the graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public MutableGraphAdapter(
         MutableGraph<V> graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
@@ -89,6 +93,9 @@ public class MutableGraphAdapter<V>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if either one of {@code graph} or {@code vertexOrderMethod} is {@code null}
      */
     public MutableGraphAdapter(
         MutableGraph<V> graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
@@ -97,6 +104,10 @@ public class MutableGraphAdapter<V>
         super(graph, vertexSupplier, edgeSupplier, vertexOrderMethod);
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public EndpointPair<V> addEdge(V sourceVertex, V targetVertex)
     {
@@ -118,13 +129,13 @@ public class MutableGraphAdapter<V>
     /**
      * {@inheritDoc}
      * 
-     * The provided edge object can either be null or must respect the source and target vertices
-     * that are provided as parameters.
+     * The provided edge object can either be {@code null} or must respect the source and target
+     * vertices that are provided as parameters.
      * 
-     * @throws IllegalArgumentException if edge e is not null and the sourceVertex parameter does
-     *         not match the node U of the endpoint-pair
-     * @throws IllegalArgumentException if edge e is not null and the targetVertex parameter does
-     *         not match the node V of the endpoint-pair
+     * @throws IllegalArgumentException if either {@code sourceVertex} is not equal to node U
+     *                                  of {@code e} or {@code targetVertex} is not equal to node V
+     *                                  of {@code e}, or if the underlying graph disallows self loops
+     * @throws NullPointerException if either one of {@code sourceVertex} or {@code targetVertex} is {@code null}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
@@ -155,6 +166,9 @@ public class MutableGraphAdapter<V>
         return true;
     }
 
+    /**
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     */
     @Override
     public V addVertex()
     {

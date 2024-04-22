@@ -65,54 +65,80 @@ public class ImmutableGraphAdapter<V>
      * Create a new adapter.
      * 
      * @param graph the graph
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public ImmutableGraphAdapter(ImmutableGraph<V> graph)
     {
         super(graph);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public EndpointPair<V> addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public V addVertex()
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public EndpointPair<V> removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean removeEdge(EndpointPair<V> e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean removeVertex(V v)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void setEdgeWeight(EndpointPair<V> e, double weight)
     {
