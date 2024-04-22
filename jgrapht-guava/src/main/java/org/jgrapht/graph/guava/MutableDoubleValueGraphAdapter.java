@@ -71,6 +71,8 @@ public class MutableDoubleValueGraphAdapter<V>
      * Create a new adapter.
      * 
      * @param valueGraph the value graph
+     * 
+     * @throws NullPointerException if {@code valueGraph} is {@code null}
      */
     public MutableDoubleValueGraphAdapter(MutableValueGraph<V, Double> valueGraph)
     {
@@ -83,6 +85,8 @@ public class MutableDoubleValueGraphAdapter<V>
      * @param valueGraph the value graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if {@code valueGraph} is {@code null}
      */
     public MutableDoubleValueGraphAdapter(
         MutableValueGraph<V, Double> valueGraph, Supplier<V> vertexSupplier,
@@ -93,6 +97,10 @@ public class MutableDoubleValueGraphAdapter<V>
             vertexSupplier, edgeSupplier);
     }
 
+    /**
+     * @throws IllegalArgumentException if {@code e} is not an edge of this graph
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public void setEdgeWeight(EndpointPair<V> e, double weight)
     {

@@ -71,42 +71,63 @@ public class ImmutableNetworkAdapter<V, E>
         super(network);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public V addVertex()
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean removeEdge(E e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean removeVertex(V v)
     {
@@ -119,6 +140,9 @@ public class ImmutableNetworkAdapter<V, E>
         return Graph.DEFAULT_EDGE_WEIGHT;
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void setEdgeWeight(E e, double weight)
     {

@@ -64,6 +64,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * 
      * @param valueGraph the mutable value graph
      * @param valueConverter a function that converts a value to a double
+     * 
+     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is {@code null}
      */
     public BaseValueGraphAdapter(VG valueGraph, ToDoubleFunction<W> valueConverter)
     {
@@ -77,6 +79,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * @param valueConverter a function that converts a value to a double
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is {@code null}
      */
     public BaseValueGraphAdapter(
         VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
@@ -96,6 +100,10 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if any one of {@code valueGraph}, {@code valueConverter}, or {@code vertexOrderMethod}
+     *                              is {@code null}
      */
     public BaseValueGraphAdapter(
         VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
@@ -288,6 +296,10 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
             .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public double getEdgeWeight(EndpointPair<V> e)
     {
@@ -334,6 +346,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * 
      * @param vertexOrderMethod method to use
      * @return the vertex order
+     * 
+     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex order
      */
     protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
     {

@@ -87,6 +87,9 @@ public class DepthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
+     * 
+     * @throws IllegalArgumentException if {@code g} does not contain {@code startVertex}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DepthFirstIterator(Graph<V, E> g, V startVertex)
     {
@@ -101,6 +104,10 @@ public class DepthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
+     * 
+     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not
+     *                                  a vertex of {@code g}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DepthFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
     {
