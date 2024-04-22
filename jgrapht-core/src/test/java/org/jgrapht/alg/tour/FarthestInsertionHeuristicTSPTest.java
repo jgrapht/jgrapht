@@ -28,6 +28,7 @@ import org.junit.jupiter.api.*;
 import java.util.List;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link FarthestInsertionHeuristicTSP}
@@ -48,7 +49,7 @@ public class FarthestInsertionHeuristicTSPTest
         FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge> farthestInsertion =
             new FarthestInsertionHeuristicTSP<>();
 
-        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             farthestInsertion.getTour(graph);
         });
 
@@ -64,7 +65,7 @@ public class FarthestInsertionHeuristicTSPTest
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge> farthestInsertion =
             new FarthestInsertionHeuristicTSP<>();
-        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             farthestInsertion.getTour(graph);
         });
     }
@@ -81,7 +82,7 @@ public class FarthestInsertionHeuristicTSPTest
         graph.addVertex(1);
         FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge> farthestInsertion =
             new FarthestInsertionHeuristicTSP<>();
-        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             farthestInsertion.getTour(graph);
         });
     }
@@ -99,7 +100,7 @@ public class FarthestInsertionHeuristicTSPTest
             new FarthestInsertionHeuristicTSP<>();
         GraphPath<Integer, DefaultEdge> tour = farthestInsertion.getTour(graph);
         assertHamiltonian(graph, tour);
-        Assertions.assertEquals(10, tour.getWeight(), 1e-9);
+        assertEquals(10, tour.getWeight(), 1e-9);
     }
 
     /**
@@ -115,7 +116,7 @@ public class FarthestInsertionHeuristicTSPTest
             new FarthestInsertionHeuristicTSP<>();
         GraphPath<Integer, DefaultEdge> tour = farthestInsertion.getTour(graph);
         assertHamiltonian(graph, tour);
-        Assertions.assertEquals(19, tour.getWeight(), 1e-9);
+        assertEquals(19, tour.getWeight(), 1e-9);
     }
 
     /**
@@ -134,8 +135,8 @@ public class FarthestInsertionHeuristicTSPTest
         var farthestInsH = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
 
         var tour = farthestInsH.getTour(graph);
-        Assertions.assertEquals(30, tour.getWeight(), 1e-9);
-        Assertions.assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
+        assertEquals(30, tour.getWeight(), 1e-9);
+        assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
@@ -153,10 +154,10 @@ public class FarthestInsertionHeuristicTSPTest
             <Integer, DefaultWeightedEdge>(new GraphWalk<>(graph, List.of(3, 2, 0, 4), -1));
 
         var tour = farthestInsH.getTour(graph);
-        Assertions.assertEquals(30, tour.getWeight(), 1e-9);
+        assertEquals(30, tour.getWeight(), 1e-9);
 
         // vertex 1 should be inserted between vertices 2 and 0
-        Assertions.assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
+        assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
@@ -180,8 +181,8 @@ public class FarthestInsertionHeuristicTSPTest
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsertion = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
         var tour = farthestInsertion.getTour(graph);
-        Assertions.assertEquals(210, tour.getWeight(), 1e-9);
-        Assertions.assertArrayEquals(new Integer[]{4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4},
+        assertEquals(210, tour.getWeight(), 1e-9);
+        assertArrayEquals(new Integer[]{4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4},
             tour.getVertexList().toArray(new Integer[0]));
     }
 
