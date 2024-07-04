@@ -42,72 +42,73 @@ import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
  * @param <E> the graph edge type
  */
 public class NaiveGreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V> {
-	private final Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-	/**
-	 * Create a new Naive Greedy clustering algorithm.
-	 * 
-	 * @param graph the graph
-	 */
-	public NaiveGreedyModularityAlgorithm(Graph<V, E> graph) {
-		this.graph = GraphTests.requireUndirected(graph);
-	}
+    /**
+     * Create a new Naive Greedy clustering algorithm.
+     * 
+     * @param graph the graph
+     */
+    public NaiveGreedyModularityAlgorithm(Graph<V, E> graph) {
+        this.graph = GraphTests.requireUndirected(graph);
+    }
 
-	@Override
-	public ClusteringAlgorithm.Clustering<V> getClustering() {
-		int i, j;
+    @Override
+    public ClusteringAlgorithm.Clustering<V> getClustering() {
+        int i, j;
 
-		// create one community for each node
-		List<Set<V>> communities = new ArrayList<>();
-		for (V v : graph.iterables().vertices()) {
-			Set<V> set = Set.of(v);
-			communities.add(set);
-		}
+        // create one community for each node
+        List<Set<V>> communities = new ArrayList<>();
+        for (V v : graph.iterables().vertices()) {
+            Set<V> set = Set.of(v);
+            communities.add(set);
+        }
 
-		Double oldModularity = null;
-		UndirectedModularityMeasurer<V, E> measurer = new UndirectedModularityMeasurer<>(graph);
-		double curModularity = measurer.modularity(communities);
+        Double oldModularity = null;
+        UndirectedModularityMeasurer<V, E> measurer = new UndirectedModularityMeasurer<>(graph);
+        double curModularity = measurer.modularity(communities);
 
-		// greedily merge communities until no improvement is possible
-		while (isNull(oldModularity) || oldModularity < curModularity) {
-			oldModularity = curModularity;
-			List<Set<V>> bestCommunities = null;
+        // greedily merge communities until no improvement is possible
+        while (isNull(oldModularity) || oldModularity < curModularity) {
+            oldModularity = curModularity;
+            List<Set<V>> bestCommunities = null;
 
-			for (i = 0; i < communities.size(); i++) {
-				for (j = 0; j < communities.size(); j++) {
-					if (j <= i) {
-						continue;
-					}
+            for (i = 0; i < communities.size(); i++) {
+                for (j = 0; j < communities.size(); j++) {
+                    if (j <= i) {
+                        continue;
+                    }
 
-					// initialize trialCommunities
-					List<Set<V>> trialCommunities = new ArrayList<>();
-					for (int k = 0; k < communities.size(); k++) {
-						if (k != j && k != i) {
-							trialCommunities.add(communities.get(k));
-						}
-					}
+                    // initialize trialCommunities
+                    List<Set<V>> trialCommunities = new ArrayList<>();
+                    for (int k = 0; k < communities.size(); k++) {
+                        if (k != j && k != i) {
+                            trialCommunities.add(communities.get(k));
+                        }
+                    }
 
-					// create trial partition
-					Set<V> merge = new HashSet<>();
-					merge.addAll(communities.get(i));
-					merge.addAll(communities.get(j));
-					trialCommunities.add(merge);
+                    // create trial partition
+                    Set<V> merge = new HashSet<>();
+                    merge.addAll(communities.get(i));
+                    merge.addAll(communities.get(j));
+                    trialCommunities.add(merge);
 
-					// check the modularity of the trial partition
-					double trialModularity = measurer.modularity(trialCommunities);
-					if (trialModularity >= curModularity) {
-						curModularity = trialModularity;
-						bestCommunities = trialCommunities;
-					}
-				}
-			}
-			if (bestCommunities == null) {
-				break;
-			}
-			communities = bestCommunities;
-		}
+                    // check the modularity of the trial partition
+                    double trialModularity = measurer.modularity(trialCommunities);
+                    if (trialModularity >= curModularity) {
+                        curModularity = trialModularity;
+                        bestCommunities = trialCommunities;
+                    }
+                }
+            }
+            if (bestCommunities == null) {
+                break;
+            }
+            communities = bestCommunities;
+        }
 
-		ClusteringAlgorithm.ClusteringImpl<V> clustering = new ClusteringAlgorithm.ClusteringImpl<>(communities);
-		return clustering;
-	}
+        ClusteringAlgorithm.ClusteringImpl<V> clustering = new ClusteringAlgorithm.ClusteringImpl<>(communities);
+        System.out.println("Modularity: " + measurer.modularity(communities));
+        return clustering;
+    }
 }
