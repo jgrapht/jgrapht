@@ -28,14 +28,11 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for class SørensenIndexLinkPrediction
+ * Tests for class SorensenIndexLinkPrediction
  *
  * @author Dimitrios Michail
- * 
- * @deprecated Class will be replaced by SorensenIndexLinkPredictionTest
  */
-@Deprecated
-public class SørensenIndexLinkPredictionTest
+public class SorensenIndexLinkPredictionTest
 {
 
     @Test
@@ -50,8 +47,8 @@ public class SørensenIndexLinkPredictionTest
             g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 }, { 3, 4 },
                 { 3, 5 }, { 4, 5 } });
 
-        SørensenIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new SørensenIndexLinkPrediction<>(g);
+        SorensenIndexLinkPrediction<Integer, DefaultEdge> alg =
+            new SorensenIndexLinkPrediction<>(g);
 
         double[] scores = new double[6];
 
@@ -83,8 +80,8 @@ public class SørensenIndexLinkPredictionTest
             g.addVertex(0);
             g.addVertex(1);
 
-            SørensenIndexLinkPrediction<Integer, DefaultEdge> alg =
-                new SørensenIndexLinkPrediction<>(g);
+            SorensenIndexLinkPrediction<Integer, DefaultEdge> alg =
+                new SorensenIndexLinkPrediction<>(g);
 
             alg.predict(0, 1);
         });
