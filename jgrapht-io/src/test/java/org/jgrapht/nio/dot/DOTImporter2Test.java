@@ -678,9 +678,36 @@ public class DOTImporter2Test
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>",
             attrs.get("6").get("name").getValue());
         assertEquals("<h2>name \u2705</h2>", attrs.get("7").get("name").getValue());
-        assertEquals("two\nlines", attrs.get("8").get("name").getValue());
+        assertEquals("two\\\nlines", attrs.get("8").get("name").getValue());
         assertEquals("", attrs.get("9").get("name").getValue());
-        assertEquals("\\\\\\\\", attrs.get("10").get("name").getValue());
+        assertEquals("\\\\\\\\\\\\\\\\", attrs.get("10").get("name").getValue());
+    }
+
+    @Test
+    public void testUnescape2() {
+        String input = "digraph G {" + NL + 
+                        "  a [ label=\" /\\\\n \"];" + NL + 
+                        "  b [ label=\"\\\"Test\\\"\"];"  + NL + 
+                        "  a -> b; " + NL + 
+                        "}";
+        Map<String, Map<String, Attribute>> attrs = new HashMap<>();
+        DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
+        importer.addVertexAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = attrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                attrs.put(p.getFirst(), map);
+            }
+            map.put(p.getSecond(), a);
+        });
+
+        DirectedMultigraph<String, DefaultEdge> result = new DirectedMultigraph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        importer.importGraph(result, new StringReader(input));
+        assertEquals("a", attrs.get("0").get("ID").getValue());
+        assertEquals(" /\\\\n ", attrs.get("0").get("label").getValue());
+        assertEquals("b", attrs.get("1").get("ID").getValue());
+        assertEquals("\"Test\"", attrs.get("1").get("label").getValue());
     }
 
     @Test
