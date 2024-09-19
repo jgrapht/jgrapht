@@ -34,11 +34,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.math.*;
+import java.util.*;
+
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * An implementation of Suurballe algorithm for finding K edge-<em>disjoint</em> shortest paths. The
@@ -89,8 +89,10 @@ public class SuurballeKDisjointShortestPaths<V, E>
         for (E edge : this.workingGraph.edgeSet()) {
             V source = workingGraph.getEdgeSource(edge);
             V target = workingGraph.getEdgeTarget(edge);
-            double modifiedWeight = calculateModifiedWeight(this.workingGraph.getEdgeWeight(edge),
-                    singleSourcePaths.getWeight(source), singleSourcePaths.getWeight(target));
+
+            double modifiedWeight = calculateModifiedWeight(
+                this.workingGraph.getEdgeWeight(edge), singleSourcePaths.getWeight(source),
+                singleSourcePaths.getWeight(target));
 
             this.workingGraph.setEdgeWeight(edge, modifiedWeight);
         }
@@ -122,19 +124,21 @@ public class SuurballeKDisjointShortestPaths<V, E>
         return singleSourcePaths.getPath(endVertex);
     }
 
-    private double calculateModifiedWeight(double edgeWeight, double sourcePathWeight, double targetPathWeight) 
+    private double calculateModifiedWeight(
+        double edgeWeight, double sourcePathWeight, double targetPathWeight)
     {
-        if (sourcePathWeight == Double.POSITIVE_INFINITY && targetPathWeight == Double.POSITIVE_INFINITY) {
+        if (sourcePathWeight == Double.POSITIVE_INFINITY
+            && targetPathWeight == Double.POSITIVE_INFINITY)
+        {
             return Double.NaN;
         } else if (sourcePathWeight == Double.POSITIVE_INFINITY) {
             return Double.POSITIVE_INFINITY;
         } else if (targetPathWeight == Double.POSITIVE_INFINITY) {
             return Double.NEGATIVE_INFINITY;
         } else {
-            return BigDecimal.valueOf(edgeWeight)
-                    .subtract(BigDecimal.valueOf(targetPathWeight))
-                    .add(BigDecimal.valueOf(sourcePathWeight))
-                    .doubleValue();
+            return BigDecimal
+                .valueOf(edgeWeight).subtract(BigDecimal.valueOf(targetPathWeight))
+                .add(BigDecimal.valueOf(sourcePathWeight)).doubleValue();
         }
     }
 
