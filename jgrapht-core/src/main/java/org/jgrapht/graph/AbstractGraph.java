@@ -59,6 +59,7 @@ public abstract class AbstractGraph<V, E>
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
     {
+        Objects.requireNonNull(edges);
         boolean modified = false;
 
         for (E e : edges) {
@@ -90,6 +91,7 @@ public abstract class AbstractGraph<V, E>
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
     {
+        Objects.requireNonNull(vertices);
         boolean modified = false;
 
         for (V v : vertices) {
@@ -124,10 +126,9 @@ public abstract class AbstractGraph<V, E>
      */
     protected boolean assertVertexExist(V v)
     {
+        Objects.requireNonNull(v);
         if (containsVertex(v)) {
             return true;
-        } else if (v == null) {
-            throw new NullPointerException();
         } else {
             throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
         }
@@ -136,7 +137,6 @@ public abstract class AbstractGraph<V, E>
     /**
      * Removes all the edges in this graph that are also contained in the specified edge array.
      * After this call returns, this graph will contain no edges in common with the specified edges.
-     * This method will invoke the {@link Graph#removeEdge(Object)} method.
      *
      * @param edges edges to be removed from this graph.
      *
@@ -145,18 +145,12 @@ public abstract class AbstractGraph<V, E>
      * @throws NullPointerException if argument is {@code null}
      * @throws UnsupportedOperationException if this graph disallows modification
      *
-     * @see Graph#removeEdge(Object)
-     * @see Graph#containsEdge(Object)
+     * @see #removeAllEdges(Collection)
      */
     protected boolean removeAllEdges(E[] edges)
     {
-        boolean modified = false;
-
-        for (E edge : edges) {
-            modified |= removeEdge(edge);
-        }
-
-        return modified;
+        Objects.requireNonNull(edges);
+        return removeAllEdges(Arrays.asList(edges));
     }
 
     /**

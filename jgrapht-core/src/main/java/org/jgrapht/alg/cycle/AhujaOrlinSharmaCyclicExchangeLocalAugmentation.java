@@ -399,8 +399,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
 
                 return newLabeledPath;
             } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
         }
     }
