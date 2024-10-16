@@ -10,7 +10,7 @@
 1. Review/update github issues to make sure they reflect the current state.  If there were important bug/feature changes, it is worth mentioning them in the README.md release notes.
 1. Run `mvn clean; mvn javadoc:aggregate` to build the javadoc and make sure it is generated without errors/warnings. Fix where necessary. Make sure Eclipse build is warning-free.
 1. Run all the JUnit tests via `mvn test`. Fix where necessary.
-1. Reformat all code [using Eclipse](codeFormatter.sh). 
+1. Reformat all code via `mvn formatter:format`.
 1. Commit all work and push to github, merge with master branch. Locally, switch back to the master branch and perform a `git pull upstream master` to ensure that the local and upstream master are synced after merging the code formatting changes.
 1. Run `mvn -Dmaven.artifact.threads=1 -DskipTests clean deploy` to push the latest snapshot to Sonatype.
 1. Run `mvn package -DskipTests; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central

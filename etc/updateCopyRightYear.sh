@@ -26,4 +26,5 @@ updateOneModule jgrapht-ext
 updateOneModule jgrapht-guava
 updateOneModule jgrapht-io
 updateOneModule jgrapht-opt
+updateOneModule jgrapht-unimi-dsi
 popd
