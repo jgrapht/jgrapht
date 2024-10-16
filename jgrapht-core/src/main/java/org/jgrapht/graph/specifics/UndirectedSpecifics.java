@@ -49,7 +49,7 @@ public class UndirectedSpecifics<V, E>
 
     /**
      * Construct a new undirected specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
@@ -68,14 +68,11 @@ public class UndirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public boolean addVertex(V v)
+    public boolean addVertex(V vertex)
     {
-        UndirectedEdgeContainer<V, E> ec = vertexMap.get(v);
-        if (ec == null) {
-            vertexMap.put(v, new UndirectedEdgeContainer<>(edgeSetFactory, v));
-            return true;
-        }
-        return false;
+        int previousSize = vertexMap.size();
+        vertexMap.computeIfAbsent(vertex, v -> new UndirectedEdgeContainer<>(edgeSetFactory, v));
+        return previousSize < vertexMap.size();
     }
 
     /**
@@ -116,9 +113,10 @@ public class UndirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
+        UndirectedEdgeContainer<V, E> sourceEC = vertexMap.get(sourceVertex);
+        if (sourceEC != null && vertexMap.containsKey(targetVertex)) {
 
-            for (E e : getEdgeContainer(sourceVertex).vertexEdges) {
+            for (E e : sourceEC.vertexEdges) {
                 boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
 
                 if (equal) {
@@ -132,12 +130,10 @@ public class UndirectedSpecifics<V, E>
 
     private boolean isEqualsStraightOrInverted(Object sourceVertex, Object targetVertex, E e)
     {
-        boolean equalStraight = sourceVertex.equals(graph.getEdgeSource(e))
-            && targetVertex.equals(graph.getEdgeTarget(e));
-
-        boolean equalInverted = sourceVertex.equals(graph.getEdgeTarget(e))
-            && targetVertex.equals(graph.getEdgeSource(e));
-        return equalStraight || equalInverted;
+        V s = graph.getEdgeSource(e);
+        V t = graph.getEdgeTarget(e);
+        return (sourceVertex.equals(s) && targetVertex.equals(t)) // equals straight
+            || (sourceVertex.equals(t) && targetVertex.equals(s)); // equals inverted
     }
 
     @Override
@@ -239,7 +235,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
+        return edgesOf(vertex);
     }
 
     /**
@@ -257,7 +253,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
+        return edgesOf(vertex);
     }
 
     /**
@@ -285,6 +281,7 @@ public class UndirectedSpecifics<V, E>
         UndirectedEdgeContainer<V, E> ec = vertexMap.get(vertex);
 
         if (ec == null) {
+            // It is very unlikely that ec==null, so we save the lambda for Map.computeIfAbsent()
             ec = new UndirectedEdgeContainer<>(edgeSetFactory, vertex);
             vertexMap.put(vertex, ec);
         }
