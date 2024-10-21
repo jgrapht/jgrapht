@@ -187,17 +187,17 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#originalGraph">originalGraph</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink">originalGraph</span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;E&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathList">pathList</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink">pathList</span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#workingGraph">workingGraph</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink">workingGraph</span></code></th>
 <td class="colLast">
 <div class="block">Graph on which shortest paths are searched.</div>
 </td>
@@ -253,7 +253,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;V,&#8203;E&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPaths(V,V,int)">getPaths</a></span>&#8203;(V&nbsp;startVertex,
+<th class="colSecond" scope="row"><code><span class="memberNameLink">getPaths</span>&#8203;(V&nbsp;startVertex,
         V&nbsp;endVertex,
         int&nbsp;k)</code></th>
 <td class="colLast">
@@ -365,7 +365,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>transformGraph</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;transformGraph&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="SuurballeKDisjointShortestPaths.html" title="type parameter in SuurballeKDisjointShortestPaths">E</a>&gt;&nbsp;previousPath)</pre>
 <div class="block">Prepares the working graph for next iteration. To be called from the second iteration and on
- so implementation may assume a preceding <a href="#calculateShortestPath(V,V)"><code>calculateShortestPath(V, V)</code></a> call.</div>
+ so implementation may assume a preceding <code>calculateShortestPath(V, V)</code> call.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>previousPath</code> - the path found at the previous iteration.</dd>

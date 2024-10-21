@@ -585,6 +585,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the vertex supplier or <code>null</code> if the graph has no such supplier</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph disallows access to the vertex supplier</dd>
 </dl>
 </li>
 </ul>
@@ -611,6 +613,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the edge supplier <code>null</code> if the graph has no such supplier</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph disallows access to the edge supplier</dd>
 </dl>
 </li>
 </ul>
@@ -1270,6 +1274,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>edge weight</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the specified edge is not in this graph</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
@@ -1309,8 +1314,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                            <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex,
                            double&nbsp;weight)</pre>
 <div class="block">Assigns a weight to an edge between <code>sourceVertex</code> and <code>targetVertex</code>.
- If no edge exists between <code>sourceVertex</code> and <code>targetVertex</code> or either
- of these vertices is <code>null</code>, a <code>NullPointerException</code> is thrown.
  <p>
  When there exist multiple edges between <code>sourceVertex</code> and
  <code>targetVertex</code>, consider using <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> instead.</div>
@@ -1320,6 +1323,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>targetVertex</code> - target vertex of the edge</dd>
 <dd><code>weight</code> - new weight for edge</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>sourceVertex</code> or
+                              <code>targetVertex</code> is <code>null</code>, or
+                              if there is no edge between the two vertices</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph does not support weights</dd>
 </dl>
 </li>

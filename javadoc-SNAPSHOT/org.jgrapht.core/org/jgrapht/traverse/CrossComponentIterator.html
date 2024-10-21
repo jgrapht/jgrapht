@@ -371,6 +371,8 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graph to be iterated</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -392,8 +394,8 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dd><code>g</code> - the graph to be iterated.</dd>
 <dd><code>startVertex</code> - the vertex iteration to be started.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>g==null</code> or does not contain
-         <code>startVertex</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>g</code> does not contain <code>startVertex</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>g</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -413,8 +415,9 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dd><code>g</code> - the graph to be iterated.</dd>
 <dd><code>startVertices</code> - the vertices iteration to be started.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>g==null</code> or does not contain
-         <code>startVertex</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>startVertices</code> contains an element that is not
+                                  a vertex of <code>g</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>g</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>

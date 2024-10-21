@@ -156,8 +156,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public abstract class <span class="typeNameLabel">BaseGraphAdapter&lt;V,&#8203;G extends com.google.common.graph.Graph&lt;V&gt;&gt;</span>
 extends <a href="../../../../../org.jgrapht.core/org/jgrapht/graph/AbstractGraph.html" title="class in org.jgrapht.graph">AbstractGraph</a>&lt;V,&#8203;com.google.common.graph.EndpointPair&lt;V&gt;&gt;
 implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;com.google.common.graph.EndpointPair&lt;V&gt;&gt;, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
-<div class="block">A base abstract implementation for the graph adapter class using Guava's <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht"><code>Graph</code></a>. This is a
- helper class in order to support both mutable and immutable graphs.</div>
+<div class="block">A base abstract implementation for the graph adapter class using Guava's <code>Graph</code>.
+ This is a helper class in order to support both mutable and immutable graphs.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Dimitrios Michail</dd>
@@ -577,6 +577,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the graph</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>graph</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -597,6 +599,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>graph</code> - the graph</dd>
 <dd><code>vertexSupplier</code> - the vertex supplier</dd>
 <dd><code>edgeSupplier</code> - the edge supplier</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>graph</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -620,6 +624,9 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>edgeSupplier</code> - the edge supplier</dd>
 <dd><code>vertexOrderMethod</code> - the method used to ensure a total order of the graph vertices. This
         is required in order to make edge source/targets be consistent.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied <code>vertexOrderMethod</code> cannot be used to create a vertex order</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>graph</code> or <code>vertexOrderMethod</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -1115,6 +1122,9 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>e</code> - edge of interest</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>edge weight</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the specified edge is not in this graph</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -1161,6 +1171,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>vertexOrderMethod</code> - method to use</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the vertex order</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied method cannot be used to create a vertex order</dd>
 </dl>
 </li>
 </ul>

@@ -342,6 +342,8 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the directed graph to be iterated</dd>
 <dd><code>comparator</code> - comparator in order to break ties in case of partial order</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="NotDirectedAcyclicGraphException.html" title="class in org.jgrapht.traverse">NotDirectedAcyclicGraphException</a></code> - if <code>graph</code> is not a DAG</dd>
 </dl>
 </li>
 </ul>
@@ -362,17 +364,15 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <li class="blockList">
 <h4>isCrossComponentTraversal</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCrossComponentTraversal()</pre>
-<div class="block">Test whether this iterator is set to traverse the graph across connected components.
- 
- Always returns true since the iterator does not care about components.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractGraphIterator.html#isCrossComponentTraversal()">AbstractGraphIterator</a></code></span></div>
+<div class="block">Test whether this iterator is set to traverse the graph across connected components.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="GraphIterator.html#isCrossComponentTraversal()">isCrossComponentTraversal</a></code>&nbsp;in interface&nbsp;<code><a href="GraphIterator.html" title="interface in org.jgrapht.traverse">GraphIterator</a>&lt;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">V</a>,&#8203;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">E</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="AbstractGraphIterator.html#isCrossComponentTraversal()">isCrossComponentTraversal</a></code>&nbsp;in class&nbsp;<code><a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">V</a>,&#8203;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if traverses across connected components, otherwise
-         <code>false</code>.</dd>
+<dd><code>true</code> always, since this iterator does not care about components</dd>
 </dl>
 </li>
 </ul>
@@ -383,16 +383,16 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <li class="blockList">
 <h4>setCrossComponentTraversal</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCrossComponentTraversal&#8203;(boolean&nbsp;crossComponentTraversal)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractGraphIterator.html#setCrossComponentTraversal(boolean)">AbstractGraphIterator</a></code></span></div>
 <div class="block">Sets the cross component traversal flag - indicates whether to traverse the graph across
- connected components.
- 
- Trying to disable the cross components nature of this iterator will result into throwing a
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.</div>
+ connected components.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="AbstractGraphIterator.html#setCrossComponentTraversal(boolean)">setCrossComponentTraversal</a></code>&nbsp;in class&nbsp;<code><a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">V</a>,&#8203;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">E</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>crossComponentTraversal</code> - if <code>true</code> traverses across connected components.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if disabling the cross components nature of this iterator is attempted</dd>
 </dl>
 </li>
 </ul>

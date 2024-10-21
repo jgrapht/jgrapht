@@ -458,6 +458,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>valueGraph</code> - the value graph</dd>
 <dd><code>valueConverter</code> - a function that converts a value to a double</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>valueGraph</code> or <code>valueConverter</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -511,6 +513,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
 </dl>
@@ -544,6 +548,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>e</code> - edge to be added to this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified edge.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>, 
 <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
@@ -584,6 +590,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()">addVertex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="ImmutableValueGraphAdapter.html" title="type parameter in ImmutableValueGraphAdapter">V</a>,&#8203;<a href="ImmutableValueGraphAdapter.html" title="type parameter in ImmutableValueGraphAdapter">W</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created vertex if added to the graph.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a></dd>
 </dl>
@@ -612,6 +620,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>v</code> - vertex to be added to this graph.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -636,6 +646,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The removed edge, or <code>null</code> if no edge removed.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -662,6 +674,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>e</code> - edge to be removed from this graph, if present.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if and only if the graph contained the specified edge.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -693,6 +707,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if the graph contained the specified vertex; <code>false</code>
          otherwise.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>
@@ -712,6 +728,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - edge on which to set weight</dd>
 <dd><code>weight</code> - new weight for edge</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>

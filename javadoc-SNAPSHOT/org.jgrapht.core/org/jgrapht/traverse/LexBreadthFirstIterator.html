@@ -315,6 +315,9 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the graph to be iterated.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if argument is not an undirected graph</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -363,17 +366,15 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <li class="blockList">
 <h4>isCrossComponentTraversal</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCrossComponentTraversal()</pre>
-<div class="block">Test whether this iterator is set to traverse the graph across connected components.
- <p>
- Always returns true since this iterator doesn't care about connected components.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractGraphIterator.html#isCrossComponentTraversal()">AbstractGraphIterator</a></code></span></div>
+<div class="block">Test whether this iterator is set to traverse the graph across connected components.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="GraphIterator.html#isCrossComponentTraversal()">isCrossComponentTraversal</a></code>&nbsp;in interface&nbsp;<code><a href="GraphIterator.html" title="interface in org.jgrapht.traverse">GraphIterator</a>&lt;<a href="LexBreadthFirstIterator.html" title="type parameter in LexBreadthFirstIterator">V</a>,&#8203;<a href="LexBreadthFirstIterator.html" title="type parameter in LexBreadthFirstIterator">E</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="AbstractGraphIterator.html#isCrossComponentTraversal()">isCrossComponentTraversal</a></code>&nbsp;in class&nbsp;<code><a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;<a href="LexBreadthFirstIterator.html" title="type parameter in LexBreadthFirstIterator">V</a>,&#8203;<a href="LexBreadthFirstIterator.html" title="type parameter in LexBreadthFirstIterator">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if traverses across connected components, otherwise
-         <code>false</code>.</dd>
+<dd><code>true</code> always, since this iterator doesn't care about connected components</dd>
 </dl>
 </li>
 </ul>
@@ -384,16 +385,16 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <li class="blockList">
 <h4>setCrossComponentTraversal</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCrossComponentTraversal&#8203;(boolean&nbsp;crossComponentTraversal)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractGraphIterator.html#setCrossComponentTraversal(boolean)">AbstractGraphIterator</a></code></span></div>
 <div class="block">Sets the cross component traversal flag - indicates whether to traverse the graph across
- connected components.
- <p>
- Trying to disable the cross components nature of this iterator will result into throwing a
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.</div>
+ connected components.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="AbstractGraphIterator.html#setCrossComponentTraversal(boolean)">setCrossComponentTraversal</a></code>&nbsp;in class&nbsp;<code><a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;<a href="LexBreadthFirstIterator.html" title="type parameter in LexBreadthFirstIterator">V</a>,&#8203;<a href="LexBreadthFirstIterator.html" title="type parameter in LexBreadthFirstIterator">E</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>crossComponentTraversal</code> - if <code>true</code> traverses across connected components.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if disabling the cross components nature of this iterator is attempted</dd>
 </dl>
 </li>
 </ul>

@@ -417,7 +417,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEdgeWeight(E,double)">setEdgeWeight</a></span>&#8203;(<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">E</a>&nbsp;e,
              double&nbsp;weight)</code></th>
 <td class="colLast">
-<div class="block">Throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a> since graph union is read-only.</div>
+<div class="block">Assigns a weight to an edge.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
@@ -481,6 +481,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>g2</code> - the second graph</dd>
 <dd><code>operator</code> - the weight combiner (policy for edge weight calculation)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>g1 == g2</code></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the arguments is <code>null</code></dd>
 </dl>
 </li>
@@ -500,6 +501,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>g1</code> - the first graph</dd>
 <dd><code>g2</code> - the second graph</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>g1 == g2</code></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the arguments is <code>null</code></dd>
 </dl>
 </li>
@@ -867,6 +869,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <li class="blockList">
 <h4>edgesOf</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">E</a>&gt;&nbsp;edgesOf&#8203;(<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#edgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges touching the specified vertex. If no edges are touching the
  specified vertex returns an empty set.</div>
 <dl>
@@ -876,6 +879,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>vertex</code> - the vertex for which a set of touching edges is to be returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a set of all edges touching the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
 </dl>
 </li>
 </ul>
@@ -888,6 +893,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <li class="blockList">
 <h4>incomingEdgesOf</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">E</a>&gt;&nbsp;incomingEdgesOf&#8203;(<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">V</a>&nbsp;vertex)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#incomingEdgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges incoming into the specified vertex.
 
  <p>
@@ -900,6 +906,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>vertex</code> - the vertex for which the list of incoming edges to be returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a set of all edges incoming into the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
 </dl>
 </li>
 </ul>
@@ -924,6 +932,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>vertex</code> - the vertex for which the list of outgoing edges to be returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a set of all edges outgoing from the specified vertex.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if vertex is not found in the graph.</dd>
 </dl>
 </li>
 </ul>
@@ -1174,6 +1184,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <li class="blockList">
 <h4>getEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;getEdgeWeight&#8203;(<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">E</a>&nbsp;e)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getEdgeWeight(E)">Graph</a></code></span></div>
 <div class="block">Returns the weight assigned to a given edge. Unweighted graphs return 1.0 (as defined by
  <a href="../Graph.html#DEFAULT_EDGE_WEIGHT"><code>Graph.DEFAULT_EDGE_WEIGHT</code></a>), allowing weighted-graph algorithms to apply to them when
  meaningful.</div>
@@ -1184,6 +1195,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>e</code> - edge of interest</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>edge weight</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the specified edge is not in this graph</dd>
 </dl>
 </li>
 </ul>
@@ -1194,6 +1207,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <li class="blockList">
 <h4>getType</h4>
 <pre class="methodSignature">public&nbsp;<a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;getType()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getType()">Graph</a></code></span></div>
 <div class="block">Get the graph type. The graph type can be used to query for additional metadata such as
  whether the graph supports directed or undirected edges, self-loops, multiple (parallel)
  edges, weights, etc.</div>
@@ -1215,13 +1229,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <h4>setEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEdgeWeight&#8203;(<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">E</a>&nbsp;e,
                           double&nbsp;weight)</pre>
-<div class="block">Throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a> since graph union is read-only.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#setEdgeWeight(E,double)">Graph</a></code></span></div>
+<div class="block">Assigns a weight to an edge.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#setEdgeWeight(E,double)">setEdgeWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">V</a>,&#8203;<a href="AsGraphUnion.html" title="type parameter in AsGraphUnion">E</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - edge on which to set weight</dd>
 <dd><code>weight</code> - new weight for edge</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - always</dd>
 </dl>
 </li>
 </ul>

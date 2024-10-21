@@ -214,14 +214,16 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.jgrapht.Graph)">GraphDelegator</a></span>&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>,&#8203;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;graph)</code></th>
 <td class="colLast">
-<div class="block">Constructor</div>
+<div class="block">Constructs a new <code>GraphDelegator</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.jgrapht.Graph,java.util.function.Supplier,java.util.function.Supplier)">GraphDelegator</a></span>&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>,&#8203;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;graph,
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>&gt;&nbsp;vertexSupplier,
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;edgeSupplier)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructs a new <code>GraphDelegator</code>.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -493,10 +495,12 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>GraphDelegator</h4>
 <pre>public&nbsp;GraphDelegator&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>,&#8203;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;graph)</pre>
-<div class="block">Constructor</div>
+<div class="block">Constructs a new <code>GraphDelegator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the backing graph (the delegate).</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if argument is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -509,6 +513,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <pre>public&nbsp;GraphDelegator&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>,&#8203;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;graph,
                       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>&gt;&nbsp;vertexSupplier,
                       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;edgeSupplier)</pre>
+<div class="block">Constructs a new <code>GraphDelegator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the backing graph (the delegate).</dd>
@@ -538,6 +543,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>getVertexSupplier</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>&gt;&nbsp;getVertexSupplier()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getVertexSupplier()">Graph</a></code></span></div>
 <div class="block">Return the vertex supplier that the graph uses whenever it needs to create new vertices.
  
  <p>
@@ -557,16 +563,13 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  and <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
  in the graph using method <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>, which are going to be returned in
  the future by the supplied vertex supplier. Such a sequence will result into an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.
- 
- <p>
- Returns the delegator's vertex supplier or the backing graph's vertex supplier in case of
- null.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> when calling method <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#getVertexSupplier()">getVertexSupplier</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>,&#8203;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the vertex supplier or <code>null</code> if the graph has no such supplier</dd>
+<dd>the vertex supplier of this delegator or the backing graph's
+         vertex supplier if this delegator does not have a vertex supplier</dd>
 </dl>
 </li>
 </ul>
@@ -577,6 +580,7 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <li class="blockList">
 <h4>getEdgeSupplier</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;&nbsp;getEdgeSupplier()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#getEdgeSupplier()">Graph</a></code></span></div>
 <div class="block">Return the edge supplier that the graph uses whenever it needs to create new edges.
  
  <p>
@@ -589,15 +593,13 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
  requirement that a new and distinct result is returned every time it is invoked. More
  specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
  any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
- graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
- 
- <p>
- Returns the delegator's edge supplier or the backing graph's edge supplier in case of null.</div>
+ graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#getEdgeSupplier()">getEdgeSupplier</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">V</a>,&#8203;<a href="GraphDelegator.html" title="type parameter in GraphDelegator">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the edge supplier <code>null</code> if the graph has no such supplier</dd>
+<dd>the edge supplier of this delegator or the backing graph's
+         edge supplier if this delegator does not have an edge supplier</dd>
 </dl>
 </li>
 </ul>

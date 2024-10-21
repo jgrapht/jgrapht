@@ -137,9 +137,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public final class <span class="typeNameLabel">FixedSizeIntegerQueue</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Primitive but efficient implementation of a fixed size queue for integers. Note: this queue is
- not implemented as a ring, so at most $N$ enqueue operations are allowed, where $N$ is the
- maximum capacity of the queue! After that, queue.clear() must be invoked.</div>
+<div class="block">Primitive but efficient implementation of a fixed size queue for integers.
+ 
+ Note: this queue is not implemented as a ring, so at most $N$ enqueue
+ operations are allowed, where $N$ is the maximum capacity of the queue!
+ After that, <a href="#clear()"><code>clear()</code></a> must be invoked.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Joris Kinable</dd>

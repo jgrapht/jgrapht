@@ -392,6 +392,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the graph</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>graph</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -410,6 +412,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>graph</code> - the graph</dd>
 <dd><code>vertexSupplier</code> - the vertex supplier</dd>
 <dd><code>edgeSupplier</code> - the edge supplier</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>graph</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -431,6 +435,9 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>edgeSupplier</code> - the edge supplier</dd>
 <dd><code>vertexOrderMethod</code> - the method used to ensure a total order of the graph vertices. This
         is required in order to make edge source/targets be consistent.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied <code>vertexOrderMethod</code> cannot be used to create a vertex order</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>graph</code> or <code>vertexOrderMethod</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -484,6 +491,11 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>targetVertex</code> - target vertex of the edge.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph
+                                  or if there is a property of this graph that prevents the
+                                  addition of the edge</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the specified vertices is <code>null</code>.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
 </dl>
@@ -508,8 +520,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
  from the specified source to the specified target, then this method does not change the
  graph and returns <code>false</code>. If the edge was added to the graph, returns <code>true</code>.
  
- The provided edge object can either be null or must respect the source and target vertices
- that are provided as parameters.</div>
+ The provided edge object can either be <code>null</code> or must respect the source and target
+ vertices that are provided as parameters.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V,E)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="MutableGraphAdapter.html" title="type parameter in MutableGraphAdapter">V</a>,&#8203;com.google.common.graph.EndpointPair&lt;<a href="MutableGraphAdapter.html" title="type parameter in MutableGraphAdapter">V</a>&gt;&gt;</code></dd>
@@ -520,10 +532,10 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified edge.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if edge e is not null and the sourceVertex parameter does
-         not match the node U of the endpoint-pair</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if edge e is not null and the targetVertex parameter does
-         not match the node V of the endpoint-pair</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if either <code>sourceVertex</code> is not equal to node U
+                                  of <code>e</code> or <code>targetVertex</code> is not equal to node V
+                                  of <code>e</code>, or if the underlying graph disallows self loops</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>sourceVertex</code> or <code>targetVertex</code> is <code>null</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>, 
 <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a></dd>
@@ -564,6 +576,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()">addVertex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="MutableGraphAdapter.html" title="type parameter in MutableGraphAdapter">V</a>,&#8203;com.google.common.graph.EndpointPair&lt;<a href="MutableGraphAdapter.html" title="type parameter in MutableGraphAdapter">V</a>&gt;&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created vertex if added to the graph.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph was not initialized with a vertex supplier</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a></dd>
 </dl>

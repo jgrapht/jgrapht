@@ -530,8 +530,8 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <div class="block">Construct a new graph.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>vertexSupplier</code> - the vertex supplier, can be null</dd>
-<dd><code>edgeSupplier</code> - the edge supplier, can be null</dd>
+<dd><code>vertexSupplier</code> - the vertex supplier, can be <code>null</code></dd>
+<dd><code>edgeSupplier</code> - the edge supplier, can be <code>null</code></dd>
 <dd><code>type</code> - the graph type</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph type is mixed</dd>
@@ -551,12 +551,15 @@ implements <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt
 <div class="block">Construct a new graph.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>vertexSupplier</code> - the vertex supplier, can be null</dd>
-<dd><code>edgeSupplier</code> - the edge supplier, can be null</dd>
+<dd><code>vertexSupplier</code> - the vertex supplier, can be <code>null</code></dd>
+<dd><code>edgeSupplier</code> - the edge supplier, can be <code>null</code></dd>
 <dd><code>type</code> - the graph type</dd>
 <dd><code>graphSpecificsStrategy</code> - strategy for constructing low-level graph specifics</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph type is mixed</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>type</code> or <code>graphSpecificsStragegy</code>
+                              is <code>null</code>, or if <code>graphSpecificsStragegy</code> generates
+                              <code>null</code></dd>
 </dl>
 </li>
 </ul>
