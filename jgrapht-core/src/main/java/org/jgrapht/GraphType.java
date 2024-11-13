@@ -17,6 +17,8 @@
  */
 package org.jgrapht;
 
+import java.io.Serializable;
+
 /**
  * A graph type.
  * 
@@ -33,7 +35,7 @@ package org.jgrapht;
  * 
  * @author Dimitrios Michail
  */
-public interface GraphType
+public interface GraphType extends Serializable
 {
     /**
      * Returns {@code true} if all edges of the graph are directed, false otherwise.
