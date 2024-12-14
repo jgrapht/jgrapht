@@ -16,14 +16,12 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.alg.connectivity;;
+package org.jgrapht.alg.connectivity;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.junit.jupiter.api.Test;
-
-import org.jgrapht.alg.connectivity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
