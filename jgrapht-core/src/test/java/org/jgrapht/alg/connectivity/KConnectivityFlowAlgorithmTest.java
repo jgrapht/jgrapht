@@ -26,14 +26,14 @@ import org.junit.jupiter.api.Test;
 import org.jgrapht.alg.connectivity;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Tests for K-Connectivenness implemented with graph flows.
+ * 
+ * @author Azim Barhoumi
+ * @author Paul Enjalbert
+ */
 public class KConnectivityFlowAlgorithmTest {
-	/**
-	 * Tests for K-Connectivenness implemented with graph flows.
-	 * 
-	 * @author Azim Barhoumi
-	 * @author Paul Enjalbert
-	 */
-	
     @Test
     public void testEdgeConnectivitySmallUndirectedGraph() {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
