@@ -31,7 +31,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * <a href="https://en.wikipedia.org/wiki/K-edge-connected_graph"> edge connectivity and </a>
  * <a href="https://en.wikipedia.org/wiki/K-vertex-connected_graph"> vertex connectivity </a>.
  * 
- * A graph with n vertices is k-edge connected when k < n and if the size of the smallest subset of edges
+ * A graph with n vertices is k-edge connected when k is smaller than n and if the size of the smallest subset of edges
  * which disconnects the graph is equal to k. It's the same definition for vertex connectivity, by replacing edges with vertices.
  * 
  * This implementation uses a maximum flow algorithm and computes the number of different paths between two 
@@ -61,15 +61,15 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * @author Paul Enjalbert
  */
 
-public class KConnectivityFlowAlgorithm<V, E> {
-
-	/**
-	 * Value of vertex connectivity, for avoid double computing
-	 */
-	private int vertexConnectivity = -1;
-	/**
-	 * The tested graph
-	 */
+public class KConnectivityFlowAlgorithm<V, E>
+{
+    /**
+     * Value of vertex connectivity, for avoid double computing
+     */
+    private int vertexConnectivity = -1;
+    /**
+     * The tested graph
+     */
     private final Graph<V, E> graph;
     /**
      * The modified graph to compute vertex connectivity
@@ -81,8 +81,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
     private final Map<V, Integer> vertexMapping = new HashMap<>();
     
     /**
-	 * Value of edge connectivity, for avoid double computing
-	 */
+     * Value of edge connectivity, for avoid double computing
+     */
     private int edgeConnectivity = -1;
     /**
      * minimum degree value.
@@ -92,7 +92,7 @@ public class KConnectivityFlowAlgorithm<V, E> {
      * minimum degree vertex.
      */
     private V minDegreeVertex = null;
-
+    
     /**
      * Maximum flow algorithm for computing edge connectivity
      */
@@ -101,13 +101,14 @@ public class KConnectivityFlowAlgorithm<V, E> {
      * Maximum flow algorithm for computing vertex connectivity
      */
     private final MaximumFlowAlgorithm<Integer, DefaultEdge> vertexFlowAlgorithm;
-
+    
     /**
      * Constructs a k-connectivity algorithm for the given graph.
      *
      * @param graph the input graph
      */
-    public KConnectivityFlowAlgorithm(Graph<V, E> graph) {
+    public KConnectivityFlowAlgorithm(Graph<V, E> graph)
+    {
         this.graph = new AsUnweightedGraph<>(graph);
         this.edgeFlowAlgorithm = new EdmondsKarpMFImpl<>(this.graph);
 
@@ -122,7 +123,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
      *
      * @return the edge connectivity of the graph
      */
-    public int computeEdgeConnectivity() {
+    public int computeEdgeConnectivity()
+    {
         if (edgeConnectivity == -1) {
             edgeConnectivity = graph.getType().isDirected()
                 ? computeDirectedEdgeConnectivity()
@@ -136,17 +138,18 @@ public class KConnectivityFlowAlgorithm<V, E> {
      *
      * @return the vertex connectivity of the graph
      */
-    public int computeVertexConnectivity() {
-    	if(vertexConnectivity == -1)
-    	{
+    public int computeVertexConnectivity()
+    {
+        if(vertexConnectivity == -1)
+        {
             int connectivityFromNonNeighbors = computeConnectivityFromNonNeighbors(minDegreeVertex);
             int connectivityFromNeighbors = computeConnectivityFromNeighbors(minDegreeVertex);
 
             vertexConnectivity = Math.min(connectivityFromNonNeighbors, connectivityFromNeighbors);
-    	}
+        }
         return vertexConnectivity;
     }
-
+    
     /**
      * Return if the graph is {@code k} edge connected, use {@link #computeEdgeConnectivity() Compute Edge Connectivity Edge}
      * methods to have the result
@@ -155,7 +158,7 @@ public class KConnectivityFlowAlgorithm<V, E> {
      */
     public boolean isKEdgeConnect(int k)
     {
-    	return k <= computeEdgeConnectivity();
+        return k <= computeEdgeConnectivity();
     }
     
     /**
@@ -166,10 +169,11 @@ public class KConnectivityFlowAlgorithm<V, E> {
      */
     public boolean isKVertexConnect(int k)
     {
-    	return k <= computeVertexConnectivity();
+        return k <= computeVertexConnectivity();
     }
     
-    private int computeConnectivityFromNonNeighbors(V minDegreeVertex) {
+    private int computeConnectivityFromNonNeighbors(V minDegreeVertex)
+    {
         int minConnectivity = Integer.MAX_VALUE;
 
         for (V vertex : graph.vertexSet()) {
@@ -187,7 +191,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
         return minConnectivity;
     }
 
-    private int computeConnectivityFromNeighbors(V minDegreeVertex) {
+    private int computeConnectivityFromNeighbors(V minDegreeVertex)
+    {
         List<V> neighbors = Graphs.successorListOf(graph, minDegreeVertex);
         int minConnectivity = Integer.MAX_VALUE;
 
@@ -208,7 +213,7 @@ public class KConnectivityFlowAlgorithm<V, E> {
         
         //If all vertex are neighbors, i.e the graph is complete
         if(Integer.MAX_VALUE == minConnectivity){
-        	minConnectivity = graph.vertexSet().size() - 1;
+            minConnectivity = graph.vertexSet().size() - 1;
         }
 
         return minConnectivity;
@@ -218,7 +223,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
      * Compute the edge connectivity for an undirected graph
      * @return edge connectivity
      */
-    private int computeUndirectedEdgeConnectivity() {
+    private int computeUndirectedEdgeConnectivity()
+    {
         Set<V> dominatingSet = getDominatingSet();
         Iterator<V> iterator = dominatingSet.iterator();
 
@@ -240,7 +246,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
      * Compute the edge connectivity for an directed graph
      * @return edge connectivity
      */
-    private int computeDirectedEdgeConnectivity() {
+    private int computeDirectedEdgeConnectivity()
+    {
         List<V> vertices = new ArrayList<>(graph.vertexSet());
 
         int minConnectivity = Integer.MAX_VALUE;
@@ -253,18 +260,21 @@ public class KConnectivityFlowAlgorithm<V, E> {
         return minConnectivity;
     }
 
-    private int computeLocalEdgeConnectivity(V source, V target) {
+    private int computeLocalEdgeConnectivity(V source, V target)
+    {
         return (int) edgeFlowAlgorithm.getMaximumFlowValue(source, target);
     }
 
-    private int computeLocalVertexConnectivity(V source, V target) {
+    private int computeLocalVertexConnectivity(V source, V target)
+    {
         Integer sourceId = vertexMapping.get(source);
         Integer targetId = vertexMapping.get(target);
 
         return (int) vertexFlowAlgorithm.getMaximumFlowValue(sourceId + 1, targetId);
     }
 
-    private Set<V> getDominatingSet() {
+    private Set<V> getDominatingSet()
+    {
         Set<V> dominatingSet = new HashSet<>();
         Set<V> vertices = new HashSet<>(graph.vertexSet());
         Set<V> coveredVertices = new HashSet<>();
@@ -280,7 +290,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
         return dominatingSet;
     }
 
-    private void setMinDegreeVertex() {
+    private void setMinDegreeVertex()
+    {
         if (minDegreeVertex == null) {
             int minDegree = Integer.MAX_VALUE;
             V minDegreeVertex = null;
@@ -298,7 +309,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
         }
     }
 
-    private Graph<Integer, DefaultEdge> buildVertexNetwork(Graph<V, E> graph) {
+    private Graph<Integer, DefaultEdge> buildVertexNetwork(Graph<V, E> graph)
+    {
         Graph<Integer, DefaultEdge> network = new SimpleDirectedGraph<>(DefaultEdge.class);
 
         int vertexCounter = 0;
