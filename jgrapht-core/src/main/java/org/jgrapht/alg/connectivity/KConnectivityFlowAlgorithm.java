@@ -18,7 +18,6 @@
 package org.jgrapht.alg.connectivity;
 
 import java.util.*;
-import org.antlr.v4.runtime.misc.Pair;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
@@ -86,9 +85,13 @@ public class KConnectivityFlowAlgorithm<V, E> {
 	 */
     private int edgeConnectivity = -1;
     /**
-     * Pair which stock the minimum degree value and vertex.
+     * minimum degree value.
      */
-    private Pair<Integer, V> minDegreeVertex = null;
+    private int minDegreeValue = 0;
+    /**
+     * minimum degree vertex.
+     */
+    private V minDegreeVertex = null;
 
     /**
      * Maximum flow algorithm for computing edge connectivity
@@ -110,6 +113,8 @@ public class KConnectivityFlowAlgorithm<V, E> {
 
         this.vertexNetwork = buildVertexNetwork(graph);
         this.vertexFlowAlgorithm = new EdmondsKarpMFImpl<>(this.vertexNetwork);
+        
+        this.setMinDegreeVertex();
     }
 
     /**
@@ -134,8 +139,6 @@ public class KConnectivityFlowAlgorithm<V, E> {
     public int computeVertexConnectivity() {
     	if(vertexConnectivity == -1)
     	{
-    		V minDegreeVertex = getMinDegreeVertex().b;
-
             int connectivityFromNonNeighbors = computeConnectivityFromNonNeighbors(minDegreeVertex);
             int connectivityFromNeighbors = computeConnectivityFromNeighbors(minDegreeVertex);
 
@@ -230,7 +233,7 @@ public class KConnectivityFlowAlgorithm<V, E> {
             minConnectivity = Math.min(minConnectivity, localConnectivity);
         }
 
-        return Math.min(minConnectivity, getMinDegreeVertex().a);
+        return Math.min(minConnectivity, minDegreeValue);
     }
 
     /**
@@ -277,7 +280,7 @@ public class KConnectivityFlowAlgorithm<V, E> {
         return dominatingSet;
     }
 
-    private Pair<Integer, V> getMinDegreeVertex() {
+    private void setMinDegreeVertex() {
         if (minDegreeVertex == null) {
             int minDegree = Integer.MAX_VALUE;
             V minDegreeVertex = null;
@@ -290,10 +293,9 @@ public class KConnectivityFlowAlgorithm<V, E> {
                 }
             }
 
-            this.minDegreeVertex = new Pair<>(minDegree, minDegreeVertex);
+            this.minDegreeVertex = minDegreeVertex;
+            this.minDegreeValue = minDegree; 
         }
-
-        return minDegreeVertex;
     }
 
     private Graph<Integer, DefaultEdge> buildVertexNetwork(Graph<V, E> graph) {
