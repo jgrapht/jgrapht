@@ -31,9 +31,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Azim Barhoumi
  * @author Paul Enjalbert
  */
-public class KConnectivityFlowAlgorithmTest {
+public class KConnectivityFlowAlgorithmTest
+{
     @Test
-    public void testEdgeConnectivitySmallUndirectedGraph() {
+    public void testEdgeConnectivitySmallUndirectedGraph()
+    {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -48,7 +50,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testVertexConnectivitySmallUndirectedGraph() {
+    public void testVertexConnectivitySmallUndirectedGraph()
+    {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -63,7 +66,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testEdgeConnectivityLargeUndirectedGraph() {
+    public void testEdgeConnectivityLargeUndirectedGraph()
+    {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         
         for (int i = 0; i < 8; i++) {
@@ -90,7 +94,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testVertexConnectivityLargeUndirectedGraph() {
+    public void testVertexConnectivityLargeUndirectedGraph()
+    {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         
         for (int i = 0; i < 8; i++) {
@@ -116,7 +121,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testEdgeConnectivitySmallDirectedGraph() {
+    public void testEdgeConnectivitySmallDirectedGraph()
+    {
         SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -131,7 +137,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testVertexConnectivitySmallDirectedGraph() {
+    public void testVertexConnectivitySmallDirectedGraph()
+    {
         SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -146,7 +153,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testEdgeConnectivityLargeDirectedGraph() {
+    public void testEdgeConnectivityLargeDirectedGraph()
+    {
         SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         
         for (int i = 0; i < 6; i++) {
@@ -154,12 +162,12 @@ public class KConnectivityFlowAlgorithmTest {
         }
         
         int[][] edges = {
-        		{0, 1}, {0, 2},
-        		{1, 2}, {1, 3}, {1, 4}, {1, 5},
-        		{2, 3}, {2, 4}, {2, 4},
-        		{3, 4}, {3, 5},
-        		{4, 0}, {4, 1}, {4, 2}, {4, 5},
-        		{5, 0}, {5, 1}, {5, 2}  
+                {0, 1}, {0, 2},
+                {1, 2}, {1, 3}, {1, 4}, {1, 5},
+                {2, 3}, {2, 4}, {2, 4},
+                {3, 4}, {3, 5},
+                {4, 0}, {4, 1}, {4, 2}, {4, 5},
+                {5, 0}, {5, 1}, {5, 2}  
          };
         
         for (int[] edge : edges) {
@@ -172,7 +180,8 @@ public class KConnectivityFlowAlgorithmTest {
     }
 
     @Test
-    public void testVertexConnectivityLargeDirectedGraph() {
+    public void testVertexConnectivityLargeDirectedGraph()
+    {
         SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         
         for (int i = 0; i < 6; i++) {
@@ -180,12 +189,12 @@ public class KConnectivityFlowAlgorithmTest {
         }
         
         int[][] edges = {
-        		{0, 1}, {0, 2},
-        		{1, 2}, {1, 3}, {1, 4}, {1, 5},
-        		{2, 3}, {2, 4}, {2, 4},
-        		{3, 4}, {3, 5},
-        		{4, 0}, {4, 1}, {4, 2}, {4, 5},
-        		{5, 0}, {5, 1}, {5, 2}  
+                {0, 1}, {0, 2},
+                {1, 2}, {1, 3}, {1, 4}, {1, 5},
+                {2, 3}, {2, 4}, {2, 4},
+                {3, 4}, {3, 5},
+                {4, 0}, {4, 1}, {4, 2}, {4, 5},
+                {5, 0}, {5, 1}, {5, 2}  
          };
         
         for (int[] edge : edges) {
