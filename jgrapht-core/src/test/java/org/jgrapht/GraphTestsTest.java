@@ -590,16 +590,15 @@ public class GraphTestsTest
      *    3 ----- 4
      */
     public void testIsMedian() {
-    	
-    	// Test Case 1: Median Graph
+        // Test Case 1: Median Graph
         int[][] edges1 = { { 1, 2 }, { 2, 4 }, { 4, 6 }, { 6, 5 }, { 5, 3 }, { 3, 1 }, { 3, 4 } };
             Graph<Integer, DefaultEdge> graph1 = getGraph(edges1);
         // Check that the graph is a median graph
         assertTrue(MedianGraph.isMedian(graph1), "Expected the graph to be a median graph");
-        
+  
         // Test Case 2: Non median Graph
         int[][] edges2 = { { 1, 2 }, { 2, 4 }, { 4, 3 }, { 3, 1 }, { 1, 4 }, { 2, 3 } };
-        	Graph<Integer, DefaultEdge> graph2 = getGraph(edges2);
+            Graph<Integer, DefaultEdge> graph2 = getGraph(edges2);
         // Check that the graph is NOT a median graph
         assertFalse(MedianGraph.isMedian(graph2), "Expected the graph NOT to be a median graph");
 
