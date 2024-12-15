@@ -20,6 +20,7 @@ package org.jgrapht;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.median.MedianGraph;
 import org.jgrapht.alg.partition.*;
 import org.jgrapht.alg.planar.*;
 
@@ -864,5 +865,18 @@ public abstract class GraphTests
             throw new IllegalArgumentException(GRAPH_MUST_BE_WEIGHTED);
         }
         return graph;
+    }
+    
+    /**
+     * Determines whether the given graph is a median graph.
+     * 
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is a median graph; false otherwise
+     */
+    public static <V, E> boolean isMedian(Graph<V, E> graph)
+    {
+        return MedianGraph.isMedian(graph);
     }
 }
