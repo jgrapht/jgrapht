@@ -20,7 +20,6 @@ package org.jgrapht;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.median.MedianGraph;
 import org.jgrapht.alg.partition.*;
 import org.jgrapht.alg.planar.*;
 

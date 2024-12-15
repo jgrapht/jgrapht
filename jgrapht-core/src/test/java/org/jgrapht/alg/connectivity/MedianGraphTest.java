@@ -16,10 +16,12 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.alg.median;
+package org.jgrapht.alg.connectivity;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.jgrapht.Graphs;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -27,6 +29,20 @@ import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.junit.jupiter.api.Test;
 
 public class MedianGraphTest {
+	
+	/**
+     * Test with a null graph.
+     */
+    @Test
+    public void testNullGraph() {
+        Graph<String, DefaultEdge> nullGraph = null;
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> MedianGraph.isMedian(nullGraph),
+            "Expected isMedian to throw IllegalArgumentException for null graph"
+        );
+        assertEquals("Graph cannot be null or empty.", exception.getMessage());
+    }
 	
 	  @Test
 	    /**

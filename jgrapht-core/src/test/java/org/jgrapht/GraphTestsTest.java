@@ -17,7 +17,7 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.median.MedianGraph;
+import org.jgrapht.alg.connectivity.MedianGraph;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
