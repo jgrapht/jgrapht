@@ -36,7 +36,7 @@ public class KouMarkowskyBermanAlgorithmTest {
 
 	@Test
 	public void testExampleGraphSteinerTree() {
-		List<String> exampleVertices = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i");
+		List<String> exampleVertices = Arrays.asList("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9");
 		SimpleWeightedGraph<String, DefaultWeightedEdge> exampleGraph = new SimpleWeightedGraph<>(
 				DefaultWeightedEdge.class);
 
@@ -45,20 +45,20 @@ public class KouMarkowskyBermanAlgorithmTest {
 		}
 
 		// Add edges with weights
-		setEdgeWithWeight(exampleGraph, "a", "b", 10);
-		setEdgeWithWeight(exampleGraph, "b", "c", 8);
-		setEdgeWithWeight(exampleGraph, "c", "d", 9);
-		setEdgeWithWeight(exampleGraph, "d", "e", 2);
-		setEdgeWithWeight(exampleGraph, "c", "e", 2);
-		setEdgeWithWeight(exampleGraph, "f", "e", 1);
-		setEdgeWithWeight(exampleGraph, "i", "e", 1);
-		setEdgeWithWeight(exampleGraph, "b", "f", 1);
-		setEdgeWithWeight(exampleGraph, "f", "g", 0.5);
-		setEdgeWithWeight(exampleGraph, "a", "i", 1);
-		setEdgeWithWeight(exampleGraph, "g", "h", 0.5);
-		setEdgeWithWeight(exampleGraph, "h", "i", 0.5);
+		setEdgeWithWeight(exampleGraph, "v1", "v2", 10);
+		setEdgeWithWeight(exampleGraph, "v2", "v3", 8);
+		setEdgeWithWeight(exampleGraph, "v3", "v4", 9);
+		setEdgeWithWeight(exampleGraph, "v4", "v5", 2);
+		setEdgeWithWeight(exampleGraph, "v3", "v5", 2);
+		setEdgeWithWeight(exampleGraph, "v6", "v5", 1);
+		setEdgeWithWeight(exampleGraph, "v9", "v5", 1);
+		setEdgeWithWeight(exampleGraph, "v2", "v6", 1);
+		setEdgeWithWeight(exampleGraph, "v6", "v7", 0.5);
+		setEdgeWithWeight(exampleGraph, "v1", "v9", 1);
+		setEdgeWithWeight(exampleGraph, "v7", "v8", 0.5);
+		setEdgeWithWeight(exampleGraph, "v8", "v9", 0.5);
 
-		Set<String> terminals = new HashSet<>(Arrays.asList("a", "c", "e", "g"));
+		Set<String> terminals = new HashSet<>(Arrays.asList("v1", "v2", "v3", "v4"));
 
 		KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg = new KouMarkowskyBermanAlgorithm<>(
 				exampleGraph);
@@ -73,8 +73,7 @@ public class KouMarkowskyBermanAlgorithmTest {
 			double weight = exampleGraph.getEdgeWeight(edge);
 			System.out.printf("%s -- %s (%.2f)%n", src, tgt, weight);
 		}
-
-		assertEquals(5.5, steinerTree.getWeight(), 0.001);
+		assertEquals(8.0, steinerTree.getWeight(), 0.001);
 	}
 
 	private void setEdgeWithWeight(Graph<String, DefaultWeightedEdge> graph, String source, String target,
