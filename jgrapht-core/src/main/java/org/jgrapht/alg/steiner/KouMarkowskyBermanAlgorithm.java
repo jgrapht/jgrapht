@@ -37,11 +37,12 @@ public class KouMarkowskyBermanAlgorithm<V, E extends DefaultWeightedEdge> imple
 				V source = selectedList.get(i);
 				V target = selectedList.get(j);
 				GraphPath<V, E> path = dijkstraAlg.getPath(source, target);
+				double weight = path.getWeight();
 				storePaths.put(Pair.of(source, target), path);
 
 				E edge = completeGraph.addEdge(source, target);
 				if (edge != null && path != null) {
-					completeGraph.setEdgeWeight(edge, Math.round(path.getWeight() * 10) / 10.0);
+					completeGraph.setEdgeWeight(edge, weight);
 				}
 			}
 		}
@@ -57,8 +58,9 @@ public class KouMarkowskyBermanAlgorithm<V, E extends DefaultWeightedEdge> imple
 			V source = completeGraph.getEdgeSource(edge);
 			V target = completeGraph.getEdgeTarget(edge);
 			E newEdge = mstGraph.addEdge(source, target);
+			double edgeWeight = completeGraph.getEdgeWeight(edge);
 			if (newEdge != null) {
-				mstGraph.setEdgeWeight(newEdge, completeGraph.getEdgeWeight(edge));
+				mstGraph.setEdgeWeight(newEdge, edgeWeight);
 			}
 		}
 

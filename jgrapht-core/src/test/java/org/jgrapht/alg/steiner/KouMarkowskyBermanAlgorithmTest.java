@@ -53,7 +53,7 @@ public class KouMarkowskyBermanAlgorithmTest {
 		setEdgeWithWeight(exampleGraph, "v6", "v5", 1);
 		setEdgeWithWeight(exampleGraph, "v9", "v5", 1);
 		setEdgeWithWeight(exampleGraph, "v2", "v6", 1);
-		setEdgeWithWeight(exampleGraph, "v6", "v7", 0.5);
+		setEdgeWithWeight(exampleGraph, "v6", "v7", 1.0);
 		setEdgeWithWeight(exampleGraph, "v1", "v9", 1);
 		setEdgeWithWeight(exampleGraph, "v7", "v8", 0.5);
 		setEdgeWithWeight(exampleGraph, "v8", "v9", 0.5);
