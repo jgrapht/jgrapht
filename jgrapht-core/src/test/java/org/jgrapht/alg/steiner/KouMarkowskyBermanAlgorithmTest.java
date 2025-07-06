@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2024, by TODO and Contributors.
+ * (C) Copyright 2024, by Lena Büttel and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,19 +17,17 @@
  */
 package org.jgrapht.alg.steiner;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm.SteinerTree;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm.SteinerTree;
-
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class KouMarkowskyBermanAlgorithmTest {
@@ -63,7 +61,7 @@ public class KouMarkowskyBermanAlgorithmTest {
 		KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg = new KouMarkowskyBermanAlgorithm<>(
 				exampleGraph);
 
-		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSpanningTree(terminals);
+		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(terminals);
 
 		// Optional debug output:
 		System.out.println("Edges in Steiner Tree:");

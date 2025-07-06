@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2025, by TODO and Contributors.
+ * (C) Copyright 2025, by Lena Büttel and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,15 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
- * TODO: add docs for steiner tree
- * An algorithm which computes a <a href="https://en.wikipedia.org/wiki/Spanning_tree"> spanning
- * tree</a> of a given connected graph. In the case of disconnected graphs it would rather derive a
- * spanning <i>forest</i>.
+ * An algorithm which computes a <a href="https://en.wikipedia.org/wiki/Steiner_tree_problem">Steiner
+ * tree</a> of a given graph. A Steiner tree is a tree that connects a given set of vertices (called
+ * Steiner points or terminals) with minimum total weight, possibly using additional vertices not in
+ * the original set.
  *
  * @param <V> the graph vertices type
  * @param <E> the graph edge type
@@ -34,13 +35,13 @@ public interface SteinerTreeAlgorithm<V, E>
     /**
      * Computes a Steiner tree.
      *
-     * @param steinerPoints the Steiner vertices
-     * @return a Steiner tree
+     * @param steinerPoints the set of vertices (terminals) that must be connected by the Steiner tree
+     * @return a Steiner tree connecting all the specified vertices
      */
-	SteinerTree<E> getSpanningTree(Set<V> steinerPoints);
+	SteinerTree<E> getSteinerTree(Set<V> steinerPoints);
 
     /**
-     * A spanning tree.
+     * A Steiner tree.
      *
      * @param <E> the graph edge type
      */
@@ -49,21 +50,21 @@ public interface SteinerTreeAlgorithm<V, E>
     {
         /**
          * Returns the weight of the Steiner tree.
-         * 
+         *
          * @return weight of the Steiner tree
          */
         double getWeight();
 
         /**
          * Set of edges of the Steiner tree.
-         * 
+         *
          * @return edge set of the Steiner tree
          */
         Set<E> getEdges();
 
         /**
          * Returns an iterator over the edges in the Steiner tree.
-         * 
+         *
          * @return iterator over the edges in the Steiner tree.
          */
         @Override
@@ -74,11 +75,11 @@ public interface SteinerTreeAlgorithm<V, E>
     }
 
     /**
-     * Default implementation of the spanning tree interface.
+     * Default implementation of the Steiner tree interface.
      *
      * @param <E> the graph edge type
      */
-    class SpeinerTreeImpl<E>
+    class SteinerTreeImpl<E>
         implements SteinerTree<E>, Serializable
     {
         private static final long serialVersionUID = 402707108331703333L;
@@ -92,7 +93,7 @@ public interface SteinerTreeAlgorithm<V, E>
          * @param edges the edges
          * @param weight the weight
          */
-        public SpeinerTreeImpl(Set<E> edges, double weight)
+        public SteinerTreeImpl(Set<E> edges, double weight)
         {
             this.edges = edges;
             this.weight = weight;
