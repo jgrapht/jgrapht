@@ -81,14 +81,14 @@ public class KouMarkowskyBermanAlgorithmTest {
 
 		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(terminals);
 
-		// Optional debug output:
+		/* Optional debug output:
 		System.out.println("Edges in Steiner Tree:");
 		for (DefaultWeightedEdge edge : steinerTree.getEdges()) {
 			String src = exampleGraph.getEdgeSource(edge);
 			String tgt = exampleGraph.getEdgeTarget(edge);
 			double weight = exampleGraph.getEdgeWeight(edge);
 			System.out.printf("%s -- %s (%.2f)%n", src, tgt, weight);
-		}
+		}*/
 		assertEquals(8.0, steinerTree.getWeight(), 0.001);
 		
 		Set<String> exampleTreeVertices = steinerTree.getEdges().stream()
