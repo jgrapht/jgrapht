@@ -18,17 +18,27 @@
 package org.jgrapht.alg.steiner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
 import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm.SteinerTree;
-
+import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.junit.*;
 
 
@@ -74,6 +84,64 @@ public class KouMarkowskyBermanAlgorithmTest {
 			System.out.printf("%s -- %s (%.2f)%n", src, tgt, weight);
 		}
 		assertEquals(8.0, steinerTree.getWeight(), 0.001);
+		
+		Set<String> exampleTreeVertices = steinerTree.getEdges().stream()
+			    .flatMap((DefaultWeightedEdge e) -> {
+			        String source = exampleGraph.getEdgeSource(e);
+			        String target = exampleGraph.getEdgeTarget(e);
+			        return Stream.of(source, target);
+			    })
+			    .collect(Collectors.toSet());
+
+
+			for (String terminal : terminals) {
+			    assertTrue( "Missing terminal: " + terminal, exampleTreeVertices.contains(terminal));
+			}
+			
+		assertEquals(exampleTreeVertices.size() - 1, steinerTree.getEdges().size());
+
+	}
+	
+	@Test
+	public void testRandomGraphSteinerTree() {
+
+        Graph<String, DefaultWeightedEdge> gnpGraph = GraphTypeBuilder.undirected().weighted(true).edgeClass(DefaultWeightedEdge.class).vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph(); 
+		
+        GnpRandomGraphGenerator<String, DefaultWeightedEdge> gnpRandomGraphGenerator =  new GnpRandomGraphGenerator <> (25, 0.5);
+        gnpRandomGraphGenerator.generateGraph(gnpGraph);
+        
+        Random rand = new Random();
+		
+		for(DefaultWeightedEdge edge : gnpGraph.edgeSet()) {
+            double weight = rand.nextInt(10) + ((1.0 + rand.nextInt(10)) / 10);
+			gnpGraph.setEdgeWeight(edge, weight);
+		}
+		
+		KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg = new KouMarkowskyBermanAlgorithm<>(
+				gnpGraph);
+		
+		List<String> shuffled = new ArrayList<>(gnpGraph.vertexSet());
+        Collections.shuffle(shuffled);
+
+        Set<String> selected = new HashSet<> (shuffled.subList(0, 10));
+
+		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSpanningTree(selected);
+
+		Set<String> gnpTreeVertices = steinerTree.getEdges().stream()
+			    .flatMap((DefaultWeightedEdge e) -> {
+			        String source = gnpGraph.getEdgeSource(e);
+			        String target = gnpGraph.getEdgeTarget(e);
+			        return Stream.of(source, target);
+			    })
+			    .collect(Collectors.toSet());
+
+
+			for (String vertex : selected) {
+			    assertTrue( "Missing terminal: " + vertex, gnpTreeVertices.contains(vertex));
+			}
+			
+		assertEquals(gnpTreeVertices.size() - 1, steinerTree.getEdges().size());
+
 	}
 
 	private void setEdgeWithWeight(Graph<String, DefaultWeightedEdge> graph, String source, String target,
