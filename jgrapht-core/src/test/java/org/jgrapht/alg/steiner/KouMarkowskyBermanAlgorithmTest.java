@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2024, by TODO and Contributors.
+ * (C) Copyright 2025, by Lena Büttel and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.steiner;
 
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -33,13 +34,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm.SteinerTree;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
 import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm.SteinerTree;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class KouMarkowskyBermanAlgorithmTest {
@@ -73,7 +79,7 @@ public class KouMarkowskyBermanAlgorithmTest {
 		KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg = new KouMarkowskyBermanAlgorithm<>(
 				exampleGraph);
 
-		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSpanningTree(terminals);
+		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(terminals);
 
 		// Optional debug output:
 		System.out.println("Edges in Steiner Tree:");
@@ -125,7 +131,7 @@ public class KouMarkowskyBermanAlgorithmTest {
 
         Set<String> selected = new HashSet<> (shuffled.subList(0, 10));
 
-		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSpanningTree(selected);
+		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(selected);
 
 		Set<String> gnpTreeVertices = steinerTree.getEdges().stream()
 			    .flatMap((DefaultWeightedEdge e) -> {
