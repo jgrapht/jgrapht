@@ -49,6 +49,7 @@ module org.jgrapht.core
     exports org.jgrapht.alg.shortestpath;
     exports org.jgrapht.alg.similarity;
     exports org.jgrapht.alg.spanning;
+    exports org.jgrapht.alg.steiner;
     exports org.jgrapht.alg.tour;
     exports org.jgrapht.alg.transform;
     exports org.jgrapht.alg.util;
