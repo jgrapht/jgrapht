@@ -20,41 +20,27 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the {@link ChordalityInspector}
  *
  * @author Timofey Chudakov
  */
-@RunWith(Parameterized.class)
 public class ChordalityInspectorTest
 {
-    private ChordalityInspector.IterationOrder iterationOrder;
-
-    public ChordalityInspectorTest(ChordalityInspector.IterationOrder iterationOrder)
-    {
-        this.iterationOrder = iterationOrder;
-    }
-
-    @Parameterized.Parameters
-    public static Object[] params()
-    {
-        return new Object[] { ChordalityInspector.IterationOrder.MCS,
-            ChordalityInspector.IterationOrder.LEX_BFS };
-    }
-
     /**
      * Tests usage of the correct iteration order
      */
-    @Test
-    public void testIterationOrder()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIterationOrder(ChordalityInspector.IterationOrder iterationOrder)
     {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         ChordalityInspector<Integer, DefaultEdge> inspector =
@@ -84,8 +70,9 @@ public class ChordalityInspectorTest
      * Tests whether repeated calls to the {@link ChordalityInspector#getPerfectEliminationOrder()}
      * return the same vertex order.
      */
-    @Test
-    public void testPerfectEliminationOrder()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testPerfectEliminationOrder(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
@@ -103,13 +90,15 @@ public class ChordalityInspectorTest
     /**
      * Tests whether returned list is unmodifiable
      */
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testUnmodifiableList()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
-        List<Integer> perfectEliminationOrder = inspector.getPerfectEliminationOrder();
-        perfectEliminationOrder.add(0);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+            ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+            List<Integer> perfectEliminationOrder = inspector.getPerfectEliminationOrder();
+            perfectEliminationOrder.add(0);
+        });
     }
 
     /**
@@ -290,8 +279,9 @@ public class ChordalityInspectorTest
     /**
      * Basic test for {@link ChordalityInspector#isPerfectEliminationOrder(List)}
      */
-    @Test
-    public void testIsPerfectEliminationOrder1()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIsPerfectEliminationOrder1(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges = { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
@@ -305,8 +295,9 @@ public class ChordalityInspectorTest
      * First test on 4-vertex cycle: 1-2-3-4-1 <br>
      * Second test with chord 2-4 added, so that the graph becomes chordal
      */
-    @Test
-    public void testIsPerfectEliminationOrder2()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIsPerfectEliminationOrder2(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges = { { 1, 2 }, { 1, 4 }, { 2, 3 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
@@ -315,12 +306,12 @@ public class ChordalityInspectorTest
         ChordalityInspector<Integer, DefaultEdge> inspector =
             new ChordalityInspector<>(graph, iterationOrder);
         assertFalse(
-            "Not a perfect elimination order: cycle 1->2->3->4->1 has non chord",
-            inspector.isPerfectEliminationOrder(order));
+            inspector.isPerfectEliminationOrder(order),
+            "Not a perfect elimination order: cycle 1->2->3->4->1 has non chord");
         graph.addEdge(2, 4);
         assertTrue(
-            "Valid perfect elimination order: no induced cycles of length > 3",
-            inspector.isPerfectEliminationOrder(order));
+            inspector.isPerfectEliminationOrder(order),
+            "Valid perfect elimination order: no induced cycles of length > 3");
     }
 
     /**
@@ -333,8 +324,9 @@ public class ChordalityInspectorTest
      * ...........\.|<br>
      * ............10 <br>
      */
-    @Test
-    public void testIsPerfectEliminationOrder3()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIsPerfectEliminationOrder3(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges =
             { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 3 }, { 3, 4 }, { 3, 5 }, { 3, 6 }, { 4, 5 },
@@ -348,8 +340,9 @@ public class ChordalityInspectorTest
     /**
      * Test on big chordal graph with valid perfect elimination order
      */
-    @Test
-    public void testIsPerfectEliminationOrder4()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIsPerfectEliminationOrder4(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges = { { 1, 2 }, { 1, 3 }, { 1, 4 }, { 2, 3 }, { 3, 4 }, { 3, 5 }, { 3, 6 },
             { 3, 7 }, { 4, 5 }, { 5, 6 }, { 5, 7 }, { 6, 7 }, { 6, 8 }, { 7, 9 }, { 7, 10 },
@@ -358,15 +351,16 @@ public class ChordalityInspectorTest
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         assertTrue(
-            "Valid perfect elimination order",
-            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
+            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order),
+            "Valid perfect elimination order");
     }
 
     /**
      * Test on chordal graph with invalid perfect elimination order
      */
-    @Test
-    public void testIsPerfectEliminationOrder5()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIsPerfectEliminationOrder5(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges = { { 1, 2 }, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, { 3, 5 }, { 4, 5 },
             { 4, 6 }, { 5, 6 }, };
@@ -374,15 +368,16 @@ public class ChordalityInspectorTest
 
         List<Integer> order = Arrays.asList(1, 2, 5, 6, 4, 3);
         assertFalse(
-            "Graph is chordal, order isn't perfect elimination order",
-            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
+            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order),
+            "Graph is chordal, order isn't perfect elimination order");
     }
 
     /**
      * Test on graph with 5-vertex cycle 2-4-6-8-10-2 with no chords
      */
-    @Test
-    public void testIsPerfectEliminationOrder6()
+    @ParameterizedTest
+    @EnumSource(ChordalityInspector.IterationOrder.class)
+    public void testIsPerfectEliminationOrder6(ChordalityInspector.IterationOrder iterationOrder)
     {
         int[][] edges = { { 1, 2 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, { 4, 5 }, { 4, 6 }, { 5, 6 },
             { 6, 7 }, { 6, 8 }, { 7, 8 }, { 8, 9 }, { 8, 10 }, { 9, 10 }, { 10, 1 }, { 10, 2 }, };
@@ -390,8 +385,8 @@ public class ChordalityInspectorTest
 
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         assertFalse(
-            "Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order",
-            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
+            new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order),
+            "Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order");
     }
 
     /**

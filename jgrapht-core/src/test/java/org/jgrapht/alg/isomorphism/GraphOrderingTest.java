@@ -19,12 +19,14 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing the class GraphOrdering
@@ -124,31 +126,31 @@ public class GraphOrderingTest
         assertArrayEquals(v4InsExpected, v4Ins);
         assertArrayEquals(v5InsExpected, v5Ins);
 
-        assertEquals(false, g1Ordering.hasEdge(v1o, v1o));
-        assertEquals(true, g1Ordering.hasEdge(v1o, v2o));
-        assertEquals(true, g1Ordering.hasEdge(v1o, v3o));
-        assertEquals(true, g1Ordering.hasEdge(v1o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v1o, v5o));
-        assertEquals(true, g1Ordering.hasEdge(v2o, v1o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v3o));
-        assertEquals(true, g1Ordering.hasEdge(v2o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v5o));
-        assertEquals(true, g1Ordering.hasEdge(v3o, v1o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v5o));
-        assertEquals(true, g1Ordering.hasEdge(v4o, v1o));
-        assertEquals(true, g1Ordering.hasEdge(v4o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v5o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v1o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v5o));
+        assertFalse(g1Ordering.hasEdge(v1o, v1o));
+        assertTrue(g1Ordering.hasEdge(v1o, v2o));
+        assertTrue(g1Ordering.hasEdge(v1o, v3o));
+        assertTrue(g1Ordering.hasEdge(v1o, v4o));
+        assertFalse(g1Ordering.hasEdge(v1o, v5o));
+        assertTrue(g1Ordering.hasEdge(v2o, v1o));
+        assertFalse(g1Ordering.hasEdge(v2o, v2o));
+        assertFalse(g1Ordering.hasEdge(v2o, v3o));
+        assertTrue(g1Ordering.hasEdge(v2o, v4o));
+        assertFalse(g1Ordering.hasEdge(v2o, v5o));
+        assertTrue(g1Ordering.hasEdge(v3o, v1o));
+        assertFalse(g1Ordering.hasEdge(v3o, v2o));
+        assertFalse(g1Ordering.hasEdge(v3o, v3o));
+        assertFalse(g1Ordering.hasEdge(v3o, v4o));
+        assertFalse(g1Ordering.hasEdge(v3o, v5o));
+        assertTrue(g1Ordering.hasEdge(v4o, v1o));
+        assertTrue(g1Ordering.hasEdge(v4o, v2o));
+        assertFalse(g1Ordering.hasEdge(v4o, v3o));
+        assertFalse(g1Ordering.hasEdge(v4o, v4o));
+        assertFalse(g1Ordering.hasEdge(v4o, v5o));
+        assertFalse(g1Ordering.hasEdge(v5o, v1o));
+        assertFalse(g1Ordering.hasEdge(v5o, v2o));
+        assertFalse(g1Ordering.hasEdge(v5o, v3o));
+        assertFalse(g1Ordering.hasEdge(v5o, v4o));
+        assertFalse(g1Ordering.hasEdge(v5o, v5o));
     }
 
     @Test
@@ -243,30 +245,30 @@ public class GraphOrderingTest
         assertArrayEquals(v4InsExpected, v4Ins);
         assertArrayEquals(v5InsExpected, v5Ins);
 
-        assertEquals(false, g1Ordering.hasEdge(v1o, v1o));
-        assertEquals(true, g1Ordering.hasEdge(v1o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v1o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v1o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v1o, v5o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v1o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v2o));
-        assertEquals(true, g1Ordering.hasEdge(v2o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v2o, v5o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v1o));
-        assertEquals(true, g1Ordering.hasEdge(v3o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v3o));
-        assertEquals(true, g1Ordering.hasEdge(v3o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v3o, v5o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v1o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v4o, v5o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v1o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v2o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v3o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v4o));
-        assertEquals(false, g1Ordering.hasEdge(v5o, v5o));
+        assertFalse(g1Ordering.hasEdge(v1o, v1o));
+        assertTrue(g1Ordering.hasEdge(v1o, v2o));
+        assertFalse(g1Ordering.hasEdge(v1o, v3o));
+        assertFalse(g1Ordering.hasEdge(v1o, v4o));
+        assertFalse(g1Ordering.hasEdge(v1o, v5o));
+        assertFalse(g1Ordering.hasEdge(v2o, v1o));
+        assertFalse(g1Ordering.hasEdge(v2o, v2o));
+        assertTrue(g1Ordering.hasEdge(v2o, v3o));
+        assertFalse(g1Ordering.hasEdge(v2o, v4o));
+        assertFalse(g1Ordering.hasEdge(v2o, v5o));
+        assertFalse(g1Ordering.hasEdge(v3o, v1o));
+        assertTrue(g1Ordering.hasEdge(v3o, v2o));
+        assertFalse(g1Ordering.hasEdge(v3o, v3o));
+        assertTrue(g1Ordering.hasEdge(v3o, v4o));
+        assertFalse(g1Ordering.hasEdge(v3o, v5o));
+        assertFalse(g1Ordering.hasEdge(v4o, v1o));
+        assertFalse(g1Ordering.hasEdge(v4o, v2o));
+        assertFalse(g1Ordering.hasEdge(v4o, v3o));
+        assertFalse(g1Ordering.hasEdge(v4o, v4o));
+        assertFalse(g1Ordering.hasEdge(v4o, v5o));
+        assertFalse(g1Ordering.hasEdge(v5o, v1o));
+        assertFalse(g1Ordering.hasEdge(v5o, v2o));
+        assertFalse(g1Ordering.hasEdge(v5o, v3o));
+        assertFalse(g1Ordering.hasEdge(v5o, v4o));
+        assertFalse(g1Ordering.hasEdge(v5o, v5o));
     }
 }

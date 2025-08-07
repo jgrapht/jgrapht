@@ -19,11 +19,12 @@ package org.jgrapht.nio.lemon;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link LemonExporter}
@@ -36,7 +37,7 @@ public class LemonExporterTest
     private static final String V2 = "v2";
     private static final String V3 = "v3";
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     // @formatter:off
     private static final String UNDIRECTED =
@@ -117,7 +118,7 @@ public class LemonExporterTest
         LemonExporter<String, DefaultEdge> exporter = new LemonExporter<String, DefaultEdge>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED, res);
     }
 
@@ -136,7 +137,7 @@ public class LemonExporterTest
         exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_DEFAULT_WEIGHTS, res);
     }
 
@@ -158,7 +159,7 @@ public class LemonExporterTest
         exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WEIGHTED, res);
     }
     
@@ -177,7 +178,7 @@ public class LemonExporterTest
         exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WITH_ESCAPE, res);
     }
 

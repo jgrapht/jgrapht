@@ -18,13 +18,13 @@
 package org.jgrapht.nio.dimacs;
 
 import org.jgrapht.alg.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests
@@ -45,7 +45,7 @@ public class DIMACSEventDrivenImporterTest
         DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter();
 
         importer.addVertexCountConsumer(count -> {
-            assertEquals(count, Integer.valueOf(11));
+            assertEquals(11, count);
         });
         List<Pair<Integer, Integer>> collected = new ArrayList<>();
         importer.addEdgeConsumer(t -> {
@@ -62,8 +62,8 @@ public class DIMACSEventDrivenImporterTest
 
         for (int i = 0; i < edges.length; i++) {
             Pair<Integer, Integer> e = collected.get(i);
-            assertEquals(Integer.valueOf(edges[i][0]), e.getFirst());
-            assertEquals(Integer.valueOf(edges[i][1]), e.getSecond());
+            assertEquals(edges[i][0], e.getFirst());
+            assertEquals(edges[i][1], e.getSecond());
         }
     }
 
@@ -92,7 +92,7 @@ public class DIMACSEventDrivenImporterTest
         DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter();
 
         importer.addVertexCountConsumer(count -> {
-            assertEquals(count, Integer.valueOf(11));
+            assertEquals(11, count);
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(t -> {
@@ -110,7 +110,7 @@ public class DIMACSEventDrivenImporterTest
             Triple<Integer, Integer, Double> e = collected.get(i);
             assertEquals(nameMap.get(edge[0]), e.getFirst());
             assertEquals(nameMap.get(edge[1]), e.getSecond());
-            assertEquals(Double.valueOf(edge[2]), e.getThird());
+            assertEquals(edge[2], e.getThird());
             i++;
         }
     }
@@ -141,7 +141,7 @@ public class DIMACSEventDrivenImporterTest
             new DIMACSEventDrivenImporter().zeroBasedNumbering(false);
 
         importer.addVertexCountConsumer(count -> {
-            assertEquals(count, Integer.valueOf(11));
+            assertEquals(11, count);
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(t -> {
@@ -159,7 +159,7 @@ public class DIMACSEventDrivenImporterTest
             Triple<Integer, Integer, Double> e = collected.get(i);
             assertEquals(nameMap.get(edge[0]), e.getFirst());
             assertEquals(nameMap.get(edge[1]), e.getSecond());
-            assertEquals(Double.valueOf(edge[2]), e.getThird());
+            assertEquals(edge[2], e.getThird());
             i++;
         }
     }
@@ -190,7 +190,7 @@ public class DIMACSEventDrivenImporterTest
         importer = importer.renumberVertices(false);
 
         importer.addVertexCountConsumer(count -> {
-            assertEquals(count, Integer.valueOf(11));
+            assertEquals(11, count);
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(t -> {
@@ -208,7 +208,7 @@ public class DIMACSEventDrivenImporterTest
             Triple<Integer, Integer, Double> e = collected.get(i);
             assertEquals(nameMap.get(edge[0]), e.getFirst());
             assertEquals(nameMap.get(edge[1]), e.getSecond());
-            assertEquals(Double.valueOf(edge[2]), e.getThird());
+            assertEquals(edge[2], e.getThird());
             i++;
         }
     }
@@ -239,7 +239,7 @@ public class DIMACSEventDrivenImporterTest
         importer = importer.renumberVertices(false).zeroBasedNumbering(false);
 
         importer.addVertexCountConsumer(count -> {
-            assertEquals(count, Integer.valueOf(11));
+            assertEquals(11, count);
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(t -> {
@@ -257,7 +257,7 @@ public class DIMACSEventDrivenImporterTest
             Triple<Integer, Integer, Double> e = collected.get(i);
             assertEquals(nameMap.get(edge[0]), e.getFirst());
             assertEquals(nameMap.get(edge[1]), e.getSecond());
-            assertEquals(Double.valueOf(edge[2]), e.getThird());
+            assertEquals(edge[2], e.getThird());
             i++;
         }
     }

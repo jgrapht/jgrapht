@@ -22,12 +22,12 @@ import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
  */
 public class CSVImporterTest
 {
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     public <E> Graph<String, E> readGraph(
         String input, CSVFormat format, Character delimiter, Class<E> edgeClass, boolean directed,

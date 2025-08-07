@@ -22,11 +22,11 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link IntVertexDijkstraShortestPath}.
@@ -251,11 +251,7 @@ public class IntVertexDijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(1, 2);
         g.setEdgeWeight(we12, -100.0);
 
-        try {
-            new IntVertexDijkstraShortestPath<>(g).getPath(1, 2);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new IntVertexDijkstraShortestPath<>(g).getPath(1, 2));
     }
 
 }

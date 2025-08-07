@@ -30,7 +30,7 @@ import java.util.function.*;
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods.
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods.
  * </p>
  *
  * <p>
@@ -57,9 +57,11 @@ public class GraphDelegator<V, E>
     private final Supplier<E> edgeSupplier;
 
     /**
-     * Constructor
+     * Constructs a new {@code GraphDelegator}.
      *
      * @param graph the backing graph (the delegate).
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public GraphDelegator(Graph<V, E> graph)
     {
@@ -67,12 +69,15 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Constructs a new {@code GraphDelegator}.
      * 
      * @param graph the backing graph (the delegate).
      * @param vertexSupplier vertex supplier for the delegator. Can be null in which case the
      *        backing graph vertex supplier will be used.
      * @param edgeSupplier edge supplier for the delegator. Can be null in which case the backing
      *        graph edge supplier will be used.
+     * 
+     * @throws NullPointerException if {@code graph} is {@code null}
      */
     public GraphDelegator(Graph<V, E> graph, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
@@ -83,11 +88,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Returns the delegator's vertex supplier or the backing graph's vertex supplier in case of
-     * null.
+     * @return the vertex supplier of this delegator or the backing graph's
+     *         vertex supplier if this delegator does not have a vertex supplier
      */
     @Override
     public Supplier<V> getVertexSupplier()
@@ -100,10 +102,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Returns the delegator's edge supplier or the backing graph's edge supplier in case of null.
+     * @return the edge supplier of this delegator or the backing graph's
+     *         edge supplier if this delegator does not have an edge supplier
      */
     @Override
     public Supplier<E> getEdgeSupplier()
@@ -134,7 +134,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -150,7 +153,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -159,7 +165,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public V addVertex()
@@ -175,7 +182,9 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -267,7 +276,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)
@@ -276,7 +285,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -285,7 +294,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeVertex(V v)
@@ -330,7 +339,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -339,7 +348,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public void setEdgeWeight(E e, double weight)

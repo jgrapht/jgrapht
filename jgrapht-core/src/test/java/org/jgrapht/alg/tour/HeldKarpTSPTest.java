@@ -19,13 +19,12 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link HeldKarpTSP}
@@ -33,7 +32,7 @@ import static org.junit.Assert.*;
  * @author Alexandru Valeanu
  *
  */
-@Category(SlowTests.class)
+@Tag("slow")
 public class HeldKarpTSPTest
 {
     static Graph<String, DefaultWeightedEdge> directedGraph()
@@ -315,11 +314,13 @@ public class HeldKarpTSPTest
         assertNull(tour);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidInstanceEmpty()
     {
-        Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        new HeldKarpTSP<String, DefaultEdge>().getTour(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+            new HeldKarpTSP<String, DefaultEdge>().getTour(g);
+        });
     }
 
     @Test

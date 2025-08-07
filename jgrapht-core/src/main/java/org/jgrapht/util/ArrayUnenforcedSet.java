@@ -51,7 +51,7 @@ public class ArrayUnenforcedSet<E>
      * Constructs a set containing the elements of the specified collection.
      *
      * @param c the collection whose elements are to be placed into this set
-     * @throws NullPointerException if the specified collection is null
+     * @throws NullPointerException if the specified collection is {@code null}
      */
     public ArrayUnenforcedSet(Collection<? extends E> c)
     {

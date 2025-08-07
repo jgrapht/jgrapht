@@ -17,6 +17,8 @@
  */
 package org.jgrapht.util;
 
+import java.util.Objects;
+
 /**
  * Utility class to simplify handling of arrays.
  *
@@ -36,6 +38,9 @@ public class ArrayUtil
      * @param arr the array
      * @param from the index of the first element (inclusive) inside the range to reverse
      * @param to the index of the last element (inclusive) inside the range to reverse
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code from} or {@code to} is out of bounds
      */
     public static final <V> void reverse(V[] arr, int from, int to)
     {
@@ -50,13 +55,14 @@ public class ArrayUtil
      * @param arr the array
      * @param from the index of the first element (inclusive) inside the range to reverse
      * @param to the index of the last element (inclusive) inside the range to reverse
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code from} or {@code to} is out of bounds
      */
     public static final void reverse(int[] arr, int from, int to)
     {
         for (int i = from, j = to; i < j; ++i, --j) {
-            int tmp = arr[j];
-            arr[j] = arr[i];
-            arr[i] = tmp;
+            swap(arr, i, j);
         }
     }
 
@@ -67,10 +73,54 @@ public class ArrayUtil
      * @param arr the array
      * @param i the index of the first element
      * @param j the index of the second element
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code i} or {@code j} is out of bounds
      */
     public static final <V> void swap(V[] arr, int i, int j)
     {
+        Objects.requireNonNull(arr);
         V tmp = arr[j];
+        arr[j] = arr[i];
+        arr[i] = tmp;
+    }
+
+    /**
+     * Swaps the two elements at the specified indices in the given double array.
+     *
+     * @param arr the array
+     * @param i the index of the first element
+     * @param j the index of the second element
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code i} or {@code j} is out of bounds
+     * 
+     * @since 1.5.3
+     */
+    public static void swap(double[] arr, int i, int j)
+    {
+        Objects.requireNonNull(arr);
+        double tmp = arr[j];
+        arr[j] = arr[i];
+        arr[i] = tmp;
+    }
+
+    /**
+     * Swaps the two elements at the specified indices in the given int array.
+     *
+     * @param arr the array
+     * @param i the index of the first element
+     * @param j the index of the second element
+     * 
+     * @throws NullPointerException if {@code arr == null}
+     * @throws ArrayIndexOutOfBoundsException if either one of {@code i} or {@code j} is out of bounds
+     * 
+     * @since 1.5.3
+     */
+    public static void swap(int[] arr, int i, int j)
+    {
+        Objects.requireNonNull(arr);
+        int tmp = arr[j];
         arr[j] = arr[i];
         arr[i] = tmp;
     }

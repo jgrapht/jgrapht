@@ -22,7 +22,7 @@ import org.jgrapht.alg.cycle.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;

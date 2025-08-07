@@ -17,6 +17,8 @@
  */
 package org.jgrapht.event;
 
+import java.util.EventListener;
+
 /**
  * A listener on graph iterator or on a graph traverser.
  *
@@ -25,7 +27,7 @@ package org.jgrapht.event;
  *
  * @author Barak Naveh
  */
-public interface TraversalListener<V, E>
+public interface TraversalListener<V, E> extends EventListener
 {
     /**
      * Called to inform listeners that the traversal of the current connected component has

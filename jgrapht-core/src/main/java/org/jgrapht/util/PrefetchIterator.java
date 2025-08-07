@@ -20,12 +20,12 @@ package org.jgrapht.util;
 import java.util.*;
 
 /**
- * Utility class to help implement an iterator/enumerator in which the hasNext() method needs to
+ * Utility class to help implement an iterator/enumerator in which the {@link #hasNext()} method needs to
  * calculate the next elements ahead of time.
  *
  * <p>
  * Many classes which implement an iterator face a common problem: if there is no easy way to
- * calculate hasNext() other than to call getNext(), then they save the result for fetching in the
+ * calculate {@link #hasNext()} other than to call getNext(), then they save the result for fetching in the
  * next call to getNext(). This utility helps in doing just that.
  *
  * <p>
@@ -158,11 +158,12 @@ public class PrefetchIterator<E>
 
     /**
      * Tests whether the enumeration started as an empty one. It does not matter if it
-     * hasMoreElements() now, only at initialization time. Efficiency: if nextElements(),
-     * hasMoreElements() were never used, it activates the hasMoreElements() once. Else it is
-     * immediately(O(1))
+     * {@link #hasMoreElements()} now, only at initialization time.
      * 
-     * @return true if the enumeration started as an empty one, false otherwise.
+     * <p>Efficiency: if {@link #nextElement()}, {@link #hasMoreElements()} were never used,
+     * it activates the {@link #hasMoreElements()} once. Else it is immediately $(O(1))$
+     * 
+     * @return {@code true} if the enumeration started as an empty one, {@code false} otherwise.
      */
     public boolean isEnumerationStartedEmpty()
     {

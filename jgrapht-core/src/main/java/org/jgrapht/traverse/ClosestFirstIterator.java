@@ -60,11 +60,13 @@ public class ClosestFirstIterator<V, E>
     /**
      * Creates a new closest-first iterator for the specified graph. Iteration will start at the
      * specified start vertex and will be limited to the connected component that includes that
-     * vertex. If the specified start vertex is <code>null</code>, iteration will start at an
+     * vertex. If the specified start vertex is {@code null}, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
+     * 
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex)
     {
@@ -81,6 +83,8 @@ public class ClosestFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
+     * 
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
     {
@@ -91,13 +95,14 @@ public class ClosestFirstIterator<V, E>
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertex and will be limited to the subset of the connected
      * component which includes that vertex and is reachable via paths of weighted length less than
-     * or equal to the specified radius. The specified start vertex may not be <code>
-     * null</code>.
+     * or equal to the specified radius. The specified start vertex may not be {@code null}.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     * @param radius limit on weighted path length, or {@link Double#POSITIVE_INFINITY} for unbounded
      *        search.
+     * 
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
@@ -110,14 +115,16 @@ public class ClosestFirstIterator<V, E>
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertex and will be limited to the subset of the connected
      * component which includes that vertex and is reachable via paths of weighted length less than
-     * or equal to the specified radius. The specified start vertex may not be <code>
-     * null</code>. This algorithm will use the heap supplied by the {@code heapSupplier}.
+     * or equal to the specified radius. The specified start vertex may not be {@code null}.
+     * This algorithm will use the heap supplied by the {@code heapSupplier}.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     * @param radius limit on weighted path length, or {@link Double#POSITIVE_INFINITY} for unbounded
      *        search.
      * @param heapSupplier supplier of the preferable heap implementation
+     * 
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public ClosestFirstIterator(
         Graph<V, E> g, V startVertex, double radius,
@@ -132,15 +139,18 @@ public class ClosestFirstIterator<V, E>
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertices and will be limited to the subset of the graph
      * reachable from those vertices via paths of weighted length less than or equal to the
-     * specified radius. The specified collection of start vertices may not be <code>null</code>.
+     * specified radius. The specified collection of start vertices may not be {@code null}.
      * Iteration order is based on minimum distance from any of the start vertices, regardless of
      * the order in which the start vertices are supplied. Because of this, the entire traversal is
      * treated as if it were over a single connected component with respect to events fired.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     * @param radius limit on weighted path length, or {@link Double#POSITIVE_INFINITY} for unbounded
      *        search.
+     * 
+     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not a vertex of {@code g}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius)
     {
@@ -151,7 +161,7 @@ public class ClosestFirstIterator<V, E>
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertices and will be limited to the subset of the graph
      * reachable from those vertices via paths of weighted length less than or equal to the
-     * specified radius. The specified collection of start vertices may not be <code>null</code>.
+     * specified radius. The specified collection of start vertices may not be {@code null}.
      * Iteration order is based on minimum distance from any of the start vertices, regardless of
      * the order in which the start vertices are supplied. Because of this, the entire traversal is
      * treated as if it were over a single connected component with respect to events fired. This
@@ -159,9 +169,12 @@ public class ClosestFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     * @param radius limit on weighted path length, or {@link Double#POSITIVE_INFINITY} for unbounded
      *        search.
      * @param heapSupplier supplier of the preferable heap implementation
+     * 
+     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not a vertex of {@code g}
+     * @throws NullPointerException if either one of {@code g} or {@code heapSupplier} is {@code null}
      */
     public ClosestFirstIterator(
         Graph<V, E> g, Iterable<V> startVertices, double radius,
@@ -206,7 +219,7 @@ public class ClosestFirstIterator<V, E>
      * known upper bound.
      *
      * @param vertex vertex being sought from start vertex
-     * @return weighted length of shortest path known, or Double.POSITIVE_INFINITY if no path found
+     * @return weighted length of shortest path known, or {@link Double#POSITIVE_INFINITY} if no path found
      *         yet
      */
     public double getShortestPathLength(V vertex)
@@ -227,7 +240,7 @@ public class ClosestFirstIterator<V, E>
      * spanning tree edge; otherwise, it is the best candidate seen so far.
      *
      * @param vertex the spanned vertex.
-     * @return the spanning tree edge, or null if the vertex either has not been seen yet or is a
+     * @return the spanning tree edge, or {@code null} if the vertex either has not been seen yet or is a
      *         start vertex.
      */
     public E getSpanningTreeEdge(V vertex)

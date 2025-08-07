@@ -22,54 +22,23 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link KolmogorovWeightedPerfectMatching}
  *
  * @author Timofey Chudakov
  */
-@RunWith(Parameterized.class)
 public class KolmogorovWeightedPerfectMatchingTest
 {
-    /**
-     * Algorithm options
-     */
-    private BlossomVOptions options;
-    /**
-     * The objective sense of the algorithm
-     */
-    private ObjectiveSense objectiveSense;
-
-    public KolmogorovWeightedPerfectMatchingTest(
-        BlossomVOptions options, ObjectiveSense objectiveSense)
-    {
-        this.options = options;
-        this.objectiveSense = objectiveSense;
-    }
-
-    @Parameterized.Parameters
-    public static Object[][] params()
-    {
-        BlossomVOptions[] options = BlossomVOptions.ALL_OPTIONS;
-        Object[][] params = new Object[2 * options.length][2];
-        for (int i = 0; i < options.length; i++) {
-            params[2 * i][0] = options[i];
-            params[2 * i][1] = MAXIMIZE;
-            params[2 * i + 1][0] = options[i];
-            params[2 * i + 1][1] = MINIMIZE;
-        }
-        return params;
-    }
 
     /**
      * Checks complementary slackness conditions
@@ -159,8 +128,9 @@ public class KolmogorovWeightedPerfectMatchingTest
         }
     }
 
-    @Test
-    public void testInvalidDualSolution()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testInvalidDualSolution(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = { { 1, 2, 7 }, { 2, 3, 4 }, { 3, 4, 3 }, { 4, 1, 4 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
@@ -180,22 +150,24 @@ public class KolmogorovWeightedPerfectMatchingTest
      * Test on a triangulation of 8 points Points: (2, 10), (9, 11), (10, 4), (11, 15), (12, 5),
      * (12, 6), (13, 12), (14, 11)
      */
-    @Test
-    public void testGetMatching0()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching0(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 10 }, { 1, 2, 8 }, { 0, 3, 11 },
             { 1, 3, 5 }, { 2, 5, 3 }, { 1, 5, 6 }, { 2, 4, 3 }, { 4, 5, 1 }, { 1, 6, 5 },
             { 3, 6, 4 }, { 3, 7, 5 }, { 6, 7, 2 }, { 5, 7, 6 }, { 4, 7, 7 }, { 1, 7, 5 } };
         double maxWeight = 27;
         double minWeight = 18;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on an empty graph
      */
-    @Test
-    public void testGetMatching1()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching1(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -212,223 +184,240 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Smoke test
      */
-    @Test
-    public void testGetMatching2()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching2(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 2, 5 } };
         double maxWeight = 5;
         double minWeight = 5;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a graph with an odd cycle
      */
-    @Test
-    public void testGetMatching3()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching3(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 1, 2, 8 }, { 2, 3, 8 }, { 3, 4, 8 }, { 4, 1, 8 }, { 2, 4, 2 } };
         double maxWeight = 16;
         double minWeight = 16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{2,2}$
      */
-    @Test
-    public void testGetMatching4()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching4(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 3, 11 }, { 1, 4, 8 }, { 2, 3, 8 }, { 2, 4, 2 } };
         double maxWeight = 16;
         double minWeight = 13;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{3,3}$
      */
-    @Test
-    public void testGetMatching5()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching5(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 3, 7 }, { 0, 4, 5 }, { 0, 5, 2 }, { 1, 3, 1 },
             { 1, 4, 3 }, { 1, 5, 4 }, { 2, 3, 7 }, { 2, 4, 10 }, { 2, 5, 7 } };
         double maxWeight = 21;
         double minWeight = 12;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{3,3}$
      */
-    @Test
-    public void testGetMatching6()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching6(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 3, 7 }, { 0, 4, 3 }, { 0, 5, 9 }, { 1, 3, 8 },
             { 1, 4, 2 }, { 1, 5, 9 }, { 2, 3, 6 }, { 2, 4, 1 }, { 2, 5, 10 } };
         double maxWeight = 21;
         double minWeight = 17;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{4}$
      */
-    @Test
-    public void testGetMatching7()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching7(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 2 }, { 0, 2, 5 }, { 0, 3, 1 }, { 1, 2, 5 },
             { 1, 3, 2 }, { 2, 3, 1 } };
         double maxWeight = 7;
         double minWeight = 3;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (2,5)
      */
-    @Test
-    public void testGetMatching8()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching8(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 1 }, { 0, 2, 4 }, { 0, 3, 7 }, { 0, 4, 10 }, { 1, 2, 5 },
                 { 1, 3, 7 }, { 1, 4, 10 }, { 2, 3, 10 }, { 2, 4, 2 }, { 3, 4, 3 }, { 2, 5, 8 } };
         double maxWeight = 25;
         double minWeight = 12;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching9()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching9(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 1 }, { 0, 2, 6 }, { 0, 3, 1 }, { 0, 4, 1 }, { 1, 2, 6 },
                 { 1, 3, 6 }, { 1, 4, 5 }, { 2, 3, 7 }, { 2, 4, 8 }, { 3, 4, 8 }, { 0, 5, 8 } };
         double maxWeight = 22;
         double minWeight = 20;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching10()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching10(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 4 }, { 0, 2, 4 }, { 0, 3, 6 }, { 0, 4, 8 }, { 1, 2, 8 },
                 { 1, 3, 10 }, { 1, 4, 8 }, { 2, 3, 4 }, { 2, 4, 9 }, { 3, 4, 4 }, { 0, 5, 9 } };
         double maxWeight = 28;
         double minWeight = 21;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching11()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching11(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 5 }, { 0, 2, 1 }, { 0, 3, 8 }, { 0, 4, 1 }, { 1, 2, 2 },
                 { 1, 3, 8 }, { 1, 4, 1 }, { 2, 3, 8 }, { 2, 4, 5 }, { 3, 4, 10 }, { 0, 5, 8 } };
         double maxWeight = 21;
         double minWeight = 17;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (0,5)
      */
-    @Test
-    public void testGetMatching12()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching12(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 0, 1, 2 }, { 0, 2, 6 }, { 0, 3, 3 }, { 0, 4, 2 }, { 1, 2, 7 },
                 { 1, 3, 7 }, { 1, 4, 7 }, { 2, 3, 4 }, { 2, 4, 4 }, { 3, 4, 2 }, { 0, 5, 2 } };
         double maxWeight = 13;
         double minWeight = 11;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (4,3)
      */
-    @Test
-    public void testGetMatching13()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching13(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 2, 0, 5 }, { 2, 1, 9 }, { 3, 0, 2 }, { 3, 1, 6 },
             { 3, 2, 7 }, { 4, 0, 3 }, { 4, 1, 5 }, { 4, 2, 5 }, { 4, 3, 7 }, { 5, 4, 6 } };
         double maxWeight = 17;
         double minWeight = 17;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (4,0)
      */
-    @Test
-    public void testGetMatching14()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching14(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 1, 0, 9 }, { 2, 0, 8 }, { 2, 1, 3 }, { 3, 0, 5 }, { 3, 1, 4 },
                 { 3, 2, 10 }, { 4, 0, 3 }, { 4, 1, 2 }, { 4, 2, 4 }, { 4, 3, 8 }, { 5, 1, 4 } };
         double maxWeight = 20;
         double minWeight = 13;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{5}$ with a dummy edge (4,0)
      */
-    @Test
-    public void testGetMatching15()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching15(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges =
             new int[][] { { 1, 0, 8 }, { 2, 0, 7 }, { 2, 1, 10 }, { 3, 0, 8 }, { 3, 1, 5 },
                 { 3, 2, 3 }, { 4, 0, 9 }, { 4, 1, 5 }, { 4, 2, 4 }, { 4, 3, 10 }, { 5, 1, 4 } };
         double maxWeight = 21;
         double minWeight = 16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a $K_{6}$ with edges with zero weight
      */
-    @Test
-    public void testGetMatching16()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching16(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 3 }, { 0, 2, 2 }, { 0, 3, 8 }, { 0, 4, 10 },
             { 0, 5, 8 }, { 1, 2, 1 }, { 1, 3, 4 }, { 1, 4, 8 }, { 1, 5, 0 }, { 2, 3, 8 },
             { 2, 4, 5 }, { 2, 5, 0 }, { 3, 4, 7 }, { 3, 5, 0 }, { 4, 5, 0 } };
         double maxWeight = 24;
         double minWeight = 6;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 8 points
      */
-    @Test
-    public void testGetMatching17()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching17(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 7 }, { 1, 2, 3 }, { 0, 2, 7 }, { 0, 3, 9 },
             { 0, 4, 9 }, { 3, 4, 2 }, { 0, 5, 9 }, { 4, 5, 8 }, { 2, 5, 6 }, { 5, 6, 5 },
             { 2, 6, 6 }, { 1, 6, 9 }, { 3, 7, 8 }, { 4, 7, 6 }, { 5, 7, 5 }, { 6, 7, 9 } };
         double maxWeight = 32;
         double minWeight = 20;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points
      */
-    @Test
-    public void testGetMatching18()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching18(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 10 }, { 0, 2, 7 }, { 1, 2, 4 }, { 2, 3, 1 },
             { 1, 3, 3 }, { 3, 4, 1 }, { 1, 4, 2 }, { 3, 5, 1 }, { 4, 5, 2 }, { 2, 5, 2 },
@@ -436,15 +425,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 6, 8, 3 }, { 2, 8, 4 }, { 7, 8, 3 }, { 7, 9, 3 }, { 0, 9, 7 }, { 8, 9, 8 } };
         double maxWeight = 27;
         double minWeight = 16;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 2), (1, 8), (3, 5), (3, 11), (3, 12), (5,
      * 3), (10, 6), (10, 11), (14, 8), (15, 1)
      */
-    @Test
-    public void testGetMatching19()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching19(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 6 }, { 0, 2, 4 }, { 1, 2, 4 }, { 2, 3, 6 },
             { 1, 3, 4 }, { 1, 4, 5 }, { 3, 4, 1 }, { 0, 5, 5 }, { 2, 5, 3 }, { 2, 6, 8 },
@@ -452,15 +442,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 8, 5 }, { 6, 9, 8 }, { 5, 9, 11 }, { 8, 9, 9 }, { 0, 9, 15 } };
         double maxWeight = 37;
         double minWeight = 23;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 7), (1, 11), (4, 5), (6, 5), (7, 8), (9, 1),
      * (11, 7), (13, 7), (13, 10), (15, 9)
      */
-    @Test
-    public void testGetMatching20()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching20(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 2, 3, 2 }, { 2, 4, 5 }, { 3, 4, 4 }, { 0, 2, 4 },
             { 0, 4, 7 }, { 0, 1, 4 }, { 1, 4, 7 }, { 2, 5, 7 }, { 3, 5, 5 }, { 0, 5, 10 },
@@ -468,15 +459,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 1, 8, 13 }, { 6, 8, 4 }, { 7, 8, 3 }, { 7, 9, 3 }, { 8, 9, 3 }, { 5, 9, 10 } };
         double maxWeight = 37;
         double minWeight = 19;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (4, 5), (5, 14), (6, 12), (7, 11), (9, 1), (9,
      * 8), (10, 15), (12, 6), (13, 12), (14, 6)
      */
-    @Test
-    public void testGetMatching21()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching21(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 10 }, { 0, 2, 8 }, { 1, 2, 3 }, { 0, 3, 7 },
             { 2, 3, 2 }, { 0, 4, 7 }, { 0, 5, 6 }, { 4, 5, 7 }, { 3, 5, 4 }, { 2, 6, 5 },
@@ -484,15 +476,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 3, 8, 7 }, { 6, 8, 5 }, { 8, 9, 7 }, { 7, 9, 2 }, { 4, 9, 8 } };
         double maxWeight = 34;
         double minWeight = 21;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (3, 3), (3, 10), (4, 12), (5, 13), (8, 4), (10,
      * 3), (11, 5), (11, 9), (11, 13), (14, 11)
      */
-    @Test
-    public void testGetMatching22()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching22(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 7 }, { 1, 4, 8 }, { 0, 4, 6 }, { 0, 5, 7 },
             { 4, 5, 3 }, { 4, 6, 4 }, { 5, 6, 3 }, { 4, 7, 6 }, { 6, 7, 4 }, { 2, 3, 2 },
@@ -500,15 +493,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 9, 4 }, { 8, 9, 5 }, { 6, 9, 7 } };
         double maxWeight = 38;
         double minWeight = 21;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 15), (4, 2), (7, 13), (8, 15), (9, 5), (10,
      * 7), (11, 11), (12, 4), (12, 9), (13, 11)
      */
-    @Test
-    public void testGetMatching23()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching23(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 14 }, { 1, 2, 12 }, { 0, 2, 7 }, { 0, 3, 7 },
             { 2, 3, 3 }, { 2, 4, 9 }, { 1, 4, 6 }, { 2, 5, 7 }, { 4, 5, 3 }, { 2, 6, 5 },
@@ -516,15 +510,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 8, 5 }, { 6, 8, 3 }, { 3, 9, 7 }, { 6, 9, 2 }, { 8, 9, 3 }, { 7, 9, 8 } };
         double maxWeight = 40;
         double minWeight = 25;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1, 6), (2, 14), (5, 5), (7, 10), (9, 8), (9,
      * 10), (12, 4), (13, 8), (13, 12), (14, 10)
      */
-    @Test
-    public void testGetMatching24()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching24(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 2, 5 }, { 0, 3, 8 }, { 2, 3, 6 }, { 0, 1, 9 },
             { 1, 3, 7 }, { 2, 4, 5 }, { 3, 4, 3 }, { 3, 5, 2 }, { 4, 5, 2 }, { 1, 5, 9 },
@@ -532,15 +527,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 1, 8, 12 }, { 7, 8, 4 }, { 7, 9, 3 }, { 8, 9, 3 }, { 6, 9, 7 } };
         double maxWeight = 37;
         double minWeight = 22;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (1,4), (5, 10), (5, 13), (8, 7), (9, 8), (10,
      * 6), (11, 2), (11, 13), (14, 3), (15, 13)
      */
-    @Test
-    public void testGetMatching25()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching25(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 10 }, { 1, 2, 3 }, { 0, 3, 8 },
             { 1, 3, 5 }, { 1, 4, 5 }, { 3, 4, 2 }, { 4, 5, 3 }, { 3, 5, 3 }, { 3, 6, 6 },
@@ -548,14 +544,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 6, 8, 4 }, { 5, 9, 8 }, { 8, 9, 10 }, { 4, 9, 8 }, { 7, 9, 5 } };
         double maxWeight = 36;
         double minWeight = 23;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points
      */
-    @Test
-    public void testGetMatching26()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching26(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 5 }, { 0, 2, 5 }, { 1, 2, 3 }, { 1, 3, 4 },
             { 2, 3, 3 }, { 2, 4, 5 }, { 3, 4, 6 }, { 0, 4, 5 }, { 3, 5, 5 }, { 4, 5, 3 },
@@ -563,15 +560,16 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 5, 8, 5 }, { 7, 8, 11 }, { 6, 8, 2 }, { 7, 9, 13 }, { 8, 9, 5 }, { 6, 9, 5 } };
         double maxWeight = 39;
         double minWeight = 26;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a triangulation of 10 points Points: (2, 9), (4, 13), (6, 5), (6, 12), (8, 4), (8,
      * 9), (8, 14), (10, 15), (14, 10), (15, 4)
      */
-    @Test
-    public void testGetMatching27()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching27(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 5 }, { 0, 3, 5 }, { 1, 3, 3 }, { 2, 4, 3 },
             { 2, 5, 5 }, { 4, 5, 5 }, { 0, 2, 6 }, { 0, 5, 6 }, { 3, 5, 4 }, { 5, 6, 5 },
@@ -579,7 +577,7 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 7, 8, 7 }, { 4, 8, 9 }, { 8, 9, 7 }, { 4, 9, 7 } };
         double maxWeight = 30;
         double minWeight = 22;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
@@ -587,8 +585,9 @@ public class KolmogorovWeightedPerfectMatchingTest
      * 4), (15, 3), (15, 5), (17, 5), (19, 27), (20, 16), (23, 1), (23, 8), (23, 12), (24, 14), (25,
      * 21), (27, 3), (27, 11), (30, 23), (30, 28)
      */
-    @Test
-    public void testGetMatching28()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching28(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 2, 5 }, { 0, 3, 3 }, { 2, 3, 3 }, { 0, 1, 17 },
             { 0, 4, 13 }, { 1, 4, 5 }, { 2, 4, 10 }, { 4, 5, 9 }, { 1, 5, 8 }, { 5, 7, 6 },
@@ -601,14 +600,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 15, 18, 6 }, { 16, 18, 21 }, { 15, 19, 9 }, { 9, 19, 12 }, { 18, 19, 5 } };
         double maxWeight = 117;
         double minWeight = 57;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 50 points
      */
-    @Test
-    public void testGetMatching29()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching29(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 2, 44 }, { 0, 3, 50 }, { 2, 3, 6 }, { 2, 4, 6 },
             { 3, 4, 7 }, { 3, 5, 6 }, { 4, 5, 5 }, { 0, 1, 16 }, { 0, 6, 15 }, { 1, 6, 15 },
@@ -639,14 +639,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 43, 48, 24 }, { 40, 48, 18 }, { 44, 48, 8 }, { 44, 49, 8 }, { 48, 49, 1 } };
         double maxWeight = 605;
         double minWeight = 279;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 50 points
      */
-    @Test
-    public void testGetMatching30()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching30(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 34 }, { 0, 2, 146 }, { 1, 2, 113 }, { 1, 3, 34 },
             { 2, 3, 80 }, { 1, 5, 18 }, { 3, 5, 36 }, { 0, 5, 39 }, { 0, 4, 34 }, { 0, 7, 29 },
@@ -678,14 +679,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 4, 49, 175 }, { 34, 49, 38 } };
         double maxWeight = 1426;
         double minWeight = 496;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 100 points
      */
-    @Test
-    public void testGetMatching31()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching31(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 118 }, { 0, 2, 125 }, { 1, 2, 7 }, { 0, 3, 66 },
             { 1, 3, 54 }, { 0, 4, 41 }, { 3, 4, 27 }, { 0, 5, 19 }, { 4, 5, 30 }, { 5, 6, 16 },
@@ -746,14 +748,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 97, 99, 128 }, { 98, 99, 74 }, { 91, 99, 63 }, { 87, 99, 22 }, { 84, 99, 37 } };
         double maxWeight = 1781;
         double minWeight = 693;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 100 points
      */
-    @Test
-    public void testGetMatching32()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching32(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 48 }, { 0, 3, 23 }, { 1, 3, 27 }, { 1, 6, 14 },
             { 3, 6, 16 }, { 0, 2, 80 }, { 0, 7, 53 }, { 2, 7, 28 }, { 3, 8, 13 }, { 6, 8, 5 },
@@ -813,14 +816,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 95, 99, 29 }, { 91, 99, 27 }, { 97, 99, 44 }, { 98, 99, 69 } };
         double maxWeight = 1576;
         double minWeight = 728;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 200 points
      */
-    @Test
-    public void testGetMatching33()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching33(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 2, 47 }, { 1, 3, 33 }, { 2, 3, 15 }, { 1, 5, 18 },
             { 3, 5, 16 }, { 1, 4, 26 }, { 1, 6, 68 }, { 4, 6, 43 }, { 1, 0, 129 }, { 0, 6, 63 },
@@ -944,14 +948,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 175, 199, 46 }, { 176, 199, 40 }, { 178, 199, 35 } };
         double maxWeight = 2461;
         double minWeight = 974;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 300 points
      */
-    @Test
-    public void testGetMatching34()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching34(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 0, 1, 14 }, { 0, 6, 13 }, { 1, 6, 3 }, { 3, 4, 16 },
             { 3, 7, 13 }, { 4, 7, 5 }, { 7, 8, 2 }, { 4, 8, 3 }, { 0, 10, 10 }, { 6, 10, 4 },
@@ -1127,14 +1132,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 298, 299, 3 } };
         double maxWeight = 670;
         double minWeight = 316;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 400 points
      */
-    @Test
-    public void testGetMatching35()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching35(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 3, 4, 8 }, { 3, 8, 8 }, { 4, 8, 2 }, { 4, 5, 4 },
             { 4, 9, 3 }, { 5, 9, 3 }, { 5, 6, 2 }, { 5, 10, 2 }, { 6, 10, 2 }, { 9, 10, 3 },
@@ -1370,14 +1376,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 373, 399, 4 }, { 398, 399, 1 }, { 316, 399, 11 }, { 220, 399, 21 } };
         double maxWeight = 827;
         double minWeight = 367;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on triangulation of 500 points
      */
-    @Test
-    public void testGetMatching36()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching36(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 4, 5, 4 }, { 4, 14, 3 }, { 5, 14, 3 }, { 5, 6, 4 },
             { 5, 15, 2 }, { 6, 15, 4 }, { 14, 15, 3 }, { 10, 11, 1 }, { 10, 16, 2 }, { 11, 16, 3 },
@@ -1669,14 +1676,15 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 489, 499, 2 }, { 490, 499, 5 }, { 488, 499, 3 }, { 498, 499, 7 }, { 478, 499, 3 } };
         double maxWeight = 866;
         double minWeight = 425;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on an unweighted $K_{50}$
      */
-    @Test
-    public void testGetMatching37()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching37(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -1698,8 +1706,9 @@ public class KolmogorovWeightedPerfectMatchingTest
     /**
      * Test on a weighted $K_{50}$
      */
-    @Test
-    public void testGetMatching38()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching38(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 0, 597 }, { 2, 0, 614 }, { 2, 1, 57 }, { 3, 0, 554 },
             { 3, 1, 883 }, { 3, 2, 883 }, { 4, 0, 752 }, { 4, 1, 191 }, { 4, 2, 972 },
@@ -1948,28 +1957,30 @@ public class KolmogorovWeightedPerfectMatchingTest
             { 49, 45, 38 }, { 49, 46, 172 }, { 49, 47, 144 }, { 49, 48, 164 } };
         double maxWeight = 24192;
         double minWeight = 933;
-        test(edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
+        test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a small pseudograph
      */
-    @Test
-    public void testGetMatching39()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching39(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 1, 1 }, { 1, 2, 5 }, { 1, 2, 10 }, };
         double maxWeight = 10;
         double minWeight = 5;
         test(
-            new WeightedPseudograph<>(DefaultEdge.class), edges,
+            options, new WeightedPseudograph<>(DefaultEdge.class), edges,
             objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a pseudograph
      */
-    @Test
-    public void testGetMatching40()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching40(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
         int[][] edges = new int[][] { { 1, 1, 1 }, { 2, 2, 1 }, { 3, 3, 1 }, { 4, 4, 1 },
             { 1, 2, 5 }, { 1, 2, 10 }, { 1, 3, 2 }, { 1, 3, 5 }, { 1, 4, 4 }, { 1, 4, 6 },
@@ -1977,513 +1988,543 @@ public class KolmogorovWeightedPerfectMatchingTest
         double maxWeight = 13;
         double minWeight = 6;
         test(
-            new WeightedPseudograph<>(DefaultEdge.class), edges,
+            options, new WeightedPseudograph<>(DefaultEdge.class), edges,
             objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
     /**
      * Test on a graph with odd number of vertices
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching41()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching41(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> matching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        matching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> matching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            matching.getMatching();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching42()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching42(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            graph.addVertex(2);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on a $K_{3}$ with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching43()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching43(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = { { 1, 2, 1 }, { 1, 3, 2 }, { 2, 3, 3 }, };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(4);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = { { 1, 2, 1 }, { 1, 3, 2 }, { 2, 3, 3 }, };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(4);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on triangulation of 9 points with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching44()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching44(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 1, 2, 3 }, { 1, 3, 5 }, { 2, 3, 7 }, { 1, 4, 6 },
-            { 3, 4, 1 }, { 1, 0, 11 }, { 0, 4, 7 }, { 3, 5, 3 }, { 4, 5, 2 }, { 4, 6, 3 },
-            { 5, 6, 1 }, { 4, 7, 3 }, { 0, 7, 7 }, { 6, 7, 1 }, { 6, 8, 9 }, { 5, 8, 8 },
-            { 7, 8, 10 }, { 3, 8, 7 }, { 2, 8, 4 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(9);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 1, 2, 3 }, { 1, 3, 5 }, { 2, 3, 7 }, { 1, 4, 6 },
+                { 3, 4, 1 }, { 1, 0, 11 }, { 0, 4, 7 }, { 3, 5, 3 }, { 4, 5, 2 }, { 4, 6, 3 },
+                { 5, 6, 1 }, { 4, 7, 3 }, { 0, 7, 7 }, { 6, 7, 1 }, { 6, 8, 9 }, { 5, 8, 8 },
+                { 7, 8, 10 }, { 3, 8, 7 }, { 2, 8, 4 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(9);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on triangulation of 9 points with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching45()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching45(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 9 }, { 1, 2, 1 }, { 0, 3, 4 },
-            { 1, 3, 5 }, { 0, 4, 4 }, { 3, 4, 2 }, { 0, 5, 5 }, { 4, 5, 2 }, { 4, 6, 7 },
-            { 5, 6, 6 }, { 1, 7, 9 }, { 2, 7, 9 }, { 3, 7, 8 }, { 4, 7, 7 }, { 6, 7, 2 },
-            { 6, 8, 4 }, { 7, 8, 2 }, { 2, 8, 10 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(9);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 0, 1, 8 }, { 0, 2, 9 }, { 1, 2, 1 }, { 0, 3, 4 },
+                { 1, 3, 5 }, { 0, 4, 4 }, { 3, 4, 2 }, { 0, 5, 5 }, { 4, 5, 2 }, { 4, 6, 7 },
+                { 5, 6, 6 }, { 1, 7, 9 }, { 2, 7, 9 }, { 3, 7, 8 }, { 4, 7, 7 }, { 6, 7, 2 },
+                { 6, 8, 4 }, { 7, 8, 2 }, { 2, 8, 10 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(9);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on triangulation of 99 points with a zero-degree vertex
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching46()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching46(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 1, 2, 22 }, { 1, 3, 8 }, { 2, 3, 16 }, { 0, 1, 46 },
-            { 0, 5, 24 }, { 1, 5, 24 }, { 0, 4, 20 }, { 4, 5, 4 }, { 0, 6, 5 }, { 0, 7, 7 },
-            { 6, 7, 3 }, { 0, 8, 19 }, { 6, 8, 16 }, { 0, 9, 17 }, { 4, 9, 8 }, { 0, 10, 10 },
-            { 7, 10, 6 }, { 9, 10, 11 }, { 4, 11, 10 }, { 5, 11, 7 }, { 9, 11, 13 }, { 5, 12, 16 },
-            { 1, 12, 13 }, { 11, 12, 11 }, { 1, 13, 10 }, { 3, 13, 9 }, { 12, 13, 12 },
-            { 11, 14, 8 }, { 12, 14, 5 }, { 9, 15, 6 }, { 10, 15, 7 }, { 7, 16, 14 },
-            { 10, 16, 17 }, { 6, 16, 14 }, { 8, 16, 8 }, { 11, 17, 5 }, { 14, 17, 6 },
-            { 10, 18, 6 }, { 15, 18, 4 }, { 16, 18, 20 }, { 11, 19, 5 }, { 9, 19, 14 },
-            { 17, 19, 3 }, { 15, 20, 4 }, { 18, 20, 3 }, { 3, 21, 16 }, { 13, 21, 12 },
-            { 2, 21, 19 }, { 16, 22, 5 }, { 8, 22, 11 }, { 15, 23, 6 }, { 20, 23, 4 },
-            { 13, 24, 9 }, { 21, 24, 10 }, { 12, 24, 15 }, { 16, 25, 20 }, { 18, 25, 5 },
-            { 22, 25, 22 }, { 20, 25, 5 }, { 23, 25, 4 }, { 9, 26, 13 }, { 19, 26, 11 },
-            { 15, 26, 11 }, { 23, 26, 8 }, { 23, 27, 4 }, { 25, 27, 5 }, { 26, 27, 7 },
-            { 17, 28, 17 }, { 19, 28, 19 }, { 14, 28, 15 }, { 12, 28, 14 }, { 24, 28, 7 },
-            { 8, 29, 21 }, { 22, 29, 15 }, { 25, 30, 7 }, { 27, 30, 5 }, { 26, 30, 9 },
-            { 24, 31, 10 }, { 28, 31, 6 }, { 25, 33, 28 }, { 22, 33, 12 }, { 30, 33, 30 },
-            { 29, 33, 8 }, { 29, 32, 4 }, { 32, 33, 4 }, { 33, 34, 4 }, { 32, 34, 3 },
-            { 29, 34, 6 }, { 33, 35, 4 }, { 34, 35, 2 }, { 26, 36, 10 }, { 30, 36, 9 },
-            { 19, 36, 19 }, { 24, 37, 13 }, { 31, 37, 10 }, { 21, 37, 15 }, { 19, 38, 23 },
-            { 36, 38, 24 }, { 28, 38, 12 }, { 31, 38, 8 }, { 31, 39, 9 }, { 37, 39, 11 },
-            { 38, 39, 4 }, { 37, 40, 5 }, { 39, 40, 9 }, { 33, 41, 11 }, { 35, 41, 9 },
-            { 38, 42, 20 }, { 36, 42, 11 }, { 39, 43, 9 }, { 40, 43, 9 }, { 40, 45, 9 },
-            { 43, 45, 7 }, { 37, 45, 13 }, { 34, 46, 15 }, { 29, 46, 18 }, { 35, 46, 14 },
-            { 41, 46, 11 }, { 41, 44, 8 }, { 41, 47, 12 }, { 44, 47, 6 }, { 33, 47, 20 },
-            { 30, 47, 25 }, { 42, 48, 6 }, { 42, 49, 6 }, { 48, 49, 3 }, { 38, 49, 20 },
-            { 41, 50, 11 }, { 44, 50, 13 }, { 46, 50, 3 }, { 48, 51, 4 }, { 49, 51, 1 },
-            { 44, 53, 4 }, { 47, 53, 6 }, { 50, 53, 13 }, { 47, 54, 8 }, { 53, 54, 12 },
-            { 30, 54, 24 }, { 42, 55, 21 }, { 36, 55, 23 }, { 48, 55, 19 }, { 30, 55, 24 },
-            { 54, 55, 4 }, { 45, 56, 9 }, { 43, 56, 7 }, { 45, 52, 4 }, { 52, 56, 9 },
-            { 21, 57, 35 }, { 2, 57, 48 }, { 45, 57, 19 }, { 52, 57, 18 }, { 37, 57, 26 },
-            { 49, 58, 11 }, { 51, 58, 11 }, { 38, 58, 20 }, { 39, 58, 19 }, { 43, 58, 18 },
-            { 56, 58, 15 }, { 52, 59, 8 }, { 56, 59, 4 }, { 53, 60, 14 }, { 50, 60, 8 },
-            { 46, 60, 11 }, { 51, 61, 11 }, { 58, 61, 6 }, { 52, 62, 10 }, { 59, 62, 9 },
-            { 59, 63, 6 }, { 62, 63, 7 }, { 52, 64, 14 }, { 62, 64, 7 }, { 52, 65, 14 },
-            { 64, 65, 1 }, { 57, 65, 13 }, { 59, 66, 9 }, { 63, 66, 6 }, { 56, 66, 11 },
-            { 58, 66, 14 }, { 48, 67, 19 }, { 55, 67, 21 }, { 51, 67, 19 }, { 61, 67, 15 },
-            { 58, 68, 14 }, { 61, 68, 12 }, { 66, 68, 11 }, { 64, 69, 9 }, { 65, 69, 9 },
-            { 62, 69, 11 }, { 63, 69, 14 }, { 53, 70, 22 }, { 60, 70, 24 }, { 55, 70, 21 },
-            { 67, 70, 23 }, { 54, 70, 21 }, { 67, 71, 4 }, { 70, 71, 22 }, { 67, 72, 10 },
-            { 71, 72, 9 }, { 61, 72, 14 }, { 68, 72, 12 }, { 63, 73, 14 }, { 69, 73, 5 },
-            { 71, 74, 5 }, { 72, 74, 5 }, { 66, 75, 16 }, { 68, 75, 20 }, { 63, 75, 15 },
-            { 73, 75, 3 }, { 69, 76, 6 }, { 73, 76, 7 }, { 65, 76, 13 }, { 57, 76, 24 },
-            { 71, 77, 6 }, { 74, 77, 6 }, { 70, 78, 13 }, { 60, 78, 24 }, { 73, 79, 8 },
-            { 75, 79, 6 }, { 76, 79, 9 }, { 70, 80, 10 }, { 78, 80, 11 }, { 70, 81, 19 },
-            { 80, 81, 16 }, { 71, 81, 12 }, { 77, 81, 8 }, { 79, 82, 7 }, { 76, 82, 9 },
-            { 80, 83, 5 }, { 81, 83, 13 }, { 80, 84, 8 }, { 83, 84, 4 }, { 81, 84, 14 },
-            { 76, 85, 14 }, { 82, 85, 8 }, { 72, 86, 19 }, { 74, 86, 20 }, { 68, 86, 21 },
-            { 77, 86, 23 }, { 81, 86, 25 }, { 82, 87, 7 }, { 85, 87, 4 }, { 80, 88, 12 },
-            { 78, 88, 11 }, { 75, 89, 18 }, { 79, 89, 15 }, { 68, 89, 24 }, { 86, 89, 12 },
-            { 80, 90, 11 }, { 84, 90, 8 }, { 88, 90, 4 }, { 76, 91, 19 }, { 57, 91, 38 },
-            { 85, 91, 6 }, { 88, 92, 2 }, { 90, 92, 4 }, { 78, 92, 13 }, { 60, 92, 36 },
-            { 79, 93, 14 }, { 89, 93, 15 }, { 82, 93, 11 }, { 87, 93, 6 }, { 87, 94, 8 },
-            { 93, 94, 10 }, { 85, 94, 6 }, { 91, 94, 3 }, { 89, 95, 13 }, { 93, 95, 10 },
-            { 94, 95, 18 }, { 90, 96, 12 }, { 92, 96, 13 }, { 84, 96, 14 }, { 84, 97, 23 },
-            { 81, 97, 23 }, { 96, 97, 18 }, { 81, 98, 26 }, { 86, 98, 19 }, { 97, 98, 9 },
-            { 89, 98, 27 }, { 95, 98, 31 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        graph.addVertex(99);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 1, 2, 22 }, { 1, 3, 8 }, { 2, 3, 16 }, { 0, 1, 46 },
+                { 0, 5, 24 }, { 1, 5, 24 }, { 0, 4, 20 }, { 4, 5, 4 }, { 0, 6, 5 }, { 0, 7, 7 },
+                { 6, 7, 3 }, { 0, 8, 19 }, { 6, 8, 16 }, { 0, 9, 17 }, { 4, 9, 8 }, { 0, 10, 10 },
+                { 7, 10, 6 }, { 9, 10, 11 }, { 4, 11, 10 }, { 5, 11, 7 }, { 9, 11, 13 }, { 5, 12, 16 },
+                { 1, 12, 13 }, { 11, 12, 11 }, { 1, 13, 10 }, { 3, 13, 9 }, { 12, 13, 12 },
+                { 11, 14, 8 }, { 12, 14, 5 }, { 9, 15, 6 }, { 10, 15, 7 }, { 7, 16, 14 },
+                { 10, 16, 17 }, { 6, 16, 14 }, { 8, 16, 8 }, { 11, 17, 5 }, { 14, 17, 6 },
+                { 10, 18, 6 }, { 15, 18, 4 }, { 16, 18, 20 }, { 11, 19, 5 }, { 9, 19, 14 },
+                { 17, 19, 3 }, { 15, 20, 4 }, { 18, 20, 3 }, { 3, 21, 16 }, { 13, 21, 12 },
+                { 2, 21, 19 }, { 16, 22, 5 }, { 8, 22, 11 }, { 15, 23, 6 }, { 20, 23, 4 },
+                { 13, 24, 9 }, { 21, 24, 10 }, { 12, 24, 15 }, { 16, 25, 20 }, { 18, 25, 5 },
+                { 22, 25, 22 }, { 20, 25, 5 }, { 23, 25, 4 }, { 9, 26, 13 }, { 19, 26, 11 },
+                { 15, 26, 11 }, { 23, 26, 8 }, { 23, 27, 4 }, { 25, 27, 5 }, { 26, 27, 7 },
+                { 17, 28, 17 }, { 19, 28, 19 }, { 14, 28, 15 }, { 12, 28, 14 }, { 24, 28, 7 },
+                { 8, 29, 21 }, { 22, 29, 15 }, { 25, 30, 7 }, { 27, 30, 5 }, { 26, 30, 9 },
+                { 24, 31, 10 }, { 28, 31, 6 }, { 25, 33, 28 }, { 22, 33, 12 }, { 30, 33, 30 },
+                { 29, 33, 8 }, { 29, 32, 4 }, { 32, 33, 4 }, { 33, 34, 4 }, { 32, 34, 3 },
+                { 29, 34, 6 }, { 33, 35, 4 }, { 34, 35, 2 }, { 26, 36, 10 }, { 30, 36, 9 },
+                { 19, 36, 19 }, { 24, 37, 13 }, { 31, 37, 10 }, { 21, 37, 15 }, { 19, 38, 23 },
+                { 36, 38, 24 }, { 28, 38, 12 }, { 31, 38, 8 }, { 31, 39, 9 }, { 37, 39, 11 },
+                { 38, 39, 4 }, { 37, 40, 5 }, { 39, 40, 9 }, { 33, 41, 11 }, { 35, 41, 9 },
+                { 38, 42, 20 }, { 36, 42, 11 }, { 39, 43, 9 }, { 40, 43, 9 }, { 40, 45, 9 },
+                { 43, 45, 7 }, { 37, 45, 13 }, { 34, 46, 15 }, { 29, 46, 18 }, { 35, 46, 14 },
+                { 41, 46, 11 }, { 41, 44, 8 }, { 41, 47, 12 }, { 44, 47, 6 }, { 33, 47, 20 },
+                { 30, 47, 25 }, { 42, 48, 6 }, { 42, 49, 6 }, { 48, 49, 3 }, { 38, 49, 20 },
+                { 41, 50, 11 }, { 44, 50, 13 }, { 46, 50, 3 }, { 48, 51, 4 }, { 49, 51, 1 },
+                { 44, 53, 4 }, { 47, 53, 6 }, { 50, 53, 13 }, { 47, 54, 8 }, { 53, 54, 12 },
+                { 30, 54, 24 }, { 42, 55, 21 }, { 36, 55, 23 }, { 48, 55, 19 }, { 30, 55, 24 },
+                { 54, 55, 4 }, { 45, 56, 9 }, { 43, 56, 7 }, { 45, 52, 4 }, { 52, 56, 9 },
+                { 21, 57, 35 }, { 2, 57, 48 }, { 45, 57, 19 }, { 52, 57, 18 }, { 37, 57, 26 },
+                { 49, 58, 11 }, { 51, 58, 11 }, { 38, 58, 20 }, { 39, 58, 19 }, { 43, 58, 18 },
+                { 56, 58, 15 }, { 52, 59, 8 }, { 56, 59, 4 }, { 53, 60, 14 }, { 50, 60, 8 },
+                { 46, 60, 11 }, { 51, 61, 11 }, { 58, 61, 6 }, { 52, 62, 10 }, { 59, 62, 9 },
+                { 59, 63, 6 }, { 62, 63, 7 }, { 52, 64, 14 }, { 62, 64, 7 }, { 52, 65, 14 },
+                { 64, 65, 1 }, { 57, 65, 13 }, { 59, 66, 9 }, { 63, 66, 6 }, { 56, 66, 11 },
+                { 58, 66, 14 }, { 48, 67, 19 }, { 55, 67, 21 }, { 51, 67, 19 }, { 61, 67, 15 },
+                { 58, 68, 14 }, { 61, 68, 12 }, { 66, 68, 11 }, { 64, 69, 9 }, { 65, 69, 9 },
+                { 62, 69, 11 }, { 63, 69, 14 }, { 53, 70, 22 }, { 60, 70, 24 }, { 55, 70, 21 },
+                { 67, 70, 23 }, { 54, 70, 21 }, { 67, 71, 4 }, { 70, 71, 22 }, { 67, 72, 10 },
+                { 71, 72, 9 }, { 61, 72, 14 }, { 68, 72, 12 }, { 63, 73, 14 }, { 69, 73, 5 },
+                { 71, 74, 5 }, { 72, 74, 5 }, { 66, 75, 16 }, { 68, 75, 20 }, { 63, 75, 15 },
+                { 73, 75, 3 }, { 69, 76, 6 }, { 73, 76, 7 }, { 65, 76, 13 }, { 57, 76, 24 },
+                { 71, 77, 6 }, { 74, 77, 6 }, { 70, 78, 13 }, { 60, 78, 24 }, { 73, 79, 8 },
+                { 75, 79, 6 }, { 76, 79, 9 }, { 70, 80, 10 }, { 78, 80, 11 }, { 70, 81, 19 },
+                { 80, 81, 16 }, { 71, 81, 12 }, { 77, 81, 8 }, { 79, 82, 7 }, { 76, 82, 9 },
+                { 80, 83, 5 }, { 81, 83, 13 }, { 80, 84, 8 }, { 83, 84, 4 }, { 81, 84, 14 },
+                { 76, 85, 14 }, { 82, 85, 8 }, { 72, 86, 19 }, { 74, 86, 20 }, { 68, 86, 21 },
+                { 77, 86, 23 }, { 81, 86, 25 }, { 82, 87, 7 }, { 85, 87, 4 }, { 80, 88, 12 },
+                { 78, 88, 11 }, { 75, 89, 18 }, { 79, 89, 15 }, { 68, 89, 24 }, { 86, 89, 12 },
+                { 80, 90, 11 }, { 84, 90, 8 }, { 88, 90, 4 }, { 76, 91, 19 }, { 57, 91, 38 },
+                { 85, 91, 6 }, { 88, 92, 2 }, { 90, 92, 4 }, { 78, 92, 13 }, { 60, 92, 36 },
+                { 79, 93, 14 }, { 89, 93, 15 }, { 82, 93, 11 }, { 87, 93, 6 }, { 87, 94, 8 },
+                { 93, 94, 10 }, { 85, 94, 6 }, { 91, 94, 3 }, { 89, 95, 13 }, { 93, 95, 10 },
+                { 94, 95, 18 }, { 90, 96, 12 }, { 92, 96, 13 }, { 84, 96, 14 }, { 84, 97, 23 },
+                { 81, 97, 23 }, { 96, 97, 18 }, { 81, 98, 26 }, { 86, 98, 19 }, { 97, 98, 9 },
+                { 89, 98, 27 }, { 95, 98, 31 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            graph.addVertex(99);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
 
     }
 
     /**
      * Test on a 3-regular graph with no perfect matching
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching47()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching47(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 0, 2, 18 }, { 1, 2, 27 }, { 0, 3, 68 }, { 1, 3, 15 },
-            { 2, 3, 19 }, { 0, 12, 93 }, { 1, 12, 13 }, { 12, 15, 85 }, { 4, 6, 50 }, { 5, 6, 6 },
-            { 4, 7, 79 }, { 5, 7, 95 }, { 6, 7, 95 }, { 4, 13, 40 }, { 5, 13, 6 }, { 13, 15, 87 },
-            { 8, 10, 51 }, { 9, 10, 44 }, { 8, 11, 96 }, { 9, 11, 95 }, { 10, 11, 9 },
-            { 8, 14, 86 }, { 9, 14, 56 }, { 14, 15, 36 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 0, 2, 18 }, { 1, 2, 27 }, { 0, 3, 68 }, { 1, 3, 15 },
+                { 2, 3, 19 }, { 0, 12, 93 }, { 1, 12, 13 }, { 12, 15, 85 }, { 4, 6, 50 }, { 5, 6, 6 },
+                { 4, 7, 79 }, { 5, 7, 95 }, { 6, 7, 95 }, { 4, 13, 40 }, { 5, 13, 6 }, { 13, 15, 87 },
+                { 8, 10, 51 }, { 9, 10, 44 }, { 8, 11, 96 }, { 9, 11, 95 }, { 10, 11, 9 },
+                { 8, 14, 86 }, { 9, 14, 56 }, { 14, 15, 36 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on a 7-regular graph without perfect matching: |V| = 64, |max. cardinality matching| =
      * 29
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching48()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching48(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 0, 2, 72 }, { 1, 2, 85 }, { 0, 3, 5 }, { 1, 3, 59 },
-            { 0, 4, 96 }, { 1, 4, 38 }, { 2, 4, 94 }, { 3, 4, 17 }, { 0, 5, 54 }, { 1, 5, 49 },
-            { 2, 5, 81 }, { 3, 5, 56 }, { 0, 6, 69 }, { 1, 6, 82 }, { 2, 6, 18 }, { 3, 6, 53 },
-            { 4, 6, 25 }, { 5, 6, 9 }, { 0, 7, 24 }, { 1, 7, 70 }, { 2, 7, 72 }, { 3, 7, 19 },
-            { 4, 7, 16 }, { 5, 7, 61 }, { 6, 7, 92 }, { 0, 56, 0 }, { 1, 56, 77 }, { 2, 56, 11 },
-            { 3, 56, 20 }, { 4, 56, 23 }, { 5, 56, 95 }, { 56, 63, 56 }, { 8, 10, 24 },
-            { 9, 10, 21 }, { 8, 11, 87 }, { 9, 11, 76 }, { 8, 12, 24 }, { 9, 12, 43 },
-            { 10, 12, 81 }, { 11, 12, 79 }, { 8, 13, 5 }, { 9, 13, 15 }, { 10, 13, 29 },
-            { 11, 13, 83 }, { 8, 14, 53 }, { 9, 14, 66 }, { 10, 14, 8 }, { 11, 14, 52 },
-            { 12, 14, 73 }, { 13, 14, 61 }, { 8, 15, 83 }, { 9, 15, 78 }, { 10, 15, 9 },
-            { 11, 15, 73 }, { 12, 15, 27 }, { 13, 15, 69 }, { 14, 15, 24 }, { 8, 57, 11 },
-            { 9, 57, 42 }, { 10, 57, 57 }, { 11, 57, 62 }, { 12, 57, 47 }, { 13, 57, 83 },
-            { 57, 63, 93 }, { 16, 18, 36 }, { 17, 18, 59 }, { 16, 19, 71 }, { 17, 19, 48 },
-            { 16, 20, 88 }, { 17, 20, 66 }, { 18, 20, 43 }, { 19, 20, 84 }, { 16, 21, 63 },
-            { 17, 21, 87 }, { 18, 21, 53 }, { 19, 21, 79 }, { 16, 22, 65 }, { 17, 22, 39 },
-            { 18, 22, 23 }, { 19, 22, 12 }, { 20, 22, 11 }, { 21, 22, 43 }, { 16, 23, 64 },
-            { 17, 23, 94 }, { 18, 23, 25 }, { 19, 23, 89 }, { 20, 23, 24 }, { 21, 23, 50 },
-            { 22, 23, 54 }, { 16, 58, 66 }, { 17, 58, 11 }, { 18, 58, 81 }, { 19, 58, 0 },
-            { 20, 58, 8 }, { 21, 58, 12 }, { 58, 63, 74 }, { 24, 26, 32 }, { 25, 26, 47 },
-            { 24, 27, 86 }, { 25, 27, 64 }, { 24, 28, 71 }, { 25, 28, 49 }, { 26, 28, 87 },
-            { 27, 28, 94 }, { 24, 29, 84 }, { 25, 29, 71 }, { 26, 29, 52 }, { 27, 29, 92 },
-            { 24, 30, 98 }, { 25, 30, 86 }, { 26, 30, 70 }, { 27, 30, 47 }, { 28, 30, 56 },
-            { 29, 30, 30 }, { 24, 31, 2 }, { 25, 31, 18 }, { 26, 31, 9 }, { 27, 31, 26 },
-            { 28, 31, 81 }, { 29, 31, 98 }, { 30, 31, 9 }, { 24, 59, 95 }, { 25, 59, 82 },
-            { 26, 59, 94 }, { 27, 59, 88 }, { 28, 59, 74 }, { 29, 59, 91 }, { 59, 63, 77 },
-            { 32, 34, 27 }, { 33, 34, 21 }, { 32, 35, 49 }, { 33, 35, 6 }, { 32, 36, 80 },
-            { 33, 36, 89 }, { 34, 36, 78 }, { 35, 36, 0 }, { 32, 37, 92 }, { 33, 37, 60 },
-            { 34, 37, 2 }, { 35, 37, 51 }, { 32, 38, 36 }, { 33, 38, 74 }, { 34, 38, 47 },
-            { 35, 38, 14 }, { 36, 38, 54 }, { 37, 38, 6 }, { 32, 39, 29 }, { 33, 39, 26 },
-            { 34, 39, 95 }, { 35, 39, 17 }, { 36, 39, 26 }, { 37, 39, 20 }, { 38, 39, 67 },
-            { 32, 60, 66 }, { 33, 60, 38 }, { 34, 60, 10 }, { 35, 60, 82 }, { 36, 60, 92 },
-            { 37, 60, 98 }, { 60, 63, 7 }, { 40, 42, 75 }, { 41, 42, 90 }, { 40, 43, 77 },
-            { 41, 43, 3 }, { 40, 44, 97 }, { 41, 44, 6 }, { 42, 44, 32 }, { 43, 44, 6 },
-            { 40, 45, 46 }, { 41, 45, 36 }, { 42, 45, 67 }, { 43, 45, 88 }, { 40, 46, 59 },
-            { 41, 46, 88 }, { 42, 46, 29 }, { 43, 46, 79 }, { 44, 46, 65 }, { 45, 46, 22 },
-            { 40, 47, 62 }, { 41, 47, 96 }, { 42, 47, 4 }, { 43, 47, 71 }, { 44, 47, 22 },
-            { 45, 47, 97 }, { 46, 47, 28 }, { 40, 61, 71 }, { 41, 61, 35 }, { 42, 61, 33 },
-            { 43, 61, 63 }, { 44, 61, 22 }, { 45, 61, 25 }, { 61, 63, 5 }, { 48, 50, 97 },
-            { 49, 50, 73 }, { 48, 51, 41 }, { 49, 51, 92 }, { 48, 52, 36 }, { 49, 52, 47 },
-            { 50, 52, 72 }, { 51, 52, 38 }, { 48, 53, 2 }, { 49, 53, 91 }, { 50, 53, 83 },
-            { 51, 53, 19 }, { 48, 54, 0 }, { 49, 54, 75 }, { 50, 54, 44 }, { 51, 54, 4 },
-            { 52, 54, 73 }, { 53, 54, 17 }, { 48, 55, 54 }, { 49, 55, 70 }, { 50, 55, 84 },
-            { 51, 55, 38 }, { 52, 55, 70 }, { 53, 55, 80 }, { 54, 55, 73 }, { 48, 62, 73 },
-            { 49, 62, 24 }, { 50, 62, 86 }, { 51, 62, 65 }, { 52, 62, 10 }, { 53, 62, 95 },
-            { 62, 63, 45 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 0, 2, 72 }, { 1, 2, 85 }, { 0, 3, 5 }, { 1, 3, 59 },
+                { 0, 4, 96 }, { 1, 4, 38 }, { 2, 4, 94 }, { 3, 4, 17 }, { 0, 5, 54 }, { 1, 5, 49 },
+                { 2, 5, 81 }, { 3, 5, 56 }, { 0, 6, 69 }, { 1, 6, 82 }, { 2, 6, 18 }, { 3, 6, 53 },
+                { 4, 6, 25 }, { 5, 6, 9 }, { 0, 7, 24 }, { 1, 7, 70 }, { 2, 7, 72 }, { 3, 7, 19 },
+                { 4, 7, 16 }, { 5, 7, 61 }, { 6, 7, 92 }, { 0, 56, 0 }, { 1, 56, 77 }, { 2, 56, 11 },
+                { 3, 56, 20 }, { 4, 56, 23 }, { 5, 56, 95 }, { 56, 63, 56 }, { 8, 10, 24 },
+                { 9, 10, 21 }, { 8, 11, 87 }, { 9, 11, 76 }, { 8, 12, 24 }, { 9, 12, 43 },
+                { 10, 12, 81 }, { 11, 12, 79 }, { 8, 13, 5 }, { 9, 13, 15 }, { 10, 13, 29 },
+                { 11, 13, 83 }, { 8, 14, 53 }, { 9, 14, 66 }, { 10, 14, 8 }, { 11, 14, 52 },
+                { 12, 14, 73 }, { 13, 14, 61 }, { 8, 15, 83 }, { 9, 15, 78 }, { 10, 15, 9 },
+                { 11, 15, 73 }, { 12, 15, 27 }, { 13, 15, 69 }, { 14, 15, 24 }, { 8, 57, 11 },
+                { 9, 57, 42 }, { 10, 57, 57 }, { 11, 57, 62 }, { 12, 57, 47 }, { 13, 57, 83 },
+                { 57, 63, 93 }, { 16, 18, 36 }, { 17, 18, 59 }, { 16, 19, 71 }, { 17, 19, 48 },
+                { 16, 20, 88 }, { 17, 20, 66 }, { 18, 20, 43 }, { 19, 20, 84 }, { 16, 21, 63 },
+                { 17, 21, 87 }, { 18, 21, 53 }, { 19, 21, 79 }, { 16, 22, 65 }, { 17, 22, 39 },
+                { 18, 22, 23 }, { 19, 22, 12 }, { 20, 22, 11 }, { 21, 22, 43 }, { 16, 23, 64 },
+                { 17, 23, 94 }, { 18, 23, 25 }, { 19, 23, 89 }, { 20, 23, 24 }, { 21, 23, 50 },
+                { 22, 23, 54 }, { 16, 58, 66 }, { 17, 58, 11 }, { 18, 58, 81 }, { 19, 58, 0 },
+                { 20, 58, 8 }, { 21, 58, 12 }, { 58, 63, 74 }, { 24, 26, 32 }, { 25, 26, 47 },
+                { 24, 27, 86 }, { 25, 27, 64 }, { 24, 28, 71 }, { 25, 28, 49 }, { 26, 28, 87 },
+                { 27, 28, 94 }, { 24, 29, 84 }, { 25, 29, 71 }, { 26, 29, 52 }, { 27, 29, 92 },
+                { 24, 30, 98 }, { 25, 30, 86 }, { 26, 30, 70 }, { 27, 30, 47 }, { 28, 30, 56 },
+                { 29, 30, 30 }, { 24, 31, 2 }, { 25, 31, 18 }, { 26, 31, 9 }, { 27, 31, 26 },
+                { 28, 31, 81 }, { 29, 31, 98 }, { 30, 31, 9 }, { 24, 59, 95 }, { 25, 59, 82 },
+                { 26, 59, 94 }, { 27, 59, 88 }, { 28, 59, 74 }, { 29, 59, 91 }, { 59, 63, 77 },
+                { 32, 34, 27 }, { 33, 34, 21 }, { 32, 35, 49 }, { 33, 35, 6 }, { 32, 36, 80 },
+                { 33, 36, 89 }, { 34, 36, 78 }, { 35, 36, 0 }, { 32, 37, 92 }, { 33, 37, 60 },
+                { 34, 37, 2 }, { 35, 37, 51 }, { 32, 38, 36 }, { 33, 38, 74 }, { 34, 38, 47 },
+                { 35, 38, 14 }, { 36, 38, 54 }, { 37, 38, 6 }, { 32, 39, 29 }, { 33, 39, 26 },
+                { 34, 39, 95 }, { 35, 39, 17 }, { 36, 39, 26 }, { 37, 39, 20 }, { 38, 39, 67 },
+                { 32, 60, 66 }, { 33, 60, 38 }, { 34, 60, 10 }, { 35, 60, 82 }, { 36, 60, 92 },
+                { 37, 60, 98 }, { 60, 63, 7 }, { 40, 42, 75 }, { 41, 42, 90 }, { 40, 43, 77 },
+                { 41, 43, 3 }, { 40, 44, 97 }, { 41, 44, 6 }, { 42, 44, 32 }, { 43, 44, 6 },
+                { 40, 45, 46 }, { 41, 45, 36 }, { 42, 45, 67 }, { 43, 45, 88 }, { 40, 46, 59 },
+                { 41, 46, 88 }, { 42, 46, 29 }, { 43, 46, 79 }, { 44, 46, 65 }, { 45, 46, 22 },
+                { 40, 47, 62 }, { 41, 47, 96 }, { 42, 47, 4 }, { 43, 47, 71 }, { 44, 47, 22 },
+                { 45, 47, 97 }, { 46, 47, 28 }, { 40, 61, 71 }, { 41, 61, 35 }, { 42, 61, 33 },
+                { 43, 61, 63 }, { 44, 61, 22 }, { 45, 61, 25 }, { 61, 63, 5 }, { 48, 50, 97 },
+                { 49, 50, 73 }, { 48, 51, 41 }, { 49, 51, 92 }, { 48, 52, 36 }, { 49, 52, 47 },
+                { 50, 52, 72 }, { 51, 52, 38 }, { 48, 53, 2 }, { 49, 53, 91 }, { 50, 53, 83 },
+                { 51, 53, 19 }, { 48, 54, 0 }, { 49, 54, 75 }, { 50, 54, 44 }, { 51, 54, 4 },
+                { 52, 54, 73 }, { 53, 54, 17 }, { 48, 55, 54 }, { 49, 55, 70 }, { 50, 55, 84 },
+                { 51, 55, 38 }, { 52, 55, 70 }, { 53, 55, 80 }, { 54, 55, 73 }, { 48, 62, 73 },
+                { 49, 62, 24 }, { 50, 62, 86 }, { 51, 62, 65 }, { 52, 62, 10 }, { 53, 62, 95 },
+                { 62, 63, 45 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on a 9-regular graph without perfect matching: |V| = 100, |max. cardinality matching| =
      * 46
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching49()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching49(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 0, 2, 87 }, { 1, 2, 56 }, { 0, 3, 21 }, { 1, 3, 81 },
-            { 0, 4, 26 }, { 1, 4, 94 }, { 2, 4, 36 }, { 3, 4, 28 }, { 0, 5, 32 }, { 1, 5, 94 },
-            { 2, 5, 12 }, { 3, 5, 86 }, { 0, 6, 52 }, { 1, 6, 78 }, { 2, 6, 93 }, { 3, 6, 89 },
-            { 4, 6, 11 }, { 5, 6, 4 }, { 0, 7, 64 }, { 1, 7, 93 }, { 2, 7, 16 }, { 3, 7, 70 },
-            { 4, 7, 14 }, { 5, 7, 21 }, { 0, 8, 64 }, { 1, 8, 65 }, { 2, 8, 3 }, { 3, 8, 52 },
-            { 4, 8, 65 }, { 5, 8, 22 }, { 6, 8, 20 }, { 7, 8, 50 }, { 0, 9, 93 }, { 1, 9, 89 },
-            { 2, 9, 58 }, { 3, 9, 12 }, { 4, 9, 96 }, { 5, 9, 87 }, { 6, 9, 57 }, { 7, 9, 49 },
-            { 8, 9, 78 }, { 0, 90, 0 }, { 1, 90, 95 }, { 2, 90, 79 }, { 3, 90, 15 }, { 4, 90, 15 },
-            { 5, 90, 78 }, { 6, 90, 81 }, { 7, 90, 64 }, { 90, 99, 72 }, { 10, 12, 50 },
-            { 11, 12, 8 }, { 10, 13, 30 }, { 11, 13, 7 }, { 10, 14, 22 }, { 11, 14, 30 },
-            { 12, 14, 3 }, { 13, 14, 2 }, { 10, 15, 56 }, { 11, 15, 52 }, { 12, 15, 6 },
-            { 13, 15, 66 }, { 10, 16, 53 }, { 11, 16, 64 }, { 12, 16, 72 }, { 13, 16, 61 },
-            { 14, 16, 90 }, { 15, 16, 57 }, { 10, 17, 79 }, { 11, 17, 41 }, { 12, 17, 33 },
-            { 13, 17, 53 }, { 14, 17, 13 }, { 15, 17, 10 }, { 10, 18, 70 }, { 11, 18, 0 },
-            { 12, 18, 30 }, { 13, 18, 67 }, { 14, 18, 13 }, { 15, 18, 16 }, { 16, 18, 10 },
-            { 17, 18, 92 }, { 10, 19, 97 }, { 11, 19, 52 }, { 12, 19, 71 }, { 13, 19, 51 },
-            { 14, 19, 92 }, { 15, 19, 28 }, { 16, 19, 96 }, { 17, 19, 21 }, { 18, 19, 82 },
-            { 10, 91, 45 }, { 11, 91, 46 }, { 12, 91, 19 }, { 13, 91, 35 }, { 14, 91, 28 },
-            { 15, 91, 95 }, { 16, 91, 20 }, { 17, 91, 92 }, { 91, 99, 10 }, { 20, 22, 55 },
-            { 21, 22, 25 }, { 20, 23, 46 }, { 21, 23, 76 }, { 20, 24, 14 }, { 21, 24, 91 },
-            { 22, 24, 31 }, { 23, 24, 49 }, { 20, 25, 30 }, { 21, 25, 77 }, { 22, 25, 22 },
-            { 23, 25, 0 }, { 20, 26, 46 }, { 21, 26, 21 }, { 22, 26, 80 }, { 23, 26, 18 },
-            { 24, 26, 68 }, { 25, 26, 40 }, { 20, 27, 32 }, { 21, 27, 43 }, { 22, 27, 74 },
-            { 23, 27, 32 }, { 24, 27, 31 }, { 25, 27, 65 }, { 20, 28, 91 }, { 21, 28, 38 },
-            { 22, 28, 77 }, { 23, 28, 80 }, { 24, 28, 69 }, { 25, 28, 88 }, { 26, 28, 41 },
-            { 27, 28, 40 }, { 20, 29, 7 }, { 21, 29, 85 }, { 22, 29, 33 }, { 23, 29, 8 },
-            { 24, 29, 47 }, { 25, 29, 90 }, { 26, 29, 78 }, { 27, 29, 49 }, { 28, 29, 34 },
-            { 20, 92, 93 }, { 21, 92, 88 }, { 22, 92, 90 }, { 23, 92, 54 }, { 24, 92, 33 },
-            { 25, 92, 4 }, { 26, 92, 75 }, { 27, 92, 13 }, { 92, 99, 30 }, { 30, 32, 30 },
-            { 31, 32, 87 }, { 30, 33, 87 }, { 31, 33, 21 }, { 30, 34, 8 }, { 31, 34, 80 },
-            { 32, 34, 72 }, { 33, 34, 94 }, { 30, 35, 17 }, { 31, 35, 50 }, { 32, 35, 12 },
-            { 33, 35, 86 }, { 30, 36, 26 }, { 31, 36, 72 }, { 32, 36, 37 }, { 33, 36, 81 },
-            { 34, 36, 39 }, { 35, 36, 38 }, { 30, 37, 85 }, { 31, 37, 38 }, { 32, 37, 60 },
-            { 33, 37, 37 }, { 34, 37, 24 }, { 35, 37, 79 }, { 30, 38, 96 }, { 31, 38, 87 },
-            { 32, 38, 29 }, { 33, 38, 90 }, { 34, 38, 97 }, { 35, 38, 46 }, { 36, 38, 59 },
-            { 37, 38, 44 }, { 30, 39, 18 }, { 31, 39, 55 }, { 32, 39, 87 }, { 33, 39, 93 },
-            { 34, 39, 86 }, { 35, 39, 69 }, { 36, 39, 96 }, { 37, 39, 15 }, { 38, 39, 34 },
-            { 30, 93, 53 }, { 31, 93, 42 }, { 32, 93, 59 }, { 33, 93, 90 }, { 34, 93, 15 },
-            { 35, 93, 79 }, { 36, 93, 86 }, { 37, 93, 18 }, { 93, 99, 56 }, { 40, 42, 37 },
-            { 41, 42, 41 }, { 40, 43, 91 }, { 41, 43, 4 }, { 40, 44, 81 }, { 41, 44, 55 },
-            { 42, 44, 82 }, { 43, 44, 53 }, { 40, 45, 83 }, { 41, 45, 12 }, { 42, 45, 19 },
-            { 43, 45, 79 }, { 40, 46, 62 }, { 41, 46, 26 }, { 42, 46, 46 }, { 43, 46, 3 },
-            { 44, 46, 63 }, { 45, 46, 28 }, { 40, 47, 50 }, { 41, 47, 63 }, { 42, 47, 23 },
-            { 43, 47, 16 }, { 44, 47, 5 }, { 45, 47, 52 }, { 40, 48, 91 }, { 41, 48, 33 },
-            { 42, 48, 3 }, { 43, 48, 55 }, { 44, 48, 86 }, { 45, 48, 99 }, { 46, 48, 67 },
-            { 47, 48, 77 }, { 40, 49, 64 }, { 41, 49, 1 }, { 42, 49, 59 }, { 43, 49, 96 },
-            { 44, 49, 4 }, { 45, 49, 3 }, { 46, 49, 22 }, { 47, 49, 77 }, { 48, 49, 36 },
-            { 40, 94, 31 }, { 41, 94, 12 }, { 42, 94, 6 }, { 43, 94, 91 }, { 44, 94, 30 },
-            { 45, 94, 58 }, { 46, 94, 69 }, { 47, 94, 66 }, { 94, 99, 63 }, { 50, 52, 8 },
-            { 51, 52, 5 }, { 50, 53, 63 }, { 51, 53, 89 }, { 50, 54, 58 }, { 51, 54, 75 },
-            { 52, 54, 91 }, { 53, 54, 9 }, { 50, 55, 7 }, { 51, 55, 3 }, { 52, 55, 65 },
-            { 53, 55, 4 }, { 50, 56, 71 }, { 51, 56, 90 }, { 52, 56, 69 }, { 53, 56, 89 },
-            { 54, 56, 60 }, { 55, 56, 15 }, { 50, 57, 29 }, { 51, 57, 26 }, { 52, 57, 0 },
-            { 53, 57, 76 }, { 54, 57, 83 }, { 55, 57, 94 }, { 50, 58, 59 }, { 51, 58, 86 },
-            { 52, 58, 61 }, { 53, 58, 95 }, { 54, 58, 58 }, { 55, 58, 50 }, { 56, 58, 52 },
-            { 57, 58, 35 }, { 50, 59, 70 }, { 51, 59, 56 }, { 52, 59, 48 }, { 53, 59, 0 },
-            { 54, 59, 51 }, { 55, 59, 35 }, { 56, 59, 95 }, { 57, 59, 16 }, { 58, 59, 35 },
-            { 50, 95, 86 }, { 51, 95, 56 }, { 52, 95, 29 }, { 53, 95, 10 }, { 54, 95, 78 },
-            { 55, 95, 23 }, { 56, 95, 3 }, { 57, 95, 45 }, { 95, 99, 12 }, { 60, 62, 6 },
-            { 61, 62, 82 }, { 60, 63, 94 }, { 61, 63, 29 }, { 60, 64, 0 }, { 61, 64, 40 },
-            { 62, 64, 99 }, { 63, 64, 44 }, { 60, 65, 84 }, { 61, 65, 76 }, { 62, 65, 6 },
-            { 63, 65, 15 }, { 60, 66, 25 }, { 61, 66, 36 }, { 62, 66, 88 }, { 63, 66, 60 },
-            { 64, 66, 60 }, { 65, 66, 3 }, { 60, 67, 44 }, { 61, 67, 14 }, { 62, 67, 37 },
-            { 63, 67, 12 }, { 64, 67, 51 }, { 65, 67, 7 }, { 60, 68, 1 }, { 61, 68, 13 },
-            { 62, 68, 80 }, { 63, 68, 42 }, { 64, 68, 28 }, { 65, 68, 85 }, { 66, 68, 14 },
-            { 67, 68, 50 }, { 60, 69, 62 }, { 61, 69, 14 }, { 62, 69, 2 }, { 63, 69, 10 },
-            { 64, 69, 74 }, { 65, 69, 16 }, { 66, 69, 37 }, { 67, 69, 51 }, { 68, 69, 45 },
-            { 60, 96, 83 }, { 61, 96, 58 }, { 62, 96, 16 }, { 63, 96, 28 }, { 64, 96, 75 },
-            { 65, 96, 60 }, { 66, 96, 76 }, { 67, 96, 54 }, { 96, 99, 85 }, { 70, 72, 38 },
-            { 71, 72, 52 }, { 70, 73, 73 }, { 71, 73, 5 }, { 70, 74, 79 }, { 71, 74, 97 },
-            { 72, 74, 94 }, { 73, 74, 47 }, { 70, 75, 96 }, { 71, 75, 14 }, { 72, 75, 87 },
-            { 73, 75, 24 }, { 70, 76, 85 }, { 71, 76, 36 }, { 72, 76, 20 }, { 73, 76, 15 },
-            { 74, 76, 78 }, { 75, 76, 97 }, { 70, 77, 9 }, { 71, 77, 87 }, { 72, 77, 21 },
-            { 73, 77, 18 }, { 74, 77, 76 }, { 75, 77, 30 }, { 70, 78, 0 }, { 71, 78, 96 },
-            { 72, 78, 4 }, { 73, 78, 7 }, { 74, 78, 17 }, { 75, 78, 65 }, { 76, 78, 63 },
-            { 77, 78, 24 }, { 70, 79, 52 }, { 71, 79, 25 }, { 72, 79, 30 }, { 73, 79, 20 },
-            { 74, 79, 48 }, { 75, 79, 14 }, { 76, 79, 29 }, { 77, 79, 35 }, { 78, 79, 87 },
-            { 70, 97, 10 }, { 71, 97, 15 }, { 72, 97, 96 }, { 73, 97, 27 }, { 74, 97, 69 },
-            { 75, 97, 22 }, { 76, 97, 54 }, { 77, 97, 28 }, { 97, 99, 38 }, { 80, 82, 70 },
-            { 81, 82, 61 }, { 80, 83, 37 }, { 81, 83, 42 }, { 80, 84, 53 }, { 81, 84, 75 },
-            { 82, 84, 78 }, { 83, 84, 91 }, { 80, 85, 14 }, { 81, 85, 70 }, { 82, 85, 70 },
-            { 83, 85, 42 }, { 80, 86, 40 }, { 81, 86, 25 }, { 82, 86, 94 }, { 83, 86, 77 },
-            { 84, 86, 5 }, { 85, 86, 51 }, { 80, 87, 78 }, { 81, 87, 49 }, { 82, 87, 43 },
-            { 83, 87, 72 }, { 84, 87, 91 }, { 85, 87, 14 }, { 80, 88, 90 }, { 81, 88, 80 },
-            { 82, 88, 2 }, { 83, 88, 4 }, { 84, 88, 6 }, { 85, 88, 37 }, { 86, 88, 99 },
-            { 87, 88, 30 }, { 80, 89, 54 }, { 81, 89, 44 }, { 82, 89, 5 }, { 83, 89, 65 },
-            { 84, 89, 46 }, { 85, 89, 33 }, { 86, 89, 39 }, { 87, 89, 13 }, { 88, 89, 93 },
-            { 80, 98, 13 }, { 81, 98, 93 }, { 82, 98, 28 }, { 83, 98, 64 }, { 84, 98, 42 },
-            { 85, 98, 86 }, { 86, 98, 22 }, { 87, 98, 17 }, { 98, 99, 46 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 0, 2, 87 }, { 1, 2, 56 }, { 0, 3, 21 }, { 1, 3, 81 },
+                { 0, 4, 26 }, { 1, 4, 94 }, { 2, 4, 36 }, { 3, 4, 28 }, { 0, 5, 32 }, { 1, 5, 94 },
+                { 2, 5, 12 }, { 3, 5, 86 }, { 0, 6, 52 }, { 1, 6, 78 }, { 2, 6, 93 }, { 3, 6, 89 },
+                { 4, 6, 11 }, { 5, 6, 4 }, { 0, 7, 64 }, { 1, 7, 93 }, { 2, 7, 16 }, { 3, 7, 70 },
+                { 4, 7, 14 }, { 5, 7, 21 }, { 0, 8, 64 }, { 1, 8, 65 }, { 2, 8, 3 }, { 3, 8, 52 },
+                { 4, 8, 65 }, { 5, 8, 22 }, { 6, 8, 20 }, { 7, 8, 50 }, { 0, 9, 93 }, { 1, 9, 89 },
+                { 2, 9, 58 }, { 3, 9, 12 }, { 4, 9, 96 }, { 5, 9, 87 }, { 6, 9, 57 }, { 7, 9, 49 },
+                { 8, 9, 78 }, { 0, 90, 0 }, { 1, 90, 95 }, { 2, 90, 79 }, { 3, 90, 15 }, { 4, 90, 15 },
+                { 5, 90, 78 }, { 6, 90, 81 }, { 7, 90, 64 }, { 90, 99, 72 }, { 10, 12, 50 },
+                { 11, 12, 8 }, { 10, 13, 30 }, { 11, 13, 7 }, { 10, 14, 22 }, { 11, 14, 30 },
+                { 12, 14, 3 }, { 13, 14, 2 }, { 10, 15, 56 }, { 11, 15, 52 }, { 12, 15, 6 },
+                { 13, 15, 66 }, { 10, 16, 53 }, { 11, 16, 64 }, { 12, 16, 72 }, { 13, 16, 61 },
+                { 14, 16, 90 }, { 15, 16, 57 }, { 10, 17, 79 }, { 11, 17, 41 }, { 12, 17, 33 },
+                { 13, 17, 53 }, { 14, 17, 13 }, { 15, 17, 10 }, { 10, 18, 70 }, { 11, 18, 0 },
+                { 12, 18, 30 }, { 13, 18, 67 }, { 14, 18, 13 }, { 15, 18, 16 }, { 16, 18, 10 },
+                { 17, 18, 92 }, { 10, 19, 97 }, { 11, 19, 52 }, { 12, 19, 71 }, { 13, 19, 51 },
+                { 14, 19, 92 }, { 15, 19, 28 }, { 16, 19, 96 }, { 17, 19, 21 }, { 18, 19, 82 },
+                { 10, 91, 45 }, { 11, 91, 46 }, { 12, 91, 19 }, { 13, 91, 35 }, { 14, 91, 28 },
+                { 15, 91, 95 }, { 16, 91, 20 }, { 17, 91, 92 }, { 91, 99, 10 }, { 20, 22, 55 },
+                { 21, 22, 25 }, { 20, 23, 46 }, { 21, 23, 76 }, { 20, 24, 14 }, { 21, 24, 91 },
+                { 22, 24, 31 }, { 23, 24, 49 }, { 20, 25, 30 }, { 21, 25, 77 }, { 22, 25, 22 },
+                { 23, 25, 0 }, { 20, 26, 46 }, { 21, 26, 21 }, { 22, 26, 80 }, { 23, 26, 18 },
+                { 24, 26, 68 }, { 25, 26, 40 }, { 20, 27, 32 }, { 21, 27, 43 }, { 22, 27, 74 },
+                { 23, 27, 32 }, { 24, 27, 31 }, { 25, 27, 65 }, { 20, 28, 91 }, { 21, 28, 38 },
+                { 22, 28, 77 }, { 23, 28, 80 }, { 24, 28, 69 }, { 25, 28, 88 }, { 26, 28, 41 },
+                { 27, 28, 40 }, { 20, 29, 7 }, { 21, 29, 85 }, { 22, 29, 33 }, { 23, 29, 8 },
+                { 24, 29, 47 }, { 25, 29, 90 }, { 26, 29, 78 }, { 27, 29, 49 }, { 28, 29, 34 },
+                { 20, 92, 93 }, { 21, 92, 88 }, { 22, 92, 90 }, { 23, 92, 54 }, { 24, 92, 33 },
+                { 25, 92, 4 }, { 26, 92, 75 }, { 27, 92, 13 }, { 92, 99, 30 }, { 30, 32, 30 },
+                { 31, 32, 87 }, { 30, 33, 87 }, { 31, 33, 21 }, { 30, 34, 8 }, { 31, 34, 80 },
+                { 32, 34, 72 }, { 33, 34, 94 }, { 30, 35, 17 }, { 31, 35, 50 }, { 32, 35, 12 },
+                { 33, 35, 86 }, { 30, 36, 26 }, { 31, 36, 72 }, { 32, 36, 37 }, { 33, 36, 81 },
+                { 34, 36, 39 }, { 35, 36, 38 }, { 30, 37, 85 }, { 31, 37, 38 }, { 32, 37, 60 },
+                { 33, 37, 37 }, { 34, 37, 24 }, { 35, 37, 79 }, { 30, 38, 96 }, { 31, 38, 87 },
+                { 32, 38, 29 }, { 33, 38, 90 }, { 34, 38, 97 }, { 35, 38, 46 }, { 36, 38, 59 },
+                { 37, 38, 44 }, { 30, 39, 18 }, { 31, 39, 55 }, { 32, 39, 87 }, { 33, 39, 93 },
+                { 34, 39, 86 }, { 35, 39, 69 }, { 36, 39, 96 }, { 37, 39, 15 }, { 38, 39, 34 },
+                { 30, 93, 53 }, { 31, 93, 42 }, { 32, 93, 59 }, { 33, 93, 90 }, { 34, 93, 15 },
+                { 35, 93, 79 }, { 36, 93, 86 }, { 37, 93, 18 }, { 93, 99, 56 }, { 40, 42, 37 },
+                { 41, 42, 41 }, { 40, 43, 91 }, { 41, 43, 4 }, { 40, 44, 81 }, { 41, 44, 55 },
+                { 42, 44, 82 }, { 43, 44, 53 }, { 40, 45, 83 }, { 41, 45, 12 }, { 42, 45, 19 },
+                { 43, 45, 79 }, { 40, 46, 62 }, { 41, 46, 26 }, { 42, 46, 46 }, { 43, 46, 3 },
+                { 44, 46, 63 }, { 45, 46, 28 }, { 40, 47, 50 }, { 41, 47, 63 }, { 42, 47, 23 },
+                { 43, 47, 16 }, { 44, 47, 5 }, { 45, 47, 52 }, { 40, 48, 91 }, { 41, 48, 33 },
+                { 42, 48, 3 }, { 43, 48, 55 }, { 44, 48, 86 }, { 45, 48, 99 }, { 46, 48, 67 },
+                { 47, 48, 77 }, { 40, 49, 64 }, { 41, 49, 1 }, { 42, 49, 59 }, { 43, 49, 96 },
+                { 44, 49, 4 }, { 45, 49, 3 }, { 46, 49, 22 }, { 47, 49, 77 }, { 48, 49, 36 },
+                { 40, 94, 31 }, { 41, 94, 12 }, { 42, 94, 6 }, { 43, 94, 91 }, { 44, 94, 30 },
+                { 45, 94, 58 }, { 46, 94, 69 }, { 47, 94, 66 }, { 94, 99, 63 }, { 50, 52, 8 },
+                { 51, 52, 5 }, { 50, 53, 63 }, { 51, 53, 89 }, { 50, 54, 58 }, { 51, 54, 75 },
+                { 52, 54, 91 }, { 53, 54, 9 }, { 50, 55, 7 }, { 51, 55, 3 }, { 52, 55, 65 },
+                { 53, 55, 4 }, { 50, 56, 71 }, { 51, 56, 90 }, { 52, 56, 69 }, { 53, 56, 89 },
+                { 54, 56, 60 }, { 55, 56, 15 }, { 50, 57, 29 }, { 51, 57, 26 }, { 52, 57, 0 },
+                { 53, 57, 76 }, { 54, 57, 83 }, { 55, 57, 94 }, { 50, 58, 59 }, { 51, 58, 86 },
+                { 52, 58, 61 }, { 53, 58, 95 }, { 54, 58, 58 }, { 55, 58, 50 }, { 56, 58, 52 },
+                { 57, 58, 35 }, { 50, 59, 70 }, { 51, 59, 56 }, { 52, 59, 48 }, { 53, 59, 0 },
+                { 54, 59, 51 }, { 55, 59, 35 }, { 56, 59, 95 }, { 57, 59, 16 }, { 58, 59, 35 },
+                { 50, 95, 86 }, { 51, 95, 56 }, { 52, 95, 29 }, { 53, 95, 10 }, { 54, 95, 78 },
+                { 55, 95, 23 }, { 56, 95, 3 }, { 57, 95, 45 }, { 95, 99, 12 }, { 60, 62, 6 },
+                { 61, 62, 82 }, { 60, 63, 94 }, { 61, 63, 29 }, { 60, 64, 0 }, { 61, 64, 40 },
+                { 62, 64, 99 }, { 63, 64, 44 }, { 60, 65, 84 }, { 61, 65, 76 }, { 62, 65, 6 },
+                { 63, 65, 15 }, { 60, 66, 25 }, { 61, 66, 36 }, { 62, 66, 88 }, { 63, 66, 60 },
+                { 64, 66, 60 }, { 65, 66, 3 }, { 60, 67, 44 }, { 61, 67, 14 }, { 62, 67, 37 },
+                { 63, 67, 12 }, { 64, 67, 51 }, { 65, 67, 7 }, { 60, 68, 1 }, { 61, 68, 13 },
+                { 62, 68, 80 }, { 63, 68, 42 }, { 64, 68, 28 }, { 65, 68, 85 }, { 66, 68, 14 },
+                { 67, 68, 50 }, { 60, 69, 62 }, { 61, 69, 14 }, { 62, 69, 2 }, { 63, 69, 10 },
+                { 64, 69, 74 }, { 65, 69, 16 }, { 66, 69, 37 }, { 67, 69, 51 }, { 68, 69, 45 },
+                { 60, 96, 83 }, { 61, 96, 58 }, { 62, 96, 16 }, { 63, 96, 28 }, { 64, 96, 75 },
+                { 65, 96, 60 }, { 66, 96, 76 }, { 67, 96, 54 }, { 96, 99, 85 }, { 70, 72, 38 },
+                { 71, 72, 52 }, { 70, 73, 73 }, { 71, 73, 5 }, { 70, 74, 79 }, { 71, 74, 97 },
+                { 72, 74, 94 }, { 73, 74, 47 }, { 70, 75, 96 }, { 71, 75, 14 }, { 72, 75, 87 },
+                { 73, 75, 24 }, { 70, 76, 85 }, { 71, 76, 36 }, { 72, 76, 20 }, { 73, 76, 15 },
+                { 74, 76, 78 }, { 75, 76, 97 }, { 70, 77, 9 }, { 71, 77, 87 }, { 72, 77, 21 },
+                { 73, 77, 18 }, { 74, 77, 76 }, { 75, 77, 30 }, { 70, 78, 0 }, { 71, 78, 96 },
+                { 72, 78, 4 }, { 73, 78, 7 }, { 74, 78, 17 }, { 75, 78, 65 }, { 76, 78, 63 },
+                { 77, 78, 24 }, { 70, 79, 52 }, { 71, 79, 25 }, { 72, 79, 30 }, { 73, 79, 20 },
+                { 74, 79, 48 }, { 75, 79, 14 }, { 76, 79, 29 }, { 77, 79, 35 }, { 78, 79, 87 },
+                { 70, 97, 10 }, { 71, 97, 15 }, { 72, 97, 96 }, { 73, 97, 27 }, { 74, 97, 69 },
+                { 75, 97, 22 }, { 76, 97, 54 }, { 77, 97, 28 }, { 97, 99, 38 }, { 80, 82, 70 },
+                { 81, 82, 61 }, { 80, 83, 37 }, { 81, 83, 42 }, { 80, 84, 53 }, { 81, 84, 75 },
+                { 82, 84, 78 }, { 83, 84, 91 }, { 80, 85, 14 }, { 81, 85, 70 }, { 82, 85, 70 },
+                { 83, 85, 42 }, { 80, 86, 40 }, { 81, 86, 25 }, { 82, 86, 94 }, { 83, 86, 77 },
+                { 84, 86, 5 }, { 85, 86, 51 }, { 80, 87, 78 }, { 81, 87, 49 }, { 82, 87, 43 },
+                { 83, 87, 72 }, { 84, 87, 91 }, { 85, 87, 14 }, { 80, 88, 90 }, { 81, 88, 80 },
+                { 82, 88, 2 }, { 83, 88, 4 }, { 84, 88, 6 }, { 85, 88, 37 }, { 86, 88, 99 },
+                { 87, 88, 30 }, { 80, 89, 54 }, { 81, 89, 44 }, { 82, 89, 5 }, { 83, 89, 65 },
+                { 84, 89, 46 }, { 85, 89, 33 }, { 86, 89, 39 }, { 87, 89, 13 }, { 88, 89, 93 },
+                { 80, 98, 13 }, { 81, 98, 93 }, { 82, 98, 28 }, { 83, 98, 64 }, { 84, 98, 42 },
+                { 85, 98, 86 }, { 86, 98, 22 }, { 87, 98, 17 }, { 98, 99, 46 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
      * Test on a 11-regular graph without perfect matching: |V| = 144, |max. cardinality matching| =
      * 67
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetMatching50()
+    @ParameterizedTest
+    @MethodSource("org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatchingTest#params")
+    public void testGetMatching50(BlossomVOptions options, ObjectiveSense objectiveSense)
     {
-        int[][] edges = new int[][] { { 0, 2, 44 }, { 1, 2, 27 }, { 0, 3, 2 }, { 1, 3, 73 },
-            { 0, 4, 11 }, { 1, 4, 4 }, { 2, 4, 98 }, { 3, 4, 28 }, { 0, 5, 0 }, { 1, 5, 53 },
-            { 2, 5, 19 }, { 3, 5, 41 }, { 0, 6, 27 }, { 1, 6, 8 }, { 2, 6, 21 }, { 3, 6, 91 },
-            { 4, 6, 88 }, { 5, 6, 37 }, { 0, 7, 6 }, { 1, 7, 84 }, { 2, 7, 92 }, { 3, 7, 71 },
-            { 4, 7, 90 }, { 5, 7, 13 }, { 0, 8, 79 }, { 1, 8, 96 }, { 2, 8, 53 }, { 3, 8, 49 },
-            { 4, 8, 48 }, { 5, 8, 32 }, { 6, 8, 46 }, { 7, 8, 63 }, { 0, 9, 97 }, { 1, 9, 43 },
-            { 2, 9, 55 }, { 3, 9, 99 }, { 4, 9, 21 }, { 5, 9, 20 }, { 6, 9, 24 }, { 7, 9, 4 },
-            { 0, 10, 1 }, { 1, 10, 61 }, { 2, 10, 20 }, { 3, 10, 20 }, { 4, 10, 90 }, { 5, 10, 0 },
-            { 6, 10, 27 }, { 7, 10, 95 }, { 8, 10, 85 }, { 9, 10, 26 }, { 0, 11, 12 },
-            { 1, 11, 18 }, { 2, 11, 85 }, { 3, 11, 0 }, { 4, 11, 50 }, { 5, 11, 72 }, { 6, 11, 37 },
-            { 7, 11, 48 }, { 8, 11, 94 }, { 9, 11, 33 }, { 10, 11, 86 }, { 0, 132, 41 },
-            { 1, 132, 55 }, { 2, 132, 9 }, { 3, 132, 45 }, { 4, 132, 25 }, { 5, 132, 98 },
-            { 6, 132, 52 }, { 7, 132, 24 }, { 8, 132, 63 }, { 9, 132, 47 }, { 132, 143, 14 },
-            { 12, 14, 12 }, { 13, 14, 71 }, { 12, 15, 19 }, { 13, 15, 31 }, { 12, 16, 16 },
-            { 13, 16, 35 }, { 14, 16, 51 }, { 15, 16, 61 }, { 12, 17, 68 }, { 13, 17, 88 },
-            { 14, 17, 27 }, { 15, 17, 52 }, { 12, 18, 21 }, { 13, 18, 42 }, { 14, 18, 80 },
-            { 15, 18, 20 }, { 16, 18, 67 }, { 17, 18, 99 }, { 12, 19, 87 }, { 13, 19, 9 },
-            { 14, 19, 46 }, { 15, 19, 44 }, { 16, 19, 53 }, { 17, 19, 16 }, { 12, 20, 40 },
-            { 13, 20, 96 }, { 14, 20, 27 }, { 15, 20, 16 }, { 16, 20, 80 }, { 17, 20, 83 },
-            { 18, 20, 81 }, { 19, 20, 80 }, { 12, 21, 53 }, { 13, 21, 23 }, { 14, 21, 73 },
-            { 15, 21, 51 }, { 16, 21, 24 }, { 17, 21, 71 }, { 18, 21, 55 }, { 19, 21, 81 },
-            { 12, 22, 48 }, { 13, 22, 45 }, { 14, 22, 1 }, { 15, 22, 71 }, { 16, 22, 97 },
-            { 17, 22, 74 }, { 18, 22, 45 }, { 19, 22, 67 }, { 20, 22, 6 }, { 21, 22, 18 },
-            { 12, 23, 65 }, { 13, 23, 4 }, { 14, 23, 7 }, { 15, 23, 66 }, { 16, 23, 0 },
-            { 17, 23, 88 }, { 18, 23, 56 }, { 19, 23, 74 }, { 20, 23, 48 }, { 21, 23, 74 },
-            { 22, 23, 44 }, { 12, 133, 61 }, { 13, 133, 84 }, { 14, 133, 7 }, { 15, 133, 70 },
-            { 16, 133, 11 }, { 17, 133, 13 }, { 18, 133, 16 }, { 19, 133, 14 }, { 20, 133, 38 },
-            { 21, 133, 22 }, { 133, 143, 35 }, { 24, 26, 40 }, { 25, 26, 45 }, { 24, 27, 80 },
-            { 25, 27, 83 }, { 24, 28, 51 }, { 25, 28, 65 }, { 26, 28, 46 }, { 27, 28, 46 },
-            { 24, 29, 3 }, { 25, 29, 70 }, { 26, 29, 75 }, { 27, 29, 82 }, { 24, 30, 47 },
-            { 25, 30, 55 }, { 26, 30, 21 }, { 27, 30, 50 }, { 28, 30, 31 }, { 29, 30, 96 },
-            { 24, 31, 47 }, { 25, 31, 58 }, { 26, 31, 67 }, { 27, 31, 29 }, { 28, 31, 46 },
-            { 29, 31, 93 }, { 24, 32, 65 }, { 25, 32, 88 }, { 26, 32, 54 }, { 27, 32, 81 },
-            { 28, 32, 78 }, { 29, 32, 84 }, { 30, 32, 97 }, { 31, 32, 45 }, { 24, 33, 71 },
-            { 25, 33, 96 }, { 26, 33, 37 }, { 27, 33, 50 }, { 28, 33, 60 }, { 29, 33, 89 },
-            { 30, 33, 55 }, { 31, 33, 76 }, { 24, 34, 35 }, { 25, 34, 45 }, { 26, 34, 26 },
-            { 27, 34, 27 }, { 28, 34, 60 }, { 29, 34, 37 }, { 30, 34, 38 }, { 31, 34, 79 },
-            { 32, 34, 88 }, { 33, 34, 30 }, { 24, 35, 90 }, { 25, 35, 67 }, { 26, 35, 18 },
-            { 27, 35, 5 }, { 28, 35, 22 }, { 29, 35, 75 }, { 30, 35, 58 }, { 31, 35, 37 },
-            { 32, 35, 82 }, { 33, 35, 32 }, { 34, 35, 47 }, { 24, 134, 85 }, { 25, 134, 67 },
-            { 26, 134, 31 }, { 27, 134, 72 }, { 28, 134, 40 }, { 29, 134, 38 }, { 30, 134, 43 },
-            { 31, 134, 68 }, { 32, 134, 63 }, { 33, 134, 80 }, { 134, 143, 82 }, { 36, 38, 87 },
-            { 37, 38, 64 }, { 36, 39, 47 }, { 37, 39, 3 }, { 36, 40, 19 }, { 37, 40, 58 },
-            { 38, 40, 31 }, { 39, 40, 92 }, { 36, 41, 87 }, { 37, 41, 57 }, { 38, 41, 7 },
-            { 39, 41, 39 }, { 36, 42, 66 }, { 37, 42, 55 }, { 38, 42, 60 }, { 39, 42, 67 },
-            { 40, 42, 78 }, { 41, 42, 43 }, { 36, 43, 5 }, { 37, 43, 5 }, { 38, 43, 16 },
-            { 39, 43, 52 }, { 40, 43, 99 }, { 41, 43, 8 }, { 36, 44, 4 }, { 37, 44, 33 },
-            { 38, 44, 41 }, { 39, 44, 20 }, { 40, 44, 42 }, { 41, 44, 67 }, { 42, 44, 6 },
-            { 43, 44, 89 }, { 36, 45, 85 }, { 37, 45, 61 }, { 38, 45, 22 }, { 39, 45, 99 },
-            { 40, 45, 93 }, { 41, 45, 56 }, { 42, 45, 48 }, { 43, 45, 78 }, { 36, 46, 84 },
-            { 37, 46, 57 }, { 38, 46, 93 }, { 39, 46, 87 }, { 40, 46, 1 }, { 41, 46, 75 },
-            { 42, 46, 57 }, { 43, 46, 69 }, { 44, 46, 68 }, { 45, 46, 2 }, { 36, 47, 7 },
-            { 37, 47, 56 }, { 38, 47, 6 }, { 39, 47, 25 }, { 40, 47, 23 }, { 41, 47, 4 },
-            { 42, 47, 59 }, { 43, 47, 99 }, { 44, 47, 4 }, { 45, 47, 36 }, { 46, 47, 60 },
-            { 36, 135, 20 }, { 37, 135, 89 }, { 38, 135, 60 }, { 39, 135, 30 }, { 40, 135, 36 },
-            { 41, 135, 67 }, { 42, 135, 97 }, { 43, 135, 23 }, { 44, 135, 34 }, { 45, 135, 43 },
-            { 135, 143, 84 }, { 48, 50, 9 }, { 49, 50, 39 }, { 48, 51, 39 }, { 49, 51, 66 },
-            { 48, 52, 96 }, { 49, 52, 85 }, { 50, 52, 60 }, { 51, 52, 36 }, { 48, 53, 22 },
-            { 49, 53, 33 }, { 50, 53, 97 }, { 51, 53, 93 }, { 48, 54, 47 }, { 49, 54, 85 },
-            { 50, 54, 30 }, { 51, 54, 35 }, { 52, 54, 19 }, { 53, 54, 22 }, { 48, 55, 77 },
-            { 49, 55, 52 }, { 50, 55, 35 }, { 51, 55, 85 }, { 52, 55, 27 }, { 53, 55, 43 },
-            { 48, 56, 40 }, { 49, 56, 32 }, { 50, 56, 99 }, { 51, 56, 24 }, { 52, 56, 79 },
-            { 53, 56, 56 }, { 54, 56, 90 }, { 55, 56, 90 }, { 48, 57, 63 }, { 49, 57, 75 },
-            { 50, 57, 88 }, { 51, 57, 59 }, { 52, 57, 59 }, { 53, 57, 7 }, { 54, 57, 30 },
-            { 55, 57, 14 }, { 48, 58, 71 }, { 49, 58, 96 }, { 50, 58, 5 }, { 51, 58, 61 },
-            { 52, 58, 98 }, { 53, 58, 59 }, { 54, 58, 27 }, { 55, 58, 33 }, { 56, 58, 42 },
-            { 57, 58, 78 }, { 48, 59, 17 }, { 49, 59, 53 }, { 50, 59, 5 }, { 51, 59, 49 },
-            { 52, 59, 28 }, { 53, 59, 32 }, { 54, 59, 15 }, { 55, 59, 43 }, { 56, 59, 68 },
-            { 57, 59, 4 }, { 58, 59, 91 }, { 48, 136, 29 }, { 49, 136, 21 }, { 50, 136, 14 },
-            { 51, 136, 63 }, { 52, 136, 68 }, { 53, 136, 59 }, { 54, 136, 25 }, { 55, 136, 13 },
-            { 56, 136, 76 }, { 57, 136, 88 }, { 136, 143, 65 }, { 60, 62, 12 }, { 61, 62, 57 },
-            { 60, 63, 93 }, { 61, 63, 92 }, { 60, 64, 45 }, { 61, 64, 22 }, { 62, 64, 7 },
-            { 63, 64, 62 }, { 60, 65, 84 }, { 61, 65, 95 }, { 62, 65, 89 }, { 63, 65, 15 },
-            { 60, 66, 65 }, { 61, 66, 83 }, { 62, 66, 74 }, { 63, 66, 6 }, { 64, 66, 81 },
-            { 65, 66, 88 }, { 60, 67, 4 }, { 61, 67, 63 }, { 62, 67, 97 }, { 63, 67, 89 },
-            { 64, 67, 53 }, { 65, 67, 65 }, { 60, 68, 55 }, { 61, 68, 62 }, { 62, 68, 70 },
-            { 63, 68, 13 }, { 64, 68, 12 }, { 65, 68, 4 }, { 66, 68, 37 }, { 67, 68, 46 },
-            { 60, 69, 14 }, { 61, 69, 38 }, { 62, 69, 20 }, { 63, 69, 40 }, { 64, 69, 40 },
-            { 65, 69, 9 }, { 66, 69, 66 }, { 67, 69, 71 }, { 60, 70, 43 }, { 61, 70, 29 },
-            { 62, 70, 33 }, { 63, 70, 80 }, { 64, 70, 61 }, { 65, 70, 28 }, { 66, 70, 36 },
-            { 67, 70, 9 }, { 68, 70, 43 }, { 69, 70, 0 }, { 60, 71, 31 }, { 61, 71, 81 },
-            { 62, 71, 74 }, { 63, 71, 81 }, { 64, 71, 86 }, { 65, 71, 22 }, { 66, 71, 38 },
-            { 67, 71, 8 }, { 68, 71, 62 }, { 69, 71, 78 }, { 70, 71, 90 }, { 60, 137, 19 },
-            { 61, 137, 64 }, { 62, 137, 94 }, { 63, 137, 8 }, { 64, 137, 53 }, { 65, 137, 43 },
-            { 66, 137, 92 }, { 67, 137, 62 }, { 68, 137, 64 }, { 69, 137, 57 }, { 137, 143, 79 },
-            { 72, 74, 41 }, { 73, 74, 35 }, { 72, 75, 17 }, { 73, 75, 36 }, { 72, 76, 21 },
-            { 73, 76, 57 }, { 74, 76, 18 }, { 75, 76, 97 }, { 72, 77, 25 }, { 73, 77, 2 },
-            { 74, 77, 20 }, { 75, 77, 2 }, { 72, 78, 73 }, { 73, 78, 98 }, { 74, 78, 55 },
-            { 75, 78, 15 }, { 76, 78, 39 }, { 77, 78, 82 }, { 72, 79, 44 }, { 73, 79, 79 },
-            { 74, 79, 3 }, { 75, 79, 44 }, { 76, 79, 19 }, { 77, 79, 60 }, { 72, 80, 10 },
-            { 73, 80, 62 }, { 74, 80, 17 }, { 75, 80, 25 }, { 76, 80, 73 }, { 77, 80, 12 },
-            { 78, 80, 4 }, { 79, 80, 67 }, { 72, 81, 54 }, { 73, 81, 32 }, { 74, 81, 2 },
-            { 75, 81, 92 }, { 76, 81, 5 }, { 77, 81, 25 }, { 78, 81, 93 }, { 79, 81, 57 },
-            { 72, 82, 46 }, { 73, 82, 14 }, { 74, 82, 87 }, { 75, 82, 36 }, { 76, 82, 62 },
-            { 77, 82, 88 }, { 78, 82, 46 }, { 79, 82, 95 }, { 80, 82, 40 }, { 81, 82, 11 },
-            { 72, 83, 1 }, { 73, 83, 59 }, { 74, 83, 18 }, { 75, 83, 6 }, { 76, 83, 19 },
-            { 77, 83, 88 }, { 78, 83, 88 }, { 79, 83, 22 }, { 80, 83, 74 }, { 81, 83, 7 },
-            { 82, 83, 77 }, { 72, 138, 99 }, { 73, 138, 53 }, { 74, 138, 51 }, { 75, 138, 13 },
-            { 76, 138, 65 }, { 77, 138, 78 }, { 78, 138, 68 }, { 79, 138, 85 }, { 80, 138, 25 },
-            { 81, 138, 98 }, { 138, 143, 58 }, { 84, 86, 92 }, { 85, 86, 55 }, { 84, 87, 55 },
-            { 85, 87, 54 }, { 84, 88, 25 }, { 85, 88, 94 }, { 86, 88, 15 }, { 87, 88, 59 },
-            { 84, 89, 36 }, { 85, 89, 59 }, { 86, 89, 51 }, { 87, 89, 53 }, { 84, 90, 37 },
-            { 85, 90, 70 }, { 86, 90, 21 }, { 87, 90, 68 }, { 88, 90, 11 }, { 89, 90, 76 },
-            { 84, 91, 44 }, { 85, 91, 72 }, { 86, 91, 88 }, { 87, 91, 83 }, { 88, 91, 15 },
-            { 89, 91, 15 }, { 84, 92, 8 }, { 85, 92, 9 }, { 86, 92, 68 }, { 87, 92, 89 },
-            { 88, 92, 55 }, { 89, 92, 37 }, { 90, 92, 62 }, { 91, 92, 50 }, { 84, 93, 66 },
-            { 85, 93, 63 }, { 86, 93, 74 }, { 87, 93, 10 }, { 88, 93, 13 }, { 89, 93, 4 },
-            { 90, 93, 65 }, { 91, 93, 90 }, { 84, 94, 93 }, { 85, 94, 52 }, { 86, 94, 24 },
-            { 87, 94, 84 }, { 88, 94, 58 }, { 89, 94, 49 }, { 90, 94, 7 }, { 91, 94, 18 },
-            { 92, 94, 75 }, { 93, 94, 60 }, { 84, 95, 1 }, { 85, 95, 98 }, { 86, 95, 12 },
-            { 87, 95, 91 }, { 88, 95, 66 }, { 89, 95, 66 }, { 90, 95, 75 }, { 91, 95, 12 },
-            { 92, 95, 57 }, { 93, 95, 60 }, { 94, 95, 95 }, { 84, 139, 81 }, { 85, 139, 27 },
-            { 86, 139, 62 }, { 87, 139, 97 }, { 88, 139, 73 }, { 89, 139, 76 }, { 90, 139, 26 },
-            { 91, 139, 22 }, { 92, 139, 30 }, { 93, 139, 50 }, { 139, 143, 81 }, { 96, 98, 59 },
-            { 97, 98, 38 }, { 96, 99, 42 }, { 97, 99, 48 }, { 96, 100, 18 }, { 97, 100, 30 },
-            { 98, 100, 33 }, { 99, 100, 32 }, { 96, 101, 9 }, { 97, 101, 26 }, { 98, 101, 8 },
-            { 99, 101, 15 }, { 96, 102, 56 }, { 97, 102, 97 }, { 98, 102, 42 }, { 99, 102, 30 },
-            { 100, 102, 83 }, { 101, 102, 76 }, { 96, 103, 37 }, { 97, 103, 45 }, { 98, 103, 79 },
-            { 99, 103, 23 }, { 100, 103, 95 }, { 101, 103, 4 }, { 96, 104, 84 }, { 97, 104, 69 },
-            { 98, 104, 77 }, { 99, 104, 22 }, { 100, 104, 2 }, { 101, 104, 17 }, { 102, 104, 6 },
-            { 103, 104, 39 }, { 96, 105, 37 }, { 97, 105, 13 }, { 98, 105, 64 }, { 99, 105, 4 },
-            { 100, 105, 61 }, { 101, 105, 29 }, { 102, 105, 1 }, { 103, 105, 58 }, { 96, 106, 18 },
-            { 97, 106, 76 }, { 98, 106, 94 }, { 99, 106, 46 }, { 100, 106, 33 }, { 101, 106, 47 },
-            { 102, 106, 68 }, { 103, 106, 44 }, { 104, 106, 56 }, { 105, 106, 59 }, { 96, 107, 72 },
-            { 97, 107, 98 }, { 98, 107, 8 }, { 99, 107, 45 }, { 100, 107, 29 }, { 101, 107, 8 },
-            { 102, 107, 21 }, { 103, 107, 78 }, { 104, 107, 97 }, { 105, 107, 62 },
-            { 106, 107, 42 }, { 96, 140, 65 }, { 97, 140, 81 }, { 98, 140, 39 }, { 99, 140, 97 },
-            { 100, 140, 84 }, { 101, 140, 73 }, { 102, 140, 67 }, { 103, 140, 23 },
-            { 104, 140, 36 }, { 105, 140, 56 }, { 140, 143, 44 }, { 108, 110, 67 },
-            { 109, 110, 26 }, { 108, 111, 6 }, { 109, 111, 30 }, { 108, 112, 95 }, { 109, 112, 41 },
-            { 110, 112, 56 }, { 111, 112, 27 }, { 108, 113, 14 }, { 109, 113, 73 },
-            { 110, 113, 32 }, { 111, 113, 95 }, { 108, 114, 40 }, { 109, 114, 54 },
-            { 110, 114, 88 }, { 111, 114, 85 }, { 112, 114, 0 }, { 113, 114, 56 }, { 108, 115, 63 },
-            { 109, 115, 18 }, { 110, 115, 87 }, { 111, 115, 74 }, { 112, 115, 12 },
-            { 113, 115, 69 }, { 108, 116, 41 }, { 109, 116, 42 }, { 110, 116, 58 },
-            { 111, 116, 44 }, { 112, 116, 1 }, { 113, 116, 54 }, { 114, 116, 14 }, { 115, 116, 14 },
-            { 108, 117, 81 }, { 109, 117, 75 }, { 110, 117, 64 }, { 111, 117, 5 }, { 112, 117, 60 },
-            { 113, 117, 72 }, { 114, 117, 40 }, { 115, 117, 84 }, { 108, 118, 67 },
-            { 109, 118, 11 }, { 110, 118, 49 }, { 111, 118, 12 }, { 112, 118, 5 }, { 113, 118, 2 },
-            { 114, 118, 78 }, { 115, 118, 17 }, { 116, 118, 67 }, { 117, 118, 56 },
-            { 108, 119, 73 }, { 109, 119, 50 }, { 110, 119, 95 }, { 111, 119, 66 },
-            { 112, 119, 82 }, { 113, 119, 52 }, { 114, 119, 53 }, { 115, 119, 90 },
-            { 116, 119, 11 }, { 117, 119, 13 }, { 118, 119, 61 }, { 108, 141, 78 },
-            { 109, 141, 73 }, { 110, 141, 29 }, { 111, 141, 18 }, { 112, 141, 31 }, { 113, 141, 2 },
-            { 114, 141, 0 }, { 115, 141, 46 }, { 116, 141, 42 }, { 117, 141, 3 }, { 141, 143, 87 },
-            { 120, 122, 74 }, { 121, 122, 90 }, { 120, 123, 23 }, { 121, 123, 0 }, { 120, 124, 43 },
-            { 121, 124, 49 }, { 122, 124, 49 }, { 123, 124, 33 }, { 120, 125, 52 },
-            { 121, 125, 55 }, { 122, 125, 53 }, { 123, 125, 19 }, { 120, 126, 56 },
-            { 121, 126, 50 }, { 122, 126, 18 }, { 123, 126, 56 }, { 124, 126, 28 }, { 125, 126, 8 },
-            { 120, 127, 61 }, { 121, 127, 79 }, { 122, 127, 27 }, { 123, 127, 45 },
-            { 124, 127, 92 }, { 125, 127, 81 }, { 120, 128, 64 }, { 121, 128, 53 },
-            { 122, 128, 59 }, { 123, 128, 70 }, { 124, 128, 91 }, { 125, 128, 21 },
-            { 126, 128, 49 }, { 127, 128, 76 }, { 120, 129, 40 }, { 121, 129, 25 }, { 122, 129, 8 },
-            { 123, 129, 46 }, { 124, 129, 30 }, { 125, 129, 30 }, { 126, 129, 82 },
-            { 127, 129, 67 }, { 120, 130, 73 }, { 121, 130, 31 }, { 122, 130, 92 },
-            { 123, 130, 64 }, { 124, 130, 60 }, { 125, 130, 65 }, { 126, 130, 31 },
-            { 127, 130, 40 }, { 128, 130, 55 }, { 129, 130, 1 }, { 120, 131, 71 }, { 121, 131, 85 },
-            { 122, 131, 90 }, { 123, 131, 93 }, { 124, 131, 21 }, { 125, 131, 84 },
-            { 126, 131, 41 }, { 127, 131, 23 }, { 128, 131, 16 }, { 129, 131, 20 },
-            { 130, 131, 82 }, { 120, 142, 36 }, { 121, 142, 49 }, { 122, 142, 87 }, { 123, 142, 6 },
-            { 124, 142, 55 }, { 125, 142, 89 }, { 126, 142, 98 }, { 127, 142, 79 },
-            { 128, 142, 77 }, { 129, 142, 25 }, { 142, 143, 29 } };
-        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+        assertThrows(IllegalArgumentException.class, () -> {
+            int[][] edges = new int[][] { { 0, 2, 44 }, { 1, 2, 27 }, { 0, 3, 2 }, { 1, 3, 73 },
+                { 0, 4, 11 }, { 1, 4, 4 }, { 2, 4, 98 }, { 3, 4, 28 }, { 0, 5, 0 }, { 1, 5, 53 },
+                { 2, 5, 19 }, { 3, 5, 41 }, { 0, 6, 27 }, { 1, 6, 8 }, { 2, 6, 21 }, { 3, 6, 91 },
+                { 4, 6, 88 }, { 5, 6, 37 }, { 0, 7, 6 }, { 1, 7, 84 }, { 2, 7, 92 }, { 3, 7, 71 },
+                { 4, 7, 90 }, { 5, 7, 13 }, { 0, 8, 79 }, { 1, 8, 96 }, { 2, 8, 53 }, { 3, 8, 49 },
+                { 4, 8, 48 }, { 5, 8, 32 }, { 6, 8, 46 }, { 7, 8, 63 }, { 0, 9, 97 }, { 1, 9, 43 },
+                { 2, 9, 55 }, { 3, 9, 99 }, { 4, 9, 21 }, { 5, 9, 20 }, { 6, 9, 24 }, { 7, 9, 4 },
+                { 0, 10, 1 }, { 1, 10, 61 }, { 2, 10, 20 }, { 3, 10, 20 }, { 4, 10, 90 }, { 5, 10, 0 },
+                { 6, 10, 27 }, { 7, 10, 95 }, { 8, 10, 85 }, { 9, 10, 26 }, { 0, 11, 12 },
+                { 1, 11, 18 }, { 2, 11, 85 }, { 3, 11, 0 }, { 4, 11, 50 }, { 5, 11, 72 }, { 6, 11, 37 },
+                { 7, 11, 48 }, { 8, 11, 94 }, { 9, 11, 33 }, { 10, 11, 86 }, { 0, 132, 41 },
+                { 1, 132, 55 }, { 2, 132, 9 }, { 3, 132, 45 }, { 4, 132, 25 }, { 5, 132, 98 },
+                { 6, 132, 52 }, { 7, 132, 24 }, { 8, 132, 63 }, { 9, 132, 47 }, { 132, 143, 14 },
+                { 12, 14, 12 }, { 13, 14, 71 }, { 12, 15, 19 }, { 13, 15, 31 }, { 12, 16, 16 },
+                { 13, 16, 35 }, { 14, 16, 51 }, { 15, 16, 61 }, { 12, 17, 68 }, { 13, 17, 88 },
+                { 14, 17, 27 }, { 15, 17, 52 }, { 12, 18, 21 }, { 13, 18, 42 }, { 14, 18, 80 },
+                { 15, 18, 20 }, { 16, 18, 67 }, { 17, 18, 99 }, { 12, 19, 87 }, { 13, 19, 9 },
+                { 14, 19, 46 }, { 15, 19, 44 }, { 16, 19, 53 }, { 17, 19, 16 }, { 12, 20, 40 },
+                { 13, 20, 96 }, { 14, 20, 27 }, { 15, 20, 16 }, { 16, 20, 80 }, { 17, 20, 83 },
+                { 18, 20, 81 }, { 19, 20, 80 }, { 12, 21, 53 }, { 13, 21, 23 }, { 14, 21, 73 },
+                { 15, 21, 51 }, { 16, 21, 24 }, { 17, 21, 71 }, { 18, 21, 55 }, { 19, 21, 81 },
+                { 12, 22, 48 }, { 13, 22, 45 }, { 14, 22, 1 }, { 15, 22, 71 }, { 16, 22, 97 },
+                { 17, 22, 74 }, { 18, 22, 45 }, { 19, 22, 67 }, { 20, 22, 6 }, { 21, 22, 18 },
+                { 12, 23, 65 }, { 13, 23, 4 }, { 14, 23, 7 }, { 15, 23, 66 }, { 16, 23, 0 },
+                { 17, 23, 88 }, { 18, 23, 56 }, { 19, 23, 74 }, { 20, 23, 48 }, { 21, 23, 74 },
+                { 22, 23, 44 }, { 12, 133, 61 }, { 13, 133, 84 }, { 14, 133, 7 }, { 15, 133, 70 },
+                { 16, 133, 11 }, { 17, 133, 13 }, { 18, 133, 16 }, { 19, 133, 14 }, { 20, 133, 38 },
+                { 21, 133, 22 }, { 133, 143, 35 }, { 24, 26, 40 }, { 25, 26, 45 }, { 24, 27, 80 },
+                { 25, 27, 83 }, { 24, 28, 51 }, { 25, 28, 65 }, { 26, 28, 46 }, { 27, 28, 46 },
+                { 24, 29, 3 }, { 25, 29, 70 }, { 26, 29, 75 }, { 27, 29, 82 }, { 24, 30, 47 },
+                { 25, 30, 55 }, { 26, 30, 21 }, { 27, 30, 50 }, { 28, 30, 31 }, { 29, 30, 96 },
+                { 24, 31, 47 }, { 25, 31, 58 }, { 26, 31, 67 }, { 27, 31, 29 }, { 28, 31, 46 },
+                { 29, 31, 93 }, { 24, 32, 65 }, { 25, 32, 88 }, { 26, 32, 54 }, { 27, 32, 81 },
+                { 28, 32, 78 }, { 29, 32, 84 }, { 30, 32, 97 }, { 31, 32, 45 }, { 24, 33, 71 },
+                { 25, 33, 96 }, { 26, 33, 37 }, { 27, 33, 50 }, { 28, 33, 60 }, { 29, 33, 89 },
+                { 30, 33, 55 }, { 31, 33, 76 }, { 24, 34, 35 }, { 25, 34, 45 }, { 26, 34, 26 },
+                { 27, 34, 27 }, { 28, 34, 60 }, { 29, 34, 37 }, { 30, 34, 38 }, { 31, 34, 79 },
+                { 32, 34, 88 }, { 33, 34, 30 }, { 24, 35, 90 }, { 25, 35, 67 }, { 26, 35, 18 },
+                { 27, 35, 5 }, { 28, 35, 22 }, { 29, 35, 75 }, { 30, 35, 58 }, { 31, 35, 37 },
+                { 32, 35, 82 }, { 33, 35, 32 }, { 34, 35, 47 }, { 24, 134, 85 }, { 25, 134, 67 },
+                { 26, 134, 31 }, { 27, 134, 72 }, { 28, 134, 40 }, { 29, 134, 38 }, { 30, 134, 43 },
+                { 31, 134, 68 }, { 32, 134, 63 }, { 33, 134, 80 }, { 134, 143, 82 }, { 36, 38, 87 },
+                { 37, 38, 64 }, { 36, 39, 47 }, { 37, 39, 3 }, { 36, 40, 19 }, { 37, 40, 58 },
+                { 38, 40, 31 }, { 39, 40, 92 }, { 36, 41, 87 }, { 37, 41, 57 }, { 38, 41, 7 },
+                { 39, 41, 39 }, { 36, 42, 66 }, { 37, 42, 55 }, { 38, 42, 60 }, { 39, 42, 67 },
+                { 40, 42, 78 }, { 41, 42, 43 }, { 36, 43, 5 }, { 37, 43, 5 }, { 38, 43, 16 },
+                { 39, 43, 52 }, { 40, 43, 99 }, { 41, 43, 8 }, { 36, 44, 4 }, { 37, 44, 33 },
+                { 38, 44, 41 }, { 39, 44, 20 }, { 40, 44, 42 }, { 41, 44, 67 }, { 42, 44, 6 },
+                { 43, 44, 89 }, { 36, 45, 85 }, { 37, 45, 61 }, { 38, 45, 22 }, { 39, 45, 99 },
+                { 40, 45, 93 }, { 41, 45, 56 }, { 42, 45, 48 }, { 43, 45, 78 }, { 36, 46, 84 },
+                { 37, 46, 57 }, { 38, 46, 93 }, { 39, 46, 87 }, { 40, 46, 1 }, { 41, 46, 75 },
+                { 42, 46, 57 }, { 43, 46, 69 }, { 44, 46, 68 }, { 45, 46, 2 }, { 36, 47, 7 },
+                { 37, 47, 56 }, { 38, 47, 6 }, { 39, 47, 25 }, { 40, 47, 23 }, { 41, 47, 4 },
+                { 42, 47, 59 }, { 43, 47, 99 }, { 44, 47, 4 }, { 45, 47, 36 }, { 46, 47, 60 },
+                { 36, 135, 20 }, { 37, 135, 89 }, { 38, 135, 60 }, { 39, 135, 30 }, { 40, 135, 36 },
+                { 41, 135, 67 }, { 42, 135, 97 }, { 43, 135, 23 }, { 44, 135, 34 }, { 45, 135, 43 },
+                { 135, 143, 84 }, { 48, 50, 9 }, { 49, 50, 39 }, { 48, 51, 39 }, { 49, 51, 66 },
+                { 48, 52, 96 }, { 49, 52, 85 }, { 50, 52, 60 }, { 51, 52, 36 }, { 48, 53, 22 },
+                { 49, 53, 33 }, { 50, 53, 97 }, { 51, 53, 93 }, { 48, 54, 47 }, { 49, 54, 85 },
+                { 50, 54, 30 }, { 51, 54, 35 }, { 52, 54, 19 }, { 53, 54, 22 }, { 48, 55, 77 },
+                { 49, 55, 52 }, { 50, 55, 35 }, { 51, 55, 85 }, { 52, 55, 27 }, { 53, 55, 43 },
+                { 48, 56, 40 }, { 49, 56, 32 }, { 50, 56, 99 }, { 51, 56, 24 }, { 52, 56, 79 },
+                { 53, 56, 56 }, { 54, 56, 90 }, { 55, 56, 90 }, { 48, 57, 63 }, { 49, 57, 75 },
+                { 50, 57, 88 }, { 51, 57, 59 }, { 52, 57, 59 }, { 53, 57, 7 }, { 54, 57, 30 },
+                { 55, 57, 14 }, { 48, 58, 71 }, { 49, 58, 96 }, { 50, 58, 5 }, { 51, 58, 61 },
+                { 52, 58, 98 }, { 53, 58, 59 }, { 54, 58, 27 }, { 55, 58, 33 }, { 56, 58, 42 },
+                { 57, 58, 78 }, { 48, 59, 17 }, { 49, 59, 53 }, { 50, 59, 5 }, { 51, 59, 49 },
+                { 52, 59, 28 }, { 53, 59, 32 }, { 54, 59, 15 }, { 55, 59, 43 }, { 56, 59, 68 },
+                { 57, 59, 4 }, { 58, 59, 91 }, { 48, 136, 29 }, { 49, 136, 21 }, { 50, 136, 14 },
+                { 51, 136, 63 }, { 52, 136, 68 }, { 53, 136, 59 }, { 54, 136, 25 }, { 55, 136, 13 },
+                { 56, 136, 76 }, { 57, 136, 88 }, { 136, 143, 65 }, { 60, 62, 12 }, { 61, 62, 57 },
+                { 60, 63, 93 }, { 61, 63, 92 }, { 60, 64, 45 }, { 61, 64, 22 }, { 62, 64, 7 },
+                { 63, 64, 62 }, { 60, 65, 84 }, { 61, 65, 95 }, { 62, 65, 89 }, { 63, 65, 15 },
+                { 60, 66, 65 }, { 61, 66, 83 }, { 62, 66, 74 }, { 63, 66, 6 }, { 64, 66, 81 },
+                { 65, 66, 88 }, { 60, 67, 4 }, { 61, 67, 63 }, { 62, 67, 97 }, { 63, 67, 89 },
+                { 64, 67, 53 }, { 65, 67, 65 }, { 60, 68, 55 }, { 61, 68, 62 }, { 62, 68, 70 },
+                { 63, 68, 13 }, { 64, 68, 12 }, { 65, 68, 4 }, { 66, 68, 37 }, { 67, 68, 46 },
+                { 60, 69, 14 }, { 61, 69, 38 }, { 62, 69, 20 }, { 63, 69, 40 }, { 64, 69, 40 },
+                { 65, 69, 9 }, { 66, 69, 66 }, { 67, 69, 71 }, { 60, 70, 43 }, { 61, 70, 29 },
+                { 62, 70, 33 }, { 63, 70, 80 }, { 64, 70, 61 }, { 65, 70, 28 }, { 66, 70, 36 },
+                { 67, 70, 9 }, { 68, 70, 43 }, { 69, 70, 0 }, { 60, 71, 31 }, { 61, 71, 81 },
+                { 62, 71, 74 }, { 63, 71, 81 }, { 64, 71, 86 }, { 65, 71, 22 }, { 66, 71, 38 },
+                { 67, 71, 8 }, { 68, 71, 62 }, { 69, 71, 78 }, { 70, 71, 90 }, { 60, 137, 19 },
+                { 61, 137, 64 }, { 62, 137, 94 }, { 63, 137, 8 }, { 64, 137, 53 }, { 65, 137, 43 },
+                { 66, 137, 92 }, { 67, 137, 62 }, { 68, 137, 64 }, { 69, 137, 57 }, { 137, 143, 79 },
+                { 72, 74, 41 }, { 73, 74, 35 }, { 72, 75, 17 }, { 73, 75, 36 }, { 72, 76, 21 },
+                { 73, 76, 57 }, { 74, 76, 18 }, { 75, 76, 97 }, { 72, 77, 25 }, { 73, 77, 2 },
+                { 74, 77, 20 }, { 75, 77, 2 }, { 72, 78, 73 }, { 73, 78, 98 }, { 74, 78, 55 },
+                { 75, 78, 15 }, { 76, 78, 39 }, { 77, 78, 82 }, { 72, 79, 44 }, { 73, 79, 79 },
+                { 74, 79, 3 }, { 75, 79, 44 }, { 76, 79, 19 }, { 77, 79, 60 }, { 72, 80, 10 },
+                { 73, 80, 62 }, { 74, 80, 17 }, { 75, 80, 25 }, { 76, 80, 73 }, { 77, 80, 12 },
+                { 78, 80, 4 }, { 79, 80, 67 }, { 72, 81, 54 }, { 73, 81, 32 }, { 74, 81, 2 },
+                { 75, 81, 92 }, { 76, 81, 5 }, { 77, 81, 25 }, { 78, 81, 93 }, { 79, 81, 57 },
+                { 72, 82, 46 }, { 73, 82, 14 }, { 74, 82, 87 }, { 75, 82, 36 }, { 76, 82, 62 },
+                { 77, 82, 88 }, { 78, 82, 46 }, { 79, 82, 95 }, { 80, 82, 40 }, { 81, 82, 11 },
+                { 72, 83, 1 }, { 73, 83, 59 }, { 74, 83, 18 }, { 75, 83, 6 }, { 76, 83, 19 },
+                { 77, 83, 88 }, { 78, 83, 88 }, { 79, 83, 22 }, { 80, 83, 74 }, { 81, 83, 7 },
+                { 82, 83, 77 }, { 72, 138, 99 }, { 73, 138, 53 }, { 74, 138, 51 }, { 75, 138, 13 },
+                { 76, 138, 65 }, { 77, 138, 78 }, { 78, 138, 68 }, { 79, 138, 85 }, { 80, 138, 25 },
+                { 81, 138, 98 }, { 138, 143, 58 }, { 84, 86, 92 }, { 85, 86, 55 }, { 84, 87, 55 },
+                { 85, 87, 54 }, { 84, 88, 25 }, { 85, 88, 94 }, { 86, 88, 15 }, { 87, 88, 59 },
+                { 84, 89, 36 }, { 85, 89, 59 }, { 86, 89, 51 }, { 87, 89, 53 }, { 84, 90, 37 },
+                { 85, 90, 70 }, { 86, 90, 21 }, { 87, 90, 68 }, { 88, 90, 11 }, { 89, 90, 76 },
+                { 84, 91, 44 }, { 85, 91, 72 }, { 86, 91, 88 }, { 87, 91, 83 }, { 88, 91, 15 },
+                { 89, 91, 15 }, { 84, 92, 8 }, { 85, 92, 9 }, { 86, 92, 68 }, { 87, 92, 89 },
+                { 88, 92, 55 }, { 89, 92, 37 }, { 90, 92, 62 }, { 91, 92, 50 }, { 84, 93, 66 },
+                { 85, 93, 63 }, { 86, 93, 74 }, { 87, 93, 10 }, { 88, 93, 13 }, { 89, 93, 4 },
+                { 90, 93, 65 }, { 91, 93, 90 }, { 84, 94, 93 }, { 85, 94, 52 }, { 86, 94, 24 },
+                { 87, 94, 84 }, { 88, 94, 58 }, { 89, 94, 49 }, { 90, 94, 7 }, { 91, 94, 18 },
+                { 92, 94, 75 }, { 93, 94, 60 }, { 84, 95, 1 }, { 85, 95, 98 }, { 86, 95, 12 },
+                { 87, 95, 91 }, { 88, 95, 66 }, { 89, 95, 66 }, { 90, 95, 75 }, { 91, 95, 12 },
+                { 92, 95, 57 }, { 93, 95, 60 }, { 94, 95, 95 }, { 84, 139, 81 }, { 85, 139, 27 },
+                { 86, 139, 62 }, { 87, 139, 97 }, { 88, 139, 73 }, { 89, 139, 76 }, { 90, 139, 26 },
+                { 91, 139, 22 }, { 92, 139, 30 }, { 93, 139, 50 }, { 139, 143, 81 }, { 96, 98, 59 },
+                { 97, 98, 38 }, { 96, 99, 42 }, { 97, 99, 48 }, { 96, 100, 18 }, { 97, 100, 30 },
+                { 98, 100, 33 }, { 99, 100, 32 }, { 96, 101, 9 }, { 97, 101, 26 }, { 98, 101, 8 },
+                { 99, 101, 15 }, { 96, 102, 56 }, { 97, 102, 97 }, { 98, 102, 42 }, { 99, 102, 30 },
+                { 100, 102, 83 }, { 101, 102, 76 }, { 96, 103, 37 }, { 97, 103, 45 }, { 98, 103, 79 },
+                { 99, 103, 23 }, { 100, 103, 95 }, { 101, 103, 4 }, { 96, 104, 84 }, { 97, 104, 69 },
+                { 98, 104, 77 }, { 99, 104, 22 }, { 100, 104, 2 }, { 101, 104, 17 }, { 102, 104, 6 },
+                { 103, 104, 39 }, { 96, 105, 37 }, { 97, 105, 13 }, { 98, 105, 64 }, { 99, 105, 4 },
+                { 100, 105, 61 }, { 101, 105, 29 }, { 102, 105, 1 }, { 103, 105, 58 }, { 96, 106, 18 },
+                { 97, 106, 76 }, { 98, 106, 94 }, { 99, 106, 46 }, { 100, 106, 33 }, { 101, 106, 47 },
+                { 102, 106, 68 }, { 103, 106, 44 }, { 104, 106, 56 }, { 105, 106, 59 }, { 96, 107, 72 },
+                { 97, 107, 98 }, { 98, 107, 8 }, { 99, 107, 45 }, { 100, 107, 29 }, { 101, 107, 8 },
+                { 102, 107, 21 }, { 103, 107, 78 }, { 104, 107, 97 }, { 105, 107, 62 },
+                { 106, 107, 42 }, { 96, 140, 65 }, { 97, 140, 81 }, { 98, 140, 39 }, { 99, 140, 97 },
+                { 100, 140, 84 }, { 101, 140, 73 }, { 102, 140, 67 }, { 103, 140, 23 },
+                { 104, 140, 36 }, { 105, 140, 56 }, { 140, 143, 44 }, { 108, 110, 67 },
+                { 109, 110, 26 }, { 108, 111, 6 }, { 109, 111, 30 }, { 108, 112, 95 }, { 109, 112, 41 },
+                { 110, 112, 56 }, { 111, 112, 27 }, { 108, 113, 14 }, { 109, 113, 73 },
+                { 110, 113, 32 }, { 111, 113, 95 }, { 108, 114, 40 }, { 109, 114, 54 },
+                { 110, 114, 88 }, { 111, 114, 85 }, { 112, 114, 0 }, { 113, 114, 56 }, { 108, 115, 63 },
+                { 109, 115, 18 }, { 110, 115, 87 }, { 111, 115, 74 }, { 112, 115, 12 },
+                { 113, 115, 69 }, { 108, 116, 41 }, { 109, 116, 42 }, { 110, 116, 58 },
+                { 111, 116, 44 }, { 112, 116, 1 }, { 113, 116, 54 }, { 114, 116, 14 }, { 115, 116, 14 },
+                { 108, 117, 81 }, { 109, 117, 75 }, { 110, 117, 64 }, { 111, 117, 5 }, { 112, 117, 60 },
+                { 113, 117, 72 }, { 114, 117, 40 }, { 115, 117, 84 }, { 108, 118, 67 },
+                { 109, 118, 11 }, { 110, 118, 49 }, { 111, 118, 12 }, { 112, 118, 5 }, { 113, 118, 2 },
+                { 114, 118, 78 }, { 115, 118, 17 }, { 116, 118, 67 }, { 117, 118, 56 },
+                { 108, 119, 73 }, { 109, 119, 50 }, { 110, 119, 95 }, { 111, 119, 66 },
+                { 112, 119, 82 }, { 113, 119, 52 }, { 114, 119, 53 }, { 115, 119, 90 },
+                { 116, 119, 11 }, { 117, 119, 13 }, { 118, 119, 61 }, { 108, 141, 78 },
+                { 109, 141, 73 }, { 110, 141, 29 }, { 111, 141, 18 }, { 112, 141, 31 }, { 113, 141, 2 },
+                { 114, 141, 0 }, { 115, 141, 46 }, { 116, 141, 42 }, { 117, 141, 3 }, { 141, 143, 87 },
+                { 120, 122, 74 }, { 121, 122, 90 }, { 120, 123, 23 }, { 121, 123, 0 }, { 120, 124, 43 },
+                { 121, 124, 49 }, { 122, 124, 49 }, { 123, 124, 33 }, { 120, 125, 52 },
+                { 121, 125, 55 }, { 122, 125, 53 }, { 123, 125, 19 }, { 120, 126, 56 },
+                { 121, 126, 50 }, { 122, 126, 18 }, { 123, 126, 56 }, { 124, 126, 28 }, { 125, 126, 8 },
+                { 120, 127, 61 }, { 121, 127, 79 }, { 122, 127, 27 }, { 123, 127, 45 },
+                { 124, 127, 92 }, { 125, 127, 81 }, { 120, 128, 64 }, { 121, 128, 53 },
+                { 122, 128, 59 }, { 123, 128, 70 }, { 124, 128, 91 }, { 125, 128, 21 },
+                { 126, 128, 49 }, { 127, 128, 76 }, { 120, 129, 40 }, { 121, 129, 25 }, { 122, 129, 8 },
+                { 123, 129, 46 }, { 124, 129, 30 }, { 125, 129, 30 }, { 126, 129, 82 },
+                { 127, 129, 67 }, { 120, 130, 73 }, { 121, 130, 31 }, { 122, 130, 92 },
+                { 123, 130, 64 }, { 124, 130, 60 }, { 125, 130, 65 }, { 126, 130, 31 },
+                { 127, 130, 40 }, { 128, 130, 55 }, { 129, 130, 1 }, { 120, 131, 71 }, { 121, 131, 85 },
+                { 122, 131, 90 }, { 123, 131, 93 }, { 124, 131, 21 }, { 125, 131, 84 },
+                { 126, 131, 41 }, { 127, 131, 23 }, { 128, 131, 16 }, { 129, 131, 20 },
+                { 130, 131, 82 }, { 120, 142, 36 }, { 121, 142, 49 }, { 122, 142, 87 }, { 123, 142, 6 },
+                { 124, 142, 55 }, { 125, 142, 89 }, { 126, 142, 98 }, { 127, 142, 79 },
+                { 128, 142, 77 }, { 129, 142, 25 }, { 142, 143, 29 } };
+            Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
-        KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
-            new KolmogorovWeightedPerfectMatching<>(graph, options);
-        perfectMatching.getMatching();
+            KolmogorovWeightedPerfectMatching<Integer, DefaultEdge> perfectMatching =
+                new KolmogorovWeightedPerfectMatching<>(graph, options);
+            perfectMatching.getMatching();
+        });
     }
 
     /**
@@ -2493,10 +2534,10 @@ public class KolmogorovWeightedPerfectMatchingTest
      * @param result the expected weight of a resulting matching
      * @param objectiveSense objective sense of the algorithm
      */
-    private void test(int[][] edges, double result, ObjectiveSense objectiveSense)
+    private void test(BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         test(
-            new DefaultUndirectedWeightedGraph<>(DefaultEdge.class), edges, result, objectiveSense);
+            options, new DefaultUndirectedWeightedGraph<>(DefaultEdge.class), edges, result, objectiveSense);
     }
 
     /**
@@ -2508,6 +2549,7 @@ public class KolmogorovWeightedPerfectMatchingTest
      * @param objectiveSense objective sense of the algorithm
      */
     private void test(
+        BlossomVOptions options,
         Graph<Integer, DefaultEdge> graph, int[][] edges, double result,
         ObjectiveSense objectiveSense)
     {

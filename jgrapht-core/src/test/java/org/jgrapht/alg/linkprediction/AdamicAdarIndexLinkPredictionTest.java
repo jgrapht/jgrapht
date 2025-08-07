@@ -17,7 +17,8 @@
  */
 package org.jgrapht.alg.linkprediction;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link AdamicAdarIndexLinkPrediction}
@@ -110,20 +111,22 @@ public class AdamicAdarIndexLinkPredictionTest
 
     }
 
-    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
+    @Test
     public void testInvalidPrediction()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        assertThrows(LinkPredictionIndexNotWellDefinedException.class, () -> {
+            Graph<Integer,
+                DefaultEdge> g = GraphTypeBuilder
+                    .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        TestUtil.constructGraph(g, new int[][] { { 0, 2 }, { 1, 2 } });
+            TestUtil.constructGraph(g, new int[][] { { 0, 2 }, { 1, 2 } });
 
-        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new AdamicAdarIndexLinkPrediction<>(g);
+            AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
+                new AdamicAdarIndexLinkPrediction<>(g);
 
-        alg.predict(0, 1);
+            alg.predict(0, 1);
+        });
     }
 
 }

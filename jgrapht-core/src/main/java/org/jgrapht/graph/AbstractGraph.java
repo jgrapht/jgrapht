@@ -23,7 +23,7 @@ import org.jgrapht.util.*;
 import java.util.*;
 
 /**
- * A skeletal implementation of the <code>Graph</code> interface, to minimize the effort required to
+ * A skeletal implementation of the {@code Graph} interface, to minimize the effort required to
  * implement graph interfaces. This implementation is applicable to both: directed graphs and
  * undirected graphs.
  *
@@ -53,11 +53,13 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Collection)
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
     {
+        Objects.requireNonNull(edges);
         boolean modified = false;
 
         for (E e : edges) {
@@ -68,7 +70,7 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Object, Object)
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
@@ -83,11 +85,13 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllVertices(Collection)
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
     {
+        Objects.requireNonNull(vertices);
         boolean modified = false;
 
         for (V v : vertices) {
@@ -115,17 +119,16 @@ public abstract class AbstractGraph<V, E>
      *
      * @param v vertex
      *
-     * @return <code>true</code> if this assertion holds.
+     * @return {@code true} if this assertion holds.
      *
-     * @throws NullPointerException if specified vertex is <code>null</code>.
+     * @throws NullPointerException if specified vertex is {@code null}.
      * @throws IllegalArgumentException if specified vertex does not exist in this graph.
      */
     protected boolean assertVertexExist(V v)
     {
+        Objects.requireNonNull(v);
         if (containsVertex(v)) {
             return true;
-        } else if (v == null) {
-            throw new NullPointerException();
         } else {
             throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
         }
@@ -134,24 +137,20 @@ public abstract class AbstractGraph<V, E>
     /**
      * Removes all the edges in this graph that are also contained in the specified edge array.
      * After this call returns, this graph will contain no edges in common with the specified edges.
-     * This method will invoke the {@link Graph#removeEdge(Object)} method.
      *
      * @param edges edges to be removed from this graph.
      *
-     * @return <code>true</code> if this graph changed as a result of the call.
+     * @return {@code true} if this graph changed as a result of the call.
+     * 
+     * @throws NullPointerException if argument is {@code null}
+     * @throws UnsupportedOperationException if this graph disallows modification
      *
-     * @see Graph#removeEdge(Object)
-     * @see Graph#containsEdge(Object)
+     * @see #removeAllEdges(Collection)
      */
     protected boolean removeAllEdges(E[] edges)
     {
-        boolean modified = false;
-
-        for (E edge : edges) {
-            modified |= removeEdge(edge);
-        }
-
-        return modified;
+        Objects.requireNonNull(edges);
+        return removeAllEdges(Arrays.asList(edges));
     }
 
     /**
@@ -237,13 +236,13 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Indicates whether some other object is "equal to" this graph. Returns <code>true</code> if
+     * Indicates whether some other object is "equal to" this graph. Returns {@code true} if
      * the given object is also a graph, the two graphs are instances of the same graph class, have
      * identical vertices and edges sets with the same weights.
      *
      * @param obj object to be compared for equality with this graph
      *
-     * @return <code>true</code> if the specified object is equal to this graph
+     * @return {@code true} if the specified object is equal to this graph
      *
      * @see Object#equals(Object)
      */

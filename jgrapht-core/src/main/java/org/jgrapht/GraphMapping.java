@@ -31,7 +31,7 @@ package org.jgrapht;
 public interface GraphMapping<V, E>
 {
     /**
-     * Gets the mapped value where the key is <code>vertex</code>
+     * Gets the mapped value where the key is {@code vertex}
      *
      * @param vertex vertex in one of the graphs
      * @param forward if true, uses mapping from graph1 to graph2; if false, use mapping from graph2
@@ -42,7 +42,7 @@ public interface GraphMapping<V, E>
     V getVertexCorrespondence(V vertex, boolean forward);
 
     /**
-     * Gets the mapped value where the key is <code>edge</code>
+     * Gets the mapped value where the key is {@code edge}
      *
      * @param edge edge in one of the graphs
      * @param forward if true, uses mapping from graph1 to graph2; if false, use mapping from graph2

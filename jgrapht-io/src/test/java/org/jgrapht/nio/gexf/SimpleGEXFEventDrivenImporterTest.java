@@ -18,14 +18,14 @@
 package org.jgrapht.nio.gexf;
 
 import org.jgrapht.alg.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests
@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNull;
 public class SimpleGEXFEventDrivenImporterTest
 {
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     @Test
     public void testUndirectedUnweighted()
@@ -76,8 +76,8 @@ public class SimpleGEXFEventDrivenImporterTest
         int i = 0;
         for (int[] edge : edges) {
             Pair<Integer, Integer> e = collected.get(i);
-            assertEquals(Integer.valueOf(edge[0]), e.getFirst());
-            assertEquals(Integer.valueOf(edge[1]), e.getSecond());
+            assertEquals(edge[0], e.getFirst());
+            assertEquals(edge[1], e.getSecond());
             i++;
         }
     }

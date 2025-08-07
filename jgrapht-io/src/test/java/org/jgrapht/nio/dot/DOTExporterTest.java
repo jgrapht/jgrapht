@@ -20,14 +20,13 @@ package org.jgrapht.nio.dot;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
@@ -42,7 +41,7 @@ public class DOTExporterTest
     private static final String V2 = "v2";
     private static final String V3 = "v3";
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     private static final String UNDIRECTED = "graph G {" + NL + "  1 [ label=\"a\" ];" + NL
         + "  2 [ x=\"y\" ];" + NL + "  3;" + NL + "  1 -- 2;" + NL + "  3 -- 1;" + NL + "}" + NL;
@@ -100,7 +99,7 @@ public class DOTExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals((strict) ? "strict " + UNDIRECTED : UNDIRECTED, res);
     }
 
@@ -124,7 +123,7 @@ public class DOTExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(
             (strict) ? "strict " + UNDIRECTED_WITH_GRAPH_ATTRIBUTES
                 : UNDIRECTED_WITH_GRAPH_ATTRIBUTES,
@@ -174,7 +173,7 @@ public class DOTExporterTest
         graph.addVertex(quotedNodeId);
         exporter.exportGraph(graph, outputWriter);
 
-        assertThat(outputWriter.toString(), containsString("label=\"\\\"abc\\\"\""));
+        assertTrue(outputWriter.toString().contains("label=\"\\\"abc\\\"\""));
     }
 
     @Test
@@ -194,7 +193,7 @@ public class DOTExporterTest
         graph.addVertex("myVertex");
         exporter.exportGraph(graph, outputWriter);
 
-        assertThat(outputWriter.toString(), containsString("label=<<b>html label</b>>"));
+        assertTrue(outputWriter.toString().contains("label=<<b>html label</b>>"));
     }
 
     @Test
@@ -212,7 +211,7 @@ public class DOTExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
         assertEquals(correctResult, res);
     }
 

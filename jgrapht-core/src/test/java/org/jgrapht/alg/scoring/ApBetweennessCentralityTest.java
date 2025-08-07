@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.scoring;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApBetweennessCentralityTest
 {

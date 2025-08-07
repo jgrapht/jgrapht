@@ -20,11 +20,11 @@ package org.jgrapht.generate;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * .
@@ -417,12 +417,7 @@ public class GnmRandomGraphGeneratorTest
             DefaultEdge> graph = new SimpleDirectedGraph<>(
                 SupplierUtil.createSupplier(String.class), SupplierUtil.createDefaultEdgeSupplier(),
                 false);
-        try {
-            randomGen.generateGraph(graph);
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> randomGen.generateGraph(graph));
     }
 
     /**

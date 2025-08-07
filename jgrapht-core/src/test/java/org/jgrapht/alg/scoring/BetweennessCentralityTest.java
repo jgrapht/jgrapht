@@ -23,23 +23,25 @@ import org.jgrapht.alg.scoring.BetweennessCentrality.OverflowStrategy;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BetweennessCentralityTest
 {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraph()
     {
-        Graph<Integer, DefaultEdge> g = null;
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
-        bc.getScores();
+        assertThrows(NullPointerException.class, () -> {
+            Graph<Integer, DefaultEdge> g = null;
+            VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
+            bc.getScores();
+        });
     }
 
     @Test
@@ -548,22 +550,24 @@ public class BetweennessCentralityTest
         return g;
     }
 
-    @Test(expected = ArithmeticException.class)
+    @Test
     public void testOverflow()
     {
-        final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        for (int i = 0; i < 3300; i++)
-            g.addVertex(i);
-        for (int i = 0; i < 3290; i++)
-            for (int j = 0; j < 10; j++)
-                g.addEdge(i, i - i % 10 + 10 + j);
-        VertexScoringAlgorithm<Integer, Double> bc =
-            new BetweennessCentrality<>(g, false, OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW);
-        bc.getScores();
+        assertThrows(ArithmeticException.class, () -> {
+            final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+            for (int i = 0; i < 3300; i++)
+                g.addVertex(i);
+            for (int i = 0; i < 3290; i++)
+                for (int j = 0; j < 10; j++)
+                    g.addEdge(i, i - i % 10 + 10 + j);
+            VertexScoringAlgorithm<Integer, Double> bc =
+                new BetweennessCentrality<>(g, false, OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW);
+            bc.getScores();
+        });
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testIgnoreOverflow()
     {
         final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);

@@ -50,7 +50,7 @@ public interface StrongConnectivityAlgorithm<V, E>
      * Computes a {@link List} of {@link Set}s, where each set contains vertices which together form
      * a strongly connected component within the given graph.
      *
-     * @return <code>List</code> of <code>Set</code> s containing the strongly connected components
+     * @return {@code List} of {@code Set} s containing the strongly connected components
      */
     List<Set<V>> stronglyConnectedSets();
 

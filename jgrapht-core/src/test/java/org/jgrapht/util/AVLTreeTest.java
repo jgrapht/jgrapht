@@ -17,13 +17,13 @@
  */
 package org.jgrapht.util;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
 import static org.jgrapht.util.AVLTree.TreeNode;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link AVLTree}
@@ -204,7 +204,7 @@ public class AVLTreeTest
             assertTrue(it.hasNext());
             TreeNode<Integer> node = it.next();
 
-            assertEquals(i, node.getValue().intValue());
+            assertEquals(i, node.getValue());
         }
     }
 

@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg.cycle;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
@@ -29,12 +31,14 @@ import java.util.*;
 public class ChinesePostmanTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGraphNoVertices()
     {
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        ChinesePostman<Integer, DefaultEdge> alg = new ChinesePostman<>();
-        alg.getCPPSolution(g);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+            ChinesePostman<Integer, DefaultEdge> alg = new ChinesePostman<>();
+            alg.getCPPSolution(g);
+        });
     }
 
     @Test
@@ -310,31 +314,31 @@ public class ChinesePostmanTest
         ChinesePostman<V, E> alg = new ChinesePostman<>();
         GraphPath<V, E> path = alg.getCPPSolution(graph);
 
-        Assert.assertEquals(expectedLength, path.getLength());
-        Assert.assertEquals(expectedLength, path.getEdgeList().size());
-        Assert.assertEquals(expectedWeight, path.getWeight(), 0.00000001);
-        Assert.assertEquals(
+        assertEquals(expectedLength, path.getLength());
+        assertEquals(expectedLength, path.getEdgeList().size());
+        assertEquals(expectedWeight, path.getWeight(), 0.00000001);
+        assertEquals(
             expectedWeight, path.getEdgeList().stream().mapToDouble(graph::getEdgeWeight).sum(),
             0.00000001);
 
         // all edges of the graph must be visited at least once
-        Assert.assertTrue(path.getEdgeList().containsAll(graph.edgeSet()));
+        assertTrue(path.getEdgeList().containsAll(graph.edgeSet()));
 
-        Assert.assertTrue(graph.containsVertex(path.getStartVertex()));
-        Assert.assertEquals(path.getStartVertex(), path.getEndVertex());
+        assertTrue(graph.containsVertex(path.getStartVertex()));
+        assertEquals(path.getStartVertex(), path.getEndVertex());
 
         // Verify that the path is an actual path in the graph
-        Assert.assertEquals(path.getEdgeList().size() + 1, path.getVertexList().size());
+        assertEquals(path.getEdgeList().size() + 1, path.getVertexList().size());
         List<V> vertexList = path.getVertexList();
         List<E> edgeList = path.getEdgeList();
 
         // Check start and end vertex
-        Assert.assertEquals(vertexList.get(0), path.getStartVertex());
-        Assert.assertEquals(vertexList.get(vertexList.size() - 1), path.getEndVertex());
+        assertEquals(vertexList.get(0), path.getStartVertex());
+        assertEquals(vertexList.get(vertexList.size() - 1), path.getEndVertex());
 
         // All vertices and edges in the path must be contained in the graph
-        Assert.assertTrue(graph.vertexSet().containsAll(vertexList));
-        Assert.assertTrue(graph.edgeSet().containsAll(edgeList));
+        assertTrue(graph.vertexSet().containsAll(vertexList));
+        assertTrue(graph.edgeSet().containsAll(edgeList));
 
         for (int i = 0; i < vertexList.size() - 1; i++) {
             V u = vertexList.get(i);
@@ -342,10 +346,10 @@ public class ChinesePostmanTest
             E edge = edgeList.get(i);
 
             if (graph.getType().isUndirected()) {
-                Assert.assertEquals(Graphs.getOppositeVertex(graph, edge, u), v);
+                assertEquals(Graphs.getOppositeVertex(graph, edge, u), v);
             } else { // Directed
-                Assert.assertEquals(graph.getEdgeSource(edge), u);
-                Assert.assertEquals(graph.getEdgeTarget(edge), v);
+                assertEquals(graph.getEdgeSource(edge), u);
+                assertEquals(graph.getEdgeTarget(edge), v);
             }
         }
     }

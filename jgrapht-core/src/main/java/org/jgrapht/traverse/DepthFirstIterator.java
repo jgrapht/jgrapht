@@ -82,11 +82,14 @@ public class DepthFirstIterator<V, E>
     /**
      * Creates a new depth-first iterator for the specified graph. Iteration will start at the
      * specified start vertex and will be limited to the connected component that includes that
-     * vertex. If the specified start vertex is <code>null</code>, iteration will start at an
+     * vertex. If the specified start vertex is {@code null}, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
+     * 
+     * @throws IllegalArgumentException if {@code g} does not contain {@code startVertex}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DepthFirstIterator(Graph<V, E> g, V startVertex)
     {
@@ -96,11 +99,15 @@ public class DepthFirstIterator<V, E>
     /**
      * Creates a new depth-first iterator for the specified graph. Iteration will start at the
      * specified start vertices and will be limited to the connected component that includes those
-     * vertices. If the specified start vertices is <code>null</code>, iteration will start at an
+     * vertices. If the specified start vertices is {@code null}, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
+     * 
+     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not
+     *                                  a vertex of {@code g}
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DepthFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
     {

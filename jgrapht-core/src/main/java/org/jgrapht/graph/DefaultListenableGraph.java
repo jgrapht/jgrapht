@@ -25,13 +25,13 @@ import java.util.*;
 
 /**
  * A graph backed by the the graph specified at the constructor, which can be listened by
- * <code>GraphListener</code> s and by <code>
- * VertexSetListener</code> s. Operations on this graph "pass through" to the to the backing graph.
+ * {@code GraphListener} s and by {@code  VertexSetListener} s. Operations on this graph
+ * "pass through" to the to the backing graph.
  * Any modification made to this graph or the backing graph is reflected by the other.
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods.
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -57,6 +57,9 @@ public class DefaultListenableGraph<V, E>
      * Creates a new listenable graph.
      *
      * @param g the backing graph.
+     * 
+     * @throws IllegalArgumentException if the backing graph is already a listenable graph.
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DefaultListenableGraph(Graph<V, E> g)
     {
@@ -64,8 +67,8 @@ public class DefaultListenableGraph<V, E>
     }
 
     /**
-     * Creates a new listenable graph. If the <code>reuseEvents</code> flag is set to
-     * <code>true</code> this class will reuse previously fired events and will not create a new
+     * Creates a new listenable graph. If the {@code reuseEvents} flag is set to
+     * {@code true} this class will reuse previously fired events and will not create a new
      * object for each event. This option increases performance but should be used with care,
      * especially in multithreaded environment.
      *
@@ -74,6 +77,7 @@ public class DefaultListenableGraph<V, E>
      *        event object for each event.
      *
      * @throws IllegalArgumentException if the backing graph is already a listenable graph.
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DefaultListenableGraph(Graph<V, E> g, boolean reuseEvents)
     {
@@ -89,7 +93,7 @@ public class DefaultListenableGraph<V, E>
     }
 
     /**
-     * If the <code>reuseEvents</code> flag is set to <code>true</code> this class will reuse
+     * If the {@code reuseEvents} flag is set to {@code true} this class will reuse
      * previously fired events and will not create a new object for each event. This option
      * increases performance but should be used with care, especially in multithreaded environment.
      *
@@ -102,12 +106,12 @@ public class DefaultListenableGraph<V, E>
     }
 
     /**
-     * Tests whether the <code>reuseEvents</code> flag is set. If the flag is set to
-     * <code>true</code> this class will reuse previously fired events and will not create a new
+     * Tests whether the {@code reuseEvents} flag is set. If the flag is set to
+     * {@code true} this class will reuse previously fired events and will not create a new
      * object for each event. This option increases performance but should be used with care,
      * especially in multithreaded environment.
      *
-     * @return the value of the <code>reuseEvents</code> flag.
+     * @return the value of the {@code reuseEvents} flag.
      */
     public boolean isReuseEvents()
     {
@@ -183,8 +187,7 @@ public class DefaultListenableGraph<V, E>
             return g;
         } catch (CloneNotSupportedException e) {
             // should never get here since we're Cloneable
-            e.printStackTrace();
-            throw new RuntimeException("internal error");
+            throw new Error("internal error", e);
         }
     }
 

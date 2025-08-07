@@ -19,11 +19,11 @@ package org.jgrapht.alg.cycle;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * .
@@ -155,12 +155,12 @@ public class CycleDetectorTest
         assertEquals(cyclicSet, detector.findCycles());
 
         for (String v : cyclicSet) {
-            assertEquals(true, detector.detectCyclesContainingVertex(v));
+            assertTrue(detector.detectCyclesContainingVertex(v));
             assertEquals(cyclicSet, detector.findCyclesContainingVertex(v));
         }
 
         for (String v : acyclicSet) {
-            assertEquals(false, detector.detectCyclesContainingVertex(v));
+            assertFalse(detector.detectCyclesContainingVertex(v));
             assertEquals(emptySet, detector.findCyclesContainingVertex(v));
         }
     }

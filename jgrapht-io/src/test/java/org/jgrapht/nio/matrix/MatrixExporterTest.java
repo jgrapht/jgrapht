@@ -20,11 +20,11 @@ package org.jgrapht.nio.matrix;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests
@@ -39,7 +39,7 @@ public class MatrixExporterTest
     private static final String V2 = "v2";
     private static final String V3 = "v3";
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     private static final String LAPLACIAN = "1 1 2" + NL + "1 2 -1" + NL + "1 3 -1" + NL + "2 2 1"
         + NL + "2 1 -1" + NL + "3 3 1" + NL + "3 1 -1" + NL;

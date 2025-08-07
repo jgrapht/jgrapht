@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * A unit test for a cloning bug, adapted from a forum entry from Linda Buisman.
@@ -74,7 +74,7 @@ public class CloneTest
         try {
             pg.addVertex(v3);
 
-            Assert.fail(); // should not get here
+            fail(); // should not get here
         } catch (IllegalArgumentException ex) {
             // expected, swallow
         }

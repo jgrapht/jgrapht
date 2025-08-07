@@ -57,6 +57,7 @@ class VF2SubgraphIsomorphismState<V, E>
 
         // check outgoing edges of addVertex1
         final int[] outE1 = g1.getOutEdges(addVertex1);
+        final String fp = "isFeasiblePair";
         for (int i = 0; i < outE1.length; i++) {
             final int other1 = outE1[i];
             if (core1[other1] != NULL_NODE) {
@@ -66,7 +67,7 @@ class VF2SubgraphIsomorphismState<V, E>
                 {
                     if (DEBUG)
                         showLog(
-                            "isFeasiblePair", abortmsg + ": edge from " + g2.getVertex(addVertex2)
+                            fp, abortmsg + ": edge from " + g2.getVertex(addVertex2)
                                 + " to " + g2.getVertex(other2) + " is missing in the 2nd graph");
                     return false;
                 }
@@ -95,7 +96,7 @@ class VF2SubgraphIsomorphismState<V, E>
                 if (!g1.hasEdge(addVertex1, other1)) {
                     if (DEBUG)
                         showLog(
-                            "isFeasbilePair", abortmsg + ": edge from " + g1.getVertex(addVertex1)
+                            fp, abortmsg + ": edge from " + g1.getVertex(addVertex1)
                                 + " to " + g1.getVertex(other1) + " is missing in the 1st graph");
                     return false;
                 }
@@ -129,7 +130,7 @@ class VF2SubgraphIsomorphismState<V, E>
                     cause = "|N‾ ∩ Succ(Graph2, " + v2 + ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
                 }
 
-                showLog("isFeasbilePair", abortmsg + ": " + cause);
+                showLog(fp, abortmsg + ": " + cause);
             }
 
             return false;
@@ -146,7 +147,7 @@ class VF2SubgraphIsomorphismState<V, E>
                 {
                     if (DEBUG)
                         showLog(
-                            "isFeasbilePair",
+                            fp,
                             abortmsg + ": edge from " + g2.getVertex(other2) + " to "
                                 + g2.getVertex(addVertex2) + " is missing in the 2nd graph");
                     return false;
@@ -176,7 +177,7 @@ class VF2SubgraphIsomorphismState<V, E>
                 if (!g1.hasEdge(other1, addVertex1)) {
                     if (DEBUG)
                         showLog(
-                            "isFeasiblePair",
+                            fp,
                             abortmsg + ": edge from " + g1.getVertex(other1) + " to "
                                 + g1.getVertex(addVertex1) + " is missing in the 1st graph");
                     return false;
@@ -201,7 +202,7 @@ class VF2SubgraphIsomorphismState<V, E>
             && (newPred1 >= newPred2))
         {
             if (DEBUG)
-                showLog("isFeasiblePair", pairstr + " fits");
+                showLog(fp, pairstr + " fits");
             return true;
         } else {
             if (DEBUG) {
@@ -217,7 +218,7 @@ class VF2SubgraphIsomorphismState<V, E>
                     cause = "|N‾ ∩ Pred(Graph2, " + v2 + ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
                 }
 
-                showLog("isFeasbilePair", abortmsg + ": " + cause);
+                showLog(fp, abortmsg + ": " + cause);
             }
 
             return false;

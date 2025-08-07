@@ -1,3 +1,21 @@
+/*
+ * (C) Copyright 2021-2024, by Sebastiano Vigna and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+
 /**
  * Immutable graphs stored using <a href="http://sux4j.di.unimi.it/">Sux4J</a>'s quasi-succinct data
  * structures.

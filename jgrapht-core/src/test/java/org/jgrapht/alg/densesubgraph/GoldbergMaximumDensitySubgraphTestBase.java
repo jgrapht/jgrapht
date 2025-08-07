@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * base class for {@link GoldbergMaximumDensitySubgraphAlgorithm} testing

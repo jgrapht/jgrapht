@@ -21,9 +21,9 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link ClusteringCoefficient}
@@ -117,10 +117,10 @@ public class ClusteringCoefficientTest
         assertEquals(0, clusteringCoefficient.getAverageClusteringCoefficient(), 0.0);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraphClusteringCoefficient()
     {
-        new ClusteringCoefficient<>(null);
+        assertThrows(NullPointerException.class, () -> new ClusteringCoefficient<>(null));
     }
 
     @Test

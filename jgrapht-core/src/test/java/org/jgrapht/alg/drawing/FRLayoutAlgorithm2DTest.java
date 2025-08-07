@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg.drawing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 import java.util.Random;
@@ -31,7 +31,7 @@ import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link FRLayoutAlgorithm2D}.

@@ -20,9 +20,10 @@ package org.jgrapht.alg.flow;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DinicMFImplTest
     extends MaximumFlowAlgorithmTest
@@ -47,7 +48,7 @@ public class DinicMFImplTest
         return new DinicMFImpl<>(network);
     }
 
-    @Before
+    @BeforeEach
     public void init()
     {
         g = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -80,13 +81,15 @@ public class DinicMFImplTest
         assertEquals(50.0, flow, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void exceptionTest1()
     {
-        g.addVertex(v1);
-        dinic = new DinicMFImpl<>(g);
-        double flow = dinic.getMaximumFlowValue(v1, v1);
-        System.out.println(flow);
+        assertThrows(IllegalArgumentException.class, () -> {
+            g.addVertex(v1);
+            dinic = new DinicMFImpl<>(g);
+            double flow = dinic.getMaximumFlowValue(v1, v1);
+            System.out.println(flow);
+        });
     }
 
     @Test

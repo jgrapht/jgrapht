@@ -53,7 +53,7 @@ public class PatonCycleBase<V, E>
      * Create a cycle base finder for the specified graph.
      *
      * @param graph the input graph
-     * @throws IllegalArgumentException if the graph argument is <code>null</code> or the graph is
+     * @throws IllegalArgumentException if the graph argument is {@code null} or the graph is
      *         not undirected
      */
     public PatonCycleBase(Graph<V, E> graph)

@@ -21,9 +21,10 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * This class tests default implementation of the
@@ -33,11 +34,13 @@ public class AStarAdmissibleHeuristicTest
     extends BaseHeuristicSearchTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNullValue()
     {
-        AStarAdmissibleHeuristic<Integer> heuristic = (sourceVertex, targetVertex) -> 0;
-        heuristic.isConsistent(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            AStarAdmissibleHeuristic<Integer> heuristic = (sourceVertex, targetVertex) -> 0;
+            heuristic.isConsistent(null);
+        });
     }
 
     @Test

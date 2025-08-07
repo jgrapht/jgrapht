@@ -46,14 +46,14 @@ public interface AStarAdmissibleHeuristic<V>
      * to the estimated distance from any neighboring vertex to the goal, plus the step cost of
      * reaching that neighbor. For details, refer to <a href=
      * "https://en.wikipedia.org/wiki/Consistent_heuristic">https://en.wikipedia.org/wiki/Consistent_heuristic</a>.
-     * In short, a heuristic is consistent iff <code>h(u)&le; d(u,v)+h(v)</code>, for every edge
+     * In short, a heuristic is consistent iff $h(u) \le d(u,v)+h(v)$, for every edge
      * $(u,v)$, where $d(u,v)$ is the weight of edge $(u,v)$ and $h(u)$ is the estimated cost to
      * reach the target node from vertex u. Most natural admissible heuristics, such as Manhattan or
      * Euclidean distance, are consistent heuristics.
      *
      * @param graph graph to test heuristic on
      * @param <E> graph edges type
-     * @return true iff the heuristic is consistent wrt the {@code graph}, false otherwise
+     * @return {@code true} iff the heuristic is consistent wrt the {@code graph}, {@code false} otherwise
      */
     default <E> boolean isConsistent(Graph<V, E> graph)
     {

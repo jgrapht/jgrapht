@@ -19,13 +19,13 @@ package org.jgrapht.nio.graphml;
 
 import org.jgrapht.alg.util.*;
 import org.jgrapht.nio.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
 public class SimpleGraphMLEdgeListImporterTest
 {
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     @Test
     public void testUndirectedUnweighted()
@@ -123,17 +123,17 @@ public class SimpleGraphMLEdgeListImporterTest
         });
         importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
-        Integer[][] edges = { { 0, 2, 2 }, { 0, 1, 3 }, { 1, 2, 1 } };
+        int[][] edges = { { 0, 2, 2 }, { 0, 1, 3 }, { 1, 2, 1 } };
 
-        assertTrue(collected.size() == 3);
+        assertEquals(3, collected.size());
 
         int i = 0;
-        for (Integer[] edge : edges) {
+        for (int[] edge : edges) {
             Triple<Integer, Integer, Double> e = collected.get(i);
-            assertEquals(Integer.valueOf(edge[0]), e.getFirst());
-            assertEquals(Integer.valueOf(edge[1]), e.getSecond());
+            assertEquals(edge[0], e.getFirst());
+            assertEquals(edge[1], e.getSecond());
             if (i < 2) {
-                assertEquals(Double.valueOf(edge[2]), collected.get(i).getThird());
+                assertEquals(edge[2], collected.get(i).getThird());
             } else {
                 assertNull(e.getThird());
 

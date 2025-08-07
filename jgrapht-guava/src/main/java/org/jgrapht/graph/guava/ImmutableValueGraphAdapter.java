@@ -98,6 +98,8 @@ public class ImmutableValueGraphAdapter<V, W>
      * 
      * @param valueGraph the value graph
      * @param valueConverter a function that converts a value to a double
+     * 
+     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is {@code null}
      */
     public ImmutableValueGraphAdapter(
         ImmutableValueGraph<V, W> valueGraph, ToDoubleFunction<W> valueConverter)
@@ -105,48 +107,72 @@ public class ImmutableValueGraphAdapter<V, W>
         super(valueGraph, valueConverter);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public EndpointPair<V> addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public V addVertex()
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public EndpointPair<V> removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean removeEdge(EndpointPair<V> e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean removeVertex(V v)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void setEdgeWeight(EndpointPair<V> e, double weight)
     {
@@ -184,8 +210,7 @@ public class ImmutableValueGraphAdapter<V, W>
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 

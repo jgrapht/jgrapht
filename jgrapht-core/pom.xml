@@ -10,7 +10,7 @@
     <name>JGraphT - Core</name>
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>
-        <excludedGroups>org.jgrapht.SlowTests,org.jgrapht.OptionalTests</excludedGroups>
+        <excludedGroups>slow,optional</excludedGroups>
     </properties>
     <licenses>
         <license>
@@ -34,8 +34,18 @@
             <artifactId>apfloat</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.junit-toolbox</groupId>
-            <artifactId>junit-toolbox</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -71,10 +81,28 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
+                            <argLine>
+                                --add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED
+                                <!-- 
+                                    Manually export performance test packages
+                                    Ref: https://github.com/jgrapht/jgrapht/issues/1170
+                                -->
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.clique=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.connectivity=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.flow=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.graph=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.lca=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.matching=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.spanning=ALL-UNNAMED
+                            </argLine>
                             <excludes>
                                 <exclude>**/perf/**</exclude>
                             </excludes>
                             <excludedGroups>${excludedGroups}</excludedGroups>
+                            <includes>
+                                <include>**/FastTestSuite.java</include>
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>
@@ -83,11 +111,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
+                    <argLine>--add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED</argLine>
+                    <excludedGroups>optional</excludedGroups>
+                    <groups>slow</groups>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <groups>org.jgrapht.SlowTests</groups>
-                    <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
                 </configuration>
             </plugin>
         </plugins>

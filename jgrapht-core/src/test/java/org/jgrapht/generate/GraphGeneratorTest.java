@@ -21,11 +21,11 @@ import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * .
@@ -182,7 +182,7 @@ public class GraphGeneratorTest
         ScaleFreeGraphGenerator<Object, DefaultEdge> generator = new ScaleFreeGraphGenerator<>(500);
         generator.generateGraph(graph);
         ConnectivityInspector<Object, DefaultEdge> inspector = new ConnectivityInspector<>(graph);
-        assertTrue("generated graph is not connected", inspector.isConnected());
+        assertTrue(inspector.isConnected(), "generated graph is not connected");
 
         try {
             new ScaleFreeGraphGenerator<>(-50);
@@ -200,7 +200,7 @@ public class GraphGeneratorTest
         Graph<Object, DefaultEdge> empty = new DefaultDirectedGraph<>(
             SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(empty);
-        assertTrue("non-empty graph generated", empty.vertexSet().isEmpty());
+        assertTrue(empty.vertexSet().isEmpty(), "non-empty graph generated");
     }
 
     /**
@@ -310,15 +310,15 @@ public class GraphGeneratorTest
         // graph structure validations
         int expectedVerticeNum = rows * cols;
         assertEquals(
+            expectedVerticeNum, gridGraph.vertexSet().size(),
             "number of vertices is wrong (" + gridGraph.vertexSet().size() + "), should be "
-                + expectedVerticeNum,
-            expectedVerticeNum, gridGraph.vertexSet().size());
+                + expectedVerticeNum);
         int expectedEdgesNum = (((rows - 1) * cols) + ((cols - 1) * rows))
             * ((gridGraph.getType().isUndirected()) ? 1 : 2);
         assertEquals(
+            expectedEdgesNum, gridGraph.edgeSet().size(),
             "number of edges is wrong (" + gridGraph.edgeSet().size() + "), should be "
-                + expectedEdgesNum,
-            expectedEdgesNum, gridGraph.edgeSet().size());
+                + expectedEdgesNum);
 
         int cornerVertices = 0, borderVertices = 0, innerVertices = 0, neighborsSize;
         int expCornerVertices = 4;
@@ -331,8 +331,8 @@ public class GraphGeneratorTest
             neighbors.addAll(Graphs.neighborListOf(gridGraph, v));
             neighborsSize = neighbors.size();
             assertTrue(
-                "vertex with illegal number of neighbors (" + neighborsSize + ").",
-                (neighborsSize == 2) || (neighborsSize == 3) || (neighborsSize == 4));
+                (neighborsSize == 2) || (neighborsSize == 3) || (neighborsSize == 4),
+                "vertex with illegal number of neighbors (" + neighborsSize + ").");
             if (neighborsSize == 2) {
                 cornerVertices++;
             } else if (neighborsSize == 3) {
@@ -342,31 +342,31 @@ public class GraphGeneratorTest
             }
         }
         assertEquals(
+            expCornerVertices, cornerVertices,
             "there should be exactly " + expCornerVertices
                 + " corner (with two neighbors) vertices. " + " actual number is " + cornerVertices
-                + ".",
-            expCornerVertices, cornerVertices);
+                + ".");
         assertEquals(
-            "there should be exactly " + expBorderVertices
+            expBorderVertices, borderVertices,
+             "there should be exactly " + expBorderVertices
                 + " border (with three neighbors) vertices. " + " actual number is "
-                + borderVertices + ".",
-            expBorderVertices, borderVertices);
+                + borderVertices + ".");
         assertEquals(
+            expInnerVertices, innerVertices,
             "there should be exactly " + expInnerVertices
                 + " inner (with four neighbors) vertices. " + " actual number is " + innerVertices
-                + ".",
-            expInnerVertices, innerVertices);
+                + ".");
 
         // result map validations
         Set<String> keys = resultMap.keySet();
         assertEquals(
-            "result map contains should contains exactly 4 corner verices", 4, keys.size());
+            4, keys.size(), "result map contains should contains exactly 4 corner verices");
 
         for (String key : keys) {
             neighbors.clear();
             neighbors.addAll(Graphs.neighborListOf(gridGraph, resultMap.get(key)));
             neighborsSize = neighbors.size();
-            assertEquals("corner vertex should have exactly 2 neighbors", 2, neighborsSize);
+            assertEquals(2, neighborsSize, "corner vertex should have exactly 2 neighbors");
         }
     }
 }

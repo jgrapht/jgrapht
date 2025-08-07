@@ -21,11 +21,11 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Dimitrios Michail
@@ -57,7 +57,7 @@ public class ListSingleSourcePathsTest
         ListSingleSourcePathsImpl<Integer, DefaultWeightedEdge> paths =
             new ListSingleSourcePathsImpl<>(g, 0, map);
 
-        assertEquals(0, paths.getSourceVertex().intValue());
+        assertEquals(0, paths.getSourceVertex());
         assertEquals(0d, paths.getWeight(0), 1e-9);
         for (int i = 1; i < n; i++) {
             assertEquals(p.get(i - 1).getWeight(), paths.getWeight(i), 1e-9);

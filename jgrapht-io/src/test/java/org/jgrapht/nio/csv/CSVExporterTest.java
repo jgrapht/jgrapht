@@ -19,12 +19,12 @@ package org.jgrapht.nio.csv;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.util.function.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link CSVExporter}.
@@ -36,7 +36,7 @@ public class CSVExporterTest
     // ~ Static fields/initializers
     // ---------------------------------------------
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
     private static final Function<Integer, String> NAME_PROVIDER = v -> String.valueOf(v);
 
     // @formatter:off

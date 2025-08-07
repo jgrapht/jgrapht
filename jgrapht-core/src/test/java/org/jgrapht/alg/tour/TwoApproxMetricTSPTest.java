@@ -22,12 +22,13 @@ import org.jgrapht.alg.spanning.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Dimitrios Michail
@@ -121,27 +122,31 @@ public class TwoApproxMetricTSPTest
         assertTrue(2 * mstWeight >= tourWeight);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidInstanceDirected()
     {
-        Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        g.addVertex("A");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+            g.addVertex("A");
 
-        new TwoApproxMetricTSP<String, DefaultEdge>().getTour(g);
+            new TwoApproxMetricTSP<String, DefaultEdge>().getTour(g);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidInstanceNotComplete()
     {
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        g.addVertex("A");
-        g.addVertex("B");
-        g.addVertex("C");
-        g.setEdgeWeight(g.addEdge("A", "B"), 20d);
-        g.setEdgeWeight(g.addEdge("A", "C"), 42d);
+        assertThrows(IllegalArgumentException.class, () -> {
+            SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            g.addVertex("A");
+            g.addVertex("B");
+            g.addVertex("C");
+            g.setEdgeWeight(g.addEdge("A", "B"), 20d);
+            g.setEdgeWeight(g.addEdge("A", "C"), 42d);
 
-        new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
+            new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
+        });
     }
 
     static <V, E> void assertHamiltonian(Graph<V, E> g, GraphPath<V, E> path)

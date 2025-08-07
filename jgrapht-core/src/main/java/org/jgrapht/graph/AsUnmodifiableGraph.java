@@ -25,12 +25,12 @@ import java.util.*;
 /**
  * An unmodifiable view of the backing graph specified in the constructor. This graph allows modules
  * to provide users with "read-only" access to internal graphs. Query operations on this graph "read
- * through" to the backing graph, and attempts to modify this graph result in an <code>
- * UnsupportedOperationException</code>.
+ * through" to the backing graph, and attempts to modify this graph result in an
+ * {@link UnsupportedOperationException}.
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods. This
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This
  * graph will be serializable if the backing graph is serializable.
  * </p>
  *
@@ -50,7 +50,9 @@ public class AsUnmodifiableGraph<V, E>
     /**
      * Creates a new unmodifiable graph based on the specified backing graph.
      *
-     * @param g the backing graph on which an unmodifiable graph is to be created.
+     * @param g the backing graph on which an unmodifiable graph is to be created
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public AsUnmodifiableGraph(Graph<V, E> g)
     {
@@ -58,7 +60,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -67,7 +69,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -76,7 +78,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex()
+     * @throws UnsupportedOperationException always
      */
     @Override
     public V addVertex()
@@ -85,7 +87,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean addVertex(V v)
@@ -94,7 +96,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Collection)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
@@ -103,7 +105,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
@@ -112,7 +114,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllVertices(Collection)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
@@ -121,7 +123,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeEdge(E e)
@@ -130,7 +132,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object, Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -139,7 +141,7 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(Object)
+     * @throws UnsupportedOperationException always
      */
     @Override
     public boolean removeVertex(V v)
@@ -154,5 +156,25 @@ public class AsUnmodifiableGraph<V, E>
     public GraphType getType()
     {
         return super.getType().asUnmodifiable();
+    }
+
+    /**
+     * @throws UnsupportedOperationException always
+     * 
+     * @since 1.5.3
+     */
+    @Override
+    public void setEdgeWeight(E e, double weight) {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    /**
+     * @throws UnsupportedOperationException always
+     * 
+     * @since 1.5.3
+     */
+    @Override
+    public void setEdgeWeight(V sourceVertex, V targetVertex, double weight) {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 }

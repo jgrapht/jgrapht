@@ -23,14 +23,13 @@ import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
@@ -40,7 +39,7 @@ import static org.junit.Assert.assertTrue;
 public class SimpleGraphMLImporterTest
 {
 
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     @Test
     public void testUndirectedUnweighted()
@@ -268,84 +267,86 @@ public class SimpleGraphMLImporterTest
         assertEquals(99.0, g.getEdgeWeight(g.getEdge("0", "3")), 1e-9);
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testValidate()
-        throws ImportException
     {
-        // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
-            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<nOde id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<myedge source=\"1\" target=\"2\"/>" + NL + 
-            "</graph>" + NL + 
-            "</graphml>";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = 
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
+                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+                "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
+                "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+                "<nOde id=\"1\"/>" + NL +
+                "<node id=\"2\"/>" + NL + 
+                "<myedge source=\"1\" target=\"2\"/>" + NL + 
+                "</graph>" + NL + 
+                "</graphml>";
+            // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+            Graph<String,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .vertexSupplier(SupplierUtil.createStringSupplier())
+                    .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
-        new SimpleGraphMLImporter<String, DefaultEdge>()
-            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+            new SimpleGraphMLImporter<String, DefaultEdge>()
+                .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        });
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testNestedGraphs()
-        throws ImportException
     {
-        // @formatter:off
-        String input =
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
-            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
-            "<key id=\"d0\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
-            "<key id=\"d1\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
-            "<key id=\"d2\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
-            "<data key=\"d0\">green</data>" + NL +
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
-            "<data key=\"d0\">green</data>" + NL +
-            "<node id=\"n0\"/>" + NL +
-            "<node id=\"n1\">" + NL +
-            "  <graph id=\"n1:\" edgedefault=\"undirected\">" + NL +
-            "    <node id=\"n1:n0\"/>" + NL +
-            "    <node id=\"n1:n1\"/>" + NL +
-            "    <data key=\"d0\">green</data>" + NL +
-            "    <edge source=\"n1:n0\" target=\"n1:n1\"/>" + NL +
-            "  </graph>" + NL +
-            "</node>" + NL +
-            "<node id=\"n2\">" + NL +
-            "  <graph id=\"n2:\" edgedefault=\"undirected\">" + NL +
-            "    <node id=\"n2:n0\"/>" + NL +
-            "    <node id=\"n2:n1\"/>" + NL +
-            "    <data key=\"d0\">green</data>" + NL +
-            "    <edge source=\"n2:n0\" target=\"n2:n1\"/>" + NL +
-            "  </graph>" + NL +
-            "</node>" + NL +
-            "<edge id=\"e1\" source=\"n1\" target=\"n2\"/>" + NL +
-            "<data key=\"d1\">green</data>" + NL +
-            "</graph>" + NL +
-            "<data key=\"d2\">green</data>" + NL +
-            "</graphml>";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+                "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+                "<key id=\"d0\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+                "<key id=\"d1\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+                "<key id=\"d2\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+                "<data key=\"d0\">green</data>" + NL +
+                "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+                "<data key=\"d0\">green</data>" + NL +
+                "<node id=\"n0\"/>" + NL +
+                "<node id=\"n1\">" + NL +
+                "  <graph id=\"n1:\" edgedefault=\"undirected\">" + NL +
+                "    <node id=\"n1:n0\"/>" + NL +
+                "    <node id=\"n1:n1\"/>" + NL +
+                "    <data key=\"d0\">green</data>" + NL +
+                "    <edge source=\"n1:n0\" target=\"n1:n1\"/>" + NL +
+                "  </graph>" + NL +
+                "</node>" + NL +
+                "<node id=\"n2\">" + NL +
+                "  <graph id=\"n2:\" edgedefault=\"undirected\">" + NL +
+                "    <node id=\"n2:n0\"/>" + NL +
+                "    <node id=\"n2:n1\"/>" + NL +
+                "    <data key=\"d0\">green</data>" + NL +
+                "    <edge source=\"n2:n0\" target=\"n2:n1\"/>" + NL +
+                "  </graph>" + NL +
+                "</node>" + NL +
+                "<edge id=\"e1\" source=\"n1\" target=\"n2\"/>" + NL +
+                "<data key=\"d1\">green</data>" + NL +
+                "</graph>" + NL +
+                "<data key=\"d2\">green</data>" + NL +
+                "</graphml>";
+            // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+            Graph<String,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .vertexSupplier(SupplierUtil.createStringSupplier())
+                    .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
-        new SimpleGraphMLImporter<String, DefaultEdge>()
-            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+            new SimpleGraphMLImporter<String, DefaultEdge>()
+                .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        });
     }
 
     @Test

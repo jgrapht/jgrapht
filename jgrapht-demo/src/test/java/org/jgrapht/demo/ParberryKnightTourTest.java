@@ -18,12 +18,13 @@
 package org.jgrapht.demo;
 
 import org.jgrapht.alg.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParberryKnightTourTest
 {
@@ -200,34 +201,34 @@ public class ParberryKnightTourTest
         assertTrue(checkCorrectnessParberry(par.getTour().toList(), 6, 8));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParberryIncorrectBoardConf1()
     {
-        par = new ParberryKnightTour(2, 2);
+        assertThrows(IllegalArgumentException.class, () -> new ParberryKnightTour(2, 2));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParberryIncorrectBoardConf2()
     {
-        par = new ParberryKnightTour(21, 22);
+        assertThrows(IllegalArgumentException.class, () -> new ParberryKnightTour(21, 22));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParberryIncorrectBoardConf3()
     {
-        par = new ParberryKnightTour(73, 73);
+        assertThrows(IllegalArgumentException.class, () -> new ParberryKnightTour(73, 73));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParberryIncorrectBoardConf4()
     {
-        par = new ParberryKnightTour(-20, 20);
+        assertThrows(IllegalArgumentException.class, () -> new ParberryKnightTour(-20, 20));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParberryIncorrectBoardConf5()
     {
-        par = new ParberryKnightTour(40, 44);
+        assertThrows(IllegalArgumentException.class, () -> new ParberryKnightTour(40, 44));
     }
 
     @Test

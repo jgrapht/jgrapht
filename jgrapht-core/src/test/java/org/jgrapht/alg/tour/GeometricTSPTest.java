@@ -22,10 +22,9 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 import java.util.PrimitiveIterator.*;
@@ -38,28 +37,20 @@ import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
  *
  * @author Peter Harman
  */
-@Category(SlowTests.class)
-@RunWith(Parameterized.class)
+@Tag("slow")
 public class GeometricTSPTest
 {
 
     private static final OfDouble RNG = new Random().doubles(0.0, 100.0).iterator();
-    private final Graph<Vector2D, DefaultWeightedEdge> graph;
 
-    public GeometricTSPTest(Graph<Vector2D, DefaultWeightedEdge> graph, Integer size)
+    public static List<Arguments> graphs()
     {
-        this.graph = graph;
-    }
-
-    @Parameterized.Parameters(name = "{1} Points")
-    public static Object[][] graphs()
-    {
-        List<Object[]> graphs = new ArrayList<>();
+        List<Arguments> graphs = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             int size = (int) Math.pow(10, i);
-            graphs.add(new Object[] { generate(size), size });
+            graphs.add(Arguments.of( generate(size), size ));
         }
-        return graphs.toArray(new Object[0][]);
+        return graphs;
     }
 
     static Graph<Vector2D, DefaultWeightedEdge> generate(int n)
@@ -89,55 +80,68 @@ public class GeometricTSPTest
     }
 
     void testWith(
-        String description, HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> algorithm)
+        Graph<Vector2D, DefaultWeightedEdge> graph, HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> algorithm)
     {
         GraphPath<Vector2D, DefaultWeightedEdge> tour = algorithm.getTour(graph);
         assertHamiltonian(graph, tour);
     }
 
-    @Test
-    public void testGreedy()
+    @DisplayName("Greedy")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testGreedy(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
     {
-        testWith("Greedy", new GreedyHeuristicTSP<>());
+        testWith(graph, new GreedyHeuristicTSP<>());
     }
 
-    @Test
-    public void testNearestInsertionHeuristic()
+    @DisplayName("Nearest insertion starting from shortest edge")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testNearestInsertionHeuristic(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
+    {
+        testWith(graph, new NearestInsertionHeuristicTSP<>());
+    }
+
+    @DisplayName("Nearest neighbour")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testNearestNeighbourHeuristic(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
+    {
+        testWith(graph, new NearestNeighborHeuristicTSP<>());
+    }
+
+    @DisplayName("Random")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testRandom(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
+    {
+        testWith(graph, new RandomTourTSP<>());
+    }
+
+    @DisplayName("Two-opt of nearest neighbour")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testTwoOptNearestNeighbour(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
     {
         testWith(
-            "Nearest insertion starting from shortest edge", new NearestInsertionHeuristicTSP<>());
-    }
-
-    @Test
-    public void testNearestNeighbourHeuristic()
-    {
-        testWith("Nearest neighbour", new NearestNeighborHeuristicTSP<>());
-    }
-
-    @Test
-    public void testRandom()
-    {
-        testWith("Random", new RandomTourTSP<>());
-    }
-
-    @Test
-    public void testTwoOptNearestNeighbour()
-    {
-        testWith(
-            "Two-opt of nearest neighbour",
+            graph,
             new TwoOptHeuristicTSP<>(new NearestNeighborHeuristicTSP<>()));
     }
 
-    @Test
-    public void testTwoOpt1()
+    @DisplayName("Two-opt, 1 attempt from random")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testTwoOpt1(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
     {
-        testWith("Two-opt, 1 attempt from random", new TwoOptHeuristicTSP<>(1));
+        testWith(graph, new TwoOptHeuristicTSP<>(1));
     }
 
-    @Test
-    public void testChristofides()
+    @DisplayName("Greedy")
+    @ParameterizedTest(name = "{1} points")
+    @MethodSource("graphs")
+    public void testChristofides(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
     {
-        testWith("Christofides", new ChristofidesThreeHalvesApproxMetricTSP<>());
+        testWith(graph, new ChristofidesThreeHalvesApproxMetricTSP<>());
     }
 
 }

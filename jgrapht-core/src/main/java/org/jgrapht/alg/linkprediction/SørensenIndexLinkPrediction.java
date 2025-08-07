@@ -49,7 +49,10 @@ import org.jgrapht.alg.util.Pair;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * 
+ * @deprecated Class will be replaced by SorensenIndexLinkPrediction
  */
+@Deprecated
 public class SørensenIndexLinkPrediction<V, E>
     implements LinkPredictionAlgorithm<V, E>
 {

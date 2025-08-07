@@ -26,8 +26,8 @@ import java.util.*;
  * A topological ordering iterator for a directed acyclic graph.
  * 
  * <p>
- * A topological order is a permutation <code>p</code> of the vertices of a graph such that an edge
- * <code>(i,j)</code> implies that <code>i</code> appears before <code>j</code> in <code>p</code>.
+ * A topological order is a permutation {@code p} of the vertices of a graph such that an edge
+ * {@code (i,j)} implies that {@code i} appears before {@code j} in {@code p}.
  * For more information see
  * <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
  * <a href="http://mathworld.wolfram.com/TopologicalSort.html">wolfram</a>.
@@ -83,6 +83,8 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param graph the directed graph to be iterated
      * @param comparator comparator in order to break ties in case of partial order
+     * 
+     * @throws NotDirectedAcyclicGraphException if {@code graph} is not a DAG
      */
     public TopologicalOrderIterator(Graph<V, E> graph, Comparator<V> comparator)
     {
@@ -118,9 +120,7 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Always returns true since the iterator does not care about components.
+     * @return {@code true} always, since this iterator does not care about components
      */
     @Override
     public boolean isCrossComponentTraversal()
@@ -129,10 +129,7 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Trying to disable the cross components nature of this iterator will result into throwing a
-     * {@link IllegalArgumentException}.
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)

@@ -24,13 +24,14 @@ import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PatonCycleBaseTest
 {
@@ -86,7 +87,7 @@ public class PatonCycleBaseTest
 
     private void checkResult(CycleBasisAlgorithm<Integer, DefaultEdge> finder, int size)
     {
-        assertTrue(finder.getCycleBasis().getCycles().size() == size);
+        assertEquals(size, finder.getCycleBasis().getCycles().size());
     }
 
     @Test
@@ -546,15 +547,17 @@ public class PatonCycleBaseTest
         assertEquals(1d, cb.getWeight(), 1e-9);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testMultipleEdges()
     {
-        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Collections.singletonList(0));
-        graph.addEdge(0, 0);
-        graph.addEdge(0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+            Graphs.addAllVertices(graph, Collections.singletonList(0));
+            graph.addEdge(0, 0);
+            graph.addEdge(0, 0);
 
-        new PatonCycleBase<>(graph).getCycleBasis();
+            new PatonCycleBase<>(graph).getCycleBasis();
+        });
     }
 
     @Test

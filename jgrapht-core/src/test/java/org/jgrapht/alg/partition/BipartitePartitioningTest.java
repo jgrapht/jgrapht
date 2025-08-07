@@ -21,12 +21,13 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for {@link BipartitePartitioning}
@@ -158,8 +159,8 @@ public class BipartitePartitioningTest
 
         BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-        Assert.assertTrue(finder.isBipartite());
-        Assert.assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
+        assertTrue(finder.isBipartite());
+        assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
     }
 
     @Test
@@ -178,8 +179,8 @@ public class BipartitePartitioningTest
 
             BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-            Assert.assertTrue(finder.isBipartite());
-            Assert.assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
+            assertTrue(finder.isBipartite());
+            assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
         }
     }
 
@@ -202,8 +203,8 @@ public class BipartitePartitioningTest
 
             BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-            Assert.assertTrue(finder.isBipartite());
-            Assert.assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
+            assertTrue(finder.isBipartite());
+            assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
         }
     }
 
@@ -218,8 +219,8 @@ public class BipartitePartitioningTest
 
         BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-        Assert.assertTrue(finder.isBipartite());
-        Assert.assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
+        assertTrue(finder.isBipartite());
+        assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
     }
 
     @Test
@@ -240,8 +241,8 @@ public class BipartitePartitioningTest
 
             BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-            Assert.assertTrue(finder.isBipartite());
-            Assert.assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
+            assertTrue(finder.isBipartite());
+            assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
         }
     }
 
@@ -256,8 +257,8 @@ public class BipartitePartitioningTest
 
         BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-        Assert.assertFalse(finder.isBipartite());
-        Assert.assertNull(finder.getPartitioning());
+        assertFalse(finder.isBipartite());
+        assertNull(finder.getPartitioning());
     }
 
     @Test
@@ -271,8 +272,8 @@ public class BipartitePartitioningTest
 
         BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-        Assert.assertTrue(finder.isBipartite());
-        Assert.assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
+        assertTrue(finder.isBipartite());
+        assertTrue(finder.isValidPartitioning(finder.getPartitioning()));
     }
 
     @Test
@@ -286,7 +287,7 @@ public class BipartitePartitioningTest
 
         BipartitePartitioning<Integer, DefaultEdge> finder = new BipartitePartitioning<>(graph);
 
-        Assert.assertFalse(finder.isBipartite());
-        Assert.assertNull(finder.getPartitioning());
+        assertFalse(finder.isBipartite());
+        assertNull(finder.getPartitioning());
     }
 }

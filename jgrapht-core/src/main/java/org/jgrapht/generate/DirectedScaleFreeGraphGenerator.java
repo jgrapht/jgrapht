@@ -171,7 +171,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Constructs a Generator using a seed for the random number generator and sets the two
-     * relaxation options <code>allowingMultipleEdges</code> and <code>allowingSelfLoops</code>.
+     * relaxation options {@code allowingMultipleEdges} and {@code allowingSelfLoops}.
      * 
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
@@ -253,7 +253,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Construct a new generator using the provided random number generator and sets the two
-     * relaxation options <code>allowingMultipleEdges</code> and <code>allowingSelfLoops</code>.
+     * relaxation options {@code allowingMultipleEdges} and {@code allowingSelfLoops}.
      * 
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.

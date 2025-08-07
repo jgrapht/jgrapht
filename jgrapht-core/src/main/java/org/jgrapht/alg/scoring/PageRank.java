@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * PageRank implementation.
- * 
+ *
  * <p>
  * The <a href="https://en.wikipedia.org/wiki/PageRank">wikipedia</a> article contains a nice
  * description of PageRank. The method can be found on the article: Sergey Brin and Larry Page: The
@@ -32,7 +32,7 @@ import java.util.*;
  * Conference, Brisbane, Australia, April 1998. See also the following
  * <a href="http://infolab.stanford.edu/~backrub/google.html">page</a>.
  * </p>
- * 
+ *
  * <p>
  * This is a simple iterative implementation of PageRank which stops after a given number of
  * iterations or if the PageRank values between two iterations do not change more than a predefined
@@ -45,19 +45,19 @@ import java.util.*;
  * $m$ the number of edges of the graph. The maximum number of iterations can be adjusted by the
  * caller. The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
  * </p>
- * 
+ *
  * <p>
  * If the graph is a weighted graph, a weighted variant is used where the probability of following
  * an edge e out of node $v$ is equal to the weight of $e$ over the sum of weights of all outgoing
  * edges of $v$.
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public final class PageRank<V, E>
+public class PageRank<V, E>
     implements VertexScoringAlgorithm<V, Double>
 {
     /**
@@ -104,7 +104,7 @@ public final class PageRank<V, E>
 
     /**
      * Create and execute an instance of PageRank.
-     * 
+     *
      * @param graph the input graph
      */
     public PageRank(Graph<V, E> graph)
@@ -114,7 +114,7 @@ public final class PageRank<V, E>
 
     /**
      * Create and execute an instance of PageRank.
-     * 
+     *
      * @param graph the input graph
      * @param dampingFactor the damping factor
      */
@@ -125,7 +125,7 @@ public final class PageRank<V, E>
 
     /**
      * Create and execute an instance of PageRank.
-     * 
+     *
      * @param graph the input graph
      * @param dampingFactor the damping factor
      * @param maxIterations the maximum number of iterations to perform
@@ -137,7 +137,7 @@ public final class PageRank<V, E>
 
     /**
      * Create and execute an instance of PageRank.
-     * 
+     *
      * @param graph the input graph
      * @param dampingFactor the damping factor
      * @param maxIterations the maximum number of iterations to perform
@@ -190,14 +190,14 @@ public final class PageRank<V, E>
 
     /**
      * The actual implementation.
-     * 
+     *
      * <p>
      * We use this pattern with the inner class in order to be able to cache the result but also
      * allow the garbage collector to acquire all auxiliary memory used during the execution of the
      * algorithm.
-     * 
+     *
      * @author Dimitrios Michail
-     * 
+     *
      * @param <V> the graph type
      * @param <E> the edge type
      */

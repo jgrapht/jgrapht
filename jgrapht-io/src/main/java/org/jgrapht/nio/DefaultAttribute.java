@@ -156,7 +156,6 @@ public class DefaultAttribute<T>
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
     public boolean equals(Object obj)
     {
         if (this == obj)
@@ -165,7 +164,7 @@ public class DefaultAttribute<T>
             return false;
         if (getClass() != obj.getClass())
             return false;
-        DefaultAttribute other = (DefaultAttribute) obj;
+        DefaultAttribute<?> other = (DefaultAttribute<?>) obj;
         if (type != other.type)
             return false;
         if (value == null) {

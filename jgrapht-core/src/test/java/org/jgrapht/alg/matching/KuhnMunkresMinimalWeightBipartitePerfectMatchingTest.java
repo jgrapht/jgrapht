@@ -22,9 +22,11 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 {
@@ -125,7 +127,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         MatchingAlgorithm<V, DefaultWeightedEdge> alg =
             new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(graph, emptyList, emptyList);
 
-        Assert.assertTrue(alg.getMatching().getEdges().isEmpty());
+        assertTrue(alg.getMatching().getEdges().isEmpty());
     }
 
     @Test
@@ -138,7 +140,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 12);
+        assertEquals(12, w);
     }
 
     @Test
@@ -151,7 +153,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 15);
+        assertEquals(15, w);
 
     }
 
@@ -166,7 +168,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 10);
+        assertEquals(10, w);
 
     }
 
@@ -192,7 +194,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 12);
+        assertEquals(12, w);
 
     }
 
@@ -211,7 +213,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 21);
+        assertEquals(21, w);
     }
 
     @Test
@@ -229,7 +231,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 19);
+        assertEquals(19, w);
     }
 
     @Test
@@ -249,7 +251,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double w = match(costMatrix, costMatrix.length).getWeight();
 
-        Assert.assertTrue(w == 12);
+        assertEquals(12, w);
     }
 
     @Test

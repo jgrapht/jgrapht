@@ -72,6 +72,8 @@ public class MaximumCardinalityIterator<V, E>
      * Creates a maximum cardinality iterator for the {@code graph}.
      *
      * @param graph the graph to be iterated.
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public MaximumCardinalityIterator(Graph<V, E> graph)
     {

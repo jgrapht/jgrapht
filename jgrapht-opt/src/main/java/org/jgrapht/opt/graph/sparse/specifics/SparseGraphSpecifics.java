@@ -44,14 +44,14 @@ public interface SparseGraphSpecifics
     long verticesCount();
 
     /**
-     * Returns <code>true</code> if this graph contains the specified edge. More formally, returns
-     * <code>true</code> if and only if this graph contains an edge <code>e2</code> such that
-     * <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns
-     * <code>false</code>.
+     * Returns {@code true} if this graph contains the specified edge. More formally, returns
+     * {@code true} if and only if this graph contains an edge {@code e2} such that
+     * {@code e.equals(e2)}. If the specified edge is {@code null} returns
+     * {@code false}.
      *
      * @param e edge whose presence in this graph is to be tested.
      *
-     * @return <code>true</code> if this graph contains the specified edge.
+     * @return {@code true} if this graph contains the specified edge.
      */
     default boolean containsEdge(Integer e)
     {
@@ -59,14 +59,14 @@ public interface SparseGraphSpecifics
     }
 
     /**
-     * Returns <code>true</code> if this graph contains the specified vertex. More formally, returns
-     * <code>true</code> if and only if this graph contains a vertex <code>u</code> such that
-     * <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns
-     * <code>false</code>.
+     * Returns {@code true} if this graph contains the specified vertex. More formally, returns
+     * {@code true} if and only if this graph contains a vertex {@code u} such that
+     * {@code u.equals(v)}. If the specified vertex is {@code null} returns
+     * {@code false}.
      *
      * @param v vertex whose presence in this graph is to be tested.
      *
-     * @return <code>true</code> if this graph contains the specified vertex.
+     * @return {@code true} if this graph contains the specified vertex.
      */
     default boolean containsVertex(Integer v)
     {
@@ -110,7 +110,7 @@ public interface SparseGraphSpecifics
      * @return the degree of the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      * @throws ArithmeticException if the result overflows an int
      */
     long degreeOf(Integer vertex);
@@ -123,7 +123,7 @@ public interface SparseGraphSpecifics
      * @return a set of all edges touching the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     Set<Integer> edgesOf(Integer vertex);
 
@@ -143,7 +143,7 @@ public interface SparseGraphSpecifics
      * @return the degree of the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      * @throws ArithmeticException if the result overflows an int
      */
     long inDegreeOf(Integer vertex);
@@ -159,7 +159,7 @@ public interface SparseGraphSpecifics
      * @return a set of all edges incoming into the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     Set<Integer> incomingEdgesOf(Integer vertex);
 
@@ -179,7 +179,7 @@ public interface SparseGraphSpecifics
      * @return the degree of the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      * @throws ArithmeticException if the result overflows an int
      */
     long outDegreeOf(Integer vertex);
@@ -195,7 +195,7 @@ public interface SparseGraphSpecifics
      * @return a set of all edges outgoing from the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     Set<Integer> outgoingEdgesOf(Integer vertex);
 
@@ -278,8 +278,8 @@ public interface SparseGraphSpecifics
 
     /**
      * Returns an edge connecting source vertex to target vertex if such vertices and such edge
-     * exist in this graph. Otherwise returns <code>
-     * null</code>. If any of the specified vertices is <code>null</code> returns <code>null</code>
+     * exist in this graph. Otherwise returns {@code null}. If any of the specified vertices is
+     * {@code null} returns {@code null}
      *
      * <p>
      * In undirected graphs, the returned edge may have its source and target vertices in the
@@ -295,8 +295,8 @@ public interface SparseGraphSpecifics
 
     /**
      * Returns a set of all edges connecting source vertex to target vertex if such vertices exist
-     * in this graph. If any of the vertices does not exist or is <code>null</code>, returns
-     * <code>null</code>. If both vertices exist but no edges found, returns an empty set.
+     * in this graph. If any of the vertices does not exist or is {@code null}, returns
+     * {@code null}. If both vertices exist but no edges found, returns an empty set.
      *
      * <p>
      * In undirected graphs, some of the returned edges may have their source and target vertices in
@@ -314,7 +314,7 @@ public interface SparseGraphSpecifics
      * Ensures that the specified vertex exists in this graph, or else throws exception.
      *
      * @param v vertex
-     * @return <code>true</code> if this assertion holds.
+     * @return {@code true} if this assertion holds.
      * @throws IllegalArgumentException if specified vertex does not exist in this graph.
      */
     default boolean assertVertexExist(Integer v)
@@ -330,7 +330,7 @@ public interface SparseGraphSpecifics
      * Ensures that the specified edge exists in this graph, or else throws exception.
      *
      * @param e edge
-     * @return <code>true</code> if this assertion holds.
+     * @return {@code true} if this assertion holds.
      * @throws IllegalArgumentException if specified edge does not exist in this graph.
      */
     default boolean assertEdgeExist(Integer e)

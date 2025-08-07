@@ -59,8 +59,7 @@ public class TarjanSimpleCycles<V, E>
      *
      * @param graph - the DirectedGraph in which to find cycles.
      *
-     * @throws IllegalArgumentException if the graph argument is <code>
-     * null</code>.
+     * @throws IllegalArgumentException if the graph argument is {@code null}.
      */
     public TarjanSimpleCycles(Graph<V, E> graph)
     {

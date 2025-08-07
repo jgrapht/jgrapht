@@ -20,7 +20,7 @@ package org.jgrapht.alg.matching.blossom.v5;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
@@ -28,7 +28,7 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.Initialization
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatchingTest.checkMatchingAndDualSolution;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link BlossomVInitializer}

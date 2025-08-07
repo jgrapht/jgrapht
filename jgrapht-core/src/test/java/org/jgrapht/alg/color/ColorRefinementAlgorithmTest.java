@@ -19,12 +19,12 @@ package org.jgrapht.alg.color;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests for the color-refinement algorithm.
@@ -56,13 +56,13 @@ public class ColorRefinementAlgorithmTest
 
         // symmetric pairs around 3 should have the same color and different colors otherwise
 
-        assertEquals(colors.get(1).intValue(), colors.get(5).intValue());
-        assertNotEquals(colors.get(1).intValue(), colors.get(7).intValue());
-        assertEquals(colors.get(2).intValue(), colors.get(4).intValue());
-        assertEquals(colors.get(7).intValue(), colors.get(8).intValue());
-        assertNotEquals(colors.get(1).intValue(), colors.get(2).intValue());
-        assertNotEquals(colors.get(2).intValue(), colors.get(3).intValue());
-        assertNotEquals(colors.get(3).intValue(), colors.get(6).intValue());
+        assertEquals(colors.get(1), colors.get(5));
+        assertNotEquals(colors.get(1), colors.get(7));
+        assertEquals(colors.get(2), colors.get(4));
+        assertEquals(colors.get(7), colors.get(8));
+        assertNotEquals(colors.get(1), colors.get(2));
+        assertNotEquals(colors.get(2), colors.get(3));
+        assertNotEquals(colors.get(3), colors.get(6));
     }
 
     @Test
@@ -88,11 +88,11 @@ public class ColorRefinementAlgorithmTest
 
         // all vertices should have the same color
 
-        assertEquals(colors.get(1).intValue(), colors.get(2).intValue());
-        assertEquals(colors.get(1).intValue(), colors.get(3).intValue());
-        assertEquals(colors.get(1).intValue(), colors.get(4).intValue());
-        assertEquals(colors.get(1).intValue(), colors.get(5).intValue());
-        assertEquals(colors.get(1).intValue(), colors.get(6).intValue());
+        assertEquals(colors.get(1), colors.get(2));
+        assertEquals(colors.get(1), colors.get(3));
+        assertEquals(colors.get(1), colors.get(4));
+        assertEquals(colors.get(1), colors.get(5));
+        assertEquals(colors.get(1), colors.get(6));
     }
 
     @Test
@@ -136,11 +136,11 @@ public class ColorRefinementAlgorithmTest
         for (int i = 1; i < 11; i++) {
             for (int j = i + 1; j <= 11; j++) {
                 if (i != 9 || j != 10) {
-                    assertNotEquals(colors.get(i).intValue(), colors.get(j).intValue());
+                    assertNotEquals(colors.get(i), colors.get(j));
                 }
             }
         }
-        assertEquals(colors.get(9).intValue(), colors.get(10).intValue());
+        assertEquals(colors.get(9), colors.get(10));
     }
 
     @Test
@@ -177,12 +177,12 @@ public class ColorRefinementAlgorithmTest
         for (int i = 1; i < 9; i++) {
             for (int j = i + 1; j < 9; j++) {
                 if ((i == 1 && j == 3) || (i == 5 && j == 7)) {
-                    assertEquals(colors.get(i).intValue(), colors.get(j).intValue());
+                    assertEquals(colors.get(i), colors.get(j));
                 } else {
-                    assertNotEquals(colors.get(i).intValue(), colors.get(j).intValue());
+                    assertNotEquals(colors.get(i), colors.get(j));
                 }
             }
         }
-        assertEquals(colors.get(1).intValue(), colors.get(3).intValue());
+        assertEquals(colors.get(1), colors.get(3));
     }
 }

@@ -106,7 +106,7 @@ public interface GraphIterables<V, E>
      * @param vertex input vertex
      * @return an iterable view of the vertices contained in this graph
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default Iterable<E> edgesOf(V vertex)
     {
@@ -127,7 +127,7 @@ public interface GraphIterables<V, E>
      * @return the degree of the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default long degreeOf(V vertex)
     {
@@ -147,7 +147,7 @@ public interface GraphIterables<V, E>
      * @param vertex input vertex
      * @return an iterable view of all edges incoming into the specified vertex
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default Iterable<E> incomingEdgesOf(V vertex)
     {
@@ -170,7 +170,7 @@ public interface GraphIterables<V, E>
      * @return the degree of the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default long inDegreeOf(V vertex)
     {
@@ -190,7 +190,7 @@ public interface GraphIterables<V, E>
      * @param vertex input vertex
      * @return an iterable view of all edges outgoing from the specified vertex
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default Iterable<E> outgoingEdgesOf(V vertex)
     {
@@ -213,7 +213,7 @@ public interface GraphIterables<V, E>
      * @return the degree of the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default long outDegreeOf(V vertex)
     {
@@ -225,7 +225,7 @@ public interface GraphIterables<V, E>
      * vertices exist in this graph. The returned iterators are live views. If the graph is modified
      * while an iteration is in progress, the results of the iteration are undefined.
      * 
-     * If any of the vertices does not exist or is <code>null</code>, returns <code>null</code>. If
+     * If any of the vertices does not exist or is {@code null}, returns {@code null}. If
      * both vertices exist but no edges found, returns an iterable which returns exhausted
      * iterators.
      * 
@@ -240,7 +240,7 @@ public interface GraphIterables<V, E>
      * @return an iterable view of all edges connecting source to target vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws NullPointerException if vertex is {@code null}.
      */
     default Iterable<E> allEdges(V sourceVertex, V targetVertex)
     {

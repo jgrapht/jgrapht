@@ -65,32 +65,33 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
-        <apfloat.version>1.10.1</apfloat.version>
-        <checkstyle.version>10.9.2</checkstyle.version>
-        <commons-text.version>1.10.0</commons-text.version>
+        <apfloat.version>1.12.0</apfloat.version>
+        <checkstyle.version>10.12.7</checkstyle.version>
+        <commons-text.version>1.11.0</commons-text.version>
         <dsiutils.version>2.7.3</dsiutils.version>
         <fastutil.version>8.5.12</fastutil.version>
         <guava.version>32.1.1-jre</guava.version>
+        <hamcrest.version>2.2</hamcrest.version>
+        <java.version>11</java.version>
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
-        <jmh.version>1.36</jmh.version>
-        <junit-toolbox.version>2.4</junit-toolbox.version>
-        <junit.version>4.13.2</junit.version>
+        <jmh.version>1.37</jmh.version>
+        <junit.version>5.10.1</junit.version>
+        <junit.platform.version>1.10.1</junit.platform.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
-        <maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
-        <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
+        <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
+        <maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
+        <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-        <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
-        <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-        <maven-release-plugin.version>3.0.0</maven-release-plugin.version>
+        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
-        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <replacer.version>1.5.3</replacer.version>
         <sux4j.version>5.4.1</sux4j.version>
         <webgraph-big.version>3.7.0</webgraph-big.version>
@@ -210,16 +211,22 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                    <groupId>com.googlecode.junit-toolbox</groupId>
-                    <artifactId>junit-toolbox</artifactId>
-                    <version>${junit-toolbox.version}</version>
-                    <scope>test</scope>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-suite</artifactId>
+                <version>${junit.platform.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${hamcrest.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -232,7 +239,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <release>11</release>
+                        <release>${java.version}</release>
                         <compilerArgs>
                             <arg>--add-modules</arg>
                                 <arg>java.xml</arg>
@@ -242,7 +249,6 @@
                         <execution>
                             <id>default-compile</id>
                             <configuration>
-                                <!-- failOnWarning>true</failOnWarning -->
                                 <compilerArgs>
                                     <arg>-Xlint:all,-deprecation</arg>
                                     <arg>-Xpkginfo:always</arg>
@@ -256,20 +262,34 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
+                        <!-- <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests> -->
                         <testFailureIgnore>false</testFailureIgnore>
-                        <useSystemClassLoader>false</useSystemClassLoader>
+                        <properties>
+                            <configurationParameters>
+                                junit.jupiter.testinstance.lifecycle.default = per_class
+                                junit.jupiter.execution.parallel.enabled = true
+                            </configurationParameters>
+                        </properties>
                     </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                     <version>${maven-failsafe-plugin.version}</version>
-                     <dependencies>
-                          <dependency>
-                               <groupId>org.apache.maven.surefire</groupId>
-                               <artifactId>surefire-junit47</artifactId>
-                               <version>${maven-failsafe-plugin.version}</version>
-                          </dependency>
-                     </dependencies>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <properties>
+                            <configurationParameters>
+                                junit.jupiter.testinstance.lifecycle.default = per_class
+                                junit.jupiter.execution.parallel.enabled = true
+                            </configurationParameters>
+                        </properties>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.surefire</groupId>
+                            <artifactId>surefire-junit-platform</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                        </dependency>
+                    </dependencies>
                     <executions>
                         <execution>
                             <id>integration-test</id>
@@ -352,14 +372,13 @@
                         <windowtitle>JGraphT : a free Java graph library</windowtitle>
                         <additionalJOption>--allow-script-in-comments</additionalJOption>
                         <doclint>none</doclint>
-                        <source>11</source>
-                        <header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;
+                        <source>${java.version}</source>
+                        <header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;
                         &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"&gt;
                         </header>
                         <doctitle>${project.name} ${project.version} API
                         &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped.png?raw=true" style="height:100px;float:right" &gt;
                         </doctitle>
-                        <detectJavaApiLink>false</detectJavaApiLink> <!-- Temporary fix for https://stackoverflow.com/questions/58836862/jdk-11-and-javadoc -->
                         <notimestamp>true</notimestamp>
                         <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                     </configuration>

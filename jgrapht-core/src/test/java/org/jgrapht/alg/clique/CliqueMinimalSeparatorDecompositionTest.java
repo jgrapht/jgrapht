@@ -22,12 +22,12 @@ import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for the Clique Minimal Separator Decomposition.
@@ -442,7 +442,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             }
         }
         for (int i = 0; i < atomsFound.length; ++i)
-            assertTrue("atom " + i, atomsFound[i]);
+            assertTrue(atomsFound[i], "atom " + i);
 
         // check seprators
         assertEquals(6, cmsd.getSeparators().size());
@@ -463,22 +463,22 @@ public class CliqueMinimalSeparatorDecompositionTest
             }
         }
         for (int i = 0; i < separatorsFound.length; ++i)
-            assertTrue("separator " + i, separatorsFound[i]);
+            assertTrue(separatorsFound[i], "separator " + i);
 
         // check component counts
         assertEquals(6, cmsd.getFullComponentCount().size());
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("d", "e")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("d", "e")));
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e")));
 
-        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("d", "i")).intValue());
+        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("d", "i")));
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("i")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("i")));
 
-        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e", "j")).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e", "j")));
 
-        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("i", "j")).intValue());
+        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("i", "j")));
     }
 
     /**

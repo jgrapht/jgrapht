@@ -91,8 +91,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Construct a new graph.
      *
-     * @param vertexSupplier the vertex supplier, can be null
-     * @param edgeSupplier the edge supplier, can be null
+     * @param vertexSupplier the vertex supplier, can be {@code null}
+     * @param edgeSupplier the edge supplier, can be {@code null}
      * @param type the graph type
      *
      * @throws IllegalArgumentException if the graph type is mixed
@@ -106,12 +106,15 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Construct a new graph.
      *
-     * @param vertexSupplier the vertex supplier, can be null
-     * @param edgeSupplier the edge supplier, can be null
+     * @param vertexSupplier the vertex supplier, can be {@code null}
+     * @param edgeSupplier the edge supplier, can be {@code null}
      * @param type the graph type
      * @param graphSpecificsStrategy strategy for constructing low-level graph specifics
      *
      * @throws IllegalArgumentException if the graph type is mixed
+     * @throws NullPointerException if either one of {@code type} or {@code graphSpecificsStragegy}
+     *                              is {@code null}, or if {@code graphSpecificsStragegy} generates
+     *                              {@code null}
      */
     protected AbstractBaseGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type,
@@ -161,9 +164,9 @@ public abstract class AbstractBaseGraph<V, E>
      * <p>
      * In contrast with the {@link Supplier} interface, the edge supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to
      * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
-     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
      * 
      * @param edgeSupplier the edge supplier
      */
@@ -189,9 +192,9 @@ public abstract class AbstractBaseGraph<V, E>
      * <p>
      * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
-     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * {@code v2} such that {@code v2.equals(v)}.
      * 
      * <p>
      * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
@@ -217,7 +220,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -261,7 +266,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -301,6 +307,10 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
+     */
     @Override
     public V addVertex()
     {
@@ -318,7 +328,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -387,8 +397,7 @@ public abstract class AbstractBaseGraph<V, E>
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -411,7 +420,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public int degreeOf(V vertex)
@@ -430,7 +440,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public Set<E> edgesOf(V vertex)
@@ -440,7 +451,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public int inDegreeOf(V vertex)
@@ -450,7 +462,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
@@ -460,7 +473,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public int outDegreeOf(V vertex)
@@ -470,7 +484,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
@@ -547,7 +562,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -559,11 +574,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Set an edge weight.
-     * 
-     * @param e the edge
-     * @param weight the weight
-     * @throws UnsupportedOperationException if the graph is not weighted
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public void setEdgeWeight(E e, double weight)

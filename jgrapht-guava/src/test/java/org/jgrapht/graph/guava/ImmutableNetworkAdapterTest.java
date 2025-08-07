@@ -20,11 +20,11 @@ package org.jgrapht.graph.guava;
 import com.google.common.graph.*;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.

@@ -20,13 +20,13 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * A unit test for simple directed graph when the backing map is an IdentityHashMap
@@ -157,13 +157,13 @@ public class SimpleIdentityDirectedGraphTest
     {
         try {
             g1.addEdge(v1, v1, eLoop); // loops not allowed
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (IllegalArgumentException e) {
         }
 
         try {
             g3.addEdge(v1, v1, null);
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (NullPointerException e) {
         }
 
@@ -171,7 +171,7 @@ public class SimpleIdentityDirectedGraphTest
 
         try {
             g1.addEdge(new Holder<>("ya"), new Holder<>("ya"), e); // no such vertex in graph
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (IllegalArgumentException ile) {
         }
 
@@ -188,19 +188,19 @@ public class SimpleIdentityDirectedGraphTest
     {
         try {
             g1.addEdge(v1, v1); // loops not allowed
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (IllegalArgumentException e) {
         }
 
         try {
             g3.addEdge(null, null);
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (NullPointerException e) {
         }
 
         try {
             g1.addEdge(v2, v1); // no such vertex in graph
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (IllegalArgumentException ile) {
         }
 
@@ -405,13 +405,13 @@ public class SimpleIdentityDirectedGraphTest
 
         try {
             g3.inDegreeOf(new Holder<>(""));
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (IllegalArgumentException e) {
         }
 
         try {
             g3.inDegreeOf(null);
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (NullPointerException e) {
         }
     }
@@ -634,7 +634,7 @@ public class SimpleIdentityDirectedGraphTest
         assertSame(v1, r.getEdgeTarget(e));
     }
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         gEmpty = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);

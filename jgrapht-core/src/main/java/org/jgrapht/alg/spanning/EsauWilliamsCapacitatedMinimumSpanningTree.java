@@ -36,7 +36,7 @@ import java.util.*;
  * School of Management.
  * <p>
  * This version runs in polynomial time dependent on the number of considered operations per
- * iteration <code>numberOfOperationsParameter</code> (denoted by p), such that runs is in $O(|V|^3
+ * iteration {@code numberOfOperationsParameter} (denoted by p), such that runs is in $O(|V|^3
  * + p|V|) = O(|V|^3)$ since $p \leq |V|$.
  * <p>
  * A <a href="https://en.wikipedia.org/wiki/Capacitated_minimum_spanning_tree">Capacitated Minimum
@@ -255,10 +255,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
     }
 
     /**
-     * Returns the list of the best options as stored in <code>savings</code>.
+     * Returns the list of the best options as stored in {@code savings}.
      *
      * @param savings the savings calculated in the algorithm (see getSolution())
-     * @return the list of the <code>numberOfOperationsParameter</code> best options
+     * @return the list of the {@code numberOfOperationsParameter} best options
      */
     private LinkedList<V> getListOfBestOptions(Map<V, Double> savings)
     {
@@ -290,8 +290,8 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
     }
 
     /**
-     * Calculates the closest vertex to <code>vertex</code> such that the connection of
-     * <code>vertex</code> to the subtree of the closest vertex does not violate the capacity
+     * Calculates the closest vertex to {@code vertex} such that the connection of
+     * {@code vertex} to the subtree of the closest vertex does not violate the capacity
      * constraint and the savings are positive. Otherwise null is returned.
      *
      * @param vertex the vertex to find a valid closest vertex for

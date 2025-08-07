@@ -18,12 +18,13 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Robby McKilliam
@@ -250,14 +251,8 @@ public class StoerWagnerMinimumCutTest
     public void testMinCutEmpty()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        boolean caught = false;
         // No vertices
-        try {
-            new StoerWagnerMinimumCut<>(g);
-        } catch (IllegalArgumentException ex) {
-            caught = true;
-        }
-        assertTrue(caught);
+        assertThrows(IllegalArgumentException.class, () -> new StoerWagnerMinimumCut<>(g));
     }
 
     /**
@@ -267,15 +262,9 @@ public class StoerWagnerMinimumCutTest
     public void testMinCutSingleton()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        boolean caught = false;
         // 1 vertex
         g.addVertex(v1);
-        try {
-            new StoerWagnerMinimumCut<>(g);
-        } catch (IllegalArgumentException ex) {
-            caught = true;
-        }
-        assertTrue(caught);
+        assertThrows(IllegalArgumentException.class, () -> new StoerWagnerMinimumCut<>(g));
     }
 
     /**

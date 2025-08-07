@@ -24,7 +24,7 @@ import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.runner.*;

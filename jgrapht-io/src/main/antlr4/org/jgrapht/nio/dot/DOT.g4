@@ -137,12 +137,11 @@ SCharSequence
    : SChar+
    ;
 
+
 fragment
 SChar
-   : ~["\\]
-   | '\\' ["\\]
-   | '\\\n'
-   | '\\\r\n'  
+   : ~["]
+   | '\\"' 
    ;
 
 fragment

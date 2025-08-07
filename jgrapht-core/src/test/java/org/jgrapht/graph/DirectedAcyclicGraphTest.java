@@ -24,12 +24,12 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.

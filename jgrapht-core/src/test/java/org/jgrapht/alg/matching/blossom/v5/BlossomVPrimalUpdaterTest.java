@@ -19,13 +19,13 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link BlossomVPrimalUpdater}
@@ -533,8 +533,8 @@ public class BlossomVPrimalUpdaterTest
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node1.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node2.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node1.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node2.label);
         assertEquals(2, state.treeNum);
         assertEquals(0, edge12.slack, EPS);
         assertEquals(1, node1.dual, EPS);
@@ -582,8 +582,8 @@ public class BlossomVPrimalUpdaterTest
 
         primalUpdater.augment(edge23);
 
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node2.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node3.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node2.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node3.label);
         assertEquals(2, edge12.slack, EPS);
         assertEquals(0, edge23.slack, EPS);
         assertEquals(3, edge34.slack, EPS);
@@ -596,8 +596,8 @@ public class BlossomVPrimalUpdaterTest
 
         primalUpdater.augment(edge45);
 
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node4.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node5.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node4.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node5.label);
         assertEquals(2, edge34.slack, EPS);
         assertEquals(0, edge45.slack, EPS);
         assertEquals(2, edge56.slack, EPS);
@@ -623,12 +623,12 @@ public class BlossomVPrimalUpdaterTest
 
         primalUpdater.augment(edge34);
 
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node1.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node2.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node3.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node4.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node5.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node6.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node1.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node2.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node3.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node4.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node5.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node6.label);
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -699,16 +699,16 @@ public class BlossomVPrimalUpdaterTest
 
         primalUpdater.augment(edge710);
 
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node1.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node2.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node3.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node4.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node5.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node6.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node7.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node8.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node9.label);
-        Assert.assertEquals(BlossomVNode.Label.INFINITY, node10.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node1.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node2.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node3.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node4.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node5.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node6.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node7.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node8.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node9.label);
+        assertEquals(BlossomVNode.Label.INFINITY, node10.label);
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);

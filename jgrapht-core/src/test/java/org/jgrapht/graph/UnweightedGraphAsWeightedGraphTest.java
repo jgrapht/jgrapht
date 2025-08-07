@@ -18,14 +18,14 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static junit.framework.TestCase.fail;
 import static org.jgrapht.Graph.DEFAULT_EDGE_WEIGHT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnweightedGraphAsWeightedGraphTest
 {
@@ -51,7 +51,7 @@ public class UnweightedGraphAsWeightedGraphTest
     /**
      * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    @Before
+    @BeforeEach
     public void setUp()
     {
         Graph<String, DefaultWeightedEdge> graph =
@@ -99,12 +99,7 @@ public class UnweightedGraphAsWeightedGraphTest
     @Test
     public void testGetEdgeWeightOfNull()
     {
-        try {
-            this.weightedGraph.getEdgeWeight(null);
-            fail("Expected a NullPointerException");
-        } catch (Exception e) {
-            assertTrue(e instanceof NullPointerException);
-        }
+        assertThrows(NullPointerException.class, () -> this.weightedGraph.getEdgeWeight(null));
     }
 
     @Test
@@ -116,12 +111,7 @@ public class UnweightedGraphAsWeightedGraphTest
     @Test
     public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
     {
-        try {
-            new AsWeightedGraph<>(
-                new DefaultUndirectedGraph<>(String.class), new HashMap<>(), true);
-            fail("Expected a IllegalArgumentException");
-        } catch (Exception e) {
-            assertTrue(e instanceof IllegalArgumentException);
-        }
+        assertThrows(IllegalArgumentException.class, () -> new AsWeightedGraph<>(
+                new DefaultUndirectedGraph<>(String.class), new HashMap<>(), true));
     }
 }
