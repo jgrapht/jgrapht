@@ -21,11 +21,11 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dimitrios Michail
@@ -389,41 +389,17 @@ public class BidirectionalDijkstraShortestPathTest
         g.addVertex("2");
         g.addEdge("1", "2");
 
-        try {
-            new BidirectionalDijkstraShortestPath<>(g, -2.0).getPath("1", "2");
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g, -2.0).getPath("1", "2"));
 
-        try {
-            new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("3", "2");
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("3", "2"));
 
-        try {
-            new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("2", "3");
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("2", "3"));
 
-        try {
-            new BidirectionalDijkstraShortestPath<>(null).getPath("1", "1");
-            fail("No!");
-        } catch (NullPointerException e) {
-        }
+        assertThrows(NullPointerException.class, () -> new BidirectionalDijkstraShortestPath<>(null).getPath("1", "1"));
 
-        try {
-            new BidirectionalDijkstraShortestPath<>(g).getPath(null, "1");
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g).getPath(null, "1"));
 
-        try {
-            new BidirectionalDijkstraShortestPath<>(g).getPath("1", null);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g).getPath("1", null));
     }
 
     private <V, E> double computePathWeight(Graph<V, E> g, GraphPath<V, E> path)

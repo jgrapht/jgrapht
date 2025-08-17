@@ -35,26 +35,26 @@ public interface GraphIterator<V, E>
     /**
      * Test whether this iterator is set to traverse the graph across connected components.
      *
-     * @return <code>true</code> if traverses across connected components, otherwise
-     *         <code>false</code>.
+     * @return {@code true} if traverses across connected components, otherwise
+     *         {@code false}.
      */
     boolean isCrossComponentTraversal();
 
     /**
-     * Tests whether the <code>reuseEvents</code> flag is set. If the flag is set to
-     * <code>true</code> this class will reuse previously fired events and will not create a new
+     * Tests whether the {@code reuseEvents} flag is set. If the flag is set to
+     * {@code true} this class will reuse previously fired events and will not create a new
      * object for each event. This option increases performance but should be used with care,
      * especially in multithreaded environment.
      *
-     * @return the value of the <code>reuseEvents</code> flag.
+     * @return the value of the {@code reuseEvents} flag.
      */
     boolean isReuseEvents();
 
     /**
-     * Sets a value the <code>reuseEvents</code> flag. If the <code>
-     * reuseEvents</code> flag is set to <code>true</code> this class will reuse previously fired
-     * events and will not create a new object for each event. This option increases performance but
-     * should be used with care, especially in multithreaded environment.
+     * Sets a value the {@code reuseEvents} flag. If the {@code reuseEvents} flag is set to
+     * {@code true} this class will reuse previously fired events and will not create a new
+     * object for each event. This option increases performance but should be used with care,
+     * especially in multithreaded environment.
      *
      * @param reuseEvents whether to reuse previously fired event objects instead of creating a new
      *        event object for each event.

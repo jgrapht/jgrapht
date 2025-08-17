@@ -78,6 +78,8 @@ public class MutableNetworkAdapter<V, E>
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if {@code network} is {@code null}
      */
     public MutableNetworkAdapter(
         MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
@@ -93,6 +95,9 @@ public class MutableNetworkAdapter<V, E>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is {@code null}
      */
     public MutableNetworkAdapter(
         MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
@@ -101,6 +106,11 @@ public class MutableNetworkAdapter<V, E>
         super(network, vertexSupplier, edgeSupplier, vertexOrderMethod);
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException if the graph was not initialized with an edge supplier
+     */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
@@ -127,6 +137,10 @@ public class MutableNetworkAdapter<V, E>
         return null;
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
@@ -152,6 +166,9 @@ public class MutableNetworkAdapter<V, E>
         return false;
     }
 
+    /**
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     */
     @Override
     public V addVertex()
     {
@@ -198,6 +215,9 @@ public class MutableNetworkAdapter<V, E>
         return network.removeNode(v);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void setEdgeWeight(E e, double weight)
     {
@@ -228,8 +248,7 @@ public class MutableNetworkAdapter<V, E>
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 

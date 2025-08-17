@@ -66,8 +66,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private LinkedList<V> meo;
 
     /**
-     * List of all vertices that generate a minimal separator of <code>
-     * chordGraph</code>
+     * List of all vertices that generate a minimal separator of {@code chordGraph}
      */
     private List<V> generators;
 
@@ -87,8 +86,8 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private Map<Set<V>, Integer> fullComponentCount = new HashMap<>();
 
     /**
-     * Setup a clique minimal separator decomposition on undirected graph <code>
-     * g</code>. Loops and multiple (parallel) edges are removed, i.e. the graph is transformed to a
+     * Setup a clique minimal separator decomposition on undirected graph {@code g}.
+     * Loops and multiple (parallel) edges are removed, i.e. the graph is transformed to a
      * simple graph.
      *
      * @param g The graph to decompose.
@@ -288,7 +287,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     }
 
     /**
-     * Check whether the subgraph of <code>graph</code> induced by the given <code>vertices</code>
+     * Check whether the subgraph of {@code graph} induced by the given {@code vertices}
      * is complete, i.e. a clique.
      *
      * @param graph the graph.

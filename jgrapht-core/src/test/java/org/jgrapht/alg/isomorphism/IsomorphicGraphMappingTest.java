@@ -19,11 +19,12 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.isomorphism.IsomorphismTestUtil.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link IsomorphicGraphMapping}
@@ -56,8 +57,8 @@ public class IsomorphicGraphMappingTest
             new AHURootedTreeIsomorphismInspector<>(
                 tree1, "A", tree2, identity.getVertexCorrespondence("A", true));
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
-        Assert.assertTrue(areIsomorphic(tree1, tree2, identity));
+        assertTrue(isomorphism.isomorphismExists());
+        assertTrue(areIsomorphic(tree1, tree2, identity));
     }
 
     @Test
@@ -81,17 +82,17 @@ public class IsomorphicGraphMappingTest
         AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
             new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree2);
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
+        assertTrue(isomorphism.isomorphismExists());
         IsomorphicGraphMapping<String, DefaultEdge> mapping12 = isomorphism.getMapping();
 
         isomorphism = new AHUUnrootedTreeIsomorphismInspector<>(tree2, tree3);
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
+        assertTrue(isomorphism.isomorphismExists());
         IsomorphicGraphMapping<String, DefaultEdge> mapping23 = isomorphism.getMapping();
 
         IsomorphicGraphMapping<String, DefaultEdge> mapping13 = mapping12.compose(mapping23);
 
-        Assert.assertTrue(areIsomorphic(tree1, tree3, mapping13));
+        assertTrue(areIsomorphic(tree1, tree3, mapping13));
     }
 
     @Test
@@ -117,7 +118,7 @@ public class IsomorphicGraphMappingTest
 
             IsomorphicGraphMapping<Integer, DefaultEdge> mapping13 = mapping12.compose(mapping23);
 
-            Assert.assertTrue(areIsomorphic(tree1, tree3, mapping13));
+            assertTrue(areIsomorphic(tree1, tree3, mapping13));
         }
     }
 

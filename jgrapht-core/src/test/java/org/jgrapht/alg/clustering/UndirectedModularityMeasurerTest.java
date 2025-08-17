@@ -17,7 +17,8 @@
  */
 package org.jgrapht.alg.clustering;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests
@@ -267,49 +268,50 @@ public class UndirectedModularityMeasurerTest
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWithInvalidPartition()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer,
+                DefaultWeightedEdge> g = GraphTypeBuilder
+                    .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
+                    .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+                    .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
-        g.addVertex(0);
-        g.addVertex(1);
-        g.addVertex(2);
-        g.addVertex(3);
-        g.addVertex(4);
+            g.addVertex(0);
+            g.addVertex(1);
+            g.addVertex(2);
+            g.addVertex(3);
+            g.addVertex(4);
 
-        g.addVertex(5);
-        g.addVertex(6);
-        g.addVertex(7);
-        g.addVertex(8);
+            g.addVertex(5);
+            g.addVertex(6);
+            g.addVertex(7);
+            g.addVertex(8);
 
-        g.addEdge(0, 1);
-        g.addEdge(0, 4);
-        g.addEdge(1, 2);
-        g.addEdge(1, 3);
-        g.addEdge(1, 5);
-        g.addEdge(2, 3);
-        g.addEdge(2, 4);
-        g.addEdge(3, 4);
+            g.addEdge(0, 1);
+            g.addEdge(0, 4);
+            g.addEdge(1, 2);
+            g.addEdge(1, 3);
+            g.addEdge(1, 5);
+            g.addEdge(2, 3);
+            g.addEdge(2, 4);
+            g.addEdge(3, 4);
 
-        g.addEdge(5, 6);
-        g.addEdge(5, 7);
-        g.addEdge(5, 8);
-        g.addEdge(6, 7);
-        g.addEdge(7, 8);
+            g.addEdge(5, 6);
+            g.addEdge(5, 7);
+            g.addEdge(5, 8);
+            g.addEdge(6, 7);
+            g.addEdge(7, 8);
 
-        UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer =
-            new UndirectedModularityMeasurer<>(g);
+            UndirectedModularityMeasurer<Integer, DefaultWeightedEdge> measurer =
+                new UndirectedModularityMeasurer<>(g);
 
-        List<Set<Integer>> partitions = List.of(Set.of(0, 3, 4), Set.of(1, 2, 5, 7, 8, 9));
-        double mod = measurer.modularity(partitions);
+            List<Set<Integer>> partitions = List.of(Set.of(0, 3, 4), Set.of(1, 2, 5, 7, 8, 9));
+            double mod = measurer.modularity(partitions);
 
-        assertEquals(mod, 0.118343, 1e-6);
-
+            assertEquals(mod, 0.118343, 1e-6);
+        });
     }
 
     @Test

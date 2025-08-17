@@ -21,12 +21,12 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for class {@link HierholzerEulerianCycle}.
@@ -39,10 +39,10 @@ public class HierholzerEulerianCycleTest
     public void testNullEulerian()
     {
         Graph<Integer, DefaultEdge> g1 = new Pseudograph<>(DefaultEdge.class);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
 
         Graph<Integer, DefaultEdge> g2 = new DirectedPseudograph<>(DefaultEdge.class);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
     }
 
     @Test
@@ -50,19 +50,19 @@ public class HierholzerEulerianCycleTest
     {
         Graph<Integer, DefaultEdge> g1 = new Pseudograph<>(DefaultEdge.class);
         g1.addVertex(1);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
         g1.addVertex(2);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
         g1.addVertex(3);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
 
         Graph<Integer, DefaultEdge> g2 = new DirectedPseudograph<>(DefaultEdge.class);
         g2.addVertex(1);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
         g2.addVertex(2);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
         g2.addVertex(3);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(3, 4);
         g.addEdge(4, 2);
 
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(4, 2);
         g.addEdge(5, 6);
 
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(3, 4);
         g.addEdge(4, 2);
 
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(4, 2);
         g.addEdge(5, 6);
 
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class HierholzerEulerianCycleTest
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(6);
         gen.generateGraph(g);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(4, 5);
         g.addEdge(5, 6);
         g.addEdge(6, 4);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -179,7 +179,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(6, 4);
         g.addEdge(3, 4);
         g.addEdge(3, 4);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class HierholzerEulerianCycleTest
         // even degrees
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         g.addVertex(1);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -206,7 +206,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(3, 4);
         g.addEdge(3, 4);
         IntStream.rangeClosed(1, 6).forEach(i -> g.addEdge(i, i));
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -222,7 +222,7 @@ public class HierholzerEulerianCycleTest
         g.addEdge(5, 6);
         g.addEdge(6, 4);
         IntStream.rangeClosed(1, 6).forEach(i -> g.addEdge(i, i));
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -233,7 +233,7 @@ public class HierholzerEulerianCycleTest
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(5);
         gen.generateGraph(g);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -244,14 +244,14 @@ public class HierholzerEulerianCycleTest
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen1 = new CompleteGraphGenerator<>(6);
         gen1.generateGraph(g1);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
 
         // complete graph of 7 vertices
         Graph<Integer, DefaultEdge> g2 = new SimpleDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen2 = new CompleteGraphGenerator<>(7);
         gen2.generateGraph(g2);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
     }
 
     @Test
@@ -259,13 +259,13 @@ public class HierholzerEulerianCycleTest
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1));
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
         g.addEdge(1, 1);
         g.addEdge(1, 1);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
         Graphs.addAllVertices(g, Arrays.asList(2));
         g.addEdge(2, 1);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -273,26 +273,26 @@ public class HierholzerEulerianCycleTest
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
         g.addEdge(1, 2);
         g.addEdge(2, 3);
         g.addEdge(3, 4);
         g.addEdge(4, 5);
         g.addEdge(5, 1);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
         g.addEdge(2, 1);
         g.addEdge(3, 2);
         g.addEdge(4, 3);
         g.addEdge(5, 4);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
         g.addEdge(1, 1);
         g.addEdge(2, 2);
         g.addEdge(3, 3);
         g.addEdge(4, 4);
         g.addEdge(5, 5);
-        Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
         g.addEdge(1, 5);
-        Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
+        assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
     @Test
@@ -525,10 +525,10 @@ public class HierholzerEulerianCycleTest
         assertEquals(e42, cycle.getEdgeList().get(2));
 
         List<Integer> vl = cycle.getVertexList();
-        assertEquals(2, vl.get(0).intValue());
-        assertEquals(3, vl.get(1).intValue());
-        assertEquals(4, vl.get(2).intValue());
-        assertEquals(2, vl.get(3).intValue());
+        assertEquals(2, vl.get(0));
+        assertEquals(3, vl.get(1));
+        assertEquals(4, vl.get(2));
+        assertEquals(2, vl.get(3));
 
         assertEulerian(cycle);
     }
@@ -769,10 +769,10 @@ public class HierholzerEulerianCycleTest
 
         if (g.vertexSet().isEmpty()) {
             // we do not consider the null-graph to be connected
-            assertTrue(false);
+            fail();
         } else if (GraphTests.isEmpty(g)) {
-            assertTrue(cycle.getStartVertex() == null);
-            assertTrue(cycle.getEndVertex() == null);
+            assertNull(cycle.getStartVertex());
+            assertNull(cycle.getEndVertex());
             assertTrue(cycle.getEdgeList().isEmpty());
         } else {
             boolean isDirected = g.getType().isDirected();

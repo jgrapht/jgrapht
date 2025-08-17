@@ -19,12 +19,12 @@ package org.jgrapht.alg.drawing;
 
 import org.jgrapht.alg.drawing.FRQuadTree.*;
 import org.jgrapht.alg.drawing.model.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test {@link FRQuadTree}.

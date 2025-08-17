@@ -20,11 +20,11 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * .
@@ -154,11 +154,7 @@ public class DijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(V1, V2);
         g.setEdgeWeight(we12, -100.0);
 
-        try {
-            new DijkstraShortestPath<>(g).getPath(V1, V2);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new DijkstraShortestPath<>(g).getPath(V1, V2));
     }
 
 }

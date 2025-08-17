@@ -23,15 +23,13 @@ import org.jgrapht.alg.matching.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Parameterized.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for Dulmage-Mendelsohn, based on MaximumCardinailityBipartiteMatchingTest
@@ -39,22 +37,12 @@ import static org.junit.Assert.assertTrue;
  * @author Peter Harman
  * @author Joris Kinable
  */
-@RunWith(Parameterized.class)
 public class DulmageMendelsohnDecompositionTest
 {
 
-    private final GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator;
-
-    public DulmageMendelsohnDecompositionTest(
-        GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator)
+    public static List<GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge>> generators()
     {
-        this.generator = generator;
-    }
-
-    @Parameters
-    public static Collection<Object[]> generators()
-    {
-        Collection<Object[]> out = new ArrayList<>();
+        List<GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge>> out = new ArrayList<>();
         Random random = new Random(1);
         for (int vertices = 20; vertices < 120; vertices++) {
             int edges = random.nextInt(maxEdges(vertices) / 2);
@@ -62,13 +50,14 @@ public class DulmageMendelsohnDecompositionTest
             GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
                 new GnmRandomBipartiteGraphGenerator<>(
                     vertices - imbalance, vertices + imbalance, edges, 0);
-            out.add(new Object[] { generator });
+            out.add(generator);
         }
         return out;
     }
 
-    @Test
-    public void testGeneratedGraph()
+    @ParameterizedTest
+    @MethodSource("generators")
+    public void testGeneratedGraph(GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator)
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
@@ -119,27 +108,27 @@ public class DulmageMendelsohnDecompositionTest
             E> perfectMatching = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(
                 new AsSubgraph<>(graph, allPerfectlyMatched), partition1PerfectlyMatched,
                 partition2PerfectlyMatched).getMatching();
-        assertTrue("Core of decomposition must perfectly match", perfectMatching.isPerfect());
+        assertTrue(perfectMatching.isPerfect(), "Core of decomposition must perfectly match");
         // Do all the vertices in the graph appear in the decomposition, and only in one part of it?
         for (V v : graph.vertexSet()) {
             if (allPerfectlyMatched.contains(v)) {
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition1DominatedSet().contains(v));
+                    decomposition.getPartition1DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition2DominatedSet().contains(v));
+                    decomposition.getPartition2DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
             } else if (decomposition.getPartition1DominatedSet().contains(v)) {
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    allPerfectlyMatched.contains(v));
+                    allPerfectlyMatched.contains(v),
+                    "Vertex appears in multiple sets in decomposition");
                 assertFalse(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition2DominatedSet().contains(v));
+                    decomposition.getPartition2DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
             } else {
                 assertTrue(
-                    "Vertex appears in multiple sets in decomposition",
-                    decomposition.getPartition2DominatedSet().contains(v));
+                    decomposition.getPartition2DominatedSet().contains(v),
+                    "Vertex appears in multiple sets in decomposition");
             }
         }
         ;
@@ -154,8 +143,8 @@ public class DulmageMendelsohnDecompositionTest
             }
         }
         assertTrue(
-            "Partition 1 dominated set is not dominated by partition 1",
-            n1 > n2 || (n1 == 0 && n2 == 0));
+            n1 > n2 || (n1 == 0 && n2 == 0),
+            "Partition 1 dominated set is not dominated by partition 1");
         n1 = 0;
         n2 = 0;
         for (V v : decomposition.getPartition2DominatedSet()) {
@@ -166,8 +155,8 @@ public class DulmageMendelsohnDecompositionTest
             }
         }
         assertTrue(
-            "Partition 2 dominated set is not dominated by partition 2",
-            n1 < n2 || (n1 == 0 && n2 == 0));
+            n1 < n2 || (n1 == 0 && n2 == 0),
+            "Partition 2 dominated set is not dominated by partition 2");
     }
 
     /**

@@ -17,9 +17,7 @@
  */
 package org.jgrapht.nio.json;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -33,7 +31,7 @@ import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link JsonImporter}.
@@ -158,84 +156,87 @@ public class JSONImporterTest
         assertTrue(g.containsEdge("1", "3"));
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testDuplicateNodeIds()
-        throws ImportException
     {
-        // @formatter:off
-        String input = "{\n"
-                     + "  \"nodes\": [\n"    
-                     + "  { \"id\":1 },\n"
-                     + "  { \"id\":\"2\" },\n"
-                     + "  { \"id\":1 }\n"
-                     + "  ],\n"
-                     + "  \"edges\": [\n"    
-                     + "  { \"source\":\"1\", \"target\":\"2\" }\n"
-                     + "  ]\n"
-                     + "}";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "{\n"
+                        + "  \"nodes\": [\n"    
+                        + "  { \"id\":1 },\n"
+                        + "  { \"id\":\"2\" },\n"
+                        + "  { \"id\":1 }\n"
+                        + "  ],\n"
+                        + "  \"edges\": [\n"    
+                        + "  { \"source\":\"1\", \"target\":\"2\" }\n"
+                        + "  ]\n"
+                        + "}";
+            // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+            Graph<String,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .vertexSupplier(SupplierUtil.createStringSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
-        importer.importGraph(g, new StringReader(input));
+            JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+            importer.importGraph(g, new StringReader(input));
+        });
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testMissingSourceOnEdge()
-        throws ImportException
     {
-        // @formatter:off
-        String input = "{\n"
-                     + "  \"nodes\": [\n"    
-                     + "  { \"id\":1 },\n"
-                     + "  { \"id\":\"2\" },\n"
-                     + "  ],\n"
-                     + "  \"edges\": [\n"    
-                     + "  { \"source\":\"1\", \"target\":\"2\" },\n"
-                     + "  { \"target\":\"2\" },\n"                     
-                     + "  ]\n"
-                     + "}";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "{\n"
+                        + "  \"nodes\": [\n"    
+                        + "  { \"id\":1 },\n"
+                        + "  { \"id\":\"2\" },\n"
+                        + "  ],\n"
+                        + "  \"edges\": [\n"    
+                        + "  { \"source\":\"1\", \"target\":\"2\" },\n"
+                        + "  { \"target\":\"2\" },\n"                     
+                        + "  ]\n"
+                        + "}";
+            // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+            Graph<String,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .vertexSupplier(SupplierUtil.createStringSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
-        importer.importGraph(g, new StringReader(input));
+            JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+            importer.importGraph(g, new StringReader(input));
+        });
     }
 
-    @Test(expected = ImportException.class)
+    @Test
     public void testMissingTargetOnEdge()
-        throws ImportException
     {
-        // @formatter:off
-        String input = "{\n"
-                     + "  \"nodes\": [\n"    
-                     + "  { \"id\":1 },\n"
-                     + "  { \"id\":\"2\" },\n"
-                     + "  ],\n"
-                     + "  \"edges\": [\n"    
-                     + "  { \"source\":\"1\" },\n"
-                     + "  ]\n"
-                     + "}";
-        // @formatter:on
+        assertThrows(ImportException.class, () -> {
+            // @formatter:off
+            String input = "{\n"
+                        + "  \"nodes\": [\n"    
+                        + "  { \"id\":1 },\n"
+                        + "  { \"id\":\"2\" },\n"
+                        + "  ],\n"
+                        + "  \"edges\": [\n"    
+                        + "  { \"source\":\"1\" },\n"
+                        + "  ]\n"
+                        + "}";
+            // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+            Graph<String,
+                DefaultEdge> g = GraphTypeBuilder
+                    .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .vertexSupplier(SupplierUtil.createStringSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
-        importer.importGraph(g, new StringReader(input));
+            JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+            importer.importGraph(g, new StringReader(input));
+        });
     }
 
     @Test

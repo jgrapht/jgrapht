@@ -23,14 +23,14 @@ import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
-import java.nio.charset.*;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for Graph6Sparse6Importer Sparse6/Graph6 strings are generated with Sage Math engine
@@ -48,11 +48,7 @@ public class Graph6Sparse6ImporterTest
             .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(edgeClass).buildGraph();
 
         Graph6Sparse6Importer<Integer, E> importer = new Graph6Sparse6Importer<>();
-        try {
-            importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            // cannot happen
-        }
+        importer.importGraph(g, new InputStreamReader(in, UTF_8));
         return g;
     }
 
@@ -64,7 +60,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         assertEquals(7, graph.vertexSet().size());
@@ -84,7 +80,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         Graph<Integer, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
@@ -114,13 +110,9 @@ public class Graph6Sparse6ImporterTest
 
         Graph6Sparse6Importer<String, DefaultEdge> importer = new Graph6Sparse6Importer<>();
         importer.setVertexFactory(id -> String.valueOf("node" + id));
-        try {
-            importer.importGraph(
-                graph, new InputStreamReader(
-                    new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            // cannot happen
-        }
+        importer.importGraph(
+            graph, new InputStreamReader(
+                new ByteArrayInputStream(input.getBytes(UTF_8)), UTF_8));
 
         Graph<String, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList("node0", "node1", "node2"));
@@ -143,7 +135,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         assertEquals(63, graph.vertexSet().size());
@@ -158,7 +150,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         assertEquals(32, graph.vertexSet().size());
@@ -173,7 +165,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.klein7RegularGraph(), graph);
@@ -189,7 +181,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
@@ -204,7 +196,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.goldnerHararyGraph(), graph);
@@ -220,7 +212,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.buckyBallGraph(), graph);
@@ -235,7 +227,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.heawoodGraph(), graph);
@@ -251,7 +243,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.klein7RegularGraph(), graph);
@@ -267,7 +259,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
@@ -282,7 +274,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.goldnerHararyGraph(), graph);
@@ -298,7 +290,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.buckyBallGraph(), graph);
@@ -313,7 +305,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.heawoodGraph(), graph);
@@ -329,7 +321,7 @@ public class Graph6Sparse6ImporterTest
 
         Graph<Integer,
             DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
                 false);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);

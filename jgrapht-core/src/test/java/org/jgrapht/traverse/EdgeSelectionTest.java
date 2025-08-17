@@ -19,12 +19,12 @@ package org.jgrapht.traverse;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for overriding the {@link CrossComponentIterator#selectOutgoingEdges selectOutgoingEdges}

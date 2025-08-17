@@ -18,12 +18,13 @@
 package org.jgrapht.demo;
 
 import org.jgrapht.alg.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WarnsdorffRuleKnightTourHeuristicTest
 {
@@ -31,7 +32,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     private KnightTour container;
     private WarnsdorffRuleKnightTourHeuristic solver;
 
-    @Before
+    @BeforeEach
     public void setup()
     {
         container = new KnightTour();
@@ -267,46 +268,58 @@ public class WarnsdorffRuleKnightTourHeuristicTest
         checkCorrectness(container.toList(), TourType.OPEN, 40, 20, 0, 0, true);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectConfigurationOpen()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(2, 200);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            solver = new WarnsdorffRuleKnightTourHeuristic(2, 200);
+            container = solver.getTour(TourType.OPEN, false, 0, 0);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectConfigurationOpen3x5()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(5, 3);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            solver = new WarnsdorffRuleKnightTourHeuristic(5, 3);
+            container = solver.getTour(TourType.OPEN, false, 0, 0);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectConfigurationOpen3x6()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(3, 6);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            solver = new WarnsdorffRuleKnightTourHeuristic(3, 6);
+            container = solver.getTour(TourType.OPEN, false, 0, 0);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectConfigurationOpen4x4()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(4, 4);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            solver = new WarnsdorffRuleKnightTourHeuristic(4, 4);
+            container = solver.getTour(TourType.OPEN, false, 0, 0);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectTourConfigurationClosedBothOdd()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(31, 31);
-        container = solver.getTour(TourType.CLOSED, false, 0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            solver = new WarnsdorffRuleKnightTourHeuristic(31, 31);
+            container = solver.getTour(TourType.CLOSED, false, 0, 0);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectTourConfigurationClosed4x6()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(4, 6);
-        container = solver.getTour(TourType.CLOSED, false, 0, 0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            solver = new WarnsdorffRuleKnightTourHeuristic(4, 6);
+            container = solver.getTour(TourType.CLOSED, false, 0, 0);
+        });
     }
 
     @Test
@@ -317,28 +330,28 @@ public class WarnsdorffRuleKnightTourHeuristicTest
         checkCorrectness(container.toList(), TourType.OPEN, 4, 6, 0, 0, false);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectBoardConfiguration0x100()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(0, 100);
+        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(0, 100));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectBoardConfigurationBothNegative()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(-132);
+        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(-132));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectBoardConfigurationBothNegative2()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(-132, -140);
+        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(-132, -140));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void warnsdorffIncorrectBoardConfigurationOneDimSmall()
     {
-        solver = new WarnsdorffRuleKnightTourHeuristic(1, 10);
+        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(1, 10));
     }
 
     @Test

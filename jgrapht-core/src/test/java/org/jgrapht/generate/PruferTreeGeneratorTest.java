@@ -20,9 +20,11 @@ package org.jgrapht.generate;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link PruferTreeGenerator}
@@ -32,10 +34,10 @@ import java.util.*;
 public class PruferTreeGeneratorTest
 {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNullPruferSequence()
     {
-        new PruferTreeGenerator<>(null);
+        assertThrows(IllegalArgumentException.class, () -> new PruferTreeGenerator<>(null));
     }
 
     @Test
@@ -48,13 +50,13 @@ public class PruferTreeGeneratorTest
             new PruferTreeGenerator<>(new int[] {});
 
         generator.generateGraph(tree);
-        Assert.assertEquals(2, tree.vertexSet().size());
+        assertEquals(2, tree.vertexSet().size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidPruferSequence()
     {
-        new PruferTreeGenerator<>(new int[] { 10 });
+        assertThrows(IllegalArgumentException.class, () -> new PruferTreeGenerator<>(new int[] { 10 }));
     }
 
     @Test
@@ -68,43 +70,47 @@ public class PruferTreeGeneratorTest
 
         generator.generateGraph(tree);
 
-        Assert.assertEquals(6, tree.vertexSet().size());
+        assertEquals(6, tree.vertexSet().size());
 
         int[] degrees = tree.vertexSet().stream().mapToInt(tree::degreeOf).toArray();
         Arrays.sort(degrees);
 
-        Assert.assertArrayEquals(new int[] { 1, 1, 1, 1, 2, 4 }, degrees);
+        assertArrayEquals(new int[] { 1, 1, 1, 1, 2, 4 }, degrees);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testZeroVertices()
     {
-        new PruferTreeGenerator<>(0);
+        assertThrows(IllegalArgumentException.class, () -> new PruferTreeGenerator<>(0));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullRNG()
     {
-        new PruferTreeGenerator<>(100, null);
+        assertThrows(NullPointerException.class, () -> new PruferTreeGenerator<>(100, null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDirectedGraph()
     {
-        Graph<Integer, DefaultEdge> tree = new DirectedAcyclicGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> tree = new DirectedAcyclicGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(10);
+            PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(10);
 
-        generator.generateGraph(tree);
+            generator.generateGraph(tree);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraph()
     {
-        PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(10);
+        assertThrows(NullPointerException.class, () -> {
+            PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(10);
 
-        generator.generateGraph(null);
+            generator.generateGraph(null);
+        });
     }
 
     @Test
@@ -116,23 +122,25 @@ public class PruferTreeGeneratorTest
         PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(1, 0x99);
 
         generator.generateGraph(tree);
-        Assert.assertTrue(GraphTests.isTree(tree));
+        assertTrue(GraphTests.isTree(tree));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testExistingVertices()
     {
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
-            new CompleteGraphGenerator<>(10);
+            CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
+                new CompleteGraphGenerator<>(10);
 
-        completeGraphGenerator.generateGraph(tree);
+            completeGraphGenerator.generateGraph(tree);
 
-        PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(100, 0x99);
+            PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(100, 0x99);
 
-        generator.generateGraph(tree);
+            generator.generateGraph(tree);
+        });
     }
 
     @Test
@@ -149,7 +157,7 @@ public class PruferTreeGeneratorTest
                 new PruferTreeGenerator<>(1 + random.nextInt(5000), random);
 
             generator.generateGraph(tree);
-            Assert.assertTrue(GraphTests.isTree(tree));
+            assertTrue(GraphTests.isTree(tree));
         }
     }
 
@@ -163,6 +171,6 @@ public class PruferTreeGeneratorTest
             new PruferTreeGenerator<>(100_000, 0x99);
 
         generator.generateGraph(tree);
-        Assert.assertTrue(GraphTests.isTree(tree));
+        assertTrue(GraphTests.isTree(tree));
     }
 }

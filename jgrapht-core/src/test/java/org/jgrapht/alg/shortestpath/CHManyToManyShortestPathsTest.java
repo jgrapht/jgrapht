@@ -21,13 +21,14 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.ConcurrencyUtil;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link CHManyToManyShortestPaths}.
@@ -42,14 +43,14 @@ public class CHManyToManyShortestPathsTest
      */
     private static ThreadPoolExecutor executor;
 
-    @BeforeClass
+    @BeforeAll
     public static void createExecutor()
     {
         executor =
             ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
-    @AfterClass
+    @AfterAll
     public static void shutdownExecutor()
         throws InterruptedException
     {
@@ -62,16 +63,16 @@ public class CHManyToManyShortestPathsTest
         super.testEmptyGraph();
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSourcesIsNull()
     {
-        super.testSourcesIsNull();
+        assertThrows(NullPointerException.class, () -> super.testSourcesIsNull());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testTargetsIsNull()
     {
-        super.testTargetsIsNull();
+        assertThrows(NullPointerException.class, () -> super.testTargetsIsNull());
     }
 
     @Test

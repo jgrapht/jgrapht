@@ -66,7 +66,7 @@ import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
  * @author Pratik Tibrewal
  * @author Sebastiano Vigna
  */
-public final class KatzCentrality<V, E>
+public class KatzCentrality<V, E>
     implements VertexScoringAlgorithm<V, Double>
 {
     /**

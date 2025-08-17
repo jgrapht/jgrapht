@@ -19,9 +19,9 @@ package org.jgrapht.alg.scoring;
 
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for PageRank
@@ -269,11 +269,7 @@ public class PageRankTest
 
         VertexScoringAlgorithm<String, Double> pr = new PageRank<>(g, 0.85, 100, 0.0001);
 
-        try {
-            pr.getVertexScore("unknown");
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> pr.getVertexScore("unknown"));
     }
 
     @Test
@@ -281,23 +277,11 @@ public class PageRankTest
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
-        try {
-            new PageRank<>(g, 1.1, 100, 0.0001);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new PageRank<>(g, 1.1, 100, 0.0001));
 
-        try {
-            new PageRank<>(g, 0.85, 0, 0.0001);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new PageRank<>(g, 0.85, 0, 0.0001));
 
-        try {
-            new PageRank<>(g, 0.85, 100, 0.0);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new PageRank<>(g, 0.85, 100, 0.0));
 
     }
 

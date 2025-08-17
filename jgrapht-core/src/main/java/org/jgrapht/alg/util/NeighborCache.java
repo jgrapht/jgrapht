@@ -52,7 +52,7 @@ public class NeighborCache<V, E>
      * Constructor
      * 
      * @param graph the input graph
-     * @throws NullPointerException if the input graph is null
+     * @throws NullPointerException if the input graph is {@code null}
      */
     public NeighborCache(Graph<V, E> graph)
     {

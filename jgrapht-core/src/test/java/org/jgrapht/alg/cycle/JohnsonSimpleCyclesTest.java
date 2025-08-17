@@ -20,12 +20,11 @@ package org.jgrapht.alg.cycle;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Simple tests for JohnsonSimpleCycles.
@@ -49,13 +48,13 @@ public class JohnsonSimpleCyclesTest
 
         List<List<Integer>> cycles = new JohnsonSimpleCycles<>(g).findSimpleCycles();
 
-        assertTrue(cycles.size() == 2);
+        assertEquals(2, cycles.size());
 
         List<Integer> cycle0 = cycles.get(0);
-        assertEquals(cycle0, Arrays.asList(1, 2, 3, 4, 5, 6));
+        assertEquals(Arrays.asList(1, 2, 3, 4, 5, 6), cycle0);
 
         List<Integer> cycle1 = cycles.get(1);
-        assertEquals(cycle1, Arrays.asList(1, 2, 5, 6));
+        assertEquals(Arrays.asList(1, 2, 5, 6), cycle1);
     }
 
 }

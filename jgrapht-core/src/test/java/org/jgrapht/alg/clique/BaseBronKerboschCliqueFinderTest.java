@@ -22,12 +22,13 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * .
@@ -145,20 +146,22 @@ public abstract class BaseBronKerboschCliqueFinderTest
         assertEquals(expected, actual);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNonSimple()
     {
-        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        g.addVertex("1");
-        g.addVertex("2");
-        g.addEdge("1", "2");
-        g.addEdge("1", "2");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+            g.addVertex("1");
+            g.addVertex("2");
+            g.addEdge("1", "2");
+            g.addEdge("1", "2");
 
-        MaximalCliqueEnumerationAlgorithm<String, DefaultEdge> finder = createFinder1(g);
-        Iterator<Set<String>> it = finder.iterator();
-        while (it.hasNext()) {
-            it.next();
-        }
+            MaximalCliqueEnumerationAlgorithm<String, DefaultEdge> finder = createFinder1(g);
+            Iterator<Set<String>> it = finder.iterator();
+            while (it.hasNext()) {
+                it.next();
+            }
+        });
     }
 
     public static void createGraph(Graph<String, DefaultEdge> g)

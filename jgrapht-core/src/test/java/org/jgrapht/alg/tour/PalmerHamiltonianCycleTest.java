@@ -19,14 +19,14 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PalmerHamiltonianCycleTest
 {
@@ -61,24 +61,26 @@ public class PalmerHamiltonianCycleTest
      * Test that contains a simple cycle of 10 nodes. The graph has a Hamiltonian cycle but it
      * doesn't meet Ore's condition.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testLineGraph()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 0; i < 10; i++) {
-            graph.addVertex(i);
-        }
+            for (int i = 0; i < 10; i++) {
+                graph.addVertex(i);
+            }
 
-        for (int i = 0; i < 10; i++) {
-            graph.addEdge(i, (i + 1) % 10);
-        }
+            for (int i = 0; i < 10; i++) {
+                graph.addEdge(i, (i + 1) % 10);
+            }
 
-        GraphPath<Integer, DefaultEdge> tour =
-            new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
+            GraphPath<Integer, DefaultEdge> tour =
+                new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
 
-        assertNotNull(tour);
-        assertHamiltonian(graph, tour);
+            assertNotNull(tour);
+            assertHamiltonian(graph, tour);
+        });
     }
 
     private void testRandomGraphs(Random random)
@@ -125,7 +127,7 @@ public class PalmerHamiltonianCycleTest
      * graph doesn't have Ore's property
      */
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomGraphs()
     {
         testRandomGraphs(new Random(0xC0FFEE));
@@ -176,7 +178,7 @@ public class PalmerHamiltonianCycleTest
      * each node has (n+1)/2 neighbours
      */
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomGraphs2FixedSeed()
     {
         testRandomGraphs2(new Random(0xBEEF));
@@ -184,7 +186,7 @@ public class PalmerHamiltonianCycleTest
 
     private static Graph<Integer, DefaultEdge> bigGraph = new SimpleGraph<>(DefaultEdge.class);
 
-    @BeforeClass
+    @BeforeAll
     public static void generateBigGraph()
     {
         Random random = new Random(0xC0FFEE);
@@ -218,7 +220,7 @@ public class PalmerHamiltonianCycleTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testBigGraph()
     {
         GraphPath<Integer, DefaultEdge> tour =

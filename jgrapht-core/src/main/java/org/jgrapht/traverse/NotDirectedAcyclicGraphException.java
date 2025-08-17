@@ -18,10 +18,11 @@
 package org.jgrapht.traverse;
 
 /**
- * An exception to signal that {@link TopologicalOrderIterator} is used for a non-directed acyclic
- * graph. Note that this class extends {@link IllegalArgumentException} for backward compatibility
+ * Thrown to indicate that {@link TopologicalOrderIterator} is used for a non-directed acyclic
+ * graph. Note that this class extends {@link IllegalArgumentException} for backward compatibility.
  *
  * @author Kaiichiro Ota
+ * @since 1.5.2
  */
 public class NotDirectedAcyclicGraphException
     extends IllegalArgumentException

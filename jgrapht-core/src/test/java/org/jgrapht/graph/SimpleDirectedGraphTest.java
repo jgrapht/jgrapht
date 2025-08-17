@@ -19,12 +19,12 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * A unit test for simple directed graph.
@@ -327,13 +327,13 @@ public class SimpleDirectedGraphTest
 
         try {
             g3.inDegreeOf(new String());
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (IllegalArgumentException e) {
         }
 
         try {
             g3.inDegreeOf(null);
-            Assert.fail("Should not get here.");
+            fail("Should not get here.");
         } catch (NullPointerException e) {
         }
     }
@@ -561,7 +561,7 @@ public class SimpleDirectedGraphTest
         assertEquals("([v1, v2], [(v2,v1)])", r.toString());
     }
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         gEmpty = new SimpleDirectedGraph<>(

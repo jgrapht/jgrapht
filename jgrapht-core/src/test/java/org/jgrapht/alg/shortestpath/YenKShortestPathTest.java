@@ -21,11 +21,12 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for the {@link YenKShortestPath}.
@@ -39,13 +40,15 @@ public class YenKShortestPathTest
      */
     private static final long SEED = 13l;
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeK()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        new YenKShortestPath<>(graph).getPaths(1, 2, -1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            Graphs.addEdgeWithVertices(graph, 1, 2);
+            new YenKShortestPath<>(graph).getPaths(1, 2, -1);
+        });
     }
 
     /**
@@ -64,22 +67,27 @@ public class YenKShortestPathTest
         assertEquals(0, paths.size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSourceGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(2);
-        new YenKShortestPath<>(graph).getPaths(1, 2, 1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(2);
+            new YenKShortestPath<>(graph).getPaths(1, 2, 1);
+        });
+        
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSinkGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        new YenKShortestPath<>(graph).getPaths(1, 2, 1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            new YenKShortestPath<>(graph).getPaths(1, 2, 1);
+        });
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2024, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,14 +18,14 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AsUnweightedGraphTest
 {
@@ -43,7 +43,7 @@ public class AsUnweightedGraphTest
     /**
      * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    @Before
+    @BeforeEach
     public void setUp()
     {
         Graph<String, DefaultWeightedEdge> undirectedWeightedGraph =

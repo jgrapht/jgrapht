@@ -19,13 +19,13 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.MINUS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link BlossomVTree}

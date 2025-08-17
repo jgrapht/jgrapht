@@ -20,22 +20,23 @@ package org.jgrapht.generate;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Dimitrios Michail
  */
 public class WattsStrogatzGraphGeneratorTest
 {
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testLessThan3Nodes()
     {
-        new WattsStrogatzGraphGenerator<>(2, 1, 0.5);
+        assertThrows(IllegalArgumentException.class, () -> new WattsStrogatzGraphGenerator<>(2, 1, 0.5));
     }
 
     @Test

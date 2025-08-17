@@ -65,6 +65,8 @@ public class ToleranceDoubleComparator
      * @param o1 the first value
      * @param o2 the second value
      * @return 0 if they are equal, -1 if {@literal o1 < o2}, 1 otherwise
+     * 
+     * @throws NullPointerException if either one of the arguments is {@code null}
      */
     @Override
     public int compare(Double o1, Double o2)

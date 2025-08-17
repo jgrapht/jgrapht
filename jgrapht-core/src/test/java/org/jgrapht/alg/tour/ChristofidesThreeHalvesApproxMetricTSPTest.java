@@ -19,11 +19,12 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for the {@link ChristofidesThreeHalvesApproxMetricTSP}
@@ -36,43 +37,49 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     /**
      * Directed graph
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetTour0()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
-        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
-            new ChristofidesThreeHalvesApproxMetricTSP<>();
-        approxMetricTSP.getTour(graph);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+            ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
+                new ChristofidesThreeHalvesApproxMetricTSP<>();
+            approxMetricTSP.getTour(graph);
+        });
     }
 
     /**
      * Empty graph
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetTour1()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
-            new ChristofidesThreeHalvesApproxMetricTSP<>();
-        approxMetricTSP.getTour(graph);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
+                new ChristofidesThreeHalvesApproxMetricTSP<>();
+            approxMetricTSP.getTour(graph);
+        });
     }
 
     /**
      * Not complete
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetTour2()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(0);
-        graph.addVertex(1);
-        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
-            new ChristofidesThreeHalvesApproxMetricTSP<>();
-        approxMetricTSP.getTour(graph);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(0);
+            graph.addVertex(1);
+            ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
+                new ChristofidesThreeHalvesApproxMetricTSP<>();
+            approxMetricTSP.getTour(graph);
+        });
     }
 
     /**

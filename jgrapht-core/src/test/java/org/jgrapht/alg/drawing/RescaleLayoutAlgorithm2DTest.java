@@ -22,9 +22,9 @@ import org.jgrapht.alg.drawing.model.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test {@link CircularLayoutAlgorithm2D}.

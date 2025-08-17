@@ -51,6 +51,8 @@ public abstract class AbstractGraphIterator<V, E>
      * Create a new iterator
      * 
      * @param graph the graph
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public AbstractGraphIterator(Graph<V, E> graph)
     {
@@ -75,7 +77,9 @@ public abstract class AbstractGraphIterator<V, E>
      * Sets the cross component traversal flag - indicates whether to traverse the graph across
      * connected components.
      *
-     * @param crossComponentTraversal if <code>true</code> traverses across connected components.
+     * @param crossComponentTraversal if {@code true} traverses across connected components.
+     * 
+     * @throws IllegalArgumentException if the argument is invalid for this iterator
      */
     public void setCrossComponentTraversal(boolean crossComponentTraversal)
     {
@@ -85,8 +89,8 @@ public abstract class AbstractGraphIterator<V, E>
     /**
      * Test whether this iterator is set to traverse the graph across connected components.
      *
-     * @return <code>true</code> if traverses across connected components, otherwise
-     *         <code>false</code>.
+     * @return {@code true} if traverses across connected components, otherwise
+     *         {@code false}.
      */
     @Override
     public boolean isCrossComponentTraversal()
@@ -113,6 +117,9 @@ public abstract class AbstractGraphIterator<V, E>
         nListeners = traversalListeners.size();
     }
 
+    /**
+     * @throws UnsupportedOperationException {@inheritDoc}
+     */
     @Override
     public void remove()
     {

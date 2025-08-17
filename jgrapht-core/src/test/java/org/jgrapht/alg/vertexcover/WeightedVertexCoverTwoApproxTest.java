@@ -20,13 +20,13 @@ package org.jgrapht.alg.vertexcover;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.vertexcover.VertexCoverTestUtils.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the weighted 2-approx vertex cover algorithms
@@ -44,20 +44,18 @@ public abstract class WeightedVertexCoverTwoApproxTest
      * Test 2-approximation algorithm for the minimum vertex cover problem. TODO: verify whether the
      * objective indeed is smaller than 2 times the optimum solution.
      */
-    @Test
+    @RepeatedTest(TEST_REPEATS)
     public void testFind2ApproximationWeightedCover()
     {
-        for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
-            Map<Integer, Double> vertexWeights = WeightedVertexCoverTest.getRandomVertexWeights(g);
-            VertexCoverAlgorithm<Integer> mvc =
-                createWeightedSolver(Graphs.undirectedGraph(g), vertexWeights);
+        Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
+        Map<Integer, Double> vertexWeights = WeightedVertexCoverTest.getRandomVertexWeights(g);
+        VertexCoverAlgorithm<Integer> mvc =
+            createWeightedSolver(Graphs.undirectedGraph(g), vertexWeights);
 
-            VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
-            assertTrue(isCover(g, vertexCover));
-            assertEquals(
-                vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
-                0);
-        }
+        VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
+        assertTrue(isCover(g, vertexCover));
+        assertEquals(
+            vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
+            0);
     }
 }

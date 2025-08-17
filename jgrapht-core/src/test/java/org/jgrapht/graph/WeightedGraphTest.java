@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for different edge types on weighted graphs.
@@ -57,20 +57,24 @@ public class WeightedGraphTest
         assertFalse(g.containsEdge("1-2"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidEdgeOnWeightedGraph()
     {
-        WeightedPseudograph<Integer, String> g =
-            new WeightedPseudograph<Integer, String>(String.class);
-        g.getEdgeWeight("1-2");
+        assertThrows(IllegalArgumentException.class, () -> {
+            WeightedPseudograph<Integer, String> g =
+                new WeightedPseudograph<Integer, String>(String.class);
+            g.getEdgeWeight("1-2");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidEdgeOnWeightedGraphSet()
     {
-        WeightedPseudograph<Integer, String> g =
-            new WeightedPseudograph<Integer, String>(String.class);
-        g.setEdgeWeight("1-2", 2d);
+        assertThrows(IllegalArgumentException.class, () -> {
+            WeightedPseudograph<Integer, String> g =
+                new WeightedPseudograph<Integer, String>(String.class);
+            g.setEdgeWeight("1-2", 2d);
+        });
     }
 
     public void testInvalidEdgeOnUnweightedGraph()
@@ -90,8 +94,8 @@ public class WeightedGraphTest
         assertEquals(g.getEdgeWeight(e), 1d, 1e-9);
         g.setEdgeWeight(e, 3d);
         assertEquals(g.getEdgeWeight(e), 3d, 1e-9);
-        assertEquals(Integer.valueOf(1), g.getEdgeSource(e));
-        assertEquals(Integer.valueOf(2), g.getEdgeTarget(e));
+        assertEquals(1, g.getEdgeSource(e));
+        assertEquals(2, g.getEdgeTarget(e));
     }
 
 }

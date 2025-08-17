@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * Computes the coreness of each vertex in an undirected graph.
- * 
+ *
  * <p>
  * A $k$-core of a graph $G$ is a maximal connected subgraph of $G$ in which all vertices have
  * degree at least $k$. Equivalently, it is one of the connected components of the subgraph of $G$
@@ -52,7 +52,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public final class Coreness<V, E>
+public class Coreness<V, E>
     implements VertexScoringAlgorithm<V, Integer>
 {
     private final Graph<V, E> g;
@@ -61,7 +61,7 @@ public final class Coreness<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param g the input graph
      */
     public Coreness(Graph<V, E> g)
@@ -94,13 +94,13 @@ public final class Coreness<V, E>
 
     /**
      * Compute the degeneracy of a graph.
-     * 
+     *
      * <p>
      * The degeneracy of a graph is the smallest value of $k$ for which it is $k$-degenerate. In
      * graph theory, a $k$-degenerate graph is an undirected graph in which every subgraph has a
      * vertex of degree at most $k$: that is, some vertex in the subgraph touches $k$ or fewer of
      * the subgraph's edges.
-     * 
+     *
      * @return the degeneracy of a graph
      */
     public int getDegeneracy()

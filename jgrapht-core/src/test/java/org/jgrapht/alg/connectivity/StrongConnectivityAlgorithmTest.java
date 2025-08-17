@@ -23,10 +23,8 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Parameterized.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -34,7 +32,7 @@ import java.util.stream.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test cases for the GabowStrongConnectivityInspector. Tests are identical to the tests for the
@@ -44,7 +42,6 @@ import static org.junit.Assert.*;
  * @author Joris Kinable
  * @author Hannes Wellmann
  */
-@RunWith(Parameterized.class)
 public class StrongConnectivityAlgorithmTest
 {
     // ~ Static fields/initializers ---------------------------------------------
@@ -66,26 +63,20 @@ public class StrongConnectivityAlgorithmTest
 
     // ~ Instance fields --------------------------------------------------------
 
-    @Parameter()
-    public String name;
-
-    @Parameter(1)
-    public Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory;
-
-    @Parameters(name = "{0}")
     @SuppressWarnings("unchecked")
-    public static List<Object[]> getAlgorithmFactory()
+    public static List<Arguments> getAlgorithmFactory()
     {
         return List.of(
-            new Object[] { GabowStrongConnectivityInspector.class.getSimpleName(),
-                (Function<Graph<?, ?>, ?>) GabowStrongConnectivityInspector::new },
+            Arguments.of(GabowStrongConnectivityInspector.class.getSimpleName(),
+                (Function<Graph<?, ?>, ?>) GabowStrongConnectivityInspector::new),
 
-            new Object[] { KosarajuStrongConnectivityInspector.class.getSimpleName(),
-                (Function<Graph<?, ?>, ?>) KosarajuStrongConnectivityInspector::new });
+            Arguments.of(KosarajuStrongConnectivityInspector.class.getSimpleName(),
+                (Function<Graph<?, ?>, ?>) KosarajuStrongConnectivityInspector::new ));
     }
 
-    @Test
-    public void testStronglyConnected1()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected1(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> g = createDirectedGraphWithVertices(4);
 
@@ -94,11 +85,12 @@ public class StrongConnectivityAlgorithmTest
 
         g.addEdge(V3, V4); // only weakly connected
 
-        assertStronglyConnectedSets(g, Set.of(V1, V2), Set.of(V3), Set.of(V4));
+        assertStronglyConnectedSets(g, algorithmFactory, Set.of(V1, V2), Set.of(V3), Set.of(V4));
     }
 
-    @Test
-    public void testStronglyConnected2()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected2(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> g = createDirectedGraphWithVertices(4);
 
@@ -108,11 +100,12 @@ public class StrongConnectivityAlgorithmTest
         g.addEdge(V4, V3); // only weakly connected
         g.addEdge(V3, V2); // only weakly connected
 
-        assertStronglyConnectedSets(g, Set.of(V1, V2), Set.of(V3), Set.of(V4));
+        assertStronglyConnectedSets(g, algorithmFactory, Set.of(V1, V2), Set.of(V3), Set.of(V4));
     }
 
-    @Test
-    public void testStronglyConnected3()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected3(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> g = createDirectedGraphWithVertices(4);
 
@@ -124,22 +117,24 @@ public class StrongConnectivityAlgorithmTest
         g.addEdge(V2, V4);
         g.addEdge(V3, V4); // weakly connected
 
-        assertStronglyConnectedSets(g, Set.of(V1, V2, V3), Set.of(V4));
+        assertStronglyConnectedSets(g, algorithmFactory, Set.of(V1, V2, V3), Set.of(V4));
     }
 
-    @Test
-    public void testStronglyConnected4()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected4(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<Integer, String> graph = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.createStringSupplier(), false);
 
         new RingGraphGenerator<Integer, String>(3).generateGraph(graph);
 
-        assertStronglyConnectedSets(graph, Set.of(0, 1, 2));
+        assertStronglyConnectedSets(graph, algorithmFactory, Set.of(0, 1, 2));
     }
 
-    @Test
-    public void testStronglyConnected5()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected5(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
 
         // example from paper "Path-based depth-first search for strong and biconnected components"
@@ -162,11 +157,12 @@ public class StrongConnectivityAlgorithmTest
         graph.addEdge(V6, V3);
         graph.addEdge(V6, V4);
 
-        assertStronglyConnectedSets(graph, Set.of(V1), Set.of(V2, V4, V5, V6), Set.of(V3));
+        assertStronglyConnectedSets(graph, algorithmFactory, Set.of(V1), Set.of(V2, V4, V5, V6), Set.of(V3));
     }
 
-    @Test
-    public void testStronglyConnected6()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected6(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         // example from
         // https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
@@ -188,11 +184,12 @@ public class StrongConnectivityAlgorithmTest
         graph.addEdge(V8, V7);
 
         assertStronglyConnectedSets(
-            graph, Set.of(V1, V2, V5), Set.of(V3, V4), Set.of(V6, V7), Set.of(V8));
+            graph, algorithmFactory, Set.of(V1, V2, V5), Set.of(V3, V4), Set.of(V6, V7), Set.of(V8));
     }
 
-    @Test
-    public void testStronglyConnected7()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected7(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> graph = createDirectedGraphWithVertices(5);
 
@@ -203,11 +200,12 @@ public class StrongConnectivityAlgorithmTest
         graph.addEdge(V4, V1);
         graph.addEdge(V5, V3);
 
-        assertStronglyConnectedSets(graph, Set.of(V1, V2, V3, V4, V5));
+        assertStronglyConnectedSets(graph, algorithmFactory, Set.of(V1, V2, V3, V4, V5));
     }
 
-    @Test
-    public void testStronglyConnected8()
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
+    public void testStronglyConnected8(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> graph = createDirectedGraphWithVertices(11);
 
@@ -230,13 +228,14 @@ public class StrongConnectivityAlgorithmTest
         graph.addEdge(V10, V9);
 
         assertStronglyConnectedSets(
-            graph, Set.of(V1, V2, V3, V4), Set.of(V5, V6, V7), Set.of(V8), Set.of(V9, V10),
+            graph, algorithmFactory, Set.of(V1, V2, V3, V4), Set.of(V5, V6, V7), Set.of(V8), Set.of(V9, V10),
             Set.of(V11));
     }
 
-    @Test
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
     @SuppressWarnings("unchecked")
-    public void testCondensation()
+    public void testCondensation(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> g = createDirectedGraphWithVertices(5);
 
@@ -247,7 +246,7 @@ public class StrongConnectivityAlgorithmTest
         g.addEdge(V5, V4); // only weakly connected
 
         StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
-            getStrongConnectivityInspector(g);
+            getStrongConnectivityInspector(g, algorithmFactory);
 
         Graph<Graph<String, DefaultEdge>, DefaultEdge> condensation = inspector.getCondensation();
 
@@ -274,9 +273,10 @@ public class StrongConnectivityAlgorithmTest
         assertThat(condensation.edgeSet(), is(equalTo(interSCCEdges)));
     }
 
-    @Test
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("getAlgorithmFactory")
     @SuppressWarnings("unchecked")
-    public void testCondensation2()
+    public void testCondensation2(String name, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         Graph<String, DefaultEdge> g = createDirectedGraphWithVertices(4);
 
@@ -289,7 +289,7 @@ public class StrongConnectivityAlgorithmTest
         g.addEdge(V2, V4);
 
         StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
-            getStrongConnectivityInspector(g);
+            getStrongConnectivityInspector(g, algorithmFactory);
 
         Graph<Graph<String, DefaultEdge>, DefaultEdge> condensation = inspector.getCondensation();
 
@@ -321,7 +321,7 @@ public class StrongConnectivityAlgorithmTest
     }
 
     @SafeVarargs
-    private <V, E> void assertStronglyConnectedSets(Graph<V, E> graph, Set<V>... expectedSets)
+    private <V, E> void assertStronglyConnectedSets(Graph<V, E> graph, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory, Set<V>... expectedSets)
     {
         // Test the SCC algorithm for each vertex of the graph as start vertex
         int vertices = graph.vertexSet().size();
@@ -330,7 +330,7 @@ public class StrongConnectivityAlgorithmTest
             Graph<V, E> g = createRotatedGraphCopy(graph, i);
             Set<V>[] expectedVertices = createdRotatedSets(expectedSets, i, graph);
 
-            StrongConnectivityAlgorithm<V, E> inspector = getStrongConnectivityInspector(g);
+            StrongConnectivityAlgorithm<V, E> inspector = getStrongConnectivityInspector(g, algorithmFactory);
 
             assertThat(inspector.stronglyConnectedSets(), containsInAnyOrder(expectedVertices));
 
@@ -338,7 +338,7 @@ public class StrongConnectivityAlgorithmTest
             for (Graph<V, E> sg : inspector.getStronglyConnectedComponents()) {
                 actualSets.add(sg.vertexSet());
 
-                StrongConnectivityAlgorithm<V, E> ci = getStrongConnectivityInspector(sg);
+                StrongConnectivityAlgorithm<V, E> ci = getStrongConnectivityInspector(sg, algorithmFactory);
                 assertTrue(ci.isStronglyConnected());
             }
 
@@ -414,7 +414,7 @@ public class StrongConnectivityAlgorithmTest
     }
 
     @SuppressWarnings("unchecked")
-    private <V, E> StrongConnectivityAlgorithm<V, E> getStrongConnectivityInspector(Graph<V, E> g)
+    private <V, E> StrongConnectivityAlgorithm<V, E> getStrongConnectivityInspector(Graph<V, E> g, Function<Graph<?, ?>, StrongConnectivityAlgorithm<?, ?>> algorithmFactory)
     {
         return (StrongConnectivityAlgorithm<V, E>) algorithmFactory.apply(g);
     }

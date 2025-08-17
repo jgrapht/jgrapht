@@ -18,11 +18,11 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * A unit test for directed multigraph.

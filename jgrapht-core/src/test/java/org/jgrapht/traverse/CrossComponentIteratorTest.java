@@ -21,11 +21,11 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -173,7 +173,7 @@ public abstract class CrossComponentIteratorTest
                 break;
 
             default:
-                Assert.fail("Should not get here.");
+                fail("Should not get here.");
 
                 break;
             }

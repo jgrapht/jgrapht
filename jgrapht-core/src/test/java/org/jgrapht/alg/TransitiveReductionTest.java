@@ -19,11 +19,11 @@ package org.jgrapht.alg;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TransitiveReductionTest
 {
@@ -80,7 +80,7 @@ public class TransitiveReductionTest
             // System.out.println(Arrays.deepToString(path_matrix) + " path
             // matrix");
 
-            Assert.assertArrayEquals(expectedPathMatrix, pathMatrix);
+            assertArrayEquals(expectedPathMatrix, pathMatrix);
         }
 
         // calc transitive reduction
@@ -100,8 +100,7 @@ public class TransitiveReductionTest
             // System.out.println(Arrays.deepToString(transitively_reduced_matrix)
             // + " transitive reduction");
 
-            Assert
-                .assertArrayEquals(EXPECTED_TRANSITIVELY_REDUCED_MATRIX, transitivelyReducedMatrix);
+            assertArrayEquals(EXPECTED_TRANSITIVELY_REDUCED_MATRIX, transitivelyReducedMatrix);
         }
     }
 
@@ -129,10 +128,10 @@ public class TransitiveReductionTest
 
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReduceNull()
     {
-        TransitiveReduction.INSTANCE.reduce(null);
+        assertThrows(NullPointerException.class, () -> TransitiveReduction.INSTANCE.reduce(null));
     }
 
     @Test
@@ -141,8 +140,8 @@ public class TransitiveReductionTest
         SimpleDirectedGraph<String, DefaultEdge> graph =
             new SimpleDirectedGraph<>(DefaultEdge.class);
         TransitiveReduction.INSTANCE.reduce(graph);
-        assertEquals(graph.vertexSet().size(), 0);
-        assertEquals(graph.edgeSet().size(), 0);
+        assertEquals(0, graph.vertexSet().size());
+        assertEquals(0, graph.edgeSet().size());
     }
 
     @Test
@@ -154,8 +153,8 @@ public class TransitiveReductionTest
         graph.addVertex("y");
         graph.addVertex("z");
         TransitiveReduction.INSTANCE.reduce(graph);
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 0);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(0, graph.edgeSet().size());
     }
 
     @Test
@@ -169,14 +168,14 @@ public class TransitiveReductionTest
         graph.addEdge("x", "y");
         graph.addEdge("y", "z");
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 2);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(2, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 2);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(2, graph.edgeSet().size());
 
         assertTrue(graph.containsEdge("x", "y"));
         assertTrue(graph.containsEdge("y", "z"));
@@ -195,14 +194,14 @@ public class TransitiveReductionTest
         graph.addEdge("y", "z");
         graph.addEdge("x", "z"); // <-- reduce me, please
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 3);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(3, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 3);
-        assertEquals(graph.edgeSet().size(), 2);
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(2, graph.edgeSet().size());
 
         assertTrue(graph.containsEdge("x", "y"));
         assertTrue(graph.containsEdge("y", "z"));
@@ -227,14 +226,14 @@ public class TransitiveReductionTest
         graph.addEdge("y", "z");
         graph.addEdge("a", "z"); // <-- reduce me, please
 
-        assertEquals(graph.vertexSet().size(), 6);
-        assertEquals(graph.edgeSet().size(), 6);
+        assertEquals(6, graph.vertexSet().size());
+        assertEquals(6, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 6);
-        assertEquals(graph.edgeSet().size(), 5);
+        assertEquals(6, graph.vertexSet().size());
+        assertEquals(5, graph.edgeSet().size());
 
         assertTrue(graph.containsEdge("a", "b"));
         assertTrue(graph.containsEdge("b", "c"));
@@ -255,14 +254,14 @@ public class TransitiveReductionTest
         assertTrue(graph.containsEdge(2, 4));
         assertTrue(graph.containsEdge(4, 1));
 
-        assertEquals(graph.vertexSet().size(), 5);
-        assertEquals(graph.edgeSet().size(), 6);
+        assertEquals(5, graph.vertexSet().size());
+        assertEquals(6, graph.edgeSet().size());
 
         // reduce !
         TransitiveReduction.INSTANCE.reduce(graph);
 
-        assertEquals(graph.vertexSet().size(), 5);
-        assertEquals(graph.edgeSet().size(), 4);
+        assertEquals(5, graph.vertexSet().size());
+        assertEquals(4, graph.edgeSet().size());
 
         // equivalent spot tests on the reduced graph
         assertFalse(graph.containsEdge(0, 0));

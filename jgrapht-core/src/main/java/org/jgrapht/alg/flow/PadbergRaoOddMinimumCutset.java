@@ -113,10 +113,10 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * The original algorithm runs on a compressed Gomory-Hu tree: a cut-tree with the odd vertices
      * as terminal vertices. This tree has $|T|-1$ edges as opposed to $|V|-1$ for a Gomory-Hu tree
      * defined on the input graph $G$. This compression step can however be skipped. If you want to
-     * run the original algorithm in the paper, set the parameter <code>useTreeCompression</code> to
+     * run the original algorithm in the paper, set the parameter {@code useTreeCompression} to
      * true. Alternatively, experiment which setting of this parameter produces the fastest results.
      * Both settings are guaranteed to find the optimal cut. Experiments on random graphs showed
-     * that setting <code>useTreeCompression</code> to false was on average a bit faster.
+     * that setting {@code useTreeCompression} to false was on average a bit faster.
      *
      * @param oddVertices Set of vertices which are labeled 'odd'. Note that the number of vertices
      *        in this set must be even!

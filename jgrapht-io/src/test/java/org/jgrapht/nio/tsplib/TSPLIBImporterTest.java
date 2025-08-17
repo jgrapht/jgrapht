@@ -24,14 +24,14 @@ import org.jgrapht.graph.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TSPLIBImporterTest
 {
@@ -143,8 +143,8 @@ public class TSPLIBImporterTest
         assertEquals("TSP", spec.getType());
         assertEquals(
             Arrays.asList("The first line of the comment", "A second line"), spec.getComments());
-        assertEquals(Integer.valueOf(4), spec.getDimension());
-        assertEquals(Integer.valueOf(7), spec.getCapacity());
+        assertEquals(4, spec.getDimension());
+        assertEquals(7, spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
         assertEquals("FULL_MATRIX", spec.getEdgeWeightFormat());
         assertEquals("ADJ_LIST", spec.getEdgeDataFormat());
@@ -180,8 +180,8 @@ public class TSPLIBImporterTest
         Specification spec = metaData.getSpecification();
         assertEquals("theNameOfThisFile", spec.getName());
         assertEquals("TSP", spec.getType());
-        assertEquals(Integer.valueOf(4), spec.getDimension());
-        assertEquals(Integer.valueOf(7), spec.getCapacity());
+        assertEquals(4, spec.getDimension());
+        assertEquals(7, spec.getCapacity());
         assertEquals("EUC_2D", spec.getEdgeWeightType());
         assertEquals("FULL_MATRIX", spec.getEdgeWeightFormat());
         assertEquals("ADJ_LIST", spec.getEdgeDataFormat());
@@ -710,7 +710,7 @@ public class TSPLIBImporterTest
 
         // assert if the computed edge weights/ distances are as expected
         Set<DefaultWeightedEdge> expectedEdgeSet = expectedGraph.edgeSet();
-        assertEquals("Unequal edgeSet size", expectedEdgeSet.size(), graph.edgeSet().size());
+        assertEquals(expectedEdgeSet.size(), graph.edgeSet().size(), "Unequal edgeSet size");
 
         Map<Integer, V> number2vertex = new HashMap<>();
         metadata.getVertexToNodeMapping().forEach((v, n) -> number2vertex.put(n.getNumber(), v));
@@ -723,7 +723,7 @@ public class TSPLIBImporterTest
 
             DefaultWeightedEdge actualEdge = graph.getEdge(source, target);
 
-            assertTrue(actualEdge != null);
+            assertNotNull(actualEdge);
             assertEquals(
                 expectedGraph.getEdgeWeight(expectedEdge), graph.getEdgeWeight(actualEdge), 1e-5);
         }
@@ -748,15 +748,7 @@ public class TSPLIBImporterTest
             TestVector expectedVector = expectedSortedVectors.get(i);
             Node actualNode = sortedVertexNodes.get(i);
             assertEquals(expectedVector.getIndex(), actualNode.getNumber());
-            assertEqualElements(expectedVector.getElementValues(), actualNode.getCoordinates());
-        }
-    }
-
-    private static void assertEqualElements(double[] expected, double[] actual)
-    {
-        if (!Arrays.equals(actual, expected)) {
-            fail(
-                "Expected is " + Arrays.toString(expected) + " but was " + Arrays.toString(actual));
+            assertArrayEquals(expectedVector.getElementValues(), actualNode.getCoordinates());
         }
     }
 

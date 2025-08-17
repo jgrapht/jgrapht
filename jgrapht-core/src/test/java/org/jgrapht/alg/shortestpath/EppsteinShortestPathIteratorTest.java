@@ -21,13 +21,14 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link EppsteinShortestPathIterator}.
@@ -72,22 +73,26 @@ public class EppsteinShortestPathIteratorTest
     private final int[][] notShortestPathEdgesGraph = { { 1, 2, 1 }, { 1, 3, 3 }, { 1, 4, 4 },
         { 1, 5, 5 }, { 1, 6, 6 }, { 1, 7, 7 }, { 1, 8, 8 }, { 1, 9, 9 } };
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSourceGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(2);
-        new EppsteinShortestPathIterator<>(graph, 1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(2);
+            new EppsteinShortestPathIterator<>(graph, 1, 2);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoSinkGraph()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        new EppsteinShortestPathIterator<>(graph, 1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            new EppsteinShortestPathIterator<>(graph, 1, 2);
+        });
     }
 
     @Test
@@ -102,17 +107,19 @@ public class EppsteinShortestPathIteratorTest
         assertFalse(it.hasNext());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testNoPathLeft()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
-        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
-            new EppsteinShortestPathIterator<>(graph, 1, 2);
-        assertFalse(it.hasNext());
-        it.next();
+        assertThrows(NoSuchElementException.class, () -> {
+            Graph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.addVertex(1);
+            graph.addVertex(2);
+            EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, 1, 2);
+            assertFalse(it.hasNext());
+            it.next();
+        });
     }
 
     @Test

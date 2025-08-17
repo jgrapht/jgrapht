@@ -26,7 +26,7 @@ import java.util.stream.*;
 
 /**
  * Color refinement algorithm that finds the coarsest stable coloring of a graph based on a given
- * <code>alpha</code> coloring as described in the following
+ * {@code alpha} coloring as described in the following
  * <a href="https://doi.org/10.1007/s00224-016-9686-0">paper</a>: C. Berkholz, P. Bonsma, and M.
  * Grohe. Tight lower and upper bounds for the complexity of canonical colour refinement. Theory of
  * Computing Systems, 60(4), p581--614, 2017.

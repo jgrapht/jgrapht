@@ -23,13 +23,13 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
 import static org.jgrapht.util.MathUtil.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link HeavyPathDecomposition}
@@ -185,28 +185,32 @@ public class HeavyPathDecompositionTest
         return countMaxPath(graph, decomposition) <= log2(graph.vertexSet().size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraph()
     {
-        new HeavyPathDecomposition<>(null, 1);
+        assertThrows(NullPointerException.class, () -> new HeavyPathDecomposition<>(null, 1));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullRoot()
     {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        String s = null;
+        assertThrows(NullPointerException.class, () -> {
+            Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            String s = null;
 
-        new HeavyPathDecomposition<>(graph, s);
+            new HeavyPathDecomposition<>(graph, s);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRootNotInTree()
     {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        graph.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            graph.addVertex("a");
 
-        new HeavyPathDecomposition<>(graph, "b");
+            new HeavyPathDecomposition<>(graph, "b");
+        });
     }
 
     @Test
@@ -225,8 +229,8 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, "1");
 
-        Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
-        Assert.assertTrue(
+        assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
+        assertTrue(
             isValidDecomposition(graph, Collections.singleton("1"), heavyPathDecomposition));
     }
 
@@ -239,8 +243,8 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, "a");
 
-        Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(
+        assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        assertTrue(
             isValidDecomposition(graph, Collections.singleton("a"), heavyPathDecomposition));
     }
 
@@ -258,8 +262,8 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(
+        assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        assertTrue(
             isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
     }
 
@@ -277,8 +281,8 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, 5);
 
-        Assert.assertEquals(2, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(
+        assertEquals(2, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        assertTrue(
             isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
     }
 
@@ -304,7 +308,7 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertTrue(
+        assertTrue(
             isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
     }
 
@@ -323,13 +327,13 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
-        Assert.assertEquals(1, heavyPathDecomposition.getLightEdges().size());
+        assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
+        assertEquals(1, heavyPathDecomposition.getLightEdges().size());
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomTrees()
     {
         final int numTests = 100;
@@ -349,12 +353,12 @@ public class HeavyPathDecompositionTest
             HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
                 new HeavyPathDecomposition<>(graph, roots);
 
-            Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
+            assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
         }
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomForests()
     {
         final int numTests = 1000;
@@ -379,12 +383,12 @@ public class HeavyPathDecompositionTest
             HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
                 new HeavyPathDecomposition<>(graph, roots);
 
-            Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
+            assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
         }
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeTree()
     {
         Random random = new Random(0x118811);
@@ -402,6 +406,6 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, roots);
 
-        Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
+        assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
     }
 }

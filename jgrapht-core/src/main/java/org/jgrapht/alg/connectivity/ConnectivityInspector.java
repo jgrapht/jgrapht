@@ -77,7 +77,7 @@ public class ConnectivityInspector<V, E>
      * inspected graph is <i>weakly</i> connected. An empty graph is <i>not</i> considered
      * connected.
      *
-     * @return <code>true</code> if and only if inspected graph is connected.
+     * @return {@code true} if and only if inspected graph is connected.
      */
     public boolean isConnected()
     {
@@ -115,13 +115,13 @@ public class ConnectivityInspector<V, E>
     }
 
     /**
-     * Returns a list of <code>Set</code> s, where each set contains all vertices that are in the
+     * Returns a list of {@code Set} s, where each set contains all vertices that are in the
      * same maximally connected component. All graph vertices occur in exactly one set. For more on
      * maximally connected component, see
      * <a href="http://www.nist.gov/dads/HTML/maximallyConnectedComponent.html">
      * http://www.nist.gov/dads/HTML/maximallyConnectedComponent.html</a>.
      *
-     * @return Returns a list of <code>Set</code> s, where each set contains all vertices that are
+     * @return Returns a list of {@code Set} s, where each set contains all vertices that are
      *         in the same maximally connected component.
      */
     public List<Set<V>> connectedSets()
@@ -171,7 +171,7 @@ public class ConnectivityInspector<V, E>
      * @param sourceVertex one end of the path.
      * @param targetVertex another end of the path.
      *
-     * @return <code>true</code> if and only if the source and target vertex are in the same
+     * @return {@code true} if and only if the source and target vertex are in the same
      *         connected component (undirected graph), or in the same weakly connected component
      *         (directed graph).
      */

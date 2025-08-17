@@ -18,14 +18,13 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WeightedGraphAsWeightedGraphTest
 {
@@ -148,12 +147,7 @@ public class WeightedGraphAsWeightedGraphTest
     public void testGetEdgeWeightOfNull()
     {
         this.setUp(false);
-        try {
-            this.weightedGraph.getEdgeWeight(null);
-            fail("Expected a NullPointerException");
-        } catch (Exception e) {
-            assertTrue(e instanceof NullPointerException);
-        }
+        assertThrows(NullPointerException.class, () -> this.weightedGraph.getEdgeWeight(null));
     }
 
     @Test

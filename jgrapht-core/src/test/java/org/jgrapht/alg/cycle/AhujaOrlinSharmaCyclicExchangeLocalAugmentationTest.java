@@ -20,12 +20,12 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit tests for {@link AhujaOrlinSharmaCyclicExchangeLocalAugmentation}.
@@ -241,8 +241,8 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentationTest
 
         assertEquals(-2, calculatedCycle1.getWeight(), 0.0000001);
         assertEquals(cycle, calculatedCycle1.getVertexList());
-        assertEquals(Integer.valueOf(0), calculatedCycle1.getStartVertex());
-        assertEquals(Integer.valueOf(0), calculatedCycle1.getEndVertex());
+        assertEquals(0, calculatedCycle1.getStartVertex());
+        assertEquals(0, calculatedCycle1.getEndVertex());
     }
 
     @Test

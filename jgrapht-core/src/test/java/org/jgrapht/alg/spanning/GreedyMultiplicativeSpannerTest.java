@@ -19,11 +19,11 @@ package org.jgrapht.alg.spanning;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dimitrios Michail
@@ -372,11 +372,7 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V1, V2), -1.0);
         g.setEdgeWeight(g.addEdge(V2, V0), 1.0);
 
-        try {
-            new GreedyMultiplicativeSpanner<>(g, 2).getSpanner();
-            fail("Negative edge weights not permitted.");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new GreedyMultiplicativeSpanner<>(g, 2).getSpanner(), "Negative edge weights not permitted.");
     }
 
 }

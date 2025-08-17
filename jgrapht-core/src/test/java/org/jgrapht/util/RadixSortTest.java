@@ -18,12 +18,11 @@
 package org.jgrapht.util;
 
 import org.jgrapht.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for the {@link RadixSort} class.
@@ -95,14 +94,14 @@ public class RadixSortTest
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomArrays()
     {
         testRandomArrays(new Random(0x88));
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomArraysWithNoFixedSeed()
     {
         testRandomArrays(new Random());

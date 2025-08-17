@@ -22,7 +22,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.net.*;
@@ -50,7 +50,7 @@ public class NearestNeighborHeuristicTSPTest
     private static Graph<Vector2D, DefaultWeightedEdge> graph;
     private static List<GraphPath<Vector2D, DefaultWeightedEdge>> expectedTours;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass()
         throws Exception
     {

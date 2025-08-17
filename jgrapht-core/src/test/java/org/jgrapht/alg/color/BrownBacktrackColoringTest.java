@@ -22,13 +22,12 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests for BrownBacktrackColoring
@@ -253,7 +252,7 @@ public class BrownBacktrackColoringTest
      * mug100_1.col 100 vertices, 166 edges chromatic number: 4
      */
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void insertions2_3Test()
     {
         int[][] edges = { { 1, 3 }, { 1, 4 }, { 1, 9 }, { 1, 23 }, { 2, 6 }, { 2, 8 }, { 2, 11 },
@@ -292,7 +291,7 @@ public class BrownBacktrackColoringTest
      * jean.col 80 vertices, 508 edges chromatic number: 10
      */
     @Test
-    @Category(OptionalTests.class)
+    @Tag("optional")
     public void jeanTest()
     {
         int[][] edges = { { 1, 14 }, { 2, 37 }, { 2, 75 }, { 2, 14 }, { 3, 54 }, { 3, 46 },

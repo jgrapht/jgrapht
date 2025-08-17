@@ -23,14 +23,15 @@ import org.jgrapht.graph.builder.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.nio.gexf.GEXFExporter.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.xmlunit.builder.*;
 import org.xmlunit.diff.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.assertFalse;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests
@@ -39,7 +40,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class GEXFExporterTest
 {
-    private static final String NL = System.getProperty("line.separator");
+    private static final String NL = System.lineSeparator();
 
     // ~ Methods
     // ----------------------------------------------------------------
@@ -136,11 +137,11 @@ public class GEXFExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
     @Test
@@ -239,11 +240,11 @@ public class GEXFExporterTest
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        String res = new String(os.toByteArray(), UTF_8);
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
 }

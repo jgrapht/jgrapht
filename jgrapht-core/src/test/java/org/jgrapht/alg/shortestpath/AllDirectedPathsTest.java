@@ -19,12 +19,11 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -56,7 +55,7 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultEdge>> allPaths =
             pathFindingAlg.getAllPaths(sources, targets, true, null);
 
-        assertEquals("Toy network should have correct number of simple paths", 7, allPaths.size());
+        assertEquals(7, allPaths.size(), "Toy network should have correct number of simple paths");
     }
 
     @Test
@@ -75,8 +74,8 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, true, null);
 
         assertEquals(
-            "Toy network should have correct number of simple paths using path validator", 3,
-            allPaths.size());
+            3, allPaths.size(),
+            "Toy network should have correct number of simple paths using path validator");
     }
 
     @Test
@@ -92,7 +91,7 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, true, 1);
 
         assertEquals(
-            "Toy network should have correct number of trivial simple paths", 2, allPaths.size());
+            2, allPaths.size(), "Toy network should have correct number of trivial simple paths");
         assertEquals(Arrays.asList(I1), allPaths.get(0).getVertexList());
         assertEquals(Arrays.asList(I1, A), allPaths.get(1).getVertexList());
     }
@@ -170,7 +169,7 @@ public class AllDirectedPathsTest
         allPaths.sort(Comparator.comparing(GraphPath::getWeight));
 
         assertEquals(
-            "Example weighted graph has 3 paths of length no greater than 2", 3, allPaths.size());
+            3, allPaths.size(), "Example weighted graph has 3 paths of length no greater than 2");
         ;
 
         assertEquals(Arrays.asList("A", "D"), allPaths.get(0).getVertexList());
@@ -201,11 +200,11 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, false, 8);
 
         assertEquals(
-            "Toy network with cycle should have correct number of paths with cycle", 13,
-            allPathsWithCycle.size());
+            13, allPathsWithCycle.size(),
+            "Toy network with cycle should have correct number of paths with cycle");
         assertEquals(
-            "Toy network with cycle should have correct number of simple paths", 7,
-            allPathsWithoutCycle.size());
+            7, allPathsWithoutCycle.size(),
+            "Toy network with cycle should have correct number of simple paths");
     }
 
     @Test
@@ -218,12 +217,7 @@ public class AllDirectedPathsTest
         Set<String> sources = vertexSet(I1);
         Set<String> targets = vertexSet(O1);
 
-        try {
-            pathFindingAlg.getAllPaths(sources, targets, false, null);
-            fail("Expected an IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            // This is the expected outcome, so the test passes
-        }
+        assertThrows(IllegalArgumentException.class, () -> pathFindingAlg.getAllPaths(sources, targets, false, null));
     }
 
     @Test
@@ -240,14 +234,14 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultEdge>> paths = new AllDirectedPaths<>(graph)
             .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
 
-        Assert.assertFalse("We should find at least some paths!", paths.isEmpty());
+        assertFalse(paths.isEmpty(), "We should find at least some paths!");
 
         paths.forEach(
-            path -> Assert.assertEquals(
+            path -> assertEquals(
+                0, path.getLength(),
                 String.format(
                     "The path %s has length %d even though we requested only paths of length 0",
-                    path, path.getLength()),
-                0, path.getLength()));
+                    path, path.getLength())));
     }
 
     private static Graph<String, DefaultEdge> toyGraph()

@@ -22,13 +22,13 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the {@link ContractionHierarchyPrecomputation}.
@@ -46,14 +46,14 @@ public class ContractionHierarchyPrecomputationTest
      */
     private static ThreadPoolExecutor executor;
 
-    @BeforeClass
+    @BeforeAll
     public static void createExecutor()
     {
         executor =
             ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
-    @AfterClass
+    @AfterAll
     public static void shutdownExecutor()
         throws InterruptedException
     {

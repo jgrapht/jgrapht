@@ -152,7 +152,12 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Sérgio Faria](https://github.com/sergio91pt)
 - [Rene Leonhardt](https://github.com/reneleonhardt)
 - [DelfinSR](https://github.com/DelfinSR)
-- [DelfinSR](https://github.com/vab2048)
+- [vab2048](https://github.com/vab2048)
+- [Sung Ho Yoon](https://github.com/syoon2)
+- [Albgarsan](https://github.com/Albgarsan)
+- [J. Alejandro Cornejo-Acosta](https://github.com/alex-cornejo)
+- [Feng Wenhan](https://github.com/fwhdzh)
+- [Yuri Bilyarov](https://github.com/YuriBilyarov)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 

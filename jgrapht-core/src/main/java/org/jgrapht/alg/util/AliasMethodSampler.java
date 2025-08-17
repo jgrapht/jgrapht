@@ -44,7 +44,8 @@ public class AliasMethodSampler
      * Constructor
      * 
      * @param p the probability distribution where position i of the array is $Prob(X=i)$
-     * @throws IllegalArgumentException in case of a non-valid probability distribution
+     * 
+     * @throws IllegalArgumentException if an invalid probability distribution is supplied
      */
     public AliasMethodSampler(double[] p)
     {
@@ -56,6 +57,9 @@ public class AliasMethodSampler
      * 
      * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param seed seed to use for the random number generator
+     * 
+     * @throws IllegalArgumentException if an invalid probability distribution is supplied
+     * @throws NullPointerException if {@code rng} is {@code null}
      */
     public AliasMethodSampler(double[] p, long seed)
     {
@@ -67,7 +71,9 @@ public class AliasMethodSampler
      * 
      * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param rng the random number generator
-     * @throws IllegalArgumentException in case of a non-valid probability distribution
+     * 
+     * @throws IllegalArgumentException if an invalid probability distribution is supplied
+     * @throws NullPointerException if {@code rng} is {@code null}
      */
     public AliasMethodSampler(double[] p, Random rng)
     {
@@ -80,7 +86,9 @@ public class AliasMethodSampler
      * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param rng the random number generator
      * @param epsilon tolerance used when comparing floating-point values
-     * @throws IllegalArgumentException in case of a non-valid probability distribution
+     * 
+     * @throws IllegalArgumentException if an invalid probability distribution is supplied
+     * @throws NullPointerException if {@code rng} is {@code null}
      */
     public AliasMethodSampler(double[] p, Random rng, double epsilon)
     {

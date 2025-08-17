@@ -17,11 +17,13 @@
  */
 package org.jgrapht.util;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link VertexToIntegerMapping}
@@ -31,10 +33,10 @@ import java.util.stream.*;
 public class VertexToIntegerMappingTest
 {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullSet()
     {
-        new VertexToIntegerMapping<>((Set<Integer>) null);
+        assertThrows(NullPointerException.class, () -> new VertexToIntegerMapping<>((Set<Integer>) null));
     }
 
     @Test
@@ -42,14 +44,14 @@ public class VertexToIntegerMappingTest
     {
         VertexToIntegerMapping<Integer> mapping = new VertexToIntegerMapping<>(new HashSet<>());
 
-        Assert.assertTrue(mapping.getIndexList().isEmpty());
-        Assert.assertTrue(mapping.getVertexMap().isEmpty());
+        assertTrue(mapping.getIndexList().isEmpty());
+        assertTrue(mapping.getVertexMap().isEmpty());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNotUniqueElements()
     {
-        new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1));
+        assertThrows(IllegalArgumentException.class, () -> new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1)));
     }
 
     @Test
@@ -69,15 +71,15 @@ public class VertexToIntegerMappingTest
             Map<String, Integer> vertexMap = mapping.getVertexMap();
             List<String> indexList = mapping.getIndexList();
 
-            Assert.assertEquals(n, vertexMap.size());
-            Assert.assertEquals(n, indexList.size());
+            assertEquals(n, vertexMap.size());
+            assertEquals(n, indexList.size());
 
             for (int i = 0; i < indexList.size(); i++) {
-                Assert.assertEquals(i, vertexMap.get(indexList.get(i)).intValue());
+                assertEquals(i, vertexMap.get(indexList.get(i)));
             }
 
             for (Map.Entry<String, Integer> entry : vertexMap.entrySet()) {
-                Assert.assertEquals(indexList.get(entry.getValue()), entry.getKey());
+                assertEquals(indexList.get(entry.getValue()), entry.getKey());
             }
         }
     }

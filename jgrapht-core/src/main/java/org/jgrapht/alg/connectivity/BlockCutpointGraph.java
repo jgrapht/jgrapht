@@ -127,10 +127,10 @@ public class BlockCutpointGraph<V, E>
     }
 
     /**
-     * Returns <code>true</code> if the vertex is a cutpoint, <code>false</code> otherwise.
+     * Returns {@code true} if the vertex is a cutpoint, {@code false} otherwise.
      *
      * @param vertex vertex in the initial graph.
-     * @return <code>true</code> if the vertex is a cutpoint, <code>false</code> otherwise.
+     * @return {@code true} if the vertex is a cutpoint, {@code false} otherwise.
      */
     public boolean isCutpoint(V vertex)
     {

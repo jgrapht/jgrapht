@@ -82,9 +82,11 @@ public class JGraphXAdapter<V, E>
     /**
      * Constructs and draws a new ListenableGraph. If the graph changes through the ListenableGraph,
      * the JGraphXAdapter will automatically add/remove the new edge/vertex as it implements the
-     * GraphListener interface. Throws a IllegalArgumentException if the graph is null.
+     * GraphListener interface. 
      *
      * @param graph casted to graph
+     * 
+     * @throws IllegalArgumentException if the graph is null.
      */
     public JGraphXAdapter(ListenableGraph<V, E> graph)
     {
@@ -97,10 +99,11 @@ public class JGraphXAdapter<V, E>
     /**
      * Constructs and draws a new mxGraph from a JGraphT graph. Changes on the JGraphT graph will
      * not edit this mxGraph any further; use the constructor with the ListenableGraph parameter
-     * instead or use this graph as a normal mxGraph. Throws an IllegalArgumentException if the
-     * parameter is null.
+     * instead or use this graph as a normal mxGraph.
      *
      * @param graph is a graph
+     * 
+     * @throws IllegalArgumentException if the parameter is null
      */
     public JGraphXAdapter(Graph<V, E> graph)
     {

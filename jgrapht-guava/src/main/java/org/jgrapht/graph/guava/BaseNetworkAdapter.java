@@ -71,6 +71,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if {@code network} is {@code null}
      */
     public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
@@ -85,6 +87,9 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is {@code null}
      */
     public BaseNetworkAdapter(
         N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
@@ -114,9 +119,9 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * <p>
      * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
-     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * {@code v2} such that {@code v2.equals(v)}.
      * 
      * @param vertexSupplier the vertex supplier
      */
@@ -142,9 +147,9 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * <p>
      * In contrast with the {@link Supplier} interface, the edge supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to
      * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
-     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
      * 
      * @param edgeSupplier the edge supplier
      */
@@ -267,6 +272,10 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
         return network.outEdges(vertex);
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public double getEdgeWeight(E e)
     {
@@ -290,6 +299,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      * 
      * @param vertexOrderMethod method to use
      * @return the vertex order
+     * 
+     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex order
      */
     protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
     {

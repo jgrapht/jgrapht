@@ -21,11 +21,11 @@ import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for VertexDegreeComparator
@@ -40,21 +40,19 @@ public class VertexDegreeComparatorTest
     private final GraphGenerator<Integer, DefaultEdge, Integer> randomGraphGenerator =
         new GnmRandomGraphGenerator<>(100, 1000, 0);
 
-    @Test
+    @RepeatedTest(TEST_REPEATS)
     public void testVertexDegreeComparator()
     {
-        for (int repeat = 0; repeat < TEST_REPEATS; repeat++) {
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-            randomGraphGenerator.generateGraph(graph);
-            List<Integer> vertices = new ArrayList<>(graph.vertexSet());
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        randomGraphGenerator.generateGraph(graph);
+        List<Integer> vertices = new ArrayList<>(graph.vertexSet());
 
-            // Sort in ascending vertex degree
-            vertices.sort(VertexDegreeComparator.of(graph));
+        // Sort in ascending vertex degree
+        vertices.sort(VertexDegreeComparator.of(graph));
 
-            for (int i = 0; i < vertices.size() - 1; i++) {
-                assertTrue(graph.degreeOf(vertices.get(i)) <= graph.degreeOf(vertices.get(i + 1)));
-            }
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            assertTrue(graph.degreeOf(vertices.get(i)) <= graph.degreeOf(vertices.get(i + 1)));
         }
     }
 

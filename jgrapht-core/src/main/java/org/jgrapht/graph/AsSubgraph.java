@@ -30,7 +30,7 @@ import java.util.stream.*;
  * base graph. More formally, a subgraph G(V,E) that is based on a base graph Gb(Vb,Eb) satisfies
  * the following <b><i>subgraph property</i></b>: V is a subset of Vb and E is a subset of Eb. Other
  * than this property, a subgraph is a graph with any respect and fully complies with the
- * <code>Graph</code> interface.
+ * {@code Graph} interface.
  *
  * <p>
  * If the base graph is a {@link org.jgrapht.ListenableGraph}, the subgraph listens on the base
@@ -61,8 +61,8 @@ import java.util.stream.*;
  * value-equal) to their respective ones in the base graph. Previous versions of this class enforced
  * such identity, at a severe performance cost. Currently it is no longer enforced. If you want to
  * achieve a "live-window" functionality, your safest tactics would be to NOT override the
- * <code>equals()</code> methods of your vertices and edges. If you use a class that has already
- * overridden the <code>equals()</code> method, such as <code>String</code>, then you can use a
+ * {@code equals()} methods of your vertices and edges. If you use a class that has already
+ * overridden the {@code equals()} method, such as {@code String}, then you can use a
  * wrapper around it, or else use it directly but exercise a great care to avoid having
  * different-but-equal instances in the subgraph and the base graph.
  * </p>
@@ -113,9 +113,9 @@ public class AsSubgraph<V, E>
      * Creates a new subgraph.
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     * @param vertexSubset vertices to include in the subgraph. If {@code null} then all
      *        vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
+     * @param edgeSubset edges to in include in the subgraph. If {@code null} then all the
      *        edges whose vertices found in the graph are included.
      */
     public AsSubgraph(Graph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
@@ -139,7 +139,7 @@ public class AsSubgraph<V, E>
      * identical to the call Subgraph(base, vertexSubset, null).
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     * @param vertexSubset vertices to include in the subgraph. If {@code null} then all
      *        vertices are included.
      */
     public AsSubgraph(Graph<V, E> base, Set<? extends V> vertexSubset)
@@ -267,6 +267,9 @@ public class AsSubgraph<V, E>
         return edgeSet.add(e);
     }
 
+    /**
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public V addVertex()
     {
@@ -278,10 +281,9 @@ public class AsSubgraph<V, E>
      *
      * @param v the vertex to be added.
      *
-     * @return <code>true</code> if the vertex was added, otherwise <code>
-     * false</code>.
+     * @return {@code true} if the vertex was added, otherwise {@code false}.
      *
-     * @throws NullPointerException if v is null
+     * @throws NullPointerException {@inheritDoc}
      * @throws IllegalArgumentException if the base graph does not contain the vertex
      *
      * @see AsSubgraph

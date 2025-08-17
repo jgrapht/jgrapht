@@ -22,13 +22,13 @@ import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
 import static org.jgrapht.alg.isomorphism.IsomorphismTestUtil.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link AHUForestIsomorphismInspector}
@@ -38,33 +38,37 @@ import static org.jgrapht.alg.isomorphism.IsomorphismTestUtil.*;
 public class AHUForestIsomorphismInspectorTest
 {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testMissingSupplier()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("1");
-        tree1.addVertex("2");
-        tree1.addEdge("1", "2");
-        tree1.addVertex("3");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("1");
+            tree1.addVertex("2");
+            tree1.addEdge("1", "2");
+            tree1.addVertex("3");
 
-        AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
-            new AHUForestIsomorphismInspector<>(tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
+            AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
+                new AHUForestIsomorphismInspector<>(tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
 
-        forestIsomorphism.isomorphismExists();
+            forestIsomorphism.isomorphismExists();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptyGraph()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        Set<String> roots = new HashSet<>();
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            Set<String> roots = new HashSet<>();
 
-        AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHUForestIsomorphismInspector<>(tree1, roots, tree1, roots);
+            AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHUForestIsomorphismInspector<>(tree1, roots, tree1, roots);
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
-        Assert.assertTrue(areIsomorphic(tree1, tree1, treeMapping));
+            assertTrue(isomorphism.isomorphismExists());
+            IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+            assertTrue(areIsomorphic(tree1, tree1, treeMapping));
+        });
     }
 
     @Test
@@ -80,31 +84,33 @@ public class AHUForestIsomorphismInspectorTest
             new AHUForestIsomorphismInspector<>(
                 tree1, Collections.singleton("1"), tree2, Collections.singleton("A"));
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
+        assertTrue(isomorphism.isomorphismExists());
         IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
-        Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
+        assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNullGraphs()
     {
-        new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null);
+        assertThrows(NullPointerException.class, () -> new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidRoot()
     {
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("a");
 
-        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("A");
+            Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+            tree1.addVertex("A");
 
-        AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHUForestIsomorphismInspector<>(
-                tree1, Collections.singleton("b"), tree2, Collections.singleton("A"));
+            AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
+                new AHUForestIsomorphismInspector<>(
+                    tree1, Collections.singleton("b"), tree2, Collections.singleton("A"));
 
-        isomorphism.getMapping();
+            isomorphism.getMapping();
+        });
     }
 
     @Test
@@ -137,7 +143,7 @@ public class AHUForestIsomorphismInspectorTest
         AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
             new AHUForestIsomorphismInspector<>(tree1, Set.of("b", "d"), tree2, Set.of("A", "D"));
 
-        Assert.assertFalse(forestIsomorphism.isomorphismExists());
+        assertFalse(forestIsomorphism.isomorphismExists());
     }
 
     @Test
@@ -165,14 +171,14 @@ public class AHUForestIsomorphismInspectorTest
         AHUForestIsomorphismInspector<Integer, DefaultEdge> isomorphism =
             new AHUForestIsomorphismInspector<>(forest1, roots1, forest2, roots2);
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
+        assertTrue(isomorphism.isomorphismExists());
         IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
 
-        Assert.assertTrue(areIsomorphic(forest1, forest2, treeMapping));
+        assertTrue(areIsomorphic(forest1, forest2, treeMapping));
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeNumberOfChildren()
     {
         final int n = 100_000;
@@ -196,13 +202,13 @@ public class AHUForestIsomorphismInspectorTest
             new AHUForestIsomorphismInspector<>(
                 tree1, Collections.singleton(1), tree2, Collections.singleton(mapping.get(1)));
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
+        assertTrue(isomorphism.isomorphismExists());
         IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
-        Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
+        assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testRandomForests()
     {
         Random random = new Random(0x2312);
@@ -227,15 +233,15 @@ public class AHUForestIsomorphismInspectorTest
             AHUForestIsomorphismInspector<Integer, DefaultEdge> isomorphism =
                 new AHUForestIsomorphismInspector<>(tree1, roots1, tree2, roots2);
 
-            Assert.assertTrue(isomorphism.isomorphismExists());
+            assertTrue(isomorphism.isomorphismExists());
             IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
 
-            Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
+            assertTrue(areIsomorphic(tree1, tree2, treeMapping));
         }
     }
 
     @Test
-    @Category(SlowTests.class)
+    @Tag("slow")
     public void testHugeRandomForest()
     {
         final int n = 50_000;
@@ -255,8 +261,8 @@ public class AHUForestIsomorphismInspectorTest
         AHUForestIsomorphismInspector<Integer, DefaultEdge> isomorphism =
             new AHUForestIsomorphismInspector<>(tree1, roots1, tree2, roots2);
 
-        Assert.assertTrue(isomorphism.isomorphismExists());
+        assertTrue(isomorphism.isomorphismExists());
         IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
-        Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
+        assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 }

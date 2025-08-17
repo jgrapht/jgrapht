@@ -24,12 +24,12 @@ import org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test for the {@link TransitNodeRoutingShortestPath}.
@@ -50,14 +50,14 @@ public class TransitNodeRoutingShortestPathTest
      */
     private static ThreadPoolExecutor executor;
 
-    @BeforeClass
+    @BeforeAll
     public static void createExecutor()
     {
         executor =
             ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
-    @AfterClass
+    @AfterAll
     public static void shutdownExecutor()
         throws InterruptedException
     {

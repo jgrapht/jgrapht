@@ -248,7 +248,7 @@ public class DOTExporter<V, E>
      * <li>an HTML string (<...>).
      * </ul>
      *
-     * @throws ExportException if the given <code>vertexIDProvider</code> didn't generate a valid
+     * @throws ExportException if the given {@code vertexIDProvider} didn't generate a valid
      *         vertex ID.
      */
     private String getVertexID(V v)

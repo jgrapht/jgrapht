@@ -59,6 +59,9 @@ public class AsGraphUnion<V, E>
      * @param g1 the first graph
      * @param g2 the second graph
      * @param operator the weight combiner (policy for edge weight calculation)
+     * 
+     * @throws IllegalArgumentException if {@code g1 == g2}
+     * @throws NullPointerException if any of the arguments is {@code null}
      */
     public AsGraphUnion(Graph<V, E> g1, Graph<V, E> g2, WeightCombiner operator)
     {
@@ -93,6 +96,9 @@ public class AsGraphUnion<V, E>
      * 
      * @param g1 the first graph
      * @param g2 the second graph
+     * 
+     * @throws IllegalArgumentException if {@code g1 == g2}
+     * @throws NullPointerException if any of the arguments is {@code null}
      */
     public AsGraphUnion(Graph<V, E> g1, Graph<V, E> g2)
     {
@@ -230,7 +236,7 @@ public class AsGraphUnion<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */
     @Override
     public Set<E> edgesOf(V vertex)
@@ -250,7 +256,7 @@ public class AsGraphUnion<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
@@ -272,6 +278,8 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws IllegalArgumentException {@inheritDoc}
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
@@ -439,7 +447,7 @@ public class AsGraphUnion<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -456,9 +464,6 @@ public class AsGraphUnion<V, E>
         throw new IllegalArgumentException("no such edge in the union");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public GraphType getType()
     {
@@ -466,7 +471,7 @@ public class AsGraphUnion<V, E>
     }
 
     /**
-     * Throws {@link UnsupportedOperationException} since graph union is read-only.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void setEdgeWeight(E e, double weight)

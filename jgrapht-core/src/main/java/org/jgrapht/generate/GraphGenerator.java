@@ -51,7 +51,7 @@ public interface GraphGenerator<V, E, T>
      * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
      *         suppliers, in order to be able to create new vertices and edges. Methods
      *         {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must not return
-     *         <code>null</code>.
+     *         {@code null}.
      */
     void generateGraph(Graph<V, E> target, Map<String, T> resultMap);
 

@@ -42,7 +42,7 @@ public interface PathValidator<V, E>
      * @param partialPath the path from source vertex up to the current vertex.
      * @param edge the new edge to be added to the path.
      *
-     * @return <code>true</code> if edge can be added, <code>false</code> otherwise.
+     * @return {@code true} if edge can be added, {@code false} otherwise.
      */
     public boolean isValidPath(GraphPath<V, E> partialPath, E edge);
 }

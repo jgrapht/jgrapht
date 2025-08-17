@@ -19,13 +19,13 @@ package org.jgrapht.alg.util;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * .
@@ -62,7 +62,7 @@ public class NeighborCacheTest
         Set<String> neighbors1 = cache.neighborsOf(V1);
 
         assertEquals(1, neighbors1.size());
-        assertEquals(true, neighbors1.contains(V2));
+        assertTrue(neighbors1.contains(V2));
 
         g.addVertex(V3);
         g.addEdge(V3, V1);
@@ -70,15 +70,15 @@ public class NeighborCacheTest
         Set<String> neighbors3 = cache.neighborsOf(V3);
 
         assertEquals(2, neighbors1.size());
-        assertEquals(true, neighbors1.contains(V3));
+        assertTrue(neighbors1.contains(V3));
 
         assertEquals(1, neighbors3.size());
-        assertEquals(true, neighbors3.contains(V1));
+        assertTrue(neighbors3.contains(V1));
 
         g.removeEdge(V3, V1);
 
         assertEquals(1, neighbors1.size());
-        assertEquals(false, neighbors1.contains(V3));
+        assertFalse(neighbors1.contains(V3));
 
         assertEquals(0, neighbors3.size());
 
@@ -105,7 +105,7 @@ public class NeighborCacheTest
 
         assertEquals(0, p.size());
         assertEquals(1, s.size());
-        assertEquals(true, s.contains(V2));
+        assertTrue(s.contains(V2));
 
         g.addVertex(V3);
         g.addEdge(V3, V1);
@@ -114,10 +114,10 @@ public class NeighborCacheTest
 
         assertEquals(1, p.size());
         assertEquals(1, s.size());
-        assertEquals(true, p.contains(V3));
+        assertTrue(p.contains(V3));
 
         assertEquals(1, q.size());
-        assertEquals(true, q.contains(V1));
+        assertTrue(q.contains(V1));
 
         g.removeEdge(V3, V1);
 

@@ -17,14 +17,15 @@
  */
 package org.jgrapht.alg.linkprediction;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.jgrapht.Graph;
 import org.jgrapht.TestUtil;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link ResourceAllocationIndexLinkPrediction}
@@ -69,25 +70,27 @@ public class ResourceAllocationIndexLinkPredictionTest
 
     }
 
-    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
+    @Test
     public void testInvalidPrediction()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        assertThrows(LinkPredictionIndexNotWellDefinedException.class, () -> {
+            Graph<Integer,
+                DefaultEdge> g = GraphTypeBuilder
+                    .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        g.addVertex(0);
-        g.addVertex(1);
-        g.addVertex(2);
+            g.addVertex(0);
+            g.addVertex(1);
+            g.addVertex(2);
 
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
+            g.addEdge(0, 2);
+            g.addEdge(1, 2);
 
-        ResourceAllocationIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new ResourceAllocationIndexLinkPrediction<>(g);
+            ResourceAllocationIndexLinkPrediction<Integer, DefaultEdge> alg =
+                new ResourceAllocationIndexLinkPrediction<>(g);
 
-        alg.predict(0, 1);
+            alg.predict(0, 1);
+        });
     }
 
 }

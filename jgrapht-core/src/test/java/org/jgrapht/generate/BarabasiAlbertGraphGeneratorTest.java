@@ -20,10 +20,10 @@ package org.jgrapht.generate;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link BarabasiAlbertGraphGenerator}.
@@ -35,29 +35,13 @@ public class BarabasiAlbertGraphGeneratorTest
     @Test
     public void testBadParameters()
     {
-        try {
-            new BarabasiAlbertGraphGenerator<>(0, 10, 100);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(0, 10, 100), "Bad parameter");
 
-        try {
-            new BarabasiAlbertGraphGenerator<>(2, 0, 100);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(2, 0, 100), "Bad parameter");
 
-        try {
-            new BarabasiAlbertGraphGenerator<>(2, 3, 100);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(2, 3, 100), "Bad parameter");
 
-        try {
-            new BarabasiAlbertGraphGenerator<>(3, 2, 2);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(3, 2, 2), "Bad parameter");
     }
 
     @Test

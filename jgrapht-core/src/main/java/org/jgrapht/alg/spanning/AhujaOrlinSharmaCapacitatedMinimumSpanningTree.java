@@ -572,13 +572,13 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
     }
 
     /**
-     * Calculates the subtree of <code>v</code> with respect to the MST given in
-     * <code>partitionSpanningTree</code>.
+     * Calculates the subtree of {@code v} with respect to the MST given in
+     * {@code partitionSpanningTree}.
      *
      * @param v the vertex to calculate the subtree for
      * @param partitionSpanningTree the map from labels to spanning trees of the partition.
-     * @return the subtree of <code>v</code> with respect to the MST given in
-     *         <code>partitionSpanningTree</code>.
+     * @return the subtree of {@code v} with respect to the MST given in
+     *         {@code partitionSpanningTree}.
      */
     private Pair<Set<V>, Double> subtree(
         CapacitatedSpanningTreeSolutionRepresentation currentSolution, Set<V> modifiableSet, V v,
@@ -832,7 +832,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
 
         /**
          * Updates the improvement graph. It updates the vertices and edges in the parts specified
-         * in <code>labelsToUpdate</code>.
+         * in {@code labelsToUpdate}.
          *
          * @param currentSolution the current solution
          * @param subtrees the mapping from vertices to their subtree
@@ -946,17 +946,17 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Updates all nodes that correspond to <code>v1</code> and returns if the vertex
-         * <code>v1</code>. That is, all incident edges of <code>v1</code> are removed if
-         * <code>v1</code> is in the tabu list.
+         * Updates all nodes that correspond to {@code v1} and returns if the vertex
+         * {@code v1}. That is, all incident edges of {@code v1} are removed if
+         * {@code v1} is in the tabu list.
          *
          * @param tabuList the tabu list of the current iteration
          * @param v1 the vertex to update the nodes in the improvement graph for
          * @param vertexOfV1Single the node in the improvement graph representing the exchange of
-         *        the vertex <code>v1</code>
+         *        the vertex {@code v1}
          * @param vertexOfV1Subtree the node in the improvement graph representing the exchange of
-         *        the subtree rooted at <code>v1</code>
-         * @return true iff <code>v1</code> is in the tabu list
+         *        the subtree rooted at {@code v1}
+         * @return true iff {@code v1} is in the tabu list
          */
         private boolean updateTabuVertices(
             Set<V> tabuList, V v1, Pair<Integer, ImprovementGraphVertexType> vertexOfV1Single,
@@ -989,9 +989,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
          *        multi-exchange operation)
          * @param v1 the vertex to update the nodes in the improvement graph for
          * @param vertexOfV1Single the node in the improvement graph representing the exchange of
-         *        the vertex <code>v1</code>
+         *        the vertex {@code v1}
          * @param vertexOfV1Subtree the node in the improvement graph representing the exchange of
-         *        the subtree rooted at <code>v1</code>
+         *        the subtree rooted at {@code v1}
          */
         private void updateOriginNodeConnections(
             CapacitatedSpanningTreeSolutionRepresentation currentSolution,
@@ -1057,8 +1057,8 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Updates all edges from <code>vertexOfV1Single</code> to nodes in the subset represented
-         * by <code>label</code>.
+         * Updates all edges from {@code vertexOfV1Single} to nodes in the subset represented
+         * by {@code label}.
          *
          * @param currentSolution the current solution in the iteration
          * @param subtrees the mapping from vertices to their subtree
@@ -1070,7 +1070,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
          * @param pseudoVertex the pseudo vertex representing the subset represented by label
          * @param v1 the vertex to update the nodes in the improvement graph for
          * @param vertexOfV1Single the node in the improvement graph representing the exchange of
-         *        the vertex <code>v1</code>
+         *        the vertex {@code v1}
          */
         private void updateSingleNode(
             CapacitatedSpanningTreeSolutionRepresentation currentSolution,
@@ -1176,9 +1176,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Updates all edges from <code>vertexOfV1Single</code> to nodes in the subset represented
-         * by <code>label</code>. This method does adds the subtree of v1 to
-         * <code>modifiableSet</code>.
+         * Updates all edges from {@code vertexOfV1Single} to nodes in the subset represented
+         * by {@code label}. This method does adds the subtree of v1 to
+         * {@code modifiableSet}.
          *
          * @param currentSolution the current solution in the iteration
          * @param subtrees the mapping from vertices to their subtree
@@ -1189,7 +1189,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
          * @param pseudoVertex the pseudo vertex representing the subset represented by label
          * @param v1 the vertex to update the nodes in the improvement graph for
          * @param vertexOfV1Subtree the node in the improvement graph representing the exchange of
-         *        the subtree rooted at <code>v1</code>
+         *        the subtree rooted at {@code v1}
          */
         private void updateSubtreeNode(
             CapacitatedSpanningTreeSolutionRepresentation currentSolution,
@@ -1295,19 +1295,19 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Adds an edge between <code>v1</code> and <code>v2</code> to the improvement graph if
-         * <code>newCapacity</code> does not exceed the capacity constraint. The weight of the edge
-         * is <code>newCost</code>.
+         * Adds an edge between {@code v1} and {@code v2} to the improvement graph if
+         * {@code newCapacity} does not exceed the capacity constraint. The weight of the edge
+         * is {@code newCost}.
          *
-         * @param v1 start vertex (the vertex or subtree induced by <code>v1</code> that will be
-         *        moved to the subset of <code>v2</code>)
-         * @param v2 end vertex (the vertex or subtree induced by <code>v2</code> that will be
-         *        removed from the subset of <code>v2</code>)
+         * @param v1 start vertex (the vertex or subtree induced by {@code v1} that will be
+         *        moved to the subset of {@code v2})
+         * @param v2 end vertex (the vertex or subtree induced by {@code v2} that will be
+         *        removed from the subset of {@code v2})
          * @param newCapacity the used capacity by adding the vertex or subtree induced by
-         *        <code>v1</code> to the subset of <code>v2</code> and deleting the vertex or
-         *        subtree induced by <code>v2</code>
+         *        {@code v1} to the subset of {@code v2} and deleting the vertex or
+         *        subtree induced by {@code v2}
          * @param newCost the cost of the edge (the cost induced by the operation induced by
-         *        <code>v1</code> and <code>v2</code>)
+         *        {@code v1} and {@code v2})
          */
         public void updateImprovementGraphEdge(
             Pair<Integer, ImprovementGraphVertexType> v1,
@@ -1327,14 +1327,14 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
 
         /**
          * Calculates the maximum demand over all new subtrees induced by the minimum spanning tree
-         * <code>spanningTree</code>. A spanning tree induces more than one subset in the partition
+         * {@code spanningTree}. A spanning tree induces more than one subset in the partition
          * if the root vertex of the base graph connects more than one subtree of the spanning tree.
          *
-         * @param vertexSubset the vertex subset <code>spanning Tree is defined on</code>
+         * @param vertexSubset the vertex subset {@code spanning Tree is defined on}
          * @param spanningTree the spanning tree
          * @param totalDemand the total demand of the whole spanning tree
          * @return the maximum demand over all new subtrees induced by the minimum spanning tree
-         *         <code>spanningTree</code>
+         *         {@code spanningTree}
          */
         public double calculateMaximumDemandOfSubtrees(
             Set<V> vertexSubset, SpanningTreeAlgorithm.SpanningTree<E> spanningTree,

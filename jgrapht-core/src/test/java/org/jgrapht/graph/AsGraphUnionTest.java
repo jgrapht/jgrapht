@@ -19,11 +19,11 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test for the {@link AsGraphUnion} class.
@@ -58,7 +58,7 @@ public class AsGraphUnionTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         undirectedGraph1 = new WeightedPseudograph<>(DefaultWeightedEdge.class);

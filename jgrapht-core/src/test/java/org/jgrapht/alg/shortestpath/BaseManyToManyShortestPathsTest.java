@@ -25,8 +25,8 @@ import org.jgrapht.util.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Base test for many-to-many shortest paths algorithms. Currently extended by

@@ -23,12 +23,12 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 
@@ -58,8 +58,8 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(1, pathList.size());
         assertEquals(1, pathList.get(0).getLength());
         assertTrue(pathList.get(0).getEdgeList().contains(edge));
-        assertEquals(Integer.valueOf(2), pathList.get(0).getEndVertex());
-        assertEquals(Integer.valueOf(1), pathList.get(0).getStartVertex());
+        assertEquals(2, pathList.get(0).getEndVertex());
+        assertEquals(1, pathList.get(0).getStartVertex());
         assertEquals(2, pathList.get(0).getVertexList().size());
         assertTrue(pathList.get(0).getVertexList().contains(1));
         assertTrue(pathList.get(0).getVertexList().contains(2));
@@ -995,11 +995,11 @@ public abstract class KDisjointShortestPathsTestCase
             .stream().map(GraphPath::getVertexList)
             .map(vlist -> vlist.stream().mapToInt(i -> i).toArray()).collect(Collectors.toList());
 
-        Assert.assertEquals(expectedPaths.size(), resultPaths.size());
+        assertEquals(expectedPaths.size(), resultPaths.size());
         for (int[] expectedPath : expectedPaths) {
             boolean isIncluded =
                 resultPaths.stream().anyMatch(result -> Arrays.equals(result, expectedPath));
-            Assert.assertTrue(isIncluded);
+            assertTrue(isIncluded);
         }
     }
 

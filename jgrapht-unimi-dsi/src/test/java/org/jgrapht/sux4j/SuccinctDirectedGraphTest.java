@@ -17,10 +17,10 @@
  */
 package org.jgrapht.sux4j;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +32,7 @@ import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -223,9 +223,9 @@ public class SuccinctDirectedGraphTest
         r.generateGraph(s);
         final SuccinctDirectedGraph t = new SuccinctDirectedGraph(s);
         for (final IntIntPair e : t.edgeSet())
-            assertTrue(e.toString(), s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)));
+            assertTrue(s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)), e.toString());
         for (final DefaultEdge e : s.edgeSet())
-            assertTrue(e.toString(), t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)));
+            assertTrue(t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)), e.toString());
         final XoRoShiRo128PlusPlusRandomGenerator random =
             new XoRoShiRo128PlusPlusRandomGenerator();
         final int n = (int) s.iterables().vertexCount();
@@ -255,9 +255,9 @@ public class SuccinctDirectedGraphTest
         r.generateGraph(s);
         final SuccinctDirectedGraph t = new SuccinctDirectedGraph(s);
         for (final IntIntPair e : t.edgeSet())
-            assertTrue(e.toString(), s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)));
+            assertTrue(s.containsEdge(t.getEdgeSource(e), t.getEdgeTarget(e)), e.toString());
         for (final DefaultEdge e : s.edgeSet())
-            assertTrue(e.toString(), t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)));
+            assertTrue(t.containsEdge(s.getEdgeSource(e), s.getEdgeTarget(e)), e.toString());
         final XoRoShiRo128PlusPlusRandomGenerator random =
             new XoRoShiRo128PlusPlusRandomGenerator();
         final int n = (int) s.iterables().vertexCount();

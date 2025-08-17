@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for MaskEdgeSet.
@@ -39,7 +39,7 @@ public class MaskEdgeSetTest
     private MaskEdgeSet<String, DefaultEdge> testMaskedEdgeSet;
     private DefaultDirectedGraph<String, DefaultEdge> directed;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);

@@ -1204,7 +1204,7 @@ public class BergeGraphInspector<V, E>
      * 
      * <p>
      * A certificate can be obtained through the {@link BergeGraphInspector#getCertificate} method,
-     * if <code>computeCertificate</code> is <code>true</code>.
+     * if {@code computeCertificate} is {@code true}.
      * <p>
      * Running this method takes $O(|V|^9)$, and computing the certificate takes $O(|V|^5)$.
      * 
@@ -1261,7 +1261,7 @@ public class BergeGraphInspector<V, E>
      * 
      * <p>
      * This method by default does not compute a certificate. For obtaining a certificate, call
-     * {@link BergeGraphInspector#isBerge} with <code>computeCertificate=true</code>.
+     * {@link BergeGraphInspector#isBerge} with {@code computeCertificate=true}.
      * <p>
      * Running this method takes $O(|V|^9)$.
      * 
@@ -1276,7 +1276,7 @@ public class BergeGraphInspector<V, E>
     /**
      * Returns the certificate in the form of a hole or anti-hole in the inspected graph, when the
      * {@link BergeGraphInspector#isBerge} method is previously called with
-     * <code>computeCertificate=true</code>. Returns null if the inspected graph is perfect.
+     * {@code computeCertificate=true}. Returns null if the inspected graph is perfect.
      *
      * @return a <a href="http://graphclasses.org/smallgraphs.html#holes">hole</a> or
      *         <a href="http://graphclasses.org/smallgraphs.html#antiholes">anti-hole</a> in the

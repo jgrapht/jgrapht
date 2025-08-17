@@ -24,11 +24,11 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for EdmondsMaximumCardinalityMatching

@@ -18,14 +18,15 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.stream.*;
 
 import static org.jgrapht.graph.SerializationTestUtils.serializeAndDeserialize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * SerializationTest tests serialization and deserialization of JGraphT objects.
@@ -79,7 +80,7 @@ public class SerializationTest
                 "the size of list of #edges and vertices should match");
         }
         for (int i = 0; i < edges.size(); i++) {
-            assertEquals(edges.get(i).intValue(), graph.edgesOf(vertices.get(i)).size());
+            assertEquals(edges.get(i), graph.edgesOf(vertices.get(i)).size());
         }
     }
 
@@ -120,7 +121,7 @@ public class SerializationTest
     {
         Set<E> edgeSet = graph.getAllEdges(vertex1, vertex2);
         for (E e : edgeSet)
-            assertTrue(e instanceof DefaultWeightedEdge);
+            assertInstanceOf(DefaultWeightedEdge.class, e);
         assertEquals(
             new HashSet<>(weights),
             edgeSet

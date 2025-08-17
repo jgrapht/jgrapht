@@ -17,20 +17,24 @@
  */
 package org.jgrapht.alg.linkprediction;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.jgrapht.Graph;
 import org.jgrapht.TestUtil;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for class SørensenIndexLinkPrediction
  *
  * @author Dimitrios Michail
+ * 
+ * @deprecated Class will be replaced by SorensenIndexLinkPredictionTest
  */
+@Deprecated
 public class SørensenIndexLinkPredictionTest
 {
 
@@ -67,21 +71,23 @@ public class SørensenIndexLinkPredictionTest
         assertArrayEquals(expected, scores, 1e-9);
     }
 
-    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
+    @Test
     public void testInvalidPrediction()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        assertThrows(LinkPredictionIndexNotWellDefinedException.class, () -> {
+            Graph<Integer,
+                DefaultEdge> g = GraphTypeBuilder
+                    .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        g.addVertex(0);
-        g.addVertex(1);
+            g.addVertex(0);
+            g.addVertex(1);
 
-        SørensenIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new SørensenIndexLinkPrediction<>(g);
+            SørensenIndexLinkPrediction<Integer, DefaultEdge> alg =
+                new SørensenIndexLinkPrediction<>(g);
 
-        alg.predict(0, 1);
+            alg.predict(0, 1);
+        });
     }
 
 }
