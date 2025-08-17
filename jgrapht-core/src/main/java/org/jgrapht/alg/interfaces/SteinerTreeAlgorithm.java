@@ -22,10 +22,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * An algorithm which computes a <a href="https://en.wikipedia.org/wiki/Steiner_tree_problem">Steiner
- * tree</a> of a given graph. A Steiner tree is a tree that connects a given set of vertices (called
- * Steiner points or terminals) with minimum total weight, possibly using additional vertices not in
- * the original set.
+ * An algorithm which computes a
+ * <a href="https://en.wikipedia.org/wiki/Steiner_tree_problem">Steiner tree</a> of a given graph. A
+ * Steiner tree is a tree that connects a given set of vertices (called Steiner points or terminals)
+ * with minimum total weight, possibly using additional vertices not in the original set.
  *
  * @param <V> the graph vertices type
  * @param <E> the graph edge type
@@ -35,10 +35,11 @@ public interface SteinerTreeAlgorithm<V, E>
     /**
      * Computes a Steiner tree.
      *
-     * @param steinerPoints the set of vertices (terminals) that must be connected by the Steiner tree
+     * @param steinerPoints the set of vertices (terminals) that must be connected by the Steiner
+     *        tree
      * @return a Steiner tree connecting all the specified vertices
      */
-	SteinerTree<E> getSteinerTree(Set<V> steinerPoints);
+    SteinerTree<E> getSteinerTree(Set<V> steinerPoints);
 
     /**
      * A Steiner tree.
@@ -46,7 +47,8 @@ public interface SteinerTreeAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     interface SteinerTree<E>
-        extends Iterable<E>
+        extends
+        Iterable<E>
     {
         /**
          * Returns the weight of the Steiner tree.
@@ -80,7 +82,9 @@ public interface SteinerTreeAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     class SteinerTreeImpl<E>
-        implements SteinerTree<E>, Serializable
+        implements
+        SteinerTree<E>,
+        Serializable
     {
         private static final long serialVersionUID = 402707108331703333L;
 

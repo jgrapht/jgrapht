@@ -42,103 +42,112 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class KouMarkowskyBermanAlgorithmTest {
+public class KouMarkowskyBermanAlgorithmTest
+{
 
-	@Test
-	public void testExampleGraphSteinerTree() {
-		List<String> exampleVertices = Arrays.asList("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9");
-		SimpleWeightedGraph<String, DefaultWeightedEdge> exampleGraph = new SimpleWeightedGraph<>(
-				DefaultWeightedEdge.class);
+    @Test
+    public void testExampleGraphSteinerTree()
+    {
+        List<String> exampleVertices =
+            Arrays.asList("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9");
+        SimpleWeightedGraph<String, DefaultWeightedEdge> exampleGraph =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-		for (String v : exampleVertices) {
-			exampleGraph.addVertex(v);
-		}
+        for (String v : exampleVertices) {
+            exampleGraph.addVertex(v);
+        }
 
-		// Add edges with weights
-		setEdgeWithWeight(exampleGraph, "v1", "v2", 10);
-		setEdgeWithWeight(exampleGraph, "v2", "v3", 8);
-		setEdgeWithWeight(exampleGraph, "v3", "v4", 9);
-		setEdgeWithWeight(exampleGraph, "v4", "v5", 2);
-		setEdgeWithWeight(exampleGraph, "v3", "v5", 2);
-		setEdgeWithWeight(exampleGraph, "v6", "v5", 1);
-		setEdgeWithWeight(exampleGraph, "v9", "v5", 1);
-		setEdgeWithWeight(exampleGraph, "v2", "v6", 1);
-		setEdgeWithWeight(exampleGraph, "v6", "v7", 1.0);
-		setEdgeWithWeight(exampleGraph, "v1", "v9", 1);
-		setEdgeWithWeight(exampleGraph, "v7", "v8", 0.5);
-		setEdgeWithWeight(exampleGraph, "v8", "v9", 0.5);
+        // Add edges with weights
+        setEdgeWithWeight(exampleGraph, "v1", "v2", 10);
+        setEdgeWithWeight(exampleGraph, "v2", "v3", 8);
+        setEdgeWithWeight(exampleGraph, "v3", "v4", 9);
+        setEdgeWithWeight(exampleGraph, "v4", "v5", 2);
+        setEdgeWithWeight(exampleGraph, "v3", "v5", 2);
+        setEdgeWithWeight(exampleGraph, "v6", "v5", 1);
+        setEdgeWithWeight(exampleGraph, "v9", "v5", 1);
+        setEdgeWithWeight(exampleGraph, "v2", "v6", 1);
+        setEdgeWithWeight(exampleGraph, "v6", "v7", 1.0);
+        setEdgeWithWeight(exampleGraph, "v1", "v9", 1);
+        setEdgeWithWeight(exampleGraph, "v7", "v8", 0.5);
+        setEdgeWithWeight(exampleGraph, "v8", "v9", 0.5);
 
-		Set<String> terminals = new HashSet<>(Arrays.asList("v1", "v2", "v3", "v4"));
+        Set<String> terminals = new HashSet<>(Arrays.asList("v1", "v2", "v3", "v4"));
 
-		KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg = new KouMarkowskyBermanAlgorithm<>(
-				exampleGraph);
+        KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg =
+            new KouMarkowskyBermanAlgorithm<>(exampleGraph);
 
-		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(terminals);
+        SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(terminals);
 
-		assertEquals(8.0, steinerTree.getWeight(), 0.001);
+        assertEquals(8.0, steinerTree.getWeight(), 0.001);
 
-		Set<String> exampleTreeVertices = steinerTree.getEdges().stream().flatMap((DefaultWeightedEdge e) -> {
-			String source = exampleGraph.getEdgeSource(e);
-			String target = exampleGraph.getEdgeTarget(e);
-			return Stream.of(source, target);
-		}).collect(Collectors.toSet());
+        Set<String> exampleTreeVertices =
+            steinerTree.getEdges().stream().flatMap((DefaultWeightedEdge e) -> {
+                String source = exampleGraph.getEdgeSource(e);
+                String target = exampleGraph.getEdgeTarget(e);
+                return Stream.of(source, target);
+            }).collect(Collectors.toSet());
 
-		for (String terminal : terminals) {
-			assertTrue(exampleTreeVertices.contains(terminal), "Missing terminal: " + terminal);
-		}
+        for (String terminal : terminals) {
+            assertTrue(exampleTreeVertices.contains(terminal), "Missing terminal: " + terminal);
+        }
 
-		assertEquals(exampleTreeVertices.size() - 1, steinerTree.getEdges().size());
+        assertEquals(exampleTreeVertices.size() - 1, steinerTree.getEdges().size());
 
-	}
+    }
 
-	@Test
-	public void testRandomGraphSteinerTree() {
+    @Test
+    public void testRandomGraphSteinerTree()
+    {
 
-		Graph<String, DefaultWeightedEdge> gnpGraph = GraphTypeBuilder.undirected().weighted(true)
-				.edgeClass(DefaultWeightedEdge.class).vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
+        Graph<String,
+            DefaultWeightedEdge> gnpGraph = GraphTypeBuilder
+                .undirected().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                .vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
 
-		GnpRandomGraphGenerator<String, DefaultWeightedEdge> gnpRandomGraphGenerator = new GnpRandomGraphGenerator<>(25,
-				0.5);
-		gnpRandomGraphGenerator.generateGraph(gnpGraph);
+        GnpRandomGraphGenerator<String, DefaultWeightedEdge> gnpRandomGraphGenerator =
+            new GnpRandomGraphGenerator<>(25, 0.5);
+        gnpRandomGraphGenerator.generateGraph(gnpGraph);
 
-		Random rand = new Random();
+        Random rand = new Random();
 
-		for (DefaultWeightedEdge edge : gnpGraph.edgeSet()) {
-			double weight = rand.nextInt(10) + ((1.0 + rand.nextInt(10)) / 10);
-			gnpGraph.setEdgeWeight(edge, weight);
-		}
+        for (DefaultWeightedEdge edge : gnpGraph.edgeSet()) {
+            double weight = rand.nextInt(10) + ((1.0 + rand.nextInt(10)) / 10);
+            gnpGraph.setEdgeWeight(edge, weight);
+        }
 
-		KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg = new KouMarkowskyBermanAlgorithm<>(
-				gnpGraph);
+        KouMarkowskyBermanAlgorithm<String, DefaultWeightedEdge> steinerAlg =
+            new KouMarkowskyBermanAlgorithm<>(gnpGraph);
 
-		List<String> shuffled = new ArrayList<>(gnpGraph.vertexSet());
-		Collections.shuffle(shuffled);
+        List<String> shuffled = new ArrayList<>(gnpGraph.vertexSet());
+        Collections.shuffle(shuffled);
 
-		Set<String> selected = new HashSet<>(shuffled.subList(0, 10));
+        Set<String> selected = new HashSet<>(shuffled.subList(0, 10));
 
-		SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(selected);
+        SteinerTree<DefaultWeightedEdge> steinerTree = steinerAlg.getSteinerTree(selected);
 
-		Set<String> gnpTreeVertices = steinerTree.getEdges().stream().flatMap((DefaultWeightedEdge e) -> {
-			String source = gnpGraph.getEdgeSource(e);
-			String target = gnpGraph.getEdgeTarget(e);
-			return Stream.of(source, target);
-		}).collect(Collectors.toSet());
+        Set<String> gnpTreeVertices =
+            steinerTree.getEdges().stream().flatMap((DefaultWeightedEdge e) -> {
+                String source = gnpGraph.getEdgeSource(e);
+                String target = gnpGraph.getEdgeTarget(e);
+                return Stream.of(source, target);
+            }).collect(Collectors.toSet());
 
-		for (String vertex : selected) {
-			assertTrue(gnpTreeVertices.contains(vertex), "Missing terminal: " + vertex);
-		}
+        for (String vertex : selected) {
+            assertTrue(gnpTreeVertices.contains(vertex), "Missing terminal: " + vertex);
+        }
 
-		assertEquals(gnpTreeVertices.size() - 1, steinerTree.getEdges().size());
+        assertEquals(gnpTreeVertices.size() - 1, steinerTree.getEdges().size());
 
-	}
+    }
 
-	private void setEdgeWithWeight(Graph<String, DefaultWeightedEdge> graph, String source, String target,
-			double weight) {
-		graph.addVertex(source);
-		graph.addVertex(target);
-		DefaultWeightedEdge edge = graph.addEdge(source, target);
-		if (edge != null) {
-			graph.setEdgeWeight(edge, weight);
-		}
-	}
+    private void setEdgeWithWeight(
+        Graph<String, DefaultWeightedEdge> graph, String source, String target, double weight)
+    {
+        graph.addVertex(source);
+        graph.addVertex(target);
+        DefaultWeightedEdge edge = graph.addEdge(source, target);
+        if (edge != null) {
+            graph.setEdgeWeight(edge, weight);
+        }
+    }
 }
