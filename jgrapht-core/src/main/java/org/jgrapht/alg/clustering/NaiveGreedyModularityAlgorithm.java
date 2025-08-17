@@ -113,7 +113,6 @@ public class NaiveGreedyModularityAlgorithm<V, E>
 
         ClusteringAlgorithm.ClusteringImpl<V> clustering =
             new ClusteringAlgorithm.ClusteringImpl<>(communities);
-        System.out.println("Modularity: " + measurer.modularity(communities));
         return clustering;
     }
 }
