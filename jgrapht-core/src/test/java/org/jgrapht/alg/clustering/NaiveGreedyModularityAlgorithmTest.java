@@ -24,8 +24,10 @@ import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
+
+import org.junit.*;
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+
 
 /**
  * Tests
