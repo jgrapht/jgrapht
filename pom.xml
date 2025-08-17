@@ -65,12 +65,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
-        <apfloat.version>1.12.0</apfloat.version>
-        <checkstyle.version>10.12.7</checkstyle.version>
-        <commons-text.version>1.11.0</commons-text.version>
-        <dsiutils.version>2.7.3</dsiutils.version>
-        <fastutil.version>8.5.12</fastutil.version>
-        <guava.version>32.1.1-jre</guava.version>
+        <apfloat.version>1.14.0</apfloat.version>
+        <checkstyle.version>10.26.1</checkstyle.version>
+        <commons-text.version>1.14.0</commons-text.version>
+        <dsiutils.version>2.7.4</dsiutils.version>
+        <fastutil.version>8.5.16</fastutil.version>
+        <guava.version>33.3.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <java.version>11</java.version>
         <jgraphx.version>4.2.2</jgraphx.version>
@@ -79,24 +79,24 @@
         <junit.version>5.10.1</junit.version>
         <junit.platform.version>1.10.1</junit.platform.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
+        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
         <maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
-        <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <replacer.version>1.5.3</replacer.version>
         <sux4j.version>5.4.1</sux4j.version>
-        <webgraph-big.version>3.7.0</webgraph-big.version>
-        <webgraph.version>3.6.10</webgraph.version>
-        <xmlunit-core.version>2.9.1</xmlunit-core.version>
+        <webgraph-big.version>3.7.1</webgraph-big.version>
+        <webgraph.version>3.6.12</webgraph.version>
+        <xmlunit-core.version>2.10.3</xmlunit-core.version>
     </properties>
 
     <dependencyManagement>
