@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.steiner;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +27,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
@@ -194,51 +195,38 @@ public class KouMarkowskyBermanAlgorithm<V, E>
         // Step 5: Prune non-Steiner leaves
         // Remove leaf vertices that are not required Steiner points
         // This optimization step removes unnecessary vertices
-        Set<V> leaves = MSTLeavesFinder.findLeaves(finalMST);
-        while (true) {
-            int removed = 0;
-            for (V leaf : new HashSet<>(leaves)) {
-                if (!steinerPoints.contains(leaf)) {
-                    finalMST.removeVertex(leaf);
-                    removed++;
+        ArrayDeque<V> leavesQueue = new ArrayDeque<>();
+        for (V v : finalMST.vertexSet()) {
+            if (finalMST.degreeOf(v) == 1 && !steinerPoints.contains(v)) {
+                leavesQueue.add(v);
+            }
+        }
+
+        while (!leavesQueue.isEmpty()) {
+            V leaf = leavesQueue.poll();
+            if (!finalMST.containsVertex(leaf)) {
+                continue; // already removed
+            }
+            if (steinerPoints.contains(leaf) || finalMST.degreeOf(leaf) != 1) {
+                continue; // no longer a removable leaf
+            }
+
+            // check the neighbor(s) for new leaf status
+            List<V> neighbors = Graphs.neighborListOf(finalMST, leaf);
+            finalMST.removeVertex(leaf);
+
+            for (V neighbor : neighbors) {
+                if (finalMST.containsVertex(neighbor) && finalMST.degreeOf(neighbor) == 1
+                    && !steinerPoints.contains(neighbor))
+                {
+                    leavesQueue.add(neighbor);
                 }
             }
-            if (removed == 0)
-                break;
-            leaves = MSTLeavesFinder.findLeaves(finalMST);
         }
 
         double totalWeight = finalMST.edgeSet().stream().mapToDouble(finalMST::getEdgeWeight).sum();
 
         return new SteinerTreeAlgorithm.SteinerTreeImpl<>(finalMST.edgeSet(), totalWeight);
-    }
-
-    /**
-     * Utility class for finding leaf vertices in a graph.
-     *
-     * <p>
-     * A leaf vertex is a vertex with degree 1 (connected to exactly one other vertex).
-     */
-    private static class MSTLeavesFinder
-    {
-        /**
-         * Finds all leaf vertices in the given graph.
-         *
-         * @param <V> the graph vertex type
-         * @param <E> the graph edge type
-         * @param graph the input graph
-         * @return a set of all vertices with degree 1
-         */
-        public static <V, E> Set<V> findLeaves(Graph<V, E> graph)
-        {
-            Set<V> leaves = new HashSet<>();
-            for (V vertex : graph.vertexSet()) {
-                if (graph.degreeOf(vertex) == 1) {
-                    leaves.add(vertex);
-                }
-            }
-            return leaves;
-        }
     }
 
 }
