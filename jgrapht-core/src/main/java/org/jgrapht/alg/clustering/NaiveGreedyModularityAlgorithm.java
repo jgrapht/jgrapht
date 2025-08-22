@@ -27,16 +27,24 @@ import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
 
 /**
- * The Naive Greedy Modularity algorithm.
+ * A naive implementation of greedy modularity maximization for community detection.
  * 
  * <p>
- * The algorithm is capable of detecting communities in a graph by calculating the
- * <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a> of possible
- * communities. It takes as input a graph and returns the communities of the graph which produce the
- * highest modularity.
+ * The algorithm partitions the vertices of an undirected graph into communities by greedily
+ * maximizing the <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a>
+ * of possible communities. Greedy modularity maximization begins with each node in its own
+ * community and repeatedly joins the pair of communities that lead to the largest modularity
+ * until no further increase in modularity is possible (a maximum).
+ * </p> 
+ *
+ * <p>
+ * This implementation is simple but computationally expensive, with a worst-case complexity
+ * of <b>O(n^4)</b>. It is intended as an easy-to-understand reference implementation rather
+ * than a performance-optimized solution.
  * </p>
  * 
  * @author Antonia Tsiftsi
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
