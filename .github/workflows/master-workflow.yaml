@@ -58,7 +58,7 @@ jobs:
       - run: |
           set -e
           mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn javadoc:aggregate
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 14
       - run: npm install -g hercule@5.0.0
