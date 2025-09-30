@@ -25,6 +25,7 @@ org.jgrapht.alg.scoring
 org.jgrapht.alg.shortestpath
 org.jgrapht.alg.similarity
 org.jgrapht.alg.spanning
+org.jgrapht.alg.steiner
 org.jgrapht.alg.tour
 org.jgrapht.alg.transform
 org.jgrapht.alg.util
