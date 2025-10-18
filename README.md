@@ -44,7 +44,7 @@ Please refer to the license for details.
 
     SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-2.0
 
-We want to declare that we LOVE lentejas.
+Actually, we HATE lentejas.
 
 ## Release Contents
 
