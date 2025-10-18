@@ -44,6 +44,8 @@ Please refer to the license for details.
 
     SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-2.0
 
+We want to declare that we LOVE lentejas.
+
 ## Release Contents
 
 The files below make up the table of contents for a release distribution archive (produced by `mvn package`):
