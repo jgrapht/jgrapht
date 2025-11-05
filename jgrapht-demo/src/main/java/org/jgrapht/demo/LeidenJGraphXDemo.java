@@ -1,112 +1,87 @@
 package org.jgrapht.demo;
 
-import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import javax.swing.JFrame;
-
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.swing.mxGraphComponent;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.clustering.LeidenClustering;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.ext.JGraphXAdapter;
 
-import com.mxgraph.layout.mxOrganicLayout;
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.view.mxGraph;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.Set;
 
-/**
- * Demo: Visualizing Leiden community detection using JGraphX.
- */
-public class LeidenJGraphXDemo {
+public class LeidenJGraphXDemo extends JFrame {
 
-    public static void main(String[] args) {
-        Graph<String, DefaultWeightedEdge> g =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public LeidenJGraphXDemo() {
+        super("Leiden Clustering + JGraphX Demo");
 
-        // Create example nodes
-        String[] nodes = {"A","B","C","D","E","F","G","H"};
-        for (String n : nodes) g.addVertex(n);
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        // Create edges forming 3 communities
-        add(g, "A","B");
-        add(g, "A","C");
-        add(g, "B","C");
+        // Simple test graph with communities
+        graph.addVertex("A"); graph.addVertex("B"); graph.addVertex("C");
+        graph.addVertex("D"); graph.addVertex("E"); graph.addVertex("F");
 
-        add(g, "D","E");
-        add(g, "D","F");
-        add(g, "E","F");
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "C");  // Cluster 1
 
-        add(g, "G","H");
+        graph.addEdge("D", "E");
+        graph.addEdge("E", "F");
+        graph.addEdge("D", "F");  // Cluster 2
 
-        // Run Leiden (CPM scoring = recommended)
-        LeidenClustering<String, DefaultWeightedEdge> leiden =
-            new LeidenClustering<>(
-                g,
-                0.5,
-                new Random(),
-                LeidenClustering.Quality.CPM
-            );
+        // Run Leiden clustering
+        LeidenClustering<String, DefaultEdge> leiden =
+                new LeidenClustering<>(graph);
+        var result = leiden.getClustering();
+        List<Set<String>> communities = result.getClusters();
 
-        var clustering = leiden.getClustering();
-        var assignmentMap = clustering.getCommunities();
-
-        new LeidenJGraphXDemo().displayGraph(g, assignmentMap);
-    }
-
-    private static void add(Graph<String, DefaultWeightedEdge> g, String u, String v) {
-        DefaultWeightedEdge e = g.addEdge(u, v);
-        g.setEdgeWeight(e, 1.0);
-    }
-
-    private void displayGraph(Graph<String, DefaultWeightedEdge> g,
-                              Map<String, Integer> assignment) {
-
-        JFrame frame = new JFrame("Leiden Community Detection Demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 700);
-
-        mxGraph mxg = new mxGraph();
-        Object parent = mxg.getDefaultParent();
-        Map<String, Object> cells = new HashMap<>();
-
-        mxg.getModel().beginUpdate();
-        try {
-            for (String v : g.vertexSet()) {
-                cells.put(v, mxg.insertVertex(parent, null, v, 0, 0, 70, 40));
-            }
-
-            for (DefaultWeightedEdge e : g.edgeSet()) {
-                String src = g.getEdgeSource(e);
-                String tgt = g.getEdgeTarget(e);
-                mxg.insertEdge(parent, null, "", cells.get(src), cells.get(tgt));
-            }
-
-            // Random community colors
-            Random r = new Random();
-            Map<Integer, String> cmap = new HashMap<>();
-
-            for (String v : g.vertexSet()) {
-                int com = assignment.get(v);
-
-                cmap.computeIfAbsent(
-                    com,
-                    k -> String.format("#%06X", r.nextInt(0xFFFFFF))
-                );
-
-                mxg.setCellStyle("fillColor=" + cmap.get(com),
-                    new Object[] { cells.get(v) });
-            }
+        System.out.println("Detected communities:");
+        for (int i = 0; i < communities.size(); i++) {
+            System.out.println("Community " + i + ": " + communities.get(i));
         }
-        finally {
-            mxg.getModel().endUpdate();
-        }
+
+        // JGraphX visualization
+        JGraphXAdapter<String, DefaultEdge> adapter =
+                new JGraphXAdapter<>(graph);
+
+        mxGraphComponent graphComponent = new mxGraphComponent(adapter);
+        graphComponent.setConnectable(false);
+
+        getContentPane().add(graphComponent, BorderLayout.CENTER);
+        setSize(800, 600);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Apply layout
-        new mxOrganicLayout(mxg).execute(parent);
+        mxCircleLayout layout = new mxCircleLayout(adapter);
+        layout.execute(adapter.getDefaultParent());
 
-        frame.add(new mxGraphComponent(mxg));
-        frame.setVisible(true);
+        // Color communities
+        Color[] palette = {
+                Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE,
+                Color.MAGENTA, Color.CYAN
+        };
+
+        int index = 0;
+        for (Set<String> cluster : communities) {
+            Color color = palette[index % palette.length];
+            for (String v : cluster) {
+                Object cell = adapter.getVertexToCellMap().get(v);
+                adapter.setCellStyles("fillColor",
+                        "#" + Integer.toHexString(color.getRGB()).substring(2),
+                        new Object[]{ cell });
+            }
+            index++;
+        }
+
+        graphComponent.refresh(); // ✅ Fixes blank screen
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new LeidenJGraphXDemo().setVisible(true);
+        });
     }
 }
