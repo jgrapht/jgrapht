@@ -11,6 +11,7 @@ import com.mxgraph.layout.*;
 import com.mxgraph.model.*;
 import com.mxgraph.swing.*;
 import com.mxgraph.view.*;
+import com.mxgraph.util.mxConstants;
 import org.jgrapht.*;
 import org.jgrapht.alg.clustering.*;
 import org.jgrapht.alg.interfaces.*;
