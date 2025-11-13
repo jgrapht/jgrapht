@@ -28,7 +28,12 @@ import java.util.Set;
  * A DOTSubgraph is a container class for a subgraph and its attributes. It may be used in DOT export and can be
  * parametrized to export or not vertices and/or edges.
  *
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ *
  * @author Nicolas Rol {@literal <nicolas.rol at rte-france.com>}
+ * @see AsSubgraph
+ * @see DOTExporter
  */
 public class DOTSubgraph<V, E> {
 
