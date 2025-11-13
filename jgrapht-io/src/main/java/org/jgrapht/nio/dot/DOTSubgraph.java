@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2023, by Nicolas Rol and Contributors.
+ * (C) Copyright 2025-2025, by Nicolas Rol and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * A DOTSubgraph is a container class for a subgraph and its attributes. It may be used in DOT export and can be
+ * parametrized to export or not vertices and/or edges.
+ *
  * @author Nicolas Rol {@literal <nicolas.rol at rte-france.com>}
  */
 public class DOTSubgraph<V, E> {
