@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2025-2025, by Adam Bouzid and Contributors.
+ * (C) Copyright 2025, by Your Name and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -7,23 +7,31 @@
  */
 package org.jgrapht.demo;
 
-import com.mxgraph.layout.*;
-import com.mxgraph.model.*;
-import com.mxgraph.swing.*;
-import com.mxgraph.view.*;
-import org.jgrapht.*;
-import org.jgrapht.alg.clustering.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.ext.*;
-import org.jgrapht.graph.*;
+import com.mxgraph.layout.mxFastOrganicLayout;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.view.mxGraph;
 
-import javax.swing.*;
-import java.awt.*;
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.alg.clustering.LeidenClustering;
+import org.jgrapht.alg.clustering.LeidenClustering.Quality;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
+import org.jgrapht.ext.JGraphXAdapter;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
+import org.jgrapht.graph.SimpleGraph;
+
+import javax.swing.JApplet;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import java.awt.Dimension;
 import java.util.*;
-import java.util.List;
 
 /**
- * Same demo as LouvainClusteringDemo but using the Leiden algorithm.
+ * A demo that shows how to use the Leiden clustering algorithm to detect communities
+ * in a graph and visualize them with different colors using JGraphX.
  */
 public class LeidenClusteringDemo
     extends JApplet
@@ -33,17 +41,24 @@ public class LeidenClusteringDemo
 
     private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
 
+    /**
+     * Entry point to run this applet as a standalone application.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args)
     {
-        LeidenClusteringDemo applet = new LeidenClusteringDemo();
-        applet.init();
+        SwingUtilities.invokeLater(() -> {
+            LeidenClusteringDemo applet = new LeidenClusteringDemo();
+            applet.init();
 
-        JFrame frame = new JFrame();
-        frame.getContentPane().add(applet);
-        frame.setTitle("JGraphT Leiden Clustering Demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+            JFrame frame = new JFrame();
+            frame.getContentPane().add(applet);
+            frame.setTitle("JGraphT Leiden Clustering Demo");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setVisible(true);
+        });
     }
 
     @Override
@@ -52,22 +67,24 @@ public class LeidenClusteringDemo
         // Create a JGraphT graph
         Graph<String, DefaultEdge> graph = createSampleGraph();
 
-        // ✅ Use Leiden clustering instead of Louvain
-        LeidenClustering<String, DefaultEdge> clustering =
-            new LeidenClustering<>(graph, 1.0, new Random(42),
-                LeidenClustering.Quality.MODULARITY);
+        // Choose quality function and resolution
+        double resolution = 1.0;
+        Quality quality = Quality.MODULARITY; // change to Quality.CPM to test CPM behavior
 
-        ClusteringAlgorithm.Clustering<String> result = clustering.getClustering();
+        // Apply Leiden clustering algorithm
+        LeidenClustering<String, DefaultEdge> leiden =
+            new LeidenClustering<>(graph, resolution, new Random(42), quality);
+        ClusteringAlgorithm.Clustering<String> result = leiden.getClustering();
 
-        // Print clustering results
-        System.out.println("Leiden Clustering Results:");
+        // Print clustering results to console
+        System.out.println("Leiden Clustering Results (" + quality + ", γ=" + resolution + "):");
         System.out.println("Number of communities: " + result.getNumberClusters());
-        int i = 0;
-        for (Set<String> c : result.getClusters()) {
-            System.out.println("Community " + (i++) + ": " + c);
+        int clusterIndex = 0;
+        for (Set<String> cluster : result.getClusters()) {
+            System.out.println("Community " + (clusterIndex++) + ": " + cluster);
         }
 
-        // JGraphX visualization
+        // Wrap in a listenable graph for JGraphX
         ListenableGraph<String, DefaultEdge> listenableGraph =
             new DefaultListenableGraph<>(graph);
         jgxAdapter = new JGraphXAdapter<>(listenableGraph);
@@ -79,22 +96,26 @@ public class LeidenClusteringDemo
         getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
-        // Apply layout
+        // Layout
         mxFastOrganicLayout layout = new mxFastOrganicLayout(jgxAdapter);
+        layout.setForceConstant(80);
         layout.execute(jgxAdapter.getDefaultParent());
 
         // Color vertices by community
         colorVerticesByCommunity(result);
-
-        // ✅ Refresh to make drawing visible
-        component.refresh();
     }
 
+    /**
+     * Creates a sample graph with multiple communities. This graph is designed to have clear
+     * community structure that the Leiden algorithm can detect.
+     *
+     * @return a graph with community structure
+     */
     private Graph<String, DefaultEdge> createSampleGraph()
     {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        // Community 1: nodes 0-4
+        // Community 1: nodes v0–v4 (densely connected)
         for (int i = 0; i < 5; i++) {
             graph.addVertex("v" + i);
         }
@@ -107,7 +128,7 @@ public class LeidenClusteringDemo
         graph.addEdge("v3", "v4");
         graph.addEdge("v2", "v4");
 
-        // Community 2: nodes 5-9
+        // Community 2: nodes v5–v9 (densely connected)
         for (int i = 5; i < 10; i++) {
             graph.addVertex("v" + i);
         }
@@ -120,7 +141,7 @@ public class LeidenClusteringDemo
         graph.addEdge("v8", "v9");
         graph.addEdge("v7", "v9");
 
-        // Community 3: nodes 10-14
+        // Community 3: nodes v10–v14 (densely connected)
         for (int i = 10; i < 15; i++) {
             graph.addVertex("v" + i);
         }
@@ -134,18 +155,29 @@ public class LeidenClusteringDemo
         graph.addEdge("v12", "v14");
 
         // Inter-community bridges
-        graph.addEdge("v4", "v5");
-        graph.addEdge("v9", "v10");
+        graph.addEdge("v4", "v5");   // between community 1 and 2
+        graph.addEdge("v9", "v10");  // between community 2 and 3
 
         return graph;
     }
 
+    /**
+     * Colors vertices according to their community membership.
+     *
+     * @param clustering the clustering result from Leiden algorithm
+     */
     private void colorVerticesByCommunity(ClusteringAlgorithm.Clustering<String> clustering)
     {
+        // Define colors for different communities
         String[] colors = {
-            "#FF6B6B", "#4ECDC4", "#45B7D1",
-            "#FFA07A", "#98D8C8", "#F7DC6F",
-            "#BB8FCE", "#85C1E2",
+            "#FF6B6B", // Red
+            "#4ECDC4", // Teal
+            "#45B7D1", // Blue
+            "#FFA07A", // Light Salmon
+            "#98D8C8", // Mint
+            "#F7DC6F", // Yellow
+            "#BB8FCE", // Purple
+            "#85C1E2"  // Sky Blue
         };
 
         mxGraph graph = jgxAdapter;
@@ -156,8 +188,10 @@ public class LeidenClusteringDemo
 
             for (int i = 0; i < clusters.size(); i++) {
                 String color = colors[i % colors.length];
-                for (String v : clusters.get(i)) {
-                    mxCell cell = (mxCell) jgxAdapter.getVertexToCellMap().get(v);
+                Set<String> cluster = clusters.get(i);
+
+                for (String vertex : cluster) {
+                    mxCell cell = (mxCell) jgxAdapter.getVertexToCellMap().get(vertex);
                     if (cell != null) {
                         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, color, new Object[]{cell});
                         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "#000000", new Object[]{cell});
