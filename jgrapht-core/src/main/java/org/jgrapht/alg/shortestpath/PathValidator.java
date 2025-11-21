@@ -39,8 +39,10 @@ public interface PathValidator<V, E>
     /**
      * Checks if an edge can be added to a previous path element.
      *
-     * @param partialPath the path from source vertex up to the current vertex.
-     * @param edge the new edge to be added to the path.
+     * @param partialPath the path from source vertex up to the current vertex. Note that 
+     *                    {@code partialPath} can be an empty walk when checking whether a
+     *                    single edge is a valid path.
+     * @param edge        the new edge to be added to the path.
      *
      * @return {@code true} if edge can be added, {@code false} otherwise.
      */
