@@ -33,6 +33,7 @@ import java.util.stream.*;
  * @author Dimitrios Michail
  * @author Joris Kinable
  * @author Alexandru Valeanu
+ * @author Wissal Chbani
  */
 public abstract class GraphTests
 {

@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class GraphTests.
  *
  * @author Dimitrios Michail
+ * @author Wissal Chbani
  */
 public class GraphTestsTest
 {
