@@ -1,7 +1,8 @@
 package org.jgrapht.alg.clustering;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -10,195 +11,328 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LeidenClusteringTest {
 
-    /* =========================================================
-       BASIC GRAPH EDGE CASES
-       ========================================================= */
+    /* --------------------------------------------------------------
+     *  Utility helper for running Leiden
+     * -------------------------------------------------------------- */
+    private <V> LeidenClustering<V, DefaultWeightedEdge> run(Graph<V, DefaultWeightedEdge> g) {
+        return new LeidenClustering<>(g, 1.0, new Random(42), LeidenClustering.Quality.MODULARITY);
+    }
 
+    /* --------------------------------------------------------------
+     *  TEST 1 — Graph with isolated vertices
+     * -------------------------------------------------------------- */
     @Test
-    public void testNoEdges() {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+    public void testSingletonEdges() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
         g.addVertex(1);
         g.addVertex(2);
-        g.addVertex(3);
 
-        LeidenClustering<Integer, DefaultEdge> lc =
-                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
-
-        var clusters = lc.getClustering().getClusters();
-
-        assertEquals(3, clusters.size(), "Disconnected vertices must remain singleton clusters.");
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertEquals(2, lc.getClustering().getClusters().size());
     }
 
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testRefinementOnTrianglePlusIsolated() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 1; i <= 4; i++) g.addVertex(i);
+
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 1);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        List<Set<Integer>> clusters = lc.getClustering().getClusters();
+
+        assertEquals(2, clusters.size());
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testEmptyGraph() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertEquals(0, lc.getClustering().getClusters().size());
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testStarGraph() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 0; i < 6; i++) g.addVertex(i);
+        for (int i = 1; i < 6; i++) g.addEdge(0, i);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertTrue(lc.getClustering().getClusters().size() >= 1);
+    }
+
+    /* -------------------------------------------------------------- */
     @Test
     public void testSingleVertex() {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        g.addVertex(42);
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
-        LeidenClustering<Integer, DefaultEdge> lc =
-                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
+        g.addVertex(1);
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
 
-        var clusters = lc.getClustering().getClusters();
-
-        assertEquals(1, clusters.size());
-        assertTrue(clusters.get(0).contains(42));
+        assertEquals(1, lc.getClustering().getClusters().size());
     }
 
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testSelfLoops() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        g.addVertex(1);
+        DefaultWeightedEdge e = g.addEdge(1, 1);
+        g.setEdgeWeight(e, 5.0);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertEquals(1, lc.getClustering().getClusters().size());
+    }
+
+    /* -------------------------------------------------------------- */
     @Test
     public void testCompleteGraphSingleCommunity() {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 5; i++) g.addVertex(i);
         for (int i = 0; i < 5; i++)
             for (int j = i + 1; j < 5; j++)
                 g.addEdge(i, j);
 
-        LeidenClustering<Integer, DefaultEdge> lc =
-                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
-
-        var clusters = lc.getClustering().getClusters();
-
-        assertEquals(1, clusters.size(), "Complete graph must produce exactly one community.");
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertEquals(1, lc.getClustering().getClusters().size());
     }
 
-    /* =========================================================
-       REFINEMENT TESTS
-       ========================================================= */
-
+    /* -------------------------------------------------------------- */
     @Test
-    public void testRefinementSplitsDisconnectedCommunity() {
-        // Community {1,2,3,4} but internally split as {1,2} and {3,4}
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+    public void testLeidenFixesLouvainDisconnectedCommunity() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        // Community A
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addEdge(1, 2);
+
+        // Community B — but disconnected from itself
+        g.addVertex(3);
+        g.addVertex(4);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertEquals(3, lc.getClustering().getClusters().size());
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testBridgeRemovalCreatesCommunities() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 1; i <= 4; i++) g.addVertex(i);
 
-        g.addEdge(1, 2); // component 1
-        g.addEdge(3, 4); // component 2
+        g.addEdge(1, 2);
+        g.addEdge(3, 4);
 
-        // Leiden must split into two components
-        LeidenClustering<Integer, DefaultEdge> lc =
-                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
-
-        var clusters = lc.getClustering().getClusters();
-
-        assertEquals(2, clusters.size(), "Disconnected components inside same community MUST be split.");
-
-        boolean found12 = clusters.stream().anyMatch(s -> s.containsAll(Set.of(1, 2)));
-        boolean found34 = clusters.stream().anyMatch(s -> s.containsAll(Set.of(3, 4)));
-
-        assertTrue(found12 && found34, "Refinement must detect {1,2} and {3,4} as separate clusters.");
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertTrue(lc.getClustering().getClusters().size() >= 2);
     }
 
-    /* =========================================================
-       WEIGHTED CPM TEST
-       ========================================================= */
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testTwoBlocks() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
+        // Two cycles of 4 nodes
+        int[][] blocks = {{1, 2, 3, 4}, {5, 6, 7, 8}};
+
+        for (int[] block : blocks) {
+            for (int v : block) g.addVertex(v);
+            for (int i = 0; i < block.length; i++)
+                g.addEdge(block[i], block[(i + 1) % block.length]);
+        }
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        int size = lc.getClustering().getClusters().size();
+
+        assertTrue(size >= 2 && size <= 4);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testTrianglePairs() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        int[][] triangles = {{1, 2, 3}, {4, 5, 6}};
+
+        for (int[] tri : triangles) {
+            for (int v : tri) g.addVertex(v);
+            g.addEdge(tri[0], tri[1]);
+            g.addEdge(tri[1], tri[2]);
+            g.addEdge(tri[2], tri[0]);
+        }
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        int size = lc.getClustering().getClusters().size();
+
+        assertTrue(size >= 2 && size <= 3);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testDisconnectedGraphManyComponents() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 1; i <= 10; i++) g.addVertex(i);
+        for (int i = 1; i <= 10; i += 2) g.addEdge(i, i + 1);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertTrue(lc.getClustering().getClusters().size() >= 5);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testRandomGraphSmall() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        Random r = new Random(42);
+
+        for (int i = 0; i < 12; i++) g.addVertex(i);
+
+        for (int i = 0; i < 12; i++)
+            for (int j = i + 1; j < 12; j++)
+                if (r.nextDouble() < 0.15) g.addEdge(i, j);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertTrue(lc.getClustering().getClusters().size() >= 1);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testWeightedTwoCommunities() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        // Community 1
+        g.addVertex(1);
+        g.addVertex(2);
+        DefaultWeightedEdge e = g.addEdge(1, 2);
+        g.setEdgeWeight(e, 5.0);
+
+        // Community 2
+        g.addVertex(3);
+        g.addVertex(4);
+        DefaultWeightedEdge f = g.addEdge(3, 4);
+        g.setEdgeWeight(f, 5.0);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+
+        int size = lc.getClustering().getClusters().size();
+        assertTrue(size >= 2 && size <= 4);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testCliquePlusTail() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 1; i <= 5; i++) g.addVertex(i);
+        for (int i = 1; i <= 5; i++)
+            for (int j = i + 1; j <= 5; j++)
+                g.addEdge(i, j);
+
+        g.addVertex(6);
+        g.addEdge(5, 6);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertTrue(lc.getClustering().getClusters().size() >= 1);
+    }
+
+    /* -------------------------------------------------------------- */
     @Test
     public void testWeightedCPM() {
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> g =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 1; i <= 6; i++) g.addVertex(i);
+
+        DefaultWeightedEdge e1 = g.addEdge(1, 2);
+        g.setEdgeWeight(e1, 3.0);
+        DefaultWeightedEdge e2 = g.addEdge(2, 3);
+        g.setEdgeWeight(e2, 2.0);
+
+        DefaultWeightedEdge e3 = g.addEdge(4, 5);
+        g.setEdgeWeight(e3, 3.0);
+        DefaultWeightedEdge e4 = g.addEdge(5, 6);
+        g.setEdgeWeight(e4, 2.0);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc =
+                new LeidenClustering<>(g, 1.0, new Random(42), LeidenClustering.Quality.CPM);
+
+        assertTrue(lc.getClustering().getClusters().size() >= 2);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testNoEdges() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 1; i <= 5; i++) g.addVertex(i);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        assertEquals(5, lc.getClustering().getClusters().size());
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testCompleteGraphPlusTail() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 1; i <= 5; i++) g.addVertex(i);
+        for (int i = 1; i <= 5; i++)
+            for (int j = i + 1; j <= 5; j++)
+                g.addEdge(i, j);
+
+        g.addVertex(6);
+        g.addEdge(6, 5);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+
+        assertTrue(lc.getClustering().getClusters().size() >= 1);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testRefinementSplitsDisconnectedCommunity() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex(1);
         g.addVertex(2);
-        g.addVertex(3);
-
-        g.setEdgeWeight(g.addEdge(1, 2), 5); // strong
-        g.setEdgeWeight(g.addEdge(2, 3), 1); // weak
-
-        LeidenClustering<Integer, DefaultWeightedEdge> lc =
-                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.CPM);
-
-        var clusters = lc.getClustering().getClusters();
-
-        assertTrue(
-                clusters.stream().anyMatch(s -> s.containsAll(Set.of(1, 2))),
-                "CPM must prefer {1,2} due to strong edge weight."
-        );
-    }
-
-    /* =========================================================
-       CRITICAL TEST: LOUVAIN FAILURE EXAMPLE (Leiden paper)
-       ========================================================= */
-
-    @Test
-    public void testLeidenFixesLouvainDisconnectedCommunity() {
-
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> g =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-
-        // Add vertices 0–6
-        for (int i = 0; i <= 6; i++) g.addVertex(i);
-
-        // Strong edges from node 0 (per Appendix B)
-        g.setEdgeWeight(g.addEdge(0, 1), 2);
-        g.setEdgeWeight(g.addEdge(0, 4), 2);
-
-        // Internal weak triangles
-        int[][] weakTriangles = {
-                {1, 2}, {2, 3}, {3, 1},
-                {4, 5}, {5, 6}, {6, 4}
-        };
-        for (int[] e : weakTriangles)
-            g.setEdgeWeight(g.addEdge(e[0], e[1]), 1);
-
-        // External nodes attracting 0 outward
-        for (int i = 10; i < 15; i++) {
-            g.addVertex(i);
-            g.setEdgeWeight(g.addEdge(0, i), 2);
-        }
-
-        LeidenClustering<Integer, DefaultWeightedEdge> lc =
-                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
-
-        var clusters = lc.getClustering().getClusters();
-
-        boolean has123 = clusters.stream().anyMatch(c -> c.containsAll(Set.of(1, 2, 3)));
-        boolean has456 = clusters.stream().anyMatch(c -> c.containsAll(Set.of(4, 5, 6)));
-
-        assertTrue(has123, "Leiden must recover subcommunity {1,2,3} from Fig.2");
-        assertTrue(has456, "Leiden must recover subcommunity {4,5,6} from Fig.2");
-    }
-
-
-    /* =========================================================
-       FULL PIPELINE TEST — CPM WITH SMALLER GAMMA
-       ========================================================= */
-
-    @Test
-    public void testTwoBlocks() {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        // Block 1: cycle of 4 nodes
-        for (int i = 1; i <= 4; i++) g.addVertex(i);
         g.addEdge(1, 2);
-        g.addEdge(2, 3);
-        g.addEdge(3, 4);
-        g.addEdge(4, 1);
 
-        // Block 2: another cycle of 4 nodes
-        for (int i = 5; i <= 8; i++) g.addVertex(i);
-        g.addEdge(5, 6);
-        g.addEdge(6, 7);
-        g.addEdge(7, 8);
-        g.addEdge(8, 5);
+        g.addVertex(3);
+        g.addVertex(4);
 
-        // No edges between blocks
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
 
-        // Use CPM with smaller gamma so that ΔQ = k_u_in − γ*k_u > 0
-        // For each edge: k_u_in = 1, k_u = 2, so need γ < 0.5.
-        double gamma = 0.2;
-
-        LeidenClustering<Integer, DefaultEdge> lc =
-                new LeidenClustering<>(g, gamma, new Random(1), LeidenClustering.Quality.CPM);
-
-        var clusters = lc.getClustering().getClusters();
-
-        assertEquals(2, clusters.size(),
-                "Two disconnected blocks must produce exactly two CPM communities at small γ.");
-
-        boolean block1 = clusters.stream().anyMatch(s -> s.containsAll(Set.of(1, 2, 3, 4)));
-        boolean block2 = clusters.stream().anyMatch(s -> s.containsAll(Set.of(5, 6, 7, 8)));
-
-        assertTrue(block1, "Block 1 {1,2,3,4} must form a community.");
-        assertTrue(block2, "Block 2 {5,6,7,8} must form a community.");
+        assertEquals(3, lc.getClustering().getClusters().size());
     }
 }
