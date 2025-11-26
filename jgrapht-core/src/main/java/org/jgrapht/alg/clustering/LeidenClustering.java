@@ -314,7 +314,7 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                         double k_u_in = e.getValue();          // sum of weights from u to community c
                         double gain = qualityGain(q, gamma, k_u, k_u_in, commStrength[c]);
 
-                        if (gain > bestGain + EPS ||
+                        if (gain >= bestGain - EPS ||
                             (Math.abs(gain - bestGain) <= EPS && k_u_in > tieBreaker + EPS)) {
                             bestGain = gain;
                             tieBreaker = k_u_in;
