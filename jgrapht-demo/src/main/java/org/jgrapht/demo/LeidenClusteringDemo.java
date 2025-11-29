@@ -87,7 +87,7 @@ public class LeidenClusteringDemo
         // Wrap in a listenable graph for JGraphX
         ListenableGraph<String, DefaultEdge> listenableGraph =
             new DefaultListenableGraph<>(graph);
-        jgxAdapter = new JGraphXAdapter<>(listenableGraph);
+        jgxAdapter = createAdapter(listenableGraph);
 
         setPreferredSize(DEFAULT_SIZE);
         mxGraphComponent component = new mxGraphComponent(jgxAdapter);
@@ -111,7 +111,7 @@ public class LeidenClusteringDemo
      *
      * @return a graph with community structure
      */
-    private Graph<String, DefaultEdge> createSampleGraph()
+    Graph<String, DefaultEdge> createSampleGraph()
     {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
@@ -161,12 +161,18 @@ public class LeidenClusteringDemo
         return graph;
     }
 
+    JGraphXAdapter<String, DefaultEdge> createAdapter(ListenableGraph<String, DefaultEdge> listenableGraph)
+    {
+        jgxAdapter = new JGraphXAdapter<>(listenableGraph);
+        return jgxAdapter;
+    }
+
     /**
      * Colors vertices according to their community membership.
      *
      * @param clustering the clustering result from Leiden algorithm
      */
-    private void colorVerticesByCommunity(ClusteringAlgorithm.Clustering<String> clustering)
+    void colorVerticesByCommunity(ClusteringAlgorithm.Clustering<String> clustering)
     {
         // Define colors for different communities
         String[] colors = {
