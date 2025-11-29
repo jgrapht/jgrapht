@@ -9,6 +9,8 @@ package org.jgrapht.alg.clustering;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm.ClusteringImpl;
 
 import java.util.*;
 import java.util.Map.Entry;

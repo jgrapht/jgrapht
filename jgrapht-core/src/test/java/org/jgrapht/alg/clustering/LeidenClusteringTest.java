@@ -1,6 +1,7 @@
 package org.jgrapht.alg.clustering;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.jupiter.api.Test;
@@ -334,5 +335,70 @@ public class LeidenClusteringTest {
         LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
 
         assertEquals(3, lc.getClustering().getClusters().size());
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testCachingReusesResult() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addEdge(1, 2);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lc = run(g);
+        Clustering<Integer> c1 = lc.getClustering();
+        Clustering<Integer> c2 = lc.getClustering();
+
+        assertSame(c1, c2);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testRejectsNonUndirectedGraph() {
+        Graph<Integer, DefaultWeightedEdge> directed =
+                new org.jgrapht.graph.DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        directed.addVertex(1);
+        directed.addVertex(2);
+        directed.addEdge(1, 2);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new LeidenClustering<>(directed, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY));
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testRejectsInvalidResolution() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        g.addVertex(1);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new LeidenClustering<>(g, 0.0, new Random(1), LeidenClustering.Quality.MODULARITY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LeidenClustering<>(g, Double.NaN, new Random(1), LeidenClustering.Quality.MODULARITY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LeidenClustering<>(g, Double.POSITIVE_INFINITY, new Random(1), LeidenClustering.Quality.MODULARITY));
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testRejectsNegativeOrNaNWeights() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        g.addVertex(1);
+        g.addVertex(2);
+        DefaultWeightedEdge e = g.addEdge(1, 2);
+        g.setEdgeWeight(e, -1.0);
+
+        LeidenClustering<Integer, DefaultWeightedEdge> lcNeg =
+                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
+        assertThrows(IllegalArgumentException.class, lcNeg::getClustering);
+
+        g.setEdgeWeight(e, Double.NaN);
+        LeidenClustering<Integer, DefaultWeightedEdge> lcNan =
+                new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
+        assertThrows(IllegalArgumentException.class, lcNan::getClustering);
     }
 }
