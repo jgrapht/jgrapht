@@ -4,7 +4,10 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
 
 import java.util.*;
 
@@ -400,5 +403,80 @@ public class LeidenClusteringTest {
         LeidenClustering<Integer, DefaultWeightedEdge> lcNan =
                 new LeidenClustering<>(g, 1.0, new Random(1), LeidenClustering.Quality.MODULARITY);
         assertThrows(IllegalArgumentException.class, lcNan::getClustering);
+    }
+
+    /* -------------------------------------------------------------- */
+    @Test
+    public void testLeidenRepairsDisconnectedCommunityFromLouvainExample() {
+        Graph<Integer, DefaultWeightedEdge> g =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        // Two dense cliques connected only via weak ties through node 0
+        int[][] cliques = {{1, 2, 3}, {4, 5, 6}};
+        for (int[] clique : cliques) {
+            for (int v : clique) {
+                g.addVertex(v);
+            }
+            addClique(g, clique, 4.0);
+        }
+        g.addVertex(0);
+        for (int v = 1; v <= 6; v++) {
+            DefaultWeightedEdge e = g.addEdge(0, v);
+            g.setEdgeWeight(e, 0.5);
+        }
+
+        // External dense community strongly attracting node 0
+        int[] external = {7, 8, 9};
+        for (int v : external) {
+            g.addVertex(v);
+        }
+        addClique(g, external, 6.0);
+        for (int v : external) {
+            DefaultWeightedEdge e = g.addEdge(0, v);
+            g.setEdgeWeight(e, 8.0);
+        }
+
+        double resolution = 0.1; // encourage merging into larger communities
+        Optional<Set<Integer>> bad = Optional.empty();
+        int usedSeed = -1;
+        for (int seed = 0; seed < 200000 && bad.isEmpty(); seed++) {
+            LouvainClustering<Integer, DefaultWeightedEdge> louvain =
+                    new LouvainClustering<>(g, resolution, new Random(seed));
+            List<Set<Integer>> louvainClusters = louvain.getClustering().getClusters();
+            bad = louvainClusters.stream().filter(c -> !isConnected(g, c)).findFirst();
+            if (bad.isPresent()) {
+                usedSeed = seed;
+            }
+        }
+
+        Assumptions.assumeTrue(bad.isPresent(),
+                "Did not find a disconnected Louvain community within seed search (200000 seeds)");
+
+        LeidenClustering<Integer, DefaultWeightedEdge> leiden =
+                new LeidenClustering<>(g, resolution, new Random(usedSeed), LeidenClustering.Quality.MODULARITY);
+        List<Set<Integer>> leidenClusters = leiden.getClustering().getClusters();
+
+        assertTrue(leidenClusters.stream().allMatch(c -> isConnected(g, c)),
+                "Leiden should return only connected communities");
+        assertFalse(leidenClusters.stream().anyMatch(c -> c.contains(1) && c.contains(4)),
+                "Leiden should split the disconnected Louvain community");
+    }
+
+    private static <V, E> boolean isConnected(Graph<V, E> g, Set<V> vertices) {
+        if (vertices.size() <= 1) {
+            return true;
+        }
+        ConnectivityInspector<V, E> inspector =
+                new ConnectivityInspector<>(new AsSubgraph<>(g, vertices));
+        return inspector.isConnected();
+    }
+
+    private static void addClique(Graph<Integer, DefaultWeightedEdge> g, int[] nodes, double weight) {
+        for (int i = 0; i < nodes.length; i++) {
+            for (int j = i + 1; j < nodes.length; j++) {
+                DefaultWeightedEdge e = g.addEdge(nodes[i], nodes[j]);
+                g.setEdgeWeight(e, weight);
+            }
+        }
     }
 }
