@@ -1,5 +1,5 @@
-/*
- * (C) 2025 Your Name and Contributors.
+/* 
+ * (C) 2025 Hanine Gharsalli, xiangyu MAO and Contributors.
  * JGraphT: Leiden community detection (clean, readable, full-feature implementation)
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
@@ -12,31 +12,21 @@ import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm.ClusteringImpl;
 
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm.ClusteringImpl;
+
 import java.util.*;
 import java.util.Map.Entry;
 
 /**
  * Leiden community detection for undirected graphs (weighted or unweighted).
  *
- * <p>Implements the 3-phase Leiden procedure:
- * <ol>
- *   <li><b>Local moving</b>: move individual nodes to neighboring communities to improve quality
- *   <li><b>Refinement</b>: split communities that are not well-connected (here: disconnected parts)
- *   <li><b>Aggregation</b>: collapse each community to a super-node; repeat until no improvement
- * </ol>
+ * Implements the 3-phase Leiden procedure:
+ * 1) Local moving
+ * 2) Refinement (split disconnected components)
+ * 3) Aggregation (collapse communities)
  *
- * <p>Supports two quality functions via {@link Quality}:
- * <ul>
- *   <li>{@link Quality#MODULARITY}: standard (Louvain-like) modularity with resolution γ
- *   <li>{@link Quality#CPM}: Constant Potts Model. The local gain uses a practical weighted form
- *       ΔQ = k_i,in(C) − γ · strength(i). This favors small, dense communities and avoids the
- *       modularity resolution limit.
- * </ul>
- *
- * <p><b>Notes on refinement:</b> Leiden’s full refinement defines “well-connectedness”. For clarity
- * and robustness, this implementation guarantees at minimum that each community’s induced subgraph
- * is (edge-)connected. Disconnected parts are split into separate subcommunities before aggregation,
- * which is the essential improvement over Louvain.
+ * Supports MODULARITY and CPM objective functions.
  *
  * @param <V> vertex type
  * @param <E> edge type
@@ -48,9 +38,7 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
 
     /** Quality function options for Leiden. */
     public enum Quality {
-        /** Modularity with resolution γ. */
         MODULARITY,
-        /** Constant Potts Model (weighted variant). */
         CPM
     }
 
@@ -59,10 +47,13 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
     private final Quality quality;
     private final Random rng;
 
+    /** Cache final clustering once computed */
     private Clustering<V> cached;
 
     /**
-     * Create Leiden with default γ=1.0, quality=MODULARITY and a default RNG.
+     * Constructor with γ = 1.0, MODULARITY, and default RNG.
+     *
+     * @param graph input graph
      */
     public LeidenClustering(Graph<V, E> graph)
     {
@@ -70,7 +61,10 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
     }
 
     /**
-     * Create Leiden with custom resolution γ, default RNG, quality=MODULARITY.
+     * Constructor with custom γ (resolution), MODULARITY, and default RNG.
+     *
+     * @param graph input graph
+     * @param resolution resolution parameter γ
      */
     public LeidenClustering(Graph<V, E> graph, double resolution)
     {
@@ -78,24 +72,29 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
     }
 
     /**
-     * Create Leiden with custom γ, RNG and quality.
+     * Full constructor.
      *
-     * @param graph undirected input graph (weighted or unweighted)
-     * @param resolution positive resolution γ (modularity/CPM)
-     * @param rng random source used to shuffle vertex order
-     * @param quality quality function to optimize
+     * @param graph undirected input graph
+     * @param resolution positive resolution γ
+     * @param rng random generator used for node ordering
+     * @param quality objective function (MODULARITY or CPM)
      */
     public LeidenClustering(Graph<V, E> graph, double resolution, Random rng, Quality quality)
     {
         this.graph = GraphTests.requireUndirected(graph);
         if (!(resolution > 0) || Double.isNaN(resolution) || Double.isInfinite(resolution)) {
-            throw new IllegalArgumentException("Resolution γ must be a positive, finite number");
+            throw new IllegalArgumentException("Resolution γ must be positive and finite");
         }
         this.resolution = resolution;
-        this.rng = Objects.requireNonNull(rng, "rng");
-        this.quality = Objects.requireNonNull(quality, "quality");
+        this.rng = Objects.requireNonNull(rng);
+        this.quality = Objects.requireNonNull(quality);
     }
 
+    /**
+     * Compute or return cached Leiden clustering result.
+     *
+     * @return JGraphT clustering: list of vertex sets
+     */
     @Override
     public Clustering<V> getClustering()
     {
@@ -106,8 +105,11 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
         return cached;
     }
 
-    /* ========================== Internal implementation ========================== */
+    /* ========================== Internal Implementation ========================== */
 
+    /**
+     * Internal class performing all Leiden steps on index-based arrays.
+     */
     private static final class Impl<V, E>
     {
         private final Graph<V, E> g;
@@ -124,66 +126,80 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
         }
 
         /**
-         * Full Leiden loop: keep creating aggregated levels while quality improves.
-         * We remember assignments per level and compose them at the end.
+         * Run full multi-level Leiden algorithm.
+         *
+         * Steps repeated:
+         * 1) local moving
+         * 2) refinement of disconnected components
+         * 3) aggregation
+         *
+         * Stops when modularity/CPM no longer improves.
+         *
+         * @return list of vertex clusters in original vertex space
          */
         List<Set<V>> run()
         {
-            // Map vertices to indices [0..n-1] for fast arrays.
+            // Map vertices to indices
             List<V> vs = new ArrayList<>(g.vertexSet());
-            if (vs.isEmpty())
-                return Collections.emptyList();
+            if (vs.isEmpty()) return Collections.emptyList();
 
             Map<V, Integer> idx = new HashMap<>();
             for (int i = 0; i < vs.size(); i++) idx.put(vs.get(i), i);
 
-            Level level = Level.fromGraph(g, vs, idx);//Level object that represents the graph in array form
-            double bestScore = Double.NEGATIVE_INFINITY;//keeps track of the best quality value (modularity or CPM score) seen so far.
+            // Build first-level graph
+            Level level = Level.fromGraph(g, vs, idx);
+            double bestScore = Double.NEGATIVE_INFINITY;
 
+            // Track the community assignment of each level
             List<int[]> levelAssignments = new ArrayList<>();
 
             while (true) {
-                // 1) Local moving
+                // 1) local moving
                 int[] community = level.localMoving(gamma, quality, rng);
 
-                // 2) Refinement (split disconnected parts in each community)
+                // 2) refinement
                 community = level.refineDisconnected(community);
 
-                // Compute current quality
+                // 3) compute quality
                 double score = level.computeQuality(community, gamma, quality);
 
-                // Stop if no improvement
-                if (score <= bestScore + EPS) {
-                    break;
-                }
-
+                if (score <= bestScore + EPS) break;
                 bestScore = score;
                 levelAssignments.add(community);
 
-                // 3) Aggregation: form next level graph; stop if no compression
+                // 4) aggregation
                 Level.AggregateResult agg = level.aggregate(community);
-                if (agg.communityCount == level.size()) {
-                    // cannot compress further,number of communities equals the number of nodes at this level
-                    break;
-                }
+
+                // if no compression: stop
+                if (agg.communityCount == level.size()) break;
+
                 level = agg.nextLevel;
             }
 
-            // Compose per-level assignments into a final partition over original vertices.
+            // Expand hierarchical assignments to clusters
             return buildClusters(vs, levelAssignments);
         }
 
-        /** Compose level assignments and return vertex sets. */
+        /**
+         * Compose multi-level assignments into final vertex→community mapping.
+         *
+         * @param vs list of original vertices
+         * @param assignments list of int[] assignments per level
+         * @return list of vertex sets (clusters)
+         */
         private List<Set<V>> buildClusters(List<V> vs, List<int[]> assignments)
         {
             if (assignments.isEmpty()) {
-                // return singletons
+                // no improvement: each vertex alone
                 List<Set<V>> res = new ArrayList<>(vs.size());
                 for (V v : vs) res.add(new LinkedHashSet<>(Collections.singleton(v)));
                 return res;
             }
+
             int n = vs.size();
             int[] finalComm = new int[n];
+
+            // Combine levels: comm[v] = A2[A1[v]]...
             for (int v = 0; v < n; v++) {
                 int c = assignments.get(0)[v];
                 for (int lvl = 1; lvl < assignments.size(); lvl++) {
@@ -191,7 +207,8 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                 }
                 finalComm[v] = c;
             }
-            // group by community id (preserve insertion order)
+
+            // Group by community
             Map<Integer, Set<V>> map = new LinkedHashMap<>();
             for (int i = 0; i < n; i++) {
                 map.computeIfAbsent(finalComm[i], k -> new LinkedHashSet<>()).add(vs.get(i));
@@ -201,16 +218,20 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
     }
 
     /**
-     * One Leiden level: compact weighted adjacency, degrees, and total weight (2m).
-     * All arrays/counts are in the index space [0..n-1] of this level.
+     * A "Level" stores the graph of one Leiden iteration:
+     * - compact adjacency list with weights
+     * - node strengths
+     * - total edge weight
+     *
+     * All nodes are indexed 0..n-1.
      */
     private static final class Level
     {
-        /** For each node u, adjacency[u] is a map (v -> weight). Includes self-loops if present. */
+        /** adjacency[u]: map v→weight (undirected, includes self-loops) */
         private final List<Map<Integer, Double>> adjacency;
-        /** Node strength (weighted degree). */
+        /** node strength (weighted degree) */
         private final double[] strength;
-        /** Twice the total edge weight 2m (sum of strengths). */
+        /** total weight 2m (sum of all strengths) */
         private final double m2;
 
         private Level(List<Map<Integer, Double>> adjacency, double[] strength, double m2)
@@ -220,9 +241,17 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
             this.m2 = m2;
         }
 
+        /** @return number of nodes in this level */
         int size() { return strength.length; }
 
-        /** Build level-0 graph from JGraphT graph. */
+        /**
+         * Build Level 0 (initial level) from JGraphT graph.
+         *
+         * @param g input graph
+         * @param vs vertex list
+         * @param index mapping V → int index
+         * @return Level object with adjacency and weights
+         */
         static <V, E> Level fromGraph(Graph<V, E> g, List<V> vs, Map<V, Integer> index)
         {
             final int n = vs.size();
@@ -230,17 +259,18 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
             for (int i = 0; i < n; i++) adj.add(new HashMap<>());
 
             double[] deg = new double[n];
-            double total = 0d;
+            double total = 0;
             boolean weighted = g.getType().isWeighted();
 
             for (E e : g.edgeSet()) {
                 int u = index.get(g.getEdgeSource(e));
                 int v = index.get(g.getEdgeTarget(e));
                 double w = weighted ? g.getEdgeWeight(e) : 1.0;
-                if (!(w >= 0) || Double.isNaN(w))
-                    throw new IllegalArgumentException("Negative/NaN edge weight");
+
+                if (!(w >= 0)) throw new IllegalArgumentException("Negative or NaN edge weight");
+
                 if (u == v) {
-                    // self-loop contributes 2w to degree sum for undirected modularity (m2 sum)
+                    // self-loop contributes twice
                     adj.get(u).merge(v, w, Double::sum);
                     deg[u] += 2 * w;
                     total += 2 * w;
@@ -252,32 +282,38 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                     total += 2 * w;
                 }
             }
+
             return new Level(adj, deg, total);
         }
 
         /* --------------------------- Phase 1: Local moving --------------------------- */
 
         /**
-         * Local moving: in random order, move node i to the neighboring community which maximizes
-         * the quality gain (depending on {@link Quality}).
+         * Local moving phase:
+         * Each node is visited in random order and moved to the neighboring community that
+         * maximizes ΔQ.
          *
-         * @return community assignment array of length n (labels may be sparse; use refine/aggregate after)
+         * INPUT:
+         *  @param gamma resolution parameter γ
+         *  @param q quality function (MODULARITY or CPM)
+         *  @param rng random source
+         *
+         * OUTPUT:
+         *  @return community assignment int[] of size n
          */
         int[] localMoving(double gamma, Quality q, Random rng)
         {
             final int n = size();
             int[] comm = new int[n];
             double[] commStrength = new double[n];
+
+            // Initial: each node in its own community
             for (int i = 0; i < n; i++) {
-                comm[i] = i;               // each node in its own community initially
-                commStrength[i] = strength[i]; // so each community strength = node strength
-
+                comm[i] = i;
+                commStrength[i] = strength[i];
             }
 
-            if (m2 < EPS) {
-                // No edges — keep singletons
-                return comm;
-            }
+            if (m2 < EPS) return comm;
 
             int[] order = new int[n];
             for (int i = 0; i < n; i++) order[i] = i;
@@ -292,11 +328,9 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                     if (k_u < EPS) continue;
 
                     int cu = comm[u];
-
-                    // Temporarily remove u from its community
                     commStrength[cu] -= k_u;
 
-                    // Gather weights to each neighboring community
+                    // collect weight from u to each community
                     Map<Integer, Double> weightToComm = new HashMap<>();
                     for (Entry<Integer, Double> e : adjacency.get(u).entrySet()) {
                         int v = e.getKey();
@@ -304,7 +338,7 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                         int cv = comm[v];
                         weightToComm.merge(cv, w, Double::sum);
                     }
-                    // Ensure current community is considered (even if u had no intra edges)
+
                     weightToComm.putIfAbsent(cu, 0d);
 
                     int bestC = cu;
@@ -313,18 +347,18 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
 
                     for (Entry<Integer, Double> e : weightToComm.entrySet()) {
                         int c = e.getKey();
-                        double k_u_in = e.getValue();          // sum of weights from u to community c
+                        double k_u_in = e.getValue();
+
                         double gain = qualityGain(q, gamma, k_u, k_u_in, commStrength[c]);
 
                         if (gain >= bestGain - EPS ||
                             (Math.abs(gain - bestGain) <= EPS && k_u_in > tieBreaker + EPS)) {
+                            bestC = c;
                             bestGain = gain;
                             tieBreaker = k_u_in;
-                            bestC = c;
                         }
                     }
 
-                    // Move u to bestC
                     commStrength[bestC] += k_u;
                     if (bestC != cu) {
                         comm[u] = bestC;
@@ -333,54 +367,57 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                 }
             } while (moved);
 
-            // Compress community labels to [0..C-1]
             return relabelCommunities(comm);
         }
 
         /**
-         * Quality gain ΔQ when moving a node u (strength k_u) to community C:
-         * <pre>
-         * MODULARITY: ΔQ = k_u,in(C) − γ * (k_u * sumStrength(C) / m2)
-         * CPM       : ΔQ = k_u,in(C) − γ * k_u
-         * </pre>
+         * Compute ΔQ for moving node u to community C.
+         *
+         * @param q quality metric
+         * @param gamma resolution
+         * @param k_u strength of node u
+         * @param k_u_in weight from u to C
+         * @param sumC strength of community C
+         * @return quality improvement (ΔQ)
          */
         private double qualityGain(Quality q, double gamma, double k_u, double k_u_in, double sumC)
         {
-            if (q == Quality.MODULARITY) {
+            if (q == Quality.MODULARITY)
                 return k_u_in - gamma * (k_u * sumC) / Math.max(m2, EPS);
-            } else { // CPM (weighted practical form)
-                return k_u_in - gamma * k_u;
-            }
+            else
+                return k_u_in - gamma * k_u; // CPM
         }
 
         /* --------------------------- Phase 2: Refinement --------------------------- */
 
         /**
-         * Split each community into connected components of its induced subgraph.
-         * Returns a new assignment with communities relabeled and possibly increased in count.
+         * REFINE: Splits each community into connected components of its induced subgraph.
+         *
+         * INPUT:
+         *  @param comm community assignment
+         *
+         * OUTPUT:
+         *  @return refined community assignment with potentially more communities
          */
         int[] refineDisconnected(int[] comm)
         {
             final int n = size();
-            // Build members per community id found in 'comm'
             Map<Integer, List<Integer>> members = new LinkedHashMap<>();
-            for (int i = 0; i < n; i++) members.computeIfAbsent(comm[i], k -> new ArrayList<>()).add(i);
+
+            for (int i = 0; i < n; i++)
+                members.computeIfAbsent(comm[i], k -> new ArrayList<>()).add(i);
 
             int nextId = 0;
             int[] refined = new int[n];
 
-            // For each community, split by connected components using BFS over adjacency filtered to members
             for (List<Integer> group : members.values()) {
-                // quick set membership check
                 Set<Integer> inGroup = new HashSet<>(group);
-
-                // mark unvisited
                 Set<Integer> unvisited = new LinkedHashSet<>(group);
+
                 while (!unvisited.isEmpty()) {
                     int seed = unvisited.iterator().next();
                     unvisited.remove(seed);
 
-                    // BFS component
                     Deque<Integer> dq = new ArrayDeque<>();
                     dq.add(seed);
                     refined[seed] = nextId;
@@ -388,15 +425,16 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
                     while (!dq.isEmpty()) {
                         int u = dq.removeFirst();
                         for (Entry<Integer, Double> e : adjacency.get(u).entrySet()) {
-                            if (e.getValue() <= EPS) continue;
                             int v = e.getKey();
-                            if (inGroup.contains(v) && unvisited.remove(v)) {
+                            if (e.getValue() > EPS &&
+                                inGroup.contains(v) &&
+                                unvisited.remove(v)) {
                                 refined[v] = nextId;
                                 dq.addLast(v);
                             }
                         }
                     }
-                    nextId++; // next component label
+                    nextId++;
                 }
             }
             return refined;
@@ -405,35 +443,39 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
         /* --------------------------- Phase 3: Aggregation --------------------------- */
 
         /**
-         * Aggregate by turning each community into a super-node and summing inter-community edge weights.
-         * Self-loops store intra-community weights. Degrees and total weight are preserved.
+         * AGGREGATION: collapses each community into a super-node and reconstructs adjacency.
+         *
+         * INPUT:
+         *  @param comm community assignment
+         *
+         * OUTPUT:
+         *  @return AggregateResult containing next-level graph and number of communities
          */
         AggregateResult aggregate(int[] comm)
         {
-            // Map old community ids to [0..C-1]
             int[] relabeled = relabelCommunities(comm);
             int C = 0;
             for (int x : relabeled) C = Math.max(C, x + 1);
 
             List<Map<Integer, Double>> newAdj = new ArrayList<>(C);
             for (int i = 0; i < C; i++) newAdj.add(new HashMap<>());
+
             double[] newStrength = new double[C];
+            for (int i = 0; i < relabeled.length; i++)
+                newStrength[relabeled[i]] += strength[i];
 
-            // sum strengths per community
-            for (int i = 0; i < relabeled.length; i++) newStrength[relabeled[i]] += strength[i];
-
-            // Build edges between super-nodes
+            // sum edges between supernodes
             for (int i = 0; i < relabeled.length; i++) {
                 int ci = relabeled[i];
                 for (Entry<Integer, Double> e : adjacency.get(i).entrySet()) {
                     int j = e.getKey();
                     double w = e.getValue();
-                    if (i > j) continue; // handle each undirected pair once
+                    if (i > j) continue;
                     int cj = relabeled[j];
-                    if (ci == cj) {
-                        // intra-community: becomes self-loop
+
+                    if (ci == cj)
                         newAdj.get(ci).merge(ci, w, Double::sum);
-                    } else {
+                    else {
                         newAdj.get(ci).merge(cj, w, Double::sum);
                         newAdj.get(cj).merge(ci, w, Double::sum);
                     }
@@ -443,65 +485,78 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
             return new AggregateResult(new Level(newAdj, newStrength, m2), C);
         }
 
-        /* --------------------------- Utilities --------------------------- */
+        /* --------------------------- Utility Methods --------------------------- */
 
-        /** Compute overall quality of a partition for reporting/selection. */
+        /**
+         * Compute global quality score for MODULARITY or CPM.
+         *
+         * @param comm community assignment
+         * @param gamma resolution
+         * @param q quality function
+         * @return quality score (higher = better)
+         */
         double computeQuality(int[] comm, double gamma, Quality q)
         {
-            if (comm.length == 0 || m2 < EPS) return 0d;
+            if (comm.length == 0 || m2 < EPS) return 0;
 
             int C = 0;
             for (int x : comm) C = Math.max(C, x + 1);
 
             double[] sumStrength = new double[C];
-            double[] internal = new double[C]; // sum of internal weights (count each undirected edge once)
+            double[] internal = new double[C];
 
             for (int i = 0; i < comm.length; i++) {
                 int ci = comm[i];
                 sumStrength[ci] += strength[i];
                 for (Entry<Integer, Double> e : adjacency.get(i).entrySet()) {
                     int j = e.getKey();
-                    if (i <= j && comm[j] == ci) {
+                    if (i <= j && comm[j] == ci)
                         internal[ci] += e.getValue();
-                    }
                 }
             }
 
-            double qsum = 0d;
+            double qsum = 0;
             if (q == Quality.MODULARITY) {
-                for (int c = 0; c < C; c++) {
-                    double in = internal[c];     // total weight of intra edges (counted once)
-                    double tot = sumStrength[c]; // sum of node strengths in c
-                    qsum += (in / m2) - gamma * (tot / m2) * (tot / m2);
-                }
-            } else { // CPM (weighted practical form)
                 for (int c = 0; c < C; c++) {
                     double in = internal[c];
                     double tot = sumStrength[c];
-                    // With ΔQ choice used in local moving, a consistent global score is:
-                    qsum += in - gamma * tot / 2.0; // factor 1/2 because strengths sum to 2m
+                    qsum += (in / m2) - gamma * (tot / m2) * (tot / m2);
                 }
-                // normalize by m (optional). We keep raw CPM here for monotonic comparison.
+            } else { // CPM
+                for (int c = 0; c < C; c++) {
+                    double in = internal[c];
+                    double tot = sumStrength[c];
+                    qsum += in - gamma * tot / 2.0;
+                }
             }
             return qsum;
         }
 
-        /** Relabel community ids to dense [0..C-1]. */
+        /**
+         * Renumber community labels to consecutive integers 0..C-1.
+         *
+         * @param comm original labels
+         * @return compact relabeled array
+         */
         private static int[] relabelCommunities(int[] comm)
         {
             Map<Integer, Integer> map = new LinkedHashMap<>();
             int next = 0;
+
             int[] out = new int[comm.length];
             for (int i = 0; i < comm.length; i++) {
-                int c = comm[i];
-                Integer m = map.get(c);
-                if (m == null) { m = next++; map.put(c, m); }
-                out[i] = m;
+                map.putIfAbsent(comm[i], next++);
+                out[i] = map.get(comm[i]);
             }
             return out;
         }
 
-        //randomizes node order during local moving(Fisher–Yates shuffle)
+        /**
+         * Fisher–Yates shuffle of int array.
+         *
+         * @param a array to shuffle
+         * @param rng random generator
+         */
         private static void shuffle(int[] a, Random rng)
         {
             for (int i = a.length - 1; i > 0; i--) {
@@ -510,10 +565,11 @@ public class LeidenClustering<V, E> implements ClusteringAlgorithm<V>
             }
         }
 
-        /** Holder for aggregation result. */
+        /** Result wrapper for aggregation. */
         static final class AggregateResult {
             final Level nextLevel;
             final int communityCount;
+
             AggregateResult(Level nextLevel, int communityCount) {
                 this.nextLevel = nextLevel;
                 this.communityCount = communityCount;
