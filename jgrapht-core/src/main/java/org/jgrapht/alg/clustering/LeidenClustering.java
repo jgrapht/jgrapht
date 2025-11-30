@@ -1,5 +1,5 @@
 /*
- * (C) 2025 Your Name and Contributors.
+ * (C) 2025 Hanine Gharsalli, xiangyu MAO and Contributors.
  * JGraphT: Leiden community detection (clean, readable, full-feature implementation)
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
