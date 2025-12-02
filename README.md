@@ -1,6 +1,6 @@
 [![JGrapht Master build](https://github.com/jgrapht/jgrapht/actions/workflows/master-workflow.yaml/badge.svg)](https://github.com/jgrapht/jgrapht/actions/workflows/master-workflow.yaml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jgrapht/jgrapht/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jgrapht%22)
-[![Snapshot](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Forg%2Fjgrapht%2Fjgrapht-core%2Fmaven-metadata.xml&style=flat-square&label=snapshots&color=%2315252D)](https://central.sonatype.com/repository/maven-snapshots/org/jgrapht/jgrapht/maven-metadata.xml)
+[![Snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.jgrapht/jgrapht.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/jgrapht/jgrapht-core/)
 [![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
 [![License](https://img.shields.io/badge/license-EPL%202.0-blue.svg)](https://www.eclipse.org/legal/epl-2.0)
 [![Language](http://img.shields.io/badge/language-java-brightgreen.svg)](https://www.java.com/)
@@ -116,9 +116,9 @@ and make sure the snapshot repository is enabled:
 ```xml
 <repositories>
   <repository>
-    <name>Central Portal Snapshots</name>
-    <id>central-portal-snapshots</id>
-    <url>https://central.sonatype.com/repository/maven-snapshots</url>
+    <id>maven-snapshots</id>
+    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    <layout>default</layout>
     <releases>
       <enabled>false</enabled>
     </releases>
@@ -140,7 +140,7 @@ Reading the [change history](HISTORY.md) is always recommended.
 
 ## Documentation
 
-A local copy of the Javadoc HTML files is included in the distribution. The latest version of these files is also available [online](http://www.jgrapht.org/javadoc).
+A local copy of the Javadoc HTML files is included in the distribution. The latest version of these files is also available [on-line](http://www.jgrapht.org/javadoc).
 
 ## Dependencies
 
