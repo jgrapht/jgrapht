@@ -1,3 +1,22 @@
+/*
+ * (C) Copyright 2019-2024, by xiangyu MAO , Hanine Gharsalli and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+
+
 package org.jgrapht.alg.clustering;
 
 import org.jgrapht.Graph;
@@ -7,12 +26,15 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assumptions;
 
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests
+ *
+ * @author xiangyu MAO and Hanine Gharsalli
+ */
 public class LeidenClusteringTest {
 
     /* --------------------------------------------------------------
@@ -437,29 +459,18 @@ public class LeidenClusteringTest {
         }
 
         double resolution = 0.1; // encourage merging into larger communities
-        Optional<Set<Integer>> bad = Optional.empty();
-        int usedSeed = -1;
-        for (int seed = 0; seed < 200000 && bad.isEmpty(); seed++) {
-            LouvainClustering<Integer, DefaultWeightedEdge> louvain =
-                    new LouvainClustering<>(g, resolution, new Random(seed));
-            List<Set<Integer>> louvainClusters = louvain.getClustering().getClusters();
-            bad = louvainClusters.stream().filter(c -> !isConnected(g, c)).findFirst();
-            if (bad.isPresent()) {
-                usedSeed = seed;
-            }
+        // Louvain could produce a disconnected community on this graph; ensure Leiden stays connected
+        int[] seeds = {0, 1, 2, 3, 4, 42, 4242};
+        for (int seed : seeds) {
+            LeidenClustering<Integer, DefaultWeightedEdge> leiden =
+                    new LeidenClustering<>(g, resolution, new Random(seed), LeidenClustering.Quality.MODULARITY);
+            List<Set<Integer>> leidenClusters = leiden.getClustering().getClusters();
+
+            assertTrue(leidenClusters.stream().allMatch(c -> isConnected(g, c)),
+                    "Leiden should return only connected communities");
+            assertFalse(leidenClusters.stream().anyMatch(c -> c.contains(1) && c.contains(4)),
+                    "Leiden should split the disconnected Louvain community");
         }
-
-        Assumptions.assumeTrue(bad.isPresent(),
-                "Did not find a disconnected Louvain community within seed search (200000 seeds)");
-
-        LeidenClustering<Integer, DefaultWeightedEdge> leiden =
-                new LeidenClustering<>(g, resolution, new Random(usedSeed), LeidenClustering.Quality.MODULARITY);
-        List<Set<Integer>> leidenClusters = leiden.getClustering().getClusters();
-
-        assertTrue(leidenClusters.stream().allMatch(c -> isConnected(g, c)),
-                "Leiden should return only connected communities");
-        assertFalse(leidenClusters.stream().anyMatch(c -> c.contains(1) && c.contains(4)),
-                "Leiden should split the disconnected Louvain community");
     }
 
     private static <V, E> boolean isConnected(Graph<V, E> g, Set<V> vertices) {
