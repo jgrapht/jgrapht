@@ -45,16 +45,16 @@ public abstract class GraphTests
     private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
-     * Test whether a graph is linear (path graph)
+     * Test whether a graph is linear (path graph).
      * A graph is linear if:
      * 1. It is undirected.
-     * 2. Every vertex has degree <=2.
-     * 3. The graph is connected
+     * 2. Every vertex has degree <= 2.
+     * 3. The graph is connected.
      * The graph contains no cycles.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
-     * @param <E>the graph edge type
+     * @param <E> the graph edge type
      * @return true if the graph is linear, false otherwise
      */
     public static <V, E> boolean isLinear(Graph<V, E> graph) {
