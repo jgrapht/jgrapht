@@ -58,6 +58,19 @@ public class BFSShortestPath<V, E>
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
     {
+        return getPaths(source, null);
+    }
+
+    /**
+     * Compute all shortest paths from single source vertex if no sink provided.
+     * If sink provided, will compute shortest path from source vertex to target vertex.
+     * @param source - The source vertex.
+     * @param sink - Optional, the target vertex.
+     * @return - The shortest paths if no sink provided.
+     * Returns the shortest path between source and sink if sink is provided.
+     */
+    private SingleSourcePaths<V, E> getPaths(V source, V sink)
+    {
         if (!graph.containsVertex(source)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
@@ -87,6 +100,14 @@ public class BFSShortestPath<V, E>
                     double newDist = distanceAndPredecessorMap.get(v).getFirst() + 1.0;
                     distanceAndPredecessorMap.put(u, Pair.of(newDist, e));
                 }
+
+                /*
+                 * Break the loop if target vertex is found.
+                 */
+                if(u.equals(sink)) {
+                    queue.clear();
+                    break;
+                }
             }
         }
 
@@ -104,16 +125,16 @@ public class BFSShortestPath<V, E>
         if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
-        return getPaths(source).getPath(sink);
+        return getPaths(source, sink).getPath(sink);
     }
 
     /**
      * Find a path between two vertices.
-     * 
+     *
      * @param graph the graph to be searched
      * @param source the vertex at which the path should start
      * @param sink the vertex at which the path should end
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
