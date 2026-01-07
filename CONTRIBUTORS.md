@@ -163,6 +163,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Kirill A. Korinsky](https://github.com/catap)
 - [Pratyush Goyal](https://github.com/Pratyushgoyal66)
 - [tobi-emx](https://github.com/tobi-emx)
+- [Pasha Finkelshteyn](https://github.com/asm0dey)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 

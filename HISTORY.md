@@ -23,6 +23,7 @@ Changes to JGraphT in each version:
     - Improved performance of filtered `AsSubgraph` creation (contributed by Kirill A. Korinsky)
     - Improved performance of `BFSShortestPath` with early termination (contributed by Pratyush Goyal)
     - Improved documentation of `PathValidator` (contributed by tobi-emx)
+    - Added `DagAllPathsCounter` (contributed by Pasha Finkelshteyn)
 
 - **version 1.5.2** (2-May-2023)
     - Prepared release cycle 1.5.2: removed deprecated code, updated dependencies (contributed by Joris Kinable)
