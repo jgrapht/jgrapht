@@ -201,7 +201,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Checks if an edge can be added to a previous path element.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>partialPath</code> - the path from source vertex up to the current vertex.</dd>
+<dd><code>partialPath</code> - the path from source vertex up to the current vertex. Note that 
+                    <code>partialPath</code> can be an empty walk when checking whether a
+                    single edge is a valid path.</dd>
 <dd><code>edge</code> - the new edge to be added to the path.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if edge can be added, <code>false</code> otherwise.</dd>
