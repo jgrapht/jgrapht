@@ -161,6 +161,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Antonia Tsiftsi](https://github.com/toniaTsif)
 - Lena Büttel
 - [Kirill A. Korinsky](https://github.com/catap)
+- [Pratyush Goyal](https://github.com/Pratyushgoyal66)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
