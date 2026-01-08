@@ -164,6 +164,13 @@ public class DOTExporter<V, E>
         out.flush();
     }
 
+    /**
+     * Export a subgraph into DOT format
+     *
+     * @param out the writer to which the graph to be exported
+     * @param subgraphName the name of the subgraph
+     * @param subgraph the subgraph to be exported
+     */
     private void writeSubgraph(PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph) {
         out.println(INDENT + "subgraph " + subgraphName + " {");
         renderSubgraphAttributes(out, subgraphName, subgraph);

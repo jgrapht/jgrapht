@@ -235,8 +235,10 @@ public class DOTExporterTest
         AsSubgraph<Integer, DefaultEdge> sg = new AsSubgraph<>(g, vertices, edges);
         Map<String, Attribute> subgraphAttributes = Map.of(
             "pencolor", DefaultAttribute.createAttribute("transparent"));
-        Map<String, Attribute> clusterAttributes = Map.of(
-            "style", DefaultAttribute.createAttribute("invis"));
+        Map<String, Attribute> clusterAttributes = new LinkedHashMap<>();
+        clusterAttributes.put("label", DefaultAttribute.createAttribute(""));
+        clusterAttributes.put("shape", DefaultAttribute.createAttribute("point"));
+        clusterAttributes.put("style", DefaultAttribute.createAttribute("invis"));
         DOTSubgraph<Integer, DefaultEdge> dotSubgraph = new DOTSubgraph<>(sg, subgraphAttributes, clusterAttributes);
         Map<String, DOTSubgraph<Integer, DefaultEdge>> subgraphs = Map.of("subg", dotSubgraph);
 
@@ -260,7 +262,7 @@ public class DOTExporterTest
             "  4 -- 5;",
             "  5 -- 2;",
             "  subgraph subg {",
-            "    subg [ style=\"invis\" ];",
+            "    subg [ label=\"\" shape=\"point\" style=\"invis\" ];",
             "    pencolor=transparent;",
             "    1;",
             "    2;",
