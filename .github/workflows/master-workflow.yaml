@@ -75,7 +75,7 @@ jobs:
         shell: bash
 
       - name: Publish Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4.7.6
         with:
           token: ${{ secrets.PAGES_TOKEN }}
           branch: gh-pages
