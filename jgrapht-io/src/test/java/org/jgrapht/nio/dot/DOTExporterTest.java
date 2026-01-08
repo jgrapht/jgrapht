@@ -215,4 +215,68 @@ public class DOTExporterTest
         assertEquals(correctResult, res);
     }
 
+    @Test
+    void testWithSubgraph() throws IOException {
+        // Global graph and its attributes
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
+        DefaultEdge e12 = g.addEdge(1, 2);
+        DefaultEdge e13 = g.addEdge(1, 3);
+        g.addEdge(1, 4);
+        DefaultEdge e23 = g.addEdge(2, 3);
+        g.addEdge(4, 5);
+        g.addEdge(5, 2);
+        Map<String, Attribute> graphAttributes = new HashMap<>(1);
+        graphAttributes.put("compound", DefaultAttribute.createAttribute("true"));
+
+        // Subgraph and its attributes
+        Set<Integer> vertices = new LinkedHashSet<>(Arrays.asList(1, 2, 3));
+        Set<DefaultEdge> edges = new LinkedHashSet<>(Arrays.asList(e12, e13, e23));
+        AsSubgraph<Integer, DefaultEdge> sg = new AsSubgraph<>(g, vertices, edges);
+        Map<String, Attribute> subgraphAttributes = Map.of(
+            "pencolor", DefaultAttribute.createAttribute("transparent"));
+        Map<String, Attribute> clusterAttributes = new LinkedHashMap<>();
+        clusterAttributes.put("label", DefaultAttribute.createAttribute(""));
+        clusterAttributes.put("shape", DefaultAttribute.createAttribute("point"));
+        clusterAttributes.put("style", DefaultAttribute.createAttribute("invis"));
+        DOTSubgraph<Integer, DefaultEdge> dotSubgraph = new DOTSubgraph<>(sg, subgraphAttributes, clusterAttributes);
+        Map<String, DOTSubgraph<Integer, DefaultEdge>> subgraphs = Map.of("subg", dotSubgraph);
+
+        // DOT exporter
+        DOTExporter<Integer, DefaultEdge> exporter = new DOTExporter<>();
+        exporter.setGraphAttributeProvider(() -> graphAttributes);
+        exporter.setSubgraphProvider(() -> subgraphs);
+
+        String expected = String.join(System.lineSeparator(),
+        "strict graph G {",
+            "  compound=true;",
+            "  1;",
+            "  2;",
+            "  3;",
+            "  4;",
+            "  5;",
+            "  1 -- 2;",
+            "  1 -- 3;",
+            "  1 -- 4;",
+            "  2 -- 3;",
+            "  4 -- 5;",
+            "  5 -- 2;",
+            "  subgraph subg {",
+            "    subg [ label=\"\" shape=\"point\" style=\"invis\" ];",
+            "    pencolor=transparent;",
+            "    1;",
+            "    2;",
+            "    3;",
+            "    1 -- 2;",
+            "    1 -- 3;",
+            "    2 -- 3;",
+            "  }",
+            "}",
+            "");
+        try (StringWriter outputWriter = new StringWriter()) {
+            exporter.exportGraph(g, outputWriter);
+            assertEquals(expected, outputWriter.toString());
+        }
+    }
+
 }
