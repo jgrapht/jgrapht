@@ -48,7 +48,7 @@ public class FastLookupDirectedSpecifics<V, E>
 
     /**
      * Construct a new fast lookup directed specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
@@ -85,9 +85,9 @@ public class FastLookupDirectedSpecifics<V, E>
     public E getEdge(V sourceVertex, V targetVertex)
     {
         Set<E> edges = touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
-        if (edges == null || edges.isEmpty())
+        if (edges == null || edges.isEmpty()) {
             return null;
-        else {
+        } else {
             return edges.iterator().next();
         }
     }
@@ -95,38 +95,40 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        if (!super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)) {
-            return false;
-        }
-        addToIndex(sourceVertex, targetVertex, e);
+        addToTouchingVertices(sourceVertex, targetVertex, e, null, false);
         return true;
     }
 
     @Override
     public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
     {
-        // first lookup using our own index
-        E edge = getEdge(sourceVertex, targetVertex);
-        if (edge != null) {
-            return false;
-        }
-
-        return addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+        return addToTouchingVertices(sourceVertex, targetVertex, e, null, true) != null;
     }
 
     @Override
     public E createEdgeToTouchingVerticesIfAbsent(
         V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
     {
-        // first lookup using our own index
-        E edge = getEdge(sourceVertex, targetVertex);
-        if (edge != null) {
-            return null;
-        }
+        return addToTouchingVertices(sourceVertex, targetVertex, null, edgeSupplier, true);
+    }
 
-        E e = edgeSupplier.get();
-        addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
-        return e;
+    private E addToTouchingVertices(
+        V source, V target, E edge, Supplier<E> edgeSupplier, boolean addOnlyIfAbsent)
+    {
+        int previousSize = touchingVerticesToEdgeMap.size();
+        Pair<V, V> pair = new Pair<>(source, target);
+
+        Set<E> edgeSet = touchingVerticesToEdgeMap
+            .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
+
+        if (!addOnlyIfAbsent || previousSize < touchingVerticesToEdgeMap.size()) { // new pair added
+            E e = edge != null ? edge : edgeSupplier.get();
+            super.addEdgeToTouchingVertices(source, target, e);
+            edgeSet.add(e);
+            addToIndex(source, target, e);
+            return e;
+        }
+        return null;
     }
 
     @Override
@@ -134,46 +136,43 @@ public class FastLookupDirectedSpecifics<V, E>
     {
         super.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
 
+        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
+        touchingVerticesToEdgeMap.computeIfPresent(vertexPair, (p, edgeSet) -> {
+            edgeSet.remove(e);
+            return !edgeSet.isEmpty() ? edgeSet : null; // remove if empty
+        });
+
         removeFromIndex(sourceVertex, targetVertex, e);
     }
 
     /**
      * Add an edge to the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
+     * @deprecated not used anymore, without replacement
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     protected void addToIndex(V sourceVertex, V targetVertex, E e)
     {
-        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
-        Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
-        if (edgeSet != null)
-            edgeSet.add(e);
-        else {
-            edgeSet = edgeSetFactory.createEdgeSet(sourceVertex);
-            edgeSet.add(e);
-            touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
-        }
+        // TODO: Remove this after next release. Only kept for backward compatibility.
     }
 
     /**
      * Remove an edge from the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
+     * @deprecated not used anymore, without replacement
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
-        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
-        Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
-        if (edgeSet != null) {
-            edgeSet.remove(e);
-            if (edgeSet.isEmpty()) {
-                touchingVerticesToEdgeMap.remove(vertexPair);
-            }
-        }
+        // TODO: Remove this after next release. Only kept for backward compatibility.
+        // Code of this method was in-lined into the only caller and deprecated to be consistent
+        // with addToIndex(V,V,E)
     }
 
 }
