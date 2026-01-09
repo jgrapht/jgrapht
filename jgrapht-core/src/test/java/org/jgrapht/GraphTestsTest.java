@@ -17,6 +17,7 @@
  */
 package org.jgrapht;
 
+import org.jgrapht.alg.connectivity.MedianGraph;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
@@ -564,4 +565,44 @@ public class GraphTestsTest
         }
         return graph;
     }
+    
+    @Test
+    /**
+     * Tests the `isMedian` method with median and non-median graphs.
+     * 
+     * Test Cases:
+     * 1. Median Graph: 
+     *    1 ----- 2
+     *    |       |
+     *    |       |
+     *    3 ----- 4
+     *    |       |
+     *    |       |
+     *    5 ----- 6
+     *    
+     * 2. Non-median graph (K4 - complete graph with 4 vertices).
+     * Representation:
+     *    1 ----- 2
+     *    | \   / |
+     *    |  \ /  |
+     *    |  / \  |
+     *    | /   \ |
+     *    3 ----- 4
+     */
+    public void testIsMedian() {
+        // Test Case 1: Median Graph
+        int[][] edges1 = { { 1, 2 }, { 2, 4 }, { 4, 6 }, { 6, 5 }, { 5, 3 }, { 3, 1 }, { 3, 4 } };
+            Graph<Integer, DefaultEdge> graph1 = getGraph(edges1);
+        // Check that the graph is a median graph
+        assertTrue(MedianGraph.isMedian(graph1), "Expected the graph to be a median graph");
+  
+        // Test Case 2: Non median Graph
+        int[][] edges2 = { { 1, 2 }, { 2, 4 }, { 4, 3 }, { 3, 1 }, { 1, 4 }, { 2, 3 } };
+            Graph<Integer, DefaultEdge> graph2 = getGraph(edges2);
+        // Check that the graph is NOT a median graph
+        assertFalse(MedianGraph.isMedian(graph2), "Expected the graph NOT to be a median graph");
+
+        
+    }
+    
 }
