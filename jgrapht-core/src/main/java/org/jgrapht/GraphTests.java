@@ -865,4 +865,48 @@ public abstract class GraphTests
         }
         return graph;
     }
+    
+    /**
+	 * @param graph the graph reference to check for being linear or not
+     * @param <V>
+     * @param <E>
+     * @param graph
+	 * @return true if the graph is Linear, false otherwise
+	 */
+	public static <V,E> boolean islinearGraph(Graph<V,E> graph) {
+	   	Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+	   	return !new CycleDetector<>(graph).detectCycles();
+	   }
+   /**
+    * 
+    * @param <V>
+    * @param <E>
+    * @param graph
+    * @return true if the graph is chordless 
+	*/
+	public static <V, E> boolean ischordless (Graph<V, E> graph){
+		   List<List<V>> cycles;
+		   if (graph.getType().isDirected()) {
+			   JohnsonSimpleCycles<V, E> johnsonSimpleCycles = new JohnsonSimpleCycles<>(graph);
+			   cycles = johnsonSimpleCycles.findSimpleCycles();
+		   		} 
+		   else {
+			   JohnsonSimpleCycles<V, E> johnsonSimpleCycles = new JohnsonSimpleCycles<>(graph);
+			   cycles = johnsonSimpleCycles.findSimpleCycles();
+		   		}
+		   for (List<V> cycle : cycles) {
+			   for (V sommets_1 : cycle) { 
+				   for (V sommets_2 : cycle) { 
+					   if ( ((cycle.indexOf(sommets_2) < cycle.indexOf(sommets_1) - 1 || cycle.indexOf(sommets_2) > cycle.indexOf(sommets_1) + 1)
+							   	&& !(cycle.indexOf(sommets_1)==cycle.size()-1 && cycle.indexOf(sommets_2)==0)) 
+							   	&& graph.containsEdge(sommets_1, sommets_2)) {
+						   			return false;
+					   						}
+				   					}
+			   					}
+		   					}
+		   return true;
+		   }
+
+
 }
