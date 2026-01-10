@@ -18,6 +18,8 @@
 package org.jgrapht.alg.connectivity;
 
 import java.util.*;
+import java.util.function.Function;
+
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
@@ -104,17 +106,35 @@ public class KConnectivityFlowAlgorithm<V, E>
     
     /**
      * Constructs a k-connectivity algorithm for the given graph.
+     * This 
      *
      * @param graph the input graph
      */
     public KConnectivityFlowAlgorithm(Graph<V, E> graph)
     {
+        this(graph,
+                (g) -> new EdmondsKarpMFImpl<V, E>(g),
+                (g) -> new EdmondsKarpMFImpl<Integer, DefaultEdge>(g));
+    }
+    
+    /**
+     * Constructs a k-connectivity algorithm for the given graph.
+     * Use algorithms given by the suppliers for edge and vertex flow algorithm
+     * A supplier is a function which takes a graph and construct the algorithm which will be used
+     * @param graph the input graph
+     * @param edgeFlowAlgorithmSupplier edge maximum flow algorithm supplier
+     * @param vertexFlowAlgorithmSupplier vertex maximum flow algorithm supplier
+     */
+    public KConnectivityFlowAlgorithm(Graph<V, E> graph
+            , Function<Graph<V, E>, MaximumFlowAlgorithm<V, E>> edgeFlowAlgorithmSupplier
+            , Function<Graph<Integer, DefaultEdge>, MaximumFlowAlgorithm<Integer, DefaultEdge>> vertexFlowAlgorithmSupplier)
+    {
         this.graph = new AsUnweightedGraph<>(graph);
-        this.edgeFlowAlgorithm = new EdmondsKarpMFImpl<>(this.graph);
-
+        this.edgeFlowAlgorithm = edgeFlowAlgorithmSupplier.apply(this.graph);
+       
         this.vertexNetwork = buildVertexNetwork(graph);
-        this.vertexFlowAlgorithm = new EdmondsKarpMFImpl<>(this.vertexNetwork);
-        
+        this.vertexFlowAlgorithm = vertexFlowAlgorithmSupplier.apply(this.vertexNetwork);
+       
         this.setMinDegreeVertex();
     }
 
@@ -123,7 +143,7 @@ public class KConnectivityFlowAlgorithm<V, E>
      *
      * @return the edge connectivity of the graph
      */
-    public int computeEdgeConnectivity()
+    public int getEdgeConnectivity()
     {
         if (edgeConnectivity == -1) {
             edgeConnectivity = graph.getType().isDirected()
@@ -156,9 +176,9 @@ public class KConnectivityFlowAlgorithm<V, E>
      * @param k 
      * @return if the the graph is k edge connect or not
      */
-    public boolean isKEdgeConnect(int k)
+    public boolean isKEdgeConnected(int k)
     {
-        return k <= computeEdgeConnectivity();
+        return k <= getEdgeConnectivity();
     }
     
     /**
@@ -167,11 +187,11 @@ public class KConnectivityFlowAlgorithm<V, E>
      * @param k
      * @return if the the graph is k vertex connect or not
      */
-    public boolean isKVertexConnect(int k)
+    public boolean isKVertexConnected(int k)
     {
         return k <= computeVertexConnectivity();
     }
-    
+
     private int computeConnectivityFromNonNeighbors(V minDegreeVertex)
     {
         int minConnectivity = Integer.MAX_VALUE;
