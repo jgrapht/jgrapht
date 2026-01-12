@@ -100,10 +100,10 @@ public class GonAlgorithmTest
 
         GonHeuristic<Integer, DefaultEdge> gon =
             new GonHeuristic<>(new Random());
-        Set<Integer> C = gon.getCenters(graph, 1);
-        assertEquals(1, C.size());
-        assertTrue(C.contains(1) || C.contains(2));
-        assertFalse(C.contains(5)); // is the weight, not a vertex
+        Set<Integer> centers = gon.getCenters(graph, 1);
+        assertEquals(1, centers.size());
+        assertTrue(centers.contains(1) || centers.contains(2));
+        assertFalse(centers.contains(5)); // is the weight, not a vertex
     }
 
     /**
@@ -117,10 +117,10 @@ public class GonAlgorithmTest
 
         GonHeuristic<Integer, DefaultEdge> gon =
             new GonHeuristic<>(new Random());
-        Set<Integer> C = gon.getCenters(graph, 2);
-        assertEquals(2, C.size());
-        assertTrue(C.contains(1) && C.contains(2));
-        assertFalse(C.contains(5)); // is the weight, not a vertex
+        Set<Integer> centers = gon.getCenters(graph, 2);
+        assertEquals(2, centers.size());
+        assertTrue(centers.contains(1) && centers.contains(2));
+        assertFalse(centers.contains(5)); // is the weight, not a vertex
     }
 
     /**
@@ -155,8 +155,8 @@ public class GonAlgorithmTest
 
         GonHeuristic<Integer, DefaultWeightedEdge> gon =
             new GonHeuristic<>(new Random());
-        Set<Integer> C = gon.getCenters(graph, 1);
-        assertEquals(5, covRadius((Graph<Integer, DefaultWeightedEdge>)graph, C));
+        Set<Integer> centers = gon.getCenters(graph, 1);
+        assertEquals(5, covRadius((Graph<Integer, DefaultWeightedEdge>)graph, centers));
     }
 
     /**
@@ -175,9 +175,9 @@ public class GonAlgorithmTest
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0));
 
-        var C = gon.getCenters(graph, 2);
-        assertTrue(C.contains(4));  // vertex 4 is the farthest from {0}
-        assertEquals(7, covRadius(graph, C));   // covering radius is 7
+        var centers = gon.getCenters(graph, 2);
+        assertTrue(centers.contains(4));  // vertex 4 is the farthest from {0}
+        assertEquals(7, covRadius(graph, centers));   // covering radius is 7
     }
 
     /**
@@ -195,9 +195,9 @@ public class GonAlgorithmTest
         };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4));
-        var C = gon.getCenters(graph, 3);
-        assertTrue(C.contains(1));  // vertex 1 is the farthest from {0, 4}
-        assertEquals(3, covRadius(graph, C));   // covering radius is 2
+        var centers = gon.getCenters(graph, 3);
+        assertTrue(centers.contains(1));  // vertex 1 is the farthest from {0, 4}
+        assertEquals(3, covRadius(graph, centers));   // covering radius is 2
     }
 
     /**
@@ -215,9 +215,9 @@ public class GonAlgorithmTest
         };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4, 1));
-        var C = gon.getCenters(graph, 4);
-        assertTrue(C.contains(3));  // vertex 3 is the farthest from {0, 4, 1}
-        assertEquals(1, covRadius(graph, C));   // covering radius is 1
+        var centers = gon.getCenters(graph, 4);
+        assertTrue(centers.contains(3));  // vertex 3 is the farthest from {0, 4, 1}
+        assertEquals(1, covRadius(graph, centers));   // covering radius is 1
     }
 
     /**
@@ -229,30 +229,30 @@ public class GonAlgorithmTest
     {
         String filePath = getClass().getResource("/kroA200.tsp").getPath();
         int n = 200;
-        Graph<Integer, DefaultWeightedEdge> G = loadFromTSPLIB(filePath, n);
+        Graph<Integer, DefaultWeightedEdge> graph = loadFromTSPLIB(filePath, n);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(new Random());
         
         // for k=5
-        var C = gon.getCenters(G, 5);
-        double r = covRadius(G, C);
+        var centers = gon.getCenters(graph, 5);
+        double r = covRadius(graph, centers);
         // the optimal solution is 911.41, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 911.41, "For k=5, covering radius is " + r);
 
         // for k=10
-        C = gon.getCenters(G, 10);
-        r = covRadius(G, C);
+        centers = gon.getCenters(graph, 10);
+        r = covRadius(graph, centers);
         // the optimal solution is 598.81, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 598.81, "For k=10, covering radius is " + r);
 
         // for k=20
-        C = gon.getCenters(G, 20);
-        r = covRadius(G, C);
+        centers = gon.getCenters(graph, 20);
+        r = covRadius(graph, centers);
         // the optimal solution is 389.30, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 389.30, "For k=20, covering radius is " + r);
 
         // for k=40
-        C = gon.getCenters(G, 40);
-        r = covRadius(G, C);
+        centers = gon.getCenters(graph, 40);
+        r = covRadius(graph, centers);
         // the optimal solution is 258.25, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 258.25, "For k=40, covering radius is " + r);
     }
@@ -298,7 +298,7 @@ public class GonAlgorithmTest
     }
 
     static Graph<Integer, DefaultWeightedEdge> loadFromTSPLIB(String filePath, int n) throws IOException{
-        var G = GraphTypeBuilder
+        var graph = GraphTypeBuilder
             .<Integer, DefaultWeightedEdge>undirected()
             .allowingMultipleEdges(false)
             .allowingSelfLoops(false)
@@ -323,10 +323,10 @@ public class GonAlgorithmTest
                     int dx = coordinates[i][0] - coordinates[j][0];
                     int dy = coordinates[i][1] - coordinates[j][1];
                     double dist = Math.sqrt(dx * dx + dy * dy);
-                    Graphs.addEdgeWithVertices(G, i, j, dist);
+                    Graphs.addEdgeWithVertices(graph, i, j, dist);
                 }
             }
             scanner.close();
-            return G;
+            return graph;
     }
 }

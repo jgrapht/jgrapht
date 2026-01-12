@@ -22,7 +22,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 
 /**
- * An algorithm for solving the <a href="https://encyclopedia.pub/entry/52164"> vertex k-center problem</a>.
+ * An algorithm for solving the <a href="https://encyclopedia.pub/entry/52164"> vertex $k$-center problem</a>.
  * 
  * <p>
  * Center location problems are a class of optimization problems in graph theory and operations research that aims
@@ -41,6 +41,7 @@ public interface CentersLocationAlgorithm<V, E>
      * Computes a set of centers.
      *
      * @param graph the input graph.
+     * @param k the number of centers to locate.
      * @return a set of centes.
      */
     Set<V> getCenters(Graph<V, E> graph, int k);

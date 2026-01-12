@@ -28,23 +28,23 @@ import org.jgrapht.Graphs;
 import org.jgrapht.util.VertexToIntegerMapping;
 
 /**
- * The Gon heuristic algorithm for the vertex k-center problem.
+ * The Gon heuristic algorithm for the vertex $k$-center problem.
  *
  * <p>
- * The vertex k-center problem is an NP-hard combinatorial optimization problem that receives a complete
- * edge-weighted undirected graph G = (V, E, w), and a positive integer k. The goal is to find a subset C of V such
- * that |C| = k and the maximum distance from any vertex in V to the nearest vertex in C is minimized.
- * C is called the set of centers. The vertex k-center problem has applications in clustering and facility location.
+ * The vertex $k$-center problem is an NP-hard combinatorial optimization problem that receives a complete
+ * edge-weighted undirected graph $G = (V, E, w)$, and a positive integer $k$. The goal is to find a subset $C$ of $V$ such
+ * that $|C| = k$ and the maximum distance from any vertex in $V$ to the nearest vertex in $C$ is minimized.
+ * $C$ is called the set of centers. The vertex $k$-center problem has applications in clustering and facility location.
  * </p>
  *
  * <p>
- * The Gon heuristic is a classic heuristic approximation algorithm for the vertex k-center problem. 
- * It works in a straightforward way. First, a vertex from the input graph is chosen randomly and added to the set of centers C. 
- * Then, iteratively, the farthest vertex from V to C is chosen and added to C. This process is repeated until |C| = k.
+ * The Gon heuristic is a classic heuristic approximation algorithm for the vertex $k$-center problem. 
+ * It works in a straightforward way. First, a vertex from the input graph is chosen randomly and added to the set of centers $C$. 
+ * Then, iteratively, the farthest vertex from $V$ to $C$ is chosen and added to $C$. This process is repeated until $|C| = k$.
  * 
- * This algorithm provides a guarantee to compute solutions for the vertex k-center problem no more than
- * 2-times optimum. According to the literature, this is the best approximation factor (under P!=NP).
- * The implementation chooses the first vertex randomly. Alternatively, an existing set of centers C with fewer than k centers
+ * This algorithm provides a guarantee to compute solutions for the vertex $k$-center problem no more than
+ * 2-times optimum. According to the literature, this is the best approximation factor (under $P \neq NP$).
+ * The implementation chooses the first vertex randomly. Alternatively, an existing set of centers $C$ with fewer than $k$ centers
  * can be provided to be augmented. In this implementation, ties are broken by choosing the vertex with the lowest index.
  * </p>
  *
@@ -169,32 +169,33 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
             initialCenters.add(v);
         }
 
-        // initialize set of centers
-        Set<Integer> C = initPartialC();
-        Set<Integer> Ccomp = graph.vertexSet().stream().map(v->mapping.getVertexMap().get(v)).collect(Collectors.toSet());
-        Ccomp.removeAll(C);
+        // initialize set of centers C
+        Set<Integer> centers = initPartialC();
+        // complement of C (i.e. C')
+        Set<Integer> comp = graph.vertexSet().stream().map(v->mapping.getVertexMap().get(v)).collect(Collectors.toSet());
+        comp.removeAll(centers);
 
         // init distances from vertices to the set of centers
-        initDistances(C, Ccomp);
+        initDistances(centers, comp);
 
         // compute centers
-        while (C.size()<k) {
+        while (centers.size()<k) {
 
             // Find the index of the farthest vertex.
-            int v = getFarthest(Ccomp);
+            int v = getFarthest(comp);
 
             // remove from C'
-            Ccomp.remove(v);
+            comp.remove(v);
 
             // insert to centers
-            C.add(v);
+            centers.add(v);
             
             // Update distances from vertices to the centers
-            updateDistances(v, Ccomp);
+            updateDistances(v, comp);
         }
 
         // Map the set of centers from integer values to V values
-        return C.stream().map(i->mapping.getIndexList().get(i)).collect(Collectors.toSet());
+        return centers.stream().map(i->mapping.getIndexList().get(i)).collect(Collectors.toSet());
     }
 
     /**
@@ -204,9 +205,9 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
      */
     private Set<Integer> initPartialC()
     {
-        Set<Integer> C = initialCenters.stream().map(
+        Set<Integer> centers = initialCenters.stream().map(
             v->mapping.getVertexMap().get(v)).collect(Collectors.toSet());
-        return C;
+        return centers;
     }
 
 
@@ -237,14 +238,14 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
     /**
      * Find the index of the vertex in C' which is farthest from C.
      *
-     * @param Ccomp The set of vertices that are not centers.
+     * @param comp the set of vertices that are not centers (i.e. C').
      * @return the index of the vertex which is farthest from the set of centers.
      */
-    private int getFarthest(Set<Integer> Ccomp)
+    private int getFarthest(Set<Integer> comp)
     {
         int farthest = -1;
         double maxDist = -1;
-        for (int v : Ccomp) {
+        for (int v : comp) {
             double dist = distances[v];
             if (dist > maxDist) {
                 farthest = v;
@@ -257,15 +258,15 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
     /**
      * Initialize distances from the vertices to the initial set of centers
      *
-     * @param C a partial set of centers. {@code initialCenters}.
-     * @param Ccomp the vertices that are not centers (the complement of C).
+     * @param centers a partial set of centers. {@code initialCenters}.
+     * @param comp the vertices that are not centers (i.e. the complement of C).
      */
-    private void initDistances(Set<Integer> C, Set<Integer> Ccomp)
+    private void initDistances(Set<Integer> centers, Set<Integer> comp)
     {
         distances = new double[mapping.getVertexMap().size()];
         Arrays.fill(distances, Double.POSITIVE_INFINITY);
-        for (int v : Ccomp) {
-            for (int c : C) {
+        for (int v : comp) {
+            for (int c : centers) {
                 distances[v] = Math.min(distances[v], allDist[v][c]);
             }
         }
@@ -275,11 +276,11 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
      * Update the distances from the vertices to the partial set of centers.
      *
      * @param v the last vertex added to the set of centers.
-     * @param Ccomp the vertices that are not centers.
+     * @param comp the vertices that are not centers.
      */
-    private void updateDistances(int v, Set<Integer> Ccomp)
+    private void updateDistances(int v, Set<Integer> comp)
     {
-        for (int i : Ccomp) {
+        for (int i : comp) {
             distances[i] = Math.min(allDist[v][i], distances[i]);
         }
     }

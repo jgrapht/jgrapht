@@ -28,8 +28,8 @@ import org.jgrapht.alg.interfaces.CentersLocationAlgorithm;
  * This class provides implementations of utilities for Centers Location classes.
  * </p>
  *
- * @param <V> the graph vertex type
- * @param <E> the graph edge type
+ * @param <V> the graph vertex type.
+ * @param <E> the graph edge type.
  *
  * @author Jose Alejandro Cornejo-Acosta
  */
