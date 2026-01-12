@@ -76,7 +76,7 @@
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
         <jmh.version>1.37</jmh.version>
-        <junit.version>5.10.1</junit.version>
+        <junit.version>6.0.2</junit.version>
         <junit.platform.version>1.10.1</junit.platform.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
