@@ -50,6 +50,9 @@ import org.jgrapht.util.VertexToIntegerMapping;
  *
  * <p>
  * The description of this algorithm can be consulted on: <br>
+ * 
+ * T. F. Gonzalez Clustering to minimize the maximum intercluster distance. Theor. Comput. Sci. 1985, 38, 293-306.
+ * 
  * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández, J. C. Pérez-Sansalvador and N. Lakouari, 
  * "Approximation Algorithms for the Vertex K-Center Problem: Survey and Experimental Evaluation," in IEEE Access, vol. 7, 
  * pp. 109228-109245, 2019, doi: 10.1109/ACCESS.2019.2933875.
