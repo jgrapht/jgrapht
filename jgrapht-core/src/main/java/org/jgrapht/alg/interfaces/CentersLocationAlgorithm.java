@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2026, by Jose Alejandro Cornejo-Acosta and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,7 +25,7 @@ import org.jgrapht.Graph;
  * An algorithm for solving the <a href="https://encyclopedia.pub/entry/52164"> vertex k-center problem</a>.
  * 
  * <p>
- * Center location problems are a class of optimization problems in graph theory and operations research that involve
+ * Center location problems are a class of optimization problems in graph theory and operations research that aims
  * selecting optimal locations for facilities (centers) to minimize the distance or cost for serving a set of
  * demand points or clients (vertices) in a graph.
  * 
