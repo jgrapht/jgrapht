@@ -615,8 +615,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends E&gt;&nbsp;edges)</pre>
 <div class="block">Adds a subset of the edges of the specified source graph to the specified destination graph.
  The behavior of this operation is undefined if either of the graphs is modified while the
- operation is in progress. <a href="#addEdgeWithVertices(org.jgrapht.Graph,V,V)"><code>addEdgeWithVertices(org.jgrapht.Graph&lt;V, E&gt;, V, V)</code></a> is used for the transfer, so source
- vertexes will be added automatically to the target graph.</div>
+ operation is in progress. Source vertices will be added automatically to
+ the target graph.  Edge weights will be copied from the source except when the
+ edge already exists in the destination.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>V</code> - the graph vertex type</dd>
