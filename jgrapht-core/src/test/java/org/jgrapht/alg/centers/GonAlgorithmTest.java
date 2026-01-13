@@ -156,7 +156,7 @@ public class GonAlgorithmTest
         GonHeuristic<Integer, DefaultWeightedEdge> gon =
             new GonHeuristic<>(new Random());
         Set<Integer> centers = gon.getCenters(graph, 1);
-        assertEquals(5, covRadius((Graph<Integer, DefaultWeightedEdge>)graph, centers));
+        assertEquals(5, covRadius(graph, centers));
     }
 
     /**
@@ -221,7 +221,11 @@ public class GonAlgorithmTest
     }
 
     /**
-     * Test with instance kroA200 from TSPLIB, whose optimal solution for k=5 is known to be 911.41
+     * Test with instance kroA200 from TSPLIB, whose optimal solution for different values of k is
+     * known and reported in:
+     *  * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández, J. C. Pérez-Sansalvador and N. Lakouari, 
+     * "Approximation Algorithms for the Vertex K-Center Problem: Survey and Experimental Evaluation," in IEEE Access, vol. 7, 
+     * pp. 109228-109245, 2019, doi: 10.1109/ACCESS.2019.2933875.
      * 
      */
     @Test
