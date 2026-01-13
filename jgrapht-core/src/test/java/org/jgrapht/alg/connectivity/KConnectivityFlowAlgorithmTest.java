@@ -62,7 +62,7 @@ public class KConnectivityFlowAlgorithmTest
 
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.computeVertexConnectivity(), "Vertex connectivity of a triangle graph should be 2.");
+        assertEquals(2, algo.getVertexConnectivity(), "Vertex connectivity of a triangle graph should be 2.");
     }
 
     @Test
@@ -117,7 +117,7 @@ public class KConnectivityFlowAlgorithmTest
         }
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(3, algo.computeVertexConnectivity(), "Vertex connectivity of a this cycle graph should be 3.");
+        assertEquals(3, algo.getVertexConnectivity(), "Vertex connectivity of a this cycle graph should be 3.");
     }
 
     @Test
@@ -149,7 +149,7 @@ public class KConnectivityFlowAlgorithmTest
 
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(1, algo.computeVertexConnectivity(), "Vertex connectivity of a directed triangle graph should be 1.");
+        assertEquals(1, algo.getVertexConnectivity(), "Vertex connectivity of a directed triangle graph should be 1.");
     }
 
     @Test
@@ -203,6 +203,6 @@ public class KConnectivityFlowAlgorithmTest
         
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.computeVertexConnectivity(), "Vertex connectivity of a large directed cycle graph should be 2.");
+        assertEquals(2, algo.getVertexConnectivity(), "Vertex connectivity of a large directed cycle graph should be 2.");
     }
 }
