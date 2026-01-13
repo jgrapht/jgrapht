@@ -158,7 +158,7 @@ public class KConnectivityFlowAlgorithm<V, E>
      *
      * @return the vertex connectivity of the graph
      */
-    public int computeVertexConnectivity()
+    public int getVertexConnectivity()
     {
         if(vertexConnectivity == -1)
         {
@@ -171,7 +171,7 @@ public class KConnectivityFlowAlgorithm<V, E>
     }
     
     /**
-     * Return if the graph is {@code k} edge connected, use {@link #computeEdgeConnectivity() Compute Edge Connectivity Edge}
+     * Return if the graph is {@code k} edge connected, use {@link #getEdgeConnectivity() Compute Edge Connectivity Edge}
      * methods to have the result
      * @param k 
      * @return if the the graph is k edge connect or not
@@ -189,7 +189,7 @@ public class KConnectivityFlowAlgorithm<V, E>
      */
     public boolean isKVertexConnected(int k)
     {
-        return k <= computeVertexConnectivity();
+        return k <= getVertexConnectivity();
     }
 
     private int computeConnectivityFromNonNeighbors(V minDegreeVertex)

@@ -46,7 +46,7 @@ public class KConnectivityFlowAlgorithmTest
 
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.computeEdgeConnectivity(), "Edge connectivity of a triangle graph should be 2.");
+        assertEquals(2, algo.getEdgeConnectivity(), "Edge connectivity of a triangle graph should be 2.");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class KConnectivityFlowAlgorithmTest
 
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(3, algo.computeEdgeConnectivity(), "Edge connectivity of a large cycle graph should be 3.");
+        assertEquals(3, algo.getEdgeConnectivity(), "Edge connectivity of a large cycle graph should be 3.");
     }
 
     @Test
@@ -133,7 +133,7 @@ public class KConnectivityFlowAlgorithmTest
 
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(1, algo.computeEdgeConnectivity(), "Edge connectivity of a directed triangle graph should be 1.");
+        assertEquals(1, algo.getEdgeConnectivity(), "Edge connectivity of a directed triangle graph should be 1.");
     }
 
     @Test
@@ -176,7 +176,7 @@ public class KConnectivityFlowAlgorithmTest
 
         KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.computeEdgeConnectivity(), "Edge connectivity of a large directed cycle graph should be 1.");
+        assertEquals(2, algo.getEdgeConnectivity(), "Edge connectivity of a large directed cycle graph should be 1.");
     }
 
     @Test
