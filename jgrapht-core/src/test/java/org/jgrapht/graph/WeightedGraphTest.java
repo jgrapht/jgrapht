@@ -98,4 +98,25 @@ public class WeightedGraphTest
         assertEquals(2, g.getEdgeTarget(e));
     }
 
+    @Test
+    public void testCloneWithCustomEdgeType()
+    {
+        // from https://github.com/jgrapht/jgrapht/issues/1233
+        DirectedWeightedMultigraph<Integer, String> graph1 =
+            new DirectedWeightedMultigraph<>(String.class);
+        graph1.addVertex(1);
+        graph1.addVertex(2);
+        graph1.addVertex(3);
+        String edge1 = "Edge1";
+        graph1.addEdge(1,2, edge1);
+
+        DirectedWeightedMultigraph<Integer, String> graph2 =
+            (DirectedWeightedMultigraph<Integer, String>) graph1.clone();
+        assertEquals(graph1, graph2);
+
+        graph1.setEdgeWeight(edge1, 15.0);
+        DirectedWeightedMultigraph<Integer, String> graph3 =
+            (DirectedWeightedMultigraph<Integer, String>) graph1.clone();
+        assertEquals(graph1, graph3);        
+    }
 }
