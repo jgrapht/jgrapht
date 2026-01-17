@@ -19,7 +19,7 @@ package org.jgrapht.util;
 
 /**
  * Math Utilities.
- * 
+ *
  * @author Assaf Lehr
  */
 public class MathUtil
@@ -27,7 +27,7 @@ public class MathUtil
 
     /**
      * Calculate the factorial of $n$.
-     * 
+     *
      * @param n the input number
      * @return the factorial
      */
@@ -38,6 +38,17 @@ public class MathUtil
             multi = multi * i;
         }
         return multi;
+    }
+
+    /**
+     * Calculate the arithmetic progression summing up the natural numbers from 1 to $n$.
+     *
+     * @param n the input number
+     * @return the sum of all natural numbers &lt;= n
+     */
+    public static long naturalNumberSumGauss(int n)
+    {
+        return n * (n + 1) / 2;
     }
 
     /**

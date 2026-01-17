@@ -498,7 +498,7 @@
                             <linkXRef>false</linkXRef>
                             <sourceDirectories>${project.basedir}</sourceDirectories>
                             <includes>src/main/**/*.java,src/test/**/*.java,**/*.xml</includes>
-                            <excludes>**/target/**</excludes>
+                            <excludes>**/target/**,.idea/**</excludes>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         </configuration>
                     </plugin>

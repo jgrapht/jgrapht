@@ -17,9 +17,13 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.cycle.CycleDetector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
 
 /**
  * An implementation of Harry Hsu's
@@ -110,31 +114,52 @@ public class TransitiveReduction
     }
 
     /**
-     * This method will remove all transitive edges from the graph passed as input parameter.
-     *
+     * This method will remove all transitive edges from the DAG (directed acyclic graph) graph passed as input
+     * parameter. If you need to transitively reduce a cyclic graph, please use {@link CyclicTransitiveReduction}
+     * instead.
      * <p>
      * You may want to clone the graph before, as transitive edges will be pitilessly removed.
      * </p>
-     *
-     * e.g.
-     *
-     * <pre>
-     * {
-     *     &#64;code DirectedGraph&lt;V, T&gt; soonToBePrunedDirectedGraph;
-     *
-     *     TransitiveReduction.INSTANCE.reduce(soonToBePrunedDirectedGraph);
-     *
-     *     // pruned !
-     * }
+     * e.g. <pre>
+     * DirectedGraph&lt;V, T&gt; soonToBePrunedDirectedGraph;
+     * TransitiveReduction.INSTANCE.reduce(soonToBePrunedDirectedGraph);
      * </pre>
      *
      * @param directedGraph the directed graph that will be reduced transitively
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @throws IllegalArgumentException if the given directed graph contains cycles, because this algorithm only works
+     *                                  for acyclic graphs
      */
     public <V, E> void reduce(final Graph<V, E> directedGraph)
     {
+        reduce(directedGraph, true);
+    }
+
+    /**
+     * This method is just a special version of {@link #reduce(Graph)} with the additional option to avoid checking the
+     * input graph for cycles. It is package-scoped in order to allow other classes in the same package, namely
+     * {@link CyclicTransitiveReduction}, to avoid a cyclicity check if they have checked the graph already by
+     * themselves and know it to be acyclic.
+     *
+     * @param directedGraph the directed graph that will be reduced transitively
+     * @param checkForCycles set to {@code false} if you know the graph is acyclic and want to avoid the check which
+     *                       occurs by default
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @throws IllegalArgumentException if <i>checkForCycles</i> is {@code true} and the given directed graph contains
+     *                                  cycles, because this algorithm only works for acyclic graphs
+     */
+    <V, E> void reduce(final Graph<V, E> directedGraph, final boolean checkForCycles)
+    {
         GraphTests.requireDirected(directedGraph, "Graph must be directed");
+
+        if (checkForCycles && new CycleDetector<>(directedGraph).detectCycles()) {
+            throw new IllegalArgumentException(
+              "This algorithm only works properly for DAGs, but the given graph contains cycles. " +
+                "Please use class CyclicTransitiveReduction instead."
+            );
+        }
 
         final List<V> vertices = new ArrayList<>(directedGraph.vertexSet());
 
