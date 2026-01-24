@@ -6028,6 +6028,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Get edge attributes</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#getEdgeConnectivity()">getEdgeConnectivity()</a></span> - Method in class org.jgrapht.alg.connectivity.<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity">KConnectivityFlowAlgorithm</a></dt>
+<dd>
+<div class="block">Computes the edge connectivity of the graph.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/graph/specifics/DirectedSpecifics.html#getEdgeContainer(V)">getEdgeContainer(V)</a></span> - Method in class org.jgrapht.graph.specifics.<a href="org.jgrapht.core/org/jgrapht/graph/specifics/DirectedSpecifics.html" title="class in org.jgrapht.graph.specifics">DirectedSpecifics</a></dt>
 <dd>
 <div class="block">Get the edge container for specified vertex.</div>
@@ -8286,6 +8290,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Get vertex attributes</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#getVertexConnectivity()">getVertexConnectivity()</a></span> - Method in class org.jgrapht.alg.connectivity.<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity">KConnectivityFlowAlgorithm</a></dt>
+<dd>
+<div class="block">Computes the vertex connectivity of the graph.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/isomorphism/IsomorphicGraphMapping.html#getVertexCorrespondence(V,boolean)">getVertexCorrespondence(V, boolean)</a></span> - Method in class org.jgrapht.alg.isomorphism.<a href="org.jgrapht.core/org/jgrapht/alg/isomorphism/IsomorphicGraphMapping.html" title="class in org.jgrapht.alg.isomorphism">IsomorphicGraphMapping</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/graph/DefaultGraphMapping.html#getVertexCorrespondence(V,boolean)">getVertexCorrespondence(V, boolean)</a></span> - Method in class org.jgrapht.graph.<a href="org.jgrapht.core/org/jgrapht/graph/DefaultGraphMapping.html" title="class in org.jgrapht.graph">DefaultGraphMapping</a></dt>
@@ -10321,10 +10329,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Checks whether the <code>graph</code> is a $K_5$ subdivision.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#isKEdgeConnected(int)">isKEdgeConnected(int)</a></span> - Method in class org.jgrapht.alg.connectivity.<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity">KConnectivityFlowAlgorithm</a></dt>
+<dd>
+<div class="block">Return if the graph is <code>k</code> edge connected, use <a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#getEdgeConnectivity()"><code>Compute Edge Connectivity Edge</code></a>
+ methods to have the result</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/GraphTests.html#isKuratowskiSubdivision(org.jgrapht.Graph)">isKuratowskiSubdivision(Graph&lt;V, E&gt;)</a></span> - Static method in class org.jgrapht.<a href="org.jgrapht.core/org/jgrapht/GraphTests.html" title="class in org.jgrapht">GraphTests</a></dt>
 <dd>
 <div class="block">Checks whether the <code>graph</code> is a <a href="https://en.wikipedia.org/wiki/Kuratowski%27s_theorem#Kuratowski_subgraphs">Kuratowski
  subdivision</a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#isKVertexConnected(int)">isKVertexConnected(int)</a></span> - Method in class org.jgrapht.alg.connectivity.<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity">KConnectivityFlowAlgorithm</a></dt>
+<dd>
+<div class="block">Return if the graph is <code>k</code> vertex connected, use <code>Compute Edge Connectivity Edge</code>
+ methods to have the result</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/MatchingAlgorithm.Matching.html#isMatched(V)">isMatched(V)</a></span> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/MatchingAlgorithm.Matching.html" title="interface in org.jgrapht.alg.interfaces">MatchingAlgorithm.Matching</a></dt>
 <dd>
@@ -10813,6 +10831,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/scoring/KatzCentrality.html#%3Cinit%3E(org.jgrapht.Graph,double,java.util.function.ToDoubleFunction,int,double)">KatzCentrality(Graph&lt;V, E&gt;, double, ToDoubleFunction&lt;V&gt;, int, double)</a></span> - Constructor for class org.jgrapht.alg.scoring.<a href="org.jgrapht.core/org/jgrapht/alg/scoring/KatzCentrality.html" title="class in org.jgrapht.alg.scoring">KatzCentrality</a></dt>
 <dd>
 <div class="block">Create and execute an instance of KatzCentrality.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity"><span class="typeNameLink">KConnectivityFlowAlgorithm</span></a>&lt;<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">V</a>,&#8203;<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">E</a>&gt; - Class in <a href="org.jgrapht.core/org/jgrapht/alg/connectivity/package-summary.html">org.jgrapht.alg.connectivity</a></dt>
+<dd>
+<div class="block">This class implements the computation, for a graph, of both 
+ <a href="https://en.wikipedia.org/wiki/K-edge-connected_graph"> edge connectivity and </a>
+ <a href="https://en.wikipedia.org/wiki/K-vertex-connected_graph"> vertex connectivity </a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#%3Cinit%3E(org.jgrapht.Graph)">KConnectivityFlowAlgorithm(Graph&lt;V, E&gt;)</a></span> - Constructor for class org.jgrapht.alg.connectivity.<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity">KConnectivityFlowAlgorithm</a></dt>
+<dd>
+<div class="block">Constructs a k-connectivity algorithm for the given graph.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html#%3Cinit%3E(org.jgrapht.Graph,java.util.function.Function,java.util.function.Function)">KConnectivityFlowAlgorithm(Graph&lt;V, E&gt;, Function&lt;Graph&lt;V, E&gt;, MaximumFlowAlgorithm&lt;V, E&gt;&gt;, Function&lt;Graph&lt;Integer, DefaultEdge&gt;, MaximumFlowAlgorithm&lt;Integer, DefaultEdge&gt;&gt;)</a></span> - Constructor for class org.jgrapht.alg.connectivity.<a href="org.jgrapht.core/org/jgrapht/alg/connectivity/KConnectivityFlowAlgorithm.html" title="class in org.jgrapht.alg.connectivity">KConnectivityFlowAlgorithm</a></dt>
+<dd>
+<div class="block">Constructs a k-connectivity algorithm for the given graph.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html#kittellGraph()">kittellGraph()</a></span> - Static method in class org.jgrapht.generate.<a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html" title="class in org.jgrapht.generate">NamedGraphGenerator</a></dt>
 <dd>&nbsp;</dd>
