@@ -1,6 +1,7 @@
 module:org.jgrapht.core
 org.jgrapht
 org.jgrapht.alg
+org.jgrapht.alg.centers
 org.jgrapht.alg.clique
 org.jgrapht.alg.clustering
 org.jgrapht.alg.color
