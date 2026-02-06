@@ -111,6 +111,7 @@ import java.util.stream.*;
  * @param <E> the graph edge type
  *
  * @author CHEN Kui
+ * @author Andriy Palamarchuk
  */
 public class AsSynchronizedGraph<V, E>
     extends GraphDelegator<V, E>
@@ -1251,13 +1252,13 @@ public class AsSynchronizedGraph<V, E>
         private static final long serialVersionUID = -18262921841829294L;
 
         // A map caching for incomingEdges operation.
-        private final transient Map<V, Set<E>> incomingEdgesMap = new ConcurrentHashMap<>();
+        private transient volatile Map<V, Set<E>> incomingEdgesMap = new ConcurrentHashMap<>();
 
         // A map caching for outgoingEdges operation.
-        private final transient Map<V, Set<E>> outgoingEdgesMap = new ConcurrentHashMap<>();
+        private transient volatile Map<V, Set<E>> outgoingEdgesMap = new ConcurrentHashMap<>();
 
         // A map caching for edgesOf operation.
-        private final transient Map<V, Set<E>> edgesOfMap = new ConcurrentHashMap<>();
+        private transient volatile Map<V, Set<E>> edgesOfMap = new ConcurrentHashMap<>();
 
         /**
          * {@inheritDoc}
@@ -1360,9 +1361,15 @@ public class AsSynchronizedGraph<V, E>
         public boolean removeVertex(V v)
         {
             if (AsSynchronizedGraph.super.removeVertex(v)) {
-                edgesOfMap.clear();
-                incomingEdgesMap.clear();
-                outgoingEdgesMap.clear();
+                if (!edgesOfMap.isEmpty()) {
+                    edgesOfMap = new ConcurrentHashMap<>();
+                }
+                if (!incomingEdgesMap.isEmpty()) {
+                    incomingEdgesMap = new ConcurrentHashMap<>();
+                }
+                if (!outgoingEdgesMap.isEmpty()) {
+                    outgoingEdgesMap = new ConcurrentHashMap<>();
+                }
                 return true;
             }
             return false;
