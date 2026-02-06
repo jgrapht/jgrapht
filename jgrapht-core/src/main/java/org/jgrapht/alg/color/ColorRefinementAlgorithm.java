@@ -121,10 +121,7 @@ public class ColorRefinementAlgorithm<V, E>
         final Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
         // we cache the structure here to optimize perf vs memory traffic
         // default size of 16 w/ load factor 0.75 is reasonable for most use cases
-        /*final double avgDegree = graph.vertexSet().isEmpty()
-                ? 0.0
-                : (graph.getType().isDirected() ? 1.0 : 2.0) * graph.edgeSet().size() / graph.vertexSet().size();*/
-        final Set<V> inNeighborhood = new HashSet<>();//(int) avgDegree, 0.75f);
+        final Set<V> inNeighborhood = new HashSet<>();
 
         // calculate color degree and update maxColorDegree
         for (final V v : rep.colorClasses.get(refiningColor)) {
