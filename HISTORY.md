@@ -27,6 +27,7 @@ Changes to JGraphT in each version:
     - Added subgraph support to `DOTExporter` (contributed by Nicolas Rol)
     - Fixed `Graphs.addAllEdges` with custom weighted edge types (contributed by John Sichi)
     - Added `KConnectivityFlowAlgorithm` (contributed by Azim Barhoumi and Paul Enjalbert)
+    - Improved `AsSynchronizedGraph` cache performance (contributed by Andriy Palamarchuk)
 
 - **version 1.5.2** (2-May-2023)
     - Prepared release cycle 1.5.2: removed deprecated code, updated dependencies (contributed by Joris Kinable)
