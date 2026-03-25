@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Azim Barhoumi, Paul Enjalbert and Contributors.
+ * (C) Copyright 2020-2026, by Azim Barhoumi, Paul Enjalbert and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

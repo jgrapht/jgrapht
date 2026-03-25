@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2025-2025, by Nicolas Rol and Contributors.
+ * (C) Copyright 2025-2026, by Nicolas Rol and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by JeanYves Tinevez and Contributors.
+ * (C) Copyright 2013-2026, by JeanYves Tinevez and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

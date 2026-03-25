@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2023, by Vinayak R Borkar and Contributors.
+ * (C) Copyright 2007-2026, by Vinayak R Borkar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

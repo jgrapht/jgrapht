@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Assaf Lehr, Dimitrios Michail and Contributors.
+ * (C) Copyright 2005-2026, by Assaf Lehr, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

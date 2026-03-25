@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Linda Buisman and Contributors.
+ * (C) Copyright 2003-2026, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

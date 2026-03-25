@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2024, by CHEN Kui and Contributors.
+ * (C) Copyright 2018-2026, by CHEN Kui and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

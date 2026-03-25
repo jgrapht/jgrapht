@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2023, by Hannes Wellmann and Contributors.
+ * (C) Copyright 2021-2026, by Hannes Wellmann and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

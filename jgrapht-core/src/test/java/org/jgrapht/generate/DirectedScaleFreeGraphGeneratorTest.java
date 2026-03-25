@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Amr ALHOSSARY and Contributors.
+ * (C) Copyright 2019-2026, by Amr ALHOSSARY and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

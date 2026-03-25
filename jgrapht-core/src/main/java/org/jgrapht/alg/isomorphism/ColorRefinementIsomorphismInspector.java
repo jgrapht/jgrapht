@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Christoph Grüne, Dennis Fischer and Contributors.
+ * (C) Copyright 2018-2026, by Christoph Grüne, Dennis Fischer and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

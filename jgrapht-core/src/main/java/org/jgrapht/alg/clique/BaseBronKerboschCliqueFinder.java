@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Ewgenij Proschak and Contributors.
+ * (C) Copyright 2005-2026, by Ewgenij Proschak and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

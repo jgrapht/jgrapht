@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2024, by J. Alejandro Cornejo-Acosta and Contributors.
+ * (C) Copyright 2021-2026, by J. Alejandro Cornejo-Acosta and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

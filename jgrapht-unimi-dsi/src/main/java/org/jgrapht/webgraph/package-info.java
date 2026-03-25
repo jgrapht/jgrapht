@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2024, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

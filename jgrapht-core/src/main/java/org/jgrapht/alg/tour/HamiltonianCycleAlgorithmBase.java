@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Peter Harman and Contributors.
+ * (C) Copyright 2019-2026, by Peter Harman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

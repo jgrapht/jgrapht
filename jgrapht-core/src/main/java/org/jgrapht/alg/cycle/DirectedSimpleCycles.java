@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2026, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
