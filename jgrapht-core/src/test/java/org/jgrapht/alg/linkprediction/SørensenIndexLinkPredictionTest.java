@@ -31,7 +31,10 @@ import org.junit.jupiter.api.Test;
  * Tests for class SørensenIndexLinkPrediction
  *
  * @author Dimitrios Michail
+ * 
+ * @deprecated Class will be replaced by SorensenIndexLinkPredictionTest
  */
+@Deprecated
 public class SørensenIndexLinkPredictionTest
 {
 

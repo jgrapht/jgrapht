@@ -132,7 +132,7 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>${main.basedir}/target/site/apidocs</directory>
+            <directory>${main.basedir}/target/reports/apidocs</directory>
             <outputDirectory>javadoc</outputDirectory>
             <includes>
                 <include>**/*</include>

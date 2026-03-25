@@ -8,4 +8,4 @@ set -e
 ${GITHUB_WORKSPACE}/etc/expandMarkdown.sh
 rm -f ${GITHUB_WORKSPACE}/docs/guide/.gitignore
 ${GITHUB_WORKSPACE}/etc/downloadJavadoc.sh
-mv ${GITHUB_WORKSPACE}/target/site/apidocs ${GITHUB_WORKSPACE}/docs/javadoc-SNAPSHOT
+mv ${GITHUB_WORKSPACE}/target/reports/apidocs ${GITHUB_WORKSPACE}/docs/javadoc-SNAPSHOT

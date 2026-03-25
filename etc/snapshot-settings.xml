@@ -4,9 +4,9 @@
                               https://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
         <server>
-            <id>sonatype-nexus-snapshots</id>
-            <username>${SONATYPE_USER}</username>
-            <password>${SONATYPE_PASSWORD}</password>
+            <id>central</id>
+            <username>${CENTRAL_USER}</username>
+            <password>${CENTRAL_PASSWORD}</password>
         </server>
     </servers>
 </settings>

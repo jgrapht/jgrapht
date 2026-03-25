@@ -25,11 +25,11 @@ jobs:
     name: Build (${{ matrix.os.name }})
     runs-on: ${{ matrix.os.tag }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           java-version: 11
           distribution: 'temurin'
@@ -47,10 +47,10 @@ jobs:
     if: github.repository == 'jgrapht/jgrapht'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           java-version: 11
           distribution: 'temurin'
@@ -58,7 +58,7 @@ jobs:
       - run: |
           set -e
           mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn javadoc:aggregate
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 14
       - run: npm install -g hercule@5.0.0
@@ -69,13 +69,13 @@ jobs:
 
       - name: Deploy snapshot to Sonatype
         env:
-          SONATYPE_USER: ${{ secrets.CI_DEPLOY_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
-        run: mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml
+          CENTRAL_USER: ${{ secrets.CI_DEPLOY_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+        run: mvn package org.sonatype.central:central-publishing-maven-plugin:publish -DskipTests=true --settings etc/snapshot-settings.xml
         shell: bash
 
       - name: Publish Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
         with:
           token: ${{ secrets.PAGES_TOKEN }}
           branch: gh-pages

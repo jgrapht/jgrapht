@@ -5,9 +5,6 @@
     "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
-    <!-- Ignore header checks for package-info.java files -->
-    <suppress files="package-info\.java" checks="Header" />
-
     <!-- Suppression of Javadoc related checks for test files -->
     <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocMethod" />
     <suppress files="[/\\]src[/\\]test[/\\].*" checks="JavadocType" />

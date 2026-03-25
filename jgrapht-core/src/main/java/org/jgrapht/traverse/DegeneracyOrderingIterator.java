@@ -61,6 +61,8 @@ public class DegeneracyOrderingIterator<V, E>
      * Constructor
      *
      * @param graph the graph to be iterated
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     @SuppressWarnings("unchecked")
     public DegeneracyOrderingIterator(Graph<V, E> graph)
@@ -111,10 +113,7 @@ public class DegeneracyOrderingIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Trying to disable the cross components nature of this iterator will result into throwing a
-     * {@link IllegalArgumentException}.
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)

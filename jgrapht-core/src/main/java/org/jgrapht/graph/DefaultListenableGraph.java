@@ -57,6 +57,9 @@ public class DefaultListenableGraph<V, E>
      * Creates a new listenable graph.
      *
      * @param g the backing graph.
+     * 
+     * @throws IllegalArgumentException if the backing graph is already a listenable graph.
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DefaultListenableGraph(Graph<V, E> g)
     {
@@ -74,6 +77,7 @@ public class DefaultListenableGraph<V, E>
      *        event object for each event.
      *
      * @throws IllegalArgumentException if the backing graph is already a listenable graph.
+     * @throws NullPointerException if {@code g} is {@code null}
      */
     public DefaultListenableGraph(Graph<V, E> g, boolean reuseEvents)
     {
@@ -183,8 +187,7 @@ public class DefaultListenableGraph<V, E>
             return g;
         } catch (CloneNotSupportedException e) {
             // should never get here since we're Cloneable
-            e.printStackTrace();
-            throw new RuntimeException("internal error");
+            throw new Error("internal error", e);
         }
     }
 

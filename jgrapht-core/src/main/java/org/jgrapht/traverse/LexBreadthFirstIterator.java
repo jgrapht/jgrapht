@@ -75,6 +75,9 @@ public class LexBreadthFirstIterator<V, E>
      * Creates new lexicographical breadth-first iterator for {@code graph}.
      *
      * @param graph the graph to be iterated.
+     * 
+     * @throws IllegalArgumentException if argument is not an undirected graph
+     * @throws NullPointerException if argument is {@code null}
      */
     public LexBreadthFirstIterator(Graph<V, E> graph)
     {
@@ -121,9 +124,7 @@ public class LexBreadthFirstIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
-     * Always returns true since this iterator doesn't care about connected components.
+     * @return {@code true} always, since this iterator doesn't care about connected components
      */
     @Override
     public boolean isCrossComponentTraversal()
@@ -132,10 +133,7 @@ public class LexBreadthFirstIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
-     * Trying to disable the cross components nature of this iterator will result into throwing a
-     * {@link IllegalArgumentException}.
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)

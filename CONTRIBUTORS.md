@@ -156,6 +156,17 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Sung Ho Yoon](https://github.com/syoon2)
 - [Albgarsan](https://github.com/Albgarsan)
 - [J. Alejandro Cornejo-Acosta](https://github.com/alex-cornejo)
+- [Feng Wenhan](https://github.com/fwhdzh)
+- [Yuri Bilyarov](https://github.com/YuriBilyarov)
+- [Antonia Tsiftsi](https://github.com/toniaTsif)
+- Lena Büttel
+- [Kirill A. Korinsky](https://github.com/catap)
+- [Pratyush Goyal](https://github.com/Pratyushgoyal66)
+- [tobi-emx](https://github.com/tobi-emx)
+- [Pasha Finkelshteyn](https://github.com/asm0dey)
+- [Nicolas Rol](https://github.com/rolnico)
+- [Azim Barhoumi](https://github.com/Aziiiiim)
+- [Andriy Palamarchuk](https://github.com/apalamarchuk-csi)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 

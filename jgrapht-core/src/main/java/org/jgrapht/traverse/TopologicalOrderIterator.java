@@ -83,6 +83,8 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param graph the directed graph to be iterated
      * @param comparator comparator in order to break ties in case of partial order
+     * 
+     * @throws NotDirectedAcyclicGraphException if {@code graph} is not a DAG
      */
     public TopologicalOrderIterator(Graph<V, E> graph, Comparator<V> comparator)
     {
@@ -118,9 +120,7 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Always returns true since the iterator does not care about components.
+     * @return {@code true} always, since this iterator does not care about components
      */
     @Override
     public boolean isCrossComponentTraversal()
@@ -129,10 +129,7 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Trying to disable the cross components nature of this iterator will result into throwing a
-     * {@link IllegalArgumentException}.
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)

@@ -537,12 +537,22 @@ public class AsSubgraph<V, E>
 
         // add edges
         if (edgeFilter == null) {
-            base
-                .edgeSet().stream()
-                .filter(
-                    e -> vertexSet.contains(base.getEdgeSource(e))
-                        && vertexSet.contains(base.getEdgeTarget(e)))
-                .forEach(edgeSet::add);
+            if (vertexSet.size() > base.edgeSet().size()) {
+                base
+                    .edgeSet().stream()
+                    .filter(
+                        e -> vertexSet.contains(base.getEdgeSource(e))
+                            && vertexSet.contains(base.getEdgeTarget(e)))
+                    .forEach(edgeSet::add);
+            } else {
+                vertexSet.forEach(v ->
+                    base.edgesOf(v).stream()
+                        .filter(
+                            e -> vertexSet.contains(base.getEdgeSource(e))
+                                && vertexSet.contains(base.getEdgeTarget(e)))
+                        .forEach(edgeSet::add)
+                    );
+            }
         } else {
             if (edgeFilter.size() > base.edgeSet().size()) {
                 base

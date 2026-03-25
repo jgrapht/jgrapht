@@ -41,6 +41,8 @@ public class DefaultEdgeFunction<E, T>
      * Create a new function
      * 
      * @param defaultValue the default value
+     * 
+     * @throws NullPointerException if argument is {@code null}
      */
     public DefaultEdgeFunction(T defaultValue)
     {
@@ -52,6 +54,8 @@ public class DefaultEdgeFunction<E, T>
      * 
      * @param defaultValue the default value
      * @param map the underlying map
+     * 
+     * @throws NullPointerException if either one of the arguments is {@code null}
      */
     public DefaultEdgeFunction(T defaultValue, Map<E, T> map)
     {

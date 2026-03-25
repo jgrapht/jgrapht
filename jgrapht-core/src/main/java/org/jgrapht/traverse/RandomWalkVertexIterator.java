@@ -66,6 +66,9 @@ public class RandomWalkVertexIterator<V, E>
      * 
      * @param graph the graph
      * @param vertex the starting vertex
+     * 
+     * @throws IllegalArgumentException if {@code graph} does not contain {@code vertex}
+     * @throws NullPointerException if either one of {@code graph} or {@code vertex} is {@code null}
      */
     public RandomWalkVertexIterator(Graph<V, E> graph, V vertex)
     {
@@ -78,6 +81,9 @@ public class RandomWalkVertexIterator<V, E>
      * @param graph the graph
      * @param vertex the starting vertex
      * @param maxHops maximum hops to perform during the walk
+     * 
+     * @throws IllegalArgumentException if {@code graph} does not contain {@code vertex}
+     * @throws NullPointerException if either one of {@code graph} or {@code vertex} is {@code null}
      */
     public RandomWalkVertexIterator(Graph<V, E> graph, V vertex, long maxHops)
     {
@@ -93,6 +99,9 @@ public class RandomWalkVertexIterator<V, E>
      * @param weighted whether to perform a weighted random walk (compute probabilities based on the
      *        edge weights)
      * @param rng the random number generator
+     * 
+     * @throws IllegalArgumentException if {@code graph} does not contain {@code vertex}
+     * @throws NullPointerException if either one of {@code graph} or {@code vertex} is {@code null}
      */
     public RandomWalkVertexIterator(
         Graph<V, E> graph, V vertex, long maxHops, boolean weighted, Random rng)

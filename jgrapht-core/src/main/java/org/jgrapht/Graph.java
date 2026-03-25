@@ -117,6 +117,8 @@ public interface Graph<V, E>
      * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
      * 
      * @return the vertex supplier or {@code null} if the graph has no such supplier
+     * 
+     * @throws UnsupportedOperationException if this graph disallows access to the vertex supplier
      */
     Supplier<V> getVertexSupplier();
 
@@ -136,6 +138,8 @@ public interface Graph<V, E>
      * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
      * 
      * @return the edge supplier {@code null} if the graph has no such supplier
+     * 
+     * @throws UnsupportedOperationException if this graph disallows access to the edge supplier
      */
     Supplier<E> getEdgeSupplier();
 
@@ -574,6 +578,7 @@ public interface Graph<V, E>
      * @param e edge of interest
      * @return edge weight
      * 
+     * @throws IllegalArgumentException if the specified edge is not in this graph
      * @throws NullPointerException if argument is {@code null}
      */
     double getEdgeWeight(E e);
@@ -593,8 +598,6 @@ public interface Graph<V, E>
 
     /**
      * Assigns a weight to an edge between {@code sourceVertex} and {@code targetVertex}.
-     * If no edge exists between {@code sourceVertex} and {@code targetVertex} or either
-     * of these vertices is {@code null}, a {@code NullPointerException} is thrown.
      * <p>
      * When there exist multiple edges between {@code sourceVertex} and
      * {@code targetVertex}, consider using {@link #setEdgeWeight(Object, double)} instead.
@@ -602,6 +605,10 @@ public interface Graph<V, E>
      * @param sourceVertex source vertex of the edge
      * @param targetVertex target vertex of the edge
      * @param weight new weight for edge
+     * 
+     * @throws NullPointerException if either one of {@code sourceVertex} or
+     *                              {@code targetVertex} is {@code null}, or
+     *                              if there is no edge between the two vertices
      * @throws UnsupportedOperationException if the graph does not support weights
      */
     default void setEdgeWeight(V sourceVertex, V targetVertex, double weight)

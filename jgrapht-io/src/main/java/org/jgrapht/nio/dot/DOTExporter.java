@@ -53,7 +53,11 @@ public class DOTExporter<V, E>
 
     private static final String INDENT = "  ";
 
+    private static final String DOUBLE_INDENT = INDENT + INDENT;
+
     private final Map<V, String> validatedIds;
+
+    private Supplier<Map<String, DOTSubgraph<V, E>>> subgraphProvider;
 
     /**
      * Constructs a new DOTExporter object with an integer id provider.
@@ -73,6 +77,25 @@ public class DOTExporter<V, E>
     {
         super(vertexIdProvider);
         this.validatedIds = new HashMap<>();
+        this.subgraphProvider = null;
+    }
+
+    /**
+     * Get the subgraph provider
+     *
+     * @return the subgraph provider as an {@link Optional}
+     */
+    public Optional<Supplier<Map<String, DOTSubgraph<V, E>>>> getSubgraphProvider() {
+        return subgraphProvider != null ? Optional.of(subgraphProvider) : Optional.empty();
+    }
+
+    /**
+     * Set the subgraph provider
+     *
+     * @param subgraphProvider the subgraph provider
+     */
+    public void setSubgraphProvider(Supplier<Map<String, DOTSubgraph<V, E>>> subgraphProvider) {
+        this.subgraphProvider = subgraphProvider;
     }
 
     /**
@@ -131,9 +154,40 @@ public class DOTExporter<V, E>
             out.println(";");
         }
 
+        // subgraphs
+        for (Map.Entry<String, DOTSubgraph<V, E>> subgraphEntry : getSubgraphProvider().orElse(Collections::emptyMap).get().entrySet()) {
+            writeSubgraph(out, subgraphEntry.getKey(), subgraphEntry.getValue());
+        }
+
         out.println(computeFooter(g));
 
         out.flush();
+    }
+
+    /**
+     * Export a subgraph into DOT format
+     *
+     * @param out the writer to which the graph to be exported
+     * @param subgraphName the name of the subgraph
+     * @param subgraph the subgraph to be exported
+     */
+    private void writeSubgraph(PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph) {
+        out.println(INDENT + "subgraph " + subgraphName + " {");
+        renderSubgraphAttributes(out, subgraphName, subgraph);
+        if (subgraph.isExportVertices()) {
+            for (V v : subgraph.vertexSet()) {
+                out.println(DOUBLE_INDENT + getVertexId(v) + ";");
+            }
+        }
+        if (subgraph.isExportEdges()) {
+            String connector = computeConnector(subgraph.getSubgraph());
+            for (E e : subgraph.edgeSet()) {
+                String source = getVertexID(subgraph.getSubgraph().getEdgeSource(e));
+                String target = getVertexID(subgraph.getSubgraph().getEdgeTarget(e));
+                out.println(DOUBLE_INDENT + source + connector + target + ";");
+            }
+        }
+        out.println(INDENT + "}");
     }
 
     /**
@@ -227,6 +281,27 @@ public class DOTExporter<V, E>
             out.print("\"" + escapeDoubleQuotes(attrValue) + "\"");
         }
         out.print(" ");
+    }
+
+    private void renderSubgraphAttributes(PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph) {
+        Map<String, Attribute> subgraphAttributes = subgraph.getSubgraphAttributes();
+        Map<String, Attribute> clusterAttributes = subgraph.getClusterAttributes();
+        if (subgraphAttributes.isEmpty() && clusterAttributes.isEmpty()) {
+            return;
+        }
+        out.print(DOUBLE_INDENT + subgraphName + " [ ");
+        for (Map.Entry<String, Attribute> entry : clusterAttributes.entrySet()) {
+            String name = entry.getKey();
+            renderAttribute(out, name, entry.getValue());
+        }
+        out.println("];");
+        for (Map.Entry<String, Attribute> attr : subgraph.getSubgraphAttributes().entrySet()) {
+            out.print(DOUBLE_INDENT);
+            out.print(attr.getKey());
+            out.print('=');
+            out.print(attr.getValue());
+            out.println(";");
+        }
     }
 
     private static String escapeDoubleQuotes(String labelName)

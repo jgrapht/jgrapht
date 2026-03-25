@@ -78,10 +78,7 @@ public class DOTEventDrivenImporter
     {
         super();
         Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
-        lookupMap.put("\\\\", "\\");
         lookupMap.put("\\\"", "\"");
-        lookupMap.put("\\'", "'");
-        lookupMap.put("\\", "");
         unescapeId = new AggregateTranslator(new LookupTranslator(lookupMap));
 
         this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;

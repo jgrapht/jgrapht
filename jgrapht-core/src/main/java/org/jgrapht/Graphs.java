@@ -199,8 +199,9 @@ public abstract class Graphs
     /**
      * Adds a subset of the edges of the specified source graph to the specified destination graph.
      * The behavior of this operation is undefined if either of the graphs is modified while the
-     * operation is in progress. {@link #addEdgeWithVertices} is used for the transfer, so source
-     * vertexes will be added automatically to the target graph.
+     * operation is in progress. Source vertices will be added automatically to
+     * the target graph.  Edge weights will be copied from the source except when the
+     * edge already exists in the destination.
      *
      * @param destination the graph to which edges are to be added
      * @param source the graph used as a source for edges to add
@@ -213,14 +214,25 @@ public abstract class Graphs
     public static <V, E> boolean addAllEdges(
         Graph<? super V, ? super E> destination, Graph<V, E> source, Collection<? extends E> edges)
     {
+        boolean firstEdge = true;
         boolean modified = false;
+        boolean needWeightCopy = destination.getType().isWeighted();
 
         for (E e : edges) {
+            if (firstEdge) {
+                if (needWeightCopy && (e instanceof DefaultWeightedEdge)) {
+                    needWeightCopy = false;
+                }
+                firstEdge = false;
+            }
             V s = source.getEdgeSource(e);
             V t = source.getEdgeTarget(e);
             destination.addVertex(s);
             destination.addVertex(t);
             modified |= destination.addEdge(s, t, e);
+            if (modified && needWeightCopy) {
+                destination.setEdgeWeight(e, source.getEdgeWeight(e));
+            }
         }
 
         return modified;

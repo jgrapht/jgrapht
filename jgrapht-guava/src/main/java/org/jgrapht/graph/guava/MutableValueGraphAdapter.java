@@ -101,6 +101,9 @@ public class MutableValueGraphAdapter<V, W>
      * @param valueGraph the value graph
      * @param defaultValue a default value to be used when creating new edges
      * @param valueConverter a function that converts a value to a double
+     * 
+     * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue} or
+     *                              {@code valueConverter} is {@code null}
      */
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter)
@@ -116,6 +119,9 @@ public class MutableValueGraphAdapter<V, W>
      * @param valueConverter a function that converts a value to a double
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
+     * 
+     * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue} or
+     *                              {@code valueConverter} is {@code null}
      */
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
@@ -137,6 +143,10 @@ public class MutableValueGraphAdapter<V, W>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
+     * 
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
+     * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue}, {@code valueConverter},
+     *                              or {@code vertexOrderMethod} is {@code null}
      */
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
@@ -147,6 +157,10 @@ public class MutableValueGraphAdapter<V, W>
         this.defaultValue = Objects.requireNonNull(defaultValue);
     }
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */
     @Override
     public EndpointPair<V> addEdge(V sourceVertex, V targetVertex)
     {
@@ -168,13 +182,13 @@ public class MutableValueGraphAdapter<V, W>
     /**
      * {@inheritDoc}
      * 
-     * The provided edge object can either be null or must respect the source and target vertices
-     * that are provided as parameters.
+     * The provided edge object can either be {@code null} or must respect the source and target
+     * vertices that are provided as parameters.
      * 
-     * @throws IllegalArgumentException if edge e is not null and the sourceVertex parameter does
-     *         not match the node U of the endpoint-pair
-     * @throws IllegalArgumentException if edge e is not null and the targetVertex parameter does
-     *         not match the node V of the endpoint-pair
+     * @throws IllegalArgumentException if either {@code sourceVertex} is not equal to node U
+     *                                  of {@code e} or {@code targetVertex} is not equal to node V
+     *                                  of {@code e}, or if the underlying graph disallows self loops
+     * @throws NullPointerException if either one of {@code sourceVertex} or {@code targetVertex} is {@code null}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
@@ -205,6 +219,9 @@ public class MutableValueGraphAdapter<V, W>
         return true;
     }
 
+    /**
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     */
     @Override
     public V addVertex()
     {
@@ -264,7 +281,9 @@ public class MutableValueGraphAdapter<V, W>
      *
      * @param e edge on which to set weight
      * @param weight new weight for edge
-     * @throws UnsupportedOperationException if the graph does not support weights
+     * 
+     * @throws NullPointerException {@inheritDoc}
+     * @throws UnsupportedOperationException {@inheritDoc}
      */
     @Override
     public void setEdgeWeight(EndpointPair<V> e, double weight)
@@ -298,8 +317,7 @@ public class MutableValueGraphAdapter<V, W>
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
