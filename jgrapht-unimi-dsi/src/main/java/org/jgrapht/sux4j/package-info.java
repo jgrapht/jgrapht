@@ -102,7 +102,7 @@
  * There is however a simple strategy that makes it possible to build succinct representations using
  * a relatively small amount of additional memory with respect to the representation itself:
  * <ol>
- * <li>{@linkplain it.unimi.dsi.webgraph convert your graph to a WebGraph} format such as
+ * <li>convert your graph to a WebGraph format such as
  * {@link it.unimi.dsi.big.webgraph.BVGraph BVGraph} or {@link it.unimi.dsi.webgraph.EFGraph
  * EFGraph};
  * <li>if your graph is directed, use {@link it.unimi.dsi.webgraph.Transform Transform} to store the
