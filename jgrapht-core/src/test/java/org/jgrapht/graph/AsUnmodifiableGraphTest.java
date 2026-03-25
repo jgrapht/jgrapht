@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2024-2024, by Sung Ho Yoon and Contributors.
+ * (C) Copyright 2024-2026, by Sung Ho Yoon and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

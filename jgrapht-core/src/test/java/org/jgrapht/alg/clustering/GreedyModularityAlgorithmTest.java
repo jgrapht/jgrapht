@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Antonia Tsiftsi and Contributors.
+ * (C) Copyright 2020-2026, by Antonia Tsiftsi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

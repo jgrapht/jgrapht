@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Wil Selwood and Contributors.
+ * (C) Copyright 2015-2026, by Wil Selwood and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

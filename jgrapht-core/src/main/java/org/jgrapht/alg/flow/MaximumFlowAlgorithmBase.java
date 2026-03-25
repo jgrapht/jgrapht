@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Alexey Kudinkin, Joris Kinable and Contributors.
+ * (C) Copyright 2015-2026, by Alexey Kudinkin, Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
