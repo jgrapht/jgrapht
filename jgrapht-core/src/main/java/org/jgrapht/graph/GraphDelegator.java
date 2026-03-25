@@ -134,7 +134,6 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @throws ClassCastException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      * @throws UnsupportedOperationException {@inheritDoc}

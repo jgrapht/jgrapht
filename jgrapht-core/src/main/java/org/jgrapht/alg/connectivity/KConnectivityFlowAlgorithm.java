@@ -171,8 +171,7 @@ public class KConnectivityFlowAlgorithm<V, E>
     }
     
     /**
-     * Return if the graph is {@code k} edge connected, use {@link #getEdgeConnectivity() Compute Edge Connectivity Edge}
-     * methods to have the result
+     * Return if the graph is {@code k} edge connected
      * @param k 
      * @return if the the graph is k edge connect or not
      */
@@ -182,8 +181,7 @@ public class KConnectivityFlowAlgorithm<V, E>
     }
     
     /**
-     * Return if the graph is {@code k} vertex connected, use {@link #computeVertexConnectivity() Compute Edge Connectivity Edge}
-     * methods to have the result
+     * Return if the graph is {@code k} vertex connected
      * @param k
      * @return if the the graph is k vertex connect or not
      */

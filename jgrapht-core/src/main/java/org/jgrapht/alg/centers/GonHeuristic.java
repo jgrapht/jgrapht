@@ -119,7 +119,7 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
      * Constructor
      *
      * Specifies a partial set of initial centers that will be augmented to form a set of k centers when
-     * {@link #getCenters(java.util.Set) } is called.
+     * {@link #getCenters } is called.
      *
      * @param initialCenters Initial set of centers.
      */

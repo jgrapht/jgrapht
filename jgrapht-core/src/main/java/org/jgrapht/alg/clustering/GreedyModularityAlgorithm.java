@@ -48,7 +48,7 @@ import org.jheaps.tree.PairingHeap;
  * The algorithm is due to Clauset, Newman and Moore. It is described in detail in the following
  * <a href="https://doi.org/10.1103/PhysRevE.70.066111">paper</a>:
  * <ul>
- * <li>Clauset, A., Newman, M. E., & Moore, C. “Finding community structure in very large networks.”
+ * <li>Clauset, A., Newman, M. E., &amp; Moore, C. “Finding community structure in very large networks.”
  * Physical Review E 70(6), 2004.
  * </li>
  * </ul> 
