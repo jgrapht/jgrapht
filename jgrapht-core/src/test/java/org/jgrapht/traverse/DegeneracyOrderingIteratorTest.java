@@ -119,8 +119,7 @@ public class DegeneracyOrderingIteratorTest
             listener.toString());
     }
 
-    private static class TestTraversalListener<V, E>
-        implements TraversalListener<V, E>
+    private static class TestTraversalListener<V, E> implements TraversalListener<V, E>
     {
 
         private StringBuilder sb = new StringBuilder();

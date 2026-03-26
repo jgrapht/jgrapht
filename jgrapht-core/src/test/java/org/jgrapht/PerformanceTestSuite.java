@@ -21,10 +21,10 @@ import org.junit.platform.suite.api.*;
 
 /**
  * Suite of performance tests only.
- * 
+ *
  * @author John Sichi
  */
-@SelectPackages({"org.jgrapht.perf"})
+@SelectPackages({ "org.jgrapht.perf" })
 @Suite
 public class PerformanceTestSuite
 {

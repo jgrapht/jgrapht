@@ -19,7 +19,7 @@ package org.jgrapht.util;
 
 /**
  * Math Utilities.
- * 
+ *
  * @author Assaf Lehr
  */
 public class MathUtil
@@ -27,7 +27,7 @@ public class MathUtil
 
     /**
      * Calculate the factorial of $n$.
-     * 
+     *
      * @param n the input number
      * @return the factorial
      */

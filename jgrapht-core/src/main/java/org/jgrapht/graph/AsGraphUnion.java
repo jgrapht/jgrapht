@@ -26,21 +26,19 @@ import java.util.function.*;
 
 /**
  * Read-only union of two graphs.
- * 
+ *
  * <p>
  * Read-only union of two graphs: G<sub>1</sub> and G<sub>2</sub>. If G<sub>1</sub> =
  * (V<sub>1</sub>, E<sub>1</sub>) and G<sub>2</sub> = (V<sub>2</sub>, E<sub>2</sub>) then their
  * union G = (V, E), where V is the union of V<sub>1</sub> and V<sub>2</sub>, and E is the union of
  * E<sub>1</sub> and E<sub>2</sub>. A {@link WeightCombiner} in order to calculate edge weights.
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
- * 
+ *
  * @author Ilya Razenshteyn
  */
-public class AsGraphUnion<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+public class AsGraphUnion<V, E> extends AbstractGraph<V, E> implements Serializable
 {
     private static final long serialVersionUID = -3848082143382987713L;
 
@@ -55,11 +53,11 @@ public class AsGraphUnion<V, E>
 
     /**
      * Construct a new graph union.
-     * 
+     *
      * @param g1 the first graph
      * @param g2 the second graph
      * @param operator the weight combiner (policy for edge weight calculation)
-     * 
+     *
      * @throws IllegalArgumentException if {@code g1 == g2}
      * @throws NullPointerException if any of the arguments is {@code null}
      */
@@ -85,18 +83,18 @@ public class AsGraphUnion<V, E>
         } else {
             builder = builder.mixed();
         }
-        this.type = builder
-            .allowSelfLoops(type1.isAllowingSelfLoops() || type2.isAllowingSelfLoops())
-            .allowMultipleEdges(true).weighted(true).modifiable(false).build();
+        this.type =
+            builder.allowSelfLoops(type1.isAllowingSelfLoops() || type2.isAllowingSelfLoops())
+                .allowMultipleEdges(true).weighted(true).modifiable(false).build();
     }
 
     /**
      * Construct a new graph union. The union will use the {@link WeightCombiner#SUM} weight
      * combiner.
-     * 
+     *
      * @param g1 the first graph
      * @param g2 the second graph
-     * 
+     *
      * @throws IllegalArgumentException if {@code g1 == g2}
      * @throws NullPointerException if any of the arguments is {@code null}
      */
@@ -144,7 +142,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -155,7 +153,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -166,7 +164,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -177,7 +175,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -188,7 +186,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -199,7 +197,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -278,7 +276,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException {@inheritDoc}
      */
     @Override
@@ -376,7 +374,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -387,7 +385,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -398,7 +396,7 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override

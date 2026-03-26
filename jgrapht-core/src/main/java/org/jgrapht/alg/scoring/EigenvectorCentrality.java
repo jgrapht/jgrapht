@@ -56,8 +56,7 @@ import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
  *
  * @author Sebastiano Vigna
  */
-public class EigenvectorCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+public class EigenvectorCentrality<V, E> implements VertexScoringAlgorithm<V, Double>
 {
     /**
      * Default number of maximum iterations.

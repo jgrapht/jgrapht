@@ -22,16 +22,15 @@ import java.util.function.*;
 
 /**
  * Assign a unique integer identifier to a set of elements.
- * 
+ *
  * Each instance of provider maintains an internal map between every element it has ever seen and
  * the unique integer representing that element.
- * 
+ *
  * @param <T> the element type
  *
  * @author Trevor Harmon
  */
-public class IntegerIdProvider<T>
-    implements Function<T, String>
+public class IntegerIdProvider<T> implements Function<T, String>
 {
     private int nextId = 1;
     private final Map<T, Integer> idMap;
@@ -46,7 +45,7 @@ public class IntegerIdProvider<T>
 
     /**
      * Create a new provider.
-     * 
+     *
      * @param nextId identifier to start from
      */
     public IntegerIdProvider(int nextId)

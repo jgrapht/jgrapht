@@ -35,8 +35,7 @@ import java.util.function.*;
  *
  * @author Joris Kinable
  */
-public class FastLookupUndirectedSpecifics<V, E>
-    extends UndirectedSpecifics<V, E>
+public class FastLookupUndirectedSpecifics<V, E> extends UndirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 225772727571597846L;
 
@@ -48,7 +47,7 @@ public class FastLookupUndirectedSpecifics<V, E>
 
     /**
      * Construct a new fast lookup undirected specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
@@ -140,7 +139,7 @@ public class FastLookupUndirectedSpecifics<V, E>
 
     /**
      * Add an edge to the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
@@ -160,7 +159,7 @@ public class FastLookupUndirectedSpecifics<V, E>
 
     /**
      * Remove an edge from the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge

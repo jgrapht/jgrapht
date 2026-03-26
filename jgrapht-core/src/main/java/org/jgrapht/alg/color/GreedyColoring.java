@@ -28,14 +28,13 @@ import java.util.*;
  * <p>
  * The algorithm iterates over all vertices and assigns the smallest possible color that is not used
  * by any neighbors. Subclasses may provide a different vertex ordering.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class GreedyColoring<V, E>
-    implements VertexColoringAlgorithm<V>
+public class GreedyColoring<V, E> implements VertexColoringAlgorithm<V>
 {
     /**
      * Error message if the input graph contains self-loops.
@@ -49,7 +48,7 @@ public class GreedyColoring<V, E>
 
     /**
      * Construct a new coloring algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public GreedyColoring(Graph<V, E> graph)
@@ -59,7 +58,7 @@ public class GreedyColoring<V, E>
 
     /**
      * Get the ordering of the vertices used by the algorithm.
-     * 
+     *
      * @return the ordering of the vertices used by the algorithm
      */
     protected Iterable<V> getVertexOrdering()

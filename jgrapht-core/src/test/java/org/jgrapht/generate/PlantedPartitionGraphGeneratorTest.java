@@ -39,37 +39,49 @@ public class PlantedPartitionGraphGeneratorTest
     @Test
     public void testNegativeL()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(-5, 10, 0.5, 0.1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new PlantedPartitionGraphGenerator<>(-5, 10, 0.5, 0.1));
     }
 
     @Test
     public void testNegativeK()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, -10, 0.5, 0.1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new PlantedPartitionGraphGenerator<>(5, -10, 0.5, 0.1));
     }
 
     @Test
     public void testNegativeP()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, -0.5, 0.1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new PlantedPartitionGraphGenerator<>(5, 10, -0.5, 0.1));
     }
 
     @Test
     public void testNegativeQ()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, 0.5, -0.1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new PlantedPartitionGraphGenerator<>(5, 10, 0.5, -0.1));
     }
 
     @Test
     public void testTooLargeP()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, 1.5, 0.1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new PlantedPartitionGraphGenerator<>(5, 10, 1.5, 0.1));
     }
 
     @Test
     public void testTooLargeQ()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PlantedPartitionGraphGenerator<>(5, 10, 0.5, 1.1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new PlantedPartitionGraphGenerator<>(5, 10, 0.5, 1.1));
     }
 
     @Test

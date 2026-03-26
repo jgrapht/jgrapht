@@ -27,21 +27,20 @@ import java.util.*;
 
 /**
  * An implementation of {@link SingleSourcePaths} which uses linear space.
- * 
+ *
  * <p>
  * This implementation uses the traditional representation of maintaining for each vertex the
  * predecessor in the shortest path tree. In order to keep space to linear, the paths are recomputed
  * in each invocation of the {@link #getPath(Object)} method. The complexity of
  * {@link #getPath(Object)} is linear to the number of edges of the path while the complexity of
  * {@link #getWeight(Object)} is $O(1)$.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class TreeSingleSourcePathsImpl<V, E>
-    implements SingleSourcePaths<V, E>, Serializable
+public class TreeSingleSourcePathsImpl<V, E> implements SingleSourcePaths<V, E>, Serializable
 {
     private static final long serialVersionUID = -5914007312734512847L;
 
@@ -63,7 +62,7 @@ public class TreeSingleSourcePathsImpl<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param g the graph
      * @param source the source vertex
      * @param distanceAndPredecessorMap a map which contains for each vertex the distance and the
@@ -100,7 +99,7 @@ public class TreeSingleSourcePathsImpl<V, E>
 
     /**
      * Get the internal map used for representing the paths.
-     * 
+     *
      * @return the internal distance and predecessor map used for representing the paths.
      */
     public Map<V, Pair<Double, E>> getDistanceAndPredecessorMap()

@@ -56,7 +56,8 @@ public class PruferTreeGeneratorTest
     @Test
     public void testInvalidPruferSequence()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PruferTreeGenerator<>(new int[] { 10 }));
+        assertThrows(
+            IllegalArgumentException.class, () -> new PruferTreeGenerator<>(new int[] { 10 }));
     }
 
     @Test
@@ -137,7 +138,8 @@ public class PruferTreeGeneratorTest
 
             completeGraphGenerator.generateGraph(tree);
 
-            PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(100, 0x99);
+            PruferTreeGenerator<Integer, DefaultEdge> generator =
+                new PruferTreeGenerator<>(100, 0x99);
 
             generator.generateGraph(tree);
         });

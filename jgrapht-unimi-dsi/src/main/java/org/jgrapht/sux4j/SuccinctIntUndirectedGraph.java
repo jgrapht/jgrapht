@@ -70,11 +70,7 @@ import it.unimi.dsi.sux4j.util.EliasFanoMonotoneLongBigList;
  * @see SuccinctUndirectedGraph
  */
 
-public class SuccinctIntUndirectedGraph
-    extends
-    AbstractSuccinctUndirectedGraph<Integer>
-    implements
-    Serializable
+public class SuccinctIntUndirectedGraph extends AbstractSuccinctUndirectedGraph<Integer> implements Serializable
 {
     private static final long serialVersionUID = 0L;
 
@@ -235,10 +231,7 @@ public class SuccinctIntUndirectedGraph
 
     }
 
-    private final static class SuccinctGraphIterables
-        implements
-        GraphIterables<Integer, Integer>,
-        Serializable
+    private final static class SuccinctGraphIterables implements GraphIterables<Integer, Integer>, Serializable
     {
         private static final long serialVersionUID = 0L;
         private final SuccinctIntUndirectedGraph graph;
@@ -276,10 +269,9 @@ public class SuccinctIntUndirectedGraph
         {
             final long[] result = new long[2];
             graph.cumulativeOutdegrees.get(source, result);
-            return Iterables
-                .concat(
-                    IntSets.fromTo((int) result[0], (int) result[1]),
-                    reverseSortedEdgesOfNoLoops(source));
+            return Iterables.concat(
+                IntSets.fromTo((int) result[0], (int) result[1]),
+                reverseSortedEdgesOfNoLoops(source));
         }
 
         private Iterable<Integer> reverseSortedEdgesOfNoLoops(final int target)

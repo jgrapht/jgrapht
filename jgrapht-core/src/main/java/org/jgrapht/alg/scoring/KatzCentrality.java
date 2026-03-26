@@ -66,8 +66,7 @@ import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
  * @author Pratik Tibrewal
  * @author Sebastiano Vigna
  */
-public class KatzCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+public class KatzCentrality<V, E> implements VertexScoringAlgorithm<V, Double>
 {
     /**
      * Default number of maximum iterations.

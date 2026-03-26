@@ -36,7 +36,8 @@ public class VertexToIntegerMappingTest
     @Test
     public void testNullSet()
     {
-        assertThrows(NullPointerException.class, () -> new VertexToIntegerMapping<>((Set<Integer>) null));
+        assertThrows(
+            NullPointerException.class, () -> new VertexToIntegerMapping<>((Set<Integer>) null));
     }
 
     @Test
@@ -51,7 +52,9 @@ public class VertexToIntegerMappingTest
     @Test
     public void testNotUniqueElements()
     {
-        assertThrows(IllegalArgumentException.class, () -> new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1)));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1)));
     }
 
     @Test

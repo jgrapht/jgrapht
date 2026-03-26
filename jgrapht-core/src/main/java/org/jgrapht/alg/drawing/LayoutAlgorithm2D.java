@@ -22,11 +22,11 @@ import org.jgrapht.alg.drawing.model.*;
 
 /**
  * A general interface for a layout 2D algorithm.
- * 
+ *
  * A layout algorithm takes as input a graph and computes point coordinates for each of the graph
  * vertices. Details such as the dimensions of the drawable area, the storage of the vertices'
  * coordinates, etc. are provided using a {@link LayoutModel2D}.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
@@ -37,7 +37,7 @@ public interface LayoutAlgorithm2D<V, E>
 
     /**
      * Layout a graph.
-     * 
+     *
      * @param graph the graph
      * @param model the layout model to use
      */

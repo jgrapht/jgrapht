@@ -27,26 +27,25 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * 
+ *
  * Tests for the {@link BhandariKDisjointShortestPaths} class.
- * 
+ *
  * @author Assaf Mizrachi
  */
-public class BhandariKDisjointShortestPathsTest
-    extends KDisjointShortestPathsTestCase
+public class BhandariKDisjointShortestPathsTest extends KDisjointShortestPathsTestCase
 {
 
     /**
      * Tests two joint paths from 1 to 4, negative edges exist in path.
-     * 
+     *
      * Edges expected in path 1 --------------- {@literal 1 --> 2}, w=-1 {@literal 2 --> 6}, w=-3
      * {@literal 6 --> 4}, w= 3
-     * 
+     *
      * Edges expected in path 2 --------------- {@literal 1 --> 5}, w=-2 {@literal 5 --> 3}, w= 2
      * {@literal 3 --> 4}, w=-1
-     * 
+     *
      * Edges expected in no path --------------- {@literal 2 --> 3}, w=-1
-     * 
+     *
      */
     @Test
     public void testTwoDisjointPathsNegative()

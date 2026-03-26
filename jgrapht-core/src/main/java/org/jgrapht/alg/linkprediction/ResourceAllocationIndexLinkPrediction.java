@@ -29,13 +29,13 @@ import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Resource Allocation Index.
- * 
+ *
  * <p>
  * This is a local method which computes $s_{uv} = \sum_{z \in
  * \Gamma(u)\cap\Gamma(v))}\frac{1}{k(z)}$ where for a node $v$, $\Gamma(v)$ denotes the set of
  * neighbors of $v$ and $k(v) = |\Gamma(v)|$ denotes the degree of $v$.
  * </p>
- * 
+ *
  * See the following two papers:
  * <ul>
  * <li>Liben‐Nowell, David, and Jon Kleinberg. "The link‐prediction problem for social networks."
@@ -44,20 +44,19 @@ import org.jgrapht.alg.util.Pair;
  * <li>Zhou, Tao, Linyuan Lü, and Yi-Cheng Zhang. "Predicting missing links via local information."
  * The European Physical Journal B 71.4 (2009): 623-630.</li>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class ResourceAllocationIndexLinkPrediction<V, E>
-    implements LinkPredictionAlgorithm<V, E>
+public class ResourceAllocationIndexLinkPrediction<V, E> implements LinkPredictionAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
     /**
      * Create a new prediction
-     * 
+     *
      * @param graph the input graph
      */
     public ResourceAllocationIndexLinkPrediction(Graph<V, E> graph)

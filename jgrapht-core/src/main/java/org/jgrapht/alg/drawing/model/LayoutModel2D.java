@@ -23,30 +23,29 @@ import java.util.*;
 
 /**
  * A general interface for the 2D layout model.
- * 
+ *
  * The layout model provides the necessary components to a {@link LayoutAlgorithm2D} in order to
  * draw a graph. Its responsibility is to provide the available drawable area, to be able to store
  * and answer queries about vertex coordinates, and to allow someone to fix (make permanent) a
  * vertex location.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
  */
-public interface LayoutModel2D<V>
-    extends Iterable<Map.Entry<V, Point2D>>
+public interface LayoutModel2D<V> extends Iterable<Map.Entry<V, Point2D>>
 {
 
     /**
      * Get the drawable area of the model.
-     * 
+     *
      * @return the drawable area of the model
      */
     Box2D getDrawableArea();
 
     /**
      * Set the drawable area of the model.
-     * 
+     *
      * @param drawableArea the drawable area to use
      */
     void setDrawableArea(Box2D drawableArea);
@@ -55,7 +54,7 @@ public interface LayoutModel2D<V>
      * Get the last location of a particular vertex in the model. May return null if the vertex has
      * not been assigned a location or if the particular implementation does not store the
      * coordinates.
-     * 
+     *
      * @param vertex the graph vertex
      * @return the last location of the vertex
      */
@@ -63,7 +62,7 @@ public interface LayoutModel2D<V>
 
     /**
      * Set the location of a vertex.
-     * 
+     *
      * @param vertex the graph vertex
      * @param point the location
      * @return the previous location or null if the vertex did not have a previous location or if
@@ -73,10 +72,10 @@ public interface LayoutModel2D<V>
 
     /**
      * Set a point as being a "fixed-point" or not.
-     * 
+     *
      * It is the model's responsibility to make sure that changing the coordinates of a fixed point
      * by calling {@link #put(Object, Point2D)} has no effect.
-     * 
+     *
      * @param vertex a vertex
      * @param fixed whether it is a fixed point or not.
      */
@@ -84,10 +83,10 @@ public interface LayoutModel2D<V>
 
     /**
      * Check whether a vertex is a fixed point.
-     * 
+     *
      * It is the model's responsibility to make sure that changing the coordinates of a fixed point
      * by calling {@link #put(Object, Point2D)} has no effect.
-     * 
+     *
      * @param vertex the vertex
      * @return true if a fixed point, false otherwise
      */
@@ -96,7 +95,7 @@ public interface LayoutModel2D<V>
     /**
      * Collect a map of all vertices locations. May return null if the model does not store
      * locations.
-     * 
+     *
      * @return a map with all the locations
      */
     default Map<V, Point2D> collect()
@@ -111,7 +110,7 @@ public interface LayoutModel2D<V>
     /**
      * Get an iterator with all vertices' locations. May return an empty iterator if the model does
      * not store locations.
-     * 
+     *
      * @return an iterator which returns all vertices with their locations. May return an empty
      *         iterator if the model does not store locations.
      */

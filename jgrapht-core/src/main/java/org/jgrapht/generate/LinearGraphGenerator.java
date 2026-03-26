@@ -30,8 +30,7 @@ import java.util.*;
  *
  * @author John V. Sichi
  */
-public class LinearGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class LinearGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     /**
      * Role for the first vertex generated.

@@ -24,17 +24,16 @@ import java.util.Map;
 
 /**
  * Helper class to maintain a total order for a set of elements.
- * 
+ *
  * <p>
  * The user can choose between using a comparator, using the natural ordering of the elements or
  * maintaining internally a mapping to long integers. In the latter case the user is also
  * responsible for notifying this class whenever elements are removed, in order to cleanup any
  * internal state. Construction of elements is performed in a lazy manner.
- * 
+ *
  * @author Dimitrios Michail
  */
-class ElementOrder<V>
-    implements Serializable
+class ElementOrder<V> implements Serializable
 {
     private static final long serialVersionUID = -3732847114940656189L;
 
@@ -44,7 +43,7 @@ class ElementOrder<V>
 
     /**
      * Create a new element order.
-     * 
+     *
      * @param comparator the comparator to use
      * @param indices internal map from elements to long indices
      */
@@ -57,7 +56,7 @@ class ElementOrder<V>
 
     /**
      * Create an element order with a comparator
-     * 
+     *
      * @param <V> the element type
      * @param comparator the comparator
      * @return the element order
@@ -69,7 +68,7 @@ class ElementOrder<V>
 
     /**
      * Create an element order with the natural ordering
-     * 
+     *
      * @param <V> the element type
      * @return the element order
      */
@@ -80,7 +79,7 @@ class ElementOrder<V>
 
     /**
      * Create an internal element order which maintains a map from elements to long values.
-     * 
+     *
      * @param <V> the element type
      * @return the element order
      */
@@ -91,7 +90,7 @@ class ElementOrder<V>
 
     /**
      * Compare two elements
-     * 
+     *
      * @param v first element
      * @param u second element
      * @return the value {@code 0} if {@code v} is equal to {@code u}; a value less than {@code 0}
@@ -114,7 +113,7 @@ class ElementOrder<V>
 
     /**
      * Get the minimum of two elements.
-     * 
+     *
      * @param v first element
      * @param u second element
      * @return the minimum of two elements
@@ -126,7 +125,7 @@ class ElementOrder<V>
 
     /**
      * Notify about a new element.
-     * 
+     *
      * @param v the element
      */
     public void notifyAddition(V v)
@@ -139,7 +138,7 @@ class ElementOrder<V>
     /**
      * Notify about an element being removed. This method only affects the case that an internal map
      * to long integers is maintained.
-     * 
+     *
      * @param v the element
      */
     public void notifyRemoval(V v)

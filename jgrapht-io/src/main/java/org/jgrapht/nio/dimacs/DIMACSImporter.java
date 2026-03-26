@@ -35,7 +35,7 @@ import java.util.function.*;
  * In summary, one of the most common DIMACS formats was used in the
  * <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">2nd DIMACS challenge</a> and follows
  * the following structure:
- * 
+ *
  * <pre>
  * {@code
  * DIMACS G {
@@ -49,16 +49,16 @@ import java.util.function.*;
  * }
  * }
  * </pre>
- * 
+ *
  * Although not specified directly in the DIMACS format documentation, this implementation also
  * allows for the a weighted variant:
- * 
+ *
  * <pre>
- * {@code 
- * e <edge source 1> <edge target 1> <edge_weight> 
+ * {@code
+ * e <edge source 1> <edge target 1> <edge_weight>
  * }
  * </pre>
- * 
+ *
  * Note: the current implementation does not fully implement the DIMACS specifications! Special
  * (rarely used) fields specified as 'Optional Descriptors' are currently not supported (ignored).
  *
@@ -69,9 +69,7 @@ import java.util.function.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DIMACSImporter<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class DIMACSImporter<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     /**
      * Default key used for vertex ID.
@@ -83,7 +81,7 @@ public class DIMACSImporter<V, E>
 
     /**
      * Construct a new DIMACSImporter
-     * 
+     *
      * @param defaultWeight default edge weight
      */
     public DIMACSImporter(double defaultWeight)
@@ -103,7 +101,7 @@ public class DIMACSImporter<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<Integer, V> getVertexFactory()
@@ -114,11 +112,11 @@ public class DIMACSImporter<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the file.
      * The method is called with parameter the vertex identifier from the file and should return the
      * actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<Integer, V> vertexFactory)
@@ -128,16 +126,16 @@ public class DIMACSImporter<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the file contains self-loops then the graph provided must also support self-loops.
      * The same for multiple edges.
-     * 
+     *
      * <p>
      * If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
      * edge weights are ignored.
-     * 
+     *
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error

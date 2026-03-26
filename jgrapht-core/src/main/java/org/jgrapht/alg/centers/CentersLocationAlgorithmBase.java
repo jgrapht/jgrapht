@@ -33,8 +33,7 @@ import org.jgrapht.alg.interfaces.CentersLocationAlgorithm;
  *
  * @author Jose Alejandro Cornejo-Acosta
  */
-public abstract class CentersLocationAlgorithmBase<V, E>
-    implements CentersLocationAlgorithm<V, E>
+public abstract class CentersLocationAlgorithmBase<V, E> implements CentersLocationAlgorithm<V, E>
 {
 
     /**

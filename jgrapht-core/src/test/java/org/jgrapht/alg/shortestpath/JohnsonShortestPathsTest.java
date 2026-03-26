@@ -39,11 +39,9 @@ public class JohnsonShortestPathsTest
     @Test
     public void testIssue408()
     {
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().edgeClass(DefaultEdge.class)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
-                .allowingSelfLoops(false).buildGraph();
+        Graph<Integer, DefaultEdge> graph = GraphTypeBuilder.directed().edgeClass(DefaultEdge.class)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
+            .allowingSelfLoops(false).buildGraph();
 
         for (int i = 0; i < 7; i++) {
             graph.addVertex();
@@ -67,9 +65,8 @@ public class JohnsonShortestPathsTest
     @Test
     public void testWikipediaExample()
     {
-        Graph<String,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultWeightedEdge> g =
+            GraphTypeBuilder.directed().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph();
 
@@ -103,8 +100,7 @@ public class JohnsonShortestPathsTest
 
         List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
         graphs.add(
-            () -> GraphTypeBuilder
-                .directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
+            () -> GraphTypeBuilder.directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph());
 

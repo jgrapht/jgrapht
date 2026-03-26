@@ -86,9 +86,9 @@
  * Finally, note that the best performance and compression can be obtained by representing the graph
  * using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s {@link it.unimi.dsi.webgraph.EFGraph
  * EFGraph} format and then accessing the graph using the suitable {@linkplain org.jgrapht.webgraph
- * adapter}; in particular, one can represent graphs with more than {@link java.lang.Integer#MAX_VALUE}
- * vertices. However, the adapters do not provide methods mapping bijectively edges into a
- * contiguous set of integers.
+ * adapter}; in particular, one can represent graphs with more than
+ * {@link java.lang.Integer#MAX_VALUE} vertices. However, the adapters do not provide methods
+ * mapping bijectively edges into a contiguous set of integers.
  *
  * <h2>Building and serializing with limited memory</h2>
  *
@@ -102,14 +102,14 @@
  * There is however a simple strategy that makes it possible to build succinct representations using
  * a relatively small amount of additional memory with respect to the representation itself:
  * <ol>
- * <li>convert your graph to a WebGraph format such as
- * {@link it.unimi.dsi.big.webgraph.BVGraph BVGraph} or {@link it.unimi.dsi.webgraph.EFGraph
- * EFGraph};
+ * <li>convert your graph to a WebGraph format such as {@link it.unimi.dsi.big.webgraph.BVGraph
+ * BVGraph} or {@link it.unimi.dsi.webgraph.EFGraph EFGraph};
  * <li>if your graph is directed, use {@link it.unimi.dsi.webgraph.Transform Transform} to store the
  * transpose of your graph in the same way;
  * <li>use a {@linkplain org.jgrapht.webgraph suitable adapter} to get a {@link org.jgrapht.Graph
  * Graph} representing your graph, taking care of loading the WebGraph representations using
- * {@link it.unimi.dsi.webgraph.ImmutableGraph#loadMapped(java.lang.CharSequence)}  ImmutableGraph.loadMapped()};
+ * {@link it.unimi.dsi.webgraph.ImmutableGraph#loadMapped(java.lang.CharSequence)}
+ * ImmutableGraph.loadMapped()};
  * <li>use the copy constructor to obtain a quasi-succinct representation.
  * </ol>
  */

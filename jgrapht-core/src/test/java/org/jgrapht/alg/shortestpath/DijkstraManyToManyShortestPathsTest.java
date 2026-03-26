@@ -29,8 +29,7 @@ import org.junit.jupiter.api.*;
  *
  * @author Semen Chudakov
  */
-public class DijkstraManyToManyShortestPathsTest
-    extends BaseManyToManyShortestPathsTest
+public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTest
 {
 
     @Test

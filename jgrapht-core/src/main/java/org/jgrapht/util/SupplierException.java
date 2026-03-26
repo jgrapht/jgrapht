@@ -21,11 +21,10 @@ import java.util.function.*;
 
 /**
  * Exception thrown to indicate that a {@link Supplier} is in an invalid state.
- * 
+ *
  * @author Hannes Wellmann
  */
-public class SupplierException
-    extends IllegalArgumentException
+public class SupplierException extends IllegalArgumentException
 {
     private static final long serialVersionUID = -8192314371524515620L;
 

@@ -44,7 +44,7 @@ import java.util.*;
  * This algorithm is used to detect valid cyclic exchanges in a cyclic exchange neighborhood for the
  * Capacitated Minomum Spanning Tree problem
  * {@link org.jgrapht.alg.spanning.AhujaOrlinSharmaCapacitatedMinimumSpanningTree}
- * 
+ *
  * @see org.jgrapht.alg.spanning.AhujaOrlinSharmaCapacitatedMinimumSpanningTree
  *
  * @param <V> the vertex type the graph
@@ -227,16 +227,16 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
     }
 
     /**
-     * Checks whether {@code path} dominates the current minimal cost path with the same head,
-     * tail and label set in the set of all paths of length k + 1. Thus, dominated paths are
-     * eliminated. This is important out of efficiency reasons, otherwise many unnecessary paths may
-     * be considered in further calculations.
+     * Checks whether {@code path} dominates the current minimal cost path with the same head, tail
+     * and label set in the set of all paths of length k + 1. Thus, dominated paths are eliminated.
+     * This is important out of efficiency reasons, otherwise many unnecessary paths may be
+     * considered in further calculations.
      *
      * @param path the currently calculated path
      * @param pathsLengthKplus1 all before calculated paths of length k + 1
      *
-     * @return whether {@code path} dominates the current minimal cost path with the same head,
-     *         tail and label set.
+     * @return whether {@code path} dominates the current minimal cost path with the same head, tail
+     *         and label set.
      */
     private boolean checkDominatedPathsOfLengthKplus1(
         LabeledPath<V> path, Map<PathSetKey<V>, LabeledPath<V>> pathsLengthKplus1)
@@ -251,8 +251,8 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
     }
 
     /**
-     * Checks whether {@code path} is dominated by some path in the previously calculated set
-     * of paths of length k. This is important out of efficiency reasons, otherwise many unnecessary
+     * Checks whether {@code path} is dominated by some path in the previously calculated set of
+     * paths of length k. This is important out of efficiency reasons, otherwise many unnecessary
      * paths may be considered in further calculations.
      *
      * @param path the currently calculated path
@@ -281,8 +281,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
 
     /**
      * Adds a path and removes the path, which has the same tail, head and label set, to the data
-     * structure {@code paths}, which contains all paths indexed by their head, tail and label
-     * set.
+     * structure {@code paths}, which contains all paths indexed by their head, tail and label set.
      *
      * @param paths the map of paths, which are indexed by head, tail and label set, to add the path
      *        to
@@ -304,8 +303,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
      * @author Christoph Grüne
      * @since June 7, 2018
      */
-    private class LabeledPath<V>
-        implements Cloneable
+    private class LabeledPath<V> implements Cloneable
     {
 
         /**

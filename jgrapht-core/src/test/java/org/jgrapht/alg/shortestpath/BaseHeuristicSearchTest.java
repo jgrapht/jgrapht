@@ -187,8 +187,7 @@ public class BaseHeuristicSearchTest
         }
     }
 
-    public static class ManhattanDistance
-        implements AStarAdmissibleHeuristic<Node>
+    public static class ManhattanDistance implements AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)
@@ -204,8 +203,7 @@ public class BaseHeuristicSearchTest
         }
     }
 
-    public static class EuclideanDistance
-        implements AStarAdmissibleHeuristic<Node>
+    public static class EuclideanDistance implements AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)

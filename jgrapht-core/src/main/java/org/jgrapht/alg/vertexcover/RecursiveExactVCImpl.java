@@ -57,8 +57,7 @@ import java.util.stream.*;
  *
  * @author Joris Kinable
  */
-public class RecursiveExactVCImpl<V, E>
-    implements VertexCoverAlgorithm<V>
+public class RecursiveExactVCImpl<V, E> implements VertexCoverAlgorithm<V>
 {
 
     /** Input graph **/
@@ -97,20 +96,20 @@ public class RecursiveExactVCImpl<V, E>
 
     /**
      * Constructs a new GreedyVCImpl instance
-     * 
+     *
      * @param graph input graph
      */
     public RecursiveExactVCImpl(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireUndirected(graph);
-        this.vertexWeightMap = graph
-            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+        this.vertexWeightMap = graph.vertexSet().stream()
+            .collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
         weighted = false;
     }
 
     /**
      * Constructs a new GreedyVCImpl instance
-     * 
+     *
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
      */
@@ -246,7 +245,7 @@ public class RecursiveExactVCImpl<V, E>
      * Returns the weight of a collection of vertices. In case of the unweighted vertex cover
      * problem, the return value is the cardinality of the collection. In case of the weighted
      * version, the return value is the sum of the weights of the vertices
-     * 
+     *
      * @param vertices vertices
      * @return the total weight of the vertices in the collection.
      */
@@ -281,7 +280,7 @@ public class RecursiveExactVCImpl<V, E>
 
         /**
          * Construct a new empty vertex cover as a BitSet.
-         * 
+         *
          * @param size initial capacity of the BitSet
          * @param initialWeight the initial weight
          */
@@ -293,7 +292,7 @@ public class RecursiveExactVCImpl<V, E>
 
         /**
          * Copy constructor
-         * 
+         *
          * @param vertexCover the input vertex cover to copy
          */
         protected BitSetCover(BitSetCover vertexCover)
@@ -304,7 +303,7 @@ public class RecursiveExactVCImpl<V, E>
 
         /**
          * Copy a vertex cover.
-         * 
+         *
          * @return a copy of the vertex cover
          */
         protected BitSetCover copy()
@@ -314,7 +313,7 @@ public class RecursiveExactVCImpl<V, E>
 
         /**
          * Add a vertex in the vertex cover.
-         * 
+         *
          * @param vertexIndex the index of the vertex
          * @param weight the weight of the vertex
          */
@@ -326,7 +325,7 @@ public class RecursiveExactVCImpl<V, E>
 
         /**
          * Add multiple vertices in the vertex cover.
-         * 
+         *
          * @param vertexIndices the index of the vertices
          * @param totalWeight the total weight of the vertices
          */

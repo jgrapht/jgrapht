@@ -30,7 +30,7 @@ import java.util.stream.*;
  * <a href="https://doi.org/10.1007/s00224-016-9686-0">paper</a>: C. Berkholz, P. Bonsma, and M.
  * Grohe. Tight lower and upper bounds for the complexity of canonical colour refinement. Theory of
  * Computing Systems, 60(4), p581--614, 2017.
- * 
+ *
  * <p>
  * The complexity of this algorithm is $O((|V| + |E|)log |V|)$.
  *
@@ -41,8 +41,7 @@ import java.util.stream.*;
  * @author Daniel Mock
  * @author Oliver Feith
  */
-public class ColorRefinementAlgorithm<V, E>
-    implements VertexColoringAlgorithm<V>
+public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V>
 {
     private final Graph<V, E> graph;
     private final Coloring<V> alpha;
@@ -95,8 +94,7 @@ public class ColorRefinementAlgorithm<V, E>
             Set<Integer> adjacentColors = calculateColorDegrees(currentColor, rep);
 
             // split colors
-            adjacentColors
-                .stream().filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
+            adjacentColors.stream().filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
                 .sorted(Comparator.comparingInt(o -> o)) // canonical order
                 .forEach(color -> splitUpColor(color, refineStack, rep));
 
@@ -122,9 +120,8 @@ public class ColorRefinementAlgorithm<V, E>
 
         // calculate color degree and update maxColorDegree
         for (V v : rep.colorClasses.get(refiningColor)) {
-            Set<V> inNeighborhood = graph
-                .incomingEdgesOf(v).stream().map(e -> Graphs.getOppositeVertex(graph, e, v))
-                .collect(Collectors.toSet());
+            Set<V> inNeighborhood = graph.incomingEdgesOf(v).stream()
+                .map(e -> Graphs.getOppositeVertex(graph, e, v)).collect(Collectors.toSet());
 
             for (V w : inNeighborhood) {
                 rep.colorDegree.put(w, rep.colorDegree.get(w) + 1);

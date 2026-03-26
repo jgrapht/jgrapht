@@ -59,8 +59,8 @@ public class MaximumFlowAlgorithmPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
             for (int i = 0; i < NUMBER_OF_GRAPHS; i++) {
-                SimpleDirectedWeightedGraph<Integer,
-                    DefaultWeightedEdge> network = new SimpleDirectedWeightedGraph<>(
+                SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
+                    new SimpleDirectedWeightedGraph<>(
                         SupplierUtil.createIntegerSupplier(0),
                         SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
@@ -78,8 +78,7 @@ public class MaximumFlowAlgorithmPerformanceTest
         }
     }
 
-    public static class EdmondsKarpMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class EdmondsKarpMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -89,8 +88,7 @@ public class MaximumFlowAlgorithmPerformanceTest
         }
     }
 
-    public static class PushRelabelMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class PushRelabelMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -100,8 +98,7 @@ public class MaximumFlowAlgorithmPerformanceTest
         }
     }
 
-    public static class DinicMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class DinicMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
 
         @Override

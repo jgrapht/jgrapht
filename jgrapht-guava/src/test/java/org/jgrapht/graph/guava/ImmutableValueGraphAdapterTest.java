@@ -56,8 +56,8 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        @SuppressWarnings("unchecked") Graph<String,
-            EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
+        @SuppressWarnings("unchecked") Graph<String, EndpointPair<String>> g =
+            new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
@@ -161,8 +161,8 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        @SuppressWarnings("unchecked") Graph<String,
-            EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
+        @SuppressWarnings("unchecked") Graph<String, EndpointPair<String>> g =
+            new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
@@ -281,8 +281,8 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        @SuppressWarnings("unchecked") Graph<String,
-            EndpointPair<String>> initialGraph = new ImmutableValueGraphAdapter<>(
+        @SuppressWarnings("unchecked") Graph<String, EndpointPair<String>> initialGraph =
+            new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
@@ -340,8 +340,7 @@ public class ImmutableValueGraphAdapterTest
 
     }
 
-    private static class MyValue
-        implements Serializable
+    private static class MyValue implements Serializable
     {
 
         private static final long serialVersionUID = 1L;

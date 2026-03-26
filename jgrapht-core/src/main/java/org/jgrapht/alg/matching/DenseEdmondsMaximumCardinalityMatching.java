@@ -89,8 +89,7 @@ import java.util.stream.*;
  *
  * @author Joris Kinable
  */
-public class DenseEdmondsMaximumCardinalityMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class DenseEdmondsMaximumCardinalityMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     /* The graph we are matching on. */
     private final Graph<V, E> graph;
@@ -139,7 +138,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
     /**
      * Constructs a new instance of the algorithm. {@link GreedyMaximumCardinalityMatching} is used
      * to quickly generate a near optimal initial solution.
-     * 
+     *
      * @param graph undirected graph (graph does not have to be simple)
      */
     public DenseEdmondsMaximumCardinalityMatching(Graph<V, E> graph)
@@ -149,7 +148,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * Constructs a new instance of the algorithm.
-     * 
+     *
      * @param graph undirected graph (graph does not have to be simple)
      * @param initializer heuristic matching algorithm used to quickly generate a (near optimal)
      *        initial feasible solution.
@@ -187,7 +186,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * Calculates an initial feasible matching.
-     * 
+     *
      * @param initializer algorithm used to compute the initial matching
      */
     private void warmStart(MatchingAlgorithm<V, E> initializer)
@@ -326,7 +325,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
     /**
      * Computes the base of the blossom formed by bridge edge $(v,w)$. The base vertex is the
      * nearest common ancestor of $v$ and $w$.
-     * 
+     *
      * @param v one side of the bridge
      * @param w other side of the bridge
      * @return base of the blossom
@@ -445,7 +444,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
      * Returns a matching of maximum cardinality. Each time this method is invoked, the matching is
      * computed from scratch. Consequently, it is possible to make changes to the graph and to
      * re-invoke this method on the altered graph.
-     * 
+     *
      * @return a matching of maximum cardinality.
      */
     @Override
@@ -492,7 +491,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
      * the runtime of this method equals the time required to test for the existence of a single
      * augmenting path.<br>
      * This method does NOT check whether the matching is valid.
-     * 
+     *
      * @param matching matching
      * @return true if the matching is maximum, false otherwise.
      */
@@ -525,11 +524,11 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
         // minimum in the Tutte-Berge Formula. It can be shown that
         // A(G)= {vertices labeled odd in the Edmonds Blossomg-Shrinking algorithm}. Note: we only
         // take odd vertices that are not consumed by blossoms (every blossom is even).
-        Set<V> oddVertices = vertexIndexMap
-            .values().stream().filter(vx -> levels.isOdd(vx) && !bridges.containsKey(vx))
-            .map(vertices::get).collect(Collectors.toSet());
-        Set<V> otherVertices = graph
-            .vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
+        Set<V> oddVertices = vertexIndexMap.values().stream()
+            .filter(vx -> levels.isOdd(vx) && !bridges.containsKey(vx)).map(vertices::get)
+            .collect(Collectors.toSet());
+        Set<V> otherVertices = graph.vertexSet().stream().filter(v -> !oddVertices.contains(v))
+            .collect(Collectors.toSet());
 
         Graph<V, E> subgraph = new AsSubgraph<>(graph, otherVertices, null); // Induced subgraph
                                                                              // defined on all
@@ -539,15 +538,14 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
         long nrOddCardinalityComponents =
             connectedComponents.stream().filter(s -> s.size() % 2 == 1).count();
 
-        return matching
-            .getEdges()
+        return matching.getEdges()
             .size() == (graph.vertexSet().size() + oddVertices.size() - nrOddCardinalityComponents)
                 / 2.0;
     }
 
     /**
      * Storage of the forest, even and odd levels.
-     * 
+     *
      * We explicitly maintain a dirty mark in order to be able to cleanup only the values that we
      * have changed. This is important when the graph is sparse to avoid performing an $O(n)$
      * operation per augmentation.

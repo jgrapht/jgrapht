@@ -32,7 +32,7 @@ import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing matching algorithms.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class PathGrowingWeightedMatchingPerformanceTest
@@ -73,8 +73,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         }
     }
 
-    public static class PathGrowingWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class PathGrowingWeightedMatchingRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -83,8 +82,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         }
     }
 
-    public static class PathGrowingWeightedMatchingNoHeuristicsRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class PathGrowingWeightedMatchingNoHeuristicsRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -94,8 +92,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         }
     }
 
-    public static class GreedyWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class GreedyWeightedMatchingRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -104,8 +101,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         }
     }
 
-    public static class EdmondsMaximumCardinalityMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class EdmondsMaximumCardinalityMatchingRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)

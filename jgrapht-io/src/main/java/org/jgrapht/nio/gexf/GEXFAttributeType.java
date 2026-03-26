@@ -19,7 +19,7 @@ package org.jgrapht.nio.gexf;
 
 /**
  * Attribute types supported by GEXF.
- * 
+ *
  * @author Dimitrios Michail
  */
 public enum GEXFAttributeType
@@ -42,7 +42,7 @@ public enum GEXFAttributeType
 
     /**
      * Get a string representation of the attribute type
-     * 
+     *
      * @return the string representation of the attribute type
      */
     public String toString()
@@ -52,7 +52,7 @@ public enum GEXFAttributeType
 
     /**
      * Create a type from a string representation
-     * 
+     *
      * @param value the name of the type
      * @return the attribute type
      */

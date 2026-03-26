@@ -31,8 +31,7 @@ import org.jgrapht.GraphIterables;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DefaultGraphIterables<V, E>
-    implements GraphIterables<V, E>
+public class DefaultGraphIterables<V, E> implements GraphIterables<V, E>
 {
     /**
      * The underlying graph
@@ -49,7 +48,7 @@ public class DefaultGraphIterables<V, E>
 
     /**
      * Create new graph iterables
-     * 
+     *
      * @param graph the underlying graph
      */
     public DefaultGraphIterables(Graph<V, E> graph)

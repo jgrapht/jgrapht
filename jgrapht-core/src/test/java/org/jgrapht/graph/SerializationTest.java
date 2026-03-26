@@ -123,10 +123,8 @@ public class SerializationTest
         for (E e : edgeSet)
             assertInstanceOf(DefaultWeightedEdge.class, e);
         assertEquals(
-            new HashSet<>(weights),
-            edgeSet
-                .stream().map(e -> (DefaultWeightedEdge) e).map(DefaultWeightedEdge::getWeight)
-                .collect(Collectors.toSet()));
+            new HashSet<>(weights), edgeSet.stream().map(e -> (DefaultWeightedEdge) e)
+                .map(DefaultWeightedEdge::getWeight).collect(Collectors.toSet()));
     }
 
     /**

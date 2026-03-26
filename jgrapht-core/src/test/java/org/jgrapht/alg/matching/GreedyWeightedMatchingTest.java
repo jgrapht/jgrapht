@@ -23,11 +23,10 @@ import org.jgrapht.graph.*;
 
 /**
  * Unit tests for the GreedyWeightedMatching algorithm.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class GreedyWeightedMatchingTest
-    extends ApproximateWeightedMatchingTest
+public class GreedyWeightedMatchingTest extends ApproximateWeightedMatchingTest
 {
 
     @Override

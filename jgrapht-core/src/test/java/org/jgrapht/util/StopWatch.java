@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 
 /**
  * A very simple stop watch.
- * 
+ *
  * @author Assaf Lehr
  */
 public class StopWatch
@@ -46,7 +46,7 @@ public class StopWatch
 
     /**
      * Get the elapsed time from the last restart.
-     * 
+     *
      * @param timeUnit the time unit
      * @return the elapsed time in the given time unit
      */

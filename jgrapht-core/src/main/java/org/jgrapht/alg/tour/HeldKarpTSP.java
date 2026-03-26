@@ -48,8 +48,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class HeldKarpTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class HeldKarpTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     private double memo(int previousNode, int state, double[][] c, double[][] w)

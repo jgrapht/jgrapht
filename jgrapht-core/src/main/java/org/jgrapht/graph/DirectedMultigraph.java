@@ -25,12 +25,11 @@ import java.util.function.*;
 /**
  * A directed multigraph. A directed multigraph is a non-simple directed graph in which no loops are
  * permitted, but multiple (parallel) edges between any two vertices are.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DirectedMultigraph<V, E>
-    extends AbstractBaseGraph<V, E>
+public class DirectedMultigraph<V, E> extends AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = 2919338637676573948L;
 
@@ -46,7 +45,7 @@ public class DirectedMultigraph<V, E>
 
     /**
      * Creates a new graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      * @param weighted whether the graph is weighted or not
@@ -55,15 +54,13 @@ public class DirectedMultigraph<V, E>
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
         super(
-            vertexSupplier, edgeSupplier,
-            new DefaultGraphType.Builder()
-                .directed().allowMultipleEdges(true).allowSelfLoops(false).weighted(weighted)
-                .build());
+            vertexSupplier, edgeSupplier, new DefaultGraphType.Builder().directed()
+                .allowMultipleEdges(true).allowSelfLoops(false).weighted(weighted).build());
     }
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -77,7 +74,7 @@ public class DirectedMultigraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type

@@ -39,19 +39,19 @@ public interface GraphIterables<V, E>
 {
     /**
      * Get the underlying graph.
-     * 
+     *
      * @return the underlying graph
      */
     Graph<V, E> getGraph();
 
     /**
      * Returns an iterable over the edges of the graph.
-     * 
+     *
      * <p>
      * Whether the ordering is deterministic, depends on the actual graph implementation. It is the
      * responsibility of callers who rely on this behavior to only use graph implementations which
      * support it.
-     * 
+     *
      * @return an iterable over the edges of the graph.
      */
     default Iterable<E> edges()
@@ -61,7 +61,7 @@ public interface GraphIterables<V, E>
 
     /**
      * Return the number of edges in the graph.
-     * 
+     *
      * @return the number of edges.
      */
     default long edgeCount()
@@ -79,7 +79,7 @@ public interface GraphIterables<V, E>
      * this is not required. It is the responsibility of callers who rely on this behavior to only
      * use graph implementations which support it.
      * </p>
-     * 
+     *
      * @return an iterable view of the vertices contained in this graph
      */
     default Iterable<V> vertices()
@@ -89,7 +89,7 @@ public interface GraphIterables<V, E>
 
     /**
      * Return the number of vertices in the graph.
-     * 
+     *
      * @return the number of vertices
      */
     default long vertexCount()
@@ -115,11 +115,11 @@ public interface GraphIterables<V, E>
 
     /**
      * Returns the degree of the specified vertex.
-     * 
+     *
      * <p>
      * A degree of a vertex in an undirected graph is the number of edges touching that vertex.
      * Edges with same source and target vertices (self-loops) are counted twice.
-     * 
+     *
      * <p>
      * In directed graphs this method returns the sum of the "in degree" and the "out degree".
      *
@@ -138,7 +138,7 @@ public interface GraphIterables<V, E>
      * Returns an iterable view over all edges incoming into the specified vertex. The returned
      * iterators are live views. If the graph is modified while an iteration is in progress, the
      * results of the iteration are undefined.
-     * 
+     *
      * <p>
      * In the case of undirected graphs the returned iterators return all edges touching the vertex,
      * thus, some of the returned edges may have their source and target vertices in the opposite
@@ -156,12 +156,12 @@ public interface GraphIterables<V, E>
 
     /**
      * Returns the "in degree" of the specified vertex.
-     * 
+     *
      * <p>
      * The "in degree" of a vertex in a directed graph is the number of inward directed edges from
      * that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
      * http://mathworld.wolfram.com/Indegree.html</a>.
-     * 
+     *
      * <p>
      * In the case of undirected graphs this method returns the number of edges touching the vertex.
      * Edges with same source and target vertices (self-loops) are counted twice.
@@ -181,7 +181,7 @@ public interface GraphIterables<V, E>
      * Returns an iterable view over all edges outgoing into the specified vertex. The returned
      * iterators are live views. If the graph is modified while an iteration is in progress, the
      * results of the iteration are undefined.
-     * 
+     *
      * <p>
      * In the case of undirected graphs the returned iterators return all edges touching the vertex,
      * thus, some of the returned edges may have their source and target vertices in the opposite
@@ -199,12 +199,12 @@ public interface GraphIterables<V, E>
 
     /**
      * Returns the "out degree" of the specified vertex.
-     * 
+     *
      * <p>
      * The "out degree" of a vertex in a directed graph is the number of outward directed edges from
      * that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
      * http://mathworld.wolfram.com/Outdegree.html</a>.
-     * 
+     *
      * <p>
      * In the case of undirected graphs this method returns the number of edges touching the vertex.
      * Edges with same source and target vertices (self-loops) are counted twice.
@@ -224,11 +224,10 @@ public interface GraphIterables<V, E>
      * Returns an iterable view over all edges connecting source vertex to target vertex if such
      * vertices exist in this graph. The returned iterators are live views. If the graph is modified
      * while an iteration is in progress, the results of the iteration are undefined.
-     * 
-     * If any of the vertices does not exist or is {@code null}, returns {@code null}. If
-     * both vertices exist but no edges found, returns an iterable which returns exhausted
-     * iterators.
-     * 
+     *
+     * If any of the vertices does not exist or is {@code null}, returns {@code null}. If both
+     * vertices exist but no edges found, returns an iterable which returns exhausted iterators.
+     *
      * <p>
      * In undirected graphs, some of the returned edges may have their source and target vertices in
      * the opposite order. In simple graphs the returned set is either singleton set or empty set.

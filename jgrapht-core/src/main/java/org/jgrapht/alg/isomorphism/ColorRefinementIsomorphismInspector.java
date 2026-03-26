@@ -41,8 +41,7 @@ import java.util.*;
  * @author Christoph Grüne
  * @author Dennis Fischer
  */
-public class ColorRefinementIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismInspector<V, E>
 {
 
     /**
@@ -164,9 +163,8 @@ public class ColorRefinementIsomorphismInspector<V, E>
 
         Graph<DistinctGraphObject<V, V, E>, DistinctGraphObject<E, V, E>> graph =
             getDisjointGraphUnion(graph1, graph2);
-        ColorRefinementAlgorithm<DistinctGraphObject<V, V, E>,
-            DistinctGraphObject<E, V, E>> colorRefinementAlgorithm =
-                new ColorRefinementAlgorithm<>(graph);
+        ColorRefinementAlgorithm<DistinctGraphObject<V, V, E>, DistinctGraphObject<E, V, E>> colorRefinementAlgorithm =
+            new ColorRefinementAlgorithm<>(graph);
 
         // execute color refinement for graph
         Coloring<DistinctGraphObject<V, V, E>> coloring = colorRefinementAlgorithm.getColoring();
@@ -258,8 +256,8 @@ public class ColorRefinementIsomorphismInspector<V, E>
             // safety check whether the color class is not empty.
             if (cur1.iterator().hasNext()) {
                 // check if the color are not the same (works as colors are integers).
-                if (!coloring1.getColors().get(cur1.iterator().next()).equals(
-                    coloring2.getColors().get(cur2.iterator().next())))
+                if (!coloring1.getColors().get(cur1.iterator().next())
+                    .equals(coloring2.getColors().get(cur2.iterator().next())))
                 {
                     // colors are not the same -> graphs are not isomorphic.
                     return false;
@@ -337,8 +335,8 @@ public class ColorRefinementIsomorphismInspector<V, E>
                 if (!it1.hasNext() || !it2.hasNext()) {
                     return Integer.compare(o1.size(), o2.size());
                 }
-                return coloring
-                    .getColors().get(it1.next()).compareTo(coloring.getColors().get(it2.next()));
+                return coloring.getColors().get(it1.next())
+                    .compareTo(coloring.getColors().get(it2.next()));
             }
             return Integer.compare(o1.size(), o2.size());
         });
@@ -396,13 +394,13 @@ public class ColorRefinementIsomorphismInspector<V, E>
         return new AsGraphUnion<>(getDistinctObjectGraph(graph1), getDistinctObjectGraph(graph2));
     }
 
-    private Graph<DistinctGraphObject<V, V, E>,
-        DistinctGraphObject<E, V, E>> getDistinctObjectGraph(Graph<V, E> graph)
+    private Graph<DistinctGraphObject<V, V, E>, DistinctGraphObject<E, V, E>> getDistinctObjectGraph(
+        Graph<V, E> graph)
     {
-        Graph<DistinctGraphObject<V, V, E>,
-            DistinctGraphObject<E, V, E>> transformedGraph = GraphTypeBuilder
-                .<DistinctGraphObject<V, V, E>,
-                    DistinctGraphObject<E, V, E>> forGraphType(graph.getType())
+        Graph<DistinctGraphObject<V, V, E>, DistinctGraphObject<E, V, E>> transformedGraph =
+            GraphTypeBuilder
+                .<DistinctGraphObject<V, V, E>, DistinctGraphObject<E, V, E>> forGraphType(
+                    graph.getType())
                 .buildGraph();
 
         for (V vertex : graph.vertexSet()) {

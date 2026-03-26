@@ -29,8 +29,7 @@ import org.junit.jupiter.api.*;
  *
  * @author Semen Chudakov
  */
-public class DefaultManyToManyShortestPathsTest
-    extends BaseManyToManyShortestPathsTest
+public class DefaultManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTest
 {
     @Test
     public void testEmptyGraph()

@@ -34,14 +34,13 @@ import java.util.*;
  *
  * @author Tom Conerly
  */
-public class KruskalMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+public class KruskalMinimumSpanningTree<V, E> implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> graph;
 
     /**
      * Construct a new instance of the algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public KruskalMinimumSpanningTree(Graph<V, E> graph)

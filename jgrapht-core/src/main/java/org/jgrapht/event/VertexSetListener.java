@@ -29,8 +29,7 @@ import java.util.*;
  * @author Barak Naveh
  * @see GraphListener
  */
-public interface VertexSetListener<V>
-    extends EventListener
+public interface VertexSetListener<V> extends EventListener
 {
     /**
      * Notifies that a vertex has been added to the graph.

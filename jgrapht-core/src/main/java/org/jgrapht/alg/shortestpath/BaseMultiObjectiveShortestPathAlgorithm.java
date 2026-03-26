@@ -31,8 +31,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E>
-    implements MultiObjectiveShortestPathAlgorithm<V, E>
+abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E> implements MultiObjectiveShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting that a source vertex is missing.
@@ -51,7 +50,7 @@ abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E>
 
     /**
      * Constructs a new instance of the algorithm for a given graph
-     * 
+     *
      * @param graph the graph
      */
     public BaseMultiObjectiveShortestPathAlgorithm(Graph<V, E> graph)
@@ -75,7 +74,7 @@ abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E>
 
     /**
      * Create an empty path. Returns null if the source vertex is different than the target vertex.
-     * 
+     *
      * @param source the source vertex
      * @param sink the sink vertex
      * @return an empty path or null null if the source vertex is different than the target vertex

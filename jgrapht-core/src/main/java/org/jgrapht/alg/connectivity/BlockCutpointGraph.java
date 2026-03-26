@@ -45,8 +45,7 @@ import java.util.*;
  * @author France Telecom S.A
  * @author Joris Kinable
  */
-public class BlockCutpointGraph<V, E>
-    extends SimpleGraph<Graph<V, E>, DefaultEdge>
+public class BlockCutpointGraph<V, E> extends SimpleGraph<Graph<V, E>, DefaultEdge>
 {
     private static final long serialVersionUID = -9101341117013163934L;
 
@@ -108,7 +107,7 @@ public class BlockCutpointGraph<V, E>
 
     /**
      * Returns all blocks (biconnected components) in the graph
-     * 
+     *
      * @return all blocks (biconnected components) in the graph.
      */
     public Set<Graph<V, E>> getBlocks()
@@ -118,7 +117,7 @@ public class BlockCutpointGraph<V, E>
 
     /**
      * Returns the cutpoints of the initial graph.
-     * 
+     *
      * @return the cutpoints of the initial graph
      */
     public Set<V> getCutpoints()

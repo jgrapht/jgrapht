@@ -125,8 +125,8 @@ public class IsomorphismTestUtil
         return reappliedMapping.isValidIsomorphism();
     }
 
-    public static <
-        V> Graph<V, DefaultEdge> generateMappedGraph(Graph<V, DefaultEdge> graph, Map<V, V> mapping)
+    public static <V> Graph<V, DefaultEdge> generateMappedGraph(
+        Graph<V, DefaultEdge> graph, Map<V, V> mapping)
     {
 
         SimpleGraph<V, DefaultEdge> isoGraph =

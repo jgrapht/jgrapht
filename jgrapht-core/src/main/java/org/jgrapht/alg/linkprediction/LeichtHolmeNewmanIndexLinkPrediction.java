@@ -29,31 +29,30 @@ import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Leicht-Holme-Newman Index.
- * 
+ *
  * <p>
  * This is a local method which computes $s_{xy} = \frac{|\Gamma(u)\cap\Gamma(v))|}{k(u) \cdot
  * k(v)}$ where for a node $v$, $\Gamma(v)$ denotes the set of neighbors of $v$ and $k(v) =
  * |\Gamma(v)|$ denotes the degree of $v$.
  * </p>
- * 
+ *
  * See the following paper:
  * <ul>
  * <li>E.A. Leicht, P. Holme, M.E.J. Newman, Phys. Rev. E 73, 026120 (2006)</li>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class LeichtHolmeNewmanIndexLinkPrediction<V, E>
-    implements LinkPredictionAlgorithm<V, E>
+public class LeichtHolmeNewmanIndexLinkPrediction<V, E> implements LinkPredictionAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
     /**
      * Create a new prediction
-     * 
+     *
      * @param graph the input graph
      */
     public LeichtHolmeNewmanIndexLinkPrediction(Graph<V, E> graph)

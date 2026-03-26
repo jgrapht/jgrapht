@@ -28,9 +28,7 @@ import java.util.function.*;
  * Helper for {@link MaskSubgraph}.
  *
  */
-class MaskEdgeSet<V, E>
-    extends AbstractSet<E>
-    implements Serializable
+class MaskEdgeSet<V, E> extends AbstractSet<E> implements Serializable
 {
     private static final long serialVersionUID = 4208908842850100708L;
 
@@ -69,8 +67,7 @@ class MaskEdgeSet<V, E>
     @Override
     public Iterator<E> iterator()
     {
-        return edgeSet
-            .stream()
+        return edgeSet.stream()
             .filter(
                 e -> !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
                     && !vertexMask.test(graph.getEdgeTarget(e)))
@@ -83,8 +80,7 @@ class MaskEdgeSet<V, E>
     @Override
     public int size()
     {
-        return (int) edgeSet
-            .stream()
+        return (int) edgeSet.stream()
             .filter(
                 e -> !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
                     && !vertexMask.test(graph.getEdgeTarget(e)))

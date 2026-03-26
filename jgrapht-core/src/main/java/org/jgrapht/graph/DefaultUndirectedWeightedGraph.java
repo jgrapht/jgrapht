@@ -26,14 +26,13 @@ import java.util.function.*;
  * The default implementation of an undirected weighted graph. A default undirected weighted graph
  * is a non-simple undirected graph in which multiple (parallel) edges between any two vertices are
  * <i>not</i> permitted, but loops are. The edges of a weighted undirected graph have weights.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see DefaultUndirectedGraph
  */
-public class DefaultUndirectedWeightedGraph<V, E>
-    extends DefaultUndirectedGraph<V, E>
+public class DefaultUndirectedWeightedGraph<V, E> extends DefaultUndirectedGraph<V, E>
 {
     private static final long serialVersionUID = -1008165881690129042L;
 
@@ -49,7 +48,7 @@ public class DefaultUndirectedWeightedGraph<V, E>
 
     /**
      * Creates a new graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      */
@@ -60,30 +59,28 @@ public class DefaultUndirectedWeightedGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
-            Class<? extends E> edgeClass)
+    public static <V, E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
     {
         return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(edgeClass));
     }
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
-            Supplier<E> edgeSupplier)
+    public static <V, E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+        Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(null, edgeSupplier));
     }

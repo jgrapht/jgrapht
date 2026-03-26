@@ -32,8 +32,7 @@ import java.util.*;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public class IsomorphicGraphMapping<V, E>
-    implements GraphMapping<V, E>
+public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E>
 {
 
     public static final int NULL_NODE = -1;
@@ -46,7 +45,7 @@ public class IsomorphicGraphMapping<V, E>
 
     /**
      * Construct a new isomorphic graph mapping
-     * 
+     *
      * @param g1 the first graph
      * @param g2 the second graph which is a possible subgraph of g1
      * @param core1 the mapping as array (forwards)
@@ -89,7 +88,7 @@ public class IsomorphicGraphMapping<V, E>
      * @param backwardMapping the mapping from graph2 to graph1 (inverse of forwardMapping)
      * @param graph1 the first graph
      * @param graph2 the second graph
-     * 
+     *
      */
     public IsomorphicGraphMapping(
         Map<V, V> forwardMapping, Map<V, V> backwardMapping, Graph<V, E> graph1, Graph<V, E> graph2)
@@ -238,8 +237,8 @@ public class IsomorphicGraphMapping<V, E>
         int i = 0;
         for (Map.Entry<String, V> entry : vertexMap.entrySet()) {
             V u = getVertexCorrespondence(entry.getValue(), true);
-            str.append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=").append(
-                (u == null) ? "~~" : u);
+            str.append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=")
+                .append((u == null) ? "~~" : u);
         }
 
         return str + "]";

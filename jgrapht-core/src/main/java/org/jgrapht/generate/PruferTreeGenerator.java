@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * Generates a random tree using Prüfer sequences.
- * 
+ *
  * <p>
  * A Prüfer sequence of length $n$ is randomly generated and converted into the corresponding tree.
  * </p>
@@ -39,8 +39,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class PruferTreeGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V>
 {
 
     // number of vertices

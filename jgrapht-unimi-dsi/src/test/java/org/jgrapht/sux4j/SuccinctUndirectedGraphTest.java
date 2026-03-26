@@ -125,10 +125,9 @@ public class SuccinctUndirectedGraphTest
             s.edgesOf(1));
         assertEquals(Set.of(IntIntSortedPair.of(2, 1), IntIntSortedPair.of(2, 3)), s.edgesOf(2));
         assertEquals(
-            Set
-                .of(
-                    IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
-                    IntIntSortedPair.of(3, 2)),
+            Set.of(
+                IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
+                IntIntSortedPair.of(3, 2)),
             s.edgesOf(3));
         assertEquals(Set.of(IntIntSortedPair.of(4, 1), IntIntSortedPair.of(4, 3)), s.edgesOf(4));
 
@@ -140,10 +139,9 @@ public class SuccinctUndirectedGraphTest
         assertEquals(
             Set.of(IntIntSortedPair.of(2, 1), IntIntSortedPair.of(2, 3)), s.outgoingEdgesOf(2));
         assertEquals(
-            Set
-                .of(
-                    IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
-                    IntIntSortedPair.of(3, 2)),
+            Set.of(
+                IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
+                IntIntSortedPair.of(3, 2)),
             s.outgoingEdgesOf(3));
         assertEquals(
             Set.of(IntIntSortedPair.of(4, 1), IntIntSortedPair.of(4, 3)), s.outgoingEdgesOf(4));
@@ -156,10 +154,9 @@ public class SuccinctUndirectedGraphTest
         assertEquals(
             Set.of(IntIntSortedPair.of(2, 1), IntIntSortedPair.of(2, 3)), s.incomingEdgesOf(2));
         assertEquals(
-            Set
-                .of(
-                    IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
-                    IntIntSortedPair.of(3, 2)),
+            Set.of(
+                IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
+                IntIntSortedPair.of(3, 2)),
             s.incomingEdgesOf(3));
         assertEquals(
             Set.of(IntIntSortedPair.of(4, 1), IntIntSortedPair.of(4, 3)), s.incomingEdgesOf(4));
@@ -174,10 +171,9 @@ public class SuccinctUndirectedGraphTest
             Set.of(IntIntSortedPair.of(2, 1), IntIntSortedPair.of(2, 3)),
             new ObjectOpenHashSet<>(s.iterables().incomingEdgesOf(2).iterator()));
         assertEquals(
-            Set
-                .of(
-                    IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
-                    IntIntSortedPair.of(3, 2)),
+            Set.of(
+                IntIntSortedPair.of(0, 3), IntIntSortedPair.of(3, 3), IntIntSortedPair.of(3, 4),
+                IntIntSortedPair.of(3, 2)),
             new ObjectOpenHashSet<>(s.iterables().incomingEdgesOf(3).iterator()));
         assertEquals(
             Set.of(IntIntSortedPair.of(4, 1), IntIntSortedPair.of(4, 3)),

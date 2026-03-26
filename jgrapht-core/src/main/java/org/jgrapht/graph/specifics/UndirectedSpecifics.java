@@ -38,8 +38,7 @@ import java.util.function.*;
  * @author Barak Naveh
  * @author Joris Kinable
  */
-public class UndirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+public class UndirectedSpecifics<V, E> implements Specifics<V, E>, Serializable
 {
     private static final long serialVersionUID = 4206026440450450992L;
 
@@ -49,7 +48,7 @@ public class UndirectedSpecifics<V, E>
 
     /**
      * Construct a new undirected specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.

@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GraphMLImporterTest
@@ -45,20 +45,20 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -79,27 +79,26 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<>();
@@ -121,27 +120,25 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false, false);
+        Graph<String, DefaultEdge> g = readGraph(
+            new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false, false);
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -158,22 +155,22 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL + 
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<edge source=\"3\" target=\"1\"/>"+ NL +
             "<edge source=\"3\" target=\"1\"/>"+ NL +
             "<edge source=\"1\" target=\"1\"/>"+ NL +
-            "</graph>" + NL + 
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -195,21 +192,21 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph edgedefault=\"undirected\">" + NL +
             "<node id=\"n1\"/>" + NL +
-            "<node id=\"n2\"/>" + NL + 
-            "<node id=\"n3\"/>" + NL + 
-            "<edge source=\"n1\" target=\"n2\"/>" + NL + 
-            "<edge source=\"n2\" target=\"n3\"/>" + NL + 
+            "<node id=\"n2\"/>" + NL +
+            "<node id=\"n3\"/>" + NL +
+            "<edge source=\"n1\" target=\"n2\"/>" + NL +
+            "<edge source=\"n2\" target=\"n3\"/>" + NL +
             "<edge source=\"n3\" target=\"n1\"/>"+ NL +
             "<edge source=\"n1\" target=\"n1\"/>"+ NL +
-            "</graph>" + NL + 
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -231,20 +228,20 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<edge source=\"3\" target=\"1\"/>"+ NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -265,20 +262,20 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"directed\">" + NL + 
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"directed\">" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<edge source=\"3\" target=\"1\"/>"+ NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -302,20 +299,20 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<gml:graphml xmlns:gml=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<gml:graphml xmlns:gml=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<gml:graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<gml:graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<gml:node id=\"1\"/>" + NL +
-            "<gml:node id=\"2\"/>" + NL + 
-            "<gml:node id=\"3\"/>" + NL + 
-            "<gml:edge source=\"1\" target=\"2\"/>" + NL + 
-            "<gml:edge source=\"2\" target=\"3\"/>" + NL + 
-            "<gml:edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</gml:graph>" + NL + 
+            "<gml:node id=\"2\"/>" + NL +
+            "<gml:node id=\"3\"/>" + NL +
+            "<gml:edge source=\"1\" target=\"2\"/>" + NL +
+            "<gml:edge source=\"2\" target=\"3\"/>" + NL +
+            "<gml:edge source=\"3\" target=\"1\"/>"+ NL +
+            "</gml:graph>" + NL +
             "</gml:graphml>";
         // @formatter:on
 
@@ -338,9 +335,9 @@ public class GraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
             "<default>yellow</default>" + NL +
@@ -384,9 +381,9 @@ public class GraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
             "<default>yellow</default>" + NL +
@@ -448,9 +445,9 @@ public class GraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
             "<default>yellow</default>" + NL +
@@ -500,9 +497,9 @@ public class GraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
             "<default>yellow</default>" + NL +
@@ -562,9 +559,9 @@ public class GraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
             "<default>yellow</default>" + NL +
@@ -640,9 +637,9 @@ public class GraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"n0\"/>" + NL +
@@ -681,17 +678,17 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<nOde id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<myedge source=\"1\" target=\"2\"/>" + NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<myedge source=\"1\" target=\"2\"/>" + NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -707,15 +704,15 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node/>" + NL +
-            "</graph>" + NL + 
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -731,16 +728,16 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +  
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"1\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "</graph>" + NL + 
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -934,22 +931,22 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL + 
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<edge source=\"3\" target=\"1\"/>"+ NL +
             "<edge source=\"3\" target=\"1\"/>"+ NL +
             "<edge source=\"1\" target=\"1\"/>"+ NL +
-            "</graph>" + NL + 
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -970,15 +967,15 @@ public class GraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL + 
-                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
+                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
                  "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"name\" for=\"node\" attr.name=\"name\" attr.type=\"string\"/>" + NL +
             "<key id=\"id\" for=\"node\" attr.name=\"id\" attr.type=\"long\"/>" + NL +
             "<graph id=\"G\" edgedefault=\"directed\">" + NL +
-                "<node id=\"n45\" labels=\":Person:ENTITY\">" + NL + 
+                "<node id=\"n45\" labels=\":Person:ENTITY\">" + NL +
                     "<data key=\"labels\">:Person:ENTITY</data>" + NL +
                     "<data key=\"name\">Person1</data>" + NL +
                     "<data key=\"id\">1</data>" + NL +
@@ -1044,13 +1041,13 @@ public class GraphMLImporterTest
     {
         assertThrows(ImportException.class, () -> {
             // @formatter:off
-            String input = 
+            String input =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
-                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL + 
-                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL + 
+                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
+                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
                     "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
                 "<graph id=\"G\" edgedefault=\"directed\">" + NL +
-                    "<node />" + NL + 
+                    "<node />" + NL +
                 "</graph>" + NL +
                 "</graphml>";
             // @formatter:on
@@ -1104,15 +1101,13 @@ public class GraphMLImporterTest
         Graph<String, E> g;
 
         if (directed) {
-            g = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
-                .vertexSupplier(SupplierUtil.createStringSupplier(1)).edgeClass(edgeClass)
-                .buildGraph();
+            g = GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(weighted).vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeClass(edgeClass).buildGraph();
         } else {
-            g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
-                .vertexSupplier(SupplierUtil.createStringSupplier(1)).edgeClass(edgeClass)
-                .buildGraph();
+            g = GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(weighted).vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeClass(edgeClass).buildGraph();
         }
 
         GraphMLImporter<String, E> importer = new GraphMLImporter<>();

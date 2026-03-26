@@ -33,8 +33,7 @@ import java.util.*;
  * @author Barak Naveh
  * @see Graph
  */
-public abstract class AbstractGraph<V, E>
-    implements Graph<V, E>
+public abstract class AbstractGraph<V, E> implements Graph<V, E>
 {
     /**
      * Construct a new empty graph object.
@@ -141,7 +140,7 @@ public abstract class AbstractGraph<V, E>
      * @param edges edges to be removed from this graph.
      *
      * @return {@code true} if this graph changed as a result of the call.
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      * @throws UnsupportedOperationException if this graph disallows modification
      *
@@ -236,8 +235,8 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Indicates whether some other object is "equal to" this graph. Returns {@code true} if
-     * the given object is also a graph, the two graphs are instances of the same graph class, have
+     * Indicates whether some other object is "equal to" this graph. Returns {@code true} if the
+     * given object is also a graph, the two graphs are instances of the same graph class, have
      * identical vertices and edges sets with the same weights.
      *
      * @param obj object to be compared for equality with this graph

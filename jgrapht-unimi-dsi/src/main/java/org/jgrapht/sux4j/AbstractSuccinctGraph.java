@@ -38,11 +38,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSets;
  * @param <E> the graph edge type
  */
 
-public abstract class AbstractSuccinctGraph<E>
-    extends
-    AbstractGraph<Integer, E>
-    implements
-    Serializable
+public abstract class AbstractSuccinctGraph<E> extends AbstractGraph<Integer, E> implements Serializable
 {
     private static final long serialVersionUID = 0L;
 

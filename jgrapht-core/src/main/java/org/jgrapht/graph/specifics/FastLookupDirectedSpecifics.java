@@ -35,8 +35,7 @@ import java.util.function.*;
  *
  * @author Joris Kinable
  */
-public class FastLookupDirectedSpecifics<V, E>
-    extends DirectedSpecifics<V, E>
+public class FastLookupDirectedSpecifics<V, E> extends DirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 4089085208843722263L;
 
@@ -48,7 +47,7 @@ public class FastLookupDirectedSpecifics<V, E>
 
     /**
      * Construct a new fast lookup directed specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
@@ -139,7 +138,7 @@ public class FastLookupDirectedSpecifics<V, E>
 
     /**
      * Add an edge to the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
@@ -159,7 +158,7 @@ public class FastLookupDirectedSpecifics<V, E>
 
     /**
      * Remove an edge from the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge

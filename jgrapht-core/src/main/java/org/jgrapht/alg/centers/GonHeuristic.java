@@ -31,31 +31,36 @@ import org.jgrapht.util.VertexToIntegerMapping;
  * The Gon heuristic algorithm for the vertex $k$-center problem.
  *
  * <p>
- * The vertex $k$-center problem is an NP-hard combinatorial optimization problem that receives a complete
- * edge-weighted undirected graph $G = (V, E, w)$, and a positive integer $k$. The goal is to find a subset $C$ of $V$ such
- * that $|C| = k$ and the maximum distance from any vertex in $V$ to the nearest vertex in $C$ is minimized.
- * $C$ is called the set of centers. The vertex $k$-center problem has applications in clustering and facility location.
+ * The vertex $k$-center problem is an NP-hard combinatorial optimization problem that receives a
+ * complete edge-weighted undirected graph $G = (V, E, w)$, and a positive integer $k$. The goal is
+ * to find a subset $C$ of $V$ such that $|C| = k$ and the maximum distance from any vertex in $V$
+ * to the nearest vertex in $C$ is minimized. $C$ is called the set of centers. The vertex
+ * $k$-center problem has applications in clustering and facility location.
  * </p>
  *
  * <p>
- * The Gon heuristic is a classic heuristic approximation algorithm for the vertex $k$-center problem. 
- * It works in a straightforward way. First, a vertex from the input graph is chosen randomly and added to the set of centers $C$. 
- * Then, iteratively, the farthest vertex from $V$ to $C$ is chosen and added to $C$. This process is repeated until $|C| = k$.
- * 
- * This algorithm provides a guarantee to compute solutions for the vertex $k$-center problem no more than
- * 2-times optimum. According to the literature, this is the best approximation factor (under $P \neq NP$).
- * The implementation chooses the first vertex randomly. Alternatively, an existing set of centers $C$ with fewer than $k$ centers
- * can be provided to be augmented. In this implementation, ties are broken by choosing the vertex with the lowest index.
+ * The Gon heuristic is a classic heuristic approximation algorithm for the vertex $k$-center
+ * problem. It works in a straightforward way. First, a vertex from the input graph is chosen
+ * randomly and added to the set of centers $C$. Then, iteratively, the farthest vertex from $V$ to
+ * $C$ is chosen and added to $C$. This process is repeated until $|C| = k$.
+ *
+ * This algorithm provides a guarantee to compute solutions for the vertex $k$-center problem no
+ * more than 2-times optimum. According to the literature, this is the best approximation factor
+ * (under $P \neq NP$). The implementation chooses the first vertex randomly. Alternatively, an
+ * existing set of centers $C$ with fewer than $k$ centers can be provided to be augmented. In this
+ * implementation, ties are broken by choosing the vertex with the lowest index.
  * </p>
  *
  * <p>
  * The description of this algorithm can be consulted on: <br>
- * 
- * T. F. Gonzalez Clustering to minimize the maximum intercluster distance. Theor. Comput. Sci. 1985, 38, 293-306.
- * 
- * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández, J. C. Pérez-Sansalvador and N. Lakouari, 
- * "Approximation Algorithms for the Vertex K-Center Problem: Survey and Experimental Evaluation," in IEEE Access, vol. 7, 
- * pp. 109228-109245, 2019, doi: 10.1109/ACCESS.2019.2933875.
+ *
+ * T. F. Gonzalez Clustering to minimize the maximum intercluster distance. Theor. Comput. Sci.
+ * 1985, 38, 293-306.
+ *
+ * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández, J. C.
+ * Pérez-Sansalvador and N. Lakouari, "Approximation Algorithms for the Vertex K-Center Problem:
+ * Survey and Experimental Evaluation," in IEEE Access, vol. 7, pp. 109228-109245, 2019, doi:
+ * 10.1109/ACCESS.2019.2933875.
  * </p>
  *
  * <p>
@@ -98,15 +103,13 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
      */
     private VertexToIntegerMapping<V> mapping;
 
-
     private Random rng;
 
-
     /**
-     * Constructor. 
-     * 
+     * Constructor.
+     *
      * By default the first vertex is chosen randomly.
-     * 
+     *
      * @param rng random number generator.
      */
     public GonHeuristic(Random rng)
@@ -118,8 +121,8 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
     /**
      * Constructor
      *
-     * Specifies a partial set of initial centers that will be augmented to form a set of k centers when
-     * {@link #getCenters } is called.
+     * Specifies a partial set of initial centers that will be augmented to form a set of k centers
+     * when {@link #getCenters } is called.
      *
      * @param initialCenters Initial set of centers.
      */
@@ -155,7 +158,7 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
                 "The number of vertices in the graph must be at least k");
         }
 
-        if (k<=0) {
+        if (k <= 0) {
             throw new IllegalArgumentException("k must be at least 1");
         }
 
@@ -175,14 +178,15 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
         // initialize set of centers C
         Set<Integer> centers = initPartialC();
         // complement of C (i.e. C')
-        Set<Integer> comp = graph.vertexSet().stream().map(v->mapping.getVertexMap().get(v)).collect(Collectors.toSet());
+        Set<Integer> comp = graph.vertexSet().stream().map(v -> mapping.getVertexMap().get(v))
+            .collect(Collectors.toSet());
         comp.removeAll(centers);
 
         // init distances from vertices to the set of centers
         initDistances(centers, comp);
 
         // compute centers
-        while (centers.size()<k) {
+        while (centers.size() < k) {
 
             // Find the index of the farthest vertex.
             int v = getFarthest(comp);
@@ -192,13 +196,13 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
 
             // insert to centers
             centers.add(v);
-            
+
             // Update distances from vertices to the centers
             updateDistances(v, comp);
         }
 
         // Map the set of centers from integer values to V values
-        return centers.stream().map(i->mapping.getIndexList().get(i)).collect(Collectors.toSet());
+        return centers.stream().map(i -> mapping.getIndexList().get(i)).collect(Collectors.toSet());
     }
 
     /**
@@ -208,15 +212,14 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
      */
     private Set<Integer> initPartialC()
     {
-        Set<Integer> centers = initialCenters.stream().map(
-            v->mapping.getVertexMap().get(v)).collect(Collectors.toSet());
+        Set<Integer> centers = initialCenters.stream().map(v -> mapping.getVertexMap().get(v))
+            .collect(Collectors.toSet());
         return centers;
     }
 
-
     /**
-     * Computes the matrix of distances by using the already computed {@code mapping}
-     * of vertices to integers.
+     * Computes the matrix of distances by using the already computed {@code mapping} of vertices to
+     * integers.
      *
      * @param graph the input graph.
      */
@@ -236,7 +239,6 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
             }
         }
     }
-
 
     /**
      * Find the index of the vertex in C' which is farthest from C.

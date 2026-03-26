@@ -26,7 +26,7 @@ import java.util.function.*;
 
 /**
  * Exports a graph into a CSV Format or any other Delimiter-separated value format.
- * 
+ *
  * <p>
  * The exporter supports three different formats which can be adjusted using the
  * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
@@ -35,7 +35,7 @@ import java.util.function.*;
  * {@link #setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter, boolean) setParameter} method. See
  * {@link CSVFormat} for a description of the formats.
  * </p>
- * 
+ *
  * <p>
  * The default output respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller
  * can also adjust the separator to something like semicolon or pipe instead of comma. In such a
@@ -43,17 +43,15 @@ import java.util.function.*;
  * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-separated values</a>
  * for more information.
  * </p>
- * 
+ *
  * @see CSVFormat
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class CSVExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class CSVExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -72,7 +70,7 @@ public class CSVExporter<V, E>
 
     /**
      * Creates a new CSVExporter with integer id providers for the vertices.
-     * 
+     *
      * @param format the format to use
      */
     public CSVExporter(CSVFormat format)
@@ -82,7 +80,7 @@ public class CSVExporter<V, E>
 
     /**
      * Creates a new CSVExporter with integer id providers for the vertices.
-     * 
+     *
      * @param format the format to use
      * @param delimiter delimiter to use
      */
@@ -135,7 +133,7 @@ public class CSVExporter<V, E>
 
     /**
      * Return if a particular parameter of the exporter is enabled
-     * 
+     *
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
@@ -146,7 +144,7 @@ public class CSVExporter<V, E>
 
     /**
      * Set the value of a parameter of the exporter
-     * 
+     *
      * @param p the parameter
      * @param value the value to set
      */
@@ -161,7 +159,7 @@ public class CSVExporter<V, E>
 
     /**
      * Get the format of the exporter
-     * 
+     *
      * @return the format of the exporter
      */
     public CSVFormat getFormat()
@@ -171,7 +169,7 @@ public class CSVExporter<V, E>
 
     /**
      * Set the format of the exporter
-     * 
+     *
      * @param format the format to use
      */
     public void setFormat(CSVFormat format)
@@ -181,7 +179,7 @@ public class CSVExporter<V, E>
 
     /**
      * Get the delimiter (comma, semicolon, pipe, etc).
-     * 
+     *
      * @return the delimiter
      */
     public char getDelimiter()
@@ -191,7 +189,7 @@ public class CSVExporter<V, E>
 
     /**
      * Set the delimiter (comma, semicolon, pipe, etc).
-     * 
+     *
      * @param delimiter the delimiter to use
      */
     public void setDelimiter(char delimiter)

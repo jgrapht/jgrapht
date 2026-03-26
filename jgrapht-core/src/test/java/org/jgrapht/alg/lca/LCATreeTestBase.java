@@ -184,7 +184,7 @@ public abstract class LCATreeTestBase
     @Test
     public void testRootNotInGraph()
     {
-        assertThrows(IllegalArgumentException.class, () ->  {
+        assertThrows(IllegalArgumentException.class, () -> {
             Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
             g.addVertex("a");
 
@@ -490,8 +490,8 @@ public abstract class LCATreeTestBase
 
         List<Set<Integer>> connectedComponents = connectivityInspector.connectedSets();
 
-        Set<Integer> roots = connectedComponents
-            .stream().map(component -> component.iterator().next()).collect(Collectors.toSet());
+        Set<Integer> roots = connectedComponents.stream()
+            .map(component -> component.iterator().next()).collect(Collectors.toSet());
 
         LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
         LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;
@@ -569,8 +569,8 @@ public abstract class LCATreeTestBase
 
             gen.generateGraph(g);
 
-            Set<Integer> roots = new ConnectivityInspector<>(g)
-                .connectedSets().stream().map(x -> x.iterator().next()).collect(Collectors.toSet());
+            Set<Integer> roots = new ConnectivityInspector<>(g).connectedSets().stream()
+                .map(x -> x.iterator().next()).collect(Collectors.toSet());
 
             LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
             LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;

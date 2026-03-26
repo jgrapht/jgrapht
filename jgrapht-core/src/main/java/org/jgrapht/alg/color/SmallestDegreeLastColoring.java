@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * The smallest degree last greedy coloring algorithm.
- * 
+ *
  * <p>
  * This is the greedy coloring algorithm with the smallest-last ordering of the vertices. The basic
  * idea is as follows: Assuming that vertices $v_{k+1}, \dotso, v_n$ have been already selected,
@@ -35,19 +35,18 @@ import java.util.*;
  * <li>D. Matula, G. Marble, and J. Isaacson. Graph coloring algorithms in Graph Theory and
  * Computing. Academic Press, 104--122, 1972.</li>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Michael Behrisch
  * @author Dimitrios Michail
  */
-public class SmallestDegreeLastColoring<V, E>
-    extends GreedyColoring<V, E>
+public class SmallestDegreeLastColoring<V, E> extends GreedyColoring<V, E>
 {
     /**
      * Construct a new coloring algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public SmallestDegreeLastColoring(Graph<V, E> graph)

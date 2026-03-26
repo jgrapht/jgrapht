@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.Triple;
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
- * 
+ *
  * <p>
  * It stores the boolean incidence matrix of the graph (rows are vertices and columns are edges) as
  * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
@@ -44,7 +44,7 @@ import org.jgrapht.alg.util.Triple;
  * <p>
  * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
  * weights can be changed even after the graph is constructed.
- * 
+ *
  * <p>
  * The question of whether a sparse or dense representation is more appropriate is highly dependent
  * on various factors such as the graph, the machine running the algorithm and the algorithm itself.
@@ -55,17 +55,13 @@ import org.jgrapht.alg.util.Triple;
  * for Automatic Computation, J. H. Wilkinson and C. Reinsch, Eds. Vol. 2. Springer-Verlag, Berlin,
  * New York.</li>
  * </ul>
- * 
+ *
  * Additional information about sparse representations can be found in the
  * <a href="https://en.wikipedia.org/wiki/Sparse_matrix">wikipedia</a>.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SparseIntUndirectedWeightedGraph
-    extends
-    SparseIntUndirectedGraph
-    implements
-    Serializable
+public class SparseIntUndirectedWeightedGraph extends SparseIntUndirectedGraph implements Serializable
 {
     private static final long serialVersionUID = -5410680356868181247L;
 
@@ -76,7 +72,7 @@ public class SparseIntUndirectedWeightedGraph
 
     /**
      * Create a new graph from an edge list
-     * 
+     *
      * @param numVertices number of vertices
      * @param edges edge list with weights
      */
@@ -88,7 +84,7 @@ public class SparseIntUndirectedWeightedGraph
 
     /**
      * Create a new graph from an edge stream
-     * 
+     *
      * @param numVertices number of vertices
      * @param numEdges number of edges
      * @param edges a supplier of an edge stream with weights

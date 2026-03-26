@@ -35,8 +35,7 @@ import java.util.function.Consumer;
  *
  * @author Nikolay Ognyanov
  */
-public class TiernanSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+public class TiernanSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
 {
     private Graph<V, E> graph;
 

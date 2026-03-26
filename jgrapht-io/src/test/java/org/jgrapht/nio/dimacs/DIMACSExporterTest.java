@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class DIMACSExporterTest
@@ -50,7 +50,7 @@ public class DIMACSExporterTest
         "a 1 2" + NL +
         "a 3 1" + NL;
 
-    private static final String UNDIRECTED_WEIGHTED = 
+    private static final String UNDIRECTED_WEIGHTED =
         "c" + NL +
         "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
@@ -66,7 +66,7 @@ public class DIMACSExporterTest
         "a 1 2 1.0" + NL +
         "a 3 1 1.0" + NL;
 
-    private static final String DIRECTED = 
+    private static final String DIRECTED =
         "c" + NL +
         "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
@@ -76,8 +76,8 @@ public class DIMACSExporterTest
         "a 2 3" + NL +
         "a 3 4" + NL +
         "a 4 5" + NL;
-    
-    private static final String DIRECTED_MAX_CLIQUE = 
+
+    private static final String DIRECTED_MAX_CLIQUE =
         "c" + NL +
         "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
@@ -87,8 +87,8 @@ public class DIMACSExporterTest
         "e 2 3" + NL +
         "e 3 4" + NL +
         "e 4 5" + NL;
-    
-    private static final String DIRECTED_COLORING = 
+
+    private static final String DIRECTED_COLORING =
         "c" + NL +
         "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
@@ -97,7 +97,7 @@ public class DIMACSExporterTest
         "e 3 1" + NL +
         "e 2 3" + NL +
         "e 3 4" + NL +
-        "e 4 5" + NL;    
+        "e 4 5" + NL;
     // @formatter:on
 
     @Test

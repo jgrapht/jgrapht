@@ -27,14 +27,13 @@ import java.util.*;
  * size. Scale-free network is a connected graph, where degrees of vertices are distributed in
  * unusual way. There are many vertices with small degrees and only small amount of vertices with
  * big degrees.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Ilya Razenshteyn
  */
-public class ScaleFreeGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class ScaleFreeGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final int size;
     private final Random rng;

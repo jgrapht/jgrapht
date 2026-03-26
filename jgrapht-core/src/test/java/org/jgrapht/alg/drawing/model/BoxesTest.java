@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test {@link Boxes}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class BoxesTest

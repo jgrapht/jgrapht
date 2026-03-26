@@ -49,8 +49,7 @@ import java.util.*;
  *
  * @author Timofey Chudakov
  */
-public class ChordalGraphMaxCliqueFinder<V, E>
-    implements CliqueAlgorithm<V>
+public class ChordalGraphMaxCliqueFinder<V, E> implements CliqueAlgorithm<V>
 {
     private final Graph<V, E> graph;
     private final ChordalityInspector.IterationOrder iterationOrder;
@@ -100,10 +99,8 @@ public class ChordalGraphMaxCliqueFinder<V, E>
             }
             // finds the vertex with the maximum cardinality predecessor list
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
-            Map.Entry<V,
-                Integer> maxEntry = coloring
-                    .getColors().entrySet().stream().max(Comparator.comparing(Map.Entry::getValue))
-                    .orElse(null);
+            Map.Entry<V, Integer> maxEntry = coloring.getColors().entrySet().stream()
+                .max(Comparator.comparing(Map.Entry::getValue)).orElse(null);
             if (maxEntry == null) {
                 maximumClique = new CliqueImpl<>(Collections.emptySet());
             } else {

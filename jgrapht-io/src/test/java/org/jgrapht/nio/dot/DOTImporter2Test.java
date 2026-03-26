@@ -577,7 +577,7 @@ public class DOTImporter2Test
                        "    node [color=black];" + NL +
                        "    a2 -> a3;" + NL +
                        "  };" + NL +
-                       "  a4 [color=white];" + NL +                       
+                       "  a4 [color=white];" + NL +
                        "  a4 -> a5;" + NL +
                        "}";
         // @formatter:on
@@ -684,12 +684,10 @@ public class DOTImporter2Test
     }
 
     @Test
-    public void testUnescape2() {
-        String input = "digraph G {" + NL + 
-                        "  a [ label=\" /\\\\n \"];" + NL + 
-                        "  b [ label=\"\\\"Test\\\"\"];"  + NL + 
-                        "  a -> b; " + NL + 
-                        "}";
+    public void testUnescape2()
+    {
+        String input = "digraph G {" + NL + "  a [ label=\" /\\\\n \"];" + NL
+            + "  b [ label=\"\\\"Test\\\"\"];" + NL + "  a -> b; " + NL + "}";
         Map<String, Map<String, Attribute>> attrs = new HashMap<>();
         DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
         importer.addVertexAttributeConsumer((p, a) -> {
@@ -846,7 +844,7 @@ public class DOTImporter2Test
                        "  a3 -> end;"+NL+
                        "  b3 -> end;"+NL+
                        "  start [shape=Mdiamond];"+NL+
-                       "  end [shape=Msquare];" + NL+ 
+                       "  end [shape=Msquare];" + NL+
                        "}";
         // @formatter:on
 
@@ -933,7 +931,7 @@ public class DOTImporter2Test
     {
         // @formatter:off
         String input = "digraph g {" + NL +
-                       "  name=\"TEST\";" + NL + 
+                       "  name=\"TEST\";" + NL +
                        "  graph []" + NL +
                        "  anyNodeWithAttributes [color=\"red\"];" + NL +
                        "  anyNodeWithoutAttributes;" + NL +
@@ -983,9 +981,9 @@ public class DOTImporter2Test
         // @formatter:off
         String input = "digraph G {" + NL +
                        "  a0 [color=gray];" + NL +
-                       "  a1 [color=green];" + NL +                       
+                       "  a1 [color=green];" + NL +
                        "  a0 -> a1;" + NL +
-                       "  a2 [color=white];" + NL +                       
+                       "  a2 [color=white];" + NL +
                        "}";
         // @formatter:on
 
@@ -1011,10 +1009,10 @@ public class DOTImporter2Test
         // @formatter:off
         String input = "digraph G {" + NL +
                        "  a0 [color=gray];" + NL +
-                       "  a1 [color=green];" + NL +                       
-                       "  a2 [color=white];" + NL +                       
+                       "  a1 [color=green];" + NL +
+                       "  a2 [color=white];" + NL +
                        "  a0 -> a1 [label=\"e1\"];" + NL +
-                       "  a1 -> a2 [label=\"e2\"];" + NL +                       
+                       "  a1 -> a2 [label=\"e2\"];" + NL +
                        "}";
         // @formatter:on
 

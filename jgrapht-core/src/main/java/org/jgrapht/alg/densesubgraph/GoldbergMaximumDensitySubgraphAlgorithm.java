@@ -53,12 +53,11 @@ import java.util.function.*;
  *
  * @author Andre Immig
  */
-public class GoldbergMaximumDensitySubgraphAlgorithm<V, E>
-    extends GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
+public class GoldbergMaximumDensitySubgraphAlgorithm<V, E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
 {
     /**
      * Constructor
-     * 
+     *
      * @param algFactory factory to construct the algorithm to use
      * @param graph input for computation
      * @param s additional source vertex
@@ -66,15 +65,15 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V, E>
      * @param epsilon to use for internal computation
      */
     public GoldbergMaximumDensitySubgraphAlgorithm(
-        Graph<V, E> graph, V s, V t, double epsilon, Function<Graph<V, DefaultWeightedEdge>,
-            MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
+        Graph<V, E> graph, V s, V t, double epsilon,
+        Function<Graph<V, DefaultWeightedEdge>, MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
     {
         super(graph, s, t, false, epsilon, algFactory);
     }
 
     /**
      * Convenience constructor that uses PushRelabel as default MinimumSTCutAlgorithm
-     * 
+     *
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
@@ -87,7 +86,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V, E>
 
     /**
      * Getter for network weights of edges su for u in V
-     * 
+     *
      * @param v of V
      * @return weight of the edge
      */
@@ -98,7 +97,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V, E>
 
     /**
      * Getter for network weights of edges ut for u in V
-     * 
+     *
      * @param v of V
      * @return weight of the edge
      */

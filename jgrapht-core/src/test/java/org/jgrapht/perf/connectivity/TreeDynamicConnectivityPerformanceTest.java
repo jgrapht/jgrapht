@@ -101,10 +101,9 @@ public class TreeDynamicConnectivityPerformanceTest
             forest = new DefaultUndirectedGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 false);
-            Graph<Integer,
-                DefaultEdge> secondTree = new DefaultUndirectedGraph<>(
-                    SupplierUtil.createIntegerSupplier(treeSize),
-                    SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer, DefaultEdge> secondTree = new DefaultUndirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(treeSize),
+                SupplierUtil.createDefaultEdgeSupplier(), false);
             connectivity = new TreeDynamicConnectivity<>();
 
             gen.generateGraph(forest);

@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * An algorithm which computes multi-objective shortest paths between vertices.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *

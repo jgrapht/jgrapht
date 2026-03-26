@@ -34,22 +34,22 @@ import java.util.Map.*;
 
 /**
  * Imports a graph from a GraphML data source.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  * http://en.wikipedia.org/wiki/ GraphML</a> or the
  * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GraphML format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
- * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
  *   <key id="d0" for="node" attr.name="color" attr.type="string">
  *     <default>yellow</default>
@@ -89,15 +89,15 @@ import java.util.Map.*;
  * </graphml>
  * }
  * </pre>
- * 
+ *
  * <p>
  * In case the corresponding edge key with attr.name="weight" is defined, the importer also reads
  * edge weights. Otherwise edge weights are ignored.
- * 
+ *
  * <p>
  * GraphML-Attributes Values are read as string key-value pairs and passed using vertex and edge
  * attribute consumers.
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
@@ -105,9 +105,7 @@ import java.util.Map.*;
  *
  * @author Dimitrios Michail
  */
-public class GraphMLEventDrivenImporter
-    extends BaseEventDrivenImporter<String, Triple<String, String, Double>>
-    implements EventDrivenImporter<String, Triple<String, String, Double>>
+public class GraphMLEventDrivenImporter extends BaseEventDrivenImporter<String, Triple<String, String, Double>> implements EventDrivenImporter<String, Triple<String, String, Double>>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -128,7 +126,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -138,7 +136,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
@@ -151,7 +149,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -161,7 +159,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -198,15 +196,13 @@ public class GraphMLEventDrivenImporter
             SAXParserFactory spf = SAXParserFactory.newInstance();
             if (schemaValidation) {
                 // load schema
-                InputStream xsdStream =
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        GRAPHML_SCHEMA_FILENAME);
+                InputStream xsdStream = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream(GRAPHML_SCHEMA_FILENAME);
                 if (xsdStream == null) {
                     throw new ImportException("Failed to locate GraphML xsd");
                 }
-                InputStream xlinkStream =
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        XLINK_SCHEMA_FILENAME);
+                InputStream xlinkStream = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream(XLINK_SCHEMA_FILENAME);
                 if (xlinkStream == null) {
                     throw new ImportException("Failed to locate XLink xsd");
                 }
@@ -228,8 +224,7 @@ public class GraphMLEventDrivenImporter
     }
 
     // content handler
-    private class GraphMLHandler
-        extends DefaultHandler
+    private class GraphMLHandler extends DefaultHandler
     {
         private static final String GRAPH = "graph";
         private static final String GRAPH_ID = "id";

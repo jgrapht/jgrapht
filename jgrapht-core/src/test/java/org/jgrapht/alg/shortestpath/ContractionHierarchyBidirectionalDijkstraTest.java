@@ -198,9 +198,8 @@ public class ContractionHierarchyBidirectionalDijkstraTest
      */
     private void test(Graph<Integer, DefaultWeightedEdge> graph, Integer source)
     {
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> dijkstraShortestPaths =
-                new DijkstraShortestPath<>(graph).getPaths(source);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
+            new DijkstraShortestPath<>(graph).getPaths(source);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> data =
             new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)

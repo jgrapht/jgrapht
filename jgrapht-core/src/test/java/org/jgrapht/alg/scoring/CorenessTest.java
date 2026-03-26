@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link Coreness}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class CorenessTest

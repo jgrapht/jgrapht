@@ -49,8 +49,7 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E> implements MatchingAlgorithm<V, E>
 {
 
     private final Graph<V, E> graph;
@@ -83,7 +82,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
      * must be bipartite. For efficiency reasons, this class does not check whether the input graph
      * is bipartite. Invoking this class on a non-bipartite graph results in undefined behavior. To
      * test whether a graph is bipartite, use {@link GraphTests#isBipartite(Graph)}.
-     * 
+     *
      * @param graph bipartite graph
      * @param partition1 the first partition of vertices in the bipartite graph
      * @param partition2 the second partition of vertices in the bipartite graph
@@ -144,7 +143,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
     /**
      * BFS function which finds the shortest augmenting path. The length of the shortest augmenting
      * path is stored in dist[DUMMY].
-     * 
+     *
      * @return true if an augmenting path was found, false otherwise
      */
     private boolean bfs()
@@ -177,7 +176,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
     /**
      * Find all vertex disjoint augmenting paths of length dist[DUMMY]. To find paths of dist[DUMMY]
      * length, we simply follow nodes that are 1 distance increments away from each other.
-     * 
+     *
      * @param u vertex from which the DFS is started
      * @return true if an augmenting path from vertex u was found, false otherwise
      */

@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author John V. Sichi, Patrick Sharp
  */
-public class ClosestFirstIteratorTest
-    extends CrossComponentIteratorTest
+public class ClosestFirstIteratorTest extends CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

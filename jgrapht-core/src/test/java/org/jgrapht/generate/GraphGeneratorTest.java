@@ -310,15 +310,13 @@ public class GraphGeneratorTest
         // graph structure validations
         int expectedVerticeNum = rows * cols;
         assertEquals(
-            expectedVerticeNum, gridGraph.vertexSet().size(),
-            "number of vertices is wrong (" + gridGraph.vertexSet().size() + "), should be "
-                + expectedVerticeNum);
+            expectedVerticeNum, gridGraph.vertexSet().size(), "number of vertices is wrong ("
+                + gridGraph.vertexSet().size() + "), should be " + expectedVerticeNum);
         int expectedEdgesNum = (((rows - 1) * cols) + ((cols - 1) * rows))
             * ((gridGraph.getType().isUndirected()) ? 1 : 2);
         assertEquals(
-            expectedEdgesNum, gridGraph.edgeSet().size(),
-            "number of edges is wrong (" + gridGraph.edgeSet().size() + "), should be "
-                + expectedEdgesNum);
+            expectedEdgesNum, gridGraph.edgeSet().size(), "number of edges is wrong ("
+                + gridGraph.edgeSet().size() + "), should be " + expectedEdgesNum);
 
         int cornerVertices = 0, borderVertices = 0, innerVertices = 0, neighborsSize;
         int expCornerVertices = 4;
@@ -348,7 +346,7 @@ public class GraphGeneratorTest
                 + ".");
         assertEquals(
             expBorderVertices, borderVertices,
-             "there should be exactly " + expBorderVertices
+            "there should be exactly " + expBorderVertices
                 + " border (with three neighbors) vertices. " + " actual number is "
                 + borderVertices + ".");
         assertEquals(

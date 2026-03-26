@@ -28,10 +28,12 @@ import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DagAllPathsCounterTest {
+public class DagAllPathsCounterTest
+{
 
     @Test
-    public void testDiamondTwoPaths() {
+    public void testDiamondTwoPaths()
+    {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex("A");
         g.addVertex("B");
@@ -47,7 +49,8 @@ public class DagAllPathsCounterTest {
     }
 
     @Test
-    public void testSourceEqualsTarget() {
+    public void testSourceEqualsTarget()
+    {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex("X");
 
@@ -56,7 +59,8 @@ public class DagAllPathsCounterTest {
     }
 
     @Test
-    public void testNoPath() {
+    public void testNoPath()
+    {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex("A");
         g.addVertex("B");
@@ -66,30 +70,40 @@ public class DagAllPathsCounterTest {
     }
 
     @Test
-    public void testRejectCycle() {
+    public void testRejectCycle()
+    {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex("A");
         g.addVertex("B");
         g.addEdge("A", "B");
         g.addEdge("B", "A"); // cycle
 
-        assertThrows(IllegalArgumentException.class, () -> DagAllPathsCounter.countAllPaths(g, "A", "B"));
+        assertThrows(
+            IllegalArgumentException.class, () -> DagAllPathsCounter.countAllPaths(g, "A", "B"));
     }
 
     @Test
-    public void testBigIntegerGrowth() {
+    public void testBigIntegerGrowth()
+    {
         // Build layered DAG: s -> {u1,u2,u3} -> {v1,v2,v3,v4} -> t
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        String s = "S"; String t = "T";
+        String s = "S";
+        String t = "T";
         g.addVertex(s);
         g.addVertex(t);
-        String[] u = {"U1","U2","U3"};
-        String[] v = {"V1","V2","V3","V4"};
-        for (String x : u) g.addVertex(x);
-        for (String x : v) g.addVertex(x);
-        for (String x : u) g.addEdge(s, x);
-        for (String x : u) for (String y : v) g.addEdge(x, y);
-        for (String x : v) g.addEdge(x, t);
+        String[] u = { "U1", "U2", "U3" };
+        String[] v = { "V1", "V2", "V3", "V4" };
+        for (String x : u)
+            g.addVertex(x);
+        for (String x : v)
+            g.addVertex(x);
+        for (String x : u)
+            g.addEdge(s, x);
+        for (String x : u)
+            for (String y : v)
+                g.addEdge(x, y);
+        for (String x : v)
+            g.addEdge(x, t);
 
         // number of paths = 3 * 4 = 12
         BigInteger count = DagAllPathsCounter.countAllPaths(g, s, t);

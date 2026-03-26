@@ -43,8 +43,8 @@ public class Graph6Sparse6ImporterTest
     public <E> Graph<Integer, E> readGraph(InputStream in, Class<E> edgeClass, boolean weighted)
         throws ImportException
     {
-        Graph<Integer, E> g = GraphTypeBuilder
-            .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
+        Graph<Integer, E> g = GraphTypeBuilder.undirected().allowingMultipleEdges(true)
+            .allowingSelfLoops(true).weighted(weighted)
             .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(edgeClass).buildGraph();
 
         Graph6Sparse6Importer<Integer, E> importer = new Graph6Sparse6Importer<>();
@@ -58,10 +58,8 @@ public class Graph6Sparse6ImporterTest
     {
         String input = ":Fa@x^\n";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         assertEquals(7, graph.vertexSet().size());
         assertEquals(4, graph.edgeSet().size());
@@ -78,10 +76,8 @@ public class Graph6Sparse6ImporterTest
         // Klein7RegularGraph
         String input = ":B_`V";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         Graph<Integer, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList(0, 1, 2));
@@ -102,17 +98,15 @@ public class Graph6Sparse6ImporterTest
         // Klein7RegularGraph
         String input = ":B_`V";
 
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         Graph6Sparse6Importer<String, DefaultEdge> importer = new Graph6Sparse6Importer<>();
         importer.setVertexFactory(id -> String.valueOf("node" + id));
         importer.importGraph(
-            graph, new InputStreamReader(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), UTF_8));
+            graph, new InputStreamReader(new ByteArrayInputStream(input.getBytes(UTF_8)), UTF_8));
 
         Graph<String, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList("node0", "node1", "node2"));
@@ -133,10 +127,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             "~??~?????_@?CG??B??@OG?C?G???GO??W@a???CO???OACC?OA?P@G??O??????G??C????c?G?CC?_?@???C_??_?C????PO?C_??AA?OOAHCA___?CC?A?CAOGO??????A??G?GR?C?_o`???g???A_C?OG??O?G_IA????_QO@EG???O??C?_?C@?G???@?_??AC?AO?a???O?????A?_Dw?H???__O@AAOAACd?_C??G?G@??GO?_???O@?_O??W??@P???AG??B?????G??GG???A??@?aC_G@A??O??_?A?????O@Z?_@M????GQ@_G@?C?\n";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         assertEquals(63, graph.vertexSet().size());
     }
@@ -148,10 +140,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             "_???C?@AA?_?A?O?C??S??O?q_?P?CHD??@?C?GC???C??GG?C_??O?COG????I?J??Q??O?_@@??@??????\n";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         assertEquals(32, graph.vertexSet().size());
     }
@@ -163,10 +153,8 @@ public class Graph6Sparse6ImporterTest
         // Klein7RegularGraph
         String input = "WzK[WgIOT@Wq_A?NALPAq?{GDASCCXO?l?OJAGOY_D@__wb";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.klein7RegularGraph(), graph);
     }
@@ -179,10 +167,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             "~?@MhEGHC?AG?_PO@?Ga?GA???C??G??G??C??P???G@?G_??????P????_??AG??O@???@C??A?G?????????C????@?????G?????_????P?????@?????G????????????P??????C?????AG????A?G?????_???????H???????G???????_??????@???????@????????_??????AG???????@?????_?@C????????????????AG????????C????????P???????A?G????????G_?????C??G_???????????????????_?????????G?????C???@??????????_?????@????G?????A???????????????_??????????@????@?????AG??????????C????G?????G@?AG@????????????????@??o??????CW????????????C?W?????????????I???????????c?G";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
     }
@@ -194,10 +180,8 @@ public class Graph6Sparse6ImporterTest
         // goldnerHararyGraph
         String input = "JntIBcPEA~_";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.goldnerHararyGraph(), graph);
     }
@@ -210,10 +194,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             "{R??OKGPG??@AA??_???@@?GO?G?????CAGA?OGO??????@???O??C@_??O??G?@?????????W???D????OS??????????????O@????@BG???????????_???_??????@B??@???_??O???g?????????????C????C???????C?W?A????C??_????D_???????????????_????C????????_?@??????O?g??????@@O?A?????????????C?C?_??????A????????OQ????????@O????????B";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.buckyBallGraph(), graph);
     }
@@ -225,10 +207,8 @@ public class Graph6Sparse6ImporterTest
         // heawoodGraph
         String input = "MhEGHC@AI?_PC@_G_";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.heawoodGraph(), graph);
     }
@@ -241,10 +221,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             ":W__@`AaBbC_CDbDcE`F_AG_@DEH_IgHIJbFGIKaFHILeFGHMdFKN_EKOPaCNPQ`HOQRcGLRS`BKMSTdJKLPTU\n";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.klein7RegularGraph(), graph);
     }
@@ -257,10 +235,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             ":~?@M_GEA_w?C`WGEaOOGaWWI_OmGBGKL`w}OcXINCxQGCPUWCp]WdPeOEh[Zc`q^Fh}_gXwagyAfGaYfhAa^IYEgIyqlji}ojREqfa{rlbCtljKvjbatMYWv_Jq|hBy{hSAdn{M\\OCRAeRtEa_wVlSHBhagjkBgzpCY}OSr";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
     }
@@ -272,10 +248,8 @@ public class Graph6Sparse6ImporterTest
         // goldnerHararyGraph
         String input = ":J`E?POAMHGpCKsrrHCXAeM`N";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.goldnerHararyGraph(), graph);
     }
@@ -288,10 +262,8 @@ public class Graph6Sparse6ImporterTest
         String input =
             ":{`?GGIKCa`gcCIGdag_iXNFPPsK`RHP`PIMMHtqtM]VKShXiyZMUBTWw]pDcDpAa`XI}@IeghHyXPjTV[IlXLTQtay@ooWUUT_qtkU[vSucLmJ]Aw_MVV";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.buckyBallGraph(), graph);
     }
@@ -303,10 +275,8 @@ public class Graph6Sparse6ImporterTest
         // heawoodGraph
         String input = ":M`ESwCjGtyGaeqhj_`f";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.heawoodGraph(), graph);
     }
@@ -319,17 +289,16 @@ public class Graph6Sparse6ImporterTest
         String input =
             ">>sparse6<<:~?@M__EC?GEA_wQD`g]DAGOH`oiEAwqLbg}?CGCP_`IBCxCSc@URDhGV_ocXaG?IEgkZfXuWgiA^GQMaHIEhHA]eII[igAabIYaoJAuqJi}pizIrlJUrLjGvlRasMZiznJumNi{~kSAoOZ|AncN@PK@DkRXEls]wQCmnMSf~~~~~";
 
-        Graph<Integer,
-            DefaultEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+        Graph<Integer, DefaultEdge> graph =
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
     }
 
     @Test
     public void testFromFile()
-        throws ImportException, IOException
+        throws ImportException,
+        IOException
     {
         InputStream fstream =
             getClass().getClassLoader().getResourceAsStream("ellinghamHorton78Graph.s6");

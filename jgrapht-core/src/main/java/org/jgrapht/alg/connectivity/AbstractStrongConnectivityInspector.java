@@ -34,8 +34,7 @@ import java.util.*;
  * @author Christian Hammer
  * @author Dimitrios Michail
  */
-abstract class AbstractStrongConnectivityInspector<V, E>
-    implements StrongConnectivityAlgorithm<V, E>
+abstract class AbstractStrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V, E>
 {
     protected final Graph<V, E> graph;
     protected List<Set<V>> stronglyConnectedSets;

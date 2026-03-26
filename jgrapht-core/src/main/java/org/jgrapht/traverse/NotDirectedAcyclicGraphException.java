@@ -24,8 +24,7 @@ package org.jgrapht.traverse;
  * @author Kaiichiro Ota
  * @since 1.5.2
  */
-public class NotDirectedAcyclicGraphException
-    extends IllegalArgumentException
+public class NotDirectedAcyclicGraphException extends IllegalArgumentException
 {
     private static final String GRAPH_IS_NOT_A_DAG = "Graph is not a DAG";
 

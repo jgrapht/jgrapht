@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test {@link MapLayoutModel2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class MapLayoutModel2DTest
@@ -38,9 +38,8 @@ public class MapLayoutModel2DTest
     @Test
     public void testGeneral()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();

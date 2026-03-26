@@ -27,8 +27,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class BinaryLiftingLCAFinderTest
-    extends LCATreeTestBase
+public class BinaryLiftingLCAFinderTest extends LCATreeTestBase
 {
 
     @Override

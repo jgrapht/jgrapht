@@ -21,11 +21,10 @@ import java.io.*;
 
 /**
  * A 2-dimensional point in Euclidean space.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class Point2D
-    implements Serializable
+public class Point2D implements Serializable
 {
     private static final long serialVersionUID = -5410937389829502498L;
 
@@ -33,7 +32,7 @@ public class Point2D
 
     /**
      * Create a new point
-     * 
+     *
      * @param x the x coordinate
      * @param y the y coordinate
      */
@@ -45,7 +44,7 @@ public class Point2D
 
     /**
      * Get the number of dimensions of the point
-     * 
+     *
      * @return the number of dimensions of the point
      */
     public int getNumDimensions()
@@ -55,7 +54,7 @@ public class Point2D
 
     /**
      * Get the x coordinate
-     * 
+     *
      * @return the x coordinate
      */
     public double getX()
@@ -65,7 +64,7 @@ public class Point2D
 
     /**
      * Get the y coordinate
-     * 
+     *
      * @return the y coordinate
      */
     public double getY()
@@ -105,7 +104,7 @@ public class Point2D
 
     /**
      * Create a new point
-     * 
+     *
      * @param x the x coordinate
      * @param y the y coordinate
      * @return the point

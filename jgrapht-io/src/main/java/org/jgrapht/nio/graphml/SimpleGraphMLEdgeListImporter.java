@@ -27,27 +27,27 @@ import java.util.function.*;
 /**
  * Imports a GraphML file as an edge list. Vertices are numbered from $0$ to $n-1$ in the order they
  * are first encountered in the input file.
- * 
+ *
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GraphML
  * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
  * towards parsing speed. Default attribute values are completely ignored.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  * http://en.wikipedia.org/wiki/ GraphML</a> or the
  * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GraphML format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
- * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
  *   <key id="d0" for="node" attr.name="color" attr.type="string" />
  *   <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
@@ -57,7 +57,7 @@ import java.util.function.*;
  *     </node>
  *     <node id="n1">
  *       <data key="d0">black</data>
- *     </node>     
+ *     </node>
  *     <node id="n2">
  *       <data key="d0">blue</data>
  *     </node>
@@ -89,17 +89,15 @@ import java.util.function.*;
  * </graphml>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLEdgeListImporter
-    extends BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
-    implements EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
+public class SimpleGraphMLEdgeListImporter extends BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>> implements EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
 {
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
 
@@ -117,7 +115,7 @@ public class SimpleGraphMLEdgeListImporter
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -127,7 +125,7 @@ public class SimpleGraphMLEdgeListImporter
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
@@ -138,7 +136,7 @@ public class SimpleGraphMLEdgeListImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -148,7 +146,7 @@ public class SimpleGraphMLEdgeListImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -198,8 +196,8 @@ public class SimpleGraphMLEdgeListImporter
             vertexMap.computeIfAbsent(v, k -> nodeCount++);
         };
 
-        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
-            Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
+        public final BiConsumer<Pair<Triple<String, String, Double>, String>, Attribute> edgeAttributeConsumer =
+            (edgeAndKey, a) -> {
                 Triple<String, String, Double> q = edgeAndKey.getFirst();
                 String keyName = edgeAndKey.getSecond();
                 if (lastTriple == q && edgeWeightAttributeName.equals(keyName)) {

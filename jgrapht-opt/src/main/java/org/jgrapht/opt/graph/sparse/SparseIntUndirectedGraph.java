@@ -32,14 +32,14 @@ import org.jgrapht.opt.graph.sparse.specifics.SparseGraphSpecifics;
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
- * 
+ *
  * <p>
  * It stores the boolean incidence matrix of the graph (rows are vertices and columns are edges) as
  * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
  * from an edge identifier we also store the transposed of the incidence matrix again in compressed
  * sparse rows format. This is a classic format for write-once read-many use cases. Thus, the graph
  * is unmodifiable.
- * 
+ *
  *
  * <p>
  * The question of whether a sparse or dense representation is more appropriate is highly dependent
@@ -51,19 +51,17 @@ import org.jgrapht.opt.graph.sparse.specifics.SparseGraphSpecifics;
  * for Automatic Computation, J. H. Wilkinson and C. Reinsch, Eds. Vol. 2. Springer-Verlag, Berlin,
  * New York.</li>
  * </ul>
- * 
+ *
  * Additional information about sparse representations can be found in the
  * <a href="https://en.wikipedia.org/wiki/Sparse_matrix">wikipedia</a>.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SparseIntUndirectedGraph
-    extends
-    AbstractSparseSpecificsGraph<SparseGraphSpecifics>
+public class SparseIntUndirectedGraph extends AbstractSparseSpecificsGraph<SparseGraphSpecifics>
 {
     /**
      * Create a new graph from an edge list
-     * 
+     *
      * @param numVertices number of vertices
      * @param edges edge list
      */
@@ -74,7 +72,7 @@ public class SparseIntUndirectedGraph
 
     /**
      * Create a new graph from an edge stream
-     * 
+     *
      * @param numVertices number of vertices
      * @param numEdges number of edges
      * @param edges supplier of an edge stream

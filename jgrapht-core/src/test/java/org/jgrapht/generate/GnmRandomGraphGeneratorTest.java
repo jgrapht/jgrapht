@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * .
- * 
+ *
  * @author Assaf Lehr
  */
 public class GnmRandomGraphGeneratorTest
@@ -196,10 +196,9 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomGraphGenerator<>(6, 18, SEED, true, false);
-            Graph<Integer,
-                DefaultEdge> g = new SimpleDirectedGraph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gen.generateGraph(g);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -208,10 +207,9 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomGraphGenerator<>(6, 18, SEED, false, true);
-            Graph<Integer,
-                DefaultEdge> g = new SimpleDirectedGraph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gen.generateGraph(g);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -224,10 +222,9 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen1 =
                 new GnmRandomGraphGenerator<>(5, 21, SEED, false, false);
-            Graph<Integer,
-                DefaultEdge> g1 = new DirectedPseudograph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> g1 = new DirectedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gen1.generateGraph(g1);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -258,10 +255,9 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen1 =
                 new GnmRandomGraphGenerator<>(5, 11, SEED, false, false);
-            Graph<Integer,
-                DefaultEdge> g1 = new SimpleGraph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> g1 = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gen1.generateGraph(g1);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -413,10 +409,9 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<String, DefaultEdge, String> randomGen =
             new GnmRandomGraphGenerator<>(10, 3);
-        Graph<String,
-            DefaultEdge> graph = new SimpleDirectedGraph<>(
-                SupplierUtil.createSupplier(String.class), SupplierUtil.createDefaultEdgeSupplier(),
-                false);
+        Graph<String, DefaultEdge> graph = new SimpleDirectedGraph<>(
+            SupplierUtil.createSupplier(String.class), SupplierUtil.createDefaultEdgeSupplier(),
+            false);
         assertThrows(IllegalArgumentException.class, () -> randomGen.generateGraph(graph));
     }
 

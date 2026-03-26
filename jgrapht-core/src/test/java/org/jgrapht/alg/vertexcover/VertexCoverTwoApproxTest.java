@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Linda Buisman
  */
-public abstract class VertexCoverTwoApproxTest
-    implements VertexCoverTest
+public abstract class VertexCoverTwoApproxTest implements VertexCoverTest
 {
 
     // ------- Approximation algorithms ------

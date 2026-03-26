@@ -30,14 +30,13 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  */
-public interface MaximumFlowAlgorithm<V, E>
-    extends FlowAlgorithm<V, E>
+public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V, E>
 {
 
     /**
-     * Sets current source to {@code source}, current sink to {@code sink}, then
-     * calculates maximum flow from {@code source} to {@code sink}. Returns an object
-     * containing detailed information about the flow.
+     * Sets current source to {@code source}, current sink to {@code sink}, then calculates maximum
+     * flow from {@code source} to {@code sink}. Returns an object containing detailed information
+     * about the flow.
      *
      * @param source source of the flow inside the network
      * @param sink sink of the flow inside the network
@@ -47,10 +46,9 @@ public interface MaximumFlowAlgorithm<V, E>
     MaximumFlow<E> getMaximumFlow(V source, V sink);
 
     /**
-     * Sets current source to {@code source}, current sink to {@code sink}, then
-     * calculates maximum flow from {@code source} to {@code sink}. Note, that
-     * {@code source} and {@code sink} must be vertices of the {@code network}
-     * passed to the constructor, and they must be different.
+     * Sets current source to {@code source}, current sink to {@code sink}, then calculates maximum
+     * flow from {@code source} to {@code sink}. Note, that {@code source} and {@code sink} must be
+     * vertices of the {@code network} passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex
@@ -66,8 +64,7 @@ public interface MaximumFlowAlgorithm<V, E>
      *
      * @param <E> the graph edge type
      */
-    interface MaximumFlow<E>
-        extends Flow<E>
+    interface MaximumFlow<E> extends Flow<E>
     {
         /**
          * Returns value of the maximum-flow for the given network
@@ -82,15 +79,13 @@ public interface MaximumFlowAlgorithm<V, E>
      *
      * @param <E> the graph edge type
      */
-    class MaximumFlowImpl<E>
-        extends FlowImpl<E>
-        implements MaximumFlow<E>
+    class MaximumFlowImpl<E> extends FlowImpl<E> implements MaximumFlow<E>
     {
         private Double value;
 
         /**
          * Create a new maximum flow
-         * 
+         *
          * @param value the flow value
          * @param flow the flow map
          */

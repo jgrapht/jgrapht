@@ -29,11 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Coloring tests
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SaturationDegreeColoringTest
-    extends BaseColoringTest
+public class SaturationDegreeColoringTest extends BaseColoringTest
 {
 
     @Override

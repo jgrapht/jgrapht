@@ -531,8 +531,7 @@ class BlossomVNode
      * caller. That's why it is safe to modify the current edge (move it to another node, for
      * example).
      */
-    public class IncidentEdgeIterator
-        implements Iterator<BlossomVEdge>
+    public class IncidentEdgeIterator implements Iterator<BlossomVEdge>
     {
 
         /**

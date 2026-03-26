@@ -25,12 +25,11 @@ import java.util.*;
 
 /**
  * Unit test for the HopcroftKarpMaximumCardinalityBipartiteMatching class
- * 
+ *
  * @author Joris Kinable
  *
  */
-public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest
-    extends MaximumCardinalityBipartiteMatchingTest
+public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest extends MaximumCardinalityBipartiteMatchingTest
 {
 
     @Override

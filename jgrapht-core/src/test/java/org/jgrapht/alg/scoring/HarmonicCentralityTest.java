@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for harmonic centrality.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class HarmonicCentralityTest

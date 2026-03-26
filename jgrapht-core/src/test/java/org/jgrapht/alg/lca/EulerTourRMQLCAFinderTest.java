@@ -27,8 +27,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class EulerTourRMQLCAFinderTest
-    extends LCATreeTestBase
+public class EulerTourRMQLCAFinderTest extends LCATreeTestBase
 {
 
     @Override

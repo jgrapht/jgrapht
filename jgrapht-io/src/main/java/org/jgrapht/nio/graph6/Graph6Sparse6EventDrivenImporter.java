@@ -24,7 +24,7 @@ import java.io.*;
 
 /**
  * Importer which reads graphs in graph6 or sparse6 format.
- * 
+ *
  * <p>
  * A description of the format can be found
  * <a href="https://users.cecs.anu.edu.au/~bdm/data/formats.txt">here</a>. graph6 and sparse6 are
@@ -34,25 +34,25 @@ import java.io.*;
  * Typically, files storing graph6 graphs have the 'g6' extension. Similarly, files storing sparse6
  * graphs have a 's6' file extension. sparse6 graphs support loops and multiple edges, graph6 graphs
  * do not.
- * 
+ *
  * <p>
  * Note that a g6/s6 string may contain backslashes '\'. Thus, escaping is required. E.g.
- * 
+ *
  * <pre>
  * {@code ":?@MnDA\oi"}
  * </pre>
- * 
+ *
  * may result in undefined behavior. This should have been:
- * 
+ *
  * <pre>
- * {@code ":?@MnDA\\oi"}
+ * {@code
+ * ":?@MnDA\\oi"
+ * }
  * </pre>
  *
  * @author Joris Kinable
  */
-public class Graph6Sparse6EventDrivenImporter
-    extends BaseEventDrivenImporter<Integer, Pair<Integer, Integer>>
-    implements EventDrivenImporter<Integer, Pair<Integer, Integer>>
+public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<Integer, Pair<Integer, Integer>> implements EventDrivenImporter<Integer, Pair<Integer, Integer>>
 {
     private static final String GRAPH_STRING_SEEMS_TO_BE_CORRUPT_INVALID_NUMBER_OF_VERTICES =
         "Graph string seems to be corrupt. Invalid number of vertices.";
@@ -120,7 +120,7 @@ public class Graph6Sparse6EventDrivenImporter
 
         /**
          * Create a new parser.
-         * 
+         *
          * @param inputLine an input line
          */
         public Parser(String inputLine)
@@ -208,7 +208,7 @@ public class Graph6Sparse6EventDrivenImporter
 
         /**
          * Check whether the g6 or s6 encoding contains any obvious errors
-         * 
+         *
          * @throws ImportException in case any error occurs, such as I/O or parse error
          */
         private void validateInput()
@@ -222,7 +222,7 @@ public class Graph6Sparse6EventDrivenImporter
 
         /**
          * Read the number of vertices in the graph
-         * 
+         *
          * @throws ImportException in case any error occurs, such as I/O or parse error
          */
         private void readNumberOfVertices()
@@ -253,7 +253,7 @@ public class Graph6Sparse6EventDrivenImporter
 
         /**
          * Converts the next k bits of data to an integer
-         * 
+         *
          * @param k number of bits
          * @return the next k bits of data represented by an integer
          */

@@ -37,9 +37,7 @@ import org.jgrapht.graph.DefaultGraphType;
  *
  * @author Dimitrios Michail
  */
-public class NoIncomingNoReindexSparseDirectedSpecifics
-    implements
-    SparseGraphSpecifics
+public class NoIncomingNoReindexSparseDirectedSpecifics implements SparseGraphSpecifics
 {
     protected static final String UNMODIFIABLE = "this graph is unmodifiable";
     protected static final String NO_INCOMING = "this graph does not support incoming edges";
@@ -61,7 +59,7 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
 
     /**
      * Create a new graph from an edge list.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param numEdges the number of edges
      * @param edges a supplier of an edge list
@@ -152,14 +150,13 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
     @Override
     public GraphType getType()
     {
-        return new DefaultGraphType.Builder()
-            .directed().weighted(false).modifiable(false).allowMultipleEdges(true)
-            .allowSelfLoops(true).build();
+        return new DefaultGraphType.Builder().directed().weighted(false).modifiable(false)
+            .allowMultipleEdges(true).allowSelfLoops(true).build();
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * This operation costs $O(d)$ where $d$ is the out-degree of the source vertex.
      */
     @Override
@@ -184,7 +181,7 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * This operation costs $O(d)$ where $d$ is the out-degree of the source vertex.
      */
     @Override

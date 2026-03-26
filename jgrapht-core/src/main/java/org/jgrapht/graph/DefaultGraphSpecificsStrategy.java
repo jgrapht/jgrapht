@@ -26,20 +26,19 @@ import java.util.function.*;
 
 /**
  * A default lookup specifics strategy implementation.
- * 
+ *
  * <p>
  * Graphs constructed using this strategy require the least amount of memory, at the expense of slow
  * edge retrievals. Methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V
  * u, V v), addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is
  * high (dense graphs). For a fast implementation, use {@link FastLookupGraphSpecificsStrategy}.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DefaultGraphSpecificsStrategy<V, E>
-    implements GraphSpecificsStrategy<V, E>
+public class DefaultGraphSpecificsStrategy<V, E> implements GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = 7615319421753562075L;
 
@@ -58,16 +57,15 @@ public class DefaultGraphSpecificsStrategy<V, E>
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {
-        return (BiFunction<Graph<V, E>, GraphType,
-            Specifics<V, E>> & Serializable) (graph, type) -> {
-                if (type.isDirected()) {
-                    return new DirectedSpecifics<V, E>(
-                        graph, new LinkedHashMap<>(), getEdgeSetFactory());
-                } else {
-                    return new UndirectedSpecifics<>(
-                        graph, new LinkedHashMap<>(), getEdgeSetFactory());
-                }
-            };
+        return (BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> & Serializable) (
+            graph, type) -> {
+            if (type.isDirected()) {
+                return new DirectedSpecifics<V, E>(
+                    graph, new LinkedHashMap<>(), getEdgeSetFactory());
+            } else {
+                return new UndirectedSpecifics<>(graph, new LinkedHashMap<>(), getEdgeSetFactory());
+            }
+        };
     }
 
 }

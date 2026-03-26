@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Joris Kinable
  */
-public abstract class MaximumFlowAlgorithmTest
-    extends MaximumFlowMinimumCutAlgorithmTestBase
+public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgorithmTestBase
 {
 
     abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(

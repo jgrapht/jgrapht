@@ -38,8 +38,7 @@ import java.util.*;
  *
  * @author Karri Sai Satish Kumar Reddy
  */
-public class BFSShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class BFSShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
 
     /**
@@ -62,12 +61,13 @@ public class BFSShortestPath<V, E>
     }
 
     /**
-     * Compute all shortest paths from single source vertex if no sink provided.
-     * If sink provided, will compute shortest path from source vertex to target vertex.
+     * Compute all shortest paths from single source vertex if no sink provided. If sink provided,
+     * will compute shortest path from source vertex to target vertex.
+     *
      * @param source - The source vertex.
      * @param sink - Optional, the target vertex.
-     * @return - The shortest paths if no sink provided.
-     * Returns the shortest path between source and sink if sink is provided.
+     * @return - The shortest paths if no sink provided. Returns the shortest path between source
+     *         and sink if sink is provided.
      */
     private SingleSourcePaths<V, E> getPaths(V source, V sink)
     {
@@ -104,7 +104,7 @@ public class BFSShortestPath<V, E>
                 /*
                  * Break the loop if target vertex is found.
                  */
-                if(u.equals(sink)) {
+                if (u.equals(sink)) {
                     queue.clear();
                     break;
                 }

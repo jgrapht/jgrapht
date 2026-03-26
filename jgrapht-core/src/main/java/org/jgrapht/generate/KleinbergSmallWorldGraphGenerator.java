@@ -24,11 +24,11 @@ import java.util.*;
 
 /**
  * Kleinberg's small-world graph generator.
- * 
+ *
  * <p>
  * The generator is described in the paper: J. Kleinberg, The Small-World Phenomenon: An Algorithmic
  * Perspective, in Proc. 32nd ACM Symp. Theory of Comp., 163-170, 2000.
- * 
+ *
  * <p>
  * The basic structure is a a two-dimensional grid and allows for edges to be directed. It begins
  * with a set of nodes (representing individuals in the social network) that are identified with the
@@ -38,14 +38,13 @@ import java.util.*;
  * from $u$ to $q$ other nodes (the long-range contacts) using independent random trials; the i-th
  * directed edge from $u$ has endpoint $v$ with probability proportional to \frac{1}{d(u,v)^r}$
  * where $d(u,v)$ is the lattice distance from $u$ to $v$.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class KleinbergSmallWorldGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class KleinbergSmallWorldGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final Random rng;
 
@@ -56,7 +55,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n generate set of lattice points in a $n$ by $n$ square
      * @param p lattice distance for which each node is connected to every other node in the lattice
      *        (local connections)
@@ -72,7 +71,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n generate set of lattice points in a $n$ by $n$ square
      * @param p lattice distance for which each node is connected to every other node in the lattice
      *        (local connections)
@@ -89,7 +88,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n generate set of lattice points in a $n \times n$ square
      * @param p lattice distance for which each node is connected to every other node in the lattice
      *        (local connections)
@@ -125,7 +124,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
 
     /**
      * Generates a small-world graph.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      */

@@ -640,8 +640,8 @@ public class NetworkGenerator<V, E>
         // For every tail, compute an upper bound on the number arcs it's
         // possible to generate from it.
         Set<Node> headsSet = new HashSet<>(heads);
-        List<Integer> outDegrees = tails
-            .stream().map(node -> getPossibleArcNum(node, headsSet)).collect(Collectors.toList());
+        List<Integer> outDegrees = tails.stream().map(node -> getPossibleArcNum(node, headsSet))
+            .collect(Collectors.toList());
         long degreeSum = outDegrees.stream().mapToLong(i -> i).sum();
 
         // Add weight bounds as well to make the distribution more uniform.

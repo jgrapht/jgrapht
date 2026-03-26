@@ -36,8 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Timofey Chudakov
  */
-public class BoykovKolmogorovMFImplTest
-    extends MaximumFlowAlgorithmTest
+public class BoykovKolmogorovMFImplTest extends MaximumFlowAlgorithmTest
 {
 
     private static final double EPS = 1e-9;

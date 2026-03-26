@@ -70,8 +70,7 @@ import static org.jgrapht.util.MathUtil.log2;
  *
  * @author Alexandru Valeanu
  */
-public class BinaryLiftingLCAFinder<V, E>
-    implements LowestCommonAncestorAlgorithm<V>
+public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
 
     private final Graph<V, E> graph;
@@ -242,7 +241,7 @@ public class BinaryLiftingLCAFinder<V, E>
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException if the method is called
      */
     @Override

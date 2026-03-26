@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test {@link AliasMethodSampler}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class AliasMethodSamplerTest

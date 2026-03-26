@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test that all Bron-Kerbosch variants return the same results.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class AllVariantsBronKerboschCliqueFinderTest

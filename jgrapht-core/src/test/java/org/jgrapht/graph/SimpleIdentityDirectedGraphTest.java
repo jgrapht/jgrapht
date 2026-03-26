@@ -74,8 +74,7 @@ public class SimpleIdentityDirectedGraphTest
         }
     }
 
-    public static class SimpleIdentityDirectedGraph<V, E>
-        extends AbstractBaseGraph<V, E>
+    public static class SimpleIdentityDirectedGraph<V, E> extends AbstractBaseGraph<V, E>
     {
         private static final long serialVersionUID = 4600490314100246989L;
 
@@ -87,15 +86,13 @@ public class SimpleIdentityDirectedGraphTest
         }
     }
 
-    private static class IdentitySpecificsStrategy<V, E>
-        implements GraphSpecificsStrategy<V, E>
+    private static class IdentitySpecificsStrategy<V, E> implements GraphSpecificsStrategy<V, E>
     {
 
         private static final long serialVersionUID = 1L;
 
         @Override
-        public Function<GraphType,
-            IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
+        public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
         {
             return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
                 if (type.isWeighted()) {
@@ -109,16 +106,16 @@ public class SimpleIdentityDirectedGraphTest
         @Override
         public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
         {
-            return (BiFunction<Graph<V, E>, GraphType,
-                Specifics<V, E>> & Serializable) (graph, type) -> {
-                    if (type.isDirected()) {
-                        return new DirectedSpecifics<V, E>(
-                            graph, new IdentityHashMap<>(), getEdgeSetFactory());
-                    } else {
-                        return new UndirectedSpecifics<>(
-                            graph, new IdentityHashMap<>(), getEdgeSetFactory());
-                    }
-                };
+            return (BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> & Serializable) (
+                graph, type) -> {
+                if (type.isDirected()) {
+                    return new DirectedSpecifics<V, E>(
+                        graph, new IdentityHashMap<>(), getEdgeSetFactory());
+                } else {
+                    return new UndirectedSpecifics<>(
+                        graph, new IdentityHashMap<>(), getEdgeSetFactory());
+                }
+            };
         }
 
     }

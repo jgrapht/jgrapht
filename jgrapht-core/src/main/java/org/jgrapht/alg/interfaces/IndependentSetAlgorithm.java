@@ -45,8 +45,7 @@ public interface IndependentSetAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    interface IndependentSet<V>
-        extends Set<V>
+    interface IndependentSet<V> extends Set<V>
     {
 
         /**
@@ -65,9 +64,7 @@ public interface IndependentSetAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    class IndependentSetImpl<V>
-        extends WeightedUnmodifiableSet<V>
-        implements IndependentSet<V>
+    class IndependentSetImpl<V> extends WeightedUnmodifiableSet<V> implements IndependentSet<V>
     {
 
         private static final long serialVersionUID = 4572451196544323306L;

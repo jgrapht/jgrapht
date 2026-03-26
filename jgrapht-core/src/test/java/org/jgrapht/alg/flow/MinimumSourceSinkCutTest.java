@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Joris Kinable
  */
-public abstract class MinimumSourceSinkCutTest
-    extends MaximumFlowMinimumCutAlgorithmTestBase
+public abstract class MinimumSourceSinkCutTest extends MaximumFlowMinimumCutAlgorithmTestBase
 {
 
     public static final int NR_RANDOM_TESTS = 500;
@@ -73,8 +72,7 @@ public abstract class MinimumSourceSinkCutTest
         assertTrue(unionSet.isEmpty());
 
         assertEquals(
-            network
-                .edgeSet().stream()
+            network.edgeSet().stream()
                 .filter(
                     e -> sourcePartition.contains(network.getEdgeSource(e))
                         && sinkPartition.contains(network.getEdgeTarget(e)))
@@ -113,8 +111,7 @@ public abstract class MinimumSourceSinkCutTest
         assertTrue(unionSet.isEmpty());
 
         assertEquals(
-            network
-                .edgeSet().stream()
+            network.edgeSet().stream()
                 .filter(
                     e -> sourcePartition.contains(network.getEdgeSource(e))
                         ^ sourcePartition.contains(network.getEdgeTarget(e)))

@@ -61,8 +61,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class AHUForestIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector<V, E>
 {
     private final Graph<V, E> forest1;
     private final Graph<V, E> forest2;

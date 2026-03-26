@@ -28,22 +28,21 @@ import java.util.stream.*;
 
 /**
  * Martin's algorithm for the multi-objective shortest paths problem.
- * 
+ *
  * <p>
  * Martin's label setting algorithm is a multiple objective extension of Dijkstra's algorithm, where
  * the minimum operator is replaced by a dominance test. It computes a maximal complete set of
  * efficient paths when all the cost values are non-negative.
- * 
+ *
  * <p>
  * Note that the multi-objective shortest path problem is a well-known NP-hard problem.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class MartinShortestPath<V, E>
-    extends BaseMultiObjectiveShortestPathAlgorithm<V, E>
+public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgorithm<V, E>
 {
     // the edge weight function
     private final Function<E, double[]> edgeWeightFunction;
@@ -56,7 +55,7 @@ public class MartinShortestPath<V, E>
 
     /**
      * Create a new shortest path algorithm
-     * 
+     *
      * @param graph the input graph
      * @param edgeWeightFunction the edge weight function
      */
@@ -140,7 +139,7 @@ public class MartinShortestPath<V, E>
 
     /**
      * Build the actual paths from the final labels of each node.
-     * 
+     *
      * @param source the source vertex
      * @return the paths
      */
@@ -169,7 +168,7 @@ public class MartinShortestPath<V, E>
 
     /**
      * Compute the sum of two vectors
-     * 
+     *
      * @param a the first vector
      * @param b the second vector
      * @return the sum
@@ -186,7 +185,7 @@ public class MartinShortestPath<V, E>
 
     /**
      * Return whether a vector dominates another.
-     * 
+     *
      * @param a the first vector
      * @param b the second vector
      * @return true if the first vector dominates the second
@@ -208,7 +207,7 @@ public class MartinShortestPath<V, E>
 
     /**
      * Check the validity of the edge weight function
-     * 
+     *
      * @param edgeWeightFunction the edge weight function
      * @return the number of dimensions
      */
@@ -266,8 +265,7 @@ public class MartinShortestPath<V, E>
     /**
      * Lexicographic comparator of two node labels.
      */
-    private class LabelComparator
-        implements Comparator<Label>
+    private class LabelComparator implements Comparator<Label>
     {
 
         @Override

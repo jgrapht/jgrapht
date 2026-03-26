@@ -29,7 +29,7 @@ import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph}.
- * 
+ *
  * <p>
  * The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as
  * adding or removing vertices and edges are reflected in the underlying value graph.
@@ -37,10 +37,9 @@ import java.util.function.*;
  * <p>
  * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
  * graph is weighted. Assume for example that the following class is the value type: <blockquote>
- * 
+ *
  * <pre>
- * class MyValue
- *     implements Serializable
+ * class MyValue implements Serializable
  * {
  *     private double value;
  *
@@ -55,41 +54,39 @@ import java.util.function.*;
  *     }
  * }
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * Then one could create an adapter using the following code: <blockquote>
- * 
+ *
  * <pre>
  * MutableValueGraph&lt;String, MyValue&gt; valueGraph =
  *     ValueGraphBuilder.directed().allowsSelfLoops(true).build();
  * valueGraph.addNode("v1");
  * valueGraph.addNode("v2");
  * valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
- * 
+ *
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new MutableValueGraphAdapter&lt;&gt;(
  *     valueGraph, new MyValue(1.0), (ToDoubleFunction&lt;MyValue&gt; &amp; Serializable) MyValue::getValue);
- * 
+ *
  * double weight = graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // should return 5.0
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * <p>
  * This is a one-way conversion meaning that calling {@link #setEdgeWeight(EndpointPair, double)}
  * will throw an unsupported operation exception. Adjusting the weights can be done directly (by
  * keeping an external reference) on the underlying {@link MutableValueGraph} and calling
  * {@link MutableValueGraph#putEdgeValue(Object, Object, Object)}. Changes on the values will be
  * propagated upstream using the provided value converter.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <W> the value type
  */
-public class MutableValueGraphAdapter<V, W>
-    extends BaseValueGraphAdapter<V, W, MutableValueGraph<V, W>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+public class MutableValueGraphAdapter<V, W> extends BaseValueGraphAdapter<V, W, MutableValueGraph<V, W>> implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -5095044027783397573L;
 
@@ -97,13 +94,13 @@ public class MutableValueGraphAdapter<V, W>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the value graph
      * @param defaultValue a default value to be used when creating new edges
      * @param valueConverter a function that converts a value to a double
-     * 
+     *
      * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue} or
-     *                              {@code valueConverter} is {@code null}
+     *         {@code valueConverter} is {@code null}
      */
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter)
@@ -113,15 +110,15 @@ public class MutableValueGraphAdapter<V, W>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the value graph
      * @param defaultValue a default value to be used when creating new edges
      * @param valueConverter a function that converts a value to a double
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * 
+     *
      * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue} or
-     *                              {@code valueConverter} is {@code null}
+     *         {@code valueConverter} is {@code null}
      */
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
@@ -135,7 +132,7 @@ public class MutableValueGraphAdapter<V, W>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the value graph
      * @param defaultValue a default value to be used when creating new edges
      * @param valueConverter a function that converts a value to a double
@@ -143,10 +140,11 @@ public class MutableValueGraphAdapter<V, W>
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
-     * 
-     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
-     * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue}, {@code valueConverter},
-     *                              or {@code vertexOrderMethod} is {@code null}
+     *
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to
+     *         create a vertex order
+     * @throws NullPointerException if any one of {@code valueGraph}, {@code defaultValue},
+     *         {@code valueConverter}, or {@code vertexOrderMethod} is {@code null}
      */
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
@@ -181,14 +179,15 @@ public class MutableValueGraphAdapter<V, W>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * The provided edge object can either be {@code null} or must respect the source and target
      * vertices that are provided as parameters.
-     * 
-     * @throws IllegalArgumentException if either {@code sourceVertex} is not equal to node U
-     *                                  of {@code e} or {@code targetVertex} is not equal to node V
-     *                                  of {@code e}, or if the underlying graph disallows self loops
-     * @throws NullPointerException if either one of {@code sourceVertex} or {@code targetVertex} is {@code null}
+     *
+     * @throws IllegalArgumentException if either {@code sourceVertex} is not equal to node U of
+     *         {@code e} or {@code targetVertex} is not equal to node V of {@code e}, or if the
+     *         underlying graph disallows self loops
+     * @throws NullPointerException if either one of {@code sourceVertex} or {@code targetVertex} is
+     *         {@code null}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
@@ -220,7 +219,8 @@ public class MutableValueGraphAdapter<V, W>
     }
 
     /**
-     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex
+     *         supplier
      */
     @Override
     public V addVertex()
@@ -273,7 +273,7 @@ public class MutableValueGraphAdapter<V, W>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * This method always throws an {@link UnsupportedOperationException} since the adapter works
      * one-way from values to weights. Adjusting the weights can be done by adjusting the values in
      * the underlying {@link ValueGraph} which will automatically be propagated using the provided
@@ -281,7 +281,7 @@ public class MutableValueGraphAdapter<V, W>
      *
      * @param e edge on which to set weight
      * @param weight new weight for edge
-     * 
+     *
      * @throws NullPointerException {@inheritDoc}
      * @throws UnsupportedOperationException {@inheritDoc}
      */
@@ -350,7 +350,8 @@ public class MutableValueGraphAdapter<V, W>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

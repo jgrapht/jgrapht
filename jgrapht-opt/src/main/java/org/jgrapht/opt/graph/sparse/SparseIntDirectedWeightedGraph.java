@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.Triple;
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
- * 
+ *
  * <p>
  * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
  * Compressed Sparse Rows (CSR). Constant time source and target lookups are provided by storing the
@@ -57,17 +57,13 @@ import org.jgrapht.alg.util.Triple;
  * for Automatic Computation, J. H. Wilkinson and C. Reinsch, Eds. Vol. 2. Springer-Verlag, Berlin,
  * New York.</li>
  * </ul>
- * 
+ *
  * Additional information about sparse representations can be found in the
  * <a href="https://en.wikipedia.org/wiki/Sparse_matrix">wikipedia</a>.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SparseIntDirectedWeightedGraph
-    extends
-    SparseIntDirectedGraph
-    implements
-    Serializable
+public class SparseIntDirectedWeightedGraph extends SparseIntDirectedGraph implements Serializable
 {
     private static final long serialVersionUID = -7601401110000642281L;
 
@@ -78,7 +74,7 @@ public class SparseIntDirectedWeightedGraph
 
     /**
      * Create a new graph from an edge list.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param edges the edge list with additional weights
      */
@@ -92,7 +88,7 @@ public class SparseIntDirectedWeightedGraph
 
     /**
      * Create a new graph from an edge list.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param edges the edge list with additional weights
      * @param incomingEdgeSupport the kind of incoming edges support needed
@@ -106,7 +102,7 @@ public class SparseIntDirectedWeightedGraph
 
     /**
      * Create a new graph from an edge stream.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param numEdges the number of edges
      * @param edges a supplier of an edge stream with additional weights

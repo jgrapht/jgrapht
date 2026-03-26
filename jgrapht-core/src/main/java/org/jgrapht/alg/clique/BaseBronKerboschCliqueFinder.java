@@ -31,8 +31,7 @@ import java.util.concurrent.*;
  *
  * @author Ewgenij Proschak
  */
-abstract class BaseBronKerboschCliqueFinder<V, E>
-    implements MaximalCliqueEnumerationAlgorithm<V, E>
+abstract class BaseBronKerboschCliqueFinder<V, E> implements MaximalCliqueEnumerationAlgorithm<V, E>
 {
     /**
      * The underlying graph
@@ -57,7 +56,7 @@ abstract class BaseBronKerboschCliqueFinder<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param graph the input graph; must be simple
      * @param timeout the maximum time to wait, if zero no timeout
      * @param unit the time unit of the timeout argument
@@ -86,7 +85,7 @@ abstract class BaseBronKerboschCliqueFinder<V, E>
     /**
      * Create an iterator which returns only the maximum cliques of a graph. The iterator computes
      * all maximal cliques and then filters them by the size of the maximum found clique.
-     * 
+     *
      * @return an iterator which returns only the maximum cliques of a graph
      */
     public Iterator<Set<V>> maximumIterator()
@@ -98,7 +97,7 @@ abstract class BaseBronKerboschCliqueFinder<V, E>
     /**
      * Check the computation has stopped due to a time limit or due to computing all maximal
      * cliques.
-     * 
+     *
      * @return true if the computation has stopped due to a time limit, false otherwise
      */
     public boolean isTimeLimitReached()

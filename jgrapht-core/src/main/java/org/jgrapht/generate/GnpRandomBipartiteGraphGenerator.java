@@ -27,19 +27,18 @@ import java.util.*;
  * <a href="https://en.wikipedia.org/wiki/Random_graph">Random Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
- * 
+ *
  * The user provides the sizes $n_1$ and $n_2$ of the two partitions $(n1+n2=n)$ and the probability
  * $p$ of the existence of an edge. The generator supports both directed and undirected graphs.
  *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see GnmRandomBipartiteGraphGenerator
  */
-public class GnpRandomBipartiteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class GnpRandomBipartiteGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int n1;
@@ -54,7 +53,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
      * = n_1 + n_2$ and the bipartite graph has one partition with size $n_1$ and one partition with
      * size $n_2$. An edge between two vertices of different partitions is included with probability
      * $p$ independent of all other edges.
-     * 
+     *
      * @param n1 number of vertices of the first partition
      * @param n2 number of vertices of the second partition
      * @param p edge probability
@@ -69,7 +68,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
      * = n_1 + n_2$, the bipartite graph has partition with size $n_1$ and a partition with size
      * $n_2$. An edge between two vertices of different partitions is included with probability $p$
      * independent of all other edges.
-     * 
+     *
      * @param n1 number of vertices of the first partition
      * @param n2 number of vertices of the second partition
      * @param p edge probability
@@ -85,7 +84,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
      * = n_1 + n_2$, the bipartite graph has partition with size $n_1$ and a partition with size
      * $n_2$. An edge between two vertices of different partitions is included with probability $p$
      * independent of all other edges.
-     * 
+     *
      * @param n1 number of vertices of the first partition
      * @param n2 number of vertices of the second partition
      * @param p edge probability
@@ -110,7 +109,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
 
     /**
      * Generates a random bipartite graph.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      */
@@ -167,7 +166,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     /**
      * Returns the first partition of vertices in the bipartite graph. This partition is guaranteed
      * to be smaller than or equal in size to the second partition.
-     * 
+     *
      * @return one partition of the bipartite graph
      */
     public Set<V> getFirstPartition()
@@ -181,7 +180,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     /**
      * Returns the second partitions of vertices in the bipartite graph. This partition is
      * guaranteed to be larger than or equal in size to the first partition.
-     * 
+     *
      * @return one partition of the bipartite graph
      */
     public Set<V> getSecondPartition()

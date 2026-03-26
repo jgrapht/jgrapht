@@ -32,8 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for the {@link YenShortestPathIterator}.
  */
-public class YenShortestPathIteratorTest
-    extends BaseKShortestPathTest
+public class YenShortestPathIteratorTest extends BaseKShortestPathTest
 {
     @Test
     public void testNoSourceGraph()

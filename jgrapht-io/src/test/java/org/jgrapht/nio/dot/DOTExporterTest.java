@@ -63,7 +63,8 @@ public class DOTExporterTest
 
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);
@@ -71,7 +72,8 @@ public class DOTExporterTest
     }
 
     private void testUndirected(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -104,7 +106,8 @@ public class DOTExporterTest
     }
 
     private void testUndirectedWithGraphAttributes(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -198,7 +201,8 @@ public class DOTExporterTest
 
     @Test
     public void testDifferentGraphID()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
@@ -216,7 +220,9 @@ public class DOTExporterTest
     }
 
     @Test
-    void testWithSubgraph() throws IOException {
+    void testWithSubgraph()
+        throws IOException
+    {
         // Global graph and its attributes
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
@@ -233,13 +239,14 @@ public class DOTExporterTest
         Set<Integer> vertices = new LinkedHashSet<>(Arrays.asList(1, 2, 3));
         Set<DefaultEdge> edges = new LinkedHashSet<>(Arrays.asList(e12, e13, e23));
         AsSubgraph<Integer, DefaultEdge> sg = new AsSubgraph<>(g, vertices, edges);
-        Map<String, Attribute> subgraphAttributes = Map.of(
-            "pencolor", DefaultAttribute.createAttribute("transparent"));
+        Map<String, Attribute> subgraphAttributes =
+            Map.of("pencolor", DefaultAttribute.createAttribute("transparent"));
         Map<String, Attribute> clusterAttributes = new LinkedHashMap<>();
         clusterAttributes.put("label", DefaultAttribute.createAttribute(""));
         clusterAttributes.put("shape", DefaultAttribute.createAttribute("point"));
         clusterAttributes.put("style", DefaultAttribute.createAttribute("invis"));
-        DOTSubgraph<Integer, DefaultEdge> dotSubgraph = new DOTSubgraph<>(sg, subgraphAttributes, clusterAttributes);
+        DOTSubgraph<Integer, DefaultEdge> dotSubgraph =
+            new DOTSubgraph<>(sg, subgraphAttributes, clusterAttributes);
         Map<String, DOTSubgraph<Integer, DefaultEdge>> subgraphs = Map.of("subg", dotSubgraph);
 
         // DOT exporter
@@ -247,31 +254,12 @@ public class DOTExporterTest
         exporter.setGraphAttributeProvider(() -> graphAttributes);
         exporter.setSubgraphProvider(() -> subgraphs);
 
-        String expected = String.join(System.lineSeparator(),
-        "strict graph G {",
-            "  compound=true;",
-            "  1;",
-            "  2;",
-            "  3;",
-            "  4;",
-            "  5;",
-            "  1 -- 2;",
-            "  1 -- 3;",
-            "  1 -- 4;",
-            "  2 -- 3;",
-            "  4 -- 5;",
-            "  5 -- 2;",
-            "  subgraph subg {",
-            "    subg [ label=\"\" shape=\"point\" style=\"invis\" ];",
-            "    pencolor=transparent;",
-            "    1;",
-            "    2;",
-            "    3;",
-            "    1 -- 2;",
-            "    1 -- 3;",
-            "    2 -- 3;",
-            "  }",
-            "}",
+        String expected = String.join(
+            System.lineSeparator(), "strict graph G {", "  compound=true;", "  1;", "  2;", "  3;",
+            "  4;", "  5;", "  1 -- 2;", "  1 -- 3;", "  1 -- 4;", "  2 -- 3;", "  4 -- 5;",
+            "  5 -- 2;", "  subgraph subg {",
+            "    subg [ label=\"\" shape=\"point\" style=\"invis\" ];", "    pencolor=transparent;",
+            "    1;", "    2;", "    3;", "    1 -- 2;", "    1 -- 3;", "    2 -- 3;", "  }", "}",
             "");
         try (StringWriter outputWriter = new StringWriter()) {
             exporter.exportGraph(g, outputWriter);

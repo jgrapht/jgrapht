@@ -71,7 +71,9 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     @Test
     public void testNullGraphs()
     {
-        assertThrows(NullPointerException.class, () -> new AHUUnrootedTreeIsomorphismInspector<>(null, null));
+        assertThrows(
+            NullPointerException.class,
+            () -> new AHUUnrootedTreeIsomorphismInspector<>(null, null));
     }
 
     @Test
@@ -166,15 +168,13 @@ public class AHUUnrootedTreeIsomorphismInspectorTest
     @Test
     public void testCornerCase2()
     {
-        Graph<Integer,
-            DefaultEdge> tree1 = parseGraph(
-                "[1, 2, 5, 6, 8, 9, 10, 11, 14, 15]",
-                "[{2,1}, {5,1}, {6,1}, {8,1}, {9,6}, {10,1}, {11,6}, {14,5}, {15,1}]");
+        Graph<Integer, DefaultEdge> tree1 = parseGraph(
+            "[1, 2, 5, 6, 8, 9, 10, 11, 14, 15]",
+            "[{2,1}, {5,1}, {6,1}, {8,1}, {9,6}, {10,1}, {11,6}, {14,5}, {15,1}]");
 
-        Graph<Integer,
-            DefaultEdge> tree2 = parseGraph(
-                "[1, 18, 3, 19, 4, 5, 8, 9, 12, 13]",
-                "[{8,12}, {3,12}, {18,12}, {9,12}, {5,18}, {19,12}, {13,12}, {4,13}, {1,18}]");
+        Graph<Integer, DefaultEdge> tree2 = parseGraph(
+            "[1, 18, 3, 19, 4, 5, 8, 9, 12, 13]",
+            "[{8,12}, {3,12}, {18,12}, {9,12}, {5,18}, {19,12}, {13,12}, {4,13}, {1,18}]");
 
         AHUUnrootedTreeIsomorphismInspector<Integer, DefaultEdge> isomorphism =
             new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree2);

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test {@link Point2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class Point2DTest

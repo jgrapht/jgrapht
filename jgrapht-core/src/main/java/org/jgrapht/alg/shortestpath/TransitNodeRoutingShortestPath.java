@@ -73,8 +73,7 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  * @see TransitNodeRoutingPrecomputation
  * @see BidirectionalDijkstraShortestPath
  */
-public class TransitNodeRoutingShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
 
     /**

@@ -24,8 +24,7 @@ import org.jgrapht.*;
  *
  * @author Barak Naveh
  */
-public class DefaultEdge
-    extends IntrusiveEdge
+public class DefaultEdge extends IntrusiveEdge
 {
     private static final long serialVersionUID = 3258408452177932855L;
 

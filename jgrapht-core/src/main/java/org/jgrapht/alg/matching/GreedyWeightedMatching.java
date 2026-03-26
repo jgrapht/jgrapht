@@ -29,7 +29,7 @@ import java.util.*;
  * the graph. This implementation accepts directed and undirected graphs which may contain
  * self-loops and multiple (parallel) edges. There is no assumption on the edge weights, i.e. they
  * can also be negative or zero.
- * 
+ *
  * <p>
  * This algorithm can be run in two modes: with and without edge cost normalization. Without
  * normalization, the algorithm first orders the edge set in non-increasing order of weights and
@@ -56,16 +56,15 @@ import java.util.*;
  * <li>D.E. Drake, S. Hougardy, A Simple Approximation Algorithm for the Weighted Matching Problem,
  * Information Processing Letters 85, 211-213, 2003.</li>
  * </ul>
- * 
+ *
  * @see PathGrowingWeightedMatching
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class GreedyWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class GreedyWeightedMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
@@ -74,7 +73,7 @@ public class GreedyWeightedMatching<V, E>
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm. Floating
      * point values are compared using {@link #DEFAULT_EPSILON} tolerance.
-     * 
+     *
      * @param graph the input graph
      * @param normalizeEdgeCosts boolean indicating whether edge normalization has to be used.
      */
@@ -85,7 +84,7 @@ public class GreedyWeightedMatching<V, E>
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm.
-     * 
+     *
      * @param graph the input graph
      * @param normalizeEdgeCosts boolean indicating whether edge normalization has to be used.
      * @param epsilon tolerance when comparing floating point values
@@ -102,7 +101,7 @@ public class GreedyWeightedMatching<V, E>
 
     /**
      * Get a matching that is a $\frac{1}{2}$-approximation of the maximum weighted matching.
-     * 
+     *
      * @return a matching
      */
     @Override

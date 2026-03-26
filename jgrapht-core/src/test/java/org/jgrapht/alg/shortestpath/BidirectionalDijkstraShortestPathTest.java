@@ -389,17 +389,29 @@ public class BidirectionalDijkstraShortestPathTest
         g.addVertex("2");
         g.addEdge("1", "2");
 
-        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g, -2.0).getPath("1", "2"));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new BidirectionalDijkstraShortestPath<>(g, -2.0).getPath("1", "2"));
 
-        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("3", "2"));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("3", "2"));
 
-        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("2", "3"));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("2", "3"));
 
-        assertThrows(NullPointerException.class, () -> new BidirectionalDijkstraShortestPath<>(null).getPath("1", "1"));
+        assertThrows(
+            NullPointerException.class,
+            () -> new BidirectionalDijkstraShortestPath<>(null).getPath("1", "1"));
 
-        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g).getPath(null, "1"));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new BidirectionalDijkstraShortestPath<>(g).getPath(null, "1"));
 
-        assertThrows(IllegalArgumentException.class, () -> new BidirectionalDijkstraShortestPath<>(g).getPath("1", null));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new BidirectionalDijkstraShortestPath<>(g).getPath("1", null));
     }
 
     private <V, E> double computePathWeight(Graph<V, E> g, GraphPath<V, E> path)

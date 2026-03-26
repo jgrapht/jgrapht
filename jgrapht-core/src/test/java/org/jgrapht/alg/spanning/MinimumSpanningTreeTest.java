@@ -122,9 +122,9 @@ public abstract class MinimumSpanningTreeTest
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         /*
-         * 
+         *
          * A -- B E -- F | | | | C -- D G -- H
-         * 
+         *
          */
 
         g.addVertex(A);

@@ -25,14 +25,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A DOTSubgraph is a container class for a subgraph and its attributes. It may be used in DOT export and can be
- * parametrized to export or not vertices and/or edges.
+ * A DOTSubgraph is a container class for a subgraph and its attributes. It may be used in DOT
+ * export and can be parametrized to export or not vertices and/or edges.
  *
  * <p>
- *     For example, for a subgraph named "subg" with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1, 2, and 3,
- *     with the subgraph attribute {@code pencolor} set to {@code transparent}, and the cluster attribute {@code shape}
- *     set to {@code point}, the DOT export of the subgraph will be:
+ * For example, for a subgraph named "subg" with DefaultEdges (1, 2) and (2, 3) between Integer
+ * vertices 1, 2, and 3, with the subgraph attribute {@code pencolor} set to {@code transparent},
+ * and the cluster attribute {@code shape} set to {@code point}, the DOT export of the subgraph will
+ * be:
  * </p>
+ *
  * <pre>
  *     subgraph subg {
  *         subg [ shape="point" ]
@@ -44,6 +46,7 @@ import java.util.Set;
  *         2 -- 3;
  *     }
  * </pre>
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  *
@@ -51,7 +54,8 @@ import java.util.Set;
  * @see AsSubgraph
  * @see DOTExporter
  */
-public class DOTSubgraph<V, E> {
+public class DOTSubgraph<V, E>
+{
 
     private final AsSubgraph<V, E> subgraph;
     private final Map<String, Attribute> subgraphAttributes;
@@ -68,8 +72,10 @@ public class DOTSubgraph<V, E> {
      * @param exportVertices whether to export vertices
      * @param exportEdges whether to export edges
      */
-    public DOTSubgraph(AsSubgraph<V, E> subgraph, Map<String, Attribute> subgraphAttributes, Map<String, Attribute> clusterAttributes,
-                       boolean exportVertices, boolean exportEdges) {
+    public DOTSubgraph(
+        AsSubgraph<V, E> subgraph, Map<String, Attribute> subgraphAttributes,
+        Map<String, Attribute> clusterAttributes, boolean exportVertices, boolean exportEdges)
+    {
         this.subgraph = subgraph;
         this.subgraphAttributes = new LinkedHashMap<>(subgraphAttributes);
         this.clusterAttributes = new LinkedHashMap<>(clusterAttributes);
@@ -84,7 +90,10 @@ public class DOTSubgraph<V, E> {
      * @param subgraphAttributes attributes for the subgraph
      * @param clusterAttributes attributes for the cluster
      */
-    public DOTSubgraph(AsSubgraph<V, E> subgraph, Map<String, Attribute> subgraphAttributes, Map<String, Attribute> clusterAttributes) {
+    public DOTSubgraph(
+        AsSubgraph<V, E> subgraph, Map<String, Attribute> subgraphAttributes,
+        Map<String, Attribute> clusterAttributes)
+    {
         this(subgraph, subgraphAttributes, clusterAttributes, true, true);
     }
 
@@ -93,7 +102,8 @@ public class DOTSubgraph<V, E> {
      *
      * @return the subgraph
      */
-    public AsSubgraph<V, E> getSubgraph() {
+    public AsSubgraph<V, E> getSubgraph()
+    {
         return subgraph;
     }
 
@@ -102,7 +112,8 @@ public class DOTSubgraph<V, E> {
      *
      * @return the subgraph attributes.
      */
-    public Map<String, Attribute> getSubgraphAttributes() {
+    public Map<String, Attribute> getSubgraphAttributes()
+    {
         return subgraphAttributes;
     }
 
@@ -111,7 +122,8 @@ public class DOTSubgraph<V, E> {
      *
      * @return the cluster attributes.
      */
-    public Map<String, Attribute> getClusterAttributes() {
+    public Map<String, Attribute> getClusterAttributes()
+    {
         return clusterAttributes;
     }
 
@@ -120,7 +132,8 @@ public class DOTSubgraph<V, E> {
      *
      * @return the vertices of the subgraph
      */
-    public Set<V> vertexSet() {
+    public Set<V> vertexSet()
+    {
         return subgraph.vertexSet();
     }
 
@@ -129,51 +142,58 @@ public class DOTSubgraph<V, E> {
      *
      * @return the edges of the subgraph
      */
-    public Set<E> edgeSet() {
+    public Set<E> edgeSet()
+    {
         return subgraph.edgeSet();
     }
 
     /**
      * Whether to export the subgraph vertices in the DOT export.
      * <p>
-     *     If {@code true}, vertices will be included in the DOT export by writing their identifiers one by one on successive
-     *     lines, with the same formalism as the main graph's vertices.
+     * If {@code true}, vertices will be included in the DOT export by writing their identifiers one
+     * by one on successive lines, with the same formalism as the main graph's vertices.
      * </p>
      *
      * <p>
-     *     For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1, 2, and 3, the
-     *     DOT export of the vertices will be:
-     *     <pre>
+     * For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1,
+     * 2, and 3, the DOT export of the vertices will be:
+     *
+     * <pre>
      *         1;
      *         2;
      *         3;
-     *     </pre>
+     * </pre>
      * </p>
      *
      * @return {@code true} if vertices should be exported, {@code false} otherwise.
      */
-    public boolean isExportVertices() {
+    public boolean isExportVertices()
+    {
         return exportVertices;
     }
 
     /**
      * Whether to export the subgraph edges in the DOT export.
      * <p>
-     *     If {@code true}, edges will be included in the DOT export by writing the identifiers of their respective source
-     *     and target vertices on successive lines, with the same formalism as the main graph's edges.
+     * If {@code true}, edges will be included in the DOT export by writing the identifiers of their
+     * respective source and target vertices on successive lines, with the same formalism as the
+     * main graph's edges.
      * </p>
      *
      * <p>
-     *     For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1, 2, and 3, the
-     *     DOT export of the edges will be:
-     *     <pre>
+     * For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1,
+     * 2, and 3, the DOT export of the edges will be:
+     *
+     * <pre>
      *         1 -- 2;
      *         2 -- 3;
-     *     </pre>
+     * </pre>
      * </p>
+     *
      * @return {@code true} if edges should be exported, {@code false} otherwise.
      */
-    public boolean isExportEdges() {
+    public boolean isExportEdges()
+    {
         return exportEdges;
     }
 }

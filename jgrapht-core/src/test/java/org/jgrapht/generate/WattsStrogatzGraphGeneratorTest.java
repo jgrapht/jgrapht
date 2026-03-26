@@ -36,7 +36,8 @@ public class WattsStrogatzGraphGeneratorTest
     @Test
     public void testLessThan3Nodes()
     {
-        assertThrows(IllegalArgumentException.class, () -> new WattsStrogatzGraphGenerator<>(2, 1, 0.5));
+        assertThrows(
+            IllegalArgumentException.class, () -> new WattsStrogatzGraphGenerator<>(2, 1, 0.5));
     }
 
     @Test

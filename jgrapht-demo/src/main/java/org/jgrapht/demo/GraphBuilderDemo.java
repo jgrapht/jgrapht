@@ -30,7 +30,7 @@ public final class GraphBuilderDemo
 {
     /**
      * Main demo entry point.
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args)
@@ -46,8 +46,7 @@ public final class GraphBuilderDemo
     // @example:buildType:begin
     private static Graph<Integer, DefaultEdge> buildEmptySimpleGraph()
     {
-        return GraphTypeBuilder
-            .<Integer, DefaultEdge> undirected().allowingMultipleEdges(false)
+        return GraphTypeBuilder.<Integer, DefaultEdge> undirected().allowingMultipleEdges(false)
             .allowingSelfLoops(false).edgeClass(DefaultEdge.class).weighted(false).buildGraph();
     }
     // @example:buildType:end
@@ -60,8 +59,8 @@ public final class GraphBuilderDemo
     // @example:buildEdges:begin
     private static Graph<Integer, DefaultEdge> buildKiteGraph()
     {
-        return new GraphBuilder<>(buildEmptySimpleGraph())
-            .addEdgeChain(1, 2, 3, 4, 1).addEdge(2, 4).addEdge(3, 5).buildAsUnmodifiable();
+        return new GraphBuilder<>(buildEmptySimpleGraph()).addEdgeChain(1, 2, 3, 4, 1).addEdge(2, 4)
+            .addEdge(3, 5).buildAsUnmodifiable();
     }
     // @example:buildEdges:end
 

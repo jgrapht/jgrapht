@@ -59,8 +59,7 @@ import java.util.Objects;
  * @param <E> graph edge type
  * @author Semen Chudakov
  */
-public class HowardMinimumMeanCycle<V, E>
-    implements MinimumCycleMeanAlgorithm<V, E>
+public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V, E>
 {
     /**
      * The underlying graph.

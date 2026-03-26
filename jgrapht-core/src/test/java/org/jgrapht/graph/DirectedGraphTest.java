@@ -173,12 +173,11 @@ public class DirectedGraphTest
 
     /**
      * A graph implementation with an edge factory using linked hash sets.
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    private class LinkedHashSetDirectedMultigraph<V, E>
-        extends DirectedMultigraph<V, E>
+    private class LinkedHashSetDirectedMultigraph<V, E> extends DirectedMultigraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 

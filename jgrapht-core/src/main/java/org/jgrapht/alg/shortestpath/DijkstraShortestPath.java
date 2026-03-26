@@ -33,8 +33,7 @@ import java.util.function.*;
  * @param <E> the graph edge type
  * @author John V. Sichi
  */
-public final class DijkstraShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public final class DijkstraShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     private final double radius;
     private final Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier;

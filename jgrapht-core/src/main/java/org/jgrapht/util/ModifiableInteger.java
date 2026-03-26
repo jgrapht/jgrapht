@@ -18,15 +18,15 @@
 package org.jgrapht.util;
 
 /**
- * The {@code ModifiableInteger} class wraps a value of the primitive type {@code int} in
- * an object, similarly to {@link java.lang.Integer}. An object of type
- * {@code ModifiableInteger} contains a single field whose type is {@code int}.
+ * The {@code ModifiableInteger} class wraps a value of the primitive type {@code int} in an object,
+ * similarly to {@link java.lang.Integer}. An object of type {@code ModifiableInteger} contains a
+ * single field whose type is {@code int}.
  *
  * <p>
- * Unlike {@code java.lang.Integer}, the {@code int} value which the ModifiableInteger represents can
- * be modified. It becomes useful when used together with the collection framework. For example, if
- * you want to have a {@link java.util.List} of counters. You could use {@code Integer} but
- * that would have became wasteful and inefficient if you frequently had to update the counters.
+ * Unlike {@code java.lang.Integer}, the {@code int} value which the ModifiableInteger represents
+ * can be modified. It becomes useful when used together with the collection framework. For example,
+ * if you want to have a {@link java.util.List} of counters. You could use {@code Integer} but that
+ * would have became wasteful and inefficient if you frequently had to update the counters.
  * </p>
  *
  * <p>
@@ -38,9 +38,7 @@ package org.jgrapht.util;
  *
  * @author Barak Naveh
  */
-public class ModifiableInteger
-    extends Number
-    implements Comparable<ModifiableInteger>
+public class ModifiableInteger extends Number implements Comparable<ModifiableInteger>
 {
     private static final long serialVersionUID = 3618698612851422261L;
 
@@ -65,8 +63,8 @@ public class ModifiableInteger
     }
 
     /**
-     * Constructs a newly allocated {@code ModifiableInteger} object that represents the
-     * specified {@code int} value.
+     * Constructs a newly allocated {@code ModifiableInteger} object that represents the specified
+     * {@code int} value.
      *
      * @param value the value to be represented by the {@code ModifiableInteger} object.
      */
@@ -117,8 +115,8 @@ public class ModifiableInteger
      *
      * @param anotherInteger the {@code ModifiableInteger} to be compared.
      *
-     * @return the value {@code 0} if this {@code ModifiableInteger} is equal to the
-     *         argument {@code ModifiableInteger}; a value less than {@code 0} if this
+     * @return the value {@code 0} if this {@code ModifiableInteger} is equal to the argument
+     *         {@code ModifiableInteger}; a value less than {@code 0} if this
      *         {@code ModifiableInteger} is numerically less than the argument
      *         {@code ModifiableInteger}; and a value greater than {@code 0} if this
      *         {@code ModifiableInteger} is numerically greater than the argument
@@ -143,9 +141,9 @@ public class ModifiableInteger
     }
 
     /**
-     * Compares this object to the specified object. The result is {@code 
-     * true} if and only if the argument is not {@code null} and is an
-     * {@code ModifiableInteger} object that contains the same {@code 
+     * Compares this object to the specified object. The result is {@code
+     * true} if and only if the argument is not {@code null} and is an {@code ModifiableInteger}
+     * object that contains the same {@code
      * int} value as this object.
      *
      * @param o the object to compare with.
@@ -174,7 +172,7 @@ public class ModifiableInteger
     /**
      * Returns a hash code for this {@code ModifiableInteger}.
      *
-     * @return a hash code value for this object, equal to the primitive {@code 
+     * @return a hash code value for this object, equal to the primitive {@code
      * int} value represented by this {@code ModifiableInteger} object.
      */
     @Override
@@ -202,7 +200,7 @@ public class ModifiableInteger
     }
 
     /**
-     * Returns an {@code Integer} object representing this {@code 
+     * Returns an {@code Integer} object representing this {@code
      * ModifiableInteger}'s value.
      *
      * @return an {@code Integer} representation of the value of this object.
@@ -213,7 +211,7 @@ public class ModifiableInteger
     }
 
     /**
-     * Returns a {@code String} object representing this {@code 
+     * Returns a {@code String} object representing this {@code
      * ModifiableInteger}'s value. The value is converted to signed decimal representation and
      * returned as a string, exactly as if the integer value were given as an argument to the
      * {@link java.lang.Integer#toString(int)} method.

@@ -319,8 +319,8 @@ public class ZhangShashaTreeEditDistance<V, E>
 
                     forestdist[iIndex][jIndex] = result;
                     treeDistances[i1 - 1][j1 - 1] = result;
-                    editOperationLists.get(i1 - 1).set(
-                        j1 - 1, restoreOperationsList(cachedOperations, iIndex, jIndex));
+                    editOperationLists.get(i1 - 1)
+                        .set(j1 - 1, restoreOperationsList(cachedOperations, iIndex, jIndex));
                 } else {
                     int i2 = li1 - 1 - iOffset;
                     int j2 = lj1 - 1 - jOffset;

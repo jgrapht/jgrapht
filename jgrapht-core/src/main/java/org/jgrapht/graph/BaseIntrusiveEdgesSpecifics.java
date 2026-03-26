@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * A base implementation for the intrusive edges specifics.
- * 
+ *
  * @author Barak Naveh
  * @author Dimitrios Michail
  *
@@ -33,8 +33,7 @@ import java.util.*;
  * @param <E> the graph edge type
  * @param <IE> the intrusive edge type
  */
-public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
-    implements Serializable
+public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge> implements Serializable
 {
     private static final long serialVersionUID = -7498268216742485L;
 
@@ -43,7 +42,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Constructor
-     * 
+     *
      * @param edgeMap the map to use for storage
      */
     public BaseIntrusiveEdgesSpecifics(Map<E, IE> edgeMap)
@@ -53,7 +52,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Check if an edge exists
-     * 
+     *
      * @param e the edge
      * @return true if the edge exists, false otherwise
      */
@@ -64,7 +63,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Get the edge set.
-     * 
+     *
      * @return an unmodifiable edge set
      */
     public Set<E> getEdgeSet()
@@ -77,7 +76,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Remove an edge.
-     * 
+     *
      * @param e the edge
      */
     public void remove(E e)
@@ -87,7 +86,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Get the source of an edge.
-     * 
+     *
      * @param e the edge
      * @return the source vertex of an edge
      */
@@ -102,7 +101,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Get the target of an edge.
-     * 
+     *
      * @param e the edge
      * @return the target vertex of an edge
      */
@@ -117,7 +116,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Get the weight of an edge.
-     * 
+     *
      * @param e the edge
      * @return the weight of an edge
      */
@@ -128,7 +127,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Set the weight of an edge
-     * 
+     *
      * @param e the edge
      * @param weight the new weight
      */
@@ -139,7 +138,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Add a new edge
-     * 
+     *
      * @param e the edge
      * @param sourceVertex the source vertex of the edge
      * @param targetVertex the target vertex of the edge
@@ -164,7 +163,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Get the intrusive edge of an edge.
-     * 
+     *
      * @param e the edge
      * @return the intrusive edge
      */

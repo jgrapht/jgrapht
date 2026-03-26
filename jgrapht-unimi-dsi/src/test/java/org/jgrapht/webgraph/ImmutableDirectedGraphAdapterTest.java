@@ -80,8 +80,8 @@ public class ImmutableDirectedGraphAdapterTest
         IllegalArgumentException,
         SecurityException
     {
-        final File basename = File
-            .createTempFile(ImmutableDirectedGraphAdapterTest.class.getSimpleName(), "test");
+        final File basename =
+            File.createTempFile(ImmutableDirectedGraphAdapterTest.class.getSimpleName(), "test");
         EFGraph.store(g, basename.toString());
         basename.deleteOnExit();
         new File(basename + EFGraph.GRAPH_EXTENSION).deleteOnExit();
@@ -182,12 +182,10 @@ public class ImmutableDirectedGraphAdapterTest
             new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
 
         assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntPair[] { IntIntPair.of(0, 1), IntIntPair.of(1, 2) }),
+            new ObjectOpenHashSet<>(new IntIntPair[] { IntIntPair.of(0, 1), IntIntPair.of(1, 2) }),
             a.edgesOf(1));
         assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntPair[] { IntIntPair.of(0, 1), IntIntPair.of(1, 2) }),
+            new ObjectOpenHashSet<>(new IntIntPair[] { IntIntPair.of(0, 1), IntIntPair.of(1, 2) }),
             new ObjectOpenHashSet<>(a.iterables().edgesOf(1).iterator()));
 
         assertEquals(3, Iterables.size(a.edgesOf(2)));
@@ -219,7 +217,6 @@ public class ImmutableDirectedGraphAdapterTest
         assertEquals(1.0, a.getEdgeWeight(IntIntPair.of(1, 2)), 0);
         a.setEdgeWeight(IntIntPair.of(0, 1), 1);
     }
-
 
     @Test
     public void testCopy()

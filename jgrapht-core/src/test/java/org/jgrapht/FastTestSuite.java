@@ -21,12 +21,12 @@ import org.junit.platform.suite.api.*;
 
 /**
  * Suite of fast unit tests only (as run by mvn test).
- * 
+ *
  * @author John Sichi
  */
-@ExcludePackages({"org.jgrapht.perf"})
+@ExcludePackages({ "org.jgrapht.perf" })
 @ExcludeTags({ "slow", "optional" })
-@SelectPackages({"org.jgrapht"})
+@SelectPackages({ "org.jgrapht" })
 @Suite
 public class FastTestSuite
 {

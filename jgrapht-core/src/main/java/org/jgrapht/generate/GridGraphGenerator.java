@@ -33,8 +33,7 @@ import java.util.*;
  *
  * @author Assaf Mizrachi
  */
-public class GridGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class GridGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     /**
      * Role for the vertices at the corners.

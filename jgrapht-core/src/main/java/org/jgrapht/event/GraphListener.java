@@ -24,15 +24,14 @@ package org.jgrapht.event;
  * If only notifications on vertex set changes are required it is more efficient to use the
  * VertexSetListener.
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @see VertexSetListener
  */
-public interface GraphListener<V, E>
-    extends VertexSetListener<V>
+public interface GraphListener<V, E> extends VertexSetListener<V>
 {
     /**
      * Notifies that an edge has been added to the graph.
@@ -50,7 +49,7 @@ public interface GraphListener<V, E>
 
     /**
      * Notifies that an edge weight has been updated.
-     * 
+     *
      * @param e the edge event.
      */
     default void edgeWeightUpdated(GraphEdgeChangeEvent<V, E> e)

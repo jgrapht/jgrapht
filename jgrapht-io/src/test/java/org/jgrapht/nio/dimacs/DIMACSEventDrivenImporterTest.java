@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class DIMACSEventDrivenImporterTest

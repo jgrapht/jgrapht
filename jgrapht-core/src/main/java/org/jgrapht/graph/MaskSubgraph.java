@@ -29,14 +29,12 @@ import java.util.function.*;
  * iterating over the vertices/edges, it will iterate over the vertices/edges of the base graph and
  * discard vertices/edges that are masked (an edge with a masked extremity vertex is discarded as
  * well).
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  */
-public class MaskSubgraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+public class MaskSubgraph<V, E> extends AbstractGraph<V, E> implements Serializable
 {
     private static final long serialVersionUID = -7397441126669119179L;
 
@@ -145,7 +143,7 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>
      * By default this method returns the sum of in-degree and out-degree. The exact value returned
      * depends on the type of the underlying graph.

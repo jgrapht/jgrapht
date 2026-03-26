@@ -177,9 +177,8 @@ public class TransitNodeRoutingShortestPathTest
      */
     private void testOnGraph(Graph<Integer, DefaultWeightedEdge> graph, Integer source)
     {
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> dijkstraShortestPaths =
-                new DijkstraShortestPath<>(graph).getPaths(source);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
+            new DijkstraShortestPath<>(graph).getPaths(source);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy =
             new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
@@ -189,9 +188,8 @@ public class TransitNodeRoutingShortestPathTest
             new TransitNodeRoutingPrecomputation<>(contractionHierarchy, executor)
                 .computeTransitNodeRouting();
 
-        TransitNodeRoutingShortestPath<Integer,
-            DefaultWeightedEdge> transitNodeRoutingShortestPath =
-                new TransitNodeRoutingShortestPath<>(routing);
+        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> transitNodeRoutingShortestPath =
+            new TransitNodeRoutingShortestPath<>(routing);
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> tnrShortestPaths =
             transitNodeRoutingShortestPath.getPaths(source);
 

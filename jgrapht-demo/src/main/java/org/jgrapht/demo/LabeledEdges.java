@@ -96,8 +96,7 @@ public class LabeledEdges
  * Custom edge class labeled with relationship type.
  */
 // @example:edgeclass:begin
-class RelationshipEdge
-    extends DefaultEdge
+class RelationshipEdge extends DefaultEdge
 {
     private String label;
 
@@ -105,7 +104,7 @@ class RelationshipEdge
      * Constructs a relationship edge
      *
      * @param label the label of the new edge.
-     * 
+     *
      */
     public RelationshipEdge(String label)
     {

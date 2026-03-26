@@ -36,8 +36,8 @@ import java.util.*;
  * School of Management.
  * <p>
  * This version runs in polynomial time dependent on the number of considered operations per
- * iteration {@code numberOfOperationsParameter} (denoted by p), such that runs is in $O(|V|^3
- * + p|V|) = O(|V|^3)$ since $p \leq |V|$.
+ * iteration {@code numberOfOperationsParameter} (denoted by p), such that runs is in $O(|V|^3 +
+ * p|V|) = O(|V|^3)$ since $p \leq |V|$.
  * <p>
  * A <a href="https://en.wikipedia.org/wiki/Capacitated_minimum_spanning_tree">Capacitated Minimum
  * Spanning Tree</a> (CMST) is a rooted minimal cost spanning tree that satisfies the capacity
@@ -49,8 +49,7 @@ import java.util.*;
  * @author Christoph Grüne
  * @since July 12, 2018
  */
-public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
-    extends AbstractCapacitatedMinimumSpanningTree<V, E>
+public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E> extends AbstractCapacitatedMinimumSpanningTree<V, E>
 {
 
     /**
@@ -290,9 +289,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
     }
 
     /**
-     * Calculates the closest vertex to {@code vertex} such that the connection of
-     * {@code vertex} to the subtree of the closest vertex does not violate the capacity
-     * constraint and the savings are positive. Otherwise null is returned.
+     * Calculates the closest vertex to {@code vertex} such that the connection of {@code vertex} to
+     * the subtree of the closest vertex does not violate the capacity constraint and the savings
+     * are positive. Otherwise null is returned.
      *
      * @param vertex the vertex to find a valid closest vertex for
      * @param restrictionMap the set of labels of sets of the partition, in which the capacity

@@ -32,15 +32,13 @@ import java.util.function.*;
  * http://dimacs.rutgers.edu/Challenges</a>. Note that there are a lot of different formats based on
  * each different challenge, see {@link DIMACSFormat} for the supported formats. The exporter uses
  * the {@link DIMACSFormat#MAX_CLIQUE} by default.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
  */
-public class DIMACSExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class DIMACSExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     /**
      * The default format used by the exporter.
@@ -125,7 +123,7 @@ public class DIMACSExporter<V, E>
 
     /**
      * Return if a particular parameter of the exporter is enabled
-     * 
+     *
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
@@ -136,7 +134,7 @@ public class DIMACSExporter<V, E>
 
     /**
      * Set the value of a parameter of the exporter
-     * 
+     *
      * @param p the parameter
      * @param value the value to set
      */
@@ -151,7 +149,7 @@ public class DIMACSExporter<V, E>
 
     /**
      * Get the format of the exporter
-     * 
+     *
      * @return the format of the exporter
      */
     public DIMACSFormat getFormat()
@@ -161,7 +159,7 @@ public class DIMACSExporter<V, E>
 
     /**
      * Set the format of the exporter
-     * 
+     *
      * @param format the format to use
      */
     public void setFormat(DIMACSFormat format)

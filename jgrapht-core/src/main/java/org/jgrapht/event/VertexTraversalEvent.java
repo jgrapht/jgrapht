@@ -26,8 +26,7 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public class VertexTraversalEvent<V>
-    extends EventObject
+public class VertexTraversalEvent<V> extends EventObject
 {
     private static final long serialVersionUID = 3688790267213918768L;
 

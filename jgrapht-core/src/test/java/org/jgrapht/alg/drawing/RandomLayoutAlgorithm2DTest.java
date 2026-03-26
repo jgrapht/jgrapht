@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test {@link RandomLayoutAlgorithm2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class RandomLayoutAlgorithm2DTest
@@ -39,9 +39,8 @@ public class RandomLayoutAlgorithm2DTest
     @Test
     public void testRandom()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();

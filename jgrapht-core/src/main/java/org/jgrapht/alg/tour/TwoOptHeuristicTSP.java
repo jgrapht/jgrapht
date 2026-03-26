@@ -57,9 +57,7 @@ import static org.jgrapht.util.ArrayUtil.*;
  * @author Dimitrios Michail
  * @author Hannes Wellmann
  */
-public class TwoOptHeuristicTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
-    implements HamiltonianCycleImprovementAlgorithm<V, E>
+public class TwoOptHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E> implements HamiltonianCycleImprovementAlgorithm<V, E>
 {
     private final int passes;
     private final HamiltonianCycleAlgorithm<V, E> initializer;

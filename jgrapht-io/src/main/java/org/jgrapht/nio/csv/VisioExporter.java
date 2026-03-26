@@ -42,9 +42,7 @@ import java.util.function.*;
  *
  * @author Avner Linder
  */
-public class VisioExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class VisioExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     /**
      * Creates a new VisioExporter.

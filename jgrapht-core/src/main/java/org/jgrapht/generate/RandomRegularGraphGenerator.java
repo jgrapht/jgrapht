@@ -47,8 +47,7 @@ import java.util.*;
  * @param <V> graph node type
  * @param <E> graph edge type
  */
-public class RandomRegularGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final int n;
     private final int d;

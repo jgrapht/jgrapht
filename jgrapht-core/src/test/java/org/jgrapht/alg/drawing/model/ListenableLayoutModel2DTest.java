@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test {@link ListenableLayoutModel2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class ListenableLayoutModel2DTest
@@ -39,9 +39,8 @@ public class ListenableLayoutModel2DTest
     @Test
     public void testGeneral()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -88,8 +87,7 @@ public class ListenableLayoutModel2DTest
         assertEquals(all.get(v2), Point2D.of(5, 7));
     }
 
-    private static class CountListener
-        implements BiConsumer<String, Point2D>
+    private static class CountListener implements BiConsumer<String, Point2D>
     {
 
         private int called = 0;

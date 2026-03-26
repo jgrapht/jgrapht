@@ -46,9 +46,7 @@ import java.util.*;
  *
  * @author JeanYves Tinevez
  */
-public class JGraphXAdapter<V, E>
-    extends mxGraph
-    implements GraphListener<V, E>
+public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
 {
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".
@@ -82,10 +80,10 @@ public class JGraphXAdapter<V, E>
     /**
      * Constructs and draws a new ListenableGraph. If the graph changes through the ListenableGraph,
      * the JGraphXAdapter will automatically add/remove the new edge/vertex as it implements the
-     * GraphListener interface. 
+     * GraphListener interface.
      *
      * @param graph casted to graph
-     * 
+     *
      * @throws IllegalArgumentException if the graph is null.
      */
     public JGraphXAdapter(ListenableGraph<V, E> graph)
@@ -102,7 +100,7 @@ public class JGraphXAdapter<V, E>
      * instead or use this graph as a normal mxGraph.
      *
      * @param graph is a graph
-     * 
+     *
      * @throws IllegalArgumentException if the parameter is null
      */
     public JGraphXAdapter(Graph<V, E> graph)

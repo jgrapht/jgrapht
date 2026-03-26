@@ -61,8 +61,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinder<V, E>
-    implements LowestCommonAncestorAlgorithm<V>
+public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
     private Graph<V, E> graph;
     private Set<V> roots;
@@ -234,7 +233,7 @@ public class TarjanLCAFinder<V, E>
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException if the method is called
      */
     @Override

@@ -32,8 +32,7 @@ import java.util.function.*;
  *
  * @see DefaultDirectedGraph
  */
-public class DefaultDirectedWeightedGraph<V, E>
-    extends DefaultDirectedGraph<V, E>
+public class DefaultDirectedWeightedGraph<V, E> extends DefaultDirectedGraph<V, E>
 {
     private static final long serialVersionUID = -4867672646995721544L;
 
@@ -49,7 +48,7 @@ public class DefaultDirectedWeightedGraph<V, E>
 
     /**
      * Creates a new graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      */
@@ -60,30 +59,28 @@ public class DefaultDirectedWeightedGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
-            Class<? extends E> edgeClass)
+    public static <V, E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
     {
         return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(edgeClass));
     }
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
-            Supplier<E> edgeSupplier)
+    public static <V, E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
+        Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(null, edgeSupplier));
     }

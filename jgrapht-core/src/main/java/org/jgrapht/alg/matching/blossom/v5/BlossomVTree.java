@@ -303,8 +303,7 @@ class BlossomVTree
      * order. <b>Note:</b> this iterator can also be used to iterate the nodes of some subtree of a
      * tree.
      */
-    public static class TreeNodeIterator
-        implements Iterator<BlossomVNode>
+    public static class TreeNodeIterator implements Iterator<BlossomVNode>
     {
         /**
          * The node this iterator is currently on
@@ -391,8 +390,7 @@ class BlossomVTree
     /**
      * An iterator over tree edges incident to this tree.
      */
-    public class TreeEdgeIterator
-        implements Iterator<BlossomVTreeEdge>
+    public class TreeEdgeIterator implements Iterator<BlossomVTreeEdge>
     {
         /**
          * The direction of the {@code currentEdge}

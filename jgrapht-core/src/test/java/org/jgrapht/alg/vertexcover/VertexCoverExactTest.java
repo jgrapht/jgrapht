@@ -33,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Linda Buisman
  */
-public abstract class VertexCoverExactTest
-    implements VertexCoverTest
+public abstract class VertexCoverExactTest implements VertexCoverTest
 {
 
     // ------- Exact algorithms ------

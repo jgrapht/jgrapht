@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link RandomRegularGraphGenerator}.
- * 
+ *
  * @author Emilio Cruciani
  */
 public class RandomRegularGraphGeneratorTest
@@ -38,19 +38,22 @@ public class RandomRegularGraphGeneratorTest
     @Test
     public void testNegativeN()
     {
-        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(-10, 1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(-10, 1));
     }
 
     @Test
     public void testNegativeD()
     {
-        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(10, -1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(10, -1));
     }
 
     @Test
     public void testDGreaterThanN()
     {
-        assertThrows(IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(10, 15));
+        assertThrows(
+            IllegalArgumentException.class, () -> new RandomRegularGraphGenerator<>(10, 15));
     }
 
     @Test

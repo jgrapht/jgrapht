@@ -21,8 +21,7 @@ package org.jgrapht.alg.isomorphism;
  * Implementation of IsomorphismUndecidableException to indicate undecidable isomorphism cases in
  * isomorphism inspectors
  */
-public class IsomorphismUndecidableException
-    extends RuntimeException
+public class IsomorphismUndecidableException extends RuntimeException
 {
 
     private static final long serialVersionUID = 4703220562690821852L;

@@ -22,26 +22,24 @@ import java.util.*;
 
 /**
  * Generic unordered pair.
- * 
+ *
  * <p>
  * Although the instances of this class are immutable, it is impossible to ensure that the
  * references passed to the constructor will not be modified by the caller.
- * 
+ *
  * @param <A> the first element type
  * @param <B> the second element type
- * 
+ *
  * @author Joris Kinable
- * 
+ *
  */
-public class UnorderedPair<A, B>
-    extends Pair<A, B>
-    implements Serializable
+public class UnorderedPair<A, B> extends Pair<A, B> implements Serializable
 {
     private static final long serialVersionUID = -3110454174542533876L;
 
     /**
      * Create a new unordered pair
-     * 
+     *
      * @param a an element
      * @param b another element
      */

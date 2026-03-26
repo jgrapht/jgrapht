@@ -19,11 +19,10 @@ package org.jgrapht.nio;
 
 /**
  * An exception that the library throws in case of graph import errors.
- * 
+ *
  * @author Wil Selwood
  */
-public class ImportException
-    extends RuntimeException
+public class ImportException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 

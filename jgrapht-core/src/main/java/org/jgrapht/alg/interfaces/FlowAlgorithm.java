@@ -92,8 +92,7 @@ public interface FlowAlgorithm<V, E>
      *
      * @param <E> graph edge type
      */
-    class FlowImpl<E>
-        implements Flow<E>
+    class FlowImpl<E> implements Flow<E>
     {
         /**
          * A mapping defining the flow on the network

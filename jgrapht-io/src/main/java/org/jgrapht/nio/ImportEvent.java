@@ -19,7 +19,7 @@ package org.jgrapht.nio;
 
 /**
  * Special events which may happen during import.
- * 
+ *
  * @author Dimitrios Michail
  */
 public enum ImportEvent

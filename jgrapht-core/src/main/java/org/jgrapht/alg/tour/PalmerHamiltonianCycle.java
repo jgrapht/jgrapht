@@ -64,8 +64,7 @@ import static org.jgrapht.util.ArrayUtil.*;
  * @author Alexandru Valeanu
  * @author Hannes Wellmann
  */
-public class PalmerHamiltonianCycle<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class PalmerHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     /**

@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * This class tests default implementation of the
  * {@link org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic#isConsistent(Graph)} method.
  */
-public class AStarAdmissibleHeuristicTest
-    extends BaseHeuristicSearchTest
+public class AStarAdmissibleHeuristicTest extends BaseHeuristicSearchTest
 {
 
     @Test
@@ -87,8 +86,7 @@ public class AStarAdmissibleHeuristicTest
     /**
      * Does not override {@link AStarAdmissibleHeuristic#isConsistent(Graph)} method.
      */
-    public static class ManhattanDistance
-        implements AStarAdmissibleHeuristic<Node>
+    public static class ManhattanDistance implements AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)
@@ -101,8 +99,7 @@ public class AStarAdmissibleHeuristicTest
     /**
      * Does not override {@link AStarAdmissibleHeuristic#isConsistent(Graph)} method.
      */
-    public static class EuclideanDistance
-        implements AStarAdmissibleHeuristic<Node>
+    public static class EuclideanDistance implements AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)

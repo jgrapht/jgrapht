@@ -24,33 +24,32 @@ import java.util.*;
 
 /**
  * The linearized chord diagram graph model generator.
- * 
+ *
  * <p>
  * The generator makes precise several unspecified mathematical details of the Barabási-Albert
  * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned
  * to a new node are added one by one, or simultaneously, etc. The generator is described in the
  * paper: Bélaa Bollobás and Oliver Riordan. The Diameter of a Scale-Free Random Graph. Journal
  * Combinatorica, 24(1): 5--34, 2004.
- * 
+ *
  * <p>
  * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allows for multiple
  * edges (parallel-edges) and self-loops. They show, however, that their number will be small. This
  * means that this generator works only on graphs which allow multiple edges (parallel-edges) such
  * as {@link Pseudograph} or {@link DirectedPseudograph}.
- * 
+ *
  * <p>
  * The generator starts with a graph of one node and grows the network by adding $n-1$ additional
  * nodes. The additional nodes are added one by one and each of them is connected to $m$ previously
  * added nodes (or to itself with a small probability), where the probability of connecting to a
  * node is proportional to its degree.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class LinearizedChordDiagramGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class LinearizedChordDiagramGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int m;
@@ -58,7 +57,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n number of nodes
      * @param m number of edges of each new node added during the network growth
      * @throws IllegalArgumentException in case of invalid parameters
@@ -70,7 +69,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n number of nodes
      * @param m number of edges of each new node added during the network growth
      * @param seed seed for the random number generator
@@ -83,7 +82,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n number of nodes
      * @param m number of edges of each new node added during the network growth
      * @param rng the random number generator to use
@@ -104,7 +103,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
 
     /**
      * Generates an instance.
-     * 
+     *
      * @param target the target graph, which must allow self-loops and parallel edges
      * @param resultMap not used by this generator, can be null
      * @throws IllegalArgumentException if the graph does not allow self-loops or parallel edges

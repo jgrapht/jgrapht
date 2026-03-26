@@ -30,7 +30,7 @@ import java.util.*;
  * <p>
  * Computes shortest paths from a single source vertex to all other vertices in a weighted graph.
  * The Bellman-Ford algorithm supports negative edge weights.
- * 
+ *
  * <p>
  * Negative weight cycles are not allowed and will be reported by the algorithm. This implies that
  * negative edge weights are not allowed in undirected graphs. In such cases the code will throw an
@@ -46,8 +46,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class BellmanFordShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class BellmanFordShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     protected final Comparator<Double> comparator;
     protected final int maxHops;
@@ -94,7 +93,7 @@ public class BellmanFordShortestPath<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
@@ -108,7 +107,7 @@ public class BellmanFordShortestPath<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
@@ -200,11 +199,11 @@ public class BellmanFordShortestPath<V, E>
 
     /**
      * Find a path between two vertices.
-     * 
+     *
      * @param graph the graph to be searched
      * @param source the vertex at which the path should start
      * @param sink the vertex at which the path should end
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
@@ -218,10 +217,10 @@ public class BellmanFordShortestPath<V, E>
     /**
      * Computes a negative weight cycle assuming that the algorithm has already determined that it
      * exists.
-     * 
+     *
      * @param edge an edge which we know that belongs to the negative weight cycle
      * @param pred the predecessor array
-     * 
+     *
      * @return the negative weight cycle
      */
     private GraphPath<V, E> computeNegativeCycle(E edge, Map<V, E> pred)

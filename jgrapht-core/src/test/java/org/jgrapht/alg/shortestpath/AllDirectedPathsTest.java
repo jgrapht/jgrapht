@@ -217,7 +217,9 @@ public class AllDirectedPathsTest
         Set<String> sources = vertexSet(I1);
         Set<String> targets = vertexSet(O1);
 
-        assertThrows(IllegalArgumentException.class, () -> pathFindingAlg.getAllPaths(sources, targets, false, null));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> pathFindingAlg.getAllPaths(sources, targets, false, null));
     }
 
     @Test

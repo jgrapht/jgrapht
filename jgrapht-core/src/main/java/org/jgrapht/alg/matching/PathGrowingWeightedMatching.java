@@ -31,21 +31,21 @@ import java.util.*;
  * maximum weight matching. The implementation accepts directed and undirected graphs which may
  * contain self-loops and multiple edges. There is no assumption on the edge weights, i.e. they can
  * also be negative or zero.
- * 
+ *
  * <p>
  * The algorithm is due to Drake and Hougardy, described in detail in the following paper:
  * <ul>
  * <li>D.E. Drake, S. Hougardy, A Simple Approximation Algorithm for the Weighted Matching Problem,
  * Information Processing Letters 85, 211-213, 2003.</li>
  * </ul>
- * 
+ *
  * <p>
  * This particular implementation uses by default two additional heuristics discussed by the authors
  * which also take linear time but improve the quality of the matchings. These heuristics can be
  * disabled by calling the constructor {@link #PathGrowingWeightedMatching(Graph, boolean)}.
  * Disabling the heuristics has the effect of fewer passes over the edge set of the input graph,
  * probably at the expense of the total weight of the matching.
- * 
+ *
  * <p>
  * For a discussion on engineering approximate weighted matching algorithms see the following paper:
  * <ul>
@@ -54,14 +54,13 @@ import java.util.*;
  * </ul>
  *
  * @see GreedyWeightedMatching
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
  */
-public class PathGrowingWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class PathGrowingWeightedMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     /**
      * Default value on whether to use extra heuristics to improve the result.
@@ -76,7 +75,7 @@ public class PathGrowingWeightedMatching<V, E>
      * Construct a new instance of the path growing algorithm. Floating point values are compared
      * using {@link #DEFAULT_EPSILON} tolerance. By default two additional linear time heuristics
      * are used in order to improve the quality of the matchings.
-     * 
+     *
      * @param graph the input graph
      */
     public PathGrowingWeightedMatching(Graph<V, E> graph)
@@ -87,7 +86,7 @@ public class PathGrowingWeightedMatching<V, E>
     /**
      * Construct a new instance of the path growing algorithm. Floating point values are compared
      * using {@link #DEFAULT_EPSILON} tolerance.
-     * 
+     *
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
@@ -101,7 +100,7 @@ public class PathGrowingWeightedMatching<V, E>
 
     /**
      * Construct a new instance of the path growing algorithm.
-     * 
+     *
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
@@ -121,7 +120,7 @@ public class PathGrowingWeightedMatching<V, E>
 
     /**
      * Get a matching that is a $\frac{1}{2}$-approximation of the maximum weighted matching.
-     * 
+     *
      * @return a matching
      */
     @Override
@@ -137,7 +136,7 @@ public class PathGrowingWeightedMatching<V, E>
     /**
      * Compute all vertices that have positive degree by iterating over the edges on purpose. This
      * keeps the complexity to $O(m)$ where $m$ is the number of edges.
-     * 
+     *
      * @return set of vertices with positive degree
      */
     private Set<V> initVisibleVertices()
@@ -322,7 +321,7 @@ public class PathGrowingWeightedMatching<V, E>
 
     /**
      * Helper class for repeatedly solving the maximum weight matching on paths.
-     * 
+     *
      * The work array used in the dynamic programming algorithm is reused between invocations. In
      * case its size is smaller than the path provided, its length is increased. This class is not
      * thread-safe.
@@ -336,7 +335,7 @@ public class PathGrowingWeightedMatching<V, E>
 
         /**
          * Find the maximum weight matching of a path using dynamic programming.
-         * 
+         *
          * @param path a list of edges. The code assumes that the list of edges is a valid simple
          *        path, and that is not a cycle.
          * @return a maximum weight matching of the path

@@ -233,11 +233,9 @@ public class BiconnectivityInspectorTest
     @Test
     public void testGithubIssueBug798()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingSelfLoops(false).allowingMultipleEdges(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingSelfLoops(false)
+            .allowingMultipleEdges(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
         g.addVertex(0);
         g.addVertex(1);
         g.addVertex(2);

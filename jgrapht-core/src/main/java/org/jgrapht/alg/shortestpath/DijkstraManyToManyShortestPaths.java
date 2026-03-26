@@ -51,8 +51,7 @@ import java.util.*;
  * @see DefaultManyToManyShortestPaths
  * @see CHManyToManyShortestPaths
  */
-public class DijkstraManyToManyShortestPaths<V, E>
-    extends BaseManyToManyShortestPaths<V, E>
+public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E>
 {
 
     /**
@@ -96,8 +95,7 @@ public class DijkstraManyToManyShortestPaths<V, E>
      * For each source vertex a single source shortest paths tree is stored. It is used to retrieve
      * both actual paths and theirs weights.
      */
-    private class DijkstraManyToManyShortestPathsImpl
-        extends BaseManyToManyShortestPathsImpl<V, E>
+    private class DijkstraManyToManyShortestPathsImpl extends BaseManyToManyShortestPathsImpl<V, E>
     {
 
         /**

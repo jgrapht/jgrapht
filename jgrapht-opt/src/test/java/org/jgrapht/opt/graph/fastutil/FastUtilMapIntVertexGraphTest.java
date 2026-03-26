@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link FastutilMapIntVertexGraph}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class FastUtilMapIntVertexGraphTest

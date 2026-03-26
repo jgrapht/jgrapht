@@ -57,8 +57,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class PageRank<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+public class PageRank<V, E> implements VertexScoringAlgorithm<V, Double>
 {
     /**
      * Default number of maximum iterations.

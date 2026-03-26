@@ -25,7 +25,7 @@ import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph} specialized with double values.
- * 
+ *
  * <p>
  * The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as
  * adding or removing vertices and edges are reflected in the underlying value graph.
@@ -35,43 +35,42 @@ import java.util.function.*;
  * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling methods
  * {@link #getEdgeWeight(Object)} and {@link #setEdgeWeight(EndpointPair, double)} will get and set
  * the value of an edge.
- * 
+ *
  * <p>
  * See the example below on how to create such an adapter: <blockquote>
- * 
+ *
  * <pre>
  * MutableValueGraph&lt;String, Double&gt; mutableValueGraph =
  *     ValueGraphBuilder.directed().allowsSelfLoops(true).build();
- * 
+ *
  * mutableValueGraph.addNode("v1");
  * mutableValueGraph.addNode("v2");
  * mutableValueGraph.putEdgeValue("v1", "v2", 3.0);
- * 
+ *
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new MutableDoubleValueGraphAdapter&lt;&gt;(mutableValueGraph);
- * 
+ *
  * System.out.println(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // outputs 3.0
- * 
+ *
  * graph.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 7.0);
- * 
+ *
  * System.out.println(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // outputs 7.0
  * </pre>
- * 
+ *
  * </blockquote>
  *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  */
-public class MutableDoubleValueGraphAdapter<V>
-    extends MutableValueGraphAdapter<V, Double>
+public class MutableDoubleValueGraphAdapter<V> extends MutableValueGraphAdapter<V, Double>
 {
     private static final long serialVersionUID = -6335845255406679994L;
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the value graph
-     * 
+     *
      * @throws NullPointerException if {@code valueGraph} is {@code null}
      */
     public MutableDoubleValueGraphAdapter(MutableValueGraph<V, Double> valueGraph)
@@ -81,11 +80,11 @@ public class MutableDoubleValueGraphAdapter<V>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the value graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * 
+     *
      * @throws NullPointerException if {@code valueGraph} is {@code null}
      */
     public MutableDoubleValueGraphAdapter(

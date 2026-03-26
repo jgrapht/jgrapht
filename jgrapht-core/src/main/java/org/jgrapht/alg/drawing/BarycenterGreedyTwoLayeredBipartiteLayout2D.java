@@ -32,28 +32,27 @@ import org.jgrapht.alg.util.Pair;
 /**
  * The barycenter heuristic greedy algorithm for edge crossing minimization in two layered bipartite
  * layouts.
- * 
+ *
  * The algorithm draws a bipartite graph using straight edges. Vertices are arranged along two
  * vertical or horizontal lines, trying to minimize crossings. This algorithm targets the one-sided
  * problem where one of the two layers is considered fixed and the algorithm is allowed to adjust
  * the positions of vertices in the other layer.
- * 
+ *
  * The algorithm is described in the following paper: K. Sugiyama, S. Tagawa, and M. Toda. Methods
  * for visual understanding of hierarchical system structures. IEEE Transaction on Systems, Man, and
  * Cybernetics, 11(2):109–125, 1981.
- * 
+ *
  * The problem of minimizing edge crossings when drawing bipartite graphs as two layered graphs is
  * NP-complete. If the coordinates of the nodes in the fixed layer are allowed to vary wildly, then
  * the barycenter heuristic can perform badly. If the coordinates of the nodes in the fixed layer
  * are $1, 2, 3, \ldots, ...$ then it is an $\mathcal{O}(\sqrt{n})$-approximation algorithm.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class BarycenterGreedyTwoLayeredBipartiteLayout2D<V, E>
-    extends TwoLayeredBipartiteLayout2D<V, E>
+public class BarycenterGreedyTwoLayeredBipartiteLayout2D<V, E> extends TwoLayeredBipartiteLayout2D<V, E>
 {
     /**
      * Create a new layout
@@ -65,7 +64,7 @@ public class BarycenterGreedyTwoLayeredBipartiteLayout2D<V, E>
 
     /**
      * Create a new layout
-     * 
+     *
      * @param partition one of the two partitions, can be null
      * @param vertexComparator vertex order, can be null
      * @param vertical draw on two vertical or horizontal lines
