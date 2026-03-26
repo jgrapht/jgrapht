@@ -99,7 +99,7 @@ public class LabeledEdges
 class RelationshipEdge extends DefaultEdge
 {
     private static final long serialVersionUID = 4106694993706914417L;
-	private String label;
+    private String label;
 
     /**
      * Constructs a relationship edge

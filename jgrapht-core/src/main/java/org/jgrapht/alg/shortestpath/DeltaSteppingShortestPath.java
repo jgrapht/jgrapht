@@ -321,7 +321,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     class MaxEdgeWeightTask extends RecursiveTask<Double>
     {
         private static final long serialVersionUID = 6002383842036478735L;
-		/**
+        /**
          * Is used to split a collection and create new recursive tasks during the computation.
          */
         Spliterator<E> spliterator;
