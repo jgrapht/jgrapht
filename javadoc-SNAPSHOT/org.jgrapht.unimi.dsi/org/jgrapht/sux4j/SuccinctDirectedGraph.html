@@ -332,8 +332,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsEdge(java.lang.Integer,java.lang.Integer)">containsEdge</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;sourceVertex,
             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;targetVertex)</code></th>
 <td class="colLast">
-<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source
- vertex to the target vertex.</div>
+<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source vertex
+ to the target vertex.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -631,8 +631,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(E)">Graph</a></code></span></div>
 <div class="block">Returns <code>true</code> if this graph contains the specified edge. More formally, returns
  <code>true</code> if and only if this graph contains an edge <code>e2</code> such that
- <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns
- <code>false</code>.</div>
+ <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(E)">containsEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;it.unimi.dsi.fastutil.ints.IntIntPair&gt;</code></dd>
@@ -698,12 +697,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;int&nbsp;inDegreeOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#inDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "in degree" of the specified vertex.
- 
+
  <p>
  The "in degree" of a vertex in a directed graph is the number of inward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
  http://mathworld.wolfram.com/Indegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -749,12 +748,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;int&nbsp;outDegreeOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#outDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "out degree" of the specified vertex.
- 
+
  <p>
  The "out degree" of a vertex in a directed graph is the number of outward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
  http://mathworld.wolfram.com/Outdegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -777,7 +776,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;it.unimi.dsi.fastutil.ints.IntIntPair&gt;&nbsp;outgoingEdgesOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#outgoingEdgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges outgoing from the specified vertex.
- 
+
  <p>
  In the case of undirected graphs this method returns all edges touching the vertex, thus,
  some of the returned edges may have their source and target vertices in the opposite order.</div>
@@ -877,8 +876,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
                                                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;targetVertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdge(V,V)">Graph</a></code></span></div>
 <div class="block">Returns an edge connecting source vertex to target vertex if such vertices and such edge
- exist in this graph. Otherwise returns <code>null</code>.
- If any of the specified vertices is <code>null</code> returns <code>null</code>
+ exist in this graph. Otherwise returns <code>null</code>. If any of the specified vertices is
+ <code>null</code> returns <code>null</code>
 
  <p>
  In undirected graphs, the returned edge may have its source and target vertices in the
@@ -904,9 +903,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;boolean&nbsp;containsEdge&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;sourceVertex,
                             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;targetVertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(V,V)">Graph</a></code></span></div>
-<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source
- vertex to the target vertex. In undirected graphs the same result is obtained when source and
- target are inverted. If any of the specified vertices does not exist in the graph, or if is
+<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source vertex
+ to the target vertex. In undirected graphs the same result is obtained when source and target
+ are inverted. If any of the specified vertices does not exist in the graph, or if is
  <code>null</code>, returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

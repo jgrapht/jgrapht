@@ -161,7 +161,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">MutableDoubleValueGraphAdapter&lt;V&gt;</span>
 extends <a href="MutableValueGraphAdapter.html" title="class in org.jgrapht.graph.guava">MutableValueGraphAdapter</a>&lt;V,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;</pre>
 <div class="block">A graph adapter class using Guava's <code>MutableValueGraph</code> specialized with double values.
- 
+
  <p>
  The adapter uses class <code>EndpointPair</code> to represent edges. Changes in the adapter such as
  adding or removing vertices and edges are reflected in the underlying value graph.
@@ -171,27 +171,27 @@ extends <a href="MutableValueGraphAdapter.html" title="class in org.jgrapht.grap
  edge weight in the resulting <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht"><code>Graph</code></a>. Thus, the graph is weighted and calling methods
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeWeight(E)"><code>Graph.getEdgeWeight(Object)</code></a> and <a href="#setEdgeWeight(com.google.common.graph.EndpointPair,double)"><code>setEdgeWeight(EndpointPair, double)</code></a> will get and set
  the value of an edge.
- 
+
  <p>
  See the example below on how to create such an adapter: <blockquote>
- 
+
  <pre>
  MutableValueGraph&lt;String, Double&gt; mutableValueGraph =
      ValueGraphBuilder.directed().allowsSelfLoops(true).build();
- 
+
  mutableValueGraph.addNode("v1");
  mutableValueGraph.addNode("v2");
  mutableValueGraph.putEdgeValue("v1", "v2", 3.0);
- 
+
  Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new MutableDoubleValueGraphAdapter&lt;&gt;(mutableValueGraph);
- 
+
  System.out.println(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // outputs 3.0
- 
+
  graph.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 7.0);
- 
+
  System.out.println(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // outputs 7.0
  </pre>
- 
+
  </blockquote></div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -397,7 +397,7 @@ extends <a href="MutableValueGraphAdapter.html" title="class in org.jgrapht.grap
                           double&nbsp;weight)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="MutableValueGraphAdapter.html#setEdgeWeight(com.google.common.graph.EndpointPair,double)">MutableValueGraphAdapter</a></code></span></div>
 <div class="block">Assigns a weight to an edge.
- 
+
  This method always throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a> since the adapter works
  one-way from values to weights. Adjusting the weights can be done by adjusting the values in
  the underlying <code>ValueGraph</code> which will automatically be propagated using the provided

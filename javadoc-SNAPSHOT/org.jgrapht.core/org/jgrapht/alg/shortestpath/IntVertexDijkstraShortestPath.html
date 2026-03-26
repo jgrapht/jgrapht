@@ -146,16 +146,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public final class <span class="typeNameLabel">IntVertexDijkstraShortestPath&lt;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Dijkstra Shortest Path implementation specialized for graphs with integer vertices.
- 
+
  <p>
  This class avoids using hash tables when the vertices are numbered from $0$ to $n-1$ where $n$ is
  the number of vertices of the graph. If vertices are not in this range, then they are mapped in
  this range using an open addressing hash table (linear probing).
- 
+
  <p>
  This implementation should be faster than our more generic one which is
  <a href="DijkstraShortestPath.html" title="class in org.jgrapht.alg.shortestpath"><code>DijkstraShortestPath</code></a> since it avoids the extensive use of hash tables.
- 
+
  <p>
  By default a 4-ary heap is used. The user is free to use a custom heap implementation during
  construction time. Regarding the choice of heap, it is generally known that it depends on the
@@ -497,7 +497,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>getPaths</h4>
 <pre class="methodSignature">public&nbsp;<a href="../interfaces/ShortestPathAlgorithm.SingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm.SingleSourcePaths</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="IntVertexDijkstraShortestPath.html" title="type parameter in IntVertexDijkstraShortestPath">E</a>&gt;&nbsp;getPaths&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;source)</pre>
 <div class="block">Compute all shortest paths starting from a single source vertex.
- 
+
  <p>
  Note that in the case of Dijkstra's algorithm it is more efficient to compute all
  single-source shortest paths using this method than repeatedly invoking

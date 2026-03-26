@@ -149,27 +149,27 @@ extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.ni
 implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht.nio">EventDrivenImporter</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../../org.jgrapht.core/org/jgrapht/alg/util/Triple.html" title="class in org.jgrapht.alg.util">Triple</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&gt;</pre>
 <div class="block">Imports a GraphML file as an edge list. Vertices are numbered from $0$ to $n-1$ in the order they
  are first encountered in the input file.
- 
+
  <p>
  This is a simple implementation with supports only a limited set of features of the GraphML
  specification. For a more rigorous parser use <a href="GraphMLImporter.html" title="class in org.jgrapht.nio.graphml"><code>GraphMLImporter</code></a>. This version is oriented
  towards parsing speed. Default attribute values are completely ignored.
- 
+
  <p>
  For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  http://en.wikipedia.org/wiki/ GraphML</a> or the
  <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  </p>
- 
+
  <p>
  Below is small example of a graph in GraphML format.
- 
+
  <pre>
  <code>
  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
- &lt;graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ &lt;graphml xmlns="http://graphml.graphdrawing.org/xmlns"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
      http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"&gt;
    &lt;key id="d0" for="node" attr.name="color" attr.type="string" /&gt;
    &lt;key id="d1" for="edge" attr.name="weight" attr.type="double"/&gt;
@@ -179,7 +179,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
      &lt;/node&gt;
      &lt;node id="n1"&gt;
        &lt;data key="d0"&gt;black&lt;/data&gt;
-     &lt;/node&gt;     
+     &lt;/node&gt;
      &lt;node id="n2"&gt;
        &lt;data key="d0"&gt;blue&lt;/data&gt;
      &lt;/node&gt;
@@ -211,7 +211,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
  &lt;/graphml&gt;
  </code>
  </pre>
- 
+
  <p>
  The importer by default validates the input using the 1.0
  <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can

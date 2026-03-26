@@ -148,7 +148,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MatchingAlgorithm</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Edmonds' blossom algorithm for maximum cardinality matching in general undirected graphs.
- 
+
  <p>
  A matching in a graph $G(V,E)$ is a subset of edges $M$ such that no two edges in $M$ have a
  vertex in common. A matching has at most $\frac{1}{2}|V|$ edges. A node $v$ in $G$ is matched by
@@ -157,7 +157,7 @@ implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in or
  algorithm will return a perfect matching if one exists. If no perfect matching exists, then the
  largest (non-perfect) matching is returned instead. In the special case that the input graph is
  bipartite, consider using <a href="HopcroftKarpMaximumCardinalityBipartiteMatching.html" title="class in org.jgrapht.alg.matching"><code>HopcroftKarpMaximumCardinalityBipartiteMatching</code></a> instead.
- 
+
  <p>
  To compute a maximum cardinality matching, at most $n$ augmenting path computations are
  performed. Each augmenting path computation takes $O(m \alpha(m,n))$ time, where $\alpha(m,n)$ is
@@ -166,7 +166,7 @@ implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in or
  augmenting path computations performed is far smaller than $n$, since an efficient heuristic is
  used to compute a near-optimal initial solution. The heuristic by default is the
  <a href="GreedyMaximumCardinalityMatching.html" title="class in org.jgrapht.alg.matching"><code>GreedyMaximumCardinalityMatching</code></a> but can be changed using the appropriate constructor.
- 
+
  <p>
  The runtime complexity of this implementation could be improved to $O(n m)$ when the UnionFind
  data structure used in this implementation is replaced by the linear-time set union data
@@ -176,12 +176,12 @@ implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in or
  <p>
  Edmonds' original algorithm first appeared in Edmonds, J. Paths, trees, and flowers. Canadian
  Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity of $O(n^4)$.
- 
+
  <p>
  This is the algorithm and implementation described in the
  <a href="https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html">LEDA book</a>. See the LEDA
  Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
- 
+
  <p>
  For future reference - A more efficient algorithm exists: S. Micali and V. Vazirani. An
  $O(\sqrt{n}m)$ algorithm for finding maximum matching in general graphs. Proc. 21st Ann. Symp. on
@@ -396,14 +396,14 @@ implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in or
 <h4>getOddSetCover</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="SparseEdmondsMaximumCardinalityMatching.html" title="type parameter in SparseEdmondsMaximumCardinalityMatching">V</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;getOddSetCover()</pre>
 <div class="block">Get an odd set cover which proves the optimality of the computed matching.
- 
+
  <p>
  In order to check for optimality one needs to check that the odd-set-cover is a node labeling
  that (a) covers the graph and (b) whose capacity is equal to the cardinality of the matching.
  For (a) we check that every edge is either incident to a node with label 1 or connects two
  nodes labeled $i$ for some $i \ge 2$. For (b) we count for each $i$ the number $n_i$ of nodes
  with label $i$ and compute $S = n_1 + \sum_{i \ge 2} \floor{n_i/2}$.
- 
+
  <p>
  Method {<a href="#isOptimalMatching(org.jgrapht.Graph,java.util.Set,java.util.Map)"><code>isOptimalMatching(Graph, Set, Map)</code></a> performs this check given a matching and
  an odd-set-cover.</div>
@@ -423,16 +423,16 @@ implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in or
                                                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;E&gt;&nbsp;matching,
                                                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;V,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;oddSetCover)</pre>
 <div class="block">Check whether a matching is optimal.
- 
+
  The method first checks whether the matching is indeed a matching. Then it checks whether the
  odd-set-cover provided is a node labeling that covers the graph and whose capacity is equal
  to the cardinality of the matching.
- 
+
  First, we count for each $i$ the number $n_i$ of nodes with label $i$, and then compute $S =
  n_1 + \sum_{i \ge 2} \floor{n_i/2}$. $S$ should be equal to the size of the matching. Then,
  we check that every edge is incident to a node label one or connects two nodes labeled $i$
  for some $i \ge 2$.
- 
+
  This method runs in linear time.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>

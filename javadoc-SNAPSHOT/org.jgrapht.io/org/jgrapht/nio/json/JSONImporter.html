@@ -153,9 +153,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.nio">BaseEventDrivenImporter</a>&lt;V,&#8203;E&gt;
 implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">GraphImporter</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
- 
+
  Below is a small example of a graph in JSON format.
- 
+
  <pre>
  {
    "nodes": [
@@ -169,17 +169,17 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
    ]
  }
  </pre>
- 
+
  <p>
  In case the graph is weighted then the importer also reads edge weights. Otherwise edge weights
  are ignored. The importer also supports reading additional string attributes such as label or
  custom user attributes.
- 
+
  <p>
  The parser completely ignores elements from the input that are not related to vertices or edges
  of the graph. Moreover, complicated nested structures which are inside vertices or edges are
  simply returned as a whole. For example, in the following graph
- 
+
  <pre>
  {
    "nodes": [
@@ -191,16 +191,16 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
    ]
  }
  </pre>
- 
+
  the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same
  is done for arrays or any other arbitrary nested structure.
- 
+
  <p>
  The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
  vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
  multiple times.
- 
+
  <p>
  The default behavior of the importer is to use the graph vertex supplier in order to create
  vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -210,7 +210,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  is responsible for creating a new graph vertex given the vertex identifier read from file
  together with all available attributes of the vertex at the location of the file where the vertex
  is first defined.
- 
+
  <p>
  The default behavior of the importer is to use the graph edge supplier in order to create edges.
  The user can also bypass edge creation by providing a custom edge factory method using
@@ -493,12 +493,12 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;importGraph&#8203;(<a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="JSONImporter.html" title="type parameter in JSONImporter">V</a>,&#8203;<a href="JSONImporter.html" title="type parameter in JSONImporter">E</a>&gt;&nbsp;graph,
                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Reader.html?is-external=true" title="class or interface in java.io" class="externalLink">Reader</a>&nbsp;input)</pre>
 <div class="block">Import a graph.
- 
+
  <p>
  The provided graph must be able to support the features of the graph that is read. For
  example if the file contains self-loops then the graph provided must also support self-loops.
  The same for multiple edges.
- 
+
  <p>
  If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
  edge weights are ignored.</div>
@@ -537,7 +537,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;setVertexFactory&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="JSONImporter.html" title="type parameter in JSONImporter">V</a>&gt;&nbsp;vertexFactory)</pre>
 <div class="block">Set the user custom vertex factory. The default behavior is being null in which case the
  graph vertex supplier is used.
- 
+
  If supplied the vertex factory is called every time a new vertex is encountered in the file.
  The method is called with parameter the vertex identifier from the file and should return the
  actual graph vertex to add to the graph.</div>
@@ -556,7 +556,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;setVertexWithAttributesFactory&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/BiFunction.html?is-external=true" title="class or interface in java.util.function" class="externalLink">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;,&#8203;<a href="JSONImporter.html" title="type parameter in JSONImporter">V</a>&gt;&nbsp;vertexWithAttributesFactory)</pre>
 <div class="block">Set the user custom vertex factory with attributes. The default behavior is being null in
  which case the graph vertex supplier is used.
- 
+
  If supplied the vertex factory is called every time a new vertex is encountered in the input.
  The method is called with parameter the vertex identifier from the input and a set of
  attributes and should return the actual graph vertex to add to the graph. Note that the set
@@ -592,7 +592,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;setEdgeWithAttributesFactory&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="../Attribute.html" title="interface in org.jgrapht.nio">Attribute</a>&gt;,&#8203;<a href="JSONImporter.html" title="type parameter in JSONImporter">E</a>&gt;&nbsp;edgeWithAttributesFactory)</pre>
 <div class="block">Set the user custom edge factory with attributes. The default behavior is being null in which
  case the graph edge supplier is used.
- 
+
  If supplied the edge factory is called every time a new edge is encountered in the input. The
  method is called with parameter the set of attributes and should return the actual graph edge
  to add to the graph. Note that the set of attributes might not be complete, as only

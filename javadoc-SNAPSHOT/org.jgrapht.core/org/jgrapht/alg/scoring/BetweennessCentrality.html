@@ -148,7 +148,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;</pre>
 <div class="block">Betweenness centrality.
- 
+
  <p>
  Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a
  node $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
@@ -156,7 +156,7 @@ implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface 
  from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
  $v$. For more details see
  <a href="https://en.wikipedia.org/wiki/Betweenness_centrality">wikipedia</a>.
- 
+
  The algorithm is based on
  <ul>
  <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". Journal of
@@ -166,7 +166,7 @@ implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface 
  The running time is $O(nm)$ and $O(nm +n^2 \log n)$ for unweighted and weighted graph
  respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
  space complexity is $O(n + m)$.
- 
+
  Note that this running time assumes that arithmetic is performed between numbers whose
  representation needs a number of bits which is logarithmic in the instance size. There are
  instances where this is not true and path counters might grow super exponential. This class

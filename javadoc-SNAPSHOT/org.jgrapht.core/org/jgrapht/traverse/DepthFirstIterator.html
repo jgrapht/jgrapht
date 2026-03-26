@@ -157,7 +157,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">DepthFirstIterator&lt;V,&#8203;E&gt;</span>
 extends <a href="CrossComponentIterator.html" title="class in org.jgrapht.traverse">CrossComponentIterator</a>&lt;V,&#8203;E,&#8203;<a href="DepthFirstIterator.VisitColor.html" title="enum in org.jgrapht.traverse">DepthFirstIterator.VisitColor</a>&gt;</pre>
 <div class="block">A depth-first iterator for a directed or undirected graph.
- 
+
  <p>
  For this iterator to work correctly the graph must not be modified during iteration. Currently
  there are no means to ensure that, nor to fail-fast. The results of such modifications are
@@ -315,8 +315,7 @@ extends <a href="CrossComponentIterator.html" title="class in org.jgrapht.traver
 <td class="colFirst"><code>protected <a href="DepthFirstIterator.html" title="type parameter in DepthFirstIterator">V</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#provideNextVertex()">provideNextVertex</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code>
- method.</div>
+<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code> method.</div>
 </td>
 </tr>
 </table>
@@ -412,8 +411,8 @@ extends <a href="CrossComponentIterator.html" title="class in org.jgrapht.traver
                           <a href="DepthFirstIterator.html" title="type parameter in DepthFirstIterator">V</a>&nbsp;startVertex)</pre>
 <div class="block">Creates a new depth-first iterator for the specified graph. Iteration will start at the
  specified start vertex and will be limited to the connected component that includes that
- vertex. If the specified start vertex is <code>null</code>, iteration will start at an
- arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.</div>
+ vertex. If the specified start vertex is <code>null</code>, iteration will start at an arbitrary
+ vertex and will not be limited, that is, will be able to traverse all the graph.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graph to be iterated.</dd>
@@ -441,8 +440,8 @@ extends <a href="CrossComponentIterator.html" title="class in org.jgrapht.traver
 <dd><code>g</code> - the graph to be iterated.</dd>
 <dd><code>startVertices</code> - the vertices iteration to be started.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>startVertices</code> contains an element that is not
-                                  a vertex of <code>g</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>startVertices</code> contains an element that is not a
+         vertex of <code>g</code></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>g</code> is <code>null</code></dd>
 </dl>
 </li>
@@ -527,8 +526,7 @@ extends <a href="CrossComponentIterator.html" title="class in org.jgrapht.traver
 <h4>provideNextVertex</h4>
 <pre class="methodSignature">protected&nbsp;<a href="DepthFirstIterator.html" title="type parameter in DepthFirstIterator">V</a>&nbsp;provideNextVertex()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="CrossComponentIterator.html#provideNextVertex()">CrossComponentIterator</a></code></span></div>
-<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code>
- method.</div>
+<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code> method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="CrossComponentIterator.html#provideNextVertex()">provideNextVertex</a></code>&nbsp;in class&nbsp;<code><a href="CrossComponentIterator.html" title="class in org.jgrapht.traverse">CrossComponentIterator</a>&lt;<a href="DepthFirstIterator.html" title="type parameter in DepthFirstIterator">V</a>,&#8203;<a href="DepthFirstIterator.html" title="type parameter in DepthFirstIterator">E</a>,&#8203;<a href="DepthFirstIterator.VisitColor.html" title="enum in org.jgrapht.traverse">DepthFirstIterator.VisitColor</a>&gt;</code></dd>

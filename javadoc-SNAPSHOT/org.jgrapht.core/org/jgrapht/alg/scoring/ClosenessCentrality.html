@@ -152,7 +152,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;</pre>
 <div class="block">Closeness centrality.
- 
+
  <p>
  Computes the closeness centrality of each vertex of a graph. The closeness of a vertex $x$ is
  defined as the reciprocal of the farness, that is $H(x)= 1 / \sum_{y \neq x} d(x,y)$, where
@@ -172,7 +172,7 @@ implements <a href="../interfaces/VertexScoringAlgorithm.html" title="interface 
  When the graph is disconnected, the closeness centrality score equals $0$ for all vertices. In
  the case of weakly connected digraphs, the closeness centrality of several vertices might be 0.
  See <a href="HarmonicCentrality.html" title="class in org.jgrapht.alg.scoring"><code>HarmonicCentrality</code></a> for a different approach in case of disconnected graphs.
- 
+
  <p>
  Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
  whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m

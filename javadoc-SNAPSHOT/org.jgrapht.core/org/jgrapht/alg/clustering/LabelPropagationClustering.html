@@ -148,7 +148,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="../interfaces/ClusteringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ClusteringAlgorithm</a>&lt;V&gt;</pre>
 <div class="block">A label propagation clustering algorithm.
- 
+
  <p>
  The algorithm is a near linear time algorithm capable of discovering communities in large graphs.
  It is described in detail in the following
@@ -157,13 +157,13 @@ implements <a href="../interfaces/ClusteringAlgorithm.html" title="interface in 
  <li>Raghavan, U. N., Albert, R., and Kumara, S. (2007). Near linear time algorithm to detect
  community structures in large-scale networks. Physical review E, 76(3), 036106.</li>
  </ul>
- 
+
  <p>
  As the paper title suggests the running time is close to linear. The algorithm runs in
  iterations, each of which runs in $O(n + m)$ where $n$ is the number of vertices and $m$ is the
  number of edges. The authors found experimentally that in most cases, 95% of the nodes or more
  are classified correctly by the end of iteration 5. See the paper for more details.
- 
+
  <p>
  The algorithm is randomized, meaning that two runs on the same graph may return different
  results. If the user requires deterministic behavior, the random number generator can be provided

@@ -163,9 +163,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  Finally, note that the best performance and compression can be obtained by representing the graph
- using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s <code>EFGraph</code> format and then accessing the graph using the suitable <a href="../webgraph/package-summary.html">adapter</a>; in particular, one can represent graphs with more than <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
- vertices. However, the adapters do not provide methods mapping bijectively edges into a
- contiguous set of integers.
+ using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s <code>EFGraph</code> format and then accessing the graph using the suitable <a href="../webgraph/package-summary.html">adapter</a>; in particular, one can represent graphs with more than
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a> vertices. However, the adapters do not provide methods
+ mapping bijectively edges into a contiguous set of integers.
 
  <h2>Building and serializing with limited memory</h2>
 
@@ -179,12 +179,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  There is however a simple strategy that makes it possible to build succinct representations using
  a relatively small amount of additional memory with respect to the representation itself:
  <ol>
- <li>convert your graph to a WebGraph format such as
- <code>BVGraph</code> or <code>EFGraph</code>;
+ <li>convert your graph to a WebGraph format such as <code>BVGraph</code> or <code>EFGraph</code>;
  <li>if your graph is directed, use <code>Transform</code> to store the
  transpose of your graph in the same way;
  <li>use a <a href="../webgraph/package-summary.html">suitable adapter</a> to get a <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht"><code>Graph</code></a> representing your graph, taking care of loading the WebGraph representations using
- <code>ImmutableGraph.loadMapped(java.lang.CharSequence)</code>  ImmutableGraph.loadMapped()};
+ <code>ImmutableGraph.loadMapped(java.lang.CharSequence)</code>
+ ImmutableGraph.loadMapped()};
  <li>use the copy constructor to obtain a quasi-succinct representation.
  </ol></div>
 </section>

@@ -252,16 +252,14 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.jgrapht.Graph)">EdmondsKarpMFImpl</a></span>&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>,&#8203;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">E</a>&gt;&nbsp;network)</code></th>
 <td class="colLast">
-<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
- <code>network</code>.</div>
+<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i> <code>network</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.jgrapht.Graph,double)">EdmondsKarpMFImpl</a></span>&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>,&#8203;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">E</a>&gt;&nbsp;network,
                  double&nbsp;epsilon)</code></th>
 <td class="colLast">
-<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
- <code>network</code>.</div>
+<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i> <code>network</code>.</div>
 </td>
 </tr>
 </table>
@@ -287,8 +285,8 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#calculateMaximumFlow(V,V)">calculateMaximumFlow</a></span>&#8203;(<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;source,
                     <a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;sink)</code></th>
 <td class="colLast">
-<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then
- calculates maximum flow from <code>source</code> to <code>sink</code>.</div>
+<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then calculates maximum
+ flow from <code>source</code> to <code>sink</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -296,8 +294,8 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaximumFlow(V,V)">getMaximumFlow</a></span>&#8203;(<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;source,
               <a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;sink)</code></th>
 <td class="colLast">
-<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then
- calculates maximum flow from <code>source</code> to <code>sink</code>.</div>
+<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then calculates maximum
+ flow from <code>source</code> to <code>sink</code>.</div>
 </td>
 </tr>
 </table>
@@ -352,10 +350,10 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <li class="blockList">
 <h4>EdmondsKarpMFImpl</h4>
 <pre>public&nbsp;EdmondsKarpMFImpl&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>,&#8203;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">E</a>&gt;&nbsp;network)</pre>
-<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
- <code>network</code>. Current source and sink are set to <code>null</code>. If
- <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
- equal to one. Doubles are compared using <a href="MaximumFlowAlgorithmBase.html#DEFAULT_EPSILON"><code>MaximumFlowAlgorithmBase.DEFAULT_EPSILON</code></a> tolerance.</div>
+<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i> <code>network</code>.
+ Current source and sink are set to <code>null</code>. If <code>network</code> is weighted, then
+ capacities are weights, otherwise all capacities are equal to one. Doubles are compared using
+ <a href="MaximumFlowAlgorithmBase.html#DEFAULT_EPSILON"><code>MaximumFlowAlgorithmBase.DEFAULT_EPSILON</code></a> tolerance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>network</code> - network, where maximum flow will be calculated</dd>
@@ -370,10 +368,9 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <h4>EdmondsKarpMFImpl</h4>
 <pre>public&nbsp;EdmondsKarpMFImpl&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>,&#8203;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">E</a>&gt;&nbsp;network,
                          double&nbsp;epsilon)</pre>
-<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
- <code>network</code>. Current source and sink are set to <code>null</code>. If
- <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
- equal to one.</div>
+<div class="block">Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i> <code>network</code>.
+ Current source and sink are set to <code>null</code>. If <code>network</code> is weighted, then
+ capacities are weights, otherwise all capacities are equal to one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>network</code> - network, where maximum flow will be calculated</dd>
@@ -401,10 +398,9 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <h4>getMaximumFlow</h4>
 <pre class="methodSignature">public&nbsp;<a href="../interfaces/MaximumFlowAlgorithm.MaximumFlow.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm.MaximumFlow</a>&lt;<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">E</a>&gt;&nbsp;getMaximumFlow&#8203;(<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;source,
                                                           <a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;sink)</pre>
-<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then
- calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
- <code>source</code> and <code>sink</code> must be vertices of the <code>network</code>
- passed to the constructor, and they must be different.</div>
+<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then calculates maximum
+ flow from <code>source</code> to <code>sink</code>. Note, that <code>source</code> and <code>sink</code> must be
+ vertices of the <code>network</code> passed to the constructor, and they must be different.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - source vertex</dd>
@@ -424,11 +420,11 @@ extends <a href="MaximumFlowAlgorithmBase.html" title="class in org.jgrapht.alg.
 <h4>calculateMaximumFlow</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;calculateMaximumFlow&#8203;(<a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;source,
                                    <a href="EdmondsKarpMFImpl.html" title="type parameter in EdmondsKarpMFImpl">V</a>&nbsp;sink)</pre>
-<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then
- calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
- <code>source</code> and <code>sink</code> must be vertices of the <code>network</code>
- passed to the constructor, and they must be different. If desired, a flow map
- can be queried afterwards; this will not require a new invocation of the algorithm.</div>
+<div class="block">Sets current source to <code>source</code>, current sink to <code>sink</code>, then calculates maximum
+ flow from <code>source</code> to <code>sink</code>. Note, that <code>source</code> and <code>sink</code> must be
+ vertices of the <code>network</code> passed to the constructor, and they must be different. If
+ desired, a flow map can be queried afterwards; this will not require a new invocation of the
+ algorithm.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - source vertex</dd>

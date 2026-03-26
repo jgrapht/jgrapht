@@ -148,17 +148,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.nio">BaseEventDrivenImporter</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../../org.jgrapht.core/org/jgrapht/alg/util/Triple.html" title="class in org.jgrapht.alg.util">Triple</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&gt;
 implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht.nio">EventDrivenImporter</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../../org.jgrapht.core/org/jgrapht/alg/util/Triple.html" title="class in org.jgrapht.alg.util">Triple</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&gt;</pre>
 <div class="block">Imports a graph from a GML file (Graph Modeling Language).
- 
+
  <p>
  For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
  http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
 
  <p>
  Below is small example of a graph in GML format.
- 
+
  <pre>
  graph [
-   node [ 
+   node [
      id 1
    ]
    node [
@@ -170,7 +170,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
    ]
    edge [
      source 1
-     target 2 
+     target 2
      weight 2.0
      label "Edge between 1 and 2"
    ]
@@ -182,33 +182,33 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
    ]
  ]
  </pre>
- 
+
  <p>
  If the input file contains edge weights then the importer also reads edge weights. The importer
  also supports reading additional string attributes such as label or custom user attributes.
  String attributes are unescaped as if they are Java strings.
- 
+
  <p>
  The parser completely ignores elements from the input that are not related to vertices or edges
  of the graph. Moreover, complicated nested structures are simply returned as a whole. For
  example, in the following graph
- 
+
  <pre>
  graph [
-   node [ 
+   node [
      id 1
    ]
-   node [ 
+   node [
      id 2
    ]
    edge [
      source 1
-     target 2 
+     target 2
      points [ x 1.0 y 2.0 ]
    ]
  ]
  </pre>
- 
+
  the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>

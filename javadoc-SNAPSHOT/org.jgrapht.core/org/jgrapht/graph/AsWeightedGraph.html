@@ -157,8 +157,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">AsWeightedGraph&lt;V,&#8203;E&gt;</span>
 extends <a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;V,&#8203;E&gt;
 implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;</pre>
-<div class="block">Provides a weighted view of a graph. The class stores edge weights internally.
- All <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> calls are handled by this view; all other graph operations are
+<div class="block">Provides a weighted view of a graph. The class stores edge weights internally. All
+ <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> calls are handled by this view; all other graph operations are
  propagated to the graph backing this view.
 
  <p>
@@ -176,11 +176,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
  </ol>
  In the first way, the map is used to lookup edge weights. In the second way, a function is
  provided to calculate the weight of an edge. If the map does not contain a particular edge, or
- the function does not provide a weight for a particular edge, the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> call is
- propagated to the backing graph.
+ the function does not provide a weight for a particular edge, the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a>
+ call is propagated to the backing graph.
 
- Finally, the view provides a <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method. This method behaves differently
- depending on how the view is constructed. See <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> for details.</div>
+ Finally, the view provides a <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method. This method behaves
+ differently depending on how the view is constructed. See <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a>
+ for details.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#org.jgrapht.graph.AsWeightedGraph">Serialized Form</a></dd>
@@ -386,25 +387,26 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
                        boolean&nbsp;cacheWeights,
                        boolean&nbsp;writeWeightsThrough)</pre>
 <div class="block">Constructor for AsWeightedGraph which uses a weight function to compute edge weights. When
- the weight of an edge is queried, the weight function is invoked. If
- <code>cacheWeights</code> is set to <code>true</code>, the weight of an edge returned by the
- <code>weightFunction</code> after its first invocation is stored in a map. The weight of an
- edge returned by subsequent calls to <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> for the same edge will then be
- retrieved directly from the map, instead of re-invoking the weight function. If
- <code>cacheWeights</code> is set to <code>false</code>, each invocation of
- the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> method will invoke the weight function. Caching the edge weights is
- particularly useful when pre-computing all edge weights is expensive and it is expected that
- the weights of only a subset of all edges will be queried.</div>
+ the weight of an edge is queried, the weight function is invoked. If <code>cacheWeights</code> is
+ set to <code>true</code>, the weight of an edge returned by the <code>weightFunction</code> after its
+ first invocation is stored in a map. The weight of an edge returned by subsequent calls to
+ <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> for the same edge will then be retrieved directly from the
+ map, instead of re-invoking the weight function. If <code>cacheWeights</code> is set to
+ <code>false</code>, each invocation of the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> method will invoke the
+ weight function. Caching the edge weights is particularly useful when pre-computing all edge
+ weights is expensive and it is expected that the weights of only a subset of all edges will
+ be queried.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the backing graph over which an weighted view is to be created</dd>
 <dd><code>weightFunction</code> - function which maps an edge to a weight</dd>
-<dd><code>cacheWeights</code> - if set to <code>true</code>, weights are cached once computed by the
-        weight function</dd>
-<dd><code>writeWeightsThrough</code> - if set to <code>true</code>, the weight set directly by
-        the <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method will be propagated to the backing graph.</dd>
+<dd><code>cacheWeights</code> - if set to <code>true</code>, weights are cached once computed by the weight
+        function</dd>
+<dd><code>writeWeightsThrough</code> - if set to <code>true</code>, the weight set directly by the
+        <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> method will be propagated to the backing graph.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>graph</code> or <code>weightFunction</code> is <code>null</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>graph</code> or <code>weightFunction</code> is
+         <code>null</code></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>writeWeightsThrough</code> is set to true and
          <code>graph</code> is not a weighted graph</dd>
 </dl>
@@ -430,13 +432,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <h4>getEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;getEdgeWeight&#8203;(<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>&nbsp;e)</pre>
 <div class="block">Returns the weight assigned to a given edge. If weights are provided through a map, first a
- map lookup is performed. If the edge is not found, the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> method of the
- underlying graph is invoked instead. If, on the other hand, the weights are provided through
- a function, this method will first attempt to lookup the weight of an edge in the cache (that
- is, if <code>cacheWeights</code> is set to <code>true</code> in the constructor). If caching
- was disabled, or the edge could not be found in the cache, the weight function is invoked. If
- the function does not provide a weight for a given edge, the call is again propagated to the
- underlying graph.</div>
+ map lookup is performed. If the edge is not found, the <a href="#getEdgeWeight(E)"><code>getEdgeWeight(Object)</code></a> method
+ of the underlying graph is invoked instead. If, on the other hand, the weights are provided
+ through a function, this method will first attempt to lookup the weight of an edge in the
+ cache (that is, if <code>cacheWeights</code> is set to <code>true</code> in the constructor). If
+ caching was disabled, or the edge could not be found in the cache, the weight function is
+ invoked. If the function does not provide a weight for a given edge, the call is again
+ propagated to the underlying graph.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#getEdgeWeight(E)">getEdgeWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">V</a>,&#8203;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>&gt;</code></dd>
@@ -461,11 +463,10 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <h4>setEdgeWeight</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEdgeWeight&#8203;(<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>&nbsp;e,
                           double&nbsp;weight)</pre>
-<div class="block">Assigns a weight to an edge. If <code>writeWeightsThrough</code> is set to <code>true</code>,
- the same weight is set in the backing graph. If this class was constructed using a weight
- function, it only makes sense to invoke this method when <code>cacheWeights</code> is set to
- true. This method can then be used to preset weights in the cache, or to overwrite existing
- values.</div>
+<div class="block">Assigns a weight to an edge. If <code>writeWeightsThrough</code> is set to <code>true</code>, the same
+ weight is set in the backing graph. If this class was constructed using a weight function, it
+ only makes sense to invoke this method when <code>cacheWeights</code> is set to true. This method
+ can then be used to preset weights in the cache, or to overwrite existing values.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#setEdgeWeight(E,double)">setEdgeWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">V</a>,&#8203;<a href="AsWeightedGraph.html" title="type parameter in AsWeightedGraph">E</a>&gt;</code></dd>

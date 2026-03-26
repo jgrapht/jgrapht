@@ -9,8 +9,7 @@ A common requirement for JGraphT applications is the need to associate a label
 with each edge.  This can be accomplished efficiently via a custom edge class:
 
 ```java
-class RelationshipEdge
-    extends DefaultEdge
+class RelationshipEdge extends DefaultEdge
 {
     private String label;
 
@@ -18,7 +17,7 @@ class RelationshipEdge
      * Constructs a relationship edge
      *
      * @param label the label of the new edge.
-     * 
+     *
      */
     public RelationshipEdge(String label)
     {

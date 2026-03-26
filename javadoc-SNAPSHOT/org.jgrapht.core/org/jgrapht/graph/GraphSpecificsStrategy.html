@@ -143,7 +143,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public interface <span class="typeNameLabel">GraphSpecificsStrategy&lt;V,&#8203;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A graph specifics construction factory.
- 
+
  <p>
  Such a strategy can be used to adjust the internals of the default graph implementations.</div>
 <dl>
@@ -220,7 +220,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../GraphType.html" title="interface in org.jgrapht">GraphType</a>,&#8203;<a href="IntrusiveEdgesSpecifics.html" title="interface in org.jgrapht.graph">IntrusiveEdgesSpecifics</a>&lt;<a href="GraphSpecificsStrategy.html" title="type parameter in GraphSpecificsStrategy">V</a>,&#8203;<a href="GraphSpecificsStrategy.html" title="type parameter in GraphSpecificsStrategy">E</a>&gt;&gt;&nbsp;getIntrusiveEdgesSpecificsFactory()</pre>
 <div class="block">Get a function which creates the intrusive edges specifics. The factory will accept the graph
  type as a parameter.
- 
+
  <p>
  Note that it is very important to use a map implementation which respects iteration order.</div>
 <dl>

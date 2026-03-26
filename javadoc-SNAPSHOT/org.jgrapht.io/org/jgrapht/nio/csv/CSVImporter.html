@@ -153,7 +153,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.nio">BaseEventDrivenImporter</a>&lt;V,&#8203;E&gt;
 implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">GraphImporter</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Imports a graph from a CSV Format or any other Delimiter-separated value format.
- 
+
  <p>
  The importer supports various different formats which can be adjusted using the
  <a href="#setFormat(org.jgrapht.nio.csv.CSVFormat)"><code>setFormat</code></a> method. The supported formats are the same CSV formats
@@ -162,7 +162,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  <a href="#setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter,boolean)"><code>setParameter</code></a> method. See
  <a href="CSVFormat.html" title="enum in org.jgrapht.nio.csv"><code>CSVFormat</code></a> for a description of the formats.
  </p>
- 
+
  <p>
  The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
  also adjust the separator to something like semicolon or pipe instead of comma. In such a case,
@@ -170,17 +170,17 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
  values</a> for more information.
  </p>
- 
+
  <p>
  This importer does not distinguish between <a href="CSVFormat.html#EDGE_LIST"><code>CSVFormat.EDGE_LIST</code></a> and
  <a href="CSVFormat.html#ADJACENCY_LIST"><code>CSVFormat.ADJACENCY_LIST</code></a>. In both cases it assumes the format is
  <a href="CSVFormat.html#ADJACENCY_LIST"><code>CSVFormat.ADJACENCY_LIST</code></a>.
  </p>
- 
+
  <p>
  The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  vertices in the original file are reported as a vertex attribute named "ID".
- 
+
  <p>
  The default behavior of the importer is to use the graph vertex supplier in order to create
  vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -513,7 +513,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;setVertexFactory&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="CSVImporter.html" title="type parameter in CSVImporter">V</a>&gt;&nbsp;vertexFactory)</pre>
 <div class="block">Set the user custom vertex factory. The default behavior is being null in which case the
  graph vertex supplier is used.
- 
+
  If supplied the vertex factory is called every time a new vertex is encountered in the file.
  The method is called with parameter the vertex identifier from the file and should return the
  actual graph vertex to add to the graph.</div>
@@ -533,12 +533,12 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Reader.html?is-external=true" title="class or interface in java.io" class="externalLink">Reader</a>&nbsp;input)
                  throws <a href="../ImportException.html" title="class in org.jgrapht.nio">ImportException</a></pre>
 <div class="block">Import a graph.
- 
+
  <p>
  The provided graph must be able to support the features of the graph that is read. For
  example if the input contains self-loops then the graph provided must also support
  self-loops. The same for multiple edges.
- 
+
  <p>
  If the provided graph is a weighted graph, the importer also reads edge weights.</div>
 <dl>

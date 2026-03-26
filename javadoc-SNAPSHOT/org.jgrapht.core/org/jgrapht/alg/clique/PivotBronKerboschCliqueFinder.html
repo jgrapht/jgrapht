@@ -151,19 +151,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">PivotBronKerboschCliqueFinder&lt;V,&#8203;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Bron-Kerbosch maximal clique enumeration algorithm with pivot.
- 
+
  <p>
  The pivoting follows the rule from the paper
  <ul>
  <li>E. Tomita, A. Tanaka, and H. Takahashi. The worst-case time complexity for generating all
  maximal cliques and computational experiments. Theor. Comput. Sci. 363(1):28–42, 2006.</li>
  </ul>
- 
+
  <p>
  where the authors show that using that rule guarantees that the Bron-Kerbosch algorithm has
  worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding
  time to write the output, which is worst-case optimal.
- 
+
  <p>
  The algorithm first computes all maximal cliques and then returns the result to the user. A
  timeout can be set using the constructor parameters.</div>

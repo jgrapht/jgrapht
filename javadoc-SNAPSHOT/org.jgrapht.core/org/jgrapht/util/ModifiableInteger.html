@@ -147,15 +147,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">ModifiableInteger</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Number.html?is-external=true" title="class or interface in java.lang" class="externalLink">Number</a>
 implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;<a href="ModifiableInteger.html" title="class in org.jgrapht.util">ModifiableInteger</a>&gt;</pre>
-<div class="block">The <code>ModifiableInteger</code> class wraps a value of the primitive type <code>int</code> in
- an object, similarly to <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>Integer</code></a>. An object of type
- <code>ModifiableInteger</code> contains a single field whose type is <code>int</code>.
+<div class="block">The <code>ModifiableInteger</code> class wraps a value of the primitive type <code>int</code> in an object,
+ similarly to <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>Integer</code></a>. An object of type <code>ModifiableInteger</code> contains a
+ single field whose type is <code>int</code>.
 
  <p>
- Unlike <code>java.lang.Integer</code>, the <code>int</code> value which the ModifiableInteger represents can
- be modified. It becomes useful when used together with the collection framework. For example, if
- you want to have a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> of counters. You could use <code>Integer</code> but
- that would have became wasteful and inefficient if you frequently had to update the counters.
+ Unlike <code>java.lang.Integer</code>, the <code>int</code> value which the ModifiableInteger represents
+ can be modified. It becomes useful when used together with the collection framework. For example,
+ if you want to have a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> of counters. You could use <code>Integer</code> but that
+ would have became wasteful and inefficient if you frequently had to update the counters.
  </p>
 
  <p>
@@ -225,8 +225,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int)">ModifiableInteger</a></span>&#8203;(int&nbsp;value)</code></th>
 <td class="colLast">
-<div class="block">Constructs a newly allocated <code>ModifiableInteger</code> object that represents the
- specified <code>int</code> value.</div>
+<div class="block">Constructs a newly allocated <code>ModifiableInteger</code> object that represents the specified
+ <code>int</code> value.</div>
 </td>
 </tr>
 </table>
@@ -409,8 +409,8 @@ public&nbsp;ModifiableInteger()</pre>
 <li class="blockList">
 <h4>ModifiableInteger</h4>
 <pre>public&nbsp;ModifiableInteger&#8203;(int&nbsp;value)</pre>
-<div class="block">Constructs a newly allocated <code>ModifiableInteger</code> object that represents the
- specified <code>int</code> value.</div>
+<div class="block">Constructs a newly allocated <code>ModifiableInteger</code> object that represents the specified
+ <code>int</code> value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the value to be represented by the <code>ModifiableInteger</code> object.</dd>
@@ -490,8 +490,8 @@ public&nbsp;ModifiableInteger()</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>anotherInteger</code> - the <code>ModifiableInteger</code> to be compared.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the value <code>0</code> if this <code>ModifiableInteger</code> is equal to the
-         argument <code>ModifiableInteger</code>; a value less than <code>0</code> if this
+<dd>the value <code>0</code> if this <code>ModifiableInteger</code> is equal to the argument
+         <code>ModifiableInteger</code>; a value less than <code>0</code> if this
          <code>ModifiableInteger</code> is numerically less than the argument
          <code>ModifiableInteger</code>; and a value greater than <code>0</code> if this
          <code>ModifiableInteger</code> is numerically greater than the argument
@@ -522,8 +522,8 @@ public&nbsp;ModifiableInteger()</pre>
 <h4>equals</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</pre>
 <div class="block">Compares this object to the specified object. The result is <code>
- true</code> if and only if the argument is not <code>null</code> and is an
- <code>ModifiableInteger</code> object that contains the same <code>
+ true</code> if and only if the argument is not <code>null</code> and is an <code>ModifiableInteger</code>
+ object that contains the same <code>
  int</code> value as this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>

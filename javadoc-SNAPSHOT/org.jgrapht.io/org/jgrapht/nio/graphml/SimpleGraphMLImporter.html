@@ -153,34 +153,34 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.nio">BaseEventDrivenImporter</a>&lt;V,&#8203;E&gt;
 implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">GraphImporter</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Imports a graph from a GraphML data source.
- 
+
  <p>
  This is a simple implementation with supports only a limited set of features of the GraphML
  specification. For a more rigorous parser use <a href="GraphMLImporter.html" title="class in org.jgrapht.nio.graphml"><code>GraphMLImporter</code></a>. This version is oriented
  towards parsing speed.
- 
+
  <p>
  The importer uses the graph suppliers (<a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> and
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>) in order to create new vertices and edges. Moreover, it notifies
  lazily and completely out-of-order for any additional vertex, edge or graph attributes in the
  input file. Users can register consumers for vertex, edge and graph attributes after construction
  of the importer. Finally, default attribute values are completely ignored.
- 
+
  <p>
  For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  http://en.wikipedia.org/wiki/ GraphML</a> or the
  <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  </p>
- 
+
  <p>
  Below is small example of a graph in GraphML format.
- 
+
  <pre>
  <code>
  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
- &lt;graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ &lt;graphml xmlns="http://graphml.graphdrawing.org/xmlns"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
      http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"&gt;
    &lt;key id="d0" for="node" attr.name="color" attr.type="string" /&gt;
    &lt;key id="d1" for="edge" attr.name="weight" attr.type="double"/&gt;
@@ -190,7 +190,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
      &lt;/node&gt;
      &lt;node id="n1"&gt;
        &lt;data key="d0"&gt;black&lt;/data&gt;
-     &lt;/node&gt;     
+     &lt;/node&gt;
      &lt;node id="n2"&gt;
        &lt;data key="d0"&gt;blue&lt;/data&gt;
      &lt;/node&gt;
@@ -222,13 +222,13 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  &lt;/graphml&gt;
  </code>
  </pre>
- 
+
  <p>
  The importer reads the input into a graph which is provided by the user. In case the graph is
  weighted and the corresponding edge key with attr.name="weight" is defined, the importer also
  reads edge weights. Otherwise edge weights are ignored. To test whether the graph is weighted,
  method <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getType()"><code>Graph.getType()</code></a> can be used.
- 
+
  <p>
  The provided graph object, where the imported graph will be stored, must be able to support the
  features of the graph that is read. For example if the GraphML file contains self-loops then the
@@ -236,18 +236,18 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  completely ignores the attribute "edgedefault" which denotes whether an edge is directed or not.
  Whether edges are directed or not depends on the underlying implementation of the user provided
  graph object.
- 
+
  <p>
  The importer by default validates the input using the 1.0
  <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  (not recommended) disable the validation by calling <a href="#setSchemaValidation(boolean)"><code>setSchemaValidation(boolean)</code></a>.
- 
+
  <p>
  The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
  vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
  multiple times.
- 
+
  <p>
  The default behavior of the importer is to use the graph vertex supplier in order to create
  vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -537,7 +537,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;setVertexFactory&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="SimpleGraphMLImporter.html" title="type parameter in SimpleGraphMLImporter">V</a>&gt;&nbsp;vertexFactory)</pre>
 <div class="block">Set the user custom vertex factory. The default behavior is being null in which case the
  graph vertex supplier is used.
- 
+
  If supplied the vertex factory is called every time a new vertex is encountered in the file.
  The method is called with parameter the vertex identifier from the file and should return the
  actual graph vertex to add to the graph.</div>
@@ -556,7 +556,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;importGraph&#8203;(<a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="SimpleGraphMLImporter.html" title="type parameter in SimpleGraphMLImporter">V</a>,&#8203;<a href="SimpleGraphMLImporter.html" title="type parameter in SimpleGraphMLImporter">E</a>&gt;&nbsp;graph,
                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Reader.html?is-external=true" title="class or interface in java.io" class="externalLink">Reader</a>&nbsp;input)</pre>
 <div class="block">Import a graph.
- 
+
  <p>
  The provided graph must be able to support the features of the graph that is read. For
  example if the GraphML file contains self-loops then the graph provided must also support

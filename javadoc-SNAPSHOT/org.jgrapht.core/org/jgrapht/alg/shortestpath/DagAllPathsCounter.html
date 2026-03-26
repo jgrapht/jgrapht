@@ -137,14 +137,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public final class <span class="typeNameLabel">DagAllPathsCounter</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Counts the number of simple directed paths in a Directed Acyclic Graph (DAG)
- between a given source and target using dynamic programming in topological order.
+<div class="block">Counts the number of simple directed paths in a Directed Acyclic Graph (DAG) between a given
+ source and target using dynamic programming in topological order.
 
- <p>For large graphs the number of paths can be extremely large; values are returned as
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink"><code>BigInteger</code></a>.</p>
+ <p>
+ For large graphs the number of paths can be extremely large; values are returned as
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink"><code>BigInteger</code></a>.
+ </p>
 
- <p>Usage constraints: the provided graph must be directed and acyclic. An
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> is thrown otherwise.</p></div>
+ <p>
+ Usage constraints: the provided graph must be directed and acyclic. An
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a> is thrown otherwise.
+ </p></div>
 </li>
 </ul>
 </div>
@@ -171,8 +175,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
              V&nbsp;source,
              V&nbsp;target)</code></th>
 <td class="colLast">
-<div class="block">Count the number of simple directed paths from <code>source</code> to <code>target</code>
- in the given directed acyclic graph.</div>
+<div class="block">Count the number of simple directed paths from <code>source</code> to <code>target</code> in the given
+ directed acyclic graph.</div>
 </td>
 </tr>
 </table>
@@ -210,15 +214,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public static&nbsp;&lt;V,&#8203;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigInteger.html?is-external=true" title="class or interface in java.math" class="externalLink">BigInteger</a>&nbsp;countAllPaths&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;&nbsp;graph,
                                                    V&nbsp;source,
                                                    V&nbsp;target)</pre>
-<div class="block">Count the number of simple directed paths from <code>source</code> to <code>target</code>
- in the given directed acyclic graph.
+<div class="block">Count the number of simple directed paths from <code>source</code> to <code>target</code> in the given
+ directed acyclic graph.
 
- <p>Edge case semantics:</p>
+ <p>
+ Edge case semantics:
+ </p>
  <ul>
-   <li>If <code>source</code> or <code>target</code> is not contained in the graph, throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.</li>
-   <li>If <code>source.equals(target)</code>, the empty path (length 0) is counted as one path and paths that leave
-   <code>source</code> and return to it cannot exist in a DAG, thus the result is 1.</li>
-   <li>If there is no path from <code>source</code> to <code>target</code>, returns <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigInteger.html?is-external=true#ZERO" title="class or interface in java.math" class="externalLink"><code>BigInteger.ZERO</code></a>.</li>
+ <li>If <code>source</code> or <code>target</code> is not contained in the graph, throws
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.</li>
+ <li>If <code>source.equals(target)</code>, the empty path (length 0) is counted as one path and
+ paths that leave <code>source</code> and return to it cannot exist in a DAG, thus the result is
+ 1.</li>
+ <li>If there is no path from <code>source</code> to <code>target</code>, returns
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigInteger.html?is-external=true#ZERO" title="class or interface in java.math" class="externalLink"><code>BigInteger.ZERO</code></a>.</li>
  </ul></div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -231,7 +240,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>number of simple directed paths from <code>source</code> to <code>target</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph is not directed, not acyclic, or vertices are missing</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph is not directed, not acyclic, or vertices are
+         missing</dd>
 </dl>
 </li>
 </ul>

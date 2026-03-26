@@ -142,32 +142,36 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">KConnectivityFlowAlgorithm&lt;V,&#8203;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">This class implements the computation, for a graph, of both 
+<div class="block">This class implements the computation, for a graph, of both
  <a href="https://en.wikipedia.org/wiki/K-edge-connected_graph"> edge connectivity and </a>
  <a href="https://en.wikipedia.org/wiki/K-vertex-connected_graph"> vertex connectivity </a>.
- 
- A graph with n vertices is k-edge connected when k is smaller than n and if the size of the smallest subset of edges
- which disconnects the graph is equal to k. It's the same definition for vertex connectivity, by replacing edges with vertices.
- 
- This implementation uses a maximum flow algorithm and computes the number of different paths between two 
- vertices with this algorithm. By default, this implementation uses the Edmonds-Karp max-flow algorithm.
- The algorithms implemented are based on
- <a href="https://www.cse.msu.edu/~cse835/Papers/Graph_connectivity_revised.pdf"> this document </a>.
- 
- The worst-case complexity depends on the number of calls to this max-flow algorithm. All algorithms make O(n) calls to 
- this flow algorithm. However, this number tries to be as low as possible. For further details on the exact 
- number of calls, see the <a href="https://www.cse.msu.edu/~cse835/Papers/Graph_connectivity_revised.pdf"> document </a>
- on which this implementation is based.
- 
- This algorithm works with both directed and undirected networks (Only SimpleGraph and 
- SimpleDirectedGraph are tested). The algorithm doesn't have internal synchronization, 
- thus any concurrent network modification has undefined behavior.
- 
+
+ A graph with n vertices is k-edge connected when k is smaller than n and if the size of the
+ smallest subset of edges which disconnects the graph is equal to k. It's the same definition for
+ vertex connectivity, by replacing edges with vertices.
+
+ This implementation uses a maximum flow algorithm and computes the number of different paths
+ between two vertices with this algorithm. By default, this implementation uses the Edmonds-Karp
+ max-flow algorithm. The algorithms implemented are based on
+ <a href="https://www.cse.msu.edu/~cse835/Papers/Graph_connectivity_revised.pdf"> this document
+ </a>.
+
+ The worst-case complexity depends on the number of calls to this max-flow algorithm. All
+ algorithms make O(n) calls to this flow algorithm. However, this number tries to be as low as
+ possible. For further details on the exact number of calls, see the
+ <a href="https://www.cse.msu.edu/~cse835/Papers/Graph_connectivity_revised.pdf"> document </a> on
+ which this implementation is based.
+
+ This algorithm works with both directed and undirected networks (Only SimpleGraph and
+ SimpleDirectedGraph are tested). The algorithm doesn't have internal synchronization, thus any
+ concurrent network modification has undefined behavior.
+
  The inspector methods work in a lazy fashion: no computations are performed unless immediately
  necessary. Computations are done once and results are cached within this class for future needs.
- 
- Further improvements of flow-based algorithms can be found in this paper: D. W. Matula, “Determining edge connectivity
- in O(mn),” Proceedings of the 28th Symp. on Foundations of Computer Science, (1987),   pp. 249‐251.</div>
+
+ Further improvements of flow-based algorithms can be found in this paper: D. W. Matula,
+ “Determining edge connectivity in O(mn),” Proceedings of the 28th Symp. on Foundations of
+ Computer Science, (1987), pp. 249‐251.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Azim Barhoumi, Paul Enjalbert</dd>
@@ -282,8 +286,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>KConnectivityFlowAlgorithm</h4>
 <pre>public&nbsp;KConnectivityFlowAlgorithm&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">V</a>,&#8203;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">E</a>&gt;&nbsp;graph)</pre>
-<div class="block">Constructs a k-connectivity algorithm for the given graph.
- This</div>
+<div class="block">Constructs a k-connectivity algorithm for the given graph. This</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the input graph</dd>
@@ -299,9 +302,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre>public&nbsp;KConnectivityFlowAlgorithm&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">V</a>,&#8203;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">E</a>&gt;&nbsp;graph,
                                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">V</a>,&#8203;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">E</a>&gt;,&#8203;<a href="../interfaces/MaximumFlowAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm</a>&lt;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">V</a>,&#8203;<a href="KConnectivityFlowAlgorithm.html" title="type parameter in KConnectivityFlowAlgorithm">E</a>&gt;&gt;&nbsp;edgeFlowAlgorithmSupplier,
                                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../graph/DefaultEdge.html" title="class in org.jgrapht.graph">DefaultEdge</a>&gt;,&#8203;<a href="../interfaces/MaximumFlowAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../graph/DefaultEdge.html" title="class in org.jgrapht.graph">DefaultEdge</a>&gt;&gt;&nbsp;vertexFlowAlgorithmSupplier)</pre>
-<div class="block">Constructs a k-connectivity algorithm for the given graph.
- Use algorithms given by the suppliers for edge and vertex flow algorithm
- A supplier is a function which takes a graph and construct the algorithm which will be used</div>
+<div class="block">Constructs a k-connectivity algorithm for the given graph. Use algorithms given by the
+ suppliers for edge and vertex flow algorithm A supplier is a function which takes a graph and
+ construct the algorithm which will be used</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - the input graph</dd>

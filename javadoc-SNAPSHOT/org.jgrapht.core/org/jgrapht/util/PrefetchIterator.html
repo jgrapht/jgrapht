@@ -146,13 +146,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">PrefetchIterator&lt;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;E&gt;, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Enumeration.html?is-external=true" title="class or interface in java.util" class="externalLink">Enumeration</a>&lt;E&gt;</pre>
-<div class="block">Utility class to help implement an iterator/enumerator in which the <a href="#hasNext()"><code>hasNext()</code></a> method needs to
- calculate the next elements ahead of time.
+<div class="block">Utility class to help implement an iterator/enumerator in which the <a href="#hasNext()"><code>hasNext()</code></a> method
+ needs to calculate the next elements ahead of time.
 
  <p>
  Many classes which implement an iterator face a common problem: if there is no easy way to
- calculate <a href="#hasNext()"><code>hasNext()</code></a> other than to call getNext(), then they save the result for fetching in the
- next call to getNext(). This utility helps in doing just that.
+ calculate <a href="#hasNext()"><code>hasNext()</code></a> other than to call getNext(), then they save the result for fetching
+ in the next call to getNext(). This utility helps in doing just that.
 
  <p>
  <b>Usage:</b> The new iterator class will hold this class as a member variable and forward the
@@ -180,12 +180,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 
           });
       }
-      
+
       // forwarding to nextSupplier and return its returned value
       public boolean hasMoreElements() {
           return this.nextSupplier.hasMoreElements();
       }
-      
+
       // forwarding to nextSupplier and return its returned value
       public Object nextElement() {
           return this.nextSupplier.nextElement();
@@ -388,9 +388,10 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isEnumerationStartedEmpty()</pre>
 <div class="block">Tests whether the enumeration started as an empty one. It does not matter if it
  <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> now, only at initialization time.
- 
- <p>Efficiency: if <a href="#nextElement()"><code>nextElement()</code></a>, <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> were never used,
- it activates the <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> once. Else it is immediately $(O(1))$</div>
+
+ <p>
+ Efficiency: if <a href="#nextElement()"><code>nextElement()</code></a>, <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> were never used, it
+ activates the <a href="#hasMoreElements()"><code>hasMoreElements()</code></a> once. Else it is immediately $(O(1))$</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if the enumeration started as an empty one, <code>false</code> otherwise.</dd>

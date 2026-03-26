@@ -154,21 +154,21 @@ implements <a href="../interfaces/MatchingAlgorithm.html" title="interface in or
  maximum weight matching. The implementation accepts directed and undirected graphs which may
  contain self-loops and multiple edges. There is no assumption on the edge weights, i.e. they can
  also be negative or zero.
- 
+
  <p>
  The algorithm is due to Drake and Hougardy, described in detail in the following paper:
  <ul>
  <li>D.E. Drake, S. Hougardy, A Simple Approximation Algorithm for the Weighted Matching Problem,
  Information Processing Letters 85, 211-213, 2003.</li>
  </ul>
- 
+
  <p>
  This particular implementation uses by default two additional heuristics discussed by the authors
  which also take linear time but improve the quality of the matchings. These heuristics can be
  disabled by calling the constructor <a href="#%3Cinit%3E(org.jgrapht.Graph,boolean)"><code>PathGrowingWeightedMatching(Graph, boolean)</code></a>.
  Disabling the heuristics has the effect of fewer passes over the edge set of the input graph,
  probably at the expense of the total weight of the matching.
- 
+
  <p>
  For a discussion on engineering approximate weighted matching algorithms see the following paper:
  <ul>

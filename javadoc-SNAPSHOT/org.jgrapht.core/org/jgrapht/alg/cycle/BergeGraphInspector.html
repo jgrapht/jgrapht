@@ -162,7 +162,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2): 143--186, 2003.
  <p>
  Special Thanks to Maria Chudnovsky for her kind help.
- 
+
  <p>
  The runtime complexity of this implementation is $O(|V|^9|)$. This implementation is far more
  efficient than simplistically testing whether graph $G$ or its complement $\overline{G}$ have an
@@ -298,7 +298,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  thus, if there is an odd hole. If an odd hole is found, this checker will output that $G$ is
  not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
  and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
- 
+
  <p>
  A certificate can be obtained through the <a href="#getCertificate()"><code>getCertificate()</code></a> method,
  if <code>computeCertificate</code> is <code>true</code>.
@@ -329,7 +329,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  thus, if there is an odd hole. If an odd hole is found, this checker will output that $G$ is
  not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
  and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
- 
+
  <p>
  This method by default does not compute a certificate. For obtaining a certificate, call
  <a href="#isBerge(org.jgrapht.Graph,boolean)"><code>isBerge(org.jgrapht.Graph&lt;V, E&gt;, boolean)</code></a> with <code>computeCertificate=true</code>.

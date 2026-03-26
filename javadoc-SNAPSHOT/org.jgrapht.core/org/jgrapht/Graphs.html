@@ -453,7 +453,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any one of <code>g</code>, <code>sourceVertex</code>, or <code>targetVertex</code> is <code>null</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any one of <code>g</code>, <code>sourceVertex</code>, or
+         <code>targetVertex</code> is <code>null</code></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph has no edge supplier</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a></dd>
@@ -541,7 +542,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any one of <code>g</code>, <code>sourceVertex</code>, or <code>targetVertex</code> is <code>null</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any one of <code>g</code>, <code>sourceVertex</code>, or
+         <code>targetVertex</code> is <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -571,8 +573,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dd><code>destination</code> - the graph to which vertices and edges are added</dd>
 <dd><code>source</code> - the graph used as source for vertices and edges to add</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if and only if the destination graph has been changed as a result
-         of this operation.</dd>
+<dd><code>true</code> if and only if the destination graph has been changed as a result of
+         this operation.</dd>
 </dl>
 </li>
 </ul>
@@ -615,9 +617,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends E&gt;&nbsp;edges)</pre>
 <div class="block">Adds a subset of the edges of the specified source graph to the specified destination graph.
  The behavior of this operation is undefined if either of the graphs is modified while the
- operation is in progress. Source vertices will be added automatically to
- the target graph.  Edge weights will be copied from the source except when the
- edge already exists in the destination.</div>
+ operation is in progress. Source vertices will be added automatically to the target graph.
+ Edge weights will be copied from the source except when the edge already exists in the
+ destination.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>V</code> - the graph vertex type</dd>
@@ -652,8 +654,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if graph changed as a result of the call</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if the specified vertices contains one or more <code>null</code> vertices, or
-         if the specified vertex collection is <code>null</code>.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if the specified vertices contains one or more <code>null</code>
+         vertices, or if the specified vertex collection is <code>null</code>.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a></dd>
 </dl>

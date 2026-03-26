@@ -624,8 +624,10 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dd><code>vertexOrderMethod</code> - the method used to ensure a total order of the graph vertices. This
         is required in order to make edge source/targets be consistent.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied <code>vertexOrderMethod</code> cannot be used to create a vertex order</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>network</code> or <code>vertexOrderMethod</code> is <code>null</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied <code>vertexOrderMethod</code> cannot be used to
+         create a vertex order</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>network</code> or <code>vertexOrderMethod</code> is
+         <code>null</code></dd>
 </dl>
 </li>
 </ul>
@@ -648,19 +650,19 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&gt;&nbsp;getVertexSupplier()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()">Graph</a></code></span></div>
 <div class="block">Return the vertex supplier that the graph uses whenever it needs to create new vertices.
- 
+
  <p>
  A graph uses the vertex supplier to create new vertex objects whenever a user calls method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. Users can also create the vertex in user code and then use method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a> to add the vertex.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the vertex supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
- to any other vertex in the graph. More formally, the graph must not contain any vertex
+ specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal to
+ any other vertex in the graph. More formally, the graph must not contain any vertex
  <code>v2</code> such that <code>v2.equals(v)</code>.
- 
+
  <p>
  Care must also be taken when interchanging calls to methods <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>
  and <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
@@ -683,17 +685,17 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <h4>setVertexSupplier</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setVertexSupplier&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&gt;&nbsp;vertexSupplier)</pre>
 <div class="block">Set the vertex supplier that the graph uses whenever it needs to create new vertices.
- 
+
  <p>
  A graph uses the vertex supplier to create new vertex objects whenever a user calls method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. Users can also create the vertex in user code and then use method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a> to add the vertex.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the vertex supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
- to any other vertex in the graph. More formally, the graph must not contain any vertex
+ specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal to
+ any other vertex in the graph. More formally, the graph must not contain any vertex
  <code>v2</code> such that <code>v2.equals(v)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -710,17 +712,17 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">E</a>&gt;&nbsp;getEdgeSupplier()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()">Graph</a></code></span></div>
 <div class="block">Return the edge supplier that the graph uses whenever it needs to create new edges.
- 
+
  <p>
  A graph uses the edge supplier to create new edge objects whenever a user calls method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>. Users can also create the edge in user code and then
  use method <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V,E)"><code>Graph.addEdge(Object, Object, Object)</code></a> to add the edge.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the edge supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
- any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+ specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to any
+ other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
  graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -738,17 +740,17 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <h4>setEdgeSupplier</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEdgeSupplier&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">E</a>&gt;&nbsp;edgeSupplier)</pre>
 <div class="block">Set the edge supplier that the graph uses whenever it needs to create new edges.
- 
+
  <p>
  A graph uses the edge supplier to create new edge objects whenever a user calls method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>. Users can also create the edge in user code and then
  use method <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V,E)"><code>Graph.addEdge(Object, Object, Object)</code></a> to add the edge.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the edge supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
- any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+ specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to any
+ other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
  graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -768,8 +770,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
                  <a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&nbsp;targetVertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdge(V,V)">Graph</a></code></span></div>
 <div class="block">Returns an edge connecting source vertex to target vertex if such vertices and such edge
- exist in this graph. Otherwise returns <code>null</code>.
- If any of the specified vertices is <code>null</code> returns <code>null</code>
+ exist in this graph. Otherwise returns <code>null</code>. If any of the specified vertices is
+ <code>null</code> returns <code>null</code>
 
  <p>
  In undirected graphs, the returned edge may have its source and target vertices in the
@@ -887,8 +889,7 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(E)">Graph</a></code></span></div>
 <div class="block">Returns <code>true</code> if this graph contains the specified edge. More formally, returns
  <code>true</code> if and only if this graph contains an edge <code>e2</code> such that
- <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns
- <code>false</code>.</div>
+ <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(E)">containsEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>,&#8203;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">E</a>&gt;</code></dd>
@@ -911,8 +912,7 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsVertex(V)">Graph</a></code></span></div>
 <div class="block">Returns <code>true</code> if this graph contains the specified vertex. More formally, returns
  <code>true</code> if and only if this graph contains a vertex <code>u</code> such that
- <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns
- <code>false</code>.</div>
+ <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsVertex(V)">containsVertex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>,&#8203;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">E</a>&gt;</code></dd>
@@ -960,11 +960,11 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;int&nbsp;degreeOf&#8203;(<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#degreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the degree of the specified vertex.
- 
+
  <p>
  A degree of a vertex in an undirected graph is the number of edges touching that vertex.
  Edges with same source and target vertices (self-loops) are counted twice.
- 
+
  <p>
  In directed graphs this method returns the sum of the "in degree" and the "out degree".</div>
 <dl>
@@ -1010,12 +1010,12 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;int&nbsp;inDegreeOf&#8203;(<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#inDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "in degree" of the specified vertex.
- 
+
  <p>
  The "in degree" of a vertex in a directed graph is the number of inward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
  http://mathworld.wolfram.com/Indegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -1065,12 +1065,12 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;int&nbsp;outDegreeOf&#8203;(<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#outDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "out degree" of the specified vertex.
- 
+
  <p>
  The "out degree" of a vertex in a directed graph is the number of outward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
  http://mathworld.wolfram.com/Outdegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -1095,7 +1095,7 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">E</a>&gt;&nbsp;outgoingEdgesOf&#8203;(<a href="BaseNetworkAdapter.html" title="type parameter in BaseNetworkAdapter">V</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#outgoingEdgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges outgoing from the specified vertex.
- 
+
  <p>
  In the case of undirected graphs this method returns all edges touching the vertex, thus,
  some of the returned edges may have their source and target vertices in the opposite order.</div>
@@ -1179,7 +1179,8 @@ implements <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" titl
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the vertex order</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied method cannot be used to create a vertex order</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the supplied method cannot be used to create a vertex
+         order</dd>
 </dl>
 </li>
 </ul>

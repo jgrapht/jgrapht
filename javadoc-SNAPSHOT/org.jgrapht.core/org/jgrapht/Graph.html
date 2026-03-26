@@ -142,9 +142,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">Graph&lt;V,&#8203;E&gt;</span></pre>
 <div class="block">The root interface in the graph hierarchy. A mathematical graph-theory graph object
- <code>G(V,E)</code> contains a set <code>V</code> of vertices and a set <code>E</code> of edges.
- Each edge e=(v1,v2) in E connects vertex v1 to vertex v2. for more information
- about graphs and their related definitions see <a href="http://mathworld.wolfram.com/Graph.html">
+ <code>G(V,E)</code> contains a set <code>V</code> of vertices and a set <code>E</code> of edges. Each edge
+ e=(v1,v2) in E connects vertex v1 to vertex v2. for more information about graphs and their
+ related definitions see <a href="http://mathworld.wolfram.com/Graph.html">
  http://mathworld.wolfram.com/Graph.html</a>.
 
  <p>
@@ -162,8 +162,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  Through generics, a graph can be typed to specific classes for vertices <code>V</code> and edges
- <code>E&lt;T&gt;</code>. Such a graph can contain vertices of type <code>V</code> and all
- sub-types and Edges of type <code>E</code> and all sub-types.
+ <code>E&lt;T&gt;</code>. Such a graph can contain vertices of type <code>V</code> and all sub-types and Edges of
+ type <code>E</code> and all sub-types.
  </p>
 
  <p>
@@ -262,8 +262,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#containsEdge(V,V)">containsEdge</a></span>&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;sourceVertex,
             <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex)</code></th>
 <td class="colLast">
-<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source
- vertex to the target vertex.</div>
+<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source vertex
+ to the target vertex.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -539,8 +539,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature"><a href="Graph.html" title="type parameter in Graph">E</a>&nbsp;getEdge&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;sourceVertex,
           <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex)</pre>
 <div class="block">Returns an edge connecting source vertex to target vertex if such vertices and such edge
- exist in this graph. Otherwise returns <code>null</code>.
- If any of the specified vertices is <code>null</code> returns <code>null</code>
+ exist in this graph. Otherwise returns <code>null</code>. If any of the specified vertices is
+ <code>null</code> returns <code>null</code>
 
  <p>
  In undirected graphs, the returned edge may have its source and target vertices in the
@@ -563,19 +563,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>getVertexSupplier</h4>
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="Graph.html" title="type parameter in Graph">V</a>&gt;&nbsp;getVertexSupplier()</pre>
 <div class="block">Return the vertex supplier that the graph uses whenever it needs to create new vertices.
- 
+
  <p>
  A graph uses the vertex supplier to create new vertex objects whenever a user calls method
  <a href="#addVertex()"><code>addVertex()</code></a>. Users can also create the vertex in user code and then use method
  <a href="#addVertex(V)"><code>addVertex(Object)</code></a> to add the vertex.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the vertex supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
- to any other vertex in the graph. More formally, the graph must not contain any vertex
+ specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal to
+ any other vertex in the graph. More formally, the graph must not contain any vertex
  <code>v2</code> such that <code>v2.equals(v)</code>.
- 
+
  <p>
  Care must also be taken when interchanging calls to methods <a href="#addVertex(V)"><code>addVertex(Object)</code></a>
  and <a href="#addVertex()"><code>addVertex()</code></a>. In such a case the user must make sure never to add vertices
@@ -598,17 +598,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>getEdgeSupplier</h4>
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="Graph.html" title="type parameter in Graph">E</a>&gt;&nbsp;getEdgeSupplier()</pre>
 <div class="block">Return the edge supplier that the graph uses whenever it needs to create new edges.
- 
+
  <p>
  A graph uses the edge supplier to create new edge objects whenever a user calls method
  <a href="#addEdge(V,V)"><code>addEdge(Object, Object)</code></a>. Users can also create the edge in user code and then
  use method <a href="#addEdge(V,V,E)"><code>addEdge(Object, Object, Object)</code></a> to add the edge.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the edge supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
- any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+ specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to any
+ other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
  graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -639,16 +639,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  This method creates the new edge <code>e</code> using this graph's edge supplier (see
- <a href="#getEdgeSupplier()"><code>getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be
- equal to any other edge the graph (even if the graph allows edge-multiplicity). More
- formally, the graph must not contain any edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If such <code>e2</code> is found then the newly created edge
- <code>e</code> is abandoned, the method leaves this graph unchanged and returns <code>null</code>.
- 
+ <a href="#getEdgeSupplier()"><code>getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be equal
+ to any other edge the graph (even if the graph allows edge-multiplicity). More formally, the
+ graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>. If such <code>e2</code>
+ is found then the newly created edge <code>e</code> is abandoned, the method leaves this graph
+ unchanged and returns <code>null</code>.
+
  <p>
- If the underlying graph implementation's <a href="#getEdgeSupplier()"><code>getEdgeSupplier()</code></a> returns
- <code>null</code>, then this method cannot create edges and throws an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
+ If the underlying graph implementation's <a href="#getEdgeSupplier()"><code>getEdgeSupplier()</code></a> returns <code>null</code>,
+ then this method cannot create edges and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sourceVertex</code> - source vertex of the edge.</dd>
@@ -656,12 +655,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The newly created edge if added to the graph, otherwise <code>null</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph
-                                  or if there is a property of this graph that prevents the
-                                  addition of the edge</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph or
+         if there is a property of this graph that prevents the addition of the edge</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the specified vertices is <code>null</code>.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph was not initialized with an edge supplier
-                                       or if this graph disallows modification</dd>
+         or if this graph disallows modification</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#getEdgeSupplier()"><code>getEdgeSupplier()</code></a></dd>
 </dl>
@@ -679,12 +677,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                 <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex,
                 <a href="Graph.html" title="type parameter in Graph">E</a>&nbsp;e)</pre>
 <div class="block">Adds the specified edge to this graph, going from the source vertex to the target vertex.
- More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains
- no edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such
- an edge, the call leaves this graph unchanged and returns <code>false</code>. Some graphs
- do not allow edge-multiplicity. In such cases, if the graph already contains an edge
- from the specified source to the specified target, then this method does not change the
- graph and returns <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
+ More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains no
+ edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such an edge,
+ the call leaves this graph unchanged and returns <code>false</code>. Some graphs do not allow
+ edge-multiplicity. In such cases, if the graph already contains an edge from the specified
+ source to the specified target, then this method does not change the graph and returns
+ <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sourceVertex</code> - source vertex of the edge.</dd>
@@ -693,9 +691,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified edge.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph
-                                  or if there is a property of this graph that prevents the
-                                  addition of the edge</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if source or target vertices are not found in the graph or
+         if there is a property of this graph that prevents the addition of the edge</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ClassCastException.html?is-external=true" title="class or interface in java.lang" class="externalLink">ClassCastException</a></code> - if the specified edge is not assignment compatible with the class
          of edges produced by the edge factory of this graph.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if any of the arguments is <code>null</code></dd>
@@ -717,17 +714,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 
  <p>
  This method creates the new vertex <code>v</code> using this graph's vertex supplier (see
- <a href="#getVertexSupplier()"><code>getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i>
- be equal to any other vertex in the graph. More formally, the graph must not contain any
- vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then
- the newly created vertex <code>v</code> is abandoned, the method leaves this graph unchanged
- and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
- 
+ <a href="#getVertexSupplier()"><code>getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i> be
+ equal to any other vertex in the graph. More formally, the graph must not contain any vertex
+ <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then the newly created
+ vertex <code>v</code> is abandoned, the method leaves this graph unchanged and throws an
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
+
  <p>
- If the underlying graph implementation's <a href="#getVertexSupplier()"><code>getVertexSupplier()</code></a> returns
- <code>null</code>, then this method cannot create vertices and throws an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
- 
+ If the underlying graph implementation's <a href="#getVertexSupplier()"><code>getVertexSupplier()</code></a> returns <code>null</code>,
+ then this method cannot create vertices and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
+
  <p>
  Care must also be taken when interchanging calls to methods <a href="#addVertex(V)"><code>addVertex(Object)</code></a>
  and <a href="#addVertex()"><code>addVertex()</code></a>. In such a case the user must make sure never to add vertices
@@ -740,8 +736,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the graph supplier returns a vertex which is already in
          the graph</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph was not initialized with a vertex supplier
-                                       or if this graph disallows modification</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph was not initialized with a vertex
+         supplier or if this graph disallows modification</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#getVertexSupplier()"><code>getVertexSupplier()</code></a></dd>
 </dl>
@@ -757,10 +753,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>addVertex</h4>
 <pre class="methodSignature">boolean&nbsp;addVertex&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;v)</pre>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
- specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>u.equals(v)</code>.
- If this graph already contains such vertex, the call leaves this graph
- unchanged and returns <code>false</code>. In combination with the restriction on
+ specified vertex, <code>v</code>, to this graph if this graph contains no vertex <code>u</code> such
+ that <code>u.equals(v)</code>. If this graph already contains such vertex, the call leaves this
+ graph unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -768,7 +763,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this graph did not already contain the specified vertex.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if there is a property that disallows adding the specified vertex</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if there is a property that disallows adding the specified
+         vertex</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if the specified vertex is <code>null</code>.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph disallows modification</dd>
 </dl>
@@ -784,9 +780,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>containsEdge</h4>
 <pre class="methodSignature">boolean&nbsp;containsEdge&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;sourceVertex,
                      <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex)</pre>
-<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source
- vertex to the target vertex. In undirected graphs the same result is obtained when source and
- target are inverted. If any of the specified vertices does not exist in the graph, or if is
+<div class="block">Returns <code>true</code> if and only if this graph contains an edge going from the source vertex
+ to the target vertex. In undirected graphs the same result is obtained when source and target
+ are inverted. If any of the specified vertices does not exist in the graph, or if is
  <code>null</code>, returns <code>false</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -808,8 +804,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">boolean&nbsp;containsEdge&#8203;(<a href="Graph.html" title="type parameter in Graph">E</a>&nbsp;e)</pre>
 <div class="block">Returns <code>true</code> if this graph contains the specified edge. More formally, returns
  <code>true</code> if and only if this graph contains an edge <code>e2</code> such that
- <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns
- <code>false</code>.</div>
+ <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - edge whose presence in this graph is to be tested.</dd>
@@ -829,8 +824,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">boolean&nbsp;containsVertex&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;v)</pre>
 <div class="block">Returns <code>true</code> if this graph contains the specified vertex. More formally, returns
  <code>true</code> if and only if this graph contains a vertex <code>u</code> such that
- <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns
- <code>false</code>.</div>
+ <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - vertex whose presence in this graph is to be tested.</dd>
@@ -872,11 +866,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>degreeOf</h4>
 <pre class="methodSignature">int&nbsp;degreeOf&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns the degree of the specified vertex.
- 
+
  <p>
  A degree of a vertex in an undirected graph is the number of edges touching that vertex.
  Edges with same source and target vertices (self-loops) are counted twice.
- 
+
  <p>
  In directed graphs this method returns the sum of the "in degree" and the "out degree".</div>
 <dl>
@@ -923,12 +917,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>inDegreeOf</h4>
 <pre class="methodSignature">int&nbsp;inDegreeOf&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns the "in degree" of the specified vertex.
- 
+
  <p>
  The "in degree" of a vertex in a directed graph is the number of inward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
  http://mathworld.wolfram.com/Indegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -979,12 +973,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>outDegreeOf</h4>
 <pre class="methodSignature">int&nbsp;outDegreeOf&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns the "out degree" of the specified vertex.
- 
+
  <p>
  The "out degree" of a vertex in a directed graph is the number of outward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
  http://mathworld.wolfram.com/Outdegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -1010,7 +1004,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>outgoingEdgesOf</h4>
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Graph.html" title="type parameter in Graph">E</a>&gt;&nbsp;outgoingEdgesOf&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns a set of all edges outgoing from the specified vertex.
- 
+
  <p>
  In the case of undirected graphs this method returns all edges touching the vertex, thus,
  some of the returned edges may have their source and target vertices in the opposite order.</div>
@@ -1060,9 +1054,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Graph.html" title="type parameter in Graph">E</a>&gt;&nbsp;removeAllEdges&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;sourceVertex,
                       <a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;targetVertex)</pre>
 <div class="block">Removes all the edges going from the specified source vertex to the specified target vertex,
- and returns a set of all removed edges. Returns <code>null</code> if any of the specified
- vertices does not exist in the graph. If both vertices exist but no edge is found, returns an
- empty set. This method will either invoke the <a href="#removeEdge(E)"><code>removeEdge(Object)</code></a> method, or the
+ and returns a set of all removed edges. Returns <code>null</code> if any of the specified vertices
+ does not exist in the graph. If both vertices exist but no edge is found, returns an empty
+ set. This method will either invoke the <a href="#removeEdge(E)"><code>removeEdge(Object)</code></a> method, or the
  <a href="#removeEdge(V,V)"><code>removeEdge(Object, Object)</code></a> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1132,9 +1126,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>removeEdge</h4>
 <pre class="methodSignature">boolean&nbsp;removeEdge&#8203;(<a href="Graph.html" title="type parameter in Graph">E</a>&nbsp;e)</pre>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>,
- if the graph contains such edge. Returns <code>true</code> if the graph contained
- the specified edge. (The graph will not contain the specified edge once the call returns).
+ is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>, if the
+ graph contains such edge. Returns <code>true</code> if the graph contained the specified edge.
+ (The graph will not contain the specified edge once the call returns).
 
  <p>
  If the specified edge is <code>null</code> returns <code>false</code>.
@@ -1159,11 +1153,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>removeVertex</h4>
 <pre class="methodSignature">boolean&nbsp;removeVertex&#8203;(<a href="Graph.html" title="type parameter in Graph">V</a>&nbsp;v)</pre>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
- the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
- If no such <code>u</code> is found, the call leaves the graph unchanged.
- Returns <code>true</code> if the graph contained the specified vertex.
- (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>, the
+ call removes all edges that touch <code>u</code> and then removes <code>u</code> itself. If no such
+ <code>u</code> is found, the call leaves the graph unchanged. Returns <code>true</code> if the graph
+ contained the specified vertex. (The graph will not contain the specified vertex once the
+ call returns).
 
  <p>
  If the specified vertex is <code>null</code> returns <code> false</code>.
@@ -1172,8 +1166,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - vertex to be removed from this graph, if present.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the graph contained the specified vertex; <code>false</code>
-         otherwise.</dd>
+<dd><code>true</code> if the graph contained the specified vertex; <code>false</code> otherwise.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if this graph disallows modification</dd>
 </dl>
@@ -1296,9 +1289,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>weight</code> - new weight for edge</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>e</code> is <code>null</code></dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph does not support weights
-                                       or if there is a property of this graph that
-                                       disallows modification of the weight</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph does not support weights or if there is a
+         property of this graph that disallows modification of the weight</dd>
 </dl>
 </li>
 </ul>
@@ -1315,17 +1307,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                            double&nbsp;weight)</pre>
 <div class="block">Assigns a weight to an edge between <code>sourceVertex</code> and <code>targetVertex</code>.
  <p>
- When there exist multiple edges between <code>sourceVertex</code> and
- <code>targetVertex</code>, consider using <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> instead.</div>
+ When there exist multiple edges between <code>sourceVertex</code> and <code>targetVertex</code>,
+ consider using <a href="#setEdgeWeight(E,double)"><code>setEdgeWeight(Object, double)</code></a> instead.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sourceVertex</code> - source vertex of the edge</dd>
 <dd><code>targetVertex</code> - target vertex of the edge</dd>
 <dd><code>weight</code> - new weight for edge</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>sourceVertex</code> or
-                              <code>targetVertex</code> is <code>null</code>, or
-                              if there is no edge between the two vertices</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if either one of <code>sourceVertex</code> or <code>targetVertex</code> is
+         <code>null</code>, or if there is no edge between the two vertices</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the graph does not support weights</dd>
 </dl>
 </li>

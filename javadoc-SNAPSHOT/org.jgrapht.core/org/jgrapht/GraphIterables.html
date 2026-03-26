@@ -295,7 +295,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>edges</h4>
 <pre class="methodSignature">default&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="GraphIterables.html" title="type parameter in GraphIterables">E</a>&gt;&nbsp;edges()</pre>
 <div class="block">Returns an iterable over the edges of the graph.
- 
+
  <p>
  Whether the ordering is deterministic, depends on the actual graph implementation. It is the
  responsibility of callers who rely on this behavior to only use graph implementations which
@@ -390,11 +390,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>degreeOf</h4>
 <pre class="methodSignature">default&nbsp;long&nbsp;degreeOf&#8203;(<a href="GraphIterables.html" title="type parameter in GraphIterables">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns the degree of the specified vertex.
- 
+
  <p>
  A degree of a vertex in an undirected graph is the number of edges touching that vertex.
  Edges with same source and target vertices (self-loops) are counted twice.
- 
+
  <p>
  In directed graphs this method returns the sum of the "in degree" and the "out degree".</div>
 <dl>
@@ -420,7 +420,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns an iterable view over all edges incoming into the specified vertex. The returned
  iterators are live views. If the graph is modified while an iteration is in progress, the
  results of the iteration are undefined.
- 
+
  <p>
  In the case of undirected graphs the returned iterators return all edges touching the vertex,
  thus, some of the returned edges may have their source and target vertices in the opposite
@@ -446,12 +446,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>inDegreeOf</h4>
 <pre class="methodSignature">default&nbsp;long&nbsp;inDegreeOf&#8203;(<a href="GraphIterables.html" title="type parameter in GraphIterables">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns the "in degree" of the specified vertex.
- 
+
  <p>
  The "in degree" of a vertex in a directed graph is the number of inward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
  http://mathworld.wolfram.com/Indegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -478,7 +478,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns an iterable view over all edges outgoing into the specified vertex. The returned
  iterators are live views. If the graph is modified while an iteration is in progress, the
  results of the iteration are undefined.
- 
+
  <p>
  In the case of undirected graphs the returned iterators return all edges touching the vertex,
  thus, some of the returned edges may have their source and target vertices in the opposite
@@ -504,12 +504,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>outDegreeOf</h4>
 <pre class="methodSignature">default&nbsp;long&nbsp;outDegreeOf&#8203;(<a href="GraphIterables.html" title="type parameter in GraphIterables">V</a>&nbsp;vertex)</pre>
 <div class="block">Returns the "out degree" of the specified vertex.
- 
+
  <p>
  The "out degree" of a vertex in a directed graph is the number of outward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
  http://mathworld.wolfram.com/Outdegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -537,11 +537,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns an iterable view over all edges connecting source vertex to target vertex if such
  vertices exist in this graph. The returned iterators are live views. If the graph is modified
  while an iteration is in progress, the results of the iteration are undefined.
- 
- If any of the vertices does not exist or is <code>null</code>, returns <code>null</code>. If
- both vertices exist but no edges found, returns an iterable which returns exhausted
- iterators.
- 
+
+ If any of the vertices does not exist or is <code>null</code>, returns <code>null</code>. If both
+ vertices exist but no edges found, returns an iterable which returns exhausted iterators.
+
  <p>
  In undirected graphs, some of the returned edges may have their source and target vertices in
  the opposite order. In simple graphs the returned set is either singleton set or empty set.

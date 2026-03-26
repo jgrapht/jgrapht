@@ -161,21 +161,21 @@ extends <a href="HamiltonianCycleAlgorithmBase.html" title="class in org.jgrapht
 
  <p>
  Insertion heuristics are quite straightforward, and there are many variants to choose from. The
- basics of insertion heuristics is to start with a partial tour of a subset of all cities,
- and then iteratively an unvisited vertex (a vertex whichis not in the tour) is chosen given a criterion
- and inserted in the best position of the partial tour. Per each iteration, the farthest insertion
- heuristic selects the farthest unvisited vertex from the partial tour.
- This algorithm provides a guarantee to compute tours no more than
- 0(log N) times optimum (assuming the triangle inequality). However, regarding practical results,
- some references refer to this heuristic as one of the best among the category of insertion heuristics.
- This implementation uses the longest edge by default as the initial sub-tour if one is not provided.
+ basics of insertion heuristics is to start with a partial tour of a subset of all cities, and
+ then iteratively an unvisited vertex (a vertex whichis not in the tour) is chosen given a
+ criterion and inserted in the best position of the partial tour. Per each iteration, the farthest
+ insertion heuristic selects the farthest unvisited vertex from the partial tour. This algorithm
+ provides a guarantee to compute tours no more than 0(log N) times optimum (assuming the triangle
+ inequality). However, regarding practical results, some references refer to this heuristic as one
+ of the best among the category of insertion heuristics. This implementation uses the longest edge
+ by default as the initial sub-tour if one is not provided.
  </p>
 
  <p>
  The description of this algorithm can be consulted on: <br>
- Johnson, D. S., &amp; McGeoch, L. A. (2007). Experimental Analysis of Heuristics for the STSP.
- In G. Gutin &amp; A. P. Punnen (Eds.), The Traveling Salesman Problem and Its Variations (pp. 369–443).
- Springer US. https://doi.org/10.1007/0-306-48213-4_9
+ Johnson, D. S., &amp; McGeoch, L. A. (2007). Experimental Analysis of Heuristics for the STSP. In
+ G. Gutin &amp; A. P. Punnen (Eds.), The Traveling Salesman Problem and Its Variations (pp.
+ 369–443). Springer US. https://doi.org/10.1007/0-306-48213-4_9
  </p>
 
  <p>

@@ -158,9 +158,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="GraphDelegator.html" title="class in org.jgrapht.graph">GraphDelegator</a>&lt;V,&#8203;E&gt;
 implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">ListenableGraph</a>&lt;V,&#8203;E&gt;, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></pre>
 <div class="block">A graph backed by the the graph specified at the constructor, which can be listened by
- <code>GraphListener</code> s and by <code> VertexSetListener</code> s. Operations on this graph
- "pass through" to the to the backing graph.
- Any modification made to this graph or the backing graph is reflected by the other.
+ <code>GraphListener</code> s and by <code> VertexSetListener</code> s. Operations on this graph "pass
+ through" to the to the backing graph. Any modification made to this graph or the backing graph is
+ reflected by the other.
 
  <p>
  This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
@@ -392,8 +392,8 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReuseEvents(boolean)">setReuseEvents</a></span>&#8203;(boolean&nbsp;reuseEvents)</code></th>
 <td class="colLast">
-<div class="block">If the <code>reuseEvents</code> flag is set to <code>true</code> this class will reuse
- previously fired events and will not create a new object for each event.</div>
+<div class="block">If the <code>reuseEvents</code> flag is set to <code>true</code> this class will reuse previously fired
+ events and will not create a new object for each event.</div>
 </td>
 </tr>
 </table>
@@ -466,10 +466,10 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <h4>DefaultListenableGraph</h4>
 <pre>public&nbsp;DefaultListenableGraph&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">V</a>,&#8203;<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">E</a>&gt;&nbsp;g,
                               boolean&nbsp;reuseEvents)</pre>
-<div class="block">Creates a new listenable graph. If the <code>reuseEvents</code> flag is set to
- <code>true</code> this class will reuse previously fired events and will not create a new
- object for each event. This option increases performance but should be used with care,
- especially in multithreaded environment.</div>
+<div class="block">Creates a new listenable graph. If the <code>reuseEvents</code> flag is set to <code>true</code> this
+ class will reuse previously fired events and will not create a new object for each event.
+ This option increases performance but should be used with care, especially in multithreaded
+ environment.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the backing graph.</dd>
@@ -498,9 +498,9 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <li class="blockList">
 <h4>setReuseEvents</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setReuseEvents&#8203;(boolean&nbsp;reuseEvents)</pre>
-<div class="block">If the <code>reuseEvents</code> flag is set to <code>true</code> this class will reuse
- previously fired events and will not create a new object for each event. This option
- increases performance but should be used with care, especially in multithreaded environment.</div>
+<div class="block">If the <code>reuseEvents</code> flag is set to <code>true</code> this class will reuse previously fired
+ events and will not create a new object for each event. This option increases performance but
+ should be used with care, especially in multithreaded environment.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>reuseEvents</code> - whether to reuse previously fired event objects instead of creating a new
@@ -515,10 +515,10 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <li class="blockList">
 <h4>isReuseEvents</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isReuseEvents()</pre>
-<div class="block">Tests whether the <code>reuseEvents</code> flag is set. If the flag is set to
- <code>true</code> this class will reuse previously fired events and will not create a new
- object for each event. This option increases performance but should be used with care,
- especially in multithreaded environment.</div>
+<div class="block">Tests whether the <code>reuseEvents</code> flag is set. If the flag is set to <code>true</code> this
+ class will reuse previously fired events and will not create a new object for each event.
+ This option increases performance but should be used with care, especially in multithreaded
+ environment.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value of the <code>reuseEvents</code> flag.</dd>
@@ -547,16 +547,15 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 
  <p>
  This method creates the new edge <code>e</code> using this graph's edge supplier (see
- <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be
- equal to any other edge the graph (even if the graph allows edge-multiplicity). More
- formally, the graph must not contain any edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If such <code>e2</code> is found then the newly created edge
- <code>e</code> is abandoned, the method leaves this graph unchanged and returns <code>null</code>.
- 
+ <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be equal
+ to any other edge the graph (even if the graph allows edge-multiplicity). More formally, the
+ graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>. If such <code>e2</code>
+ is found then the newly created edge <code>e</code> is abandoned, the method leaves this graph
+ unchanged and returns <code>null</code>.
+
  <p>
- If the underlying graph implementation's <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a> returns
- <code>null</code>, then this method cannot create edges and throws an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
+ If the underlying graph implementation's <a href="../Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a> returns <code>null</code>,
+ then this method cannot create edges and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addEdge(V,V)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">V</a>,&#8203;<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">E</a>&gt;</code></dd>
@@ -585,12 +584,12 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
                        <a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">E</a>&nbsp;e)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addEdge(V,V,E)">Graph</a></code></span></div>
 <div class="block">Adds the specified edge to this graph, going from the source vertex to the target vertex.
- More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains
- no edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such
- an edge, the call leaves this graph unchanged and returns <code>false</code>. Some graphs
- do not allow edge-multiplicity. In such cases, if the graph already contains an edge
- from the specified source to the specified target, then this method does not change the
- graph and returns <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
+ More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains no
+ edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such an edge,
+ the call leaves this graph unchanged and returns <code>false</code>. Some graphs do not allow
+ edge-multiplicity. In such cases, if the graph already contains an edge from the specified
+ source to the specified target, then this method does not change the graph and returns
+ <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Graph.html#addEdge(V,V,E)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">V</a>,&#8203;<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">E</a>&gt;</code></dd>
@@ -637,17 +636,16 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 
  <p>
  This method creates the new vertex <code>v</code> using this graph's vertex supplier (see
- <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i>
- be equal to any other vertex in the graph. More formally, the graph must not contain any
- vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then
- the newly created vertex <code>v</code> is abandoned, the method leaves this graph unchanged
- and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
- 
+ <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i> be
+ equal to any other vertex in the graph. More formally, the graph must not contain any vertex
+ <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then the newly created
+ vertex <code>v</code> is abandoned, the method leaves this graph unchanged and throws an
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
+
  <p>
- If the underlying graph implementation's <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> returns
- <code>null</code>, then this method cannot create vertices and throws an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
- 
+ If the underlying graph implementation's <a href="../Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> returns <code>null</code>,
+ then this method cannot create vertices and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
+
  <p>
  Care must also be taken when interchanging calls to methods <a href="../Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>
  and <a href="../Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
@@ -677,10 +675,9 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addVertex&#8203;(<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">V</a>&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#addVertex(V)">Graph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
- specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>u.equals(v)</code>.
- If this graph already contains such vertex, the call leaves this graph
- unchanged and returns <code>false</code>. In combination with the restriction on
+ specified vertex, <code>v</code>, to this graph if this graph contains no vertex <code>u</code> such
+ that <code>u.equals(v)</code>. If this graph already contains such vertex, the call leaves this
+ graph unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -761,9 +758,9 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeEdge&#8203;(<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">E</a>&nbsp;e)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeEdge(E)">Graph</a></code></span></div>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>,
- if the graph contains such edge. Returns <code>true</code> if the graph contained
- the specified edge. (The graph will not contain the specified edge once the call returns).
+ is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>, if the
+ graph contains such edge. Returns <code>true</code> if the graph contained the specified edge.
+ (The graph will not contain the specified edge once the call returns).
 
  <p>
  If the specified edge is <code>null</code> returns <code>false</code>.
@@ -808,11 +805,11 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeVertex&#8203;(<a href="DefaultListenableGraph.html" title="type parameter in DefaultListenableGraph">V</a>&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Graph.html#removeVertex(V)">Graph</a></code></span></div>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
- the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
- If no such <code>u</code> is found, the call leaves the graph unchanged.
- Returns <code>true</code> if the graph contained the specified vertex.
- (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>, the
+ call removes all edges that touch <code>u</code> and then removes <code>u</code> itself. If no such
+ <code>u</code> is found, the call leaves the graph unchanged. Returns <code>true</code> if the graph
+ contained the specified vertex. (The graph will not contain the specified vertex once the
+ call returns).
 
  <p>
  If the specified vertex is <code>null</code> returns <code> false</code>.
@@ -825,8 +822,7 @@ implements <a href="../ListenableGraph.html" title="interface in org.jgrapht">Li
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - vertex to be removed from this graph, if present.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the graph contained the specified vertex; <code>false</code>
-         otherwise.</dd>
+<dd><code>true</code> if the graph contained the specified vertex; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>

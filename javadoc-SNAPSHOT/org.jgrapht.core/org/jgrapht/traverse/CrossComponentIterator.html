@@ -302,8 +302,7 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <td class="colFirst"><code>protected abstract <a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">V</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#provideNextVertex()">provideNextVertex</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code>
- method.</div>
+<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code> method.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -387,8 +386,8 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <pre>public&nbsp;CrossComponentIterator&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">V</a>,&#8203;<a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">E</a>&gt;&nbsp;g,
                               <a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">V</a>&nbsp;startVertex)</pre>
 <div class="block">Creates a new iterator for the specified graph. Iteration will start at the specified start
- vertex. If the specified start vertex is <code>null</code>,
- Iteration will start at an arbitrary graph vertex.</div>
+ vertex. If the specified start vertex is <code>null</code>, Iteration will start at an arbitrary
+ graph vertex.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graph to be iterated.</dd>
@@ -408,15 +407,15 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <pre>public&nbsp;CrossComponentIterator&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">V</a>,&#8203;<a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">E</a>&gt;&nbsp;g,
                               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">V</a>&gt;&nbsp;startVertices)</pre>
 <div class="block">Creates a new iterator for the specified graph. Iteration will start at the specified start
- vertices. If the specified start vertices is <code>null</code>,
- Iteration will start at an arbitrary graph vertex.</div>
+ vertices. If the specified start vertices is <code>null</code>, Iteration will start at an
+ arbitrary graph vertex.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graph to be iterated.</dd>
 <dd><code>startVertices</code> - the vertices iteration to be started.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>startVertices</code> contains an element that is not
-                                  a vertex of <code>g</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>startVertices</code> contains an element that is not a
+         vertex of <code>g</code></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>g</code> is <code>null</code></dd>
 </dl>
 </li>
@@ -505,8 +504,7 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <li class="blockList">
 <h4>provideNextVertex</h4>
 <pre class="methodSignature">protected abstract&nbsp;<a href="CrossComponentIterator.html" title="type parameter in CrossComponentIterator">V</a>&nbsp;provideNextVertex()</pre>
-<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code>
- method.</div>
+<div class="block">Returns the vertex to be returned in the following call to the iterator <code>next</code> method.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the next vertex to be returned by this iterator.</dd>
@@ -527,9 +525,9 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vertex</code> - a vertex which has already been seen.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>data associated with the seen vertex or <code>null</code> if no data was associated
-         with the vertex. A <code>null</code> return can also indicate that the vertex was
-         explicitly associated with <code>null</code>.</dd>
+<dd>data associated with the seen vertex or <code>null</code> if no data was associated with
+         the vertex. A <code>null</code> return can also indicate that the vertex was explicitly
+         associated with <code>null</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -585,10 +583,9 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dd><code>vertex</code> - a vertex which has been seen.</dd>
 <dd><code>data</code> - data to be associated with the seen vertex.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>previous value associated with specified vertex or <code>null</code>
-         if no data was associated with the vertex. A <code>null</code> return
-         can also indicate that the vertex was explicitly associated with
-         <code>null</code>.</dd>
+<dd>previous value associated with specified vertex or <code>null</code> if no data was
+         associated with the vertex. A <code>null</code> return can also indicate that the vertex
+         was explicitly associated with <code>null</code>.</dd>
 </dl>
 </li>
 </ul>

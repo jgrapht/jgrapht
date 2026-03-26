@@ -148,7 +148,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.nio">BaseEventDrivenImporter</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../../org.jgrapht.core/org/jgrapht/alg/util/Pair.html" title="class in org.jgrapht.alg.util">Pair</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&gt;
 implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht.nio">EventDrivenImporter</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../../org.jgrapht.core/org/jgrapht/alg/util/Pair.html" title="class in org.jgrapht.alg.util">Pair</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&gt;</pre>
 <div class="block">Importer which reads graphs in graph6 or sparse6 format.
- 
+
  <p>
  A description of the format can be found
  <a href="https://users.cecs.anu.edu.au/~bdm/data/formats.txt">here</a>. graph6 and sparse6 are
@@ -158,18 +158,20 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
  Typically, files storing graph6 graphs have the 'g6' extension. Similarly, files storing sparse6
  graphs have a 's6' file extension. sparse6 graphs support loops and multiple edges, graph6 graphs
  do not.
- 
+
  <p>
  Note that a g6/s6 string may contain backslashes '\'. Thus, escaping is required. E.g.
- 
+
  <pre>
  <code>":?@MnDA\oi"</code>
  </pre>
- 
+
  may result in undefined behavior. This should have been:
- 
+
  <pre>
- <code>":?@MnDA\\oi"</code>
+ <code>
+ ":?@MnDA\\oi"
+ </code>
  </pre></div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>

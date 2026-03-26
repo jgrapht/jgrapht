@@ -147,38 +147,37 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  <p>
  The following example creates a directed graph which allows multiple (parallel) edges and
  self-loops: <blockquote>
- 
+
  <pre>
- Graph&lt;Integer,
-     DefaultEdge&gt; g = GraphTypeBuilder
-         .&lt;Integer, DefaultEdge&gt; directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-         .edgeClass(DefaultEdge.class).buildGraph();
+ Graph&lt;Integer, DefaultEdge&gt; g =
+     GraphTypeBuilder.&lt;Integer, DefaultEdge&gt; directed().allowingMultipleEdges(true)
+         .allowingSelfLoops(true).edgeClass(DefaultEdge.class).buildGraph();
  </pre>
- 
+
  </blockquote>
- 
+
  Similarly one could get a weighted multigraph by using: <blockquote>
- 
+
  <pre>
  Graph&lt;Integer, DefaultWeightedEdge&gt; g = GraphTypeBuilder
      .&lt;Integer, DefaultWeightedEdge&gt; undirected().allowingMultipleEdges(true)
      .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
  </pre>
- 
+
  </blockquote>
- 
+
  <p>
  The builder also provides the ability to construct a graph from another graph such as:
  <blockquote>
- 
+
  <pre>
  Graph&lt;Integer, DefaultWeightedEdge&gt; g1 = GraphTypeBuilder
      .&lt;Integer, DefaultWeightedEdge&gt; undirected().allowingMultipleEdges(true)
      .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
- 
+
  Graph&lt;Integer, DefaultWeightedEdge&gt; g2 = GraphTypeBuilder.asGraph(g1).buildGraph();
  </pre>
- 
+
  </blockquote></div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>

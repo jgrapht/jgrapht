@@ -496,8 +496,7 @@ implements it.unimi.dsi.lang.FlyweightPrototype&lt;<a href="ImmutableDirectedGra
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(E)">Graph</a></code></span></div>
 <div class="block">Returns <code>true</code> if this graph contains the specified edge. More formally, returns
  <code>true</code> if and only if this graph contains an edge <code>e2</code> such that
- <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns
- <code>false</code>.</div>
+ <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsEdge(E)">containsEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;it.unimi.dsi.fastutil.ints.IntIntPair&gt;</code></dd>
@@ -543,11 +542,11 @@ implements it.unimi.dsi.lang.FlyweightPrototype&lt;<a href="ImmutableDirectedGra
 <pre class="methodSignature">public&nbsp;int&nbsp;degreeOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#degreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the degree of the specified vertex.
- 
+
  <p>
  A degree of a vertex in an undirected graph is the number of edges touching that vertex.
  Edges with same source and target vertices (self-loops) are counted twice.
- 
+
  <p>
  In directed graphs this method returns the sum of the "in degree" and the "out degree".</div>
 <dl>
@@ -589,12 +588,12 @@ implements it.unimi.dsi.lang.FlyweightPrototype&lt;<a href="ImmutableDirectedGra
 <pre class="methodSignature">public&nbsp;int&nbsp;inDegreeOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#inDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "in degree" of the specified vertex.
- 
+
  <p>
  The "in degree" of a vertex in a directed graph is the number of inward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
  http://mathworld.wolfram.com/Indegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -640,12 +639,12 @@ implements it.unimi.dsi.lang.FlyweightPrototype&lt;<a href="ImmutableDirectedGra
 <pre class="methodSignature">public&nbsp;int&nbsp;outDegreeOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#outDegreeOf(V)">Graph</a></code></span></div>
 <div class="block">Returns the "out degree" of the specified vertex.
- 
+
  <p>
  The "out degree" of a vertex in a directed graph is the number of outward directed edges from
  that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
  http://mathworld.wolfram.com/Outdegree.html</a>.
- 
+
  <p>
  In the case of undirected graphs this method returns the number of edges touching the vertex.
  Edges with same source and target vertices (self-loops) are counted twice.</div>
@@ -668,7 +667,7 @@ implements it.unimi.dsi.lang.FlyweightPrototype&lt;<a href="ImmutableDirectedGra
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;it.unimi.dsi.fastutil.ints.IntIntPair&gt;&nbsp;outgoingEdgesOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;vertex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#outgoingEdgesOf(V)">Graph</a></code></span></div>
 <div class="block">Returns a set of all edges outgoing from the specified vertex.
- 
+
  <p>
  In the case of undirected graphs this method returns all edges touching the vertex, thus,
  some of the returned edges may have their source and target vertices in the opposite order.</div>

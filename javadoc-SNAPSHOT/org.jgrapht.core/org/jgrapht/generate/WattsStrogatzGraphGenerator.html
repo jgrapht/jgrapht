@@ -148,14 +148,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="GraphGenerator.html" title="interface in org.jgrapht.generate">GraphGenerator</a>&lt;V,&#8203;E,&#8203;V&gt;</pre>
 <div class="block">Watts-Strogatz small-world graph generator.
- 
+
  <p>
  The generator is described in the paper: D. J. Watts and S. H. Strogatz. Collective dynamics of
  small-world networks. Nature 393(6684):440--442, 1998.
- 
+
  <p>
  The following paragraph from the paper describes the construction.
- 
+
  <p>
  "The generator starts with a ring of $n$ vertices, each connected to its $k$ nearest neighbors
  ($k$ must be even). Then it chooses a vertex and the edge that connects it to its nearest
@@ -171,11 +171,11 @@ implements <a href="GraphGenerator.html" title="interface in org.jgrapht.generat
  the graph becomes increasingly disordered until for $p = 1$, all edges are rewired randomly. For
  intermediate values of $p$, the graph is a small-world network: highly clustered like a regular
  graph, yet with small characteristic path length, like a random graph."
- 
+
  <p>
  The authors require $n \gg k \gg \ln(n) \gg 1$ and specifically $k \gg \ln(n)$ guarantees that a
  random graph will be connected.
- 
+
  <p>
  Through the constructor parameter the model can be slightly changed into adding shortcut edges
  instead of re-wiring. This variation was proposed in the paper: M. E. J. Newman and D. J. Watts,

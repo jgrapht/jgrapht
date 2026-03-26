@@ -152,12 +152,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">TopologicalOrderIterator&lt;V,&#8203;E&gt;</span>
 extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">A topological ordering iterator for a directed acyclic graph.
- 
+
  <p>
  A topological order is a permutation <code>p</code> of the vertices of a graph such that an edge
- <code>(i,j)</code> implies that <code>i</code> appears before <code>j</code> in <code>p</code>.
- For more information see
- <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
+ <code>(i,j)</code> implies that <code>i</code> appears before <code>j</code> in <code>p</code>. For more information
+ see <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
  <a href="http://mathworld.wolfram.com/TopologicalSort.html">wolfram</a>.
 
  <p>
@@ -311,7 +310,7 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <h4>TopologicalOrderIterator</h4>
 <pre>public&nbsp;TopologicalOrderIterator&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">V</a>,&#8203;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">E</a>&gt;&nbsp;graph)</pre>
 <div class="block">Construct a topological order iterator.
- 
+
  <p>
  Traversal will start at one of the graph's <i>sources</i>. See the definition of source at
  <a href="http://mathworld.wolfram.com/Source.html">
@@ -332,7 +331,7 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <pre>public&nbsp;TopologicalOrderIterator&#8203;(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">V</a>,&#8203;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">E</a>&gt;&nbsp;graph,
                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;<a href="TopologicalOrderIterator.html" title="type parameter in TopologicalOrderIterator">V</a>&gt;&nbsp;comparator)</pre>
 <div class="block">Construct a topological order iterator.
- 
+
  <p>
  Traversal will start at one of the graph's <i>sources</i>. See the definition of source at
  <a href="http://mathworld.wolfram.com/Source.html">
@@ -392,7 +391,8 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>crossComponentTraversal</code> - if <code>true</code> traverses across connected components.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if disabling the cross components nature of this iterator is attempted</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if disabling the cross components nature of this iterator is
+         attempted</dd>
 </dl>
 </li>
 </ul>

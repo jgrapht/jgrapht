@@ -152,16 +152,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">DegeneracyOrderingIterator&lt;V,&#8203;E&gt;</span>
 extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">A degeneracy ordering iterator.
- 
+
  <p>
  The degeneracy of a graph $G $is the smallest value d such that every nonempty subgraph of $G$
  contains a vertex of degree at most $d.$ If a graph has degeneracy $d$, then it has a degeneracy
  ordering, an ordering such that each vertex has $d$ or fewer neighbors that come later in the
  ordering.
- 
+
  <p>
  The iterator crosses components but does not track them, it only tracks visited vertices.
- 
+
  <p>
  The iterator treats the input graph as undirected even if the graph is directed. Moreover, it
  completely ignores self-loops, meaning that it operates as if self-loops do not contribute to the
@@ -327,7 +327,7 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <h4>isCrossComponentTraversal</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCrossComponentTraversal()</pre>
 <div class="block">Test whether this iterator is set to traverse the graph across connected components.
- 
+
  Always returns true since the iterator does not care about components.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -335,8 +335,7 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="AbstractGraphIterator.html#isCrossComponentTraversal()">isCrossComponentTraversal</a></code>&nbsp;in class&nbsp;<code><a href="AbstractGraphIterator.html" title="class in org.jgrapht.traverse">AbstractGraphIterator</a>&lt;<a href="DegeneracyOrderingIterator.html" title="type parameter in DegeneracyOrderingIterator">V</a>,&#8203;<a href="DegeneracyOrderingIterator.html" title="type parameter in DegeneracyOrderingIterator">E</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if traverses across connected components, otherwise
-         <code>false</code>.</dd>
+<dd><code>true</code> if traverses across connected components, otherwise <code>false</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -356,7 +355,8 @@ extends <a href="AbstractGraphIterator.html" title="class in org.jgrapht.travers
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>crossComponentTraversal</code> - if <code>true</code> traverses across connected components.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if disabling the cross components nature of this iterator is attempted</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if disabling the cross components nature of this iterator is
+         attempted</dd>
 </dl>
 </li>
 </ul>

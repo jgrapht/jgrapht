@@ -138,13 +138,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">LinkPredictionAlgorithm&lt;V,&#8203;E&gt;</span></pre>
 <div class="block">A link prediction algorithm.
- 
+
  <p>
  A link prediction algorithm provides a score $s_{uv}$ for any pair of vertices $u,v \in V$ in the
  graph such that $e=(u,v) \notin E$. The nature, the magnitude and possible interpretation of such
  a score depends solely on the actual algorithm, meaning that it might be a similarity score, a
  distance metric, a probability, or even something completely unrelated.
- 
+
  Depending on the particular algorithm, a possible interpretation of the scores might be that they
  measure similarity between vertices $u$ and $v$. Thus, given such scores one could sort the edges
  in decreasing order and pick the top-k as links (edges) which are likely to exist.

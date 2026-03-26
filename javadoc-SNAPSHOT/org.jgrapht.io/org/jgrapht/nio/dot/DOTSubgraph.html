@@ -142,14 +142,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">DOTSubgraph&lt;V,&#8203;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">A DOTSubgraph is a container class for a subgraph and its attributes. It may be used in DOT export and can be
- parametrized to export or not vertices and/or edges.
+<div class="block">A DOTSubgraph is a container class for a subgraph and its attributes. It may be used in DOT
+ export and can be parametrized to export or not vertices and/or edges.
 
  <p>
-     For example, for a subgraph named "subg" with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1, 2, and 3,
-     with the subgraph attribute <code>pencolor</code> set to <code>transparent</code>, and the cluster attribute <code>shape</code>
-     set to <code>point</code>, the DOT export of the subgraph will be:
+ For example, for a subgraph named "subg" with DefaultEdges (1, 2) and (2, 3) between Integer
+ vertices 1, 2, and 3, with the subgraph attribute <code>pencolor</code> set to <code>transparent</code>,
+ and the cluster attribute <code>shape</code> set to <code>point</code>, the DOT export of the subgraph will
+ be:
  </p>
+
  <pre>
      subgraph subg {
          subg [ shape="point" ]
@@ -425,18 +427,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isExportVertices()</pre>
 <div class="block">Whether to export the subgraph vertices in the DOT export.
  <p>
-     If <code>true</code>, vertices will be included in the DOT export by writing their identifiers one by one on successive
-     lines, with the same formalism as the main graph's vertices.
+ If <code>true</code>, vertices will be included in the DOT export by writing their identifiers one
+ by one on successive lines, with the same formalism as the main graph's vertices.
  </p>
 
  <p>
-     For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1, 2, and 3, the
-     DOT export of the vertices will be:
-     <pre>
+ For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1,
+ 2, and 3, the DOT export of the vertices will be:
+
+ <pre>
          1;
          2;
          3;
-     </pre>
+ </pre>
  </p></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -453,17 +456,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isExportEdges()</pre>
 <div class="block">Whether to export the subgraph edges in the DOT export.
  <p>
-     If <code>true</code>, edges will be included in the DOT export by writing the identifiers of their respective source
-     and target vertices on successive lines, with the same formalism as the main graph's edges.
+ If <code>true</code>, edges will be included in the DOT export by writing the identifiers of their
+ respective source and target vertices on successive lines, with the same formalism as the
+ main graph's edges.
  </p>
 
  <p>
-     For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1, 2, and 3, the
-     DOT export of the edges will be:
-     <pre>
+ For example, for a subgraph with DefaultEdges (1, 2) and (2, 3) between Integer vertices 1,
+ 2, and 3, the DOT export of the edges will be:
+
+ <pre>
          1 -- 2;
          2 -- 3;
-     </pre>
+ </pre>
  </p></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

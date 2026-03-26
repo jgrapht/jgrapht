@@ -1440,15 +1440,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <li class="blockList">
 <h4>reversed</h4>
 <pre class="methodSignature">public&nbsp;<a href="DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a>&lt;<a href="DoublyLinkedList.html" title="type parameter in DoublyLinkedList">E</a>&gt;&nbsp;reversed()</pre>
-<div class="block">Returns a reverse-ordered view of this <code>DoublyLinkedList</code>.
- Unlike <a href="#invert()"><code>invert()</code></a> which modifies the called instance,
- this method returns a view, while keeping the original instance
- unmodified.
- 
- <p>The returned view is unmodifiable, i.e., any method that
- attempts to modify the returned view throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
- The behavior of the view is not defined if the original list is modified after
- the creation of the view.</div>
+<div class="block">Returns a reverse-ordered view of this <code>DoublyLinkedList</code>. Unlike <a href="#invert()"><code>invert()</code></a>
+ which modifies the called instance, this method returns a view, while keeping the original
+ instance unmodified.
+
+ <p>
+ The returned view is unmodifiable, i.e., any method that attempts to modify the returned view
+ throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>. The behavior of the view is not defined if
+ the original list is modified after the creation of the view.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a reverse-ordered view of this <code>DoublyLinkedList</code></dd>

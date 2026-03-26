@@ -151,19 +151,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">FastutilMapGraph&lt;V,&#8203;E&gt;</span>
 extends <a href="../../../../../../org.jgrapht.core/org/jgrapht/graph/AbstractBaseGraph.html" title="class in org.jgrapht.graph">AbstractBaseGraph</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">A graph implementation using fastutil's map implementations for storage.
- 
- <p>The following example creates a simple undirected weighted graph: <blockquote>
- 
+
+ <p>
+ The following example creates a simple undirected weighted graph: <blockquote>
+
  <pre>
- Graph&lt;String,
-     DefaultWeightedEdge&gt; g = new FastutilMapGraph&lt;&gt;(
-         SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
-         DefaultGraphType.simple().asWeighted());
+ Graph&lt;String, DefaultWeightedEdge&gt; g = new FastutilMapGraph&lt;&gt;(
+     SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
+     DefaultGraphType.simple().asWeighted());
  </pre>
- 
+
  </blockquote>
- 
- <p>In case you have integer vertices, consider using the <a href="FastutilMapIntVertexGraph.html" title="class in org.jgrapht.opt.graph.fastutil"><code>FastutilMapIntVertexGraph</code></a>.</div>
+
+ <p>
+ In case you have integer vertices, consider using the <a href="FastutilMapIntVertexGraph.html" title="class in org.jgrapht.opt.graph.fastutil"><code>FastutilMapIntVertexGraph</code></a>.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Dimitrios Michail</dd>
@@ -312,8 +313,9 @@ extends <a href="../../../../../../org.jgrapht.core/org/jgrapht/graph/AbstractBa
                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="FastutilMapGraph.html" title="type parameter in FastutilMapGraph">E</a>&gt;&nbsp;edgeSupplier,
                         <a href="../../../../../../org.jgrapht.core/org/jgrapht/GraphType.html" title="interface in org.jgrapht">GraphType</a>&nbsp;type)</pre>
 <div class="block">Construct a new graph.
- 
- <p>By default we index vertex pairs to allow (expected) constant time edge lookups.</div>
+
+ <p>
+ By default we index vertex pairs to allow (expected) constant time edge lookups.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vertexSupplier</code> - the vertex supplier, can be null</dd>

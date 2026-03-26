@@ -133,13 +133,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">GraphType</span></pre>
 <div class="block">A graph type.
- 
+
  <p>
  The graph type describes various properties of a graph such as whether it is directed, undirected
  or mixed, whether it contain self-loops (a self-loop is an edge where the source vertex is the
  same as the target vertex), whether it contain multiple (parallel) edges (multiple edges which
  connect the same pair of vertices) and whether it is weighted or not.
- 
+
  <p>
  The type of a graph can be queried on runtime using method <a href="Graph.html#getType()"><code>Graph.getType()</code></a>. This way, for
  example, an algorithm can have different behavior based on whether the input graph is directed or
@@ -249,7 +249,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isMixed()">isMixed</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns <code>true</code> if the graph contain both directed and undirected edges, false otherwise.</div>
+<div class="block">Returns <code>true</code> if the graph contain both directed and undirected edges, false
+ otherwise.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -346,7 +347,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>isMixed</h4>
 <pre class="methodSignature">boolean&nbsp;isMixed()</pre>
-<div class="block">Returns <code>true</code> if the graph contain both directed and undirected edges, false otherwise.</div>
+<div class="block">Returns <code>true</code> if the graph contain both directed and undirected edges, false
+ otherwise.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if the graph contain both directed and undirected edges, false otherwise</dd>
@@ -360,9 +362,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>isAllowingMultipleEdges</h4>
 <pre class="methodSignature">boolean&nbsp;isAllowingMultipleEdges()</pre>
-<div class="block">Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph.
- The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
- v2.</div>
+<div class="block">Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph. The
+ meaning of multiple edges is that there can be many edges going from vertex v1 to vertex v2.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if and only if multiple (parallel) edges are allowed.</dd>
@@ -376,8 +377,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>isAllowingSelfLoops</h4>
 <pre class="methodSignature">boolean&nbsp;isAllowingSelfLoops()</pre>
-<div class="block">Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is
- an edge that its source and target vertices are the same.</div>
+<div class="block">Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is an
+ edge that its source and target vertices are the same.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if and only if graph self-loops are allowed.</dd>

@@ -148,16 +148,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="GraphGenerator.html" title="interface in org.jgrapht.generate">GraphGenerator</a>&lt;V,&#8203;E,&#8203;V&gt;</pre>
 <div class="block">Barabási-Albert growth and preferential attachment forest generator.
- 
+
  <p>
  The general graph generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of
  scaling in random networks. Science, 286:509-512, 1999.
- 
+
  <p>
  The generator starts with a $t$ isolated nodes and grows the network by adding $n - t$ additional
  nodes. The additional nodes are added one by one and each of them is connected to one previously
  added node, where the probability of connecting to a node is proportional to its degree.
- 
+
  <p>
  Note that this Barabàsi-Albert generator only works on undirected graphs. For a version that
  works on both directed and undirected graphs and generates only connected graphs see

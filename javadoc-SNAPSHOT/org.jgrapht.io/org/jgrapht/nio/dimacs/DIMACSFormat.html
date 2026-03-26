@@ -147,7 +147,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public enum <span class="typeNameLabel">DIMACSFormat</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink">Enum</a>&lt;<a href="DIMACSFormat.html" title="enum in org.jgrapht.nio.dimacs">DIMACSFormat</a>&gt;</pre>
 <div class="block">DIMACS challenge format.
- 
+
  <p>
  For a general description of the formats see <a href="http://dimacs.rutgers.edu/Challenges/">
  http://dimacs.rutgers.edu/Challenges</a>. Note that there are a lot of different formats based on
@@ -279,13 +279,13 @@ the order they are declared.</div>
 <h4>SHORTEST_PATH</h4>
 <pre>public static final&nbsp;<a href="DIMACSFormat.html" title="enum in org.jgrapht.nio.dimacs">DIMACSFormat</a> SHORTEST_PATH</pre>
 <div class="block">Shortest path challenge format.
- 
+
  <p>
  This is the <a href="http://www.dis.uniroma1.it/challenge9/format.shtml">format</a> used in
  the 9th DIMACS implementation challenge.
- 
+
  A shortest path graph file looks as follows:
- 
+
  <pre>
  <code>
  c &lt;comments&gt;
@@ -297,12 +297,12 @@ the order they are declared.</div>
  ...
  </code>
  </pre>
- 
+
  A weighted variant where each edge has a floating-point weight is also supported:
- 
+
  <pre>
  <code>
- a &lt;edge source 1&gt; &lt;edge target 1&gt; &lt;edge_weight&gt; 
+ a &lt;edge source 1&gt; &lt;edge target 1&gt; &lt;edge_weight&gt;
  </code>
  </pre></div>
 </li>
@@ -315,13 +315,13 @@ the order they are declared.</div>
 <h4>MAX_CLIQUE</h4>
 <pre>public static final&nbsp;<a href="DIMACSFormat.html" title="enum in org.jgrapht.nio.dimacs">DIMACSFormat</a> MAX_CLIQUE</pre>
 <div class="block">Max-clique challenge format.
- 
+
  <p>
  This is the <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">format</a> used in
  the 2nd DIMACS implementation challenge.
- 
+
  A graph file looks as follows:
- 
+
  <pre>
  <code>
  c &lt;comments&gt;
@@ -333,12 +333,12 @@ the order they are declared.</div>
  ...
  </code>
  </pre>
- 
+
  A weighted variant where each edge has a floating-point weight is also supported:
- 
+
  <pre>
  <code>
- e &lt;edge source 1&gt; &lt;edge target 1&gt; &lt;edge_weight&gt; 
+ e &lt;edge source 1&gt; &lt;edge target 1&gt; &lt;edge_weight&gt;
  </code>
  </pre></div>
 </li>
@@ -351,7 +351,7 @@ the order they are declared.</div>
 <h4>COLORING</h4>
 <pre>public static final&nbsp;<a href="DIMACSFormat.html" title="enum in org.jgrapht.nio.dimacs">DIMACSFormat</a> COLORING</pre>
 <div class="block">Coloring format.
- 
+
  <p>
  This is the <a href="ftp://dimacs.rutgers.edu/pub/challenge/">format</a> used in the 2nd
  DIMACS implementation challenge. Same as the <a href="#MAX_CLIQUE"><code>MAX_CLIQUE</code></a> but uses "col"

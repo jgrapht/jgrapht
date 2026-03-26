@@ -81,9 +81,8 @@ Once a graph has been created, an application can access its vertices
 and edges directly via live set views:
 
 ```java
-        URI start = hrefGraph
-            .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
-            .get();
+        URI start = hrefGraph.vertexSet().stream()
+            .filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny().get();
 ```
 
 Here we iterate over all vertices of the graph via the [vertexSet](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html#vertexSet--) method, filtering for only those
@@ -163,8 +162,7 @@ You can also use [GraphTypeBuilder](https://jgrapht.org/javadoc/org.jgrapht.core
 ```java
     private static Graph<Integer, DefaultEdge> buildEmptySimpleGraph()
     {
-        return GraphTypeBuilder
-            .<Integer, DefaultEdge> undirected().allowingMultipleEdges(false)
+        return GraphTypeBuilder.<Integer, DefaultEdge> undirected().allowingMultipleEdges(false)
             .allowingSelfLoops(false).edgeClass(DefaultEdge.class).weighted(false).buildGraph();
     }
 ```
@@ -205,8 +203,8 @@ Here's an example using `GraphBuilder` to construct a
 ```java
     private static Graph<Integer, DefaultEdge> buildKiteGraph()
     {
-        return new GraphBuilder<>(buildEmptySimpleGraph())
-            .addEdgeChain(1, 2, 3, 4, 1).addEdge(2, 4).addEdge(3, 5).buildAsUnmodifiable();
+        return new GraphBuilder<>(buildEmptySimpleGraph()).addEdgeChain(1, 2, 3, 4, 1).addEdge(2, 4)
+            .addEdge(3, 5).buildAsUnmodifiable();
     }
 ```
 
@@ -283,7 +281,7 @@ public final class CompleteGraphDemo
 
     /**
      * Main demo entry point.
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args)
@@ -351,9 +349,8 @@ Here's an example using depth-first ordering on our HelloJGraphT example:
         Graph<URI, DefaultEdge> hrefGraph = createHrefGraph();
 
         // find the vertex corresponding to www.jgrapht.org
-        URI start = hrefGraph
-            .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
-            .get();
+        URI start = hrefGraph.vertexSet().stream()
+            .filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny().get();
 
         Iterator<URI> iterator = new DepthFirstIterator<>(hrefGraph, start);
         while (iterator.hasNext()) {
@@ -642,8 +639,7 @@ import java.awt.*;
  * JGraphAdapterDemo.
  *
  */
-public class JGraphXAdapterDemo
-    extends JApplet
+public class JGraphXAdapterDemo extends JApplet
 {
     private static final long serialVersionUID = 2202072534703043194L;
 

@@ -156,7 +156,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
  In summary, one of the most common DIMACS formats was used in the
  <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">2nd DIMACS challenge</a> and follows
  the following structure:
- 
+
  <pre>
  <code>
  DIMACS G {
@@ -170,13 +170,13 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
  }
  </code>
  </pre>
- 
+
  Although not specified directly in the DIMACS format documentation, this implementation also
  allows for the a weighted variant:
- 
+
  <pre>
  <code>
- e &lt;edge source 1&gt; &lt;edge target 1&gt; &lt;edge_weight&gt; 
+ e &lt;edge source 1&gt; &lt;edge target 1&gt; &lt;edge_weight&gt;
  </code>
  </pre>
 
@@ -185,7 +185,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
  the file. It is also possible to instruct the importer to keep the original file numbering of the
  nodes. Additionally you can also instruct the importer to use zero-based numbering or keep the
  original number of DIMACS which starts from one.
- 
+
  Note: the current implementation does not fully implement the DIMACS specifications! Special
  (rarely used) fields specified as 'Optional Descriptors' are currently not supported (ignored).</div>
 <dl>
@@ -329,7 +329,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
 <h4>zeroBasedNumbering</h4>
 <pre class="methodSignature">public&nbsp;<a href="DIMACSEventDrivenImporter.html" title="class in org.jgrapht.nio.dimacs">DIMACSEventDrivenImporter</a>&nbsp;zeroBasedNumbering&#8203;(boolean&nbsp;zeroBasedNumbering)</pre>
 <div class="block">Set whether to use zero-based numbering for vertices.
- 
+
  The DIMACS format by default starts vertices numbering from one. If true then we will use
  zero-based numbering. Default to true.</div>
 <dl>
@@ -348,7 +348,7 @@ implements <a href="../EventDrivenImporter.html" title="interface in org.jgrapht
 <h4>renumberVertices</h4>
 <pre class="methodSignature">public&nbsp;<a href="DIMACSEventDrivenImporter.html" title="class in org.jgrapht.nio.dimacs">DIMACSEventDrivenImporter</a>&nbsp;renumberVertices&#8203;(boolean&nbsp;renumberVertices)</pre>
 <div class="block">Set whether to renumber vertices or not.
- 
+
  If true then the vertices are assigned new numbers from $0$ to $n-1$ in the order that they
  are first encountered in the file. Otherwise, the original numbering (minus one in order to
  get a zero-based numbering) of the DIMACS file is kept. Defaults to true.</div>

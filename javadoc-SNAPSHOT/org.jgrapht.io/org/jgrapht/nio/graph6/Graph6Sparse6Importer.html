@@ -153,7 +153,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../BaseEventDrivenImporter.html" title="class in org.jgrapht.nio">BaseEventDrivenImporter</a>&lt;V,&#8203;E&gt;
 implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">GraphImporter</a>&lt;V,&#8203;E&gt;</pre>
 <div class="block">Importer which reads graphs in graph6 or sparse6 format.
- 
+
  <p>
  A description of the format can be found
  <a href="https://users.cecs.anu.edu.au/~bdm/data/formats.txt">here</a>. graph6 and sparse6 are
@@ -163,18 +163,20 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  Typically, files storing graph6 graphs have the 'g6' extension. Similarly, files storing sparse6
  graphs have a 's6' file extension. sparse6 graphs support loops and multiple edges, graph6 graphs
  do not.
- 
+
  <p>
  Note that a g6/s6 string may contain backslashes '\'. Thus, escaping is required. E.g.
- 
+
  <pre>
  <code>":?@MnDA\oi"</code>
  </pre>
- 
+
  may result in undefined behavior. This should have been:
- 
+
  <pre>
- <code>":?@MnDA\\oi"</code>
+ <code>
+ ":?@MnDA\\oi"
+ </code>
  </pre>
 
  <p>
@@ -182,7 +184,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
  vertices in the original file are reported as a vertex attribute named "ID". Note, however, that
  in this file format the identifiers from the input files are always going to be integers starting
  from zero, as the format does not retain such information in order to achieve compactness.
- 
+
  <p>
  The default behavior of the importer is to use the graph vertex supplier in order to create
  vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -388,7 +390,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;setVertexFactory&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="Graph6Sparse6Importer.html" title="type parameter in Graph6Sparse6Importer">V</a>&gt;&nbsp;vertexFactory)</pre>
 <div class="block">Set the user custom vertex factory. The default behavior is being null in which case the
  graph vertex supplier is used.
- 
+
  If supplied the vertex factory is called every time a new vertex is encountered in the file.
  The method is called with parameter the vertex identifier from the file and should return the
  actual graph vertex to add to the graph.</div>
@@ -407,7 +409,7 @@ implements <a href="../GraphImporter.html" title="interface in org.jgrapht.nio">
 <pre class="methodSignature">public&nbsp;void&nbsp;importGraph&#8203;(<a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="Graph6Sparse6Importer.html" title="type parameter in Graph6Sparse6Importer">V</a>,&#8203;<a href="Graph6Sparse6Importer.html" title="type parameter in Graph6Sparse6Importer">E</a>&gt;&nbsp;graph,
                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Reader.html?is-external=true" title="class or interface in java.io" class="externalLink">Reader</a>&nbsp;input)</pre>
 <div class="block">Import a graph.
- 
+
  <p>
  The provided graph must be able to support the features of the graph that is read. For
  example if the file contains self-loops then the graph provided must also support self-loops.

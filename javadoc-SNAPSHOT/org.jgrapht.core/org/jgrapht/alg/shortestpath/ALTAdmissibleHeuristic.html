@@ -331,10 +331,10 @@ implements <a href="../interfaces/AStarAdmissibleHeuristic.html" title="interfac
  provided <code>graph</code>. A heuristic is monotonic if its estimate is always less than or equal
  to the estimated distance from any neighboring vertex to the goal, plus the step cost of
  reaching that neighbor. For details, refer to <a href="https://en.wikipedia.org/wiki/Consistent_heuristic">https://en.wikipedia.org/wiki/Consistent_heuristic</a>.
- In short, a heuristic is consistent iff $h(u) \le d(u,v)+h(v)$, for every edge
- $(u,v)$, where $d(u,v)$ is the weight of edge $(u,v)$ and $h(u)$ is the estimated cost to
- reach the target node from vertex u. Most natural admissible heuristics, such as Manhattan or
- Euclidean distance, are consistent heuristics.</div>
+ In short, a heuristic is consistent iff $h(u) \le d(u,v)+h(v)$, for every edge $(u,v)$, where
+ $d(u,v)$ is the weight of edge $(u,v)$ and $h(u)$ is the estimated cost to reach the target
+ node from vertex u. Most natural admissible heuristics, such as Manhattan or Euclidean
+ distance, are consistent heuristics.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../interfaces/AStarAdmissibleHeuristic.html#isConsistent(org.jgrapht.Graph)">isConsistent</a></code>&nbsp;in interface&nbsp;<code><a href="../interfaces/AStarAdmissibleHeuristic.html" title="interface in org.jgrapht.alg.interfaces">AStarAdmissibleHeuristic</a>&lt;<a href="ALTAdmissibleHeuristic.html" title="type parameter in ALTAdmissibleHeuristic">V</a>&gt;</code></dd>
@@ -343,7 +343,8 @@ implements <a href="../interfaces/AStarAdmissibleHeuristic.html" title="interfac
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>graph</code> - graph to test heuristic on</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> iff the heuristic is consistent wrt the <code>graph</code>, <code>false</code> otherwise</dd>
+<dd><code>true</code> iff the heuristic is consistent wrt the <code>graph</code>, <code>false</code>
+         otherwise</dd>
 </dl>
 </li>
 </ul>

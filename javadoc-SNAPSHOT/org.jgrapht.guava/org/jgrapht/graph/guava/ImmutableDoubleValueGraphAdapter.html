@@ -155,34 +155,34 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">ImmutableDoubleValueGraphAdapter&lt;V&gt;</span>
 extends <a href="ImmutableValueGraphAdapter.html" title="class in org.jgrapht.graph.guava">ImmutableValueGraphAdapter</a>&lt;V,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;</pre>
 <div class="block">A graph adapter class using Guava's <code>ImmutableValueGraph</code> specialized with double values.
- 
+
  <p>
  The adapter uses class <code>EndpointPair</code> to represent edges. Since the underlying value graph
  is immutable, the resulting graph is unmodifiable.
- 
+
  <p>
  Each edge in <code>ImmutableValueGraph</code> is associated with a double value which is mapped to the
  edge weight in the resulting <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht"><code>Graph</code></a>. Thus, the graph is weighted and calling method
  <a href="../../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeWeight(E)"><code>Graph.getEdgeWeight(Object)</code></a> will return the value of an edge.
- 
+
  <p>
  See the example below on how to create such an adapter: <blockquote>
- 
+
  <pre>
  MutableValueGraph&lt;String, Double&gt; mutableValueGraph =
      ValueGraphBuilder.directed().allowsSelfLoops(true).build();
- 
+
  mutableValueGraph.addNode("v1");
  mutableValueGraph.addNode("v2");
  mutableValueGraph.putEdgeValue("v1", "v2", 3.0);
- 
+
  ImmutableValueGraph&lt;String, Double&gt; immutableValueGraph = ImmutableValueGraph.copyOf(mutableValueGraph);
- 
+
  Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new ImmutableDoubleValueGraphAdapter&lt;&gt;(immutableValueGraph);
- 
+
  System.out.println(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // outputs 3.0
  </pre>
- 
+
  </blockquote></div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>

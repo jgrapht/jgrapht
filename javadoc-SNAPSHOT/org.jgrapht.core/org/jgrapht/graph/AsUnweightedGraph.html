@@ -160,13 +160,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block">Provides an unweighted view on a graph.
 
  Algorithms designed for unweighted graphs should also work on weighted graphs. This class
- emulates an unweighted graph based on a weighted one by returning <a href="../Graph.html#DEFAULT_EDGE_WEIGHT"><code>Graph.DEFAULT_EDGE_WEIGHT</code></a>
- for each edge weight. The underlying weighted graph is provided at the constructor.
- Modifying operations (adding/removing vertexes/edges) are also passed through to the underlying
- weighted graph. As edge weight, <a href="../Graph.html#DEFAULT_EDGE_WEIGHT"><code>Graph.DEFAULT_EDGE_WEIGHT</code></a> is used. Setting an edge weight is not
- supported. The edges are not modified. So, if an edge is asked for, the one from the underlying
- weighted graph is returned. In case the underlying graph is serializable, this one is
- serializable, too.</div>
+ emulates an unweighted graph based on a weighted one by returning
+ <a href="../Graph.html#DEFAULT_EDGE_WEIGHT"><code>Graph.DEFAULT_EDGE_WEIGHT</code></a> for each edge weight. The underlying weighted graph is provided
+ at the constructor. Modifying operations (adding/removing vertexes/edges) are also passed through
+ to the underlying weighted graph. As edge weight, <a href="../Graph.html#DEFAULT_EDGE_WEIGHT"><code>Graph.DEFAULT_EDGE_WEIGHT</code></a> is used.
+ Setting an edge weight is not supported. The edges are not modified. So, if an edge is asked for,
+ the one from the underlying weighted graph is returned. In case the underlying graph is
+ serializable, this one is serializable, too.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#org.jgrapht.graph.AsUnweightedGraph">Serialized Form</a></dd>

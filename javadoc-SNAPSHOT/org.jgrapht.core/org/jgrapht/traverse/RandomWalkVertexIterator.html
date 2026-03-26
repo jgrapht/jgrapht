@@ -148,13 +148,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;V&gt;</pre>
 <div class="block">A random walk iterator.
- 
+
  "Given a graph and a starting point, we select a neighbor of it at random, and move to this
  neighbor; then we select a neighbor of this point at random, and move to it etc. The (random)
  sequence of points selected this way is a random walk on the graph." This very simple definition,
  together with a comprehensive survey can be found at: "Lovász, L. (1993). Random walks on graphs:
  A survey. Combinatorics, Paul erdos is eighty, 2(1), 1-46."
- 
+
  In its default variant the probability of selecting an outgoing edge is one over the (out) degree
  of the vertex. In case the user requests a weighted walk, then the probability of each edge is
  equal to its weight divided by the total weight of all outgoing edges. The walk can also be

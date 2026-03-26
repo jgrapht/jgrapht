@@ -555,8 +555,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsVertex(V)">Graph</a></code></span></div>
 <div class="block">Returns <code>true</code> if this graph contains the specified vertex. More formally, returns
  <code>true</code> if and only if this graph contains a vertex <code>u</code> such that
- <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns
- <code>false</code>.</div>
+ <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#containsVertex(V)">containsVertex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="AbstractSuccinctGraph.html" title="type parameter in AbstractSuccinctGraph">E</a>&gt;</code></dd>
@@ -604,19 +603,19 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;getVertexSupplier()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()">Graph</a></code></span></div>
 <div class="block">Return the vertex supplier that the graph uses whenever it needs to create new vertices.
- 
+
  <p>
  A graph uses the vertex supplier to create new vertex objects whenever a user calls method
  <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. Users can also create the vertex in user code and then use method
  <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a> to add the vertex.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the vertex supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
- to any other vertex in the graph. More formally, the graph must not contain any vertex
+ specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal to
+ any other vertex in the graph. More formally, the graph must not contain any vertex
  <code>v2</code> such that <code>v2.equals(v)</code>.
- 
+
  <p>
  Care must also be taken when interchanging calls to methods <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>
  and <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
@@ -640,17 +639,17 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="AbstractSuccinctGraph.html" title="type parameter in AbstractSuccinctGraph">E</a>&gt;&nbsp;getEdgeSupplier()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()">Graph</a></code></span></div>
 <div class="block">Return the edge supplier that the graph uses whenever it needs to create new edges.
- 
+
  <p>
  A graph uses the edge supplier to create new edge objects whenever a user calls method
  <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V)"><code>Graph.addEdge(Object, Object)</code></a>. Users can also create the edge in user code and then
  use method <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V,E)"><code>Graph.addEdge(Object, Object, Object)</code></a> to add the edge.
- 
+
  <p>
  In contrast with the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><code>Supplier</code></a> interface, the edge supplier has the additional
  requirement that a new and distinct result is returned every time it is invoked. More
- specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
- any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+ specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to any
+ other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
  graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -680,16 +679,15 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 
  <p>
  This method creates the new edge <code>e</code> using this graph's edge supplier (see
- <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be
- equal to any other edge the graph (even if the graph allows edge-multiplicity). More
- formally, the graph must not contain any edge <code>e2</code> such that
- <code>e2.equals(e)</code>. If such <code>e2</code> is found then the newly created edge
- <code>e</code> is abandoned, the method leaves this graph unchanged and returns <code>null</code>.
- 
+ <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a>). For the new edge to be added <code>e</code> must <i>not</i> be equal
+ to any other edge the graph (even if the graph allows edge-multiplicity). More formally, the
+ graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>. If such <code>e2</code>
+ is found then the newly created edge <code>e</code> is abandoned, the method leaves this graph
+ unchanged and returns <code>null</code>.
+
  <p>
- If the underlying graph implementation's <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a> returns
- <code>null</code>, then this method cannot create edges and throws an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
+ If the underlying graph implementation's <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getEdgeSupplier()"><code>Graph.getEdgeSupplier()</code></a> returns <code>null</code>,
+ then this method cannot create edges and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="AbstractSuccinctGraph.html" title="type parameter in AbstractSuccinctGraph">E</a>&gt;</code></dd>
@@ -716,12 +714,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
                        <a href="AbstractSuccinctGraph.html" title="type parameter in AbstractSuccinctGraph">E</a>&nbsp;e)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V,E)">Graph</a></code></span></div>
 <div class="block">Adds the specified edge to this graph, going from the source vertex to the target vertex.
- More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains
- no edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such
- an edge, the call leaves this graph unchanged and returns <code>false</code>. Some graphs
- do not allow edge-multiplicity. In such cases, if the graph already contains an edge
- from the specified source to the specified target, then this method does not change the
- graph and returns <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
+ More formally, adds the specified edge, <code>e</code>, to this graph if this graph contains no
+ edge <code>e2</code> such that <code>e2.equals(e)</code>. If this graph already contains such an edge,
+ the call leaves this graph unchanged and returns <code>false</code>. Some graphs do not allow
+ edge-multiplicity. In such cases, if the graph already contains an edge from the specified
+ source to the specified target, then this method does not change the graph and returns
+ <code>false</code>. If the edge was added to the graph, returns <code>true</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addEdge(V,V,E)">addEdge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="AbstractSuccinctGraph.html" title="type parameter in AbstractSuccinctGraph">E</a>&gt;</code></dd>
@@ -749,17 +747,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 
  <p>
  This method creates the new vertex <code>v</code> using this graph's vertex supplier (see
- <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i>
- be equal to any other vertex in the graph. More formally, the graph must not contain any
- vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then
- the newly created vertex <code>v</code> is abandoned, the method leaves this graph unchanged
- and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
- 
+ <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a>). For the new vertex to be added <code>v</code> must <i>not</i> be
+ equal to any other vertex in the graph. More formally, the graph must not contain any vertex
+ <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>v2</code> is found then the newly created
+ vertex <code>v</code> is abandoned, the method leaves this graph unchanged and throws an
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>IllegalArgumentException</code></a>.
+
  <p>
- If the underlying graph implementation's <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> returns
- <code>null</code>, then this method cannot create vertices and throws an
- <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
- 
+ If the underlying graph implementation's <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#getVertexSupplier()"><code>Graph.getVertexSupplier()</code></a> returns <code>null</code>,
+ then this method cannot create vertices and throws an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>UnsupportedOperationException</code></a>.
+
  <p>
  Care must also be taken when interchanging calls to methods <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)"><code>Graph.addVertex(Object)</code></a>
  and <a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex()"><code>Graph.addVertex()</code></a>. In such a case the user must make sure never to add vertices
@@ -785,10 +782,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addVertex&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#addVertex(V)">Graph</a></code></span></div>
 <div class="block">Adds the specified vertex to this graph if not already present. More formally, adds the
- specified vertex, <code>v</code>, to this graph if this graph contains no vertex
- <code>u</code> such that <code>u.equals(v)</code>.
- If this graph already contains such vertex, the call leaves this graph
- unchanged and returns <code>false</code>. In combination with the restriction on
+ specified vertex, <code>v</code>, to this graph if this graph contains no vertex <code>u</code> such
+ that <code>u.equals(v)</code>. If this graph already contains such vertex, the call leaves this
+ graph unchanged and returns <code>false</code>. In combination with the restriction on
  constructors, this ensures that graphs never contain duplicate vertices.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -833,9 +829,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeEdge&#8203;(<a href="AbstractSuccinctGraph.html" title="type parameter in AbstractSuccinctGraph">E</a>&nbsp;e)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#removeEdge(E)">Graph</a></code></span></div>
 <div class="block">Removes the specified edge from the graph. Removes the specified edge from this graph if it
- is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>,
- if the graph contains such edge. Returns <code>true</code> if the graph contained
- the specified edge. (The graph will not contain the specified edge once the call returns).
+ is present. More formally, removes an edge <code>e2</code> such that <code>e2.equals(e)</code>, if the
+ graph contains such edge. Returns <code>true</code> if the graph contained the specified edge.
+ (The graph will not contain the specified edge once the call returns).
 
  <p>
  If the specified edge is <code>null</code> returns <code>false</code>.
@@ -859,11 +855,11 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeVertex&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&nbsp;v)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org.jgrapht.core/org/jgrapht/Graph.html#removeVertex(V)">Graph</a></code></span></div>
 <div class="block">Removes the specified vertex from this graph including all its touching edges if present.
- More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>,
- the call removes all edges that touch <code>u</code> and then removes <code>u</code> itself.
- If no such <code>u</code> is found, the call leaves the graph unchanged.
- Returns <code>true</code> if the graph contained the specified vertex.
- (The graph will not contain the specified vertex once the call returns).
+ More formally, if the graph contains a vertex <code>u</code> such that <code>u.equals(v)</code>, the
+ call removes all edges that touch <code>u</code> and then removes <code>u</code> itself. If no such
+ <code>u</code> is found, the call leaves the graph unchanged. Returns <code>true</code> if the graph
+ contained the specified vertex. (The graph will not contain the specified vertex once the
+ call returns).
 
  <p>
  If the specified vertex is <code>null</code> returns <code> false</code>.
@@ -874,8 +870,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - vertex to be removed from this graph, if present.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the graph contained the specified vertex; <code>false</code>
-         otherwise.</dd>
+<dd><code>true</code> if the graph contained the specified vertex; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>

@@ -598,7 +598,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  there are no unreachable vertices. When the inspected graph is a <i>directed</i> graph, this
  method returns true if and only if the inspected graph is <i>weakly</i> connected. An empty
  graph is <i>not</i> considered connected.
- 
+
  <p>
  This method does not performing any caching, instead recomputes everything from scratch. In
  case more control is required use <a href="alg/connectivity/ConnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>ConnectivityInspector</code></a> directly.</div>
@@ -654,7 +654,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>isWeaklyConnected</h4>
 <pre class="methodSignature">public static&nbsp;&lt;V,&#8203;E&gt;&nbsp;boolean&nbsp;isWeaklyConnected&#8203;(<a href="Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;&nbsp;graph)</pre>
 <div class="block">Test whether a directed graph is weakly connected.
- 
+
  <p>
  This method does not performing any caching, instead recomputes everything from scratch. In
  case more control is required use <a href="alg/connectivity/ConnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>ConnectivityInspector</code></a> directly.</div>
@@ -681,11 +681,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>isStronglyConnected</h4>
 <pre class="methodSignature">public static&nbsp;&lt;V,&#8203;E&gt;&nbsp;boolean&nbsp;isStronglyConnected&#8203;(<a href="Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;E&gt;&nbsp;graph)</pre>
 <div class="block">Test whether a graph is strongly connected.
- 
+
  <p>
  This method does not performing any caching, instead recomputes everything from scratch. In
  case more control is required use <a href="alg/connectivity/KosarajuStrongConnectivityInspector.html" title="class in org.jgrapht.alg.connectivity"><code>KosarajuStrongConnectivityInspector</code></a> directly.
- 
+
  <p>
  In case of undirected graphs this method delegated to <a href="#isConnected(org.jgrapht.Graph)"><code>isConnected(Graph)</code></a>.</div>
 <dl>
