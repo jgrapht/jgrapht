@@ -48,8 +48,7 @@ import java.util.*;
  *
  * @author Timofey Chudakov
  */
-public class ChordalGraphColoring<V, E>
-    implements VertexColoringAlgorithm<V>
+public class ChordalGraphColoring<V, E> implements VertexColoringAlgorithm<V>
 {
 
     private final Graph<V, E> graph;

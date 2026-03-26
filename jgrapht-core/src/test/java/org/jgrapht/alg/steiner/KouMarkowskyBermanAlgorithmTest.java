@@ -99,9 +99,8 @@ public class KouMarkowskyBermanAlgorithmTest
     public void testRandomGraphSteinerTree()
     {
 
-        Graph<String,
-            DefaultWeightedEdge> gnpGraph = GraphTypeBuilder
-                .undirected().weighted(true).edgeClass(DefaultWeightedEdge.class)
+        Graph<String, DefaultWeightedEdge> gnpGraph =
+            GraphTypeBuilder.undirected().weighted(true).edgeClass(DefaultWeightedEdge.class)
                 .vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
 
         GnpRandomGraphGenerator<String, DefaultWeightedEdge> gnpRandomGraphGenerator =

@@ -26,14 +26,13 @@ import java.util.*;
  * any size. This is a graph that can be represented by bit strings, so for an n-dimensional
  * hypercube each vertex resembles an n-length bit string. Then, two vertices are adjacent if and
  * only if their bitstring differ by exactly one element.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Andrew Newell
  */
-public class HyperCubeGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class HyperCubeGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private int dim;
 

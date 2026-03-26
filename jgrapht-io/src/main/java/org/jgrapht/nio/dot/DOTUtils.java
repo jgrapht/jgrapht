@@ -21,7 +21,7 @@ import java.util.regex.*;
 
 /**
  * Class with DOT format related utilities.
- * 
+ *
  * @author Christoph Zauner
  */
 class DOTUtils

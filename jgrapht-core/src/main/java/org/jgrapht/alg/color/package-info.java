@@ -16,7 +16,6 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-
 /**
  * Graph coloring algorithms.
  */

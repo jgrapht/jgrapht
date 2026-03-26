@@ -30,8 +30,7 @@ import org.jgrapht.*;
  *
  * @author Barak Naveh
  */
-public class GraphEdgeChangeEvent<V, E>
-    extends GraphChangeEvent
+public class GraphEdgeChangeEvent<V, E> extends GraphChangeEvent
 {
     private static final long serialVersionUID = -4421610303769803253L;
 

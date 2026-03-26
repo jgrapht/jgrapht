@@ -1616,7 +1616,8 @@ public class KolmogorovWeightedMatchingTest
         test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
-    private void test(BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
+    private void test(
+        BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         DefaultUndirectedGraph<Integer, DefaultEdge> graph =
             (DefaultUndirectedGraph<Integer, DefaultEdge>) TestUtil.createUndirected(edges);

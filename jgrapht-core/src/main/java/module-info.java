@@ -18,7 +18,7 @@
 
 /**
  * Defines the core APIs of the JGraphT library.
- * 
+ *
  * @since 1.5.0
  */
 module org.jgrapht.core

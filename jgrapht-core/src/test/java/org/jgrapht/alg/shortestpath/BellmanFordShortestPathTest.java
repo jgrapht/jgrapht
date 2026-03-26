@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author John V. Sichi
  */
-public class BellmanFordShortestPathTest
-    extends ShortestPathTestCase
+public class BellmanFordShortestPathTest extends ShortestPathTestCase
 {
     // ~ Methods ----------------------------------------------------------------
 

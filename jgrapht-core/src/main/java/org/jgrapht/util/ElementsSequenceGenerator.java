@@ -31,8 +31,7 @@ import java.util.*;
  * @param <T> element type
  * @author Timofey Chudakov
  */
-public class ElementsSequenceGenerator<T>
-    implements Iterator<T>, Iterable<T>
+public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T>
 {
 
     /**

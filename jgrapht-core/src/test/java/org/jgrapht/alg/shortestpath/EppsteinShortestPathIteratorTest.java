@@ -392,10 +392,9 @@ public class EppsteinShortestPathIteratorTest
      */
     private void verifyPath(GraphPath<Integer, DefaultWeightedEdge> path)
     {
-        GraphWalk<Integer,
-            DefaultWeightedEdge> walk = new GraphWalk<>(
-                path.getGraph(), path.getStartVertex(), path.getEndVertex(), path.getVertexList(),
-                path.getEdgeList(), path.getWeight());
+        GraphWalk<Integer, DefaultWeightedEdge> walk = new GraphWalk<>(
+            path.getGraph(), path.getStartVertex(), path.getEndVertex(), path.getVertexList(),
+            path.getEdgeList(), path.getWeight());
         walk.verify();
     }
 

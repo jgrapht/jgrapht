@@ -39,9 +39,7 @@ import it.unimi.dsi.fastutil.longs.LongSets;
  * @author Sebastiano Vigna
  */
 
-public abstract class AbstractImmutableBigGraphAdapter<E extends LongLongPair>
-    extends
-    AbstractGraph<Long, E>
+public abstract class AbstractImmutableBigGraphAdapter<E extends LongLongPair> extends AbstractGraph<Long, E>
 {
 
     /** The underlying graph. */

@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for GreedyMaximumCardinalityMatching
- * 
+ *
  * @author Joris Kinable
  */
 public class GreedyMaximumCardinalityMatchingTest

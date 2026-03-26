@@ -31,15 +31,14 @@ import java.util.function.*;
  * getEdge(V u, V v), containsEdge(V u, V v), addEdge(V u, V v), etc may be relatively slow when the
  * average degree of a vertex is high (dense graphs). For a fast implementation, use
  * {@link FastLookupDirectedSpecifics}.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @author Joris Kinable
  */
-public class DirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+public class DirectedSpecifics<V, E> implements Specifics<V, E>, Serializable
 {
     private static final long serialVersionUID = 5964807709682219859L;
 
@@ -49,7 +48,7 @@ public class DirectedSpecifics<V, E>
 
     /**
      * Construct a new directed specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.

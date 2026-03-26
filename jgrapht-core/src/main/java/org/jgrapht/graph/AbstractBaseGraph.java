@@ -27,12 +27,12 @@ import java.util.function.*;
 
 /**
  * The most general implementation of the {@link org.jgrapht.Graph} interface.
- * 
+ *
  * <p>
  * Its subclasses add various restrictions to get more specific graphs. The decision whether it is
  * directed or undirected is decided at construction time and cannot be later modified (see
  * constructor for details).
- * 
+ *
  * <p>
  * The behavior of this class can be adjusted by changing the {@link GraphSpecificsStrategy} that is
  * provided from the constructor. All implemented strategies guarantee deterministic vertex and edge
@@ -57,9 +57,7 @@ import java.util.function.*;
  * @author Barak Naveh
  * @author Dimitrios Michail
  */
-public abstract class AbstractBaseGraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Cloneable, Serializable
+public abstract class AbstractBaseGraph<V, E> extends AbstractGraph<V, E> implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -3582386521833998627L;
 
@@ -113,8 +111,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @throws IllegalArgumentException if the graph type is mixed
      * @throws NullPointerException if either one of {@code type} or {@code graphSpecificsStragegy}
-     *                              is {@code null}, or if {@code graphSpecificsStragegy} generates
-     *                              {@code null}
+     *         is {@code null}, or if {@code graphSpecificsStragegy} generates {@code null}
      */
     protected AbstractBaseGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type,
@@ -155,19 +152,19 @@ public abstract class AbstractBaseGraph<V, E>
 
     /**
      * Set the edge supplier that the graph uses whenever it needs to create new edges.
-     * 
+     *
      * <p>
      * A graph uses the edge supplier to create new edge objects whenever a user calls method
      * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
      * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
-     * 
+     *
      * <p>
      * In contrast with the {@link Supplier} interface, the edge supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to
-     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to any
+     * other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
      * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      */
     public void setEdgeSupplier(Supplier<E> edgeSupplier)
@@ -183,26 +180,26 @@ public abstract class AbstractBaseGraph<V, E>
 
     /**
      * Set the vertex supplier that the graph uses whenever it needs to create new vertices.
-     * 
+     *
      * <p>
      * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
      * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
      * {@link Graph#addVertex(Object)} to add the vertex.
-     * 
+     *
      * <p>
      * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal
-     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal to
+     * any other vertex in the graph. More formally, the graph must not contain any vertex
      * {@code v2} such that {@code v2.equals(v)}.
-     * 
+     *
      * <p>
      * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
      * and {@link Graph#addVertex()}. In such a case the user must make sure never to add vertices
      * in the graph using method {@link Graph#addVertex(Object)}, which are going to be returned in
      * the future by the supplied vertex supplier. Such a sequence will result into an
      * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
-     * 
+     *
      * @param vertexSupplier the vertex supplier
      */
     public void setVertexSupplier(Supplier<V> vertexSupplier)
@@ -386,8 +383,8 @@ public abstract class AbstractBaseGraph<V, E>
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
-            newGraph.specifics = newGraph.graphSpecificsStrategy
-                .getSpecificsFactory().apply(newGraph, newGraph.type);
+            newGraph.specifics = newGraph.graphSpecificsStrategy.getSpecificsFactory()
+                .apply(newGraph, newGraph.type);
             newGraph.intrusiveEdgesSpecifics = newGraph.graphSpecificsStrategy
                 .getIntrusiveEdgesSpecificsFactory().apply(newGraph.type);
 

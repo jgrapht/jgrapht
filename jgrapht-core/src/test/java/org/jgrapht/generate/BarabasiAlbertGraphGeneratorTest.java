@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link BarabasiAlbertGraphGenerator}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class BarabasiAlbertGraphGeneratorTest
@@ -35,13 +35,21 @@ public class BarabasiAlbertGraphGeneratorTest
     @Test
     public void testBadParameters()
     {
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(0, 10, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(0, 10, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(2, 0, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(2, 0, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(2, 3, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(2, 3, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(3, 2, 2), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertGraphGenerator<>(3, 2, 2),
+            "Bad parameter");
     }
 
     @Test

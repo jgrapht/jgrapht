@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link Cycles}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class CyclesTest

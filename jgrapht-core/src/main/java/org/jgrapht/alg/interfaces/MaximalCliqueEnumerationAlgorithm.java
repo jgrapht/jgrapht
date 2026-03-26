@@ -21,14 +21,13 @@ import java.util.*;
 
 /**
  * A maximal clique enumeration algorithm.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public interface MaximalCliqueEnumerationAlgorithm<V, E>
-    extends Iterable<Set<V>>
+public interface MaximalCliqueEnumerationAlgorithm<V, E> extends Iterable<Set<V>>
 {
 
     /**

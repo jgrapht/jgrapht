@@ -38,21 +38,21 @@ import java.util.stream.Collectors;
  *
  * <p>
  * Insertion heuristics are quite straightforward, and there are many variants to choose from. The
- * basics of insertion heuristics is to start with a partial tour of a subset of all cities,
- * and then iteratively an unvisited vertex (a vertex whichis not in the tour) is chosen given a criterion
- * and inserted in the best position of the partial tour. Per each iteration, the farthest insertion
- * heuristic selects the farthest unvisited vertex from the partial tour.
- * This algorithm provides a guarantee to compute tours no more than
- * 0(log N) times optimum (assuming the triangle inequality). However, regarding practical results,
- * some references refer to this heuristic as one of the best among the category of insertion heuristics.
- * This implementation uses the longest edge by default as the initial sub-tour if one is not provided.
+ * basics of insertion heuristics is to start with a partial tour of a subset of all cities, and
+ * then iteratively an unvisited vertex (a vertex whichis not in the tour) is chosen given a
+ * criterion and inserted in the best position of the partial tour. Per each iteration, the farthest
+ * insertion heuristic selects the farthest unvisited vertex from the partial tour. This algorithm
+ * provides a guarantee to compute tours no more than 0(log N) times optimum (assuming the triangle
+ * inequality). However, regarding practical results, some references refer to this heuristic as one
+ * of the best among the category of insertion heuristics. This implementation uses the longest edge
+ * by default as the initial sub-tour if one is not provided.
  * </p>
  *
  * <p>
  * The description of this algorithm can be consulted on: <br>
- * Johnson, D. S., &amp; McGeoch, L. A. (2007). Experimental Analysis of Heuristics for the STSP.
- * In G. Gutin &amp; A. P. Punnen (Eds.), The Traveling Salesman Problem and Its Variations (pp. 369–443).
- * Springer US. https://doi.org/10.1007/0-306-48213-4_9
+ * Johnson, D. S., &amp; McGeoch, L. A. (2007). Experimental Analysis of Heuristics for the STSP. In
+ * G. Gutin &amp; A. P. Punnen (Eds.), The Traveling Salesman Problem and Its Variations (pp.
+ * 369–443). Springer US. https://doi.org/10.1007/0-306-48213-4_9
  * </p>
  *
  * <p>
@@ -72,9 +72,7 @@ import java.util.stream.Collectors;
  * @param <E> the graph edge type
  * @author J. Alejandro Cornejo-Acosta
  */
-public class FarthestInsertionHeuristicTSP<V, E>
-    extends
-    HamiltonianCycleAlgorithmBase<V, E>
+public class FarthestInsertionHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     /**
@@ -96,7 +94,6 @@ public class FarthestInsertionHeuristicTSP<V, E>
      * Mapping of vertices to integers to work on.
      */
     private VertexToIntegerMapping<V> mapping;
-
 
     /**
      * Constructor. By default a sub-tour is chosen based on the longest edge
@@ -139,7 +136,6 @@ public class FarthestInsertionHeuristicTSP<V, E>
         }
 
         mapping = Graphs.getVertexToIntegerMapping(graph);
-
 
         // Computes matrix of distances
         E longesEdge = computeDistanceMatrix(graph);
@@ -232,10 +228,9 @@ public class FarthestInsertionHeuristicTSP<V, E>
         return tour;
     }
 
-
     /**
-     * Computes the matrix of distances by using the already computed {@code mapping}
-     * of vertices to integers
+     * Computes the matrix of distances by using the already computed {@code mapping} of vertices to
+     * integers
      *
      * @param graph the input graph
      * @return the longest edge to initialize the partial tour if necessary
@@ -264,12 +259,12 @@ public class FarthestInsertionHeuristicTSP<V, E>
         return longestEdge;
     }
 
-
     /**
      * Find the index of the unvisited vertex which is farthest from the partially constructed tour.
      *
      * @param start The unvisited vertices start at index {@code start}
-     * @return the index of the unvisited vertex which is farthest from the partially constructed tour.
+     * @return the index of the unvisited vertex which is farthest from the partially constructed
+     *         tour.
      */
     private int getFarthest(int start)
     {

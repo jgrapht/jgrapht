@@ -33,16 +33,14 @@ import static java.util.stream.Collectors.toSet;
 /**
  * A base abstract implementation for the graph adapter class using Guava's {@link ValueGraph}. This
  * is a helper class in order to support both mutable and immutable value graphs.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <W> the value type
  * @param <VG> type of the underlying Guava's value graph
  */
-public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
-    extends AbstractGraph<V, EndpointPair<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>> extends AbstractGraph<V, EndpointPair<V>> implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 3833510139696864917L;
 
@@ -61,11 +59,12 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the mutable value graph
      * @param valueConverter a function that converts a value to a double
-     * 
-     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is {@code null}
+     *
+     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is
+     *         {@code null}
      */
     public BaseValueGraphAdapter(VG valueGraph, ToDoubleFunction<W> valueConverter)
     {
@@ -74,13 +73,14 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the mutable value graph
      * @param valueConverter a function that converts a value to a double
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * 
-     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is {@code null}
+     *
+     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is
+     *         {@code null}
      */
     public BaseValueGraphAdapter(
         VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
@@ -93,17 +93,18 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the mutable value graph
      * @param valueConverter a function that converts a value to a double
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
-     * 
-     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
-     * @throws NullPointerException if any one of {@code valueGraph}, {@code valueConverter}, or {@code vertexOrderMethod}
-     *                              is {@code null}
+     *
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to
+     *         create a vertex order
+     * @throws NullPointerException if any one of {@code valueGraph}, {@code valueConverter}, or
+     *         {@code vertexOrderMethod} is {@code null}
      */
     public BaseValueGraphAdapter(
         VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
@@ -125,19 +126,19 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Set the vertex supplier that the graph uses whenever it needs to create new vertices.
-     * 
+     *
      * <p>
      * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
      * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
      * {@link Graph#addVertex(Object)} to add the vertex.
-     * 
+     *
      * <p>
      * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal
-     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal to
+     * any other vertex in the graph. More formally, the graph must not contain any vertex
      * {@code v2} such that {@code v2.equals(v)}.
-     * 
+     *
      * @param vertexSupplier the vertex supplier
      */
     public void setVertexSupplier(Supplier<V> vertexSupplier)
@@ -153,19 +154,19 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Set the edge supplier that the graph uses whenever it needs to create new edges.
-     * 
+     *
      * <p>
      * A graph uses the edge supplier to create new edge objects whenever a user calls method
      * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
      * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
-     * 
+     *
      * <p>
      * In contrast with the {@link Supplier} interface, the edge supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to
-     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to any
+     * other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
      * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      */
     public void setEdgeSupplier(Supplier<EndpointPair<V>> edgeSupplier)
@@ -230,9 +231,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     public GraphType getType()
     {
         return (valueGraph.isDirected() ? new DefaultGraphType.Builder().directed()
-            : new DefaultGraphType.Builder().undirected())
-                .weighted(true).allowMultipleEdges(false)
-                .allowSelfLoops(valueGraph.allowsSelfLoops()).build();
+            : new DefaultGraphType.Builder().undirected()).weighted(true).allowMultipleEdges(false)
+            .allowSelfLoops(valueGraph.allowsSelfLoops()).build();
     }
 
     @Override
@@ -277,8 +277,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     @Override
     public Set<EndpointPair<V>> incomingEdgesOf(V vertex)
     {
-        return valueGraph
-            .predecessors(vertex).stream().map(other -> createEdge(other, vertex))
+        return valueGraph.predecessors(vertex).stream().map(other -> createEdge(other, vertex))
             .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
@@ -291,8 +290,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     @Override
     public Set<EndpointPair<V>> outgoingEdgesOf(V vertex)
     {
-        return valueGraph
-            .successors(vertex).stream().map(other -> createEdge(vertex, other))
+        return valueGraph.successors(vertex).stream().map(other -> createEdge(vertex, other))
             .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
@@ -308,8 +306,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
         } else if (!valueGraph.hasEdgeConnecting(e.nodeU(), e.nodeV())) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         } else {
-            return valueGraph
-                .edgeValue(e.nodeU(), e.nodeV()).map(valueConverter::applyAsDouble)
+            return valueGraph.edgeValue(e.nodeU(), e.nodeV()).map(valueConverter::applyAsDouble)
                 .orElse(Graph.DEFAULT_EDGE_WEIGHT);
         }
     }
@@ -331,7 +328,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Create an edge
-     * 
+     *
      * @param s the source vertex
      * @param t the target vertex
      * @return the edge
@@ -343,11 +340,12 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
 
     /**
      * Create the internal vertex order implementation.
-     * 
+     *
      * @param vertexOrderMethod method to use
      * @return the vertex order
-     * 
-     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex order
+     *
+     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex
+     *         order
      */
     protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
     {
@@ -355,8 +353,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
         case COMPARATOR:
             return ElementOrder.comparator(vertexOrderMethod.comparator());
         case GUAVA_COMPARATOR:
-            if (!valueGraph
-                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            if (!valueGraph.nodeOrder().type()
+                .equals(com.google.common.graph.ElementOrder.Type.SORTED))
             {
                 throw new IllegalArgumentException(
                     "Guava comparator only usable if node order is SORTED!");

@@ -40,7 +40,8 @@ public class AsSynchronizedGraphTest
     private List<List<Order>> ordersList;
 
     @BeforeEach
-    public void setup() {
+    public void setup()
+    {
         vertices = Collections.synchronizedList(new ArrayList<>());
         edges = Collections.synchronizedList(new ArrayList<>());
         ordersList = Collections.synchronizedList(new ArrayList<>());
@@ -80,8 +81,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testAddEdge()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
-            .cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable()
+            .build(new SimpleGraph<>(DefaultEdge.class));
         ArrayList<DefaultEdge> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
@@ -121,8 +122,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveEdge()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
-            .cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable()
+            .build(new SimpleGraph<>(DefaultEdge.class));
         for (int i = 0; i < 1000; i++) {
             g.addVertex(i);
         }
@@ -158,8 +159,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveVertex()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
-            .cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable()
+            .build(new DirectedPseudograph<>(DefaultEdge.class));
         for (int i = 0; i < 100; i++) {
             g.addVertex(i);
             vertices.add(i);
@@ -203,8 +204,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testOthers()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
-            .cacheDisable().build(new Pseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheDisable()
+            .build(new Pseudograph<>(DefaultEdge.class));
         Set<Integer> vertSet = g.vertexSet();
         Set<DefaultEdge> edgeSet = g.edgeSet();
         g.addVertex(1);
@@ -336,8 +337,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testCopyless()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
-            .setCopyless().build(new Pseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().setCopyless()
+            .build(new Pseudograph<>(DefaultEdge.class));
         for (int i = 0; i < 1000; i++) {
             g.addVertex(i);
             vertices.add(i);
@@ -372,7 +373,7 @@ public class AsSynchronizedGraphTest
             while (true) {
                 DefaultEdge e;
                 if (edges.size() > 400)
-                        e = edges.remove(0);
+                    e = edges.remove(0);
                 else {
                     semaphore.release();
                     return;
@@ -401,8 +402,7 @@ public class AsSynchronizedGraphTest
         void execute();
     }
 
-    private class AddV
-        implements Order
+    private class AddV implements Order
     {
         int vertex;
 
@@ -418,8 +418,7 @@ public class AsSynchronizedGraphTest
         }
     }
 
-    private class AddE
-        implements Order
+    private class AddE implements Order
     {
         DefaultEdge e;
         int s, t;
@@ -438,8 +437,7 @@ public class AsSynchronizedGraphTest
         }
     }
 
-    private class SetCache
-        implements Order
+    private class SetCache implements Order
     {
         @Override
         public void execute()
@@ -450,8 +448,7 @@ public class AsSynchronizedGraphTest
         }
     }
 
-    private class RmV
-        implements Order
+    private class RmV implements Order
     {
         int v;
 
@@ -467,8 +464,7 @@ public class AsSynchronizedGraphTest
         }
     }
 
-    private class RmE
-        implements Order
+    private class RmE implements Order
     {
         int s, t;
 

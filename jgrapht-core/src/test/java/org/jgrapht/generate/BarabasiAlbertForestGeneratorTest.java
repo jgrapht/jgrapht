@@ -39,11 +39,17 @@ public class BarabasiAlbertForestGeneratorTest
     @Test
     public void testBadParameters()
     {
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(0, 10, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(0, 10, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(-1, 10, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(-1, 10, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(10, 9, 100),"Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(10, 9, 100),
+            "Bad parameter");
     }
 
     @Test

@@ -65,13 +65,16 @@ public class VF2SubgraphIsomorphismInspectorTest
         pg1.addEdge(1, 2);
 
         /* GT-0 test graph=null */
-        assertThrows(NullPointerException.class, () -> new VF2SubgraphIsomorphismInspector<>(null, sg1));
+        assertThrows(
+            NullPointerException.class, () -> new VF2SubgraphIsomorphismInspector<>(null, sg1));
 
         /* GT-1: multigraphs */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(mg1, mg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(mg1, mg1));
 
         /* GT-2: pseudographs */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(pg1, pg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(pg1, pg1));
 
         /* GT-3: simple graphs */
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt3 =
@@ -85,22 +88,28 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* GT-5: simple graph + multigraph */
 
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(sg1, mg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(sg1, mg1));
 
         /* GT-6: simple graph + pseudograph */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(sg1, pg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(sg1, pg1));
 
         /* GT-7: directed graph + multigraph */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(dg1, mg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(dg1, mg1));
 
         /* GT-8: directed graph + pseudograph */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(dg1, pg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(dg1, pg1));
 
         /* GT-9: pseudograph + multigraph */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(pg1, mg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(pg1, mg1));
 
         /* GT-10: simple graph + directed graph */
-        assertThrows(IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(sg1, dg1));
+        assertThrows(
+            IllegalArgumentException.class, () -> new VF2SubgraphIsomorphismInspector<>(sg1, dg1));
     }
 
     /**
@@ -839,8 +848,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         assertFalse(iter3.hasNext());
     }
 
-    private class VertexComp
-        implements Comparator<String>
+    private class VertexComp implements Comparator<String>
     {
         @Override
         public int compare(String o1, String o2)
@@ -853,8 +861,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         }
     }
 
-    private class EdgeComp
-        implements Comparator<Integer>
+    private class EdgeComp implements Comparator<Integer>
     {
         @Override
         public int compare(Integer o1, Integer o2)

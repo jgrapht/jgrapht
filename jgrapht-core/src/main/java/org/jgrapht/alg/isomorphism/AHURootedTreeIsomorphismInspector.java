@@ -63,8 +63,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class AHURootedTreeIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V, E>
 {
     private final Graph<V, E> tree1;
     private final Graph<V, E> tree2;
@@ -159,8 +158,7 @@ public class AHURootedTreeIsomorphismInspector<V, E>
                 // The check if only needed when the input graph is undirected in order to
                 // avoid walking back "up" the tree.
                 if (!forwardMapping.containsKey(next)) {
-                    labelList
-                        .computeIfAbsent(canonicalName[0].get(next), x -> new ArrayList<>())
+                    labelList.computeIfAbsent(canonicalName[0].get(next), x -> new ArrayList<>())
                         .add(next);
                 }
             }

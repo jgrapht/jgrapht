@@ -40,10 +40,9 @@ public class UndirectedModularityMeasurerTest
     @Test
     public void testOptimalPartition()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         g.addVertex(0);
@@ -85,10 +84,9 @@ public class UndirectedModularityMeasurerTest
     @Test
     public void testSingle()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         g.addVertex(0);
@@ -130,10 +128,9 @@ public class UndirectedModularityMeasurerTest
     @Test
     public void testSuboptimal()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         g.addVertex(0);
@@ -175,10 +172,9 @@ public class UndirectedModularityMeasurerTest
     @Test
     public void testNegative()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         g.addVertex(0);
@@ -222,10 +218,9 @@ public class UndirectedModularityMeasurerTest
     @Test
     public void test24()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 16; i++) {
@@ -272,10 +267,9 @@ public class UndirectedModularityMeasurerTest
     public void testWithInvalidPartition()
     {
         assertThrows(IllegalArgumentException.class, () -> {
-            Graph<Integer,
-                DefaultWeightedEdge> g = GraphTypeBuilder
-                    .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                    .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+            Graph<Integer, DefaultWeightedEdge> g =
+                GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                    .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                     .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
             g.addVertex(0);
@@ -317,10 +311,9 @@ public class UndirectedModularityMeasurerTest
     @Test
     public void testWithSelfLoops()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         g.addVertex(0);

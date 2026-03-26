@@ -23,17 +23,17 @@ import java.util.*;
 
 /**
  * Barabási-Albert growth and preferential attachment graph generator.
- * 
+ *
  * <p>
  * The generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of scaling in
  * random networks. Science, 286:509-512, 1999.
- * 
+ *
  * <p>
  * The generator starts with a complete graph of $m_0$ nodes and grows the network by adding $n -
  * m_0$ additional nodes. The additional nodes are added one by one and each of them is connected to
  * $m$ previously added nodes, where the probability of connecting to a node is proportional to its
  * degree.
- * 
+ *
  * <p>
  * Note that the Barabàsi-Albert model is designed for undirected networks. Nevertheless, this
  * generator also works with directed networks where the probabilities are proportional to the sum
@@ -42,14 +42,13 @@ import java.util.*;
  *
  * <p>
  * For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class BarabasiAlbertGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class BarabasiAlbertGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int m0;
@@ -58,7 +57,7 @@ public class BarabasiAlbertGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param m0 number of initial nodes
      * @param m number of edges of each new node added during the network growth
      * @param n final number of nodes
@@ -71,7 +70,7 @@ public class BarabasiAlbertGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param m0 number of initial nodes
      * @param m number of edges of each new node added during the network growth
      * @param n final number of nodes
@@ -85,7 +84,7 @@ public class BarabasiAlbertGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param m0 number of initial nodes
      * @param m number of edges of each new node added during the network growth
      * @param n final number of nodes
@@ -115,7 +114,7 @@ public class BarabasiAlbertGraphGenerator<V, E>
 
     /**
      * Generates an instance.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      */

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for FixedSizeIntegerQueue
- * 
+ *
  * @author Joris Kinable
  */
 public class FixedSizeIntegerQueueTest

@@ -36,7 +36,7 @@ import org.jheaps.tree.PairingHeap;
 
 /**
  * Edge betweenness centrality.
- * 
+ *
  * <p>
  * A natural extension of betweenness to edges by counting the total shortest paths that pass
  * through an edge. See the paper: Ulrik Brandes: On Variants of Shortest-Path Betweenness
@@ -44,21 +44,20 @@ import org.jheaps.tree.PairingHeap;
  * discussion of different variants of betweenness centrality. Note that this implementation does
  * not work for graphs which have multiple edges. Self-loops do not influence the result and are
  * thus ignored.
- * 
+ *
  * <p>
  * This implementation allows the user to compute centrality contributions only from a subset of the
  * graph vertices, i.e. to start shortest path computations only from a subset of the vertices. This
  * allows centrality approximations in big graphs. Note that in this case, the user is responsible
  * for any normalization necessary due to duplicate shortest paths that might occur in undirected
  * graphs.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class EdgeBetweennessCentrality<V, E>
-    implements EdgeScoringAlgorithm<E, Double>
+public class EdgeBetweennessCentrality<V, E> implements EdgeScoringAlgorithm<E, Double>
 {
     private final Graph<V, E> graph;
     private final Iterable<V> startVertices;
@@ -84,7 +83,7 @@ public class EdgeBetweennessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      */
     public EdgeBetweennessCentrality(Graph<V, E> graph)
@@ -94,7 +93,7 @@ public class EdgeBetweennessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param overflowStrategy strategy to use if overflow is detected
      */
@@ -105,7 +104,7 @@ public class EdgeBetweennessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param overflowStrategy strategy to use if overflow is detected
      * @param startVertices vertices from which to start shortest path computations. This parameter
@@ -259,8 +258,7 @@ public class EdgeBetweennessCentrality<V, E>
     /*
      * Weighted variant where shortest paths are computed using edge weights.
      */
-    private class WeightedAlgorithm
-        extends Algorithm
+    private class WeightedAlgorithm extends Algorithm
     {
         @Override
         protected void singleVertexUpdate(V source)

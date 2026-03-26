@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for closeness centrality.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class ClosenessCentralityTest

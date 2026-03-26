@@ -33,22 +33,21 @@ import org.jgrapht.util.SupplierUtil;
 
 /**
  * The Girvan-Newman clustering algorithm.
- * 
+ *
  * <p>
  * The algorithm is described in: Girvan, Michelle, and Mark EJ Newman. "Community structure in
  * social and biological networks." Proceedings of the national academy of sciences 99.12 (2002):
  * 7821-7826.
- * 
+ *
  * <p>
  * Running time is $O(m^2 n)$ or $O(m^2n + m n^2 \log n)$ for weighted graphs.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class GirvanNewmanClustering<V, E>
-    implements ClusteringAlgorithm<V>
+public class GirvanNewmanClustering<V, E> implements ClusteringAlgorithm<V>
 {
     private Graph<V, E> graph;
     private int k;
@@ -57,7 +56,7 @@ public class GirvanNewmanClustering<V, E>
 
     /**
      * Create a new clustering algorithm.
-     * 
+     *
      * @param graph the graph
      * @param k the desired number of clusters
      */
@@ -68,7 +67,7 @@ public class GirvanNewmanClustering<V, E>
 
     /**
      * Create a new clustering algorithm.
-     * 
+     *
      * @param graph the graph
      * @param k the desired number of clusters
      * @param overflowStrategy strategy to use if overflow is detected
@@ -97,10 +96,9 @@ public class GirvanNewmanClustering<V, E>
     public Clustering<V> getClustering()
     {
         // copy graph
-        Graph<V,
-            DefaultEdge> graphCopy = GraphTypeBuilder
-                .forGraphType(graph.getType()).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(graph.getVertexSupplier()).buildGraph();
+        Graph<V, DefaultEdge> graphCopy = GraphTypeBuilder.forGraphType(graph.getType())
+            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+            .vertexSupplier(graph.getVertexSupplier()).buildGraph();
         for (V v : graph.iterables().vertices()) {
             graphCopy.addVertex(v);
         }

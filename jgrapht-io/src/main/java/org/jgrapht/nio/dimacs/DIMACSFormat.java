@@ -19,25 +19,25 @@ package org.jgrapht.nio.dimacs;
 
 /**
  * DIMACS challenge format.
- * 
+ *
  * <p>
  * For a general description of the formats see <a href="http://dimacs.rutgers.edu/Challenges/">
  * http://dimacs.rutgers.edu/Challenges</a>. Note that there are a lot of different formats based on
  * each different challenge.
- * 
+ *
  * @author Dimitrios Michail
  */
 public enum DIMACSFormat
 {
     /**
      * Shortest path challenge format.
-     * 
+     *
      * <p>
      * This is the <a href="http://www.dis.uniroma1.it/challenge9/format.shtml">format</a> used in
      * the 9th DIMACS implementation challenge.
-     * 
+     *
      * A shortest path graph file looks as follows:
-     * 
+     *
      * <pre>
      * {@code
      * c <comments>
@@ -49,25 +49,25 @@ public enum DIMACSFormat
      * ...
      * }
      * </pre>
-     * 
+     *
      * A weighted variant where each edge has a floating-point weight is also supported:
-     * 
+     *
      * <pre>
-     * {@code 
-     * a <edge source 1> <edge target 1> <edge_weight> 
+     * {@code
+     * a <edge source 1> <edge target 1> <edge_weight>
      * }
      * </pre>
      */
     SHORTEST_PATH("sp", "a"),
     /**
      * Max-clique challenge format.
-     * 
+     *
      * <p>
      * This is the <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">format</a> used in
      * the 2nd DIMACS implementation challenge.
-     * 
+     *
      * A graph file looks as follows:
-     * 
+     *
      * <pre>
      * {@code
      * c <comments>
@@ -79,19 +79,19 @@ public enum DIMACSFormat
      * ...
      * }
      * </pre>
-     * 
+     *
      * A weighted variant where each edge has a floating-point weight is also supported:
-     * 
+     *
      * <pre>
-     * {@code 
-     * e <edge source 1> <edge target 1> <edge_weight> 
+     * {@code
+     * e <edge source 1> <edge target 1> <edge_weight>
      * }
      * </pre>
      */
     MAX_CLIQUE("edge", "e"),
     /**
      * Coloring format.
-     * 
+     *
      * <p>
      * This is the <a href="ftp://dimacs.rutgers.edu/pub/challenge/">format</a> used in the 2nd
      * DIMACS implementation challenge. Same as the {@link DIMACSFormat#MAX_CLIQUE} but uses "col"
@@ -110,7 +110,7 @@ public enum DIMACSFormat
 
     /**
      * Get the name of the problem.
-     * 
+     *
      * @return the name of the problem.
      */
     public String getProblem()
@@ -120,7 +120,7 @@ public enum DIMACSFormat
 
     /**
      * Get the edge descriptor used in the format.
-     * 
+     *
      * @return the edge descriptor
      */
     public String getEdgeDescriptor()

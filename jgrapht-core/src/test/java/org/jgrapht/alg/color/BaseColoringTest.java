@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Base class for coloring tests.
- * 
+ *
  * @author Dimitrios Michail
  */
 public abstract class BaseColoringTest
@@ -102,9 +102,7 @@ public abstract class BaseColoringTest
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             gen.generateGraph(g);
 
-            for (Function<Graph<Integer, DefaultEdge>,
-                VertexColoringAlgorithm<Integer>> algProvider : algs)
-            {
+            for (Function<Graph<Integer, DefaultEdge>, VertexColoringAlgorithm<Integer>> algProvider : algs) {
                 VertexColoringAlgorithm<Integer> alg = algProvider.apply(g);
                 Coloring<Integer> coloring = alg.getColoring();
                 assertTrue(coloring.getNumberColors() <= n);

@@ -93,7 +93,7 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testGetTour1()
     {
-        int[][] edges = {{1, 2, 5}};
+        int[][] edges = { { 1, 2, 5 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         FarthestInsertionHeuristicTSP<Integer, DefaultEdge> farthestInsertion =
@@ -109,7 +109,7 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testGetTour2()
     {
-        int[][] edges = {{1, 2, 5}, {1, 3, 5}, {2, 3, 9},};
+        int[][] edges = { { 1, 2, 5 }, { 1, 3, 5 }, { 2, 3, 9 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
         FarthestInsertionHeuristicTSP<Integer, DefaultEdge> farthestInsertion =
@@ -125,40 +125,32 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testDummyGraph5()
     {
-        int[][] allDist = {{0, 8, 10, 11, 15},
-            {8, 0, 2, 3, 7},
-            {10, 2, 0, 1, 5},
-            {11, 3, 1, 0, 4},
-            {15, 7, 5, 4, 0}
-        };
+        int[][] allDist = { { 0, 8, 10, 11, 15 }, { 8, 0, 2, 3, 7 }, { 10, 2, 0, 1, 5 },
+            { 11, 3, 1, 0, 4 }, { 15, 7, 5, 4, 0 } };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsH = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
 
         var tour = farthestInsH.getTour(graph);
         assertEquals(30, tour.getWeight(), 1e-9);
-        assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
-            tour.getVertexList().toArray(new Integer[0]));
+        assertArrayEquals(
+            new Integer[] { 3, 2, 1, 0, 4, 3 }, tour.getVertexList().toArray(new Integer[0]));
     }
 
     @Test
     public void testDummyGraph5WithSubtour()
     {
-        int[][] allDist = {{0, 8, 10, 11, 15},
-            {8, 0, 2, 3, 7},
-            {10, 2, 0, 1, 5},
-            {11, 3, 1, 0, 4},
-            {15, 7, 5, 4, 0}
-        };
+        int[][] allDist = { { 0, 8, 10, 11, 15 }, { 8, 0, 2, 3, 7 }, { 10, 2, 0, 1, 5 },
+            { 11, 3, 1, 0, 4 }, { 15, 7, 5, 4, 0 } };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
-        var farthestInsH = new FarthestInsertionHeuristicTSP
-            <Integer, DefaultWeightedEdge>(new GraphWalk<>(graph, List.of(3, 2, 0, 4), -1));
+        var farthestInsH = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>(
+            new GraphWalk<>(graph, List.of(3, 2, 0, 4), -1));
 
         var tour = farthestInsH.getTour(graph);
         assertEquals(30, tour.getWeight(), 1e-9);
 
         // vertex 1 should be inserted between vertices 2 and 0
-        assertArrayEquals(new Integer[]{3, 2, 1, 0, 4, 3},
-            tour.getVertexList().toArray(new Integer[0]));
+        assertArrayEquals(
+            new Integer[] { 3, 2, 1, 0, 4, 3 }, tour.getVertexList().toArray(new Integer[0]));
     }
 
     /**
@@ -167,22 +159,19 @@ public class FarthestInsertionHeuristicTSPTest
     @Test
     public void testDummyGraph10()
     {
-        int[][] allDist = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
-            {1, 0, 10, 11, 12, 13, 14, 15, 16, 17},
-            {2, 10, 0, 18, 19, 20, 21, 22, 23, 24},
-            {3, 11, 18, 0, 25, 26, 27, 28, 29, 30},
-            {4, 12, 19, 25, 0, 31, 32, 33, 34, 35},
-            {5, 13, 20, 26, 31, 0, 36, 37, 38, 39},
-            {6, 14, 21, 27, 32, 36, 0, 40, 41, 42},
-            {7, 15, 22, 28, 33, 37, 40, 0, 43, 44},
-            {8, 16, 23, 29, 34, 38, 41, 43, 0, 45},
-            {9, 17, 24, 30, 35, 39, 42, 44, 45, 0}};
+        int[][] allDist = { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+            { 1, 0, 10, 11, 12, 13, 14, 15, 16, 17 }, { 2, 10, 0, 18, 19, 20, 21, 22, 23, 24 },
+            { 3, 11, 18, 0, 25, 26, 27, 28, 29, 30 }, { 4, 12, 19, 25, 0, 31, 32, 33, 34, 35 },
+            { 5, 13, 20, 26, 31, 0, 36, 37, 38, 39 }, { 6, 14, 21, 27, 32, 36, 0, 40, 41, 42 },
+            { 7, 15, 22, 28, 33, 37, 40, 0, 43, 44 }, { 8, 16, 23, 29, 34, 38, 41, 43, 0, 45 },
+            { 9, 17, 24, 30, 35, 39, 42, 44, 45, 0 } };
 
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var farthestInsertion = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
         var tour = farthestInsertion.getTour(graph);
         assertEquals(210, tour.getWeight(), 1e-9);
-        assertArrayEquals(new Integer[]{4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4},
+        assertArrayEquals(
+            new Integer[] { 4, 5, 1, 6, 0, 7, 3, 8, 2, 9, 4 },
             tour.getVertexList().toArray(new Integer[0]));
     }
 
@@ -190,9 +179,9 @@ public class FarthestInsertionHeuristicTSPTest
     static Graph<Integer, DefaultWeightedEdge> createGraphFromMatrixDistances(int[][] allDist)
     {
         int n = allDist.length;
-        var graph = GraphTypeBuilder
-            .<Integer, DefaultWeightedEdge>undirected().allowingMultipleEdges(false)
-            .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
+        var graph = GraphTypeBuilder.<Integer, DefaultWeightedEdge> undirected()
+            .allowingMultipleEdges(false).allowingSelfLoops(false)
+            .edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
 
         // add edges
         for (int i = 0; i < n; i++) {

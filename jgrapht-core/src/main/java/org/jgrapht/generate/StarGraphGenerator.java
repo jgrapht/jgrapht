@@ -30,8 +30,7 @@ import java.util.*;
  *
  * @author Andrew Newell
  */
-public class StarGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class StarGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     public static final String CENTER_VERTEX = "Center Vertex";
 

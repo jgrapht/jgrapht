@@ -33,7 +33,7 @@ import java.util.function.*;
  *
  * <p>
  * See <a href="http://mathworld.wolfram.com/Walk.html">http://mathworld.wolfram.com/Walk.html</a>
- * 
+ *
  * <p>
  * GraphWalk is the default implementation of {@link GraphPath}.
  *
@@ -59,10 +59,9 @@ import java.util.function.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- * 
+ *
  */
-public class GraphWalk<V, E>
-    implements GraphPath<V, E>, Serializable
+public class GraphWalk<V, E> implements GraphPath<V, E>, Serializable
 {
     private static final long serialVersionUID = 7663410644865380676L;
     protected Graph<V, E> graph;
@@ -96,7 +95,7 @@ public class GraphWalk<V, E>
      * Creates a walk defined by a sequence of vertices. Note that the input graph must be simple,
      * otherwise the vertex sequence does not necessarily define a unique path. Furthermore, all
      * vertices must be pairwise adjacent.
-     * 
+     *
      * @param graph the graph
      * @param vertexList the list of vertices of the path
      * @param weight the total weight of the path
@@ -184,7 +183,7 @@ public class GraphWalk<V, E>
 
     /**
      * Updates the weight of this walk
-     * 
+     *
      * @param weight weight of the walk
      */
     public void setWeight(double weight)
@@ -259,7 +258,7 @@ public class GraphWalk<V, E>
      * be reversed. An exception is thrown if reversing an arc $(u,v)$ is impossible because arc
      * $(v,u)$ is not present in the graph. The weight of the resulting walk equals the sum of edge
      * weights in the walk.
-     * 
+     *
      * @throws InvalidGraphWalkException if the path is invalid
      * @return a reversed GraphWalk
      */
@@ -272,7 +271,7 @@ public class GraphWalk<V, E>
      * Reverses the direction of the walk. In case of directed/mixed graphs, the arc directions will
      * be reversed. An exception is thrown if reversing an arc $(u,v)$ is impossible because arc
      * $(v,u)$ is not present in the graph.
-     * 
+     *
      * @param walkWeightCalculator Function used to calculate the weight of the reversed GraphWalk
      * @throws InvalidGraphWalkException if the path is invalid
      * @return a reversed GraphWalk
@@ -345,7 +344,7 @@ public class GraphWalk<V, E>
      * Concatenates the specified GraphWalk to the end of this GraphWalk. This action can only be
      * performed if the end vertex of this GraphWalk is the same as the start vertex of the
      * extending GraphWalk
-     * 
+     *
      * @param extension GraphPath used for the concatenation.
      * @param walkWeightCalculator Function used to calculate the weight of the GraphWalk obtained
      *        after the concatenation.
@@ -384,7 +383,7 @@ public class GraphWalk<V, E>
     /**
      * Returns true if the path is an empty path, that is, a path with startVertex=endVertex=null
      * and with an empty vertex and edge list.
-     * 
+     *
      * @return Returns true if the path is an empty path.
      */
     public boolean isEmpty()
@@ -395,7 +394,7 @@ public class GraphWalk<V, E>
     /**
      * Convenience method which verifies whether the given path is feasible wrt the input graph and
      * forms an actual path.
-     * 
+     *
      * @throws InvalidGraphWalkException if the path is invalid
      */
     public void verify()
@@ -482,7 +481,7 @@ public class GraphWalk<V, E>
 
     /**
      * Convenience method which creates an empty walk.
-     * 
+     *
      * @param graph input graph
      * @param <V> vertex type
      * @param <E> edge type
@@ -496,7 +495,7 @@ public class GraphWalk<V, E>
 
     /**
      * Convenience method which creates a walk consisting of a single vertex with weight 0.0.
-     * 
+     *
      * @param graph input graph
      * @param v single vertex
      * @param <V> vertex type
@@ -510,7 +509,7 @@ public class GraphWalk<V, E>
 
     /**
      * Convenience method which creates a walk consisting of a single vertex.
-     * 
+     *
      * @param graph input graph
      * @param v single vertex
      * @param weight weight of the path

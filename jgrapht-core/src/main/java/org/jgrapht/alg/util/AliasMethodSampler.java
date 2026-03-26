@@ -21,12 +21,12 @@ import java.util.*;
 
 /**
  * The alias method for sampling from a discrete probability distribution.
- * 
+ *
  * <p>
  * The implementation is described in the paper: Michael D. Vose. A Linear Algorithm for Generating
  * Random Numbers with a Given Distribution. IEEE Transactions on Software Engineering,
  * 17(9):972--975, 1991.
- * 
+ *
  * <p>
  * Initialization takes $O(n)$ where $n$ is the number of items. Sampling takes $O(1)$.
  *
@@ -42,9 +42,9 @@ public class AliasMethodSampler
 
     /**
      * Constructor
-     * 
+     *
      * @param p the probability distribution where position i of the array is $Prob(X=i)$
-     * 
+     *
      * @throws IllegalArgumentException if an invalid probability distribution is supplied
      */
     public AliasMethodSampler(double[] p)
@@ -54,10 +54,10 @@ public class AliasMethodSampler
 
     /**
      * Constructor
-     * 
+     *
      * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param seed seed to use for the random number generator
-     * 
+     *
      * @throws IllegalArgumentException if an invalid probability distribution is supplied
      * @throws NullPointerException if {@code rng} is {@code null}
      */
@@ -68,10 +68,10 @@ public class AliasMethodSampler
 
     /**
      * Constructor
-     * 
+     *
      * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param rng the random number generator
-     * 
+     *
      * @throws IllegalArgumentException if an invalid probability distribution is supplied
      * @throws NullPointerException if {@code rng} is {@code null}
      */
@@ -82,11 +82,11 @@ public class AliasMethodSampler
 
     /**
      * Constructor
-     * 
+     *
      * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param rng the random number generator
      * @param epsilon tolerance used when comparing floating-point values
-     * 
+     *
      * @throws IllegalArgumentException if an invalid probability distribution is supplied
      * @throws NullPointerException if {@code rng} is {@code null}
      */
@@ -156,7 +156,7 @@ public class AliasMethodSampler
 
     /**
      * Sample a value from the distribution.
-     * 
+     *
      * @return a sample from the distribution
      */
     public int next()

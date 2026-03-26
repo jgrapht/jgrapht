@@ -19,12 +19,11 @@ package org.jgrapht.generate;
 
 /**
  * Raised when the generator fails, too many times in a row, to grow a graph.
- * 
+ *
  * @author Amr ALHOSSARY
  *
  */
-public class TooManyFailuresException
-    extends RuntimeException
+public class TooManyFailuresException extends RuntimeException
 {
 
     /** Serial Version ID */
@@ -42,7 +41,7 @@ public class TooManyFailuresException
     /**
      * Constructs a new exception with the specified detail message. The cause is not initialized,
      * and may subsequently be initialized by a call to initCause.
-     * 
+     *
      * @param message the detail message (which is saved for later retrieval by the getMessage()
      *        method).
      */
@@ -55,7 +54,7 @@ public class TooManyFailuresException
      * Constructs a new too Many Failures exception with the specified detail message and cause.
      * Note that the detail message associated with cause is not automatically incorporated in this
      * runtime exception's detail message.
-     * 
+     *
      * @param message the detail message (which is saved for later retrieval by the getMessage()
      *        method).
      * @param cause the cause (which is saved for later retrieval by the getCause() method). (A null

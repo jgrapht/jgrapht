@@ -24,14 +24,14 @@ import java.util.*;
 
 /**
  * Watts-Strogatz small-world graph generator.
- * 
+ *
  * <p>
  * The generator is described in the paper: D. J. Watts and S. H. Strogatz. Collective dynamics of
  * small-world networks. Nature 393(6684):440--442, 1998.
- * 
+ *
  * <p>
  * The following paragraph from the paper describes the construction.
- * 
+ *
  * <p>
  * "The generator starts with a ring of $n$ vertices, each connected to its $k$ nearest neighbors
  * ($k$ must be even). Then it chooses a vertex and the edge that connects it to its nearest
@@ -47,24 +47,23 @@ import java.util.*;
  * the graph becomes increasingly disordered until for $p = 1$, all edges are rewired randomly. For
  * intermediate values of $p$, the graph is a small-world network: highly clustered like a regular
  * graph, yet with small characteristic path length, like a random graph."
- * 
+ *
  * <p>
  * The authors require $n \gg k \gg \ln(n) \gg 1$ and specifically $k \gg \ln(n)$ guarantees that a
  * random graph will be connected.
- * 
+ *
  * <p>
  * Through the constructor parameter the model can be slightly changed into adding shortcut edges
  * instead of re-wiring. This variation was proposed in the paper: M. E. J. Newman and D. J. Watts,
  * Renormalization group analysis of the small-world network model, Physics Letters A, 263, 341,
  * 1999.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class WattsStrogatzGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class WattsStrogatzGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ADD_INSTEAD_OF_REWIRE = false;
 
@@ -76,7 +75,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n the number of nodes
      * @param k connect each node to its k nearest neighbors in a ring
      * @param p the probability of re-wiring each edge
@@ -89,7 +88,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n the number of nodes
      * @param k connect each node to its k nearest neighbors in a ring
      * @param p the probability of re-wiring each edge
@@ -103,7 +102,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param n the number of nodes
      * @param k connect each node to its k nearest neighbors in a ring
      * @param p the probability of re-wiring each edge
@@ -139,7 +138,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
     /**
      * Generates a small-world graph based on the Watts-Strogatz model.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      */

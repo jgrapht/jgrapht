@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for PageRank
- * 
+ *
  * @author Dimitrios Michail
  */
 public class PageRankTest

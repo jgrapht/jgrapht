@@ -31,9 +31,9 @@ import java.util.stream.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 
+ *
  * Tests for the {@link BaseKDisjointShortestPathsAlgorithm} class.
- * 
+ *
  * @author Assaf Mizrachi
  */
 public abstract class KDisjointShortestPathsTestCase
@@ -41,7 +41,7 @@ public abstract class KDisjointShortestPathsTestCase
 
     /**
      * Tests single path
-     * 
+     *
      * Edges expected in path --------------- {@literal 1 --> 2}
      */
     @Test
@@ -68,11 +68,11 @@ public abstract class KDisjointShortestPathsTestCase
 
     /**
      * Tests two disjoint paths traversing common vertex.
-     * 
+     *
      * Expected path 1 --------------- {@literal 1 --> 2 --> 3 --> 4 --> 5}
-     * 
+     *
      * Expected path 2 --------------- {@literal 1 --> 7 --> 3 --> 6 --> 5}
-     * 
+     *
      */
     @Test
     public void testTwoDisjointPathsJointNode()
@@ -133,11 +133,11 @@ public abstract class KDisjointShortestPathsTestCase
 
     /**
      * Tests two disjoint paths from 1 to 3
-     * 
+     *
      * Edges expected in path 1 --------------- {@literal 1 --> 3}
-     * 
+     *
      * Edges expected in path 2 --------------- {@literal 1 --> 2} {@literal 2 --> 3}
-     * 
+     *
      */
     @Test
     public void testTwoDisjointPaths()
@@ -236,15 +236,15 @@ public abstract class KDisjointShortestPathsTestCase
 
     /**
      * Tests two joint paths from 1 to 4, merge paths is not required.
-     * 
+     *
      * Edges expected in path 1 --------------- {@literal 1 --> 2}, w=1 {@literal 2 --> 6}, w=1
      * {@literal 6 --> 4}, w=1
-     * 
+     *
      * Edges expected in path 2 --------------- {@literal 1 --> 5}, w=2 {@literal 5 --> 3}, w=2
      * {@literal 3 --> 4}, w=2
-     * 
+     *
      * Edges expected in no path --------------- {@literal 2 --> 3}, w=3
-     * 
+     *
      */
     @Test
     public void testTwoDisjointPathsNoNeedToMerge()
@@ -296,15 +296,15 @@ public abstract class KDisjointShortestPathsTestCase
 
     /**
      * Tests two joint paths from 1 to 4, merge paths is required.
-     * 
+     *
      * Edges expected in path 1 --------------- {@literal 1 --> 2}, w=1 {@literal 2 --> 6}, w=2
      * {@literal 6 --> 4}, w=2
-     * 
+     *
      * Edges expected in path 2 --------------- {@literal 1 --> 5}, w=1 {@literal 5 --> 3}, w=3
      * {@literal 3 --> 4}, w=3
-     * 
+     *
      * Edges expected in no path --------------- {@literal 2 --> 3}, w=1
-     * 
+     *
      */
     @Test
     public void testTwoDisjointPathsNeedToMerge()
@@ -357,15 +357,15 @@ public abstract class KDisjointShortestPathsTestCase
     /**
      * Tests two joint paths from 1 to 4, reversed edges already exist in graph so not added when
      * preparing for next phase.
-     * 
+     *
      * Edges expected in path 1 --------------- {@literal 1 --> 2}, w=1 {@literal 2 --> 6}, w=2
      * {@literal 6 --> 4}, w=2
-     * 
+     *
      * Edges expected in path 2 --------------- {@literal 1 --> 5}, w=1 {@literal 5 --> 3}, w=3
      * {@literal 3 --> 4}, w=3
-     * 
+     *
      * Edges expected in no path --------------- {@literal 2 --> 3}, w=1
-     * 
+     *
      */
     @Test
     public void testTwoDisjointPathsWithReversedEdgesExist()
@@ -837,10 +837,9 @@ public abstract class KDisjointShortestPathsTestCase
     @Test
     public void testLinear()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
-                SupplierUtil.createIntegerSupplier(1),
-                SupplierUtil.createDefaultWeightedEdgeSupplier());
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator =
             new LinearGraphGenerator<>(20);
         graphGenerator.generateGraph(graph);
@@ -863,10 +862,9 @@ public abstract class KDisjointShortestPathsTestCase
     @Test
     public void testRing()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
-                SupplierUtil.createIntegerSupplier(1),
-                SupplierUtil.createDefaultWeightedEdgeSupplier());
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator =
             new RingGraphGenerator<>(20);
         graphGenerator.generateGraph(graph);
@@ -889,10 +887,9 @@ public abstract class KDisjointShortestPathsTestCase
     @Test
     public void testClique()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
-                SupplierUtil.createIntegerSupplier(1),
-                SupplierUtil.createDefaultWeightedEdgeSupplier());
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator =
             new CompleteGraphGenerator<>(20);
         graphGenerator.generateGraph(graph);
@@ -911,10 +908,9 @@ public abstract class KDisjointShortestPathsTestCase
     @Test
     public void testStar()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
-                SupplierUtil.createIntegerSupplier(1),
-                SupplierUtil.createDefaultWeightedEdgeSupplier());
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator =
             new StarGraphGenerator<>(20);
         graphGenerator.generateGraph(graph);
@@ -963,9 +959,8 @@ public abstract class KDisjointShortestPathsTestCase
     @Test
     public void testThreeDisjointPathsWithMultiHitsOnEdge()
     {
-        GraphBuilder<Integer, DefaultWeightedEdge,
-            ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
-                SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
+        GraphBuilder<Integer, DefaultWeightedEdge, ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
+            SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
         builder.addEdge(1, 3, 1);
         builder.addEdge(1, 4, 1);
         builder.addEdge(1, 5, 1);
@@ -991,8 +986,7 @@ public abstract class KDisjointShortestPathsTestCase
 
         List<int[]> expectedPaths = Arrays.asList(p1, p2, p3);
 
-        List<int[]> resultPaths = paths
-            .stream().map(GraphPath::getVertexList)
+        List<int[]> resultPaths = paths.stream().map(GraphPath::getVertexList)
             .map(vlist -> vlist.stream().mapToInt(i -> i).toArray()).collect(Collectors.toList());
 
         assertEquals(expectedPaths.size(), resultPaths.size());
@@ -1006,9 +1000,8 @@ public abstract class KDisjointShortestPathsTestCase
     @Test
     public void testFirstPathEdgesFirst()
     {
-        GraphBuilder<Integer, DefaultWeightedEdge,
-            ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
-                SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
+        GraphBuilder<Integer, DefaultWeightedEdge, ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
+            SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
 
         builder.addEdge(1, 2, 1);
         builder.addEdge(2, 1, 1);
@@ -1066,7 +1059,7 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(7.0, paths.get(2).getWeight(), 0.0);
     }
 
-    protected abstract <V,
-        E> KShortestPathAlgorithm<V, E> getKShortestPathAlgorithm(Graph<V, E> graph);
+    protected abstract <V, E> KShortestPathAlgorithm<V, E> getKShortestPathAlgorithm(
+        Graph<V, E> graph);
 
 }

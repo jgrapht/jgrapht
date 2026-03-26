@@ -27,8 +27,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinderTest
-    extends LCATreeTestBase
+public class TarjanLCAFinderTest extends LCATreeTestBase
 {
     @Override
     <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots)

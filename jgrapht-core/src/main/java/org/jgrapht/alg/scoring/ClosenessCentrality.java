@@ -27,7 +27,7 @@ import java.util.*;
 
 /**
  * Closeness centrality.
- * 
+ *
  * <p>
  * Computes the closeness centrality of each vertex of a graph. The closeness of a vertex $x$ is
  * defined as the reciprocal of the farness, that is $H(x)= 1 / \sum_{y \neq x} d(x,y)$, where
@@ -47,20 +47,19 @@ import java.util.*;
  * When the graph is disconnected, the closeness centrality score equals $0$ for all vertices. In
  * the case of weakly connected digraphs, the closeness centrality of several vertices might be 0.
  * See {@link HarmonicCentrality} for a different approach in case of disconnected graphs.
- * 
+ *
  * <p>
  * Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
  * whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m
  * +n \log n))$ or $O(n^3)$ respectively, where $n$ is the number of vertices and $m$ the number of
  * edges of the graph.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class ClosenessCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+public class ClosenessCentrality<V, E> implements VertexScoringAlgorithm<V, Double>
 {
     /**
      * Underlying graph
@@ -82,7 +81,7 @@ public class ClosenessCentrality<V, E>
     /**
      * Construct a new instance. By default the centrality is normalized and computed using outgoing
      * paths.
-     * 
+     *
      * @param graph the input graph
      */
     public ClosenessCentrality(Graph<V, E> graph)
@@ -92,7 +91,7 @@ public class ClosenessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param incoming if true incoming paths are used, otherwise outgoing paths
      * @param normalize whether to normalize by multiplying the closeness by $n-1$, where $n$ is the
@@ -135,7 +134,7 @@ public class ClosenessCentrality<V, E>
 
     /**
      * Get the shortest path algorithm for the paths computation.
-     * 
+     *
      * @return the shortest path algorithm
      */
     protected ShortestPathAlgorithm<V, E> getShortestPathAlgorithm()

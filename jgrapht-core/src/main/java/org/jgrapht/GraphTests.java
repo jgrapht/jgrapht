@@ -28,7 +28,7 @@ import java.util.stream.*;
 
 /**
  * A collection of utilities to test for various graph properties.
- * 
+ *
  * @author Barak Naveh
  * @author Dimitrios Michail
  * @author Joris Kinable
@@ -46,12 +46,12 @@ public abstract class GraphTests
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
      * no edges.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is empty, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
      */
     public static <V, E> boolean isEmpty(Graph<V, E> graph)
@@ -63,12 +63,12 @@ public abstract class GraphTests
     /**
      * Check if a graph is simple. A graph is simple if it has no self-loops and multiple (parallel)
      * edges.
-     * 
+     *
      * @param graph a graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if a graph is simple, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
      */
     public static <V, E> boolean isSimple(Graph<V, E> graph)
@@ -97,12 +97,12 @@ public abstract class GraphTests
     /**
      * Check if a graph has self-loops. A self-loop is an edge with the same source and target
      * vertices.
-     * 
+     *
      * @param graph a graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if a graph has self-loops, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
      */
     public static <V, E> boolean hasSelfLoops(Graph<V, E> graph)
@@ -125,12 +125,12 @@ public abstract class GraphTests
     /**
      * Check if a graph has multiple edges (parallel edges), that is, whether the graph contains two
      * or more edges connecting the same pair of vertices.
-     * 
+     *
      * @param graph a graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if a graph has multiple edges, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
      */
     public static <V, E> boolean hasMultipleEdges(Graph<V, E> graph)
@@ -159,12 +159,12 @@ public abstract class GraphTests
      * every pair of distinct vertices is connected by a unique edge. A complete directed graph is a
      * directed graph in which every pair of distinct vertices is connected by a pair of unique
      * edges (one in each direction).
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is complete, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
      */
     public static <V, E> boolean isComplete(Graph<V, E> graph)
@@ -192,7 +192,7 @@ public abstract class GraphTests
      * there are no unreachable vertices. When the inspected graph is a <i>directed</i> graph, this
      * method returns true if and only if the inspected graph is <i>weakly</i> connected. An empty
      * graph is <i>not</i> considered connected.
-     * 
+     *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link ConnectivityInspector} directly.
@@ -201,9 +201,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is connected, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see ConnectivityInspector
      */
     public static <V, E> boolean isConnected(Graph<V, E> graph)
@@ -225,9 +225,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is biconnected, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see org.jgrapht.alg.connectivity.BiconnectivityInspector
      */
     public static <V, E> boolean isBiconnected(Graph<V, E> graph)
@@ -238,7 +238,7 @@ public abstract class GraphTests
 
     /**
      * Test whether a directed graph is weakly connected.
-     * 
+     *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link ConnectivityInspector} directly.
@@ -247,9 +247,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is weakly connected, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see ConnectivityInspector
      */
     public static <V, E> boolean isWeaklyConnected(Graph<V, E> graph)
@@ -259,11 +259,11 @@ public abstract class GraphTests
 
     /**
      * Test whether a graph is strongly connected.
-     * 
+     *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
-     * 
+     *
      * <p>
      * In case of undirected graphs this method delegated to {@link #isConnected(Graph)}.
      *
@@ -271,9 +271,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is strongly connected, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see KosarajuStrongConnectivityInspector
      */
     public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
@@ -384,7 +384,7 @@ public abstract class GraphTests
 
     /**
      * Test whether a graph is bipartite.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -398,7 +398,7 @@ public abstract class GraphTests
 
     /**
      * Test whether a partition of the vertices into two sets is a bipartite partition.
-     * 
+     *
      * @param graph the input graph
      * @param firstPartition the first vertices partition
      * @param secondPartition the second vertices partition
@@ -419,7 +419,7 @@ public abstract class GraphTests
     /**
      * Tests whether a graph is <a href="http://mathworld.wolfram.com/CubicGraph.html">cubic</a>. A
      * graph is cubic if all vertices have degree 3.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -445,9 +445,9 @@ public abstract class GraphTests
      * @param <E> the graph edge type
      *
      * @return true if the graph is Eulerian, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see HierholzerEulerianCycle#isEulerian(Graph)
      */
     public static <V, E> boolean isEulerian(Graph<V, E> graph)
@@ -465,9 +465,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is chordal, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see ChordalityInspector#isChordal()
      */
     public static <V, E> boolean isChordal(Graph<V, E> graph)
@@ -495,9 +495,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is weakly chordal, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see WeakChordalityInspector#isWeaklyChordal()
      */
     public static <V, E> boolean isWeaklyChordal(Graph<V, E> graph)
@@ -518,9 +518,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph meets Ore's condition, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see org.jgrapht.alg.tour.PalmerHamiltonianCycle
      */
     public static <V, E> boolean hasOreProperty(Graph<V, E> graph)
@@ -573,7 +573,7 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is perfect, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
      */
     public static <V, E> boolean isPerfect(Graph<V, E> graph)
@@ -594,9 +594,9 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is planar, false otherwise
-     * 
+     *
      * @throws NullPointerException if graph is {@code null}
-     * 
+     *
      * @see PlanarityTestingAlgorithm
      * @see BoyerMyrvoldPlanarityInspector
      */

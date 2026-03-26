@@ -48,8 +48,7 @@ public class GonAlgorithmTest
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2, 5);
-        GonHeuristic<Integer, DefaultWeightedEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultWeightedEdge> gon = new GonHeuristic<>(new Random());
 
         assertThrows(IllegalArgumentException.class, () -> {
             gon.getCenters(graph, 1);
@@ -65,8 +64,7 @@ public class GonAlgorithmTest
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        GonHeuristic<Integer, DefaultWeightedEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultWeightedEdge> gon = new GonHeuristic<>(new Random());
         assertThrows(IllegalArgumentException.class, () -> {
             gon.getCenters(graph, 1);
         });
@@ -82,8 +80,7 @@ public class GonAlgorithmTest
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(0);
         graph.addVertex(1);
-        GonHeuristic<Integer, DefaultWeightedEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultWeightedEdge> gon = new GonHeuristic<>(new Random());
         assertThrows(IllegalArgumentException.class, () -> {
             gon.getCenters(graph, 1);
         });
@@ -95,11 +92,10 @@ public class GonAlgorithmTest
     @Test
     public void testGetOneCenter()
     {
-        int[][] edges = {{1, 2, 5}};
+        int[][] edges = { { 1, 2, 5 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
-        GonHeuristic<Integer, DefaultEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultEdge> gon = new GonHeuristic<>(new Random());
         Set<Integer> centers = gon.getCenters(graph, 1);
         assertEquals(1, centers.size());
         assertTrue(centers.contains(1) || centers.contains(2));
@@ -112,11 +108,10 @@ public class GonAlgorithmTest
     @Test
     public void testGetTwoCenters()
     {
-        int[][] edges = {{1, 2, 5}};
+        int[][] edges = { { 1, 2, 5 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
-        GonHeuristic<Integer, DefaultEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultEdge> gon = new GonHeuristic<>(new Random());
         Set<Integer> centers = gon.getCenters(graph, 2);
         assertEquals(2, centers.size());
         assertTrue(centers.contains(1) && centers.contains(2));
@@ -129,11 +124,10 @@ public class GonAlgorithmTest
     @Test
     public void testGetMoreCenters()
     {
-        int[][] edges = {{1, 2, 5}};
+        int[][] edges = { { 1, 2, 5 } };
         Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
 
-        GonHeuristic<Integer, DefaultEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultEdge> gon = new GonHeuristic<>(new Random());
         assertThrows(IllegalArgumentException.class, () -> {
             gon.getCenters(graph, 3);
         });
@@ -145,16 +139,11 @@ public class GonAlgorithmTest
     @Test
     public void testGetOneCenterWithMinCovRadius()
     {
-        int[][] allDist = 
-           {{0, 5, 5},
-            {5, 0, 5},
-            {5, 5, 0}
-        };
+        int[][] allDist = { { 0, 5, 5 }, { 5, 0, 5 }, { 5, 5, 0 } };
 
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
 
-        GonHeuristic<Integer, DefaultWeightedEdge> gon =
-            new GonHeuristic<>(new Random());
+        GonHeuristic<Integer, DefaultWeightedEdge> gon = new GonHeuristic<>(new Random());
         Set<Integer> centers = gon.getCenters(graph, 1);
         assertEquals(5, covRadius(graph, centers));
     }
@@ -165,19 +154,14 @@ public class GonAlgorithmTest
     @Test
     public void testDummyGraph5TwoCenters()
     {
-        int[][] allDist = 
-           {{0, 8, 10, 11, 15},
-            {8, 0, 2, 3, 7},
-            {10, 2, 0, 1, 5},
-            {11, 3, 1, 0, 4},
-            {15, 7, 5, 4, 0}
-        };
+        int[][] allDist = { { 0, 8, 10, 11, 15 }, { 8, 0, 2, 3, 7 }, { 10, 2, 0, 1, 5 },
+            { 11, 3, 1, 0, 4 }, { 15, 7, 5, 4, 0 } };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0));
 
         var centers = gon.getCenters(graph, 2);
-        assertTrue(centers.contains(4));  // vertex 4 is the farthest from {0}
-        assertEquals(7, covRadius(graph, centers));   // covering radius is 7
+        assertTrue(centers.contains(4)); // vertex 4 is the farthest from {0}
+        assertEquals(7, covRadius(graph, centers)); // covering radius is 7
     }
 
     /**
@@ -186,18 +170,13 @@ public class GonAlgorithmTest
     @Test
     public void testDummyGraph5ThreeCenters()
     {
-        int[][] allDist = 
-           {{0, 8, 10, 11, 15},
-            {8, 0, 2, 3, 7},
-            {10, 2, 0, 1, 5},
-            {11, 3, 1, 0, 4},
-            {15, 7, 5, 4, 0}
-        };
+        int[][] allDist = { { 0, 8, 10, 11, 15 }, { 8, 0, 2, 3, 7 }, { 10, 2, 0, 1, 5 },
+            { 11, 3, 1, 0, 4 }, { 15, 7, 5, 4, 0 } };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4));
         var centers = gon.getCenters(graph, 3);
-        assertTrue(centers.contains(1));  // vertex 1 is the farthest from {0, 4}
-        assertEquals(3, covRadius(graph, centers));   // covering radius is 2
+        assertTrue(centers.contains(1)); // vertex 1 is the farthest from {0, 4}
+        assertEquals(3, covRadius(graph, centers)); // covering radius is 2
     }
 
     /**
@@ -206,36 +185,32 @@ public class GonAlgorithmTest
     @Test
     public void testDummyGraph5FourCenters()
     {
-        int[][] allDist = 
-           {{0, 8, 10, 11, 15},
-            {8, 0, 2, 3, 7},
-            {10, 2, 0, 1, 5},
-            {11, 3, 1, 0, 4},
-            {15, 7, 5, 4, 0}
-        };
+        int[][] allDist = { { 0, 8, 10, 11, 15 }, { 8, 0, 2, 3, 7 }, { 10, 2, 0, 1, 5 },
+            { 11, 3, 1, 0, 4 }, { 15, 7, 5, 4, 0 } };
         Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4, 1));
         var centers = gon.getCenters(graph, 4);
-        assertTrue(centers.contains(3));  // vertex 3 is the farthest from {0, 4, 1}
-        assertEquals(1, covRadius(graph, centers));   // covering radius is 1
+        assertTrue(centers.contains(3)); // vertex 3 is the farthest from {0, 4, 1}
+        assertEquals(1, covRadius(graph, centers)); // covering radius is 1
     }
 
     /**
      * Test with instance kroA200 from TSPLIB, whose optimal solution for different values of k is
-     * known and reported in:
-     *  * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández, J. C. Pérez-Sansalvador and N. Lakouari, 
-     * "Approximation Algorithms for the Vertex K-Center Problem: Survey and Experimental Evaluation," in IEEE Access, vol. 7, 
-     * pp. 109228-109245, 2019, doi: 10.1109/ACCESS.2019.2933875.
-     * 
+     * known and reported in: * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares
+     * Hernández, J. C. Pérez-Sansalvador and N. Lakouari, "Approximation Algorithms for the Vertex
+     * K-Center Problem: Survey and Experimental Evaluation," in IEEE Access, vol. 7, pp.
+     * 109228-109245, 2019, doi: 10.1109/ACCESS.2019.2933875.
+     *
      */
     @Test
-    public void testKroA200FiveCenters() throws IOException
+    public void testKroA200FiveCenters()
+        throws IOException
     {
         String filePath = getClass().getResource("/kroA200.tsp").getPath();
         int n = 200;
         Graph<Integer, DefaultWeightedEdge> graph = loadFromTSPLIB(filePath, n);
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(new Random());
-        
+
         // for k=5
         var centers = gon.getCenters(graph, 5);
         double r = covRadius(graph, centers);
@@ -265,9 +240,9 @@ public class GonAlgorithmTest
     static Graph<Integer, DefaultWeightedEdge> createGraphFromMatrixDistances(int[][] allDist)
     {
         int n = allDist.length;
-        var graph = GraphTypeBuilder
-            .<Integer, DefaultWeightedEdge>undirected().allowingMultipleEdges(false)
-            .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
+        var graph = GraphTypeBuilder.<Integer, DefaultWeightedEdge> undirected()
+            .allowingMultipleEdges(false).allowingSelfLoops(false)
+            .edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
 
         // add edges
         for (int i = 0; i < n; i++) {
@@ -280,7 +255,8 @@ public class GonAlgorithmTest
         return graph;
     }
 
-    static int covRadius(Graph<Integer, DefaultWeightedEdge> graph, Set<Integer> centers){
+    static int covRadius(Graph<Integer, DefaultWeightedEdge> graph, Set<Integer> centers)
+    {
         int radius = 0;
         for (Integer v : graph.vertexSet()) {
             int minDist = Integer.MAX_VALUE;
@@ -301,36 +277,34 @@ public class GonAlgorithmTest
         return radius;
     }
 
-    static Graph<Integer, DefaultWeightedEdge> loadFromTSPLIB(String filePath, int n) throws IOException{
-        var graph = GraphTypeBuilder
-            .<Integer, DefaultWeightedEdge>undirected()
-            .allowingMultipleEdges(false)
-            .allowingSelfLoops(false)
-            .edgeClass(DefaultWeightedEdge.class)
-            .weighted(true)
-            .buildGraph();
+    static Graph<Integer, DefaultWeightedEdge> loadFromTSPLIB(String filePath, int n)
+        throws IOException
+    {
+        var graph = GraphTypeBuilder.<Integer, DefaultWeightedEdge> undirected()
+            .allowingMultipleEdges(false).allowingSelfLoops(false)
+            .edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
 
-            int[][] coordinates = new int[n][2];
-            Scanner scanner = new Scanner(new File(filePath));
-            for (int i = 0; i < n; i++) {
-                int id, x, y;
-                id = scanner.nextInt();
-                x = scanner.nextInt();
-                y = scanner.nextInt();
-                coordinates[i][0] = x;
-                coordinates[i][1] = y;
-            }
+        int[][] coordinates = new int[n][2];
+        Scanner scanner = new Scanner(new File(filePath));
+        for (int i = 0; i < n; i++) {
+            int id, x, y;
+            id = scanner.nextInt();
+            x = scanner.nextInt();
+            y = scanner.nextInt();
+            coordinates[i][0] = x;
+            coordinates[i][1] = y;
+        }
 
-            // create graph
-            for (int i = 0; i < n; i++) {
-                for (int j = i + 1; j < n; j++) {
-                    int dx = coordinates[i][0] - coordinates[j][0];
-                    int dy = coordinates[i][1] - coordinates[j][1];
-                    double dist = Math.sqrt(dx * dx + dy * dy);
-                    Graphs.addEdgeWithVertices(graph, i, j, dist);
-                }
+        // create graph
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int dx = coordinates[i][0] - coordinates[j][0];
+                int dy = coordinates[i][1] - coordinates[j][1];
+                double dist = Math.sqrt(dx * dx + dy * dy);
+                Graphs.addEdgeWithVertices(graph, i, j, dist);
             }
-            scanner.close();
-            return graph;
+        }
+        scanner.close();
+        return graph;
     }
 }

@@ -24,14 +24,13 @@ import java.util.function.*;
 
 /**
  * A base class for a 2d layout algorithm.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-abstract class BaseLayoutAlgorithm2D<V, E>
-    implements LayoutAlgorithm2D<V, E>
+abstract class BaseLayoutAlgorithm2D<V, E> implements LayoutAlgorithm2D<V, E>
 {
     /**
      * A model initializer
@@ -48,7 +47,7 @@ abstract class BaseLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm with an initializer.
-     * 
+     *
      * @param initializer the initializer
      */
     public BaseLayoutAlgorithm2D(Function<V, Point2D> initializer)
@@ -58,7 +57,7 @@ abstract class BaseLayoutAlgorithm2D<V, E>
 
     /**
      * Get the initializer
-     * 
+     *
      * @return the initializer
      */
     public Function<V, Point2D> getInitializer()
@@ -68,7 +67,7 @@ abstract class BaseLayoutAlgorithm2D<V, E>
 
     /**
      * Set the initializer
-     * 
+     *
      * @param initializer the initializer
      */
     public void setInitializer(Function<V, Point2D> initializer)
@@ -78,7 +77,7 @@ abstract class BaseLayoutAlgorithm2D<V, E>
 
     /**
      * Initialize a model using the initializer.
-     * 
+     *
      * @param graph the graph
      * @param model the model
      */

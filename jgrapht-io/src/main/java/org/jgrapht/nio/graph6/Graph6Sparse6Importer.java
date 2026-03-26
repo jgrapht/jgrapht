@@ -27,7 +27,7 @@ import java.util.function.*;
 
 /**
  * Importer which reads graphs in graph6 or sparse6 format.
- * 
+ *
  * <p>
  * A description of the format can be found
  * <a href="https://users.cecs.anu.edu.au/~bdm/data/formats.txt">here</a>. graph6 and sparse6 are
@@ -37,18 +37,20 @@ import java.util.function.*;
  * Typically, files storing graph6 graphs have the 'g6' extension. Similarly, files storing sparse6
  * graphs have a 's6' file extension. sparse6 graphs support loops and multiple edges, graph6 graphs
  * do not.
- * 
+ *
  * <p>
  * Note that a g6/s6 string may contain backslashes '\'. Thus, escaping is required. E.g.
- * 
+ *
  * <pre>
  * {@code ":?@MnDA\oi"}
  * </pre>
- * 
+ *
  * may result in undefined behavior. This should have been:
- * 
+ *
  * <pre>
- * {@code ":?@MnDA\\oi"}
+ * {@code
+ * ":?@MnDA\\oi"
+ * }
  * </pre>
  *
  * <p>
@@ -56,7 +58,7 @@ import java.util.function.*;
  * vertices in the original file are reported as a vertex attribute named "ID". Note, however, that
  * in this file format the identifiers from the input files are always going to be integers starting
  * from zero, as the format does not retain such information in order to achieve compactness.
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
  * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -68,9 +70,7 @@ import java.util.function.*;
  * @param <V> graph vertex type
  * @param <E> graph edge type
  */
-public class Graph6Sparse6Importer<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class Graph6Sparse6Importer<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     /**
      * Default key used for vertex ID.
@@ -90,7 +90,7 @@ public class Graph6Sparse6Importer<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<Integer, V> getVertexFactory()
@@ -101,11 +101,11 @@ public class Graph6Sparse6Importer<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the file.
      * The method is called with parameter the vertex identifier from the file and should return the
      * actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<Integer, V> vertexFactory)
@@ -115,12 +115,12 @@ public class Graph6Sparse6Importer<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the file contains self-loops then the graph provided must also support self-loops.
      * The same for multiple edges.
-     * 
+     *
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error

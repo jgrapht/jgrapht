@@ -22,8 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 
 import java.util.*;
 
-public class BarYehudaEvenTwoApproxVCImplTest
-    extends WeightedVertexCoverTwoApproxTest
+public class BarYehudaEvenTwoApproxVCImplTest extends WeightedVertexCoverTwoApproxTest
 {
 
     @Override

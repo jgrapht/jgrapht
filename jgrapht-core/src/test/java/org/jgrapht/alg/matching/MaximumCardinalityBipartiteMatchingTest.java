@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for maximum cardinality bipartite matching algorithms
- * 
+ *
  * @author Joris Kinable
  */
 public abstract class MaximumCardinalityBipartiteMatchingTest
@@ -211,8 +211,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
         }
     }
 
-    private <V,
-        E> void verifyMatching(Graph<V, E> g, MatchingAlgorithm.Matching<V, E> m, int cardinality)
+    private <V, E> void verifyMatching(
+        Graph<V, E> g, MatchingAlgorithm.Matching<V, E> m, int cardinality)
     {
         Set<V> matched = new HashSet<>();
         double weight = 0;

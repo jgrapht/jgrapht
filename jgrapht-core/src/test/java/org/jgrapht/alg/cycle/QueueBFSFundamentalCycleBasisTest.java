@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link QueueBFSFundamentalCycleBasis}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class QueueBFSFundamentalCycleBasisTest

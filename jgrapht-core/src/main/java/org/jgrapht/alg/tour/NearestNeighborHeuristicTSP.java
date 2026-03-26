@@ -69,8 +69,7 @@ import static org.jgrapht.util.ArrayUtil.*;
  * @author Peter Harman
  * @author Hannes Wellmann
  */
-public class NearestNeighborHeuristicTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class NearestNeighborHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     private Random rng;

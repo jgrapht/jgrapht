@@ -23,10 +23,10 @@ import java.util.*;
 
 /**
  * An algorithm which computes $k$-shortest paths between vertices.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface KShortestPathAlgorithm<V, E>
@@ -35,7 +35,7 @@ public interface KShortestPathAlgorithm<V, E>
     /**
      * Get a list of k-shortest paths from a source vertex to a sink vertex. If no such paths exist
      * this method returns an empty list.
-     * 
+     *
      * @param source the source vertex
      * @param sink the target vertex
      * @param k the number of shortest paths to return

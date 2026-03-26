@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.
- * 
+ *
  * <p>
  * The importer supports various different formats which can be adjusted using the
  * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
@@ -37,7 +37,7 @@ import java.util.*;
  * {@link #setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter, boolean) setParameter} method. See
  * {@link CSVFormat} for a description of the formats.
  * </p>
- * 
+ *
  * <p>
  * The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
  * also adjust the separator to something like semicolon or pipe instead of comma. In such a case,
@@ -45,20 +45,18 @@ import java.util.*;
  * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-separated values</a>
  * for more information.
  * </p>
- * 
+ *
  * <p>
  * This importer does not distinguish between {@link CSVFormat#EDGE_LIST} and
  * {@link CSVFormat#ADJACENCY_LIST}. In both cases it assumes the format is
  * {@link CSVFormat#ADJACENCY_LIST}.
  * </p>
- * 
+ *
  * @see CSVFormat
- * 
+ *
  * @author Dimitrios Michail
  */
-public class CSVEventDrivenImporter
-    extends BaseEventDrivenImporter<String, Triple<String, String, Double>>
-    implements EventDrivenImporter<String, Triple<String, String, Double>>
+public class CSVEventDrivenImporter extends BaseEventDrivenImporter<String, Triple<String, String, Double>> implements EventDrivenImporter<String, Triple<String, String, Double>>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -76,7 +74,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param format format to use out of the supported ones
      */
     public CSVEventDrivenImporter(CSVFormat format)
@@ -86,7 +84,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param format format to use out of the supported ones
      * @param delimiter delimiter to use (comma, semicolon, pipe, etc.)
      */
@@ -102,7 +100,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Get the format that the importer is using.
-     * 
+     *
      * @return the input format
      */
     public CSVFormat getFormat()
@@ -112,7 +110,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Set the format of the importer
-     * 
+     *
      * @param format the format to use
      */
     public void setFormat(CSVFormat format)
@@ -122,7 +120,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Get the delimiter (comma, semicolon, pipe, etc).
-     * 
+     *
      * @return the delimiter
      */
     public char getDelimiter()
@@ -132,7 +130,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Set the delimiter (comma, semicolon, pipe, etc).
-     * 
+     *
      * @param delimiter the delimiter to use
      */
     public void setDelimiter(char delimiter)
@@ -145,7 +143,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Return if a particular parameter of the exporter is enabled
-     * 
+     *
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
@@ -156,7 +154,7 @@ public class CSVEventDrivenImporter
 
     /**
      * Set the value of a parameter of the exporter
-     * 
+     *
      * @param p the parameter
      * @param value the value to set
      */
@@ -214,8 +212,7 @@ public class CSVEventDrivenImporter
         }
     }
 
-    private class ThrowingErrorListener
-        extends BaseErrorListener
+    private class ThrowingErrorListener extends BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -229,8 +226,7 @@ public class CSVEventDrivenImporter
     }
 
     // listener for the edge list format
-    private class AdjacencyListCSVListener
-        extends RowCSVListener
+    private class AdjacencyListCSVListener extends RowCSVListener
     {
         private boolean assumeEdgeWeights;
 
@@ -284,8 +280,7 @@ public class CSVEventDrivenImporter
     }
 
     // listener for the edge list format
-    private class MatrixCSVListener
-        extends RowCSVListener
+    private class MatrixCSVListener extends RowCSVListener
     {
         private boolean assumeNodeIds;
         private boolean assumeEdgeWeights;
@@ -394,9 +389,10 @@ public class CSVEventDrivenImporter
                         }
                     } else {
                         if (assumeEdgeWeights) {
-                            notifyEdge(Triple.of(
-                                currentVertexName, columnIndex.get(target),
-                                Double.valueOf(entryAsInteger)));
+                            notifyEdge(
+                                Triple.of(
+                                    currentVertexName, columnIndex.get(target),
+                                    Double.valueOf(entryAsInteger)));
                         } else {
                             notifyEdge(Triple.of(currentVertexName, columnIndex.get(target), null));
                         }
@@ -427,8 +423,7 @@ public class CSVEventDrivenImporter
     }
 
     // base listener
-    private abstract class RowCSVListener
-        extends CSVBaseListener
+    private abstract class RowCSVListener extends CSVBaseListener
     {
         protected List<String> row;
         protected Set<String> vertices;

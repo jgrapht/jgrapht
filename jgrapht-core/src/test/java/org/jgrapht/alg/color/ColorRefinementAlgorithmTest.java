@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests for the color-refinement algorithm.
- * 
+ *
  * @author Oliver Feith
  */
 public class ColorRefinementAlgorithmTest

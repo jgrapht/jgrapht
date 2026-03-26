@@ -29,43 +29,40 @@ import java.util.function.*;
 /**
  * A specifics strategy implementation using fastutil maps for storage specialized for integer
  * vertices.
- * 
+ *
  * <p>
  * Graphs constructed using this strategy use additional data structures to improve the performance
  * of methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V u, V
  * v),addEdge(V u, V v). A disadvantage is an increase in memory consumption. If memory utilization
  * is an issue, use the {@link FastutilIntVertexGSS} instead.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <E> the graph edge type
  */
-public class FastutilFastLookupIntVertexGSS<E>
-    implements
-    GraphSpecificsStrategy<Integer, E>
+public class FastutilFastLookupIntVertexGSS<E> implements GraphSpecificsStrategy<Integer, E>
 {
     private static final long serialVersionUID = 6098261533235930603L;
 
     @Override
     public BiFunction<Graph<Integer, E>, GraphType, Specifics<Integer, E>> getSpecificsFactory()
     {
-        return (BiFunction<Graph<Integer, E>, GraphType,
-            Specifics<Integer, E>> & Serializable) (graph, type) -> {
-                if (type.isDirected()) {
-                    return new FastLookupDirectedSpecifics<>(
-                        graph, new Int2ReferenceLinkedOpenHashMap<>(),
-                        new Object2ObjectOpenHashMap<>(), getEdgeSetFactory());
-                } else {
-                    return new FastLookupUndirectedSpecifics<>(
-                        graph, new Int2ReferenceLinkedOpenHashMap<>(),
-                        new Object2ObjectOpenHashMap<>(), getEdgeSetFactory());
-                }
-            };
+        return (BiFunction<Graph<Integer, E>, GraphType, Specifics<Integer, E>> & Serializable) (
+            graph, type) -> {
+            if (type.isDirected()) {
+                return new FastLookupDirectedSpecifics<>(
+                    graph, new Int2ReferenceLinkedOpenHashMap<>(), new Object2ObjectOpenHashMap<>(),
+                    getEdgeSetFactory());
+            } else {
+                return new FastLookupUndirectedSpecifics<>(
+                    graph, new Int2ReferenceLinkedOpenHashMap<>(), new Object2ObjectOpenHashMap<>(),
+                    getEdgeSetFactory());
+            }
+        };
     }
 
     @Override
-    public Function<GraphType,
-        IntrusiveEdgesSpecifics<Integer, E>> getIntrusiveEdgesSpecificsFactory()
+    public Function<GraphType, IntrusiveEdgesSpecifics<Integer, E>> getIntrusiveEdgesSpecificsFactory()
     {
         return (Function<GraphType, IntrusiveEdgesSpecifics<Integer, E>> & Serializable) (type) -> {
             if (type.isWeighted()) {

@@ -32,11 +32,11 @@ import java.util.*;
  * <li>Raphael Finkel and J.L. Bentley. Quad Trees: A Data Structure for Retrieval on Composite
  * Keys. Acta Informatica, 4(1):1--9, 1974.</li>
  * </ul>
- * 
+ *
  * <p>
  * The tree supports adding points one by one and maintains the centroid and total number of points
  * on each tree node.
- * 
+ *
  * @author Dimitrios Michail
  */
 class FRQuadTree
@@ -50,7 +50,7 @@ class FRQuadTree
 
     /**
      * Create a new tree for a certain area.
-     * 
+     *
      * @param box the area
      */
     public FRQuadTree(Box2D box)
@@ -60,7 +60,7 @@ class FRQuadTree
 
     /**
      * Insert a new point.
-     * 
+     *
      * @param p the new point
      */
     public void insert(Point2D p)
@@ -134,7 +134,7 @@ class FRQuadTree
 
     /**
      * Get the root node of the tree.
-     * 
+     *
      * @return the root
      */
     public Node getRoot()
@@ -144,7 +144,7 @@ class FRQuadTree
 
     /**
      * The Quad-Tree node.
-     * 
+     *
      * @author Dimitrios Michail
      */
     public class Node
@@ -162,7 +162,7 @@ class FRQuadTree
 
         /**
          * Create a new node for a given area
-         * 
+         *
          * @param box the area
          */
         public Node(Box2D box)
@@ -173,7 +173,7 @@ class FRQuadTree
 
         /**
          * Check if a node is a leaf.
-         * 
+         *
          * @return true if leaf, false otherwise
          */
         public boolean isLeaf()
@@ -183,7 +183,7 @@ class FRQuadTree
 
         /**
          * Get a list of all points contained in this node.
-         * 
+         *
          * @return a list of points
          */
         public List<Point2D> getPoints()
@@ -201,7 +201,7 @@ class FRQuadTree
 
         /**
          * Check if the node contains any points.
-         * 
+         *
          * @return true if the node contains points, false otherwise
          */
         public boolean hasPoints()
@@ -215,7 +215,7 @@ class FRQuadTree
 
         /**
          * Get the area represented by this node.
-         * 
+         *
          * @return the area of the node
          */
         public Box2D getBox()
@@ -225,7 +225,7 @@ class FRQuadTree
 
         /**
          * Get the total number of points under this node.
-         * 
+         *
          * @return the total number of points
          */
         public int getNumberOfPoints()
@@ -239,7 +239,7 @@ class FRQuadTree
 
         /**
          * Get the centroid of all points contained in this node.
-         * 
+         *
          * @return the centroid of all points contained in this node
          */
         public Point2D getCentroid()
@@ -262,7 +262,7 @@ class FRQuadTree
 
         /**
          * Get the children of this node as a list.
-         * 
+         *
          * @return a list containing the children of this node
          */
         public List<Node> getChildren()

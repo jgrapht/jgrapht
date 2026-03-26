@@ -27,8 +27,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class HeavyPathLCAFinderTest
-    extends LCATreeTestBase
+public class HeavyPathLCAFinderTest extends LCATreeTestBase
 {
 
     @Override

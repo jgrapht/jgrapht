@@ -92,7 +92,7 @@ class KnightTour
 
         /**
          * Adds element to the end of the list.
-         * 
+         *
          * @param element we want to add.
          */
 
@@ -167,7 +167,7 @@ class KnightTour
 
     /**
      * Static class that represents a node.
-     * 
+     *
      * @param <E> type of the value stored in the node.
      *
      */
@@ -253,13 +253,13 @@ class KnightTour
 
     /*
      * Let's call each of the following 8 cells structured:
-     * 
+     *
      * (enumeration starts with 0 to make the relation between cells and indices in structured array
      * more clear)
-     * 
+     *
      * 0). (2, 0); 1). (0, 1); 2). (n - 1, 0); 3). (n - 2, 2); 4). (1, m - 3); 5). (0, m - 1); 6).
      * (n - 1, m - 2); 7). (n - 3, m - 1);
-     * 
+     *
      * ######################################### #**0***********************************2#
      * #1**************************************# #*************************************3*#
      * #***************************************# #***************************************#
@@ -270,7 +270,7 @@ class KnightTour
      * #***************************************# #*4*************************************#
      * #**************************************6# #5***********************************7**#
      * #########################################
-     * 
+     *
      * Structured cells are needed in the the merging procedure in the Parberry's algorithm.
      */
 
@@ -299,7 +299,7 @@ class KnightTour
 
     /**
      * Converts knight's tour represented as DoublyLinkedList to ArrayList.
-     * 
+     *
      * @return ArrayList that contains knight's tour.
      */
 
@@ -425,7 +425,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Constructor.
-     * 
+     *
      * @param n width and height of the board.
      */
 
@@ -441,7 +441,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Constructor.
-     * 
+     *
      * @param n width of the board.
      * @param m height of the board.
      */
@@ -458,7 +458,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Calculates the number of the unvisited neighbours of the given cell.
-     * 
+     *
      * @param currentCell represents cell for which we want to find the unvisited neighbours.
      * @return number of unvisited edges.
      */
@@ -481,7 +481,7 @@ public class WarnsdorffRuleKnightTourHeuristic
     /**
      * Function for handling a tie case. In case of a tie the next cell will be the cell with the
      * largest Euclidean distance from the center of the board.
-     * 
+     *
      * @param array that stores the cells with equal number of unvisited neighbours.
      * @return index of the next cell in the input array.
      */
@@ -507,7 +507,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Finds the next cell to move.
-     * 
+     *
      * @param cell represents start point of the move.
      * @return cell represents end point of the move.
      */
@@ -549,7 +549,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Checks type of the found tour.
-     * 
+     *
      * @param startX start coordinate on x-axis.
      * @param startY start coordinate on y-axis.
      * @param endX end coordinate on x-axis.
@@ -571,7 +571,7 @@ public class WarnsdorffRuleKnightTourHeuristic
     /**
      * Checks if the found tour is structured. Note, we don't know the direction of the edges in the
      * knight's tour, so we have to check both options, i.e. $a \to b$ and $b \to a$.
-     * 
+     *
      * @param moves preformed in the tour.
      * @param structured true if user asked to find a structured knight's tour, false otherwise.
      * @return true if the user didn't ask to find a structured knight's tour or if the tour
@@ -610,7 +610,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Converts doubly linked list of chessboard cells to the set of moves.
-     * 
+     *
      * @param tour we have found.
      * @return set of moves of the input tour.
      */
@@ -631,7 +631,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
     /**
      * Checks existence of the knight's tour.
-     * 
+     *
      * @param type of the tour.
      * @return true if the tour exists, otherwise false.
      */
@@ -643,7 +643,7 @@ public class WarnsdorffRuleKnightTourHeuristic
 
         /*
          * Allen Schwenk, 1991 Which Rectangular Chessboards Have a Knight's Tour?.
-         * 
+         *
          * Theorem: An n x m chessboard with n <= m has a closed knight's tour unless one or more of
          * these three condition holds: (a) n and m are both odd; (b) n = 1, 2, 4; (c) n = 3 and m =
          * 4, 6, 8.
@@ -657,7 +657,7 @@ public class WarnsdorffRuleKnightTourHeuristic
         /*
          * Regarding open knight's tour existence, refer to
          * http://gaebler.us/share/Knight_tour.html.
-         * 
+         *
          * Rob Gaebler, Tsu-wang Yang, Knight's Tours (August 13, 1999).
          */
 
@@ -667,7 +667,7 @@ public class WarnsdorffRuleKnightTourHeuristic
     /**
      * Updates the pointer on the cell in structured array if the last added cell was structured. If
      * it is a non-structured cell then returns -1.
-     * 
+     *
      * @param cell last added to the tour cell.
      * @return the index of the corresponding cell in the structured array and -1 if the last added
      *         cell is not a structured cell .

@@ -146,8 +146,7 @@ public final class GraphMLDemo
     /**
      * A custom vertex supplier which gives each vertex a random color.
      */
-    static class CustomVertexSupplier
-        implements Supplier<CustomVertex>
+    static class CustomVertexSupplier implements Supplier<CustomVertex>
     {
 
         private int id = 0;
@@ -265,10 +264,9 @@ public final class GraphMLDemo
          * Generate the complete graph. Vertices have random colors and edges have random edge
          * weights.
          */
-        Graph<CustomVertex,
-            DefaultWeightedEdge> graph1 = GraphTypeBuilder
-                .directed().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(new CustomVertexSupplier())
+        Graph<CustomVertex, DefaultWeightedEdge> graph1 =
+            GraphTypeBuilder.directed().weighted(true).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(new CustomVertexSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultWeightedEdgeSupplier()).buildGraph();
 
         CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
@@ -297,10 +295,9 @@ public final class GraphMLDemo
 
         // import it back
         System.out.println("-- Importing graph back from GraphML");
-        Graph<CustomVertex,
-            DefaultWeightedEdge> graph2 = GraphTypeBuilder
-                .directed().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(new CustomVertexSupplier())
+        Graph<CustomVertex, DefaultWeightedEdge> graph2 =
+            GraphTypeBuilder.directed().weighted(true).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(new CustomVertexSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultWeightedEdgeSupplier()).buildGraph();
 
         GraphImporter<CustomVertex, DefaultWeightedEdge> importer = createImporter();

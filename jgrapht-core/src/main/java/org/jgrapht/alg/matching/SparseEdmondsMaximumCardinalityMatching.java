@@ -26,7 +26,7 @@ import java.util.*;
 
 /**
  * Edmonds' blossom algorithm for maximum cardinality matching in general undirected graphs.
- * 
+ *
  * <p>
  * A matching in a graph $G(V,E)$ is a subset of edges $M$ such that no two edges in $M$ have a
  * vertex in common. A matching has at most $\frac{1}{2}|V|$ edges. A node $v$ in $G$ is matched by
@@ -35,7 +35,7 @@ import java.util.*;
  * algorithm will return a perfect matching if one exists. If no perfect matching exists, then the
  * largest (non-perfect) matching is returned instead. In the special case that the input graph is
  * bipartite, consider using {@link HopcroftKarpMaximumCardinalityBipartiteMatching} instead.
- * 
+ *
  * <p>
  * To compute a maximum cardinality matching, at most $n$ augmenting path computations are
  * performed. Each augmenting path computation takes $O(m \alpha(m,n))$ time, where $\alpha(m,n)$ is
@@ -44,7 +44,7 @@ import java.util.*;
  * augmenting path computations performed is far smaller than $n$, since an efficient heuristic is
  * used to compute a near-optimal initial solution. The heuristic by default is the
  * {@link GreedyMaximumCardinalityMatching} but can be changed using the appropriate constructor.
- * 
+ *
  * <p>
  * The runtime complexity of this implementation could be improved to $O(n m)$ when the UnionFind
  * data structure used in this implementation is replaced by the linear-time set union data
@@ -54,12 +54,12 @@ import java.util.*;
  * <p>
  * Edmonds' original algorithm first appeared in Edmonds, J. Paths, trees, and flowers. Canadian
  * Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity of $O(n^4)$.
- * 
+ *
  * <p>
  * This is the algorithm and implementation described in the
  * <a href="https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html">LEDA book</a>. See the LEDA
  * Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
- * 
+ *
  * <p>
  * For future reference - A more efficient algorithm exists: S. Micali and V. Vazirani. An
  * $O(\sqrt{n}m)$ algorithm for finding maximum matching in general graphs. Proc. 21st Ann. Symp. on
@@ -79,8 +79,7 @@ import java.util.*;
  * @author Dimitrios Michail
  * @author Joris Kinable
  */
-public class SparseEdmondsMaximumCardinalityMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class SparseEdmondsMaximumCardinalityMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private MatchingAlgorithm<V, E> initializer;
@@ -90,7 +89,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
     /**
      * Constructs a new instance of the algorithm. {@link GreedyMaximumCardinalityMatching} is used
      * to quickly generate a near optimal initial solution.
-     * 
+     *
      * @param graph the input graph
      */
     public SparseEdmondsMaximumCardinalityMatching(Graph<V, E> graph)
@@ -100,7 +99,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * Constructs a new instance of the algorithm.
-     * 
+     *
      * @param graph undirected graph (graph does not have to be simple)
      * @param initializer heuristic matching algorithm used to quickly generate a (near optimal)
      *        initial feasible solution
@@ -116,7 +115,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
      * The actual implementation as an inner class. We use this pattern in order to free the work
      * memory after computation. The outer class can cache the result but can also release all the
      * auxiliary memory.
-     * 
+     *
      * @param <V> the vertex type
      * @param <E> the edge type
      */
@@ -436,18 +435,18 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * Get an odd set cover which proves the optimality of the computed matching.
-     * 
+     *
      * <p>
      * In order to check for optimality one needs to check that the odd-set-cover is a node labeling
      * that (a) covers the graph and (b) whose capacity is equal to the cardinality of the matching.
      * For (a) we check that every edge is either incident to a node with label 1 or connects two
      * nodes labeled $i$ for some $i \ge 2$. For (b) we count for each $i$ the number $n_i$ of nodes
      * with label $i$ and compute $S = n_1 + \sum_{i \ge 2} \floor{n_i/2}$.
-     * 
+     *
      * <p>
      * Method {{@link #isOptimalMatching(Graph, Set, Map)} performs this check given a matching and
      * an odd-set-cover.
-     * 
+     *
      * @return an odd set cover whose capacity is the same as the matching's cardinality
      */
     public Map<V, Integer> getOddSetCover()
@@ -458,23 +457,23 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * Check whether a matching is optimal.
-     * 
+     *
      * The method first checks whether the matching is indeed a matching. Then it checks whether the
      * odd-set-cover provided is a node labeling that covers the graph and whose capacity is equal
      * to the cardinality of the matching.
-     * 
+     *
      * First, we count for each $i$ the number $n_i$ of nodes with label $i$, and then compute $S =
      * n_1 + \sum_{i \ge 2} \floor{n_i/2}$. $S$ should be equal to the size of the matching. Then,
      * we check that every edge is incident to a node label one or connects two nodes labeled $i$
      * for some $i \ge 2$.
-     * 
+     *
      * This method runs in linear time.
-     * 
+     *
      * @param graph the graph
      * @param matching a matching
      * @param oddSetCover an odd set cover
      * @return true if the matching is optimal, false otherwise
-     * 
+     *
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
@@ -540,7 +539,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * Special integer vertex union-find.
-     * 
+     *
      * @author Dimitrios Michail
      */
     private static class VertexPartition
@@ -586,7 +585,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
         /**
          * Name the representative of the group where e belongs as e.
-         * 
+         *
          * @param e a vertex
          */
         public void name(int e)
@@ -597,7 +596,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
         /**
          * Split a partition. Assumes that it contains all members, otherwise bad things may happen.
-         * 
+         *
          * @param toSplit all members of a partition
          */
         public void split(List<Integer> toSplit)

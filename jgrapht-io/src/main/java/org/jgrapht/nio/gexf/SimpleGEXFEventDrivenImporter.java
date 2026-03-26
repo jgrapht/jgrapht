@@ -40,20 +40,20 @@ import java.util.*;
  * attributes in the input file. Users can register consumers for vertex, edge and graph attributes
  * after construction of the importer. Finally, default attribute values and any nested elements are
  * completely ignored.
- * 
+ *
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GEXF
  * specification, oriented towards parsing speed.
- * 
+ *
  * <p>
  * For a description of the format see <a href="https://gephi.org/gexf/format/index.html">
  * https://gephi.org/gexf/format/index.html</a> or the
  * <a href="https://gephi.org/gexf/format/primer.html">GEXF Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GEXF format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
@@ -83,18 +83,16 @@ import java.util.*;
  * </gexf>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.2draft
  * <a href="https://gephi.org/gexf/1.2draft/gexf.xsd">GEXF Schema</a>. The user can (not
  * recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}. Older
  * schemas are not supported.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SimpleGEXFEventDrivenImporter
-    extends BaseEventDrivenImporter<String, Triple<String, String, Double>>
-    implements EventDrivenImporter<String, Triple<String, String, Double>>
+public class SimpleGEXFEventDrivenImporter extends BaseEventDrivenImporter<String, Triple<String, String, Double>> implements EventDrivenImporter<String, Triple<String, String, Double>>
 {
     private static final List<String> SCHEMA_FILENAMES = List.of("viz.xsd", "gexf.xsd");
 
@@ -111,7 +109,7 @@ public class SimpleGEXFEventDrivenImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -121,7 +119,7 @@ public class SimpleGEXFEventDrivenImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -190,8 +188,7 @@ public class SimpleGEXFEventDrivenImporter
     private static final List<String> EDGE_ATTRS = List.of("type", "label");
 
     // content handler
-    private class GEXFHandler
-        extends DefaultHandler
+    private class GEXFHandler extends DefaultHandler
     {
         private static final String GRAPH = "graph";
 

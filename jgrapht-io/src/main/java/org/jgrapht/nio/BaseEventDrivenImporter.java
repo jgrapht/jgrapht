@@ -28,7 +28,7 @@ import java.util.function.*;
  * actual work.
  *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
@@ -64,7 +64,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add an ImportEvent consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addImportEventConsumer(Consumer<ImportEvent> consumer)
@@ -74,7 +74,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove an ImportEvent consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeImportEventConsumer(Consumer<ImportEvent> consumer)
@@ -84,7 +84,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add a vertex count consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addVertexCountConsumer(Consumer<Integer> consumer)
@@ -94,7 +94,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove a vertex count consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeVertexCountConsumer(Consumer<Integer> consumer)
@@ -104,7 +104,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add an edge count consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addEdgeCountConsumer(Consumer<Integer> consumer)
@@ -114,7 +114,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove an edge count consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeEdgeCountConsumer(Consumer<Integer> consumer)
@@ -124,7 +124,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add a vertex consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addVertexConsumer(Consumer<V> consumer)
@@ -134,7 +134,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove a vertex consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeVertexConsumer(Consumer<V> consumer)
@@ -144,7 +144,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add an edge consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addEdgeConsumer(Consumer<E> consumer)
@@ -154,7 +154,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove an edge consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeEdgeConsumer(Consumer<E> consumer)
@@ -164,7 +164,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add a graph attribute consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
@@ -174,7 +174,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove a graph attribute consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
@@ -184,7 +184,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add a vertex attribute consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer)
@@ -194,7 +194,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove a vertex attribute consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer)
@@ -204,7 +204,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add a vertex with attributes consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer)
@@ -214,7 +214,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove a vertex with attributes consumer
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer)
@@ -224,7 +224,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add an edge attribute consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer)
@@ -234,7 +234,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove an edge attribute consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer)
@@ -244,7 +244,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Add an edge with attributes consumer.
-     * 
+     *
      * @param consumer the consumer
      */
     public void addEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer)
@@ -254,7 +254,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Remove an edge with attributes consumer
-     * 
+     *
      * @param consumer the consumer
      */
     public void removeEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer)
@@ -264,7 +264,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for the vertex count.
-     * 
+     *
      * @param vertexCount the number of vertices in the graph
      */
     protected void notifyVertexCount(Integer vertexCount)
@@ -274,7 +274,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for the edge count.
-     * 
+     *
      * @param edgeCount the number of edges in the graph
      */
     protected void notifyEdgeCount(Integer edgeCount)
@@ -284,7 +284,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for a vertex.
-     * 
+     *
      * @param v the vertex
      */
     protected void notifyVertex(V v)
@@ -294,7 +294,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for a vertex with attributes.
-     * 
+     *
      * @param v the vertex
      * @param attrs the attributes
      */
@@ -305,7 +305,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for an edge.
-     * 
+     *
      * @param e the edge
      */
     protected void notifyEdge(E e)
@@ -315,7 +315,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for an edge with attributes.
-     * 
+     *
      * @param e the edge
      * @param attrs the attributes
      */
@@ -326,7 +326,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for a graph attribute
-     * 
+     *
      * @param key the attribute key
      * @param value the attribute
      */
@@ -337,7 +337,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for a vertex attribute
-     * 
+     *
      * @param v the vertex
      * @param key the attribute key
      * @param value the attribute
@@ -349,7 +349,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for an edge attribute
-     * 
+     *
      * @param e the edge
      * @param key the attribute key
      * @param value the attribute
@@ -361,7 +361,7 @@ public abstract class BaseEventDrivenImporter<V, E>
 
     /**
      * Notify for an importer ImportEvent
-     * 
+     *
      * @param importEvent the ImportEvent
      */
     protected void notifyImportEvent(ImportEvent importEvent)

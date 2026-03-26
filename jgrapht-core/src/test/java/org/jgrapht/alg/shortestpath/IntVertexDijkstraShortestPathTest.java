@@ -155,10 +155,9 @@ public class IntVertexDijkstraShortestPathTest
 
     private void testDirected(int offset)
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         Graphs.addAllVertices(
@@ -251,7 +250,9 @@ public class IntVertexDijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(1, 2);
         g.setEdgeWeight(we12, -100.0);
 
-        assertThrows(IllegalArgumentException.class, () -> new IntVertexDijkstraShortestPath<>(g).getPath(1, 2));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new IntVertexDijkstraShortestPath<>(g).getPath(1, 2));
     }
 
 }

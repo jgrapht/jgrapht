@@ -43,7 +43,8 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testEmptyGraph()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
@@ -52,7 +53,8 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraphWithoutEdges()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
         orig.addVertex(0);
@@ -63,7 +65,8 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testExampleGraph()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
@@ -77,7 +80,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraph1a()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = NamedGraphGenerator.petersenGraph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
@@ -87,7 +92,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraph2a()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = NamedGraphGenerator.ellinghamHorton78Graph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
@@ -97,7 +104,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraph3a()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = NamedGraphGenerator.klein3RegularGraph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
@@ -107,7 +116,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testPseudoGraph()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList(0, 1, 2));
@@ -125,15 +136,16 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testRandomGraphsS6()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp =
             new GnpRandomGraphGenerator<>(40, .55, 0, true);
         for (int i = 0; i < 20; i++) {
-            Graph<Integer,
-                DefaultEdge> orig = new Pseudograph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> orig = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gnp.generateGraph(orig);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
@@ -147,7 +159,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraph1b()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = NamedGraphGenerator.petersenGraph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
@@ -157,7 +171,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraph2b()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = NamedGraphGenerator.ellinghamHorton78Graph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
@@ -167,7 +183,9 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testGraph3b()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         Graph<Integer, DefaultEdge> orig = NamedGraphGenerator.klein3RegularGraph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
@@ -177,15 +195,16 @@ public class Graph6Sparse6ExporterTest
 
     @Test
     public void testRandomGraphsG6()
-        throws UnsupportedEncodingException, ExportException, ImportException
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
     {
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp =
             new GnpRandomGraphGenerator<>(40, .55, 0);
         for (int i = 0; i < 20; i++) {
-            Graph<Integer,
-                DefaultEdge> orig = new SimpleGraph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gnp.generateGraph(orig);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
@@ -198,7 +217,8 @@ public class Graph6Sparse6ExporterTest
     // -------------------helper methods--------------------
 
     private <V, E> String exportGraph(Graph<V, E> g, Graph6Sparse6Exporter.Format format)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(format);
         ByteArrayOutputStream os = new ByteArrayOutputStream();

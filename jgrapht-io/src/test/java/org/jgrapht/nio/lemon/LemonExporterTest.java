@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link LemonExporter}
- * 
+ *
  * @author Dimitrios Michail
  */
 public class LemonExporterTest
@@ -48,14 +48,14 @@ public class LemonExporterTest
             + "label" + NL
             + "1" + NL
             + "2" + NL
-            + "3" + NL            
+            + "3" + NL
             + NL
             + "@arcs" + NL
             + "\t\t-" + NL
             + "1\t2" + NL
-            + "3\t1" + NL            
+            + "3\t1" + NL
             + NL;
-    
+
     private static final String UNDIRECTED_DEFAULT_WEIGHTS =
             "#Creator: JGraphT Lemon (LGF) Exporter" + NL
             + "#Version: 1" + NL
@@ -64,14 +64,14 @@ public class LemonExporterTest
             + "label" + NL
             + "1" + NL
             + "2" + NL
-            + "3" + NL            
+            + "3" + NL
             + NL
             + "@arcs" + NL
             + "\t\tweight" + NL
             + "1\t2\t1.0" + NL
-            + "3\t1\t1.0" + NL            
+            + "3\t1\t1.0" + NL
             + NL;
-    
+
     private static final String UNDIRECTED_WEIGHTED =
             "#Creator: JGraphT Lemon (LGF) Exporter" + NL
             + "#Version: 1" + NL
@@ -80,12 +80,12 @@ public class LemonExporterTest
             + "label" + NL
             + "1" + NL
             + "2" + NL
-            + "3" + NL            
+            + "3" + NL
             + NL
             + "@arcs" + NL
             + "\t\tweight" + NL
             + "1\t2\t2.0" + NL
-            + "3\t1\t5.0" + NL            
+            + "3\t1\t5.0" + NL
             + NL;
 
     private static final String UNDIRECTED_WITH_ESCAPE =
@@ -96,14 +96,14 @@ public class LemonExporterTest
         + "label" + NL
         + "\"1\"" + NL
         + "\"2\"" + NL
-        + "\"3\"" + NL            
+        + "\"3\"" + NL
         + NL
         + "@arcs" + NL
         + "\t\t-" + NL
         + "\"1\"\t\"2\"" + NL
-        + "\"3\"\t\"1\"" + NL            
+        + "\"3\"\t\"1\"" + NL
         + NL;
-    
+
     @Test
     public void testUndirected()
         throws UnsupportedEncodingException
@@ -162,7 +162,7 @@ public class LemonExporterTest
         String res = new String(os.toByteArray(), UTF_8);
         assertEquals(UNDIRECTED_WEIGHTED, res);
     }
-    
+
     @Test
     public void testUndirectedWithEscape()
         throws UnsupportedEncodingException
@@ -192,7 +192,7 @@ public class LemonExporterTest
         assertTrue(exporter.isParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS));
         exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, false);
         assertFalse(exporter.isParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS));
-        
+
         assertFalse(exporter.isParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA));
         exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, true);
         assertTrue(exporter.isParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA));

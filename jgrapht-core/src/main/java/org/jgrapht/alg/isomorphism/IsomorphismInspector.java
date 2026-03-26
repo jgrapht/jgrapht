@@ -31,7 +31,7 @@ public interface IsomorphismInspector<V, E>
 {
     /**
      * Get an iterator over all calculated (isomorphic) mappings between two graphs.
-     * 
+     *
      * @return an iterator over all calculated (isomorphic) mappings between two graphs
      * @throws IsomorphismUndecidableException if the inspector cannot decide whether the graphs are
      *         isomorphic

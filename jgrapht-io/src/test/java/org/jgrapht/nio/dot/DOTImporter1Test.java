@@ -263,7 +263,9 @@ public class DOTImporter1Test
 
     @Test
     public void testExportImportLoop()
-        throws ImportException, ExportException, UnsupportedEncodingException
+        throws ImportException,
+        ExportException,
+        UnsupportedEncodingException
     {
         DirectedMultigraph<String, DefaultEdge> start = new DirectedMultigraph<>(DefaultEdge.class);
         start.addVertex("0");

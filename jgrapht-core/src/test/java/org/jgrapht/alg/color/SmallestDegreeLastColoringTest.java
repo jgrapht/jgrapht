@@ -29,11 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Coloring tests
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SmallestDegreeLastColoringTest
-    extends BaseColoringTest
+public class SmallestDegreeLastColoringTest extends BaseColoringTest
 {
 
     @Override

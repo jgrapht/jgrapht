@@ -37,8 +37,7 @@ import java.util.function.Consumer;
  *
  * @author Nikolay Ognyanov
  */
-public class JohnsonSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+public class JohnsonSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
 {
     // The graph.
     private Graph<V, E> graph;
@@ -137,11 +136,9 @@ public class JohnsonSimpleCycles<V, E>
         }
 
         // build a graph for the SCC found
-        Graph<V,
-            E> resultGraph = GraphTypeBuilder
-                .<V, E> directed().edgeSupplier(graph.getEdgeSupplier())
-                .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
-                .allowingSelfLoops(true).buildGraph();
+        Graph<V, E> resultGraph = GraphTypeBuilder.<V, E> directed()
+            .edgeSupplier(graph.getEdgeSupplier()).vertexSupplier(graph.getVertexSupplier())
+            .allowingMultipleEdges(false).allowingSelfLoops(true).buildGraph();
         for (V v : minSCC) {
             resultGraph.addVertex(v);
         }

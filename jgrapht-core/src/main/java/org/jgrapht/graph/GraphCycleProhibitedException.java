@@ -20,11 +20,10 @@ package org.jgrapht.graph;
 /**
  * Exception indicating that the vertexes supplied to {@link DirectedAcyclicGraph} would cause a
  * cycle.
- * 
+ *
  * @author EnderCrypt (Magnus Gunnarsson)
  */
-public class GraphCycleProhibitedException
-    extends IllegalArgumentException
+public class GraphCycleProhibitedException extends IllegalArgumentException
 {
     private static final long serialVersionUID = 2440845437318796595L;
 

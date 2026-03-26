@@ -49,8 +49,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class HeavyPathLCAFinder<V, E>
-    implements LowestCommonAncestorAlgorithm<V>
+public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
 
     private final Graph<V, E> graph;
@@ -188,7 +187,7 @@ public class HeavyPathLCAFinder<V, E>
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException if the method is called
      */
     @Override

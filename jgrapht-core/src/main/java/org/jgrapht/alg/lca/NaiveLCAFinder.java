@@ -66,8 +66,7 @@ import java.util.*;
  * @author Leo Crawford
  * @author Alexandru Valeanu
  */
-public class NaiveLCAFinder<V, E>
-    implements LowestCommonAncestorAlgorithm<V>
+public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
     private final Graph<V, E> graph;
 

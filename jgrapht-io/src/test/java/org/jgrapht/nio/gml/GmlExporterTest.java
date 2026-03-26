@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author John V. Sichi
  * @author Dimitrios Michail
  */
@@ -120,33 +120,33 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t\tweight 2.0" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t\tweight 5.0" + NL
             + "\t]" + NL
             + "]" + NL;
-    
+
     private static final String UNDIRECTED_WEIGHTED_WITH_EDGE_LABELS
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
@@ -155,19 +155,19 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
@@ -175,15 +175,15 @@ public class GmlExporterTest
             + "\t\tweight 2.0" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
-            + "\t\tlabel \"(v3 : v1)\"" + NL            
+            + "\t\tlabel \"(v3 : v1)\"" + NL
             + "\t\tweight 5.0" + NL
             + "\t]" + NL
             + "]" + NL;
-    
+
     private static final String UNDIRECTED_WITH_VERTEX_LABELS
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
@@ -192,34 +192,34 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
-            + "\t\tlabel \"v1\"" + NL            
+            + "\t\tlabel \"v1\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
-            + "\t\tlabel \"v2\"" + NL            
+            + "\t\tlabel \"v2\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
-            + "\t\tlabel \"v3\"" + NL            
+            + "\t\tlabel \"v3\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t]" + NL
             + "]" + NL;
-    
+
     private static final String UNDIRECTED_WITH_VERTEX_LABELS_AND_CUSTOM_ATTRIBUTES
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
@@ -228,19 +228,19 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tlabel \"v1\"" + NL
             + "\t\tcolor \"red\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tlabel \"v2\"" + NL
             + "\t\tcolor \"black\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t\tlabel \"v3\"" + NL
             + "\t\tcost 5.5" + NL
@@ -248,73 +248,73 @@ public class GmlExporterTest
             + "\t\tvisited \"false\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t\tname \"first edge\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t]" + NL
-            + "]" + NL;    
-    
+            + "]" + NL;
+
     private static final String DIRECTED
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
             + "graph" + NL
-            + "[" + NL            
+            + "[" + NL
             + "\tlabel \"\"" + NL
             + "\tdirected 1" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 4" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 5" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t\tsource 2" + NL
             + "\t\ttarget 3" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 4" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 4" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 5" + NL
             + "\t\tsource 4" + NL
             + "\t\ttarget 5" + NL
@@ -327,7 +327,8 @@ public class GmlExporterTest
 
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
@@ -346,8 +347,8 @@ public class GmlExporterTest
 
     @Test
     public void testGraphicsSection()
-            throws UnsupportedEncodingException,
-            ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
@@ -357,7 +358,8 @@ public class GmlExporterTest
         GmlExporter<String, DefaultEdge> exporter = new GmlExporter<String, DefaultEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_VERTEX_GRAPHICS_ATTRIBUTES, true);
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
-        exporter.setVertexGraphicsAttributeProvider(v -> Map.of("fill", DefaultAttribute.createAttribute("#FF0000")));
+        exporter.setVertexGraphicsAttributeProvider(
+            v -> Map.of("fill", DefaultAttribute.createAttribute("#FF0000")));
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), UTF_8);
@@ -366,7 +368,8 @@ public class GmlExporterTest
 
     @Test
     public void testUnweightedUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -386,7 +389,8 @@ public class GmlExporterTest
 
     @Test
     public void testDirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -410,7 +414,8 @@ public class GmlExporterTest
 
     @Test
     public void testWeightedUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
@@ -433,7 +438,8 @@ public class GmlExporterTest
 
     @Test
     public void testWeightedUndirectedWithEdgeLabels()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
@@ -457,7 +463,8 @@ public class GmlExporterTest
 
     @Test
     public void testUndirectedWithVertexLabels()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
@@ -502,7 +509,8 @@ public class GmlExporterTest
 
     @Test
     public void testUndirectedWithCustomVertexAttributesAndVertexLabels()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);

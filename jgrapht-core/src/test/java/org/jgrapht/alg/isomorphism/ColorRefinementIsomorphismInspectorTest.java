@@ -58,7 +58,8 @@ public class ColorRefinementIsomorphismInspectorTest
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
             new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        assertThrows(IsomorphismUndecidableException.class, () -> isomorphismInspector.isomorphismExists());
+        assertThrows(
+            IsomorphismUndecidableException.class, () -> isomorphismInspector.isomorphismExists());
 
         assertFalse(isomorphismInspector.getMappings().hasNext());
 

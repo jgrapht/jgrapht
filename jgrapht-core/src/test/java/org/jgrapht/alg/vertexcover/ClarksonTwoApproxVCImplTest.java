@@ -22,8 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 
 import java.util.*;
 
-public class ClarksonTwoApproxVCImplTest
-    extends WeightedVertexCoverTwoApproxTest
+public class ClarksonTwoApproxVCImplTest extends WeightedVertexCoverTwoApproxTest
 {
 
     @Override

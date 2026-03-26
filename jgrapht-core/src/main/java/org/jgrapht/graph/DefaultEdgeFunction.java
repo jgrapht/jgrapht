@@ -23,14 +23,13 @@ import java.util.function.*;
 
 /**
  * Default implementation of an edge function which uses a map to store values.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <E> the edge type
  * @param <T> the value type
  */
-public class DefaultEdgeFunction<E, T>
-    implements Function<E, T>, Serializable
+public class DefaultEdgeFunction<E, T> implements Function<E, T>, Serializable
 {
     private static final long serialVersionUID = -4247429315268336855L;
 
@@ -39,9 +38,9 @@ public class DefaultEdgeFunction<E, T>
 
     /**
      * Create a new function
-     * 
+     *
      * @param defaultValue the default value
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public DefaultEdgeFunction(T defaultValue)
@@ -51,10 +50,10 @@ public class DefaultEdgeFunction<E, T>
 
     /**
      * Create a new function
-     * 
+     *
      * @param defaultValue the default value
      * @param map the underlying map
-     * 
+     *
      * @throws NullPointerException if either one of the arguments is {@code null}
      */
     public DefaultEdgeFunction(T defaultValue, Map<E, T> map)
@@ -65,7 +64,7 @@ public class DefaultEdgeFunction<E, T>
 
     /**
      * Get the function value for an edge.
-     * 
+     *
      * @param e the edge
      */
     @Override
@@ -76,7 +75,7 @@ public class DefaultEdgeFunction<E, T>
 
     /**
      * Get the function value for an edge.
-     * 
+     *
      * @param e the edge
      * @return the function value for the edge
      */
@@ -87,7 +86,7 @@ public class DefaultEdgeFunction<E, T>
 
     /**
      * Set the function value for an edge.
-     * 
+     *
      * @param e the edge
      * @param value the value
      */

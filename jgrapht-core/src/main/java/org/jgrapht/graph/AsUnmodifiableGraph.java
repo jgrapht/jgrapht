@@ -30,8 +30,8 @@ import java.util.*;
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This
- * graph will be serializable if the backing graph is serializable.
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This graph will be
+ * serializable if the backing graph is serializable.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -39,9 +39,7 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public class AsUnmodifiableGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable
+public class AsUnmodifiableGraph<V, E> extends GraphDelegator<V, E> implements Serializable
 {
     private static final long serialVersionUID = -8186686968362705760L;
 
@@ -51,7 +49,7 @@ public class AsUnmodifiableGraph<V, E>
      * Creates a new unmodifiable graph based on the specified backing graph.
      *
      * @param g the backing graph on which an unmodifiable graph is to be created
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public AsUnmodifiableGraph(Graph<V, E> g)
@@ -160,21 +158,23 @@ public class AsUnmodifiableGraph<V, E>
 
     /**
      * @throws UnsupportedOperationException always
-     * 
+     *
      * @since 1.5.3
      */
     @Override
-    public void setEdgeWeight(E e, double weight) {
+    public void setEdgeWeight(E e, double weight)
+    {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
     /**
      * @throws UnsupportedOperationException always
-     * 
+     *
      * @since 1.5.3
      */
     @Override
-    public void setEdgeWeight(V sourceVertex, V targetVertex, double weight) {
+    public void setEdgeWeight(V sourceVertex, V targetVertex, double weight)
+    {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 }

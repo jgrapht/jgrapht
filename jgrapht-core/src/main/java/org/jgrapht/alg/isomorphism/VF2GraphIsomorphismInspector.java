@@ -35,8 +35,7 @@ import java.util.*;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public class VF2GraphIsomorphismInspector<V, E>
-    extends VF2AbstractIsomorphismInspector<V, E>
+public class VF2GraphIsomorphismInspector<V, E> extends VF2AbstractIsomorphismInspector<V, E>
 {
     /**
      * Construct a new VF2 isomorphism inspector.

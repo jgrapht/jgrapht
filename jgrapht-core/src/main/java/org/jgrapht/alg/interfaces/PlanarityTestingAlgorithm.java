@@ -99,8 +99,7 @@ public interface PlanarityTestingAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class EmbeddingImpl<V, E>
-        implements Embedding<V, E>
+    class EmbeddingImpl<V, E> implements Embedding<V, E>
     {
         /**
          * The underlying {@code graph}
@@ -149,11 +148,9 @@ public interface PlanarityTestingAlgorithm<V, E>
         {
             StringBuilder builder = new StringBuilder("[");
             for (Map.Entry<V, List<E>> entry : embeddingMap.entrySet()) {
-                builder
-                    .append(entry.getKey().toString()).append(" -> ")
+                builder.append(entry.getKey().toString()).append(" -> ")
                     .append(
-                        entry
-                            .getValue().stream()
+                        entry.getValue().stream()
                             .map(e -> Graphs.getOppositeVertex(graph, e, entry.getKey()).toString())
                             .collect(Collectors.joining(", ", "[", "]")))
                     .append(", ");

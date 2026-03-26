@@ -335,10 +335,8 @@ public class WeakChordalityInspector<V, E>
                 if (i >= separator.getFirst().size()) {
                     separators.add(separator);
                 } else {
-                    queues
-                        .get(
-                            separator
-                                .getFirst().get(separator.getFirst().size() - i - 1).getFirst())
+                    queues.get(
+                        separator.getFirst().get(separator.getFirst().size() - i - 1).getFirst())
                         .add(separator);
                 }
             }

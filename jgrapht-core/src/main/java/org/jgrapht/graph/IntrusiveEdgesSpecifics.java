@@ -22,7 +22,7 @@ import java.util.*;
 
 /**
  * An interface for the set of intrusive edges of a graph.
- * 
+ *
  * <p>
  * Since the library supports edges which can be any user defined object, we need to provide
  * explicit support for storing vertex source, target and weight.
@@ -32,12 +32,11 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public interface IntrusiveEdgesSpecifics<V, E>
-    extends Serializable
+public interface IntrusiveEdgesSpecifics<V, E> extends Serializable
 {
     /**
      * Get the source vertex of an edge.
-     * 
+     *
      * @param e the edge
      * @return the source vertex
      */
@@ -45,7 +44,7 @@ public interface IntrusiveEdgesSpecifics<V, E>
 
     /**
      * Get the target vertex of an edge.
-     * 
+     *
      * @param e the edge
      * @return the target vertex
      */
@@ -53,7 +52,7 @@ public interface IntrusiveEdgesSpecifics<V, E>
 
     /**
      * Add a new edge.
-     * 
+     *
      * @param e the edge to add
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
@@ -63,7 +62,7 @@ public interface IntrusiveEdgesSpecifics<V, E>
 
     /**
      * Check if an edge exists
-     * 
+     *
      * @param e the input edge
      * @return true if an edge exists, false otherwise
      */
@@ -71,21 +70,21 @@ public interface IntrusiveEdgesSpecifics<V, E>
 
     /**
      * Get the edge set
-     * 
+     *
      * @return the edge set
      */
     Set<E> getEdgeSet();
 
     /**
      * Remove an edge.
-     * 
+     *
      * @param e the edge to remove.
      */
     void remove(E e);
 
     /**
      * Get the weight of an edge.
-     * 
+     *
      * @param e the edge
      * @return the edge weight
      */
@@ -93,7 +92,7 @@ public interface IntrusiveEdgesSpecifics<V, E>
 
     /**
      * Set the edge weight
-     * 
+     *
      * @param e the edge
      * @param weight the new weight
      */

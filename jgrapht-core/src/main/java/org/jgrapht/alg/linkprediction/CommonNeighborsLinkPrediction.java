@@ -28,12 +28,12 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
 
 /**
  * Predict links using the number of common neighbors.
- * 
+ *
  * <p>
  * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))|$ where for a node $v$,
  * $\Gamma(v)$ denotes the set of neighbors of $v$.
  * </p>
- * 
+ *
  * See the following two papers:
  * <ul>
  * <li>Liben‐Nowell, David, and Jon Kleinberg. "The link‐prediction problem for social networks."
@@ -42,20 +42,19 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
  * <li>Zhou, Tao, Linyuan Lü, and Yi-Cheng Zhang. "Predicting missing links via local information."
  * The European Physical Journal B 71.4 (2009): 623-630.</li>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class CommonNeighborsLinkPrediction<V, E>
-    implements LinkPredictionAlgorithm<V, E>
+public class CommonNeighborsLinkPrediction<V, E> implements LinkPredictionAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
     /**
      * Create a new prediction
-     * 
+     *
      * @param graph the input graph
      */
     public CommonNeighborsLinkPrediction(Graph<V, E> graph)

@@ -27,8 +27,7 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     protected List<V> first;
     protected List<V> second;
@@ -36,7 +35,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
 
     /**
      * Set the first partition of the generator.
-     * 
+     *
      * @param first the first partition
      * @return the generator
      */
@@ -48,7 +47,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
 
     /**
      * Set the second partition of the generator.
-     * 
+     *
      * @param second the second partition
      * @return the generator
      */
@@ -60,7 +59,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
 
     /**
      * Set the weights of the generator.
-     * 
+     *
      * @param weights the weights
      * @return the generator
      */

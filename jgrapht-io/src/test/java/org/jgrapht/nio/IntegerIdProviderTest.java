@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests
- * 
+ *
  * @author Amr ALHOSSARY
  */
 public class IntegerIdProviderTest

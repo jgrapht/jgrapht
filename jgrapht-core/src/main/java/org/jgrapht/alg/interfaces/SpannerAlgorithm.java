@@ -46,13 +46,12 @@ public interface SpannerAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    interface Spanner<E>
-        extends Set<E>
+    interface Spanner<E> extends Set<E>
     {
 
         /**
          * Returns the weight of the graph spanner.
-         * 
+         *
          * @return weight of the graph spanner
          */
         double getWeight();
@@ -63,9 +62,7 @@ public interface SpannerAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    class SpannerImpl<E>
-        extends WeightedUnmodifiableSet<E>
-        implements Spanner<E>, Serializable
+    class SpannerImpl<E> extends WeightedUnmodifiableSet<E> implements Spanner<E>, Serializable
     {
         private static final long serialVersionUID = 5951646499902668516L;
 

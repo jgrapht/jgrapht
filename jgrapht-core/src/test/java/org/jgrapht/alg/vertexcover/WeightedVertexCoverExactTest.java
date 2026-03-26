@@ -31,9 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Joris Kinable
  */
-public abstract class WeightedVertexCoverExactTest
-    extends VertexCoverExactTest
-    implements WeightedVertexCoverTest
+public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest implements WeightedVertexCoverTest
 {
 
     // ------- Exact algorithms ------

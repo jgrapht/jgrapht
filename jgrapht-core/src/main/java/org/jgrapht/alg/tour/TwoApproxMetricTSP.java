@@ -49,8 +49,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class TwoApproxMetricTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class TwoApproxMetricTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     /**

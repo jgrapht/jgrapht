@@ -42,7 +42,7 @@ public final class CompleteGraphDemo
 
     /**
      * Main demo entry point.
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args)

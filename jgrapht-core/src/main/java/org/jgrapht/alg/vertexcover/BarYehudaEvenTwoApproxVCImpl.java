@@ -46,8 +46,7 @@ import java.util.stream.*;
  *
  * @author Joris Kinable
  */
-public class BarYehudaEvenTwoApproxVCImpl<V, E>
-    implements VertexCoverAlgorithm<V>
+public class BarYehudaEvenTwoApproxVCImpl<V, E> implements VertexCoverAlgorithm<V>
 {
 
     private final Graph<V, E> graph;
@@ -56,19 +55,19 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
     /**
      * Constructs a new BarYehudaEvenTwoApproxVCImpl instance where all vertices have uniform
      * weights.
-     * 
+     *
      * @param graph input graph
      */
     public BarYehudaEvenTwoApproxVCImpl(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireUndirected(graph);
-        this.vertexWeightMap = graph
-            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+        this.vertexWeightMap = graph.vertexSet().stream()
+            .collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
     }
 
     /**
      * Constructs a new BarYehudaEvenTwoApproxVCImpl instance
-     * 
+     *
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
      */

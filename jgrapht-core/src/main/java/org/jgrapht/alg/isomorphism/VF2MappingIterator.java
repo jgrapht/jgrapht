@@ -21,8 +21,7 @@ import org.jgrapht.*;
 
 import java.util.*;
 
-abstract class VF2MappingIterator<V, E>
-    implements Iterator<GraphMapping<V, E>>
+abstract class VF2MappingIterator<V, E> implements Iterator<GraphMapping<V, E>>
 {
     protected Comparator<V> vertexComparator;
     protected Comparator<E> edgeComparator;

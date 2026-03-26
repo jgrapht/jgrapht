@@ -98,8 +98,7 @@ import java.util.*;
  * @see MinimumCostFlowProblem
  * @see MinimumCostFlowAlgorithm
  */
-public class CapacityScalingMinimumCostFlow<V, E>
-    implements MinimumCostFlowAlgorithm<V, E>
+public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgorithm<V, E>
 {
 
     /**

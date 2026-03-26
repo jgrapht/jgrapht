@@ -25,8 +25,7 @@ import java.util.Objects;
  *
  * @author Christoph Zauner
  */
-public class TestEdge
-    extends DefaultEdge
+public class TestEdge extends DefaultEdge
 {
 
     private static final long serialVersionUID = 1L;

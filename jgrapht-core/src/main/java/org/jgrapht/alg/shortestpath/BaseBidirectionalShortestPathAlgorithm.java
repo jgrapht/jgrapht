@@ -30,8 +30,7 @@ import java.util.*;
  * @param <E> edges type
  * @author Dimitrios Michail
  */
-public abstract class BaseBidirectionalShortestPathAlgorithm<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public abstract class BaseBidirectionalShortestPathAlgorithm<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
 
     /**

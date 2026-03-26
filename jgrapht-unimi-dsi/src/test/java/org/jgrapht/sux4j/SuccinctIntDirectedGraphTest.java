@@ -285,8 +285,8 @@ public class SuccinctIntDirectedGraphTest
     @Test
     public void testOutgoingOnly()
     {
-        final List<Pair<Integer, Integer>> edges = List
-            .of(Pair.of(0, 1), Pair.of(0, 2), Pair.of(1, 2), Pair.of(2, 1));
+        final List<Pair<Integer, Integer>> edges =
+            List.of(Pair.of(0, 1), Pair.of(0, 2), Pair.of(1, 2), Pair.of(2, 1));
         final SuccinctIntDirectedGraph s = new SuccinctIntDirectedGraph(3, edges, false);
         assertEquals(2, s.outDegreeOf(0));
     }

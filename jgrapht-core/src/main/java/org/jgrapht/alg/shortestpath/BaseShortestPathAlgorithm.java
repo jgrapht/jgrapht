@@ -31,8 +31,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-abstract class BaseShortestPathAlgorithm<V, E>
-    implements ShortestPathAlgorithm<V, E>
+abstract class BaseShortestPathAlgorithm<V, E> implements ShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting the existence of a negative-weight cycle.
@@ -57,7 +56,7 @@ abstract class BaseShortestPathAlgorithm<V, E>
 
     /**
      * Constructs a new instance of the algorithm for a given graph.
-     * 
+     *
      * @param graph the graph
      */
     public BaseShortestPathAlgorithm(Graph<V, E> graph)
@@ -98,7 +97,7 @@ abstract class BaseShortestPathAlgorithm<V, E>
 
     /**
      * Create an empty path. Returns null if the source vertex is different than the target vertex.
-     * 
+     *
      * @param source the source vertex
      * @param sink the sink vertex
      * @return an empty path or null null if the source vertex is different than the target vertex

@@ -27,8 +27,7 @@ import java.util.*;
 /**
  * @author Joris Kinable
  */
-public class EdmondsKarpMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+public class EdmondsKarpMinimumSTCutTest extends MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(

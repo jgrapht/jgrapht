@@ -77,11 +77,7 @@ import it.unimi.dsi.sux4j.util.EliasFanoMonotoneLongBigList;
  * @see SuccinctIntDirectedGraph
  */
 
-public class SuccinctDirectedGraph
-    extends
-    AbstractSuccinctDirectedGraph<IntIntPair>
-    implements
-    Serializable
+public class SuccinctDirectedGraph extends AbstractSuccinctDirectedGraph<IntIntPair> implements Serializable
 {
     private static final long serialVersionUID = 0L;
 
@@ -103,8 +99,8 @@ public class SuccinctDirectedGraph
      * @param incomingEdgesSupport whether to support incoming edges or not.
      * @param <E> the graph edge type
      */
-    public <
-        E> SuccinctDirectedGraph(final Graph<Integer, E> graph, final boolean incomingEdgesSupport)
+    public <E> SuccinctDirectedGraph(
+        final Graph<Integer, E> graph, final boolean incomingEdgesSupport)
     {
         super((int) graph.iterables().vertexCount(), (int) graph.iterables().edgeCount());
 
@@ -137,8 +133,7 @@ public class SuccinctDirectedGraph
             predecessors = new EliasFanoIndexedMonotoneLongBigList(
                 m, (long) n * n - m,
                 new CumulativeSuccessors<>(graph, iterables::incomingEdgesOf, false));
-        }
-        else {
+        } else {
             cumulativeIndegrees = predecessors = null;
         }
     }
@@ -177,7 +172,8 @@ public class SuccinctDirectedGraph
         this(
             new SparseIntDirectedGraph(
                 numVertices, edges, incomingEdgesSupport ? IncomingEdgesSupport.FULL_INCOMING_EDGES
-            : IncomingEdgesSupport.NO_INCOMING_EDGES), incomingEdgesSupport);
+                    : IncomingEdgesSupport.NO_INCOMING_EDGES),
+            incomingEdgesSupport);
     }
 
     /**
@@ -243,7 +239,6 @@ public class SuccinctDirectedGraph
     {
         this(numVertices, numEdges, edges, true);
     }
-
 
     @Override
     public boolean containsEdge(final IntIntPair e)
@@ -373,10 +368,7 @@ public class SuccinctDirectedGraph
         return successors.indexOfUnsafe(((long) sourceVertex << sourceShift) + targetVertex) != -1;
     }
 
-    private final static class SuccinctGraphIterables
-        implements
-        GraphIterables<Integer, IntIntPair>,
-        Serializable
+    private final static class SuccinctGraphIterables implements GraphIterables<Integer, IntIntPair>, Serializable
     {
         private static final long serialVersionUID = 0L;
         private final SuccinctDirectedGraph graph;
@@ -417,7 +409,8 @@ public class SuccinctDirectedGraph
 
             return () -> new Iterator<>()
             {
-                private final EliasFanoIndexedMonotoneLongBigListIterator iterator = graph.successors.iterator();
+                private final EliasFanoIndexedMonotoneLongBigListIterator iterator =
+                    graph.successors.iterator();
                 private final int n = graph.n;
 
                 @Override
@@ -496,7 +489,8 @@ public class SuccinctDirectedGraph
             final LongBigListIterator iterator = graph.successors.listIterator(result[0]);
             final long base = (long) x << sourceShift;
 
-            return () -> new Iterator<>() {
+            return () -> new Iterator<>()
+            {
                 private int d = (int) (result[1] - result[0]);
 
                 @Override

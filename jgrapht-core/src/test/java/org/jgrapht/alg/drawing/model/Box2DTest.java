@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test {@link Box2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class Box2DTest

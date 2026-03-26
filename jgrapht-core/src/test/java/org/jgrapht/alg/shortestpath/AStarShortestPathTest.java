@@ -29,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Joris Kinable
  */
-public class AStarShortestPathTest
-    extends BaseHeuristicSearchTest
+public class AStarShortestPathTest extends BaseHeuristicSearchTest
 {
 
     /**

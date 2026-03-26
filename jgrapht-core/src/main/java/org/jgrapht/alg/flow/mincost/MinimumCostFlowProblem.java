@@ -90,8 +90,7 @@ public interface MinimumCostFlowProblem<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class MinimumCostFlowProblemImpl<V, E>
-        implements MinimumCostFlowProblem<V, E>
+    class MinimumCostFlowProblemImpl<V, E> implements MinimumCostFlowProblem<V, E>
     {
 
         private final Graph<V, E> graph;

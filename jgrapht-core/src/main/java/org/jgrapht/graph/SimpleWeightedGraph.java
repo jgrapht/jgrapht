@@ -24,12 +24,11 @@ import java.util.function.*;
 
 /**
  * A simple weighted graph.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class SimpleWeightedGraph<V, E>
-    extends SimpleGraph<V, E>
+public class SimpleWeightedGraph<V, E> extends SimpleGraph<V, E>
 {
     private static final long serialVersionUID = -1568410577378365671L;
 
@@ -45,7 +44,7 @@ public class SimpleWeightedGraph<V, E>
 
     /**
      * Creates a new simple weighted graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      */
@@ -56,7 +55,7 @@ public class SimpleWeightedGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -70,7 +69,7 @@ public class SimpleWeightedGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type

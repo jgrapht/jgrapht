@@ -27,24 +27,23 @@ import java.util.*;
  * Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
- * 
+ *
  * <p>
  * In the $G(n, p)$ model, a graph is constructed by connecting nodes randomly. Each edge is
  * included in the graph with probability $p$ independent from every other edge. The complexity of
  * the generator is $O(n^2)$ where $n$ is the number of vertices.
- * 
+ *
  * <p>
  * For the $G(n, M)$ model please see {@link GnmRandomGraphGenerator}.
  *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see GnmRandomGraphGenerator
  */
-public class GnpRandomGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class GnpRandomGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ALLOW_LOOPS = false;
 
@@ -55,7 +54,7 @@ public class GnpRandomGraphGenerator<V, E>
 
     /**
      * Create a new $G(n, p)$ random graph generator. The generator does not create self-loops.
-     * 
+     *
      * @param n the number of nodes
      * @param p the edge probability
      */
@@ -66,7 +65,7 @@ public class GnpRandomGraphGenerator<V, E>
 
     /**
      * Create a new $G(n, p)$ random graph generator. The generator does not create self-loops.
-     * 
+     *
      * @param n the number of nodes
      * @param p the edge probability
      * @param seed seed for the random number generator
@@ -78,7 +77,7 @@ public class GnpRandomGraphGenerator<V, E>
 
     /**
      * Create a new $G(n, p)$ random graph generator.
-     * 
+     *
      * @param n the number of nodes
      * @param p the edge probability
      * @param seed seed for the random number generator
@@ -91,7 +90,7 @@ public class GnpRandomGraphGenerator<V, E>
 
     /**
      * Create a new $G(n, p)$ random graph generator.
-     * 
+     *
      * @param n the number of nodes
      * @param p the edge probability
      * @param rng the random number generator to use
@@ -113,7 +112,7 @@ public class GnpRandomGraphGenerator<V, E>
 
     /**
      * Generates a random graph based on the $G(n, p)$ model.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      */

@@ -19,11 +19,10 @@ package org.jgrapht.graph;
 
 /**
  * Special {@link RuntimeException} to signal that {@link IntrusiveEdge} is used incorrectly.
- * 
+ *
  * @author Hannes Wellmann
  */
-public class IntrusiveEdgeException
-    extends RuntimeException
+public class IntrusiveEdgeException extends RuntimeException
 {
     private static final long serialVersionUID = 7261763645809925025L;
 

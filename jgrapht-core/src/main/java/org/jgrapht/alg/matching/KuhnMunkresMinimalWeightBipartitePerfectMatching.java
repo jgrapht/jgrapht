@@ -36,14 +36,13 @@ import java.util.*;
  * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i,
  * j)</i>, find <i>perfect</i> matching of <i>minimal cost</i>.
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Alexey Kudinkin
  */
-public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private Set<? extends V> partition1;
@@ -51,7 +50,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
     /**
      * Construct a new instance of the algorithm.
-     * 
+     *
      * @param graph the input graph
      * @param partition1 the first partition of the vertex set
      * @param partition2 the second partition of the vertex set
@@ -161,7 +160,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
         /**
          * Construct new instance
-         * 
+         *
          * @param g the input graph
          * @param s first partition of the vertex set
          * @param t second partition of the vertex set
@@ -193,7 +192,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
          * Gets costs-matrix as input and returns assignment of tasks (designated by the columns of
          * cost-matrix) to the workers (designated by the rows of the cost-matrix) so that to
          * MINIMIZE total tasks-tackling costs
-         * 
+         *
          * @return assignment of tasks
          */
         protected int[] buildMatching()
@@ -609,7 +608,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
                 for (int i = 0; i < excessMatrix.length; ++i) {
                     if ((excessMatrix[i][pathTailCol] == 0) && !rowsVisited[i]) {
-                        boolean extending = extendMatchingOL(i, // New tail to continue
+                        boolean extending = extendMatchingOL(
+                            i, // New tail to continue
                             pathTailCol //
                         );
                         if (extending) {

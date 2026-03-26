@@ -58,8 +58,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class EulerTourRMQLCAFinder<V, E>
-    implements LowestCommonAncestorAlgorithm<V>
+public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
     private final Graph<V, E> graph;
     private final Set<V> roots;
@@ -273,7 +272,7 @@ public class EulerTourRMQLCAFinder<V, E>
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException if the method is called
      */
     @Override

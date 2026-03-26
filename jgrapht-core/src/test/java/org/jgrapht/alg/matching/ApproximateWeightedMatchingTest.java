@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for the approximate weighted matching algorithms.
- * 
+ *
  * @author Dimitrios Michail
  */
 public abstract class ApproximateWeightedMatchingTest

@@ -81,8 +81,8 @@ public class ImmutableDirectedBigGraphAdapterTest
         IllegalArgumentException,
         SecurityException
     {
-        final File basename = File
-            .createTempFile(ImmutableDirectedBigGraphAdapterTest.class.getSimpleName(), "test");
+        final File basename =
+            File.createTempFile(ImmutableDirectedBigGraphAdapterTest.class.getSimpleName(), "test");
         EFGraph.store(g, basename.toString());
         basename.deleteOnExit();
         new File(basename + EFGraph.GRAPH_EXTENSION).deleteOnExit();
@@ -111,8 +111,8 @@ public class ImmutableDirectedBigGraphAdapterTest
         final EFGraph ef = EFGraph.load(basename.toString());
 
         final ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(g, t);
-        final ImmutableDirectedBigGraphAdapter b = new ImmutableDirectedBigGraphAdapter(
-            ef, ImmutableGraph.wrap(Transform.transpose(mg)));
+        final ImmutableDirectedBigGraphAdapter b =
+            new ImmutableDirectedBigGraphAdapter(ef, ImmutableGraph.wrap(Transform.transpose(mg)));
 
         assertEquals(g.numNodes(), a.vertexSet().size());
         for (long x = 0; x < g.numNodes(); x++) {
@@ -223,7 +223,6 @@ public class ImmutableDirectedBigGraphAdapterTest
         a.setEdgeWeight(LongLongPair.of(0L, 1L), 1);
 
     }
-
 
     @Test
     public void testCopy()

@@ -25,33 +25,32 @@ import java.util.stream.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm with pivot.
- * 
+ *
  * <p>
  * The pivoting follows the rule from the paper
  * <ul>
  * <li>E. Tomita, A. Tanaka, and H. Takahashi. The worst-case time complexity for generating all
  * maximal cliques and computational experiments. Theor. Comput. Sci. 363(1):28–42, 2006.</li>
  * </ul>
- * 
+ *
  * <p>
  * where the authors show that using that rule guarantees that the Bron-Kerbosch algorithm has
  * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding
  * time to write the output, which is worst-case optimal.
- * 
+ *
  * <p>
  * The algorithm first computes all maximal cliques and then returns the result to the user. A
  * timeout can be set using the constructor parameters.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see BronKerboschCliqueFinder
  * @see DegeneracyBronKerboschCliqueFinder
  *
  * @author Dimitrios Michail
  */
-public class PivotBronKerboschCliqueFinder<V, E>
-    extends BaseBronKerboschCliqueFinder<V, E>
+public class PivotBronKerboschCliqueFinder<V, E> extends BaseBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.
@@ -101,7 +100,7 @@ public class PivotBronKerboschCliqueFinder<V, E>
 
     /**
      * Choose a pivot.
-     * 
+     *
      * @param p vertices to consider adding to the clique
      * @param x vertices which must be excluded from the clique
      * @return a pivot
@@ -131,7 +130,7 @@ public class PivotBronKerboschCliqueFinder<V, E>
 
     /**
      * Recursive implementation of the Bron-Kerbosch with pivot.
-     * 
+     *
      * @param p vertices to consider adding to the clique
      * @param r a possibly non-maximal clique
      * @param x vertices which must be excluded from the clique

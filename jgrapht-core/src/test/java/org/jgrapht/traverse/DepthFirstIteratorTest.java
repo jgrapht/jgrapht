@@ -35,8 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Liviu Rau, Patrick Sharp
  */
-public class DepthFirstIteratorTest
-    extends CrossComponentIteratorTest
+public class DepthFirstIteratorTest extends CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

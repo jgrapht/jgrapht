@@ -21,11 +21,10 @@ import org.jgrapht.alg.util.Pair;
 
 /**
  * An exception used to notify that a link prediction index is not well defined.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class LinkPredictionIndexNotWellDefinedException
-    extends RuntimeException
+public class LinkPredictionIndexNotWellDefinedException extends RuntimeException
 {
     private static final long serialVersionUID = -8832535053621910719L;
 
@@ -69,7 +68,7 @@ public class LinkPredictionIndexNotWellDefinedException
 
     /**
      * Get the vertex pair which caused the error. May be null.
-     * 
+     *
      * @return the vertex pair which caused the error
      */
     public Pair<?, ?> getVertexPair()
@@ -79,7 +78,7 @@ public class LinkPredictionIndexNotWellDefinedException
 
     /**
      * Set the vertex pair which caused the error. May be null.
-     * 
+     *
      * @param vertexPair the vertex pair to set
      */
     public void setVertexPair(Pair<?, ?> vertexPair)

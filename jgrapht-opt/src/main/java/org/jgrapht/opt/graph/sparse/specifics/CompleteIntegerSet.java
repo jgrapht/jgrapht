@@ -22,18 +22,16 @@ import java.util.stream.*;
 
 /**
  * An integer set containing all numbers from 0 to n-1.
- * 
+ *
  * @author Dimitrios Michail
  */
-class CompleteIntegerSet
-    extends
-    AbstractSet<Integer>
+class CompleteIntegerSet extends AbstractSet<Integer>
 {
     private int n;
 
     /**
      * Create an integer set from 0 to n-1.
-     * 
+     *
      * @param n the number n
      */
     public CompleteIntegerSet(int n)

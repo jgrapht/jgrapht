@@ -29,22 +29,20 @@ import java.util.function.*;
  * Exports a graph to a plain text matrix format, which can be processed by matrix manipulation
  * software, such as <a href="http://rs.cipr.uib.no/mtj/">MTJ</a> or
  * <a href="http://www.mathworks.com/products/matlab/">MATLAB</a>.
- * 
+ *
  * <p>
  * The exporter supports three different formats, see {@link Format}.
  * </p>
- * 
+ *
  * @see Format
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Charles Fry
  * @author Dimitrios Michail
  */
-public class MatrixExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class MatrixExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     private final String delimiter = " ";
     private Format format;
@@ -83,7 +81,7 @@ public class MatrixExporter<V, E>
 
     /**
      * Creates a new MatrixExporter with integer name provider for the vertex identifiers.
-     * 
+     *
      * @param format format to use
      */
     public MatrixExporter(Format format)
@@ -93,7 +91,7 @@ public class MatrixExporter<V, E>
 
     /**
      * Creates a new MatrixExporter.
-     * 
+     *
      * @param format format to use
      * @param vertexIdProvider for generating vertex identifiers. Must not be null.
      */
@@ -105,7 +103,7 @@ public class MatrixExporter<V, E>
 
     /**
      * Get the format that the exporter is using.
-     * 
+     *
      * @return the output format
      */
     public Format getFormat()
@@ -115,7 +113,7 @@ public class MatrixExporter<V, E>
 
     /**
      * Set the output format of the exporter
-     * 
+     *
      * @param format the format to use
      */
     public void setFormat(Format format)

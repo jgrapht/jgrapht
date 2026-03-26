@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Simple tests for JohnsonSimpleCycles.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class JohnsonSimpleCyclesTest

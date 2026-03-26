@@ -34,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Patrick Sharp (I pretty much just ripped off Liviu Rau's code from
  *         AbstractGraphIteratorTest)
  */
-public abstract class CrossComponentIteratorTest
-    extends AbstractGraphIteratorTest
+public abstract class CrossComponentIteratorTest extends AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -139,8 +138,7 @@ public abstract class CrossComponentIteratorTest
      *
      * @author Barak Naveh
      */
-    private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+    private class MyTraversalListener<E> implements TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;

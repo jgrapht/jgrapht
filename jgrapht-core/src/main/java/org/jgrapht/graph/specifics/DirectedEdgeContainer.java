@@ -28,14 +28,13 @@ import java.util.*;
  * <p>
  * In this edge container we use array lists to minimize memory toll. However, for high-degree
  * vertices we replace the entire edge container with a direct access subclass (to be implemented).
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  */
-public class DirectedEdgeContainer<V, E>
-    implements Serializable
+public class DirectedEdgeContainer<V, E> implements Serializable
 {
     private static final long serialVersionUID = 7494242245729767106L;
     Set<E> incoming;

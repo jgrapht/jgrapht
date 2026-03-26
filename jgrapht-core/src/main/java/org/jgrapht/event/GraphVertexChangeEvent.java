@@ -27,8 +27,7 @@ package org.jgrapht.event;
  *
  * @author Barak Naveh
  */
-public class GraphVertexChangeEvent<V>
-    extends GraphChangeEvent
+public class GraphVertexChangeEvent<V> extends GraphChangeEvent
 {
     private static final long serialVersionUID = 3690189962679104053L;
 

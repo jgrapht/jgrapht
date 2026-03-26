@@ -45,14 +45,14 @@ public interface VertexColoringAlgorithm<V>
     {
         /**
          * Get the number of colors.
-         * 
+         *
          * @return the number of colors
          */
         int getNumberColors();
 
         /**
          * Get the color map.
-         * 
+         *
          * @return the color map
          */
         Map<V, Integer> getColors();
@@ -72,8 +72,7 @@ public interface VertexColoringAlgorithm<V>
      *
      * @param <V> the graph vertex type
      */
-    class ColoringImpl<V>
-        implements Coloring<V>, Serializable
+    class ColoringImpl<V> implements Coloring<V>, Serializable
     {
         private static final long serialVersionUID = -8456580091672353150L;
 

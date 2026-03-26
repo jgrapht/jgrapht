@@ -37,8 +37,7 @@ import java.util.stream.*;
  * @author Alexey Kudinkin
  * @author Joris Kinable
  */
-public abstract class MaximumFlowAlgorithmBase<V, E>
-    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
+public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
 {
     /**
      * Default tolerance.
@@ -72,7 +71,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
 
     /**
      * Construct a new maximum flow
-     * 
+     *
      * @param network the network
      * @param epsilon the tolerance for the comparison of floating point values
      */
@@ -86,7 +85,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     /**
      * Prepares all data structures to start a new invocation of the Maximum Flow or Minimum Cut
      * algorithms
-     * 
+     *
      * @param source source
      * @param sink sink
      * @param vertexExtensionFactory vertex extension factory
@@ -200,7 +199,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      * \geq f_2$, then the flow on $(v,u)$ becomes $0$, and the flow on $(u,v)$ becomes $f_1-f_2$.
      * Else, if $f_1 \textlptr f_2$, the flow in the direction $(v, u)$ is reduced, i.e. the flow on
      * $(v, u)$ becomes $f_2 - f_1$, whereas the flow on $(u,v)$ remains zero.
-     * 
+     *
      * @param edge desired direction in which the flow is increased
      * @param flow increase of flow in the the direction indicated by the forwardEdge
      */
@@ -230,7 +229,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     /**
      * Create a map which specifies for each edge in the input map the amount of flow that flows
      * through it
-     * 
+     *
      * @return a map which specifies for each edge in the input map the amount of flow that flows
      *         through it
      */
@@ -248,8 +247,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         return maxFlow;
     }
 
-    class VertexExtensionBase
-        implements Extension
+    class VertexExtensionBase implements Extension
     {
         private final List<AnnotatedFlowEdge> outgoing = new ArrayList<>();
 
@@ -263,8 +261,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         }
     }
 
-    class AnnotatedFlowEdge
-        implements Extension
+    class AnnotatedFlowEdge implements Extension
     {
         /* Edge source */
         private VertexExtensionBase source;
@@ -323,8 +320,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns current source vertex, or {@code null} if there was no
-     * {@code calculateMaximumFlow} calls.
+     * Returns current source vertex, or {@code null} if there was no {@code calculateMaximumFlow}
+     * calls.
      *
      * @return current source
      */
@@ -334,8 +331,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns current sink vertex, or {@code null} if there was no
-     * {@code calculateMaximumFlow} calls.
+     * Returns current sink vertex, or {@code null} if there was no {@code calculateMaximumFlow}
+     * calls.
      *
      * @return current sink
      */
@@ -345,8 +342,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns maximum flow value, that was calculated during last
-     * {@code calculateMaximumFlow} call.
+     * Returns maximum flow value, that was calculated during last {@code calculateMaximumFlow}
+     * call.
      *
      * @return maximum flow value
      */
@@ -356,9 +353,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns maximum flow, that was calculated during last
-     * {@code calculateMaximumFlow} call, or {@code null}, if there was no
-     * {@code calculateMaximumFlow} calls.
+     * Returns maximum flow, that was calculated during last {@code calculateMaximumFlow} call, or
+     * {@code null}, if there was no {@code calculateMaximumFlow} calls.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */
@@ -375,7 +371,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      * in an undirected graph, flow may go through the edge in either side. If the flow goes from
      * $u$ to $v$, we return $v$, otherwise $u$. If the flow on an edge equals $0$, the returned
      * value has no meaning.
-     * 
+     *
      * @param e edge
      * @return the vertex where the flow leaves the edge
      */
@@ -439,15 +435,13 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         if (directedGraph) {
             for (V vertex : p1) {
                 cutEdges.addAll(
-                    network
-                        .outgoingEdgesOf(vertex).stream()
+                    network.outgoingEdgesOf(vertex).stream()
                         .filter(edge -> !p1.contains(network.getEdgeTarget(edge)))
                         .collect(Collectors.toList()));
             }
         } else {
             cutEdges.addAll(
-                network
-                    .edgeSet().stream()
+                network.edgeSet().stream()
                     .filter(
                         e -> p1.contains(network.getEdgeSource(e))
                             ^ p1.contains(network.getEdgeTarget(e)))

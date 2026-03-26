@@ -53,8 +53,7 @@ import java.util.function.*;
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  */
-public class BoyerMyrvoldPlanarityInspector<V, E>
-    implements PlanarityTestingAlgorithm<V, E>
+public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlgorithm<V, E>
 {
     /**
      * Whether to print debug messages
@@ -1666,8 +1665,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
      * A circulator over the nodes on the boundary of the biconnected component. Traverses the nodes
      * in the cyclic manner, i.e. it doesn't stop when all the nodes are traversed
      */
-    private class OuterFaceCirculator
-        implements Iterator<Node>
+    private class OuterFaceCirculator implements Iterator<Node>
     {
         /**
          * The node this circulator will return next

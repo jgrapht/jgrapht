@@ -39,8 +39,9 @@ public class CapacityScalingMinimumCostFlowTest
 
     private static final double EPS = 1e-9;
 
-    public static int[] scalingFactors() {
-        return new int[] {1, 2, 3, 4, 5};
+    public static int[] scalingFactors()
+    {
+        return new int[] { 1, 2, 3, 4, 5 };
     }
 
     @ParameterizedTest
@@ -1451,8 +1452,8 @@ public class CapacityScalingMinimumCostFlowTest
                 upperMap.put(edge, data[3]);
             }
         }
-        MinimumCostFlowProblem<Integer,
-            DefaultWeightedEdge> problem = new MinimumCostFlowProblem.MinimumCostFlowProblemImpl<>(
+        MinimumCostFlowProblem<Integer, DefaultWeightedEdge> problem =
+            new MinimumCostFlowProblem.MinimumCostFlowProblemImpl<>(
                 graph, v -> supplyMap.getOrDefault(v, 0), upperMap::get,
                 e -> lowerMap.getOrDefault(e, 0));
         CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> minimumCostFlowAlgorithm =

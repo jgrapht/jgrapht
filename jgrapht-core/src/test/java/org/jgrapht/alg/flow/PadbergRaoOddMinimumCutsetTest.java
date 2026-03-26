@@ -59,8 +59,7 @@ public class PadbergRaoOddMinimumCutsetTest
         assertTrue(PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices));
         assertTrue(PadbergRaoOddMinimumCutset.isOddVertexSet(sinkPartition, oddVertices));
 
-        Set<DefaultWeightedEdge> expectedCutEdges = network
-            .edgeSet().stream()
+        Set<DefaultWeightedEdge> expectedCutEdges = network.edgeSet().stream()
             .filter(
                 e -> sourcePartition.contains(network.getEdgeSource(e))
                     ^ sourcePartition.contains(network.getEdgeTarget(e)))
@@ -190,8 +189,8 @@ public class PadbergRaoOddMinimumCutsetTest
     {
         Random rand = new Random(0);
         for (int i = 0; i < 8; i++) {
-            SimpleWeightedGraph<Integer,
-                DefaultWeightedEdge> randomGraph = new SimpleWeightedGraph<>(
+            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
+                new SimpleWeightedGraph<>(
                     SupplierUtil.createIntegerSupplier(),
                     SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             int vertices = rand.nextInt((30 - 10) + 1) + 10; // 10-30 vertices

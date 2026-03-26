@@ -34,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Liviu Rau
  * @author Patrick Sharp
  */
-public class BreadthFirstIteratorTest
-    extends CrossComponentIteratorTest
+public class BreadthFirstIteratorTest extends CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

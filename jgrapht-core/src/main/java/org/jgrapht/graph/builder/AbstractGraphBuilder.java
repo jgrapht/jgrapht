@@ -30,8 +30,7 @@ import org.jgrapht.graph.*;
  *
  * @author Andrew Chen
  */
-public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
-    B extends AbstractGraphBuilder<V, E, G, B>>
+public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>, B extends AbstractGraphBuilder<V, E, G, B>>
 {
     protected final G graph;
 

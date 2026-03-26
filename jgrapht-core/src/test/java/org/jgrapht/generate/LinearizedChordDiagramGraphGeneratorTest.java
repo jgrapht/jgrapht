@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for {@link LinearizedChordDiagramGraphGenerator}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class LinearizedChordDiagramGraphGeneratorTest

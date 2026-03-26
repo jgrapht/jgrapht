@@ -24,21 +24,21 @@ import org.jgrapht.GraphType;
 
 /**
  * Specifics which provide a sparse graph implementation.
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface SparseGraphSpecifics
 {
     /**
      * Get the number of edges.
-     * 
+     *
      * @return the number of edges
      */
     long edgesCount();
 
     /**
      * Get the number of vertices
-     * 
+     *
      * @return the number of vertices
      */
     long verticesCount();
@@ -46,8 +46,7 @@ public interface SparseGraphSpecifics
     /**
      * Returns {@code true} if this graph contains the specified edge. More formally, returns
      * {@code true} if and only if this graph contains an edge {@code e2} such that
-     * {@code e.equals(e2)}. If the specified edge is {@code null} returns
-     * {@code false}.
+     * {@code e.equals(e2)}. If the specified edge is {@code null} returns {@code false}.
      *
      * @param e edge whose presence in this graph is to be tested.
      *
@@ -61,8 +60,7 @@ public interface SparseGraphSpecifics
     /**
      * Returns {@code true} if this graph contains the specified vertex. More formally, returns
      * {@code true} if and only if this graph contains a vertex {@code u} such that
-     * {@code u.equals(v)}. If the specified vertex is {@code null} returns
-     * {@code false}.
+     * {@code u.equals(v)}. If the specified vertex is {@code null} returns {@code false}.
      *
      * @param v vertex whose presence in this graph is to be tested.
      *
@@ -90,7 +88,7 @@ public interface SparseGraphSpecifics
     default Set<Integer> edgeSet()
     {
         Long edgesCount = edgesCount();
-        if (edgesCount > Integer.MAX_VALUE) { 
+        if (edgesCount > Integer.MAX_VALUE) {
             throw new ArithmeticException("integer overflow");
         }
         return new CompleteIntegerSet(edgesCount.intValue());
@@ -98,11 +96,11 @@ public interface SparseGraphSpecifics
 
     /**
      * Returns the degree of the specified vertex.
-     * 
+     *
      * <p>
      * A degree of a vertex in an undirected graph is the number of edges touching that vertex.
      * Edges with same source and target vertices (self-loops) are counted twice.
-     * 
+     *
      * <p>
      * In directed graphs this method returns the sum of the "in degree" and the "out degree".
      *
@@ -129,12 +127,12 @@ public interface SparseGraphSpecifics
 
     /**
      * Returns the "in degree" of the specified vertex.
-     * 
+     *
      * <p>
      * The "in degree" of a vertex in a directed graph is the number of inward directed edges from
      * that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
      * http://mathworld.wolfram.com/Indegree.html</a>.
-     * 
+     *
      * <p>
      * In the case of undirected graphs this method returns the number of edges touching the vertex.
      * Edges with same source and target vertices (self-loops) are counted twice.
@@ -165,12 +163,12 @@ public interface SparseGraphSpecifics
 
     /**
      * Returns the "out degree" of the specified vertex.
-     * 
+     *
      * <p>
      * The "out degree" of a vertex in a directed graph is the number of outward directed edges from
      * that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
      * http://mathworld.wolfram.com/Outdegree.html</a>.
-     * 
+     *
      * <p>
      * In the case of undirected graphs this method returns the number of edges touching the vertex.
      * Edges with same source and target vertices (self-loops) are counted twice.
@@ -186,7 +184,7 @@ public interface SparseGraphSpecifics
 
     /**
      * Returns a set of all edges outgoing from the specified vertex.
-     * 
+     *
      * <p>
      * In the case of undirected graphs this method returns all edges touching the vertex, thus,
      * some of the returned edges may have their source and target vertices in the opposite order.
@@ -216,7 +214,7 @@ public interface SparseGraphSpecifics
     default Set<Integer> vertexSet()
     {
         Long verticesCount = verticesCount();
-        if (verticesCount > Integer.MAX_VALUE) { 
+        if (verticesCount > Integer.MAX_VALUE) {
             throw new ArithmeticException("integer overflow");
         }
         return new CompleteIntegerSet(verticesCount.intValue());
@@ -246,7 +244,7 @@ public interface SparseGraphSpecifics
      * Get the graph type. The graph type can be used to query for additional metadata such as
      * whether the graph supports directed or undirected edges, self-loops, multiple (parallel)
      * edges, weights, etc.
-     * 
+     *
      * @return the graph type
      */
     GraphType getType();

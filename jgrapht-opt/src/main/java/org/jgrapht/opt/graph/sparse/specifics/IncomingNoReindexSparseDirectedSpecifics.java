@@ -34,9 +34,7 @@ import org.jgrapht.util.UnmodifiableUnionSet;
  *
  * @author Dimitrios Michail
  */
-public class IncomingNoReindexSparseDirectedSpecifics
-    extends
-    NoIncomingNoReindexSparseDirectedSpecifics
+public class IncomingNoReindexSparseDirectedSpecifics extends NoIncomingNoReindexSparseDirectedSpecifics
 {
     /**
      * Incidence matrix with incoming edges
@@ -45,7 +43,7 @@ public class IncomingNoReindexSparseDirectedSpecifics
 
     /**
      * Create a new graph from an edge list.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param numEdges the number of edges
      * @param edges a supplier of an edge stream

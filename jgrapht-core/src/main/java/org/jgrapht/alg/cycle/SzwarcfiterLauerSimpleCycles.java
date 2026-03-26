@@ -37,8 +37,7 @@ import java.util.function.Consumer;
  *
  * @author Nikolay Ognyanov
  */
-public class SzwarcfiterLauerSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+public class SzwarcfiterLauerSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
 {
     // The graph.
     private Graph<V, E> graph;

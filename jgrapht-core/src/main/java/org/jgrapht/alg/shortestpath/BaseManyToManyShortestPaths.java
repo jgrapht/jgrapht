@@ -31,8 +31,7 @@ import java.util.*;
  * @author Semen Chudakov
  * @author Dimitrios Michail
  */
-abstract class BaseManyToManyShortestPaths<V, E>
-    implements ManyToManyShortestPathsAlgorithm<V, E>
+abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPathsAlgorithm<V, E>
 {
 
     protected final Graph<V, E> graph;

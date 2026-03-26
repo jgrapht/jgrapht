@@ -19,21 +19,21 @@ package org.jgrapht.nio;
 
 /**
  * An attribute
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface Attribute
 {
     /**
      * Get the value of the attribute
-     * 
+     *
      * @return the value of the attribute
      */
     String getValue();
 
     /**
      * Get the type of the attribute
-     * 
+     *
      * @return the type of the attribute
      */
     AttributeType getType();

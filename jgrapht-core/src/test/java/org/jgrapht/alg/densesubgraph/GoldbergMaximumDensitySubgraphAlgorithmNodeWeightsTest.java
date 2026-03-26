@@ -35,15 +35,13 @@ import static java.util.Arrays.asList;
  * @author Andre Immig
  */
 
-public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
-    extends GoldbergMaximumDensitySubgraphTestBase<Pair<Integer, Double>, DefaultEdge>
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest extends GoldbergMaximumDensitySubgraphTestBase<Pair<Integer, Double>, DefaultEdge>
 {
 
     @Override
     protected MaximumDensitySubgraphAlgorithm<Pair<Integer, Double>, DefaultEdge> constructSolver(
         Graph<Pair<Integer, Double>, DefaultEdge> g,
-        Function<Graph<Pair<Integer, Double>, DefaultWeightedEdge>,
-            MinimumSTCutAlgorithm<Pair<Integer, Double>, DefaultWeightedEdge>> alg)
+        Function<Graph<Pair<Integer, Double>, DefaultWeightedEdge>, MinimumSTCutAlgorithm<Pair<Integer, Double>, DefaultWeightedEdge>> alg)
     {
         return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<>(g, s, t, DEFAULT_EPS, alg);
     }

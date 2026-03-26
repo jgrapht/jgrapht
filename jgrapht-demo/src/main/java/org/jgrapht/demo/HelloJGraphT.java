@@ -55,7 +55,8 @@ public final class HelloJGraphT
      * @throws ExportException if graph cannot be exported.
      */
     public static void main(String[] args)
-        throws URISyntaxException, ExportException
+        throws URISyntaxException,
+        ExportException
     {
         Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
@@ -73,9 +74,8 @@ public final class HelloJGraphT
 
         // find the vertex corresponding to www.jgrapht.org
         // @example:findVertex:begin
-        URI start = hrefGraph
-            .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
-            .get();
+        URI start = hrefGraph.vertexSet().stream()
+            .filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny().get();
         // @example:findVertex:end
 
         // @example:traverse:end

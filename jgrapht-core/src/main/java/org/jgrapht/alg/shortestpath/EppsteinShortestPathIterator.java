@@ -68,8 +68,7 @@ import java.util.*;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public class EppsteinShortestPathIterator<V, E>
-    implements Iterator<GraphPath<V, E>>
+public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>>
 {
     /**
      * Underlying graph.
@@ -131,8 +130,9 @@ public class EppsteinShortestPathIterator<V, E>
 
         pathsQueue = new PriorityQueue<>();
 
-        TreeSingleSourcePathsImpl<V, E> shortestPaths = (TreeSingleSourcePathsImpl<V,
-            E>) new DijkstraShortestPath<>(new EdgeReversedGraph<>(graph)).getPaths(sink);
+        TreeSingleSourcePathsImpl<V, E> shortestPaths =
+            (TreeSingleSourcePathsImpl<V, E>) new DijkstraShortestPath<>(
+                new EdgeReversedGraph<>(graph)).getPaths(sink);
 
         GraphPath<V, E> shortestPath = shortestPaths.getPath(source);
         if (shortestPath != null) {
@@ -528,8 +528,7 @@ public class EppsteinShortestPathIterator<V, E>
     /**
      * Represents a path that is generated during the computations.
      */
-    private class EppsteinGraphPath
-        implements GraphPath<V, E>, Comparable<EppsteinGraphPath>
+    private class EppsteinGraphPath implements GraphPath<V, E>, Comparable<EppsteinGraphPath>
     {
 
         /**
@@ -693,8 +692,7 @@ public class EppsteinShortestPathIterator<V, E>
      * {@code right}, {@code rest} and {@code cross} vertices, because they are computed during the
      * paths graph traversal.
      */
-    private class PathsGraphVertex
-        implements Comparable<PathsGraphVertex>
+    private class PathsGraphVertex implements Comparable<PathsGraphVertex>
     {
 
         /**

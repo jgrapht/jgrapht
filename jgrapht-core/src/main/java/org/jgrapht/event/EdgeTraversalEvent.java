@@ -26,8 +26,7 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public class EdgeTraversalEvent<E>
-    extends EventObject
+public class EdgeTraversalEvent<E> extends EventObject
 {
     private static final long serialVersionUID = 4050768173789820979L;
 

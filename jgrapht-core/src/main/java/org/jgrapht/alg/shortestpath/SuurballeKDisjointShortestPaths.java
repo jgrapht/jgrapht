@@ -48,7 +48,7 @@ import org.jgrapht.alg.interfaces.*;
  * <p>
  * The algorithm is running k sequential Dijkstra iterations to find the shortest path at each step.
  * Hence, yielding a complexity of k*O(Dijkstra).
- * 
+ *
  * <p>
  * For further reference see <a href="https://en.wikipedia.org/wiki/Suurballe%27s_algorithm">
  * Wikipedia page </a>
@@ -56,14 +56,13 @@ import org.jgrapht.alg.interfaces.*;
  * <li>Suurballe, J. W.; Tarjan, R. E. (1984), A quick method for finding shortest pairs of disjoint
  * paths.
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Assaf Mizrachi
  */
-public class SuurballeKDisjointShortestPaths<V, E>
-    extends BaseKDisjointShortestPathsAlgorithm<V, E>
+public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortestPathsAlgorithm<V, E>
 {
 
     private ShortestPathAlgorithm.SingleSourcePaths<V, E> singleSourcePaths;
@@ -136,8 +135,7 @@ public class SuurballeKDisjointShortestPaths<V, E>
         } else if (targetPathWeight == Double.POSITIVE_INFINITY) {
             return Double.NEGATIVE_INFINITY;
         } else {
-            return BigDecimal
-                .valueOf(edgeWeight).subtract(BigDecimal.valueOf(targetPathWeight))
+            return BigDecimal.valueOf(edgeWeight).subtract(BigDecimal.valueOf(targetPathWeight))
                 .add(BigDecimal.valueOf(sourcePathWeight)).doubleValue();
         }
     }

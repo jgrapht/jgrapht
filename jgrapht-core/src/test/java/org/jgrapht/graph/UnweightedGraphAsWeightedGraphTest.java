@@ -111,7 +111,8 @@ public class UnweightedGraphAsWeightedGraphTest
     @Test
     public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
     {
-        assertThrows(IllegalArgumentException.class, () -> new AsWeightedGraph<>(
+        assertThrows(
+            IllegalArgumentException.class, () -> new AsWeightedGraph<>(
                 new DefaultUndirectedGraph<>(String.class), new HashMap<>(), true));
     }
 }

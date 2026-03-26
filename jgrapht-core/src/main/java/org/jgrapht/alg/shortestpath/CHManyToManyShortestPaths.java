@@ -66,8 +66,7 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
  * @see DefaultManyToManyShortestPaths
  * @see DijkstraManyToManyShortestPaths
  */
-public class CHManyToManyShortestPaths<V, E>
-    extends BaseManyToManyShortestPaths<V, E>
+public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E>
 {
     /**
      * Contraction hierarchy of {@code graph}.
@@ -134,19 +133,17 @@ public class CHManyToManyShortestPaths<V, E>
             sources = tmp;
         }
 
-        Map<ContractionVertex<V>,
-            Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces =
-                new HashMap<>();
-        Map<ContractionVertex<V>,
-            Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces =
-                new HashMap<>();
-        Map<Pair<ContractionVertex<V>, ContractionVertex<V>>,
-            Pair<Double, ContractionVertex<V>>> middleVertices = new HashMap<>();
+        Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces =
+            new HashMap<>();
+        Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces =
+            new HashMap<>();
+        Map<Pair<ContractionVertex<V>, ContractionVertex<V>>, Pair<Double, ContractionVertex<V>>> middleVertices =
+            new HashMap<>();
 
-        Set<ContractionVertex<V>> contractedSources = sources
-            .stream().map(contractionMapping::get).collect(Collectors.toCollection(HashSet::new));
-        Set<ContractionVertex<V>> contractedTargets = targets
-            .stream().map(contractionMapping::get).collect(Collectors.toCollection(HashSet::new));
+        Set<ContractionVertex<V>> contractedSources = sources.stream().map(contractionMapping::get)
+            .collect(Collectors.toCollection(HashSet::new));
+        Set<ContractionVertex<V>> contractedTargets = targets.stream().map(contractionMapping::get)
+            .collect(Collectors.toCollection(HashSet::new));
 
         Map<ContractionVertex<V>, List<BucketEntry>> bucketsMap = new HashMap<>();
         for (ContractionVertex<V> vertex : searchContractionGraph.vertexSet()) {
@@ -196,8 +193,7 @@ public class CHManyToManyShortestPaths<V, E>
         Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
         ContractionVertex<V> target, Set<ContractionVertex<V>> contractedSources,
         Map<ContractionVertex<V>, List<BucketEntry>> bucketsMap,
-        Map<ContractionVertex<V>,
-            Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces,
+        Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces,
         boolean reversed)
     {
         Graph<ContractionVertex<V>, ContractionEdge<E>> maskSubgraph;
@@ -215,11 +211,11 @@ public class CHManyToManyShortestPaths<V, E>
 
         backwardSearchSpaces.put(target, distanceAndPredecessorMap);
 
-        for (Map.Entry<ContractionVertex<V>,
-            Pair<Double, ContractionEdge<E>>> entry : distanceAndPredecessorMap.entrySet())
+        for (Map.Entry<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>> entry : distanceAndPredecessorMap
+            .entrySet())
         {
-            bucketsMap
-                .get(entry.getKey()).add(new BucketEntry(target, entry.getValue().getFirst()));
+            bucketsMap.get(entry.getKey())
+                .add(new BucketEntry(target, entry.getValue().getFirst()));
         }
     }
 
@@ -241,10 +237,8 @@ public class CHManyToManyShortestPaths<V, E>
         Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
         ContractionVertex<V> source, Set<ContractionVertex<V>> contractedTargets,
         Map<ContractionVertex<V>, List<BucketEntry>> bucketsMap,
-        Map<ContractionVertex<V>,
-            Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces,
-        Map<Pair<ContractionVertex<V>, ContractionVertex<V>>,
-            Pair<Double, ContractionVertex<V>>> middleVerticesMap,
+        Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces,
+        Map<Pair<ContractionVertex<V>, ContractionVertex<V>>, Pair<Double, ContractionVertex<V>>> middleVerticesMap,
         boolean reversed)
     {
         Graph<ContractionVertex<V>, ContractionEdge<E>> maskSubgraph;
@@ -259,8 +253,8 @@ public class CHManyToManyShortestPaths<V, E>
 
         forwardSearchSpaces.put(source, distanceAndPredecessorMap);
 
-        for (Map.Entry<ContractionVertex<V>,
-            Pair<Double, ContractionEdge<E>>> entry : distanceAndPredecessorMap.entrySet())
+        for (Map.Entry<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>> entry : distanceAndPredecessorMap
+            .entrySet())
         {
             ContractionVertex<V> middleVertex = entry.getKey();
             double forwardDistance = entry.getValue().getFirst();
@@ -294,13 +288,12 @@ public class CHManyToManyShortestPaths<V, E>
      * @param targets search end vertices
      * @return distance and predecessor map
      */
-    private Map<ContractionVertex<V>,
-        Pair<Double, ContractionEdge<E>>> getDistanceAndPredecessorMap(
-            Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-            ContractionVertex<V> source, Set<ContractionVertex<V>> targets)
+    private Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>> getDistanceAndPredecessorMap(
+        Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
+        ContractionVertex<V> source, Set<ContractionVertex<V>> targets)
     {
-        return ((TreeSingleSourcePathsImpl<ContractionVertex<V>,
-            ContractionEdge<E>>) getShortestPathsTree(contractionGraph, source, targets)).map;
+        return ((TreeSingleSourcePathsImpl<ContractionVertex<V>, ContractionEdge<E>>) getShortestPathsTree(
+            contractionGraph, source, targets)).map;
     }
 
     /**
@@ -339,8 +332,7 @@ public class CHManyToManyShortestPaths<V, E>
      * is required it is constructed by recursively unpacking edges stored in the shortest paths
      * trees corresponding to source and target vertices.
      */
-    private class CHManyToManyShortestPathsImpl
-        extends BaseManyToManyShortestPathsImpl<V, E>
+    private class CHManyToManyShortestPathsImpl extends BaseManyToManyShortestPathsImpl<V, E>
     {
         /**
          * The underlying graph.
@@ -358,19 +350,16 @@ public class CHManyToManyShortestPaths<V, E>
         /**
          * Stores forward search space for each start vertex.
          */
-        private Map<ContractionVertex<V>,
-            Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces;
+        private Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces;
         /**
          * Stores backward search space for each target vertex.
          */
-        private Map<ContractionVertex<V>,
-            Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces;
+        private Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces;
 
         /**
          * Stores pair of path weight and middle vertex for each source-target pair.
          */
-        private Map<Pair<ContractionVertex<V>, ContractionVertex<V>>,
-            Pair<Double, ContractionVertex<V>>> distanceAndMiddleVertexMap;
+        private Map<Pair<ContractionVertex<V>, ContractionVertex<V>>, Pair<Double, ContractionVertex<V>>> distanceAndMiddleVertexMap;
 
         /**
          * Constructs a new instance for the given {@code graph}, {@code contractionGraph},
@@ -385,12 +374,9 @@ public class CHManyToManyShortestPaths<V, E>
          */
         public CHManyToManyShortestPathsImpl(
             Graph<V, E> graph, ContractionHierarchy<V, E> hierarchy, Set<V> sources, Set<V> targets,
-            Map<ContractionVertex<V>,
-                Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces,
-            Map<ContractionVertex<V>,
-                Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces,
-            Map<Pair<ContractionVertex<V>, ContractionVertex<V>>,
-                Pair<Double, ContractionVertex<V>>> distanceAndMiddleVertexMap)
+            Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> forwardSearchSpaces,
+            Map<ContractionVertex<V>, Map<ContractionVertex<V>, Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces,
+            Map<Pair<ContractionVertex<V>, ContractionVertex<V>>, Pair<Double, ContractionVertex<V>>> distanceAndMiddleVertexMap)
         {
             super(sources, targets);
             this.graph = graph;

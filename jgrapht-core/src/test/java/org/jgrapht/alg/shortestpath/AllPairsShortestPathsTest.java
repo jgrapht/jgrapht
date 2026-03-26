@@ -73,8 +73,8 @@ public class AllPairsShortestPathsTest
         final double p = 0.35;
         final int landmarksCount = 2;
 
-        List<Function<Graph<Integer, DefaultWeightedEdge>,
-            ShortestPathAlgorithm<Integer, DefaultWeightedEdge>>> algs = new ArrayList<>();
+        List<Function<Graph<Integer, DefaultWeightedEdge>, ShortestPathAlgorithm<Integer, DefaultWeightedEdge>>> algs =
+            new ArrayList<>();
         algs.add((g) -> new DijkstraShortestPath<>(g));
         algs.add((g) -> new BidirectionalDijkstraShortestPath<>(g));
         algs.add((g) -> new AStarShortestPath<>(g, (u, t) -> 0d));
@@ -103,9 +103,7 @@ public class AllPairsShortestPathsTest
             double[][] dist = new double[n][n];
 
             int j = 0;
-            for (Function<Graph<Integer, DefaultWeightedEdge>,
-                ShortestPathAlgorithm<Integer, DefaultWeightedEdge>> spProvider : algs)
-            {
+            for (Function<Graph<Integer, DefaultWeightedEdge>, ShortestPathAlgorithm<Integer, DefaultWeightedEdge>> spProvider : algs) {
                 ShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = spProvider.apply(g);
                 for (Integer v : g.vertexSet()) {
                     for (Integer u : g.vertexSet()) {

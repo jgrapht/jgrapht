@@ -49,9 +49,9 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
- * 
+ *
  * Below is a small example of a graph in JSON format.
- * 
+ *
  * <pre>
  * {
  *   "nodes": [
@@ -65,17 +65,17 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
  *   ]
  * }
  * </pre>
- * 
+ *
  * <p>
  * In case the graph is weighted then the importer also reads edge weights. Otherwise the default
  * edge weight is returned. The importer also supports reading additional string attributes such as
  * label or custom user attributes.
- * 
+ *
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
  * of the graph. Moreover, complicated nested structures which are inside vertices or edges are
  * simply returned as a whole. For example, in the following graph
- * 
+ *
  * <pre>
  * {
  *   "nodes": [
@@ -87,15 +87,13 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
  *   ]
  * }
  * </pre>
- * 
+ *
  * the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same
  * is done for arrays or any other arbitrary nested structure.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class JSONEventDrivenImporter
-    extends BaseEventDrivenImporter<String, Triple<String, String, Double>>
-    implements EventDrivenImporter<String, Triple<String, String, Double>>
+public class JSONEventDrivenImporter extends BaseEventDrivenImporter<String, Triple<String, String, Double>> implements EventDrivenImporter<String, Triple<String, String, Double>>
 {
     /**
      * Default name for the vertices collection
@@ -121,7 +119,7 @@ public class JSONEventDrivenImporter
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
      *        even if they appear together in the input
      * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
@@ -136,7 +134,7 @@ public class JSONEventDrivenImporter
 
     /**
      * Get the name used for the vertices collection in the file.
-     * 
+     *
      * @return the name used for the vertices collection in the file.
      */
     public String getVerticesCollectionName()
@@ -146,7 +144,7 @@ public class JSONEventDrivenImporter
 
     /**
      * Set the name used for the vertices collection in the file.
-     * 
+     *
      * @param verticesCollectionName the name
      */
     public void setVerticesCollectionName(String verticesCollectionName)
@@ -156,7 +154,7 @@ public class JSONEventDrivenImporter
 
     /**
      * Get the name used for the edges collection in the file.
-     * 
+     *
      * @return the name used for the edges collection in the file.
      */
     public String getEdgesCollectionName()
@@ -166,7 +164,7 @@ public class JSONEventDrivenImporter
 
     /**
      * Set the name used for the edges collection in the file.
-     * 
+     *
      * @param edgesCollectionName the name
      */
     public void setEdgesCollectionName(String edgesCollectionName)
@@ -204,8 +202,7 @@ public class JSONEventDrivenImporter
         }
     }
 
-    private class ThrowingErrorListener
-        extends BaseErrorListener
+    private class ThrowingErrorListener extends BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -219,8 +216,7 @@ public class JSONEventDrivenImporter
     }
 
     // notify about graph from parse tree
-    private class NotifyJsonListener
-        extends JsonBaseListener
+    private class NotifyJsonListener extends JsonBaseListener
     {
         private static final String GRAPH = "graph";
         private static final String ID = "id";

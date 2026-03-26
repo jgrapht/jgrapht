@@ -561,8 +561,8 @@ class BlossomVPrimalUpdater<V, E>
             current.addChild(prevNode, prevNode.blossomSibling, false);
             prevNode = current;
         }
-        blossom.parentEdge
-            .getOpposite(branchesEndpoint).addChild(branchesEndpoint, blossom.parentEdge, false);
+        blossom.parentEdge.getOpposite(branchesEndpoint)
+            .addChild(branchesEndpoint, blossom.parentEdge, false);
 
         // second traversal, update edge slacks and their presence in heaps
         current = blossomRoot;

@@ -25,11 +25,10 @@ import java.util.*;
 
 /**
  * Coloring tests
- * 
+ *
  * @author Dimitrios Michail
  */
-public class RandomGreedyColoring2Test
-    extends BaseColoringTest
+public class RandomGreedyColoring2Test extends BaseColoringTest
 {
 
     final long seed = 15;

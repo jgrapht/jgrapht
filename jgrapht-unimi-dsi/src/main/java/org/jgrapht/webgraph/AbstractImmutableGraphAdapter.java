@@ -39,9 +39,7 @@ import it.unimi.dsi.webgraph.LazyIntSkippableIterator;
  * @author Sebastiano Vigna
  */
 
-public abstract class AbstractImmutableGraphAdapter<E extends IntIntPair>
-    extends
-    AbstractGraph<Integer, E>
+public abstract class AbstractImmutableGraphAdapter<E extends IntIntPair> extends AbstractGraph<Integer, E>
 {
 
     /** The underlying graph. */

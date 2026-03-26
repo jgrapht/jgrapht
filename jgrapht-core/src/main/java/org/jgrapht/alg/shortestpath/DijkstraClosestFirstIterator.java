@@ -48,8 +48,7 @@ import java.util.function.*;
  * @author John V. Sichi
  * @author Dimitrios Michail
  */
-class DijkstraClosestFirstIterator<V, E>
-    implements Iterator<V>
+class DijkstraClosestFirstIterator<V, E> implements Iterator<V>
 {
     private final Graph<V, E> graph;
     private final V source;

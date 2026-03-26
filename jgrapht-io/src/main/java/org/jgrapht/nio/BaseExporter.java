@@ -24,7 +24,7 @@ import java.util.function.*;
  * Base implementation for an exporter.
  *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
@@ -62,7 +62,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param vertexIdProvider the vertex id provider to use. Cannot be null.
      */
     public BaseExporter(Function<V, String> vertexIdProvider)
@@ -77,7 +77,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the graph id provider.
-     * 
+     *
      * @return the graph id provider as an {@link Optional}.
      */
     public Optional<Supplier<String>> getGraphIdProvider()
@@ -87,7 +87,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Set the graph id provider.
-     * 
+     *
      * @param graphIdProvider the graph id provider
      */
     public void setGraphIdProvider(Supplier<String> graphIdProvider)
@@ -97,7 +97,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the graph attribute provider.
-     * 
+     *
      * @return the graph attribute provider as an {@link Optional}.
      */
     public Optional<Supplier<Map<String, Attribute>>> getGraphAttributeProvider()
@@ -107,7 +107,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Set the graph attribute provider.
-     * 
+     *
      * @param graphAttributeProvider the graph attribute provider
      */
     public void setGraphAttributeProvider(Supplier<Map<String, Attribute>> graphAttributeProvider)
@@ -117,7 +117,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get vertex id provider.
-     * 
+     *
      * @return the vertex id provider
      */
     public Function<V, String> getVertexIdProvider()
@@ -127,7 +127,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Set the vertex id provider
-     * 
+     *
      * @param vertexIdProvider the vertex id provider
      */
     public void setVertexIdProvider(Function<V, String> vertexIdProvider)
@@ -137,7 +137,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the vertex attribute provider
-     * 
+     *
      * @return the vertex attribute provider as an {@link Optional}
      */
     public Optional<Function<V, Map<String, Attribute>>> getVertexAttributeProvider()
@@ -147,7 +147,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Set the vertex attribute provider
-     * 
+     *
      * @param vertexAttributeProvider the vertex attribute provider
      */
     public void setVertexAttributeProvider(
@@ -158,7 +158,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the edge id provider
-     * 
+     *
      * @return the edge id provider as an {@link Optional}.
      */
     public Optional<Function<E, String>> getEdgeIdProvider()
@@ -168,7 +168,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Set edge id provider
-     * 
+     *
      * @param edgeIdProvider the edge id provider
      */
     public void setEdgeIdProvider(Function<E, String> edgeIdProvider)
@@ -178,7 +178,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the edge attribute provider
-     * 
+     *
      * @return the edge attribute provider as an {@link Optional}
      */
     public Optional<Function<E, Map<String, Attribute>>> getEdgeAttributeProvider()
@@ -188,7 +188,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Set the edge attribute provider.
-     * 
+     *
      * @param edgeAttributeProvider the edge attribute provider
      */
     public void setEdgeAttributeProvider(Function<E, Map<String, Attribute>> edgeAttributeProvider)
@@ -198,7 +198,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the graph id if present
-     * 
+     *
      * @return an {@link Optional} of the graph id
      */
     protected Optional<String> getGraphId()
@@ -208,7 +208,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get the vertex id
-     * 
+     *
      * @param v the vertex
      * @return the id of the vertex
      */
@@ -219,7 +219,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get an optional of the edge id
-     * 
+     *
      * @param e the edge
      * @return the edge id
      */
@@ -230,7 +230,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get vertex attributes
-     * 
+     *
      * @param v the vertex v
      * @return the vertex attributes as an {@link Optional}
      */
@@ -241,7 +241,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get an optional of a vertex attribute
-     * 
+     *
      * @param v the vertex v
      * @param key the attribute key
      * @return the attribute as an {@link Optional}
@@ -253,7 +253,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get edge attributes
-     * 
+     *
      * @param e the edge e
      * @return the edge attributes as an {@link Optional}
      */
@@ -264,7 +264,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get an optional of an edge attribute
-     * 
+     *
      * @param e the edge e
      * @param key the attribute key
      * @return the attribute as an {@link Optional}
@@ -276,7 +276,7 @@ public abstract class BaseExporter<V, E>
 
     /**
      * Get an optional of a graph attribute
-     * 
+     *
      * @param key the attribute key
      * @return the attribute as an {@link Optional}
      */

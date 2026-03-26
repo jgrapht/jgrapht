@@ -44,11 +44,9 @@ public class JSONExporterTest
         String expected =
             "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"nodes\":[{\"id\":\"1\"},{\"id\":\"2\"},{\"id\":\"3\"},{\"id\":\"4\"}],\"edges\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\"},{\"id\":\"2\",\"source\":\"2\",\"target\":\"3\"},{\"id\":\"3\",\"source\":\"3\",\"target\":\"4\"},{\"id\":\"4\",\"source\":\"1\",\"target\":\"4\"}]}";
 
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().edgeClass(DefaultEdge.class)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
-                .allowingSelfLoops(false).buildGraph();
+        Graph<Integer, DefaultEdge> graph = GraphTypeBuilder.directed().edgeClass(DefaultEdge.class)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
+            .allowingSelfLoops(false).buildGraph();
 
         graph.addVertex(1);
         graph.addVertex(2);
@@ -75,9 +73,8 @@ public class JSONExporterTest
         String expected =
             "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"nodes\":[{\"id\":\"1\",\"color\":\"yellow\",\"label\":\"V1\"},{\"id\":\"2\",\"color\":\"red\",\"label\":\"V2\"},{\"id\":\"3\",\"label\":\"V3\"}],\"edges\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\",\"color\":\"what?\",\"label\":\"e12\",\"weight\":1.0},{\"id\":\"2\",\"source\":\"1\",\"target\":\"3\",\"color\":\"I have no color!\",\"label\":\"e13\",\"weight\":1.0},{\"id\":\"3\",\"source\":\"2\",\"target\":\"3\",\"color\":\"I have no color!\",\"label\":\"e13\",\"weight\":100.0}]}";
 
-        Graph<Integer,
-            DefaultWeightedEdge> graph = GraphTypeBuilder
-                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+        Graph<Integer, DefaultWeightedEdge> graph =
+            GraphTypeBuilder.directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
                 .allowingSelfLoops(false).buildGraph();
 
@@ -148,9 +145,8 @@ public class JSONExporterTest
         String expected =
             "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"nodes\":[{\"id\":\"1\",\"stringAttribute\":\"yellow\",\"doubleAttribute\":3.4,\"intAttribute\":3,\"floatAttribute\":3.4,\"longAttribute\":3,\"booleanAttribute\":true},{\"id\":\"2\"}],\"edges\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\",\"color\":\"what?\",\"label\":\"e12\",\"weight\":100.0}]}";
 
-        Graph<Integer,
-            DefaultWeightedEdge> graph = GraphTypeBuilder
-                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+        Graph<Integer, DefaultWeightedEdge> graph =
+            GraphTypeBuilder.directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
                 .allowingSelfLoops(false).buildGraph();
 
@@ -203,11 +199,10 @@ public class JSONExporterTest
     public void testNotAllowedNanDouble()
     {
         assertThrows(IllegalArgumentException.class, () -> {
-            Graph<Integer,
-                DefaultWeightedEdge> graph = GraphTypeBuilder
-                    .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
-                    .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
-                    .allowingSelfLoops(false).buildGraph();
+            Graph<Integer, DefaultWeightedEdge> graph =
+                GraphTypeBuilder.directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                    .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
 
             graph.addVertex(1);
 
@@ -235,11 +230,11 @@ public class JSONExporterTest
 
     @Test
     public void testExportAndImport()
-        throws ExportException, ImportException
+        throws ExportException,
+        ImportException
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph1 = GraphTypeBuilder
-                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+        Graph<Integer, DefaultWeightedEdge> graph1 =
+            GraphTypeBuilder.directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph();
 
@@ -262,9 +257,8 @@ public class JSONExporterTest
         exporter.exportGraph(graph1, os);
         String output1 = os.toString();
 
-        Graph<Integer,
-            DefaultWeightedEdge> graph2 = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+        Graph<Integer, DefaultWeightedEdge> graph2 =
+            GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER).buildGraph();
 
@@ -288,11 +282,11 @@ public class JSONExporterTest
 
     @Test
     public void testExportAndImportWithEscape()
-        throws ExportException, ImportException
+        throws ExportException,
+        ImportException
     {
-        Graph<String,
-            DefaultWeightedEdge> graph1 = GraphTypeBuilder
-                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+        Graph<String, DefaultWeightedEdge> graph1 =
+            GraphTypeBuilder.directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
                 .vertexSupplier(SupplierUtil.createStringSupplier()).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph();
 
@@ -317,9 +311,8 @@ public class JSONExporterTest
         exporter.exportGraph(graph1, os);
         String output1 = os.toString();
 
-        Graph<String,
-            DefaultWeightedEdge> graph2 = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+        Graph<String, DefaultWeightedEdge> graph2 =
+            GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
                 .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER).buildGraph();
 
@@ -349,11 +342,9 @@ public class JSONExporterTest
         String expected =
             "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"vertices\":[{\"id\":\"1\"},{\"id\":\"2\"},{\"id\":\"3\"},{\"id\":\"4\"}],\"links\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\"},{\"id\":\"2\",\"source\":\"2\",\"target\":\"3\"},{\"id\":\"3\",\"source\":\"3\",\"target\":\"4\"},{\"id\":\"4\",\"source\":\"1\",\"target\":\"4\"}]}";
 
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().edgeClass(DefaultEdge.class)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
-                .allowingSelfLoops(false).buildGraph();
+        Graph<Integer, DefaultEdge> graph = GraphTypeBuilder.directed().edgeClass(DefaultEdge.class)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
+            .allowingSelfLoops(false).buildGraph();
 
         graph.addVertex(1);
         graph.addVertex(2);

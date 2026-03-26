@@ -21,26 +21,24 @@ import java.util.*;
 
 /**
  * An uniform weights variant of the intrusive edges specifics.
- * 
+ *
  * <p>
  * The implementation optimizes the use of {@link DefaultEdge} and subclasses. For other custom user
  * edge types, a map is used to store vertex source and target.
- * 
+ *
  * @author Barak Naveh
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class UniformIntrusiveEdgesSpecifics<V, E>
-    extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveEdge>
-    implements IntrusiveEdgesSpecifics<V, E>
+public class UniformIntrusiveEdgesSpecifics<V, E> extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveEdge> implements IntrusiveEdgesSpecifics<V, E>
 {
     private static final long serialVersionUID = -5736320893697031114L;
 
     /**
      * Constructor
-     * 
+     *
      * @param map the map to use for storage
      */
     public UniformIntrusiveEdgesSpecifics(Map<E, IntrusiveEdge> map)

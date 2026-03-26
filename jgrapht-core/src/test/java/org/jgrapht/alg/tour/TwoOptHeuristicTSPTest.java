@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for {@link TwoOptHeuristicTSP}.
- * 
+ *
  * @author Dimitrios Michail
  */
 @Tag("slow")
@@ -119,9 +119,10 @@ public class TwoOptHeuristicTSPTest
     @Test
     public void testInvalidInstanceDirected()
     {
-        assertThrows(IllegalArgumentException.class, () -> new TwoOptHeuristicTSP<String, DefaultEdge>()
-            .getTour(new SimpleDirectedGraph<>(DefaultEdge.class)));
-        
+        assertThrows(
+            IllegalArgumentException.class, () -> new TwoOptHeuristicTSP<String, DefaultEdge>()
+                .getTour(new SimpleDirectedGraph<>(DefaultEdge.class)));
+
     }
 
     @Test

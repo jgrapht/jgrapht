@@ -44,15 +44,14 @@ import java.util.stream.*;
  * </ul>
  * Currently known extensions are {@link SuurballeKDisjointShortestPaths} and
  * {@link BhandariKDisjointShortestPaths}.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Assaf Mizrachi
  * @author Benjamin Krogh
  */
-abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
-    implements KShortestPathAlgorithm<V, E>
+abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPathAlgorithm<V, E>
 {
 
     /**
@@ -92,7 +91,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      * @param endVertex target vertex of the calculated paths.
      *
      * @return list of disjoint paths between the start vertex and the end vertex
-     * 
+     *
      * @throws IllegalArgumentException if the graph does not contain the startVertex or the
      *         endVertex
      * @throws IllegalArgumentException if the startVertex and the endVertex are the same vertices
@@ -152,10 +151,10 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      * At the end of the search we have list of intermediate paths - not necessarily disjoint and
      * may contain reversed edges. Here we go over all, removing overlapping edges and merging them
      * to valid paths (from start to end). Finally, we sort them according to their weight.
-     * 
+     *
      * @param startVertex the start vertex
      * @param endVertex the end vertex
-     * 
+     *
      * @return sorted list of disjoint paths from start vertex to end vertex.
      */
     private List<GraphPath<V, E>> resolvePaths(V startVertex, V endVertex)
@@ -175,10 +174,10 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
     /**
      * After removing overlapping edges, each path is not necessarily connecting start to end
      * vertex. Here we connect the path fragments to valid paths (from start to end).
-     * 
+     *
      * @param startVertex the start vertex
      * @param endVertex the end vertex
-     * 
+     *
      * @return list of disjoint paths from start to end.
      */
     private List<GraphPath<V, E>> buildPaths(V startVertex, V endVertex)
@@ -248,10 +247,10 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
     /**
      * Calculates the shortest paths for the current iteration. Path is not final; rather, it is
      * intended to be used in a "post-production" phase (see resolvePaths method).
-     * 
+     *
      * @param startVertex the start vertex
      * @param endVertex the end vertex
-     * 
+     *
      * @return the shortest path between start and end vertices.
      */
     protected abstract GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex);
@@ -259,7 +258,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
     /**
      * Prepares the working graph for next iteration. To be called from the second iteration and on
      * so implementation may assume a preceding {@link #calculateShortestPath} call.
-     * 
+     *
      * @param previousPath the path found at the previous iteration.
      */
     protected abstract void transformGraph(List<E> previousPath);

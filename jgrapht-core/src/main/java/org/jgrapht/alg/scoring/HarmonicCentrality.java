@@ -56,8 +56,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class HarmonicCentrality<V, E>
-    extends ClosenessCentrality<V, E>
+public class HarmonicCentrality<V, E> extends ClosenessCentrality<V, E>
 {
     /**
      * Construct a new instance. By default the centrality is normalized and computed using outgoing

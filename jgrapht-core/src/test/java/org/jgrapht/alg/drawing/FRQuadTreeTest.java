@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test {@link FRQuadTree}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class FRQuadTreeTest

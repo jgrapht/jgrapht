@@ -41,7 +41,7 @@ public interface Specifics<V, E>
 
     /**
      * Get the vertex set.
-     * 
+     *
      * @return the vertex set
      */
     Set<V> getVertexSet();
@@ -60,8 +60,8 @@ public interface Specifics<V, E>
 
     /**
      * Returns an edge connecting source vertex to target vertex if such vertices and such edge
-     * exist in this graph. Otherwise returns {@code null}.
-     * If any of the specified vertices is {@code null} returns {@code null}
+     * exist in this graph. Otherwise returns {@code null}. If any of the specified vertices is
+     * {@code null} returns {@code null}
      *
      * <p>
      * In undirected graphs, the returned edge may have its source and target vertices in the
@@ -77,7 +77,7 @@ public interface Specifics<V, E>
 
     /**
      * Adds the specified edge to the edge containers of its source and target vertices.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
@@ -88,7 +88,7 @@ public interface Specifics<V, E>
     /**
      * Adds the specified edge to the edge containers of its source and target vertices only if the
      * edge is not already in the graph.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
@@ -100,7 +100,7 @@ public interface Specifics<V, E>
      * Creates an edge given an edge supplier and adds it to the edge containers of its source and
      * target vertices only if the graph does not contain other edges with the same source and
      * target vertices.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param edgeSupplier the function which will create the edge

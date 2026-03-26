@@ -33,18 +33,16 @@ import java.util.regex.*;
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
  * http://en.wikipedia.org/wiki/DOT_language</a>.
  * </p>
- * 
+ *
  * The user can adjust the behavior using the various providers.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
-public class DOTExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class DOTExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     /**
      * Default graph id used by the exporter.
@@ -85,7 +83,8 @@ public class DOTExporter<V, E>
      *
      * @return the subgraph provider as an {@link Optional}
      */
-    public Optional<Supplier<Map<String, DOTSubgraph<V, E>>>> getSubgraphProvider() {
+    public Optional<Supplier<Map<String, DOTSubgraph<V, E>>>> getSubgraphProvider()
+    {
         return subgraphProvider != null ? Optional.of(subgraphProvider) : Optional.empty();
     }
 
@@ -94,7 +93,8 @@ public class DOTExporter<V, E>
      *
      * @param subgraphProvider the subgraph provider
      */
-    public void setSubgraphProvider(Supplier<Map<String, DOTSubgraph<V, E>>> subgraphProvider) {
+    public void setSubgraphProvider(Supplier<Map<String, DOTSubgraph<V, E>>> subgraphProvider)
+    {
         this.subgraphProvider = subgraphProvider;
     }
 
@@ -112,8 +112,8 @@ public class DOTExporter<V, E>
         out.println(computeHeader(g));
 
         // graph attributes
-        for (Entry<String, Attribute> attr : graphAttributeProvider
-            .orElse(Collections::emptyMap).get().entrySet())
+        for (Entry<String, Attribute> attr : graphAttributeProvider.orElse(Collections::emptyMap)
+            .get().entrySet())
         {
             out.print(INDENT);
             out.print(attr.getKey());
@@ -155,7 +155,9 @@ public class DOTExporter<V, E>
         }
 
         // subgraphs
-        for (Map.Entry<String, DOTSubgraph<V, E>> subgraphEntry : getSubgraphProvider().orElse(Collections::emptyMap).get().entrySet()) {
+        for (Map.Entry<String, DOTSubgraph<V, E>> subgraphEntry : getSubgraphProvider()
+            .orElse(Collections::emptyMap).get().entrySet())
+        {
             writeSubgraph(out, subgraphEntry.getKey(), subgraphEntry.getValue());
         }
 
@@ -171,7 +173,8 @@ public class DOTExporter<V, E>
      * @param subgraphName the name of the subgraph
      * @param subgraph the subgraph to be exported
      */
-    private void writeSubgraph(PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph) {
+    private void writeSubgraph(PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph)
+    {
         out.println(INDENT + "subgraph " + subgraphName + " {");
         renderSubgraphAttributes(out, subgraphName, subgraph);
         if (subgraph.isExportVertices()) {
@@ -192,7 +195,7 @@ public class DOTExporter<V, E>
 
     /**
      * Compute the header
-     * 
+     *
      * @param graph the graph
      * @return the header
      */
@@ -213,7 +216,7 @@ public class DOTExporter<V, E>
 
     /**
      * Compute the footer
-     * 
+     *
      * @param graph the graph
      * @return the footer
      */
@@ -224,7 +227,7 @@ public class DOTExporter<V, E>
 
     /**
      * Compute the connector
-     * 
+     *
      * @param graph the graph
      * @return the connector
      */
@@ -241,7 +244,7 @@ public class DOTExporter<V, E>
 
     /**
      * Get the id of the graph.
-     * 
+     *
      * @param graph the graph
      * @return the graph id
      */
@@ -283,7 +286,9 @@ public class DOTExporter<V, E>
         out.print(" ");
     }
 
-    private void renderSubgraphAttributes(PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph) {
+    private void renderSubgraphAttributes(
+        PrintWriter out, String subgraphName, DOTSubgraph<V, E> subgraph)
+    {
         Map<String, Attribute> subgraphAttributes = subgraph.getSubgraphAttributes();
         Map<String, Attribute> clusterAttributes = subgraph.getClusterAttributes();
         if (subgraphAttributes.isEmpty() && clusterAttributes.isEmpty()) {
@@ -312,7 +317,7 @@ public class DOTExporter<V, E>
     /**
      * Return a valid vertex ID (with respect to the .dot language definition as described in
      * http://www.graphviz.org/doc/info/lang.html
-     * 
+     *
      * <p>
      * Quoted from above mentioned source: An ID is valid if it meets one of the following criteria:
      *
@@ -323,8 +328,8 @@ public class DOTExporter<V, E>
      * <li>an HTML string (<...>).
      * </ul>
      *
-     * @throws ExportException if the given {@code vertexIDProvider} didn't generate a valid
-     *         vertex ID.
+     * @throws ExportException if the given {@code vertexIDProvider} didn't generate a valid vertex
+     *         ID.
      */
     private String getVertexID(V v)
     {

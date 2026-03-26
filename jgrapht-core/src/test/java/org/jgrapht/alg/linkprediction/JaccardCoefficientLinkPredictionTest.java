@@ -38,10 +38,9 @@ public class JaccardCoefficientLinkPredictionTest
     @Test
     public void testPrediction()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().weighted(false)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         TestUtil.constructGraph(
             g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 }, { 3, 4 },
@@ -59,10 +58,9 @@ public class JaccardCoefficientLinkPredictionTest
     public void testInvalidPrediction()
     {
         assertThrows(LinkPredictionIndexNotWellDefinedException.class, () -> {
-            Graph<Integer,
-                DefaultEdge> g = GraphTypeBuilder
-                    .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+            Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().weighted(false)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
             g.addVertex(0);
             g.addVertex(1);

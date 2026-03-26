@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the {@link RandomWalkVertexIterator} class.
- * 
+ *
  * @author Assaf Mizrachi
  *
  */
@@ -78,11 +78,9 @@ public class RandomWalkVertexIteratorTest
     @Test
     public void testSink()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
-                .buildGraph();
+        Graph<String, DefaultEdge> graph = GraphTypeBuilder.directed()
+            .vertexSupplier(SupplierUtil.createStringSupplier()).edgeClass(DefaultEdge.class)
+            .allowingMultipleEdges(false).allowingSelfLoops(true).buildGraph();
         int graphSize = 10;
         LinearGraphGenerator<String, DefaultEdge> graphGenerator =
             new LinearGraphGenerator<>(graphSize);
@@ -102,11 +100,9 @@ public class RandomWalkVertexIteratorTest
     @Test
     public void testExhausted()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
-                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
-                .buildGraph();
+        Graph<String, DefaultEdge> graph = GraphTypeBuilder.undirected()
+            .vertexSupplier(SupplierUtil.createStringSupplier(1)).edgeClass(DefaultEdge.class)
+            .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
 
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
         graphGenerator.generateGraph(graph);
@@ -125,11 +121,9 @@ public class RandomWalkVertexIteratorTest
     @Test
     public void testDeterministic()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
-                .buildGraph();
+        Graph<String, DefaultEdge> graph = GraphTypeBuilder.directed()
+            .vertexSupplier(SupplierUtil.createStringSupplier()).edgeClass(DefaultEdge.class)
+            .allowingMultipleEdges(false).allowingSelfLoops(true).buildGraph();
 
         int ringSize = 5;
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
@@ -148,11 +142,9 @@ public class RandomWalkVertexIteratorTest
     @Test
     public void testLongTime()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
-                .buildGraph();
+        Graph<String, DefaultEdge> graph = GraphTypeBuilder.undirected()
+            .vertexSupplier(SupplierUtil.createStringSupplier()).edgeClass(DefaultEdge.class)
+            .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
 
         graph.addVertex("0");
         graph.addVertex("1");

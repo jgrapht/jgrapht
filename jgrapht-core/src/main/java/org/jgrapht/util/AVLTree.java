@@ -46,8 +46,7 @@ import java.util.*;
  * @param <T> the key data type
  * @author Timofey Chudakov
  */
-public class AVLTree<T>
-    implements Iterable<T>
+public class AVLTree<T> implements Iterable<T>
 {
     /**
      * An auxiliary node which's always present in a tree and doesn't contain any data.
@@ -627,8 +626,7 @@ public class AVLTree<T>
      * Iterator over the values stored in this tree. This implementation uses the
      * {@code TreeNodeIterator} to iterator over the values.
      */
-    private class TreeValuesIterator
-        implements Iterator<T>
+    private class TreeValuesIterator implements Iterator<T>
     {
         /**
          * Internally used {@code TreeNodeIterator}
@@ -666,8 +664,7 @@ public class AVLTree<T>
      * Iterator over the tree nodes. The nodes are returned according to the in order tree
      * traversal.
      */
-    private class TreeNodeIterator
-        implements Iterator<TreeNode<T>>
+    private class TreeNodeIterator implements Iterator<TreeNode<T>>
     {
         /**
          * A node that is returned next or {@code null} if all nodes are traversed

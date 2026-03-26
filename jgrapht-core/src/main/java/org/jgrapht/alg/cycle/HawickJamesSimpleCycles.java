@@ -38,8 +38,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Luiz Kill
  */
-public class HawickJamesSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
 {
 
     private Graph<V, E> graph;

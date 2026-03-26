@@ -74,7 +74,6 @@ public class GreedyVCImplTest
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
         assertTrue(isCover(g, vertexCover));
         assertEquals(
-            vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
-            0);
+            vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(), 0);
     }
 }

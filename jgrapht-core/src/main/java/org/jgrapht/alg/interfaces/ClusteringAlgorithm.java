@@ -40,12 +40,11 @@ public interface ClusteringAlgorithm<V>
      *
      * @param <V> the graph vertex type
      */
-    interface Clustering<V>
-        extends Iterable<Set<V>>
+    interface Clustering<V> extends Iterable<Set<V>>
     {
         /**
          * Get the number of clusters.
-         * 
+         *
          * @return the number of clusters
          */
         int getNumberClusters();
@@ -63,8 +62,7 @@ public interface ClusteringAlgorithm<V>
      *
      * @param <V> the graph vertex type
      */
-    class ClusteringImpl<V>
-        implements Clustering<V>, Serializable
+    class ClusteringImpl<V> implements Clustering<V>, Serializable
     {
         private static final long serialVersionUID = -5718903410443848101L;
 

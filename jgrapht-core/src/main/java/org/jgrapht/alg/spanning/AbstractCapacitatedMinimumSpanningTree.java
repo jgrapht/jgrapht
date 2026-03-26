@@ -38,8 +38,7 @@ import java.util.*;
  * @author Christoph Grüne
  * @since July 18, 2018
  */
-public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
-    implements CapacitatedSpanningTreeAlgorithm<V, E>
+public abstract class AbstractCapacitatedMinimumSpanningTree<V, E> implements CapacitatedSpanningTreeAlgorithm<V, E>
 {
 
     /**
@@ -114,8 +113,7 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
      * With the help of this class, a capacitated spanning tree based on the label and partition
      * mapping can be calculated.
      */
-    protected class CapacitatedSpanningTreeSolutionRepresentation
-        implements Cloneable
+    protected class CapacitatedSpanningTreeSolutionRepresentation implements Cloneable
     {
 
         /**
@@ -144,8 +142,8 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Constructs a new solution representation for the CMST problem based on
-         * {@code labels} and {@code partition}. All labels have to be positive.
+         * Constructs a new solution representation for the CMST problem based on {@code labels} and
+         * {@code partition}. All labels have to be positive.
          *
          * @param labels the labels of the subsets in the partition
          * @param partition the partition map
@@ -173,8 +171,7 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
          *
          * @return the resulting spanning tree based on this solution representation
          */
-        public CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<V,
-            E> calculateResultingSpanningTree()
+        public CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<V, E> calculateResultingSpanningTree()
         {
             Set<E> spanningTreeEdges = new HashSet<>();
             double weight = 0;
@@ -197,8 +194,8 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Moves {@code vertex} from the subset represented by {@code fromLabel} to the
-         * subset represented by {@code toLabel}.
+         * Moves {@code vertex} from the subset represented by {@code fromLabel} to the subset
+         * represented by {@code toLabel}.
          *
          * @param vertex the vertex to move
          * @param fromLabel the subset to move the vertex from
@@ -225,8 +222,8 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         }
 
         /**
-         * Moves all vertices in {@code vertices} from the subset represented by
-         * {@code fromLabel} to the subset represented by {@code toLabel}.
+         * Moves all vertices in {@code vertices} from the subset represented by {@code fromLabel}
+         * to the subset represented by {@code toLabel}.
          *
          * @param vertices the vertices to move
          * @param fromLabel the subset to move the vertices from
@@ -261,8 +258,8 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
          * Refines the partition by adding new subsets if the designated root has more than one
          * subtree in the subset {@code label} of the partition.
          *
-         * @param vertexSubset the subset represented by {@code label}, that is the subset that
-         *        has to be refined
+         * @param vertexSubset the subset represented by {@code label}, that is the subset that has
+         *        to be refined
          * @param label the label of the subset of the partition that were refined
          *
          * @return the set of all labels of subsets that were changed during the refinement
@@ -421,8 +418,9 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
                 capacitatedSpanningTreeSolutionRepresentation.labels = new HashMap<>(labels);
                 capacitatedSpanningTreeSolutionRepresentation.partition = new HashMap<>();
                 for (Map.Entry<Integer, Pair<Set<V>, Double>> entry : this.partition.entrySet()) {
-                    capacitatedSpanningTreeSolutionRepresentation.partition
-                        .put(entry.getKey(), Pair.of(
+                    capacitatedSpanningTreeSolutionRepresentation.partition.put(
+                        entry.getKey(),
+                        Pair.of(
                             new HashSet<>(entry.getValue().getFirst()),
                             entry.getValue().getSecond()));
                 }

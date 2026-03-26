@@ -29,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Joris Kinable
  */
-public class PushRelabelMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(

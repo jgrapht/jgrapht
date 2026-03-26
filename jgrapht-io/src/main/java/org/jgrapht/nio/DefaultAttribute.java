@@ -21,13 +21,12 @@ import java.io.*;
 
 /**
  * Default implementation of an attribute.
- * 
+ *
  * @param <T> the underlying type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class DefaultAttribute<T>
-    implements Attribute, Serializable
+public class DefaultAttribute<T> implements Attribute, Serializable
 {
     private static final long serialVersionUID = 366113727410278952L;
 
@@ -41,7 +40,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create a new attribute
-     * 
+     *
      * @param value the value
      * @param type the type
      */
@@ -53,7 +52,7 @@ public class DefaultAttribute<T>
 
     /**
      * Get the string value of the attribute
-     * 
+     *
      * @return the string value of the attribute
      */
     @Override
@@ -70,7 +69,7 @@ public class DefaultAttribute<T>
 
     /**
      * Get the type of the attribute
-     * 
+     *
      * @return the type of the attribute
      */
     @Override
@@ -81,7 +80,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create a boolean attribute
-     * 
+     *
      * @param value the value
      * @return the attribute
      */
@@ -92,7 +91,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create an integer attribute
-     * 
+     *
      * @param value the value
      * @return the attribute
      */
@@ -103,7 +102,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create a long attribute
-     * 
+     *
      * @param value the value
      * @return the attribute
      */
@@ -114,7 +113,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create a float attribute
-     * 
+     *
      * @param value the value
      * @return the attribute
      */
@@ -125,7 +124,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create a double attribute
-     * 
+     *
      * @param value the value
      * @return the attribute
      */
@@ -136,7 +135,7 @@ public class DefaultAttribute<T>
 
     /**
      * Create a string attribute
-     * 
+     *
      * @param value the value
      * @return the attribute
      */

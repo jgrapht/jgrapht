@@ -146,8 +146,7 @@ public class KShortestPathsPerformance
         }
     }
 
-    public static class YenState
-        extends RandomGraphState
+    public static class YenState extends RandomGraphState
     {
         @Param({ "true", "false" })
         boolean createPathValidator;

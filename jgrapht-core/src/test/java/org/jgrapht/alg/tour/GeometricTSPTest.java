@@ -48,7 +48,7 @@ public class GeometricTSPTest
         List<Arguments> graphs = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             int size = (int) Math.pow(10, i);
-            graphs.add(Arguments.of( generate(size), size ));
+            graphs.add(Arguments.of(generate(size), size));
         }
         return graphs;
     }
@@ -64,10 +64,9 @@ public class GeometricTSPTest
 
     static Graph<Vector2D, DefaultWeightedEdge> generate(Vector2D[] points)
     {
-        GraphBuilder<Vector2D, DefaultWeightedEdge,
-            Graph<Vector2D, DefaultWeightedEdge>> builder = GraphTypeBuilder
-                .undirected().vertexClass(Vector2D.class).edgeClass(DefaultWeightedEdge.class)
-                .weighted(true).buildGraphBuilder();
+        GraphBuilder<Vector2D, DefaultWeightedEdge, Graph<Vector2D, DefaultWeightedEdge>> builder =
+            GraphTypeBuilder.undirected().vertexClass(Vector2D.class)
+                .edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraphBuilder();
         for (Vector2D point : points) {
             builder.addVertex(point);
         }
@@ -80,7 +79,8 @@ public class GeometricTSPTest
     }
 
     void testWith(
-        Graph<Vector2D, DefaultWeightedEdge> graph, HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> algorithm)
+        Graph<Vector2D, DefaultWeightedEdge> graph,
+        HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> algorithm)
     {
         GraphPath<Vector2D, DefaultWeightedEdge> tour = algorithm.getTour(graph);
         assertHamiltonian(graph, tour);
@@ -123,9 +123,7 @@ public class GeometricTSPTest
     @MethodSource("graphs")
     public void testTwoOptNearestNeighbour(Graph<Vector2D, DefaultWeightedEdge> graph, int size)
     {
-        testWith(
-            graph,
-            new TwoOptHeuristicTSP<>(new NearestNeighborHeuristicTSP<>()));
+        testWith(graph, new TwoOptHeuristicTSP<>(new NearestNeighborHeuristicTSP<>()));
     }
 
     @DisplayName("Two-opt, 1 attempt from random")

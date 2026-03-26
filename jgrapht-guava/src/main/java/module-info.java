@@ -19,7 +19,7 @@
 /**
  * Provides adaptors for the Google Guava graphs to be used with the
  * JGraphT library.
- * 
+ *
  * @since 1.5.0
  */
 module org.jgrapht.guava

@@ -31,16 +31,16 @@ import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
  *
  * <p>
  * The algorithm partitions the vertices of an undirected graph into communities by greedily
- * maximizing the <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a>
- * of possible communities. Greedy modularity maximization begins with each node in its own
- * community and repeatedly joins the pair of communities that lead to the largest modularity
- * until no further increase in modularity is possible (a maximum).
+ * maximizing the <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a> of
+ * possible communities. Greedy modularity maximization begins with each node in its own community
+ * and repeatedly joins the pair of communities that lead to the largest modularity until no further
+ * increase in modularity is possible (a maximum).
  * </p>
  *
  * <p>
- * This implementation is simple but computationally expensive, with a worst-case complexity
- * of <b>O(n^4)</b>. It is intended as an easy-to-understand reference implementation rather
- * than a performance-optimized solution.
+ * This implementation is simple but computationally expensive, with a worst-case complexity of
+ * <b>O(n^4)</b>. It is intended as an easy-to-understand reference implementation rather than a
+ * performance-optimized solution.
  * </p>
  *
  * @author Antonia Tsiftsi
@@ -48,9 +48,7 @@ import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class NaiveGreedyModularityAlgorithm<V, E>
-    implements
-    ClusteringAlgorithm<V>
+public class NaiveGreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V>
 {
     private final Graph<V, E> graph;
 

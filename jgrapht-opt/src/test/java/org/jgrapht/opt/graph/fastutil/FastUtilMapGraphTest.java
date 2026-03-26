@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link FastutilMapGraph}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class FastUtilMapGraphTest

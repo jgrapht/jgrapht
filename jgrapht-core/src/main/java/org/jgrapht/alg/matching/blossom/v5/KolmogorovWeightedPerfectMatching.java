@@ -137,8 +137,7 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
  * @see BlossomVPrimalUpdater
  * @see BlossomVDualUpdater
  */
-public class KolmogorovWeightedPerfectMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class KolmogorovWeightedPerfectMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     /**
      * Default epsilon used in the algorithm

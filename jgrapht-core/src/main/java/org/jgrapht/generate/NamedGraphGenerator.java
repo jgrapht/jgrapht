@@ -47,17 +47,15 @@ public class NamedGraphGenerator<V, E>
     // -------------Doyle Graph-----------//
     /**
      * Generate the Doyle Graph
-     * 
+     *
      * @see #generateDoyleGraph
      * @return Doyle Graph
      */
     public static Graph<Integer, DefaultEdge> doyleGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateDoyleGraph(g);
         return g;
     }
@@ -66,7 +64,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DoyleGraph.html">Doyle Graph</a>. The Doyle
      * graph, sometimes also known as the Holt graph (Marušič et al. 2005), is the quartic symmetric
      * graph on 27 nodes
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -108,11 +106,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> generalizedPetersenGraph(int n, int k)
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateGeneralizedPetersenGraph(g, n, k);
         return g;
     }
@@ -138,7 +134,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/PetersenGraph.html">Petersen Graph</a>. The
      * Petersen Graph is a named graph that consists of 10 vertices and 15 edges, usually drawn as a
      * five-point star embedded in a pentagon. It is the generalized Petersen graph $GP(5,2)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -153,7 +149,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DuererGraph.html">Dürer Graph</a>. The
      * Dürer graph is the skeleton of Dürer's solid, which is the generalized Petersen graph
      * $GP(6,2)$.
-     * 
+     *
      * @return the Dürer Graph
      */
     public static Graph<Integer, DefaultEdge> dürerGraph()
@@ -165,7 +161,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DuererGraph.html">Dürer Graph</a>. The
      * Dürer graph is the skeleton of Dürer's solid, which is the generalized Petersen graph
      * $GP(6,2)$.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -190,7 +186,7 @@ public class NamedGraphGenerator<V, E>
      * Graph</a>. The skeleton of the dodecahedron (the vertices and edges) form a graph. It is one
      * of 5 Platonic graphs, each a skeleton of its Platonic solid. It is the generalized Petersen
      * graph $GP(10,2)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -214,7 +210,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DesarguesGraph.html">Desargues Graph</a>.
      * The Desargues graph is a cubic symmetric graph distance-regular graph on 20 vertices and 30
      * edges. It is the generalized Petersen graph $GP(10,3)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -238,7 +234,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/NauruGraph.html">Nauru Graph</a>. The Nauru
      * graph is a symmetric bipartite cubic graph with 24 vertices and 36 edges. It is the
      * generalized Petersen graph $GP(12,5)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -253,7 +249,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/Moebius-KantorGraph.html">Möbius-Kantor
      * Graph</a>. The unique cubic symmetric graph on 16 nodes. It is the generalized Petersen graph
      * $GP(8,3)$
-     * 
+     *
      * @return the Möbius-Kantor Graph
      */
     public static Graph<Integer, DefaultEdge> möbiusKantorGraph()
@@ -265,7 +261,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/Moebius-KantorGraph.html">Möbius-Kantor
      * Graph</a>. The unique cubic symmetric graph on 16 nodes. It is the generalized Petersen graph
      * $GP(8,3)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -282,11 +278,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> bullGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateBullGraph(g);
         return g;
     }
@@ -295,7 +289,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/BullGraph.html">Bull Graph</a>. The bull
      * graph is a simple graph on 5 nodes and 5 edges whose name derives from its resemblance to a
      * schematic illustration of a bull or ram
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -317,11 +311,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> butterflyGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateButterflyGraph(g);
         return g;
     }
@@ -330,7 +322,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/ButterflyGraph.html">Butterfly Graph</a>.
      * This graph is also known as the "bowtie graph" (West 2000, p. 12). It is isomorphic to the
      * friendship graph $F_2$.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -348,11 +340,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> clawGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateClawGraph(g);
         return g;
     }
@@ -360,7 +350,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates a <a href="http://mathworld.wolfram.com/ClawGraph.html">Claw Graph</a>. The
      * complete bipartite graph $K_{1,3}$ is a tree known as the "claw."
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -377,11 +367,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> buckyBallGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateBuckyBallGraph(g);
         return g;
     }
@@ -391,7 +379,7 @@ public class NamedGraphGenerator<V, E>
      * graph is a 3-regular 60-vertex planar graph. Its vertices and edges correspond precisely to
      * the carbon atoms and bonds in buckminsterfullerene. When embedded on a sphere, its 12
      * pentagon and 20 hexagon faces are arranged exactly as the sections of a soccer ball.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -423,11 +411,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> clebschGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateClebschGraph(g);
         return g;
     }
@@ -436,7 +422,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/ClebschGraph.html">Clebsch Graph</a>. The
      * Clebsch graph, also known as the Greenwood-Gleason graph (Read and Wilson, 1998, p. 284), is
      * a strongly regular quintic graph on 16 vertices and 40 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -461,16 +447,14 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates a <a href="http://mathworld.wolfram.com/GroetzschGraph.html">Grötzsch Graph</a>.
      * The Grötzsch graph is smallest triangle-free graph with chromatic number four.
-     * 
+     *
      * @return the Grötzsch Graph
      */
     public static Graph<Integer, DefaultEdge> grötzschGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateGrötzschGraph(g);
         return g;
     }
@@ -478,7 +462,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates a <a href="http://mathworld.wolfram.com/GroetzschGraph.html">Grötzsch Graph</a>.
      * The Grötzsch graph is smallest triangle-free graph with chromatic number four.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -506,11 +490,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> bidiakisCubeGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateBidiakisCubeGraph(g);
         return g;
     }
@@ -521,7 +503,7 @@ public class NamedGraphGenerator<V, E>
      * have edges drawn across them which connect the centers of opposite sides of the faces in such
      * a way that the orientation of the edges added on top and bottom are perpendicular to each
      * other.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -543,11 +525,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> blanusaFirstSnarkGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateBlanusaFirstSnarkGraph(g);
         return g;
     }
@@ -555,7 +535,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/BlanusaSnarks.html">First Blanusa Snark
      * Graph</a>. The Blanusa graphs are two snarks on 18 vertices and 27 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -578,11 +558,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> blanusaSecondSnarkGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateBlanusaSecondSnarkGraph(g);
         return g;
     }
@@ -590,7 +568,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/BlanusaSnarks.html">Second Blanusa Snark
      * Graph</a>. The Blanusa graphs are two snarks on 18 vertices and 27 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -613,11 +591,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> doubleStarSnarkGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateDoubleStarSnarkGraph(g);
         return g;
     }
@@ -625,7 +601,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/DoubleStarSnark.html">Double Star Snark
      * Graph</a>. A snark on 30 vertices with edge chromatic number 4.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -651,11 +627,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> brinkmannGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateBrinkmannGraph(g);
         return g;
     }
@@ -663,7 +637,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/BrinkmannGraph.html">Brinkmann Graph</a>.
      * The Brinkmann graph is a weakly regular quartic graph on 21 vertices and 42 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -688,11 +662,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> gossetGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateGossetGraph(g);
         return g;
     }
@@ -701,7 +673,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/GossetGraph.html">Gosset Graph</a>. The
      * Gosset graph is a 27-regular graph on 56 vertices which is the skeleton of the Gosset
      * polytope $3_{21}$.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -824,11 +796,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> chvatalGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateChvatalGraph(g);
         return g;
     }
@@ -837,7 +807,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/ChvatalGraph.html">Chvatal Graph</a>. The
      * Chvátal graph is an undirected graph with 12 vertices and 24 edges, discovered by Václav
      * Chvátal (1970)
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -860,11 +830,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> kittellGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateKittellGraph(g);
         return g;
     }
@@ -874,7 +842,7 @@ public class NamedGraphGenerator<V, E>
      * Kittell graph is a planar graph on 23 nodes and 63 edges that tangles the Kempe chains in
      * Kempe's algorithm and thus provides an example of how Kempe's supposed proof of the
      * four-color theorem fails.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -902,11 +870,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> coxeterGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateCoxeterGraph(g);
         return g;
     }
@@ -914,7 +880,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/CoxeterGraph.html">Coxeter Graph</a>. The
      * Coxeter graph is a nonhamiltonian cubic symmetric graph on 28 vertices and 42 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -939,11 +905,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> diamondGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateDiamondGraph(g);
         return g;
     }
@@ -951,7 +915,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Diamond_graph">Diamond Graph</a>. The
      * Diamond graph has 4 vertices and 5 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -971,11 +935,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> ellinghamHorton54Graph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateEllinghamHorton54Graph(g);
         return g;
     }
@@ -984,7 +946,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the
      * <a href="http://mathworld.wolfram.com/Ellingham-HortonGraphs.html">Ellingham-Horton 54
      * Graph</a>. The Ellingham–Horton graph is a 3-regular bicubic graph of 54 vertices
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1015,11 +977,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> ellinghamHorton78Graph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateEllinghamHorton78Graph(g);
         return g;
     }
@@ -1028,7 +988,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the
      * <a href="http://mathworld.wolfram.com/Ellingham-HortonGraphs.html">Ellingham-Horton 78
      * Graph</a>. The Ellingham–Horton graph is a 3-regular graph of 78 vertices
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1064,11 +1024,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> erreraGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateErreraGraph(g);
         return g;
     }
@@ -1076,7 +1034,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/ErreraGraph.html">Errera Graph</a>. The
      * Errera graph is the 17-node planar graph
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1101,11 +1059,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> folkmanGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateFolkmanGraph(g);
         return g;
     }
@@ -1113,7 +1069,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Folkman_graph">Folkman Graph</a>. The
      * Folkman graph is the 20-vertex 4-regular graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1138,11 +1094,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> franklinGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateFranklinGraph(g);
         return g;
     }
@@ -1150,7 +1104,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/FranklinGraph.html">Franklin Graph</a>.
      * The Franklin graph is the 12-vertex cubic graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1172,11 +1126,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> fruchtGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateFruchtGraph(g);
         return g;
     }
@@ -1184,7 +1136,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/FruchtGraph.html">Frucht Graph</a>. The
      * Frucht graph is smallest cubic identity graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1206,11 +1158,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> goldnerHararyGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateGoldnerHararyGraph(g);
         return g;
     }
@@ -1219,7 +1169,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/Goldner-HararyGraph.html">Goldner-Harary
      * Graph</a>. The Goldner-Harary graph is a graph on 11 vertices and 27. It is a simplicial
      * graph, meaning that it is polyhedral and consists of only triangular faces.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1242,11 +1192,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> heawoodGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateHeawoodGraph(g);
         return g;
     }
@@ -1255,7 +1203,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/HeawoodGraph.html">Heawood Graph</a>.
      * Heawood graph is an undirected graph with 14 vertices and 21 edges, named after Percy John
      * Heawood.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1277,11 +1225,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> herschelGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateHerschelGraph(g);
         return g;
     }
@@ -1290,7 +1236,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/HerschelGraph.html">Herschel Graph</a>.
      * The Herschel graph is the smallest nonhamiltonian polyhedral graph (Coxeter 1973, p. 8). It
      * is the unique such graph on 11 nodes and 18 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1312,11 +1258,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> hoffmanGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateHoffmanGraph(g);
         return g;
     }
@@ -1324,7 +1268,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/HoffmanGraph.html">Hoffman Graph</a>. The
      * Hoffman graph is the bipartite graph on 16 nodes and 32 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1348,11 +1292,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> krackhardtKiteGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateKrackhardtKiteGraph(g);
         return g;
     }
@@ -1361,7 +1303,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/KrackhardtKite.html">Krackhardt kite
      * Graph</a>. The Krackhardt kite is the simple graph on 10 nodes and 18 edges. It arises in
      * social network theory.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1383,11 +1325,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> klein3RegularGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateKlein3RegularGraph(g);
         return g;
     }
@@ -1395,7 +1335,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Klein_graphs">Klein 3-regular Graph</a>.
      * This graph is a 3-regular graph with 56 vertices and 84 edges, named after Felix Klein.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1426,11 +1366,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> klein7RegularGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateKlein7RegularGraph(g);
         return g;
     }
@@ -1438,7 +1376,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Klein_graphs">Klein 7-regular Graph</a>.
      * This graph is a 7-regular graph with 24 vertices and 84 edges, named after Felix Klein.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1470,11 +1408,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> moserSpindleGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateMoserSpindleGraph(g);
         return g;
     }
@@ -1482,7 +1418,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/MoserSpindle.html">Moser spindle
      * Graph</a>. The Moser spindle is the 7-node unit-distance graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1503,11 +1439,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> pappusGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generatePappusGraph(g);
         return g;
     }
@@ -1515,7 +1449,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Pappus_graph">Pappus Graph</a>. The
      * Pappus Graph is a bipartite 3-regular undirected graph with 18 vertices and 27 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1538,11 +1472,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> poussinGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generatePoussinGraph(g);
         return g;
     }
@@ -1550,7 +1482,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/PoussinGraph.html">Poussin Graph</a>. The
      * Poussin graph is the 15-node planar graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1574,16 +1506,14 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/SchlaefliGraph.html">Schläfli Graph</a>.
      * The Schläfli graph is a strongly regular graph on 27 nodes
-     * 
+     *
      * @return the Schläfli Graph
      */
     public static Graph<Integer, DefaultEdge> schläfliGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateSchläfliGraph(g);
         return g;
     }
@@ -1591,7 +1521,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/SchlaefliGraph.html">Schläfli Graph</a>.
      * The Schläfli graph is a strongly regular graph on 27 nodes
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1639,11 +1569,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> tietzeGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateTietzeGraph(g);
         return g;
     }
@@ -1651,7 +1579,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Tietze's_graph">Tietze Graph</a>. The
      * Tietze Graph is an undirected cubic graph with 12 vertices and 18 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1674,11 +1602,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> thomsenGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateThomsenGraph(g);
         return g;
     }
@@ -1687,7 +1613,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/UtilityGraph.html">Thomsen Graph</a>. The
      * Thomsen Graph is complete bipartite graph consisting of 6 vertices (3 vertices in each
      * bipartite partition. It is also called the Utility graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1708,11 +1634,9 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> tutteGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
-                .buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeClass(DefaultEdge.class).buildGraph();
         new NamedGraphGenerator<Integer, DefaultEdge>().generateTutteGraph(g);
         return g;
     }
@@ -1720,7 +1644,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Tutte_graph">Tutte Graph</a>. The Tutte
      * Graph is a 3-regular graph with 46 vertices and 69 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1747,7 +1671,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Zachary%27s_karate_club">Zachary's
      * karate club Graph</a>.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements

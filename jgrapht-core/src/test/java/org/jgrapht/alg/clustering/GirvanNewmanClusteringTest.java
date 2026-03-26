@@ -40,10 +40,9 @@ public class GirvanNewmanClusteringTest
     @Test
     public void testUndirectedGraph()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         g = TestUtil.createUndirected(

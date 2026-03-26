@@ -66,8 +66,7 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class GusfieldGomoryHuCutTree<V, E>
-    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
+public class GusfieldGomoryHuCutTree<V, E> implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
 {
 
     private final Graph<V, E> network;
@@ -92,7 +91,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
-     * 
+     *
      * @param network input graph
      */
     public GusfieldGomoryHuCutTree(Graph<V, E> network)
@@ -102,7 +101,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
-     * 
+     *
      * @param network input graph
      * @param epsilon precision
      */
@@ -113,7 +112,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
-     * 
+     *
      * @param network input graph
      * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
      */
@@ -170,7 +169,7 @@ public class GusfieldGomoryHuCutTree<V, E>
      * Returns the Gomory-Hu Tree as an actual tree (graph). Note that this tree is not necessarily
      * unique. The edge weights represent the flow values/cut weights. This method runs in $O(n)$
      * time.
-     * 
+     *
      * @return Gomory-Hu Tree
      */
     public SimpleWeightedGraph<V, DefaultWeightedEdge> getGomoryHuTree()
@@ -194,7 +193,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Unsupported operation
-     * 
+     *
      * @param source source of the flow inside the network
      * @param sink sink of the flow inside the network
      *
@@ -210,7 +209,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     /**
      * Returns the Maximum flow between source and sink. The algorithm is only executed once;
      * successive invocations of this method will return in $O(1)$ time.
-     * 
+     *
      * @param source source vertex
      * @param sink sink vertex
      * @return the Maximum flow between source and sink.
@@ -232,7 +231,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Unsupported operation
-     * 
+     *
      * @return nothing
      */
     @Override
@@ -244,7 +243,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Unsupported operation
-     * 
+     *
      * @param e edge
      * @return nothing
      */
@@ -270,16 +269,16 @@ public class GusfieldGomoryHuCutTree<V, E>
      * minimum cut can be queried through the {@link #getSourcePartition()} and
      * {@link #getSinkPartition()} methods. After computing the Gomory-Hu Cut tree, this method runs
      * in $O(N)$ time.
-     * 
+     *
      * @return weight of the minimum cut in the graph
      */
     public double calculateMinCut()
     {
         if (this.gomoryHuTree == null)
             this.gomoryHuTree = this.getGomoryHuTree();
-        DefaultWeightedEdge cheapestEdge = gomoryHuTree
-            .edgeSet().stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight))
-            .orElseThrow(() -> new RuntimeException("graph is empty?!"));
+        DefaultWeightedEdge cheapestEdge =
+            gomoryHuTree.edgeSet().stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight))
+                .orElseThrow(() -> new RuntimeException("graph is empty?!"));
         lastInvokedSource = gomoryHuTree.getEdgeSource(cheapestEdge);
         lastInvokedTarget = gomoryHuTree.getEdgeTarget(cheapestEdge);
         sourcePartitionLastInvokedSource = null;
@@ -304,8 +303,8 @@ public class GusfieldGomoryHuCutTree<V, E>
         Set<DefaultWeightedEdge> pathEdges =
             this.findPathBetween(gomoryHuTree, lastInvokedSource, lastInvokedTarget);
         DefaultWeightedEdge cheapestEdge =
-            pathEdges.stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight)).orElseThrow(
-                () -> new RuntimeException("path is empty?!"));
+            pathEdges.stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight))
+                .orElseThrow(() -> new RuntimeException("path is empty?!"));
 
         // Remove the selected edge from the gomoryHuTree graph. The resulting graph consists of 2
         // components
@@ -326,7 +325,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     /**
      * BFS method to find the edges in the shortest path from a source to a target vertex in a tree
      * graph.
-     * 
+     *
      * @param tree input graph
      * @param source source
      * @param target target

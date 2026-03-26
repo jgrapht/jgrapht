@@ -58,7 +58,7 @@ import java.util.stream.*;
  * "https://www-m9.ma.tum.de/graph-algorithms/directed-chinese-postman/index_en.html">CPP for
  * Directed graphs</a>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -73,7 +73,7 @@ public class ChinesePostman<V, E>
      * directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used instead.
      * The input graph must be strongly connected. Otherwise the behavior of this class is
      * undefined.
-     * 
+     *
      * @param graph the input graph (must be a strongly connected graph)
      * @return Eulerian circuit of minimum weight.
      */
@@ -105,9 +105,8 @@ public class ChinesePostman<V, E>
     {
 
         // 1. Find all odd degree vertices (there should be an even number of those)
-        List<V> oddDegreeVertices =
-            graph.vertexSet().stream().filter(v -> graph.degreeOf(v) % 2 == 1).collect(
-                Collectors.toList());
+        List<V> oddDegreeVertices = graph.vertexSet().stream()
+            .filter(v -> graph.degreeOf(v) % 2 == 1).collect(Collectors.toList());
 
         // 2. Compute all pairwise shortest paths for the oddDegreeVertices
         Map<Pair<V, V>, GraphPath<V, E>> shortestPaths = new HashMap<>();
@@ -159,7 +158,7 @@ public class ChinesePostman<V, E>
 
     /**
      * Solves the CPP for directed graphs
-     * 
+     *
      * @param graph input graph
      * @return CPP solution (closed walk)
      */

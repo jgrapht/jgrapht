@@ -27,13 +27,12 @@ import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 /**
- * 
+ *
  * Tests for the {@link SuurballeKDisjointShortestPaths} class.
- * 
+ *
  * @author Assaf Mizrachi
  */
-public class SuurballeKDisjointShortestPathsTest
-    extends KDisjointShortestPathsTestCase
+public class SuurballeKDisjointShortestPathsTest extends KDisjointShortestPathsTestCase
 {
 
     @Override

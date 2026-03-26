@@ -131,8 +131,8 @@ public class NetworkGeneratorTest
         }
     }
 
-    private static <V,
-        E> void validateSupplies(MinimumCostFlowProblem<V, E> problem, NetworkInfo<V, E> info)
+    private static <V, E> void validateSupplies(
+        MinimumCostFlowProblem<V, E> problem, NetworkInfo<V, E> info)
     {
         Function<V, Integer> supplyFunction = problem.getNodeSupply();
         for (V source : info.getSources()) {
@@ -350,12 +350,11 @@ public class NetworkGeneratorTest
                         for (int tNodeNum : tNodes) {
                             int arcNum = (int) NetworkGeneratorConfig
                                 .getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-                            NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
-                                .setParams(
+                            NetworkGeneratorConfig config =
+                                new NetworkGeneratorConfigBuilder().setParams(
                                     sourceNum + tNodeNum + sinkNum, arcNum, sourceNum, sinkNum,
                                     tSourceNum, tSinkNum, Math.max(sourceNum, sinkNum), 1, 100, 1,
-                                    100, 100, 0)
-                                .build();
+                                    100, 100, 0).build();
                             testMinCostFlowProblem(config, rng.nextLong());
                         }
                     }
@@ -391,10 +390,8 @@ public class NetworkGeneratorTest
     // @Test
     public void test()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
-            .setParams(
-                100 * 1000, 2000 * 1000, 1000, 1000, 500, 500, MAX_SUPPLY, 1, 100000, 1, 100000,
-                100, 0)
+        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setParams(
+            100 * 1000, 2000 * 1000, 1000, 1000, 500, 500, MAX_SUPPLY, 1, 100000, 1, 100000, 100, 0)
             .build();
         testMinCostFlowProblem(config, rng.nextLong());
     }
@@ -408,11 +405,9 @@ public class NetworkGeneratorTest
         int tSinkNum = 0;
         int sinkNum = 3;
         int arcNum = (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
-            .setParams(
-                sourceNum + tNodeNum + sinkNum, arcNum, sourceNum, sinkNum, tSourceNum, tSinkNum,
-                10 * sourceNum, 1, 100, 1, 100, 100, 0)
-            .build();
+        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder().setParams(
+            sourceNum + tNodeNum + sinkNum, arcNum, sourceNum, sinkNum, tSourceNum, tSinkNum,
+            10 * sourceNum, 1, 100, 1, 100, 100, 0).build();
         testMinCostFlowProblem(config, rng.nextLong());
     }
 
@@ -424,11 +419,10 @@ public class NetworkGeneratorTest
                 for (int tNodeNum = 0; tNodeNum < 30; tNodeNum++) {
                     int arcNum =
                         (int) NetworkGeneratorConfig.getMinimumArcNum(sourceNum, tNodeNum, sinkNum);
-                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
-                        .setMaximumFlowProblemParams(
+                    NetworkGeneratorConfig config =
+                        new NetworkGeneratorConfigBuilder().setMaximumFlowProblemParams(
                             sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100,
-                            sourceNum, sinkNum)
-                        .build();
+                            sourceNum, sinkNum).build();
                     testMaxFlowProblem(config, rng.nextLong());
                 }
             }
@@ -443,11 +437,10 @@ public class NetworkGeneratorTest
                 for (int tNodeNum = 0; tNodeNum < 30; tNodeNum++) {
                     int arcNum =
                         (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tNodeNum, sinkNum);
-                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
-                        .setMaximumFlowProblemParams(
+                    NetworkGeneratorConfig config =
+                        new NetworkGeneratorConfigBuilder().setMaximumFlowProblemParams(
                             sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100,
-                            sourceNum, sinkNum)
-                        .build();
+                            sourceNum, sinkNum).build();
                     testMaxFlowProblem(config, rng.nextLong());
                 }
             }
@@ -465,11 +458,10 @@ public class NetworkGeneratorTest
                     int uB =
                         (int) NetworkGeneratorConfig.getMaximumArcNum(sourceNum, tNodeNum, sinkNum);
                     int arcNum = rng.nextInt(uB - lB + 1) + lB;
-                    NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
-                        .setMaximumFlowProblemParams(
+                    NetworkGeneratorConfig config =
+                        new NetworkGeneratorConfigBuilder().setMaximumFlowProblemParams(
                             sourceNum + tNodeNum + sinkNum, arcNum, 10 * sourceNum, 1, 100,
-                            sourceNum, sinkNum)
-                        .build();
+                            sourceNum, sinkNum).build();
                     testMaxFlowProblem(config, rng.nextLong());
                 }
             }

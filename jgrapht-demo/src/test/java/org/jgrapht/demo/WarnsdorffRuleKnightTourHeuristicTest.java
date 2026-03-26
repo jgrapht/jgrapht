@@ -61,8 +61,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
             if (!((Math.abs(tour.get(i - 1).getFirst() - tour.get(i).getFirst()) == 1
                 && Math.abs(tour.get(i - 1).getSecond() - tour.get(i).getSecond()) == 2)
                 || Math.abs(tour.get(i - 1).getFirst() - tour.get(i).getFirst()) == 2
-                    && Math.abs(tour
-                        .get(i - 1).getSecond() - tour.get(i).getSecond()) == 1))
+                    && Math.abs(tour.get(i - 1).getSecond() - tour.get(i).getSecond()) == 1))
             {
                 return false;
             }
@@ -333,25 +332,30 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     @Test
     public void warnsdorffIncorrectBoardConfiguration0x100()
     {
-        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(0, 100));
+        assertThrows(
+            IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(0, 100));
     }
 
     @Test
     public void warnsdorffIncorrectBoardConfigurationBothNegative()
     {
-        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(-132));
+        assertThrows(
+            IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(-132));
     }
 
     @Test
     public void warnsdorffIncorrectBoardConfigurationBothNegative2()
     {
-        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(-132, -140));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new WarnsdorffRuleKnightTourHeuristic(-132, -140));
     }
 
     @Test
     public void warnsdorffIncorrectBoardConfigurationOneDimSmall()
     {
-        assertThrows(IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(1, 10));
+        assertThrows(
+            IllegalArgumentException.class, () -> new WarnsdorffRuleKnightTourHeuristic(1, 10));
     }
 
     @Test

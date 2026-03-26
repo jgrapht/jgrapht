@@ -57,8 +57,7 @@ import org.jgrapht.util.CollectionUtil;
  * @param <E> the graph edge type.
  * @author Timofey Chudakov
  */
-public class LexBreadthFirstIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E>
 {
 
     /**
@@ -75,7 +74,7 @@ public class LexBreadthFirstIterator<V, E>
      * Creates new lexicographical breadth-first iterator for {@code graph}.
      *
      * @param graph the graph to be iterated.
-     * 
+     *
      * @throws IllegalArgumentException if argument is not an undirected graph
      * @throws NullPointerException if argument is {@code null}
      */
@@ -133,7 +132,8 @@ public class LexBreadthFirstIterator<V, E>
     }
 
     /**
-     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is
+     *         attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)

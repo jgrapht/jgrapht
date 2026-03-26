@@ -18,7 +18,7 @@
 
 /**
  * Provides specialized graph implementations.
- * 
+ *
  * @since 1.5.0
  */
 module org.jgrapht.opt

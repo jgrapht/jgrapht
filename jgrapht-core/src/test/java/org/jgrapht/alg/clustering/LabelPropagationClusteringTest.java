@@ -38,10 +38,9 @@ public class LabelPropagationClusteringTest
     @Test
     public void test1()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 9; i++)
@@ -73,10 +72,9 @@ public class LabelPropagationClusteringTest
     @Test
     public void test2()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 8; i++)
@@ -115,10 +113,9 @@ public class LabelPropagationClusteringTest
     @Test
     public void test3()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 12; i++) {
@@ -168,10 +165,9 @@ public class LabelPropagationClusteringTest
     @Test
     public void testWithIsolatedVertex()
     {
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         graph.addVertex(0);

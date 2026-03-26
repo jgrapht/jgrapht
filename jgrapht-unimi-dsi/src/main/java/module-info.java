@@ -18,7 +18,7 @@
 
 /**
  * Provides graph implementations using succinct data structures.
- * 
+ *
  * @since 1.5.1
  */
 module org.jgrapht.unimi.dsi

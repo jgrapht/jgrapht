@@ -44,8 +44,7 @@ public interface CliqueAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    interface Clique<V>
-        extends Set<V>
+    interface Clique<V> extends Set<V>
     {
 
         /**
@@ -63,9 +62,7 @@ public interface CliqueAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    class CliqueImpl<V>
-        extends WeightedUnmodifiableSet<V>
-        implements Clique<V>
+    class CliqueImpl<V> extends WeightedUnmodifiableSet<V> implements Clique<V>
     {
 
         private static final long serialVersionUID = -4336873008459736342L;

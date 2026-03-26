@@ -307,8 +307,8 @@ public class ChinesePostmanTest
         alg.getCPPSolution(g);
     }
 
-    private <V,
-        E> void verifyClosedPath(Graph<V, E> graph, double expectedWeight, int expectedLength)
+    private <V, E> void verifyClosedPath(
+        Graph<V, E> graph, double expectedWeight, int expectedLength)
     {
 
         ChinesePostman<V, E> alg = new ChinesePostman<>();

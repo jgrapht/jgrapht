@@ -34,8 +34,7 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public class BreadthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, BreadthFirstIterator.SearchNodeData<E>>
+public class BreadthFirstIterator<V, E> extends CrossComponentIterator<V, E, BreadthFirstIterator.SearchNodeData<E>>
 {
     private Deque<V> queue = new ArrayDeque<>();
 
@@ -43,7 +42,7 @@ public class BreadthFirstIterator<V, E>
      * Creates a new breadth-first iterator for the specified graph.
      *
      * @param g the graph to be iterated.
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public BreadthFirstIterator(Graph<V, E> g)
@@ -54,8 +53,8 @@ public class BreadthFirstIterator<V, E>
     /**
      * Creates a new breadth-first iterator for the specified graph. Iteration will start at the
      * specified start vertex and will be limited to the connected component that includes that
-     * vertex. If the specified start vertex is {@code null}, iteration will start at an
-     * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
+     * vertex. If the specified start vertex is {@code null}, iteration will start at an arbitrary
+     * vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
@@ -177,7 +176,7 @@ public class BreadthFirstIterator<V, E>
 
         /**
          * Constructor
-         * 
+         *
          * @param edge edge to parent
          * @param depth depth of node in search tree
          */
@@ -189,7 +188,7 @@ public class BreadthFirstIterator<V, E>
 
         /**
          * Edge to parent
-         * 
+         *
          * @return the edge to the parent
          */
         public E getEdge()
@@ -199,7 +198,7 @@ public class BreadthFirstIterator<V, E>
 
         /**
          * Depth of node in search tree
-         * 
+         *
          * @return the depth of the node in the search tree
          */
         public int getDepth()

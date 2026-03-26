@@ -43,8 +43,9 @@ public abstract class Graphs
      * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise {@code null}.
-     * 
-     * @throws NullPointerException if any one of {@code g}, {@code sourceVertex}, or {@code targetVertex} is {@code null}
+     *
+     * @throws NullPointerException if any one of {@code g}, {@code sourceVertex}, or
+     *         {@code targetVertex} is {@code null}
      * @throws UnsupportedOperationException if the graph has no edge supplier
      *
      * @see Graph#addEdge(Object, Object)
@@ -77,7 +78,7 @@ public abstract class Graphs
      * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise {@code null}.
-     * 
+     *
      * @throws NullPointerException if any one of the arguments is {@code null}
      */
     public static <V, E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex)
@@ -99,8 +100,8 @@ public abstract class Graphs
      *
      * @return {@code true} if the target graph did not already contain the specified edge.
      */
-    public static <V,
-        E> boolean addEdgeWithVertices(Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
+    public static <V, E> boolean addEdgeWithVertices(
+        Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
     {
         V sourceVertex = sourceGraph.getEdgeSource(edge);
         V targetVertex = sourceGraph.getEdgeTarget(edge);
@@ -124,11 +125,12 @@ public abstract class Graphs
      * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise {@code null}.
-     * 
-     * @throws NullPointerException if any one of {@code g}, {@code sourceVertex}, or {@code targetVertex} is {@code null}
+     *
+     * @throws NullPointerException if any one of {@code g}, {@code sourceVertex}, or
+     *         {@code targetVertex} is {@code null}
      */
-    public static <V,
-        E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
+    public static <V, E> E addEdgeWithVertices(
+        Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
         g.addVertex(sourceVertex);
         g.addVertex(targetVertex);
@@ -153,11 +155,11 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return {@code true} if and only if the destination graph has been changed as a result
-     *         of this operation.
+     * @return {@code true} if and only if the destination graph has been changed as a result of
+     *         this operation.
      */
-    public static <V,
-        E> boolean addGraph(Graph<? super V, ? super E> destination, Graph<V, E> source)
+    public static <V, E> boolean addGraph(
+        Graph<? super V, ? super E> destination, Graph<V, E> source)
     {
         boolean modified = addAllVertices(destination, source.vertexSet());
         modified |= addAllEdges(destination, source, source.edgeSet());
@@ -182,8 +184,8 @@ public abstract class Graphs
      *
      * @see EdgeReversedGraph
      */
-    public static <V,
-        E> void addGraphReversed(Graph<? super V, ? super E> destination, Graph<V, E> source)
+    public static <V, E> void addGraphReversed(
+        Graph<? super V, ? super E> destination, Graph<V, E> source)
     {
         if (!source.getType().isDirected() || !destination.getType().isDirected()) {
             throw new IllegalArgumentException("graph must be directed");
@@ -199,9 +201,9 @@ public abstract class Graphs
     /**
      * Adds a subset of the edges of the specified source graph to the specified destination graph.
      * The behavior of this operation is undefined if either of the graphs is modified while the
-     * operation is in progress. Source vertices will be added automatically to
-     * the target graph.  Edge weights will be copied from the source except when the
-     * edge already exists in the destination.
+     * operation is in progress. Source vertices will be added automatically to the target graph.
+     * Edge weights will be copied from the source except when the edge already exists in the
+     * destination.
      *
      * @param destination the graph to which edges are to be added
      * @param source the graph used as a source for edges to add
@@ -250,8 +252,8 @@ public abstract class Graphs
      *
      * @return {@code true} if graph changed as a result of the call
      *
-     * @throws NullPointerException if the specified vertices contains one or more {@code null} vertices, or
-     *         if the specified vertex collection is {@code null}.
+     * @throws NullPointerException if the specified vertices contains one or more {@code null}
+     *         vertices, or if the specified vertex collection is {@code null}.
      *
      * @see Graph#addVertex(Object)
      */
@@ -472,8 +474,8 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V,
-        E> boolean removeVerticesAndPreserveConnectivity(Graph<V, E> graph, Predicate<V> predicate)
+    public static <V, E> boolean removeVerticesAndPreserveConnectivity(
+        Graph<V, E> graph, Predicate<V> predicate)
     {
         List<V> verticesToRemove = new ArrayList<>();
 
@@ -498,8 +500,8 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V,
-        E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, Iterable<V> vertices)
+    public static <V, E> boolean removeVertexAndPreserveConnectivity(
+        Graph<V, E> graph, Iterable<V> vertices)
     {
         boolean atLeastOneVertexHasBeenRemoved = false;
 

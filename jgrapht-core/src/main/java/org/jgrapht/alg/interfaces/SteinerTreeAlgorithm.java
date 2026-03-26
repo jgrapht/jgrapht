@@ -46,9 +46,7 @@ public interface SteinerTreeAlgorithm<V, E>
      *
      * @param <E> the graph edge type
      */
-    interface SteinerTree<E>
-        extends
-        Iterable<E>
+    interface SteinerTree<E> extends Iterable<E>
     {
         /**
          * Returns the weight of the Steiner tree.
@@ -81,10 +79,7 @@ public interface SteinerTreeAlgorithm<V, E>
      *
      * @param <E> the graph edge type
      */
-    class SteinerTreeImpl<E>
-        implements
-        SteinerTree<E>,
-        Serializable
+    class SteinerTreeImpl<E> implements SteinerTree<E>, Serializable
     {
         private static final long serialVersionUID = 402707108331703333L;
 
