@@ -11,6 +11,7 @@ with each edge.  This can be accomplished efficiently via a custom edge class:
 ```java
 class RelationshipEdge extends DefaultEdge
 {
+    private static final long serialVersionUID = 4106694993706914417L;
     private String label;
 
     /**
