@@ -466,10 +466,5 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         {
             return Objects.hash(getObject(), System.identityHashCode(getGraph()));
         }
-
-        public static <T, V, E> DistinctGraphObject<T, V, E> of(T object, Graph<V, E> graph)
-        {
-            return new DistinctGraphObject<>(object, graph);
-        }
     }
 }

@@ -25,7 +25,6 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 import org.jgrapht.util.CollectionUtil;
-import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 

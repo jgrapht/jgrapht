@@ -298,18 +298,18 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
      * AhujaOrlinSharmaCyclicExchangeLocalAugmentation to efficiently maintain the paths in the
      * calculation.
      *
-     * @param <V> the vertex type
+     * @param <VV> the vertex type
      *
      * @author Christoph Grüne
      * @since June 7, 2018
      */
-    private class LabeledPath<V> implements Cloneable
+    private class LabeledPath<VV> implements Cloneable
     {
 
         /**
          * the vertices in the path
          */
-        public ArrayList<V> vertices;
+        public ArrayList<VV> vertices;
         /**
          * the labels the path contains
          */
@@ -326,7 +326,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
          * @param cost the cost of the edges connecting the vertices
          * @param labels the mapping of the vertices to labels (subsets)
          */
-        public LabeledPath(ArrayList<V> vertices, double cost, HashSet<Integer> labels)
+        public LabeledPath(ArrayList<VV> vertices, double cost, HashSet<Integer> labels)
         {
             this.vertices = vertices;
             this.cost = cost;
@@ -341,7 +341,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
          *        vertex
          * @param label the label of the new vertex
          */
-        public void addVertex(V v, double edgeCost, int label)
+        public void addVertex(VV v, double edgeCost, int label)
         {
             this.vertices.add(v);
             this.cost += edgeCost;
@@ -353,7 +353,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
          *
          * @return the start vertex of the path
          */
-        public V getHead()
+        public VV getHead()
         {
             return vertices.get(0);
         }
@@ -363,19 +363,9 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
          *
          * @return the end vertex of the path
          */
-        public V getTail()
+        public VV getTail()
         {
             return vertices.get(vertices.size() - 1);
-        }
-
-        /**
-         * Returns whether the path is empty, i.e. has no vertices
-         *
-         * @return whether the path is empty
-         */
-        public boolean isEmpty()
-        {
-            return vertices.isEmpty();
         }
 
         /**
@@ -387,10 +377,10 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
          *
          * @see java.lang.Object#clone()
          */
-        public LabeledPath<V> clone()
+        public LabeledPath<VV> clone()
         {
             try {
-                LabeledPath<V> newLabeledPath = TypeUtil.uncheckedCast(super.clone());
+                LabeledPath<VV> newLabeledPath = TypeUtil.uncheckedCast(super.clone());
                 newLabeledPath.vertices = TypeUtil.uncheckedCast(this.vertices.clone());
                 newLabeledPath.labels = TypeUtil.uncheckedCast(this.labels.clone());
                 newLabeledPath.cost = this.cost;
@@ -407,21 +397,21 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
      * AhujaOrlinSharmaCyclicExchangeLocalAugmentation to efficiently maintain the path sets in the
      * calculation.
      *
-     * @param <V> the vertex type
+     * @param <VV> the vertex type
      *
      * @author Christoph Grüne
      * @since June 7, 2018
      */
-    private class PathSetKey<V>
+    private class PathSetKey<VV>
     {
         /**
          * the head of the paths indexed by this key
          */
-        private V head;
+        private VV head;
         /**
          * the tail of the paths indexed by this key
          */
-        private V tail;
+        private VV tail;
         /**
          * the label set of the paths indexed by this key
          */
@@ -434,7 +424,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
          * @param tail the tail of the paths indexed by this key
          * @param labels the label set of the paths indexed by this key
          */
-        private PathSetKey(V head, V tail, Set<Integer> labels)
+        private PathSetKey(VV head, VV tail, Set<Integer> labels)
         {
             this.head = head;
             this.tail = tail;
@@ -455,7 +445,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
             else if (!(o instanceof PathSetKey))
                 return false;
 
-            @SuppressWarnings("unchecked") PathSetKey<V> other = (PathSetKey<V>) o;
+            @SuppressWarnings("unchecked") PathSetKey<VV> other = (PathSetKey<VV>) o;
             return Objects.equals(head, other.head) && Objects.equals(tail, other.tail)
                 && Objects.equals(labels, other.labels);
         }

@@ -21,7 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.CollectionUtil;
 import org.jgrapht.util.ElementsSequenceGenerator;
 
