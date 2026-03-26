@@ -545,7 +545,8 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>>
      */
     class YenShortestPathsTree extends TreeSingleSourcePathsImpl<V, E>
     {
-        /**
+        private static final long serialVersionUID = -6377037876112951123L;
+		/**
          * Vertices which are masked in the {@code g}.
          */
         Set<V> maskedVertices;

@@ -98,7 +98,8 @@ public class LabeledEdges
 // @example:edgeclass:begin
 class RelationshipEdge extends DefaultEdge
 {
-    private String label;
+    private static final long serialVersionUID = 4106694993706914417L;
+	private String label;
 
     /**
      * Constructs a relationship edge

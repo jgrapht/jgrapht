@@ -29,7 +29,6 @@ import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
-import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

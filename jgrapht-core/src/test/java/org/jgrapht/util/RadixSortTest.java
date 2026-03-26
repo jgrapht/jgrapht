@@ -17,7 +17,6 @@
  */
 package org.jgrapht.util;
 
-import org.jgrapht.*;
 import org.junit.jupiter.api.*;
 
 import java.util.*;

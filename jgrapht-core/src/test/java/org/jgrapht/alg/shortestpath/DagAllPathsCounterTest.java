@@ -18,9 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.junit.jupiter.api.Test;
 
