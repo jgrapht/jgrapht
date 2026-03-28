@@ -160,6 +160,14 @@ public class TransitiveReduction
             originalMatrix[i1].set(i2);
         }
 
+        // Keep a copy of the original adjacency before it is overwritten by
+        // transformToPathMatrix, so the final removal loop can skip (i,j) pairs
+        // that were never edges in the first place.
+        final BitSet[] originalMatrixCopy = new BitSet[n];
+        for (int i = 0; i < n; i++) {
+            originalMatrixCopy[i] = (BitSet) originalMatrix[i].clone();
+        }
+
         // create path matrix from original matrix
         final BitSet[] pathMatrix = originalMatrix;
 
@@ -170,13 +178,14 @@ public class TransitiveReduction
 
         transitiveReduction(transitivelyReducedMatrix);
 
-        // remove edges from the DirectedGraph which are not in the reduced
-        // matrix
+        // Remove edges that existed in the original graph but were eliminated
+        // by the reduction.
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+            // for each index in the original graph
+            for (int j = originalMatrixCopy[i].nextSetBit(0); j >= 0; j = originalMatrixCopy[i].nextSetBit(j + 1)) {
+                // if it has been eliminated
                 if (!transitivelyReducedMatrix[i].get(j)) {
-                    directedGraph
-                        .removeEdge(directedGraph.getEdge(vertices.get(i), vertices.get(j)));
+                    directedGraph.removeEdge(directedGraph.getEdge(vertices.get(i), vertices.get(j)));
                 }
             }
         }
