@@ -73,11 +73,7 @@ public class TransitiveReduction
                     continue;
                 }
                 if (matrix[j].get(i)) {
-                    for (int k = 0; k < matrix.length; k++) {
-                        if (!matrix[j].get(k) && matrix[i].get(k)) {
-                            matrix[j].set(k);
-                        }
-                    }
+                    matrix[j].or(matrix[i]);
                 }
             }
         }
@@ -99,11 +95,7 @@ public class TransitiveReduction
         for (int j = 0; j < pathMatrix.length; j++) {
             for (int i = 0; i < pathMatrix.length; i++) {
                 if (pathMatrix[i].get(j)) {
-                    for (int k = 0; k < pathMatrix.length; k++) {
-                        if (pathMatrix[j].get(k)) {
-                            pathMatrix[i].set(k, false);
-                        }
-                    }
+                    pathMatrix[i].andNot(pathMatrix[j]);
                 }
             }
         }
