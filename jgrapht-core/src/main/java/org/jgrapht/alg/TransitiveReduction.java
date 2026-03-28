@@ -74,8 +74,8 @@ public class TransitiveReduction
                 }
                 if (matrix[j].get(i)) {
                     for (int k = 0; k < matrix.length; k++) {
-                        if (!matrix[j].get(k)) {
-                            matrix[j].set(k, matrix[i].get(k));
+                        if (!matrix[j].get(k) && matrix[i].get(k)) {
+                            matrix[j].set(k);
                         }
                     }
                 }
