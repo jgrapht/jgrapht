@@ -865,4 +865,17 @@ public abstract class GraphTests
         }
         return graph;
     }
+    
+    /**
+     * Determines whether the given graph is a median graph.
+     * 
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is a median graph; false otherwise
+     */
+    public static <V, E> boolean isMedian(Graph<V, E> graph)
+    {
+        return MedianGraph.isMedian(graph);
+    }
 }
