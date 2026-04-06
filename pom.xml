@@ -71,7 +71,7 @@
         <dsiutils.version>2.7.4</dsiutils.version>
         <fastutil.version>8.5.18</fastutil.version>
         <guava.version>33.3.1-jre</guava.version>
-        <hamcrest.version>2.2</hamcrest.version>
+        <hamcrest.version>3.0</hamcrest.version>
         <java.version>11</java.version>
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
