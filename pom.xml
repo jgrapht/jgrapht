@@ -31,6 +31,13 @@
         <developerConnection>scm:git:git@github.com:jgrapht/jgrapht.git</developerConnection>
         <tag>jgrapht-1.5.2</tag>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>ossrh-staging-api</name>
+            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     <issueManagement>
         <url>https://github.com/jgrapht/jgrapht/issues</url>
     </issueManagement>
