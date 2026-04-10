@@ -30,6 +30,7 @@ Changes to JGraphT in each version:
     - Added `KConnectivityFlowAlgorithm` (contributed by Azim Barhoumi and Paul Enjalbert)
     - Improved `AsSynchronizedGraph` cache performance (contributed by Andriy Palamarchuk)
     - Optimized `TransitiveReduction` (contributed by Benoit Chatain Lacelle)
+    - Optimized `ColorRefinementAlgorithm` (contributed by Johannes M Dieterich)
 
 - **version 1.5.2** (2-May-2023)
     - Prepared release cycle 1.5.2: removed deprecated code, updated dependencies (contributed by Joris Kinable)
