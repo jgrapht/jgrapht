@@ -28,6 +28,7 @@ Changes to JGraphT in each version:
     - Fixed `Graphs.addAllEdges` with custom weighted edge types (contributed by John Sichi)
     - Added `KConnectivityFlowAlgorithm` (contributed by Azim Barhoumi and Paul Enjalbert)
     - Improved `AsSynchronizedGraph` cache performance (contributed by Andriy Palamarchuk)
+    - Optimized `TransitiveReduction` (contributed by Benoit Chatain Lacelle)
 
 - **version 1.5.2** (2-May-2023)
     - Prepared release cycle 1.5.2: removed deprecated code, updated dependencies (contributed by Joris Kinable)
