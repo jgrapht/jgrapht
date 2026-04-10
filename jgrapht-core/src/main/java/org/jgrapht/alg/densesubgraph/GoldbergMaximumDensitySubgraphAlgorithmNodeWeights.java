@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Andre Immig and Contributors.
+ * (C) Copyright 2018-2026, by Andre Immig and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -55,13 +55,12 @@ import java.util.function.*;
  *
  * @author Andre Immig
  */
-public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?, Double>, E>
-    extends GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?, Double>, E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
 {
 
     /**
      * Constructor
-     * 
+     *
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
@@ -69,15 +68,15 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @param algFactory function to construct the subalgorithm
      */
     public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(
-        Graph<V, E> graph, V s, V t, double epsilon, Function<Graph<V, DefaultWeightedEdge>,
-            MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
+        Graph<V, E> graph, V s, V t, double epsilon,
+        Function<Graph<V, DefaultWeightedEdge>, MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
     {
         super(graph, s, t, true, epsilon, algFactory);
     }
 
     /**
      * Convenience constructor that uses PushRelabel as default MinimumSTCutAlgorithm
-     * 
+     *
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex

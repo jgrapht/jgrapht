@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2024, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,7 +18,7 @@
 
 /**
  * Defines the core APIs of the JGraphT library.
- * 
+ *
  * @since 1.5.0
  */
 module org.jgrapht.core

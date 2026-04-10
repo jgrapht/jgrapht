@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,32 +25,31 @@ import java.util.*;
 
 /**
  * Borůvka's algorithm for the computation of a minimum spanning tree.
- * 
+ *
  * <p>
  * See the article on
  * <a href="https://en.wikipedia.org/wiki/Bor%C5%AFvka%27s_algorithm">wikipedia</a> for more
  * information on the history of the algorithm.
- * 
+ *
  * <p>
  * This implementation uses a union-find data structure (with union by rank and path compression
  * heuristic) in order to track components. In graphs where edges have identical weights, edges with
  * equal weights are ordered lexicographically. The running time is $O((E+V) \log V)$ under the
  * assumption that the union-find uses path-compression.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
  */
-public class BoruvkaMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+public class BoruvkaMinimumSpanningTree<V, E> implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
 
     /**
      * Construct a new instance of the algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public BoruvkaMinimumSpanningTree(Graph<V, E> graph)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,35 +28,33 @@ import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableNetwork}.
- * 
+ *
  * <p>
  * Changes in the adapter such as adding or removing vertices and edges are reflected in the
  * underlying network.
- * 
+ *
  * Example usage: <blockquote>
- * 
+ *
  * <pre>
  * MutableNetwork&lt;String, DefaultEdge&gt; mutableNetwork =
  *     NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
- * 
+ *
  * Graph&lt;String, DefaultEdge&gt; graph = new MutableNetworkAdapter&lt;&gt;(
  *     mutableNetwork, SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
- * 
+ *
  * graph.addVertex("v1");
- * 
+ *
  * System.out.println(mutableNetwork.nodes().contains("v1")); // outputs true
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class MutableNetworkAdapter<V, E>
-    extends BaseNetworkAdapter<V, E, MutableNetwork<V, E>>
-    implements Graph<V, E>, Cloneable, Serializable
+public class MutableNetworkAdapter<V, E> extends BaseNetworkAdapter<V, E, MutableNetwork<V, E>> implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 7450826703235510224L;
 
@@ -64,7 +62,7 @@ public class MutableNetworkAdapter<V, E>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the mutable network
      */
     public MutableNetworkAdapter(MutableNetwork<V, E> network)
@@ -74,11 +72,11 @@ public class MutableNetworkAdapter<V, E>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * 
+     *
      * @throws NullPointerException if {@code network} is {@code null}
      */
     public MutableNetworkAdapter(
@@ -89,15 +87,17 @@ public class MutableNetworkAdapter<V, E>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
-     * 
-     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
-     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is {@code null}
+     *
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to
+     *         create a vertex order
+     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is
+     *         {@code null}
      */
     public MutableNetworkAdapter(
         MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
@@ -167,7 +167,8 @@ public class MutableNetworkAdapter<V, E>
     }
 
     /**
-     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex
+     *         supplier
      */
     @Override
     public V addVertex()
@@ -279,7 +280,8 @@ public class MutableNetworkAdapter<V, E>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

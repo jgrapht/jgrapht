@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2023, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2026, by Peter Giles and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,7 +30,7 @@ import java.util.function.*;
 
 /**
  * A small benchmark comparing the different dag implementations.
- * 
+ *
  * @author Peter Giles
  * @author Dimitrios Michail
  */
@@ -72,8 +72,7 @@ public class DirectedAcyclicGraphPerformanceTest
         }
     }
 
-    public static class ArrayDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class ArrayDAGRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
 
         @Override
@@ -84,8 +83,7 @@ public class DirectedAcyclicGraphPerformanceTest
         }
     }
 
-    public static class ArrayListDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class ArrayListDAGRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
@@ -95,8 +93,7 @@ public class DirectedAcyclicGraphPerformanceTest
         }
     }
 
-    public static class HashSetDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class HashSetDAGRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
@@ -106,8 +103,7 @@ public class DirectedAcyclicGraphPerformanceTest
         }
     }
 
-    public static class BitSetDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class BitSetDAGRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
@@ -135,14 +131,13 @@ public class DirectedAcyclicGraphPerformanceTest
     /**
      * A DAG using the array visited strategy
      */
-    private static class ArrayDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+    private static class ArrayDAG<V, E> extends DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
-         * 
+         *
          * @param vertexSupplier the vertex supplier
          * @param edgeSupplier the edge supplier
          */
@@ -157,14 +152,13 @@ public class DirectedAcyclicGraphPerformanceTest
     /**
      * A DAG using the array list visited strategy
      */
-    private static class ArrayListDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+    private static class ArrayListDAG<V, E> extends DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
-         * 
+         *
          * @param vertexSupplier the vertex supplier
          * @param edgeSupplier the edge supplier
          */
@@ -179,14 +173,13 @@ public class DirectedAcyclicGraphPerformanceTest
     /**
      * A DAG using the hash set visited strategy
      */
-    private static class HashSetDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+    private static class HashSetDAG<V, E> extends DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
-         * 
+         *
          * @param vertexSupplier the vertex supplier
          * @param edgeSupplier the edge supplier
          */
@@ -201,14 +194,13 @@ public class DirectedAcyclicGraphPerformanceTest
     /**
      * A DAG using the bitset visited strategy
      */
-    private static class BitSetDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+    private static class BitSetDAG<V, E> extends DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
-         * 
+         *
          * @param vertexSupplier the vertex supplier
          * @param edgeSupplier the edge supplier
          */

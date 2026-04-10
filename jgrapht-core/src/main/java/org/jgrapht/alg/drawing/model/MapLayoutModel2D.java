@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,13 +22,12 @@ import java.util.Map.*;
 
 /**
  * A layout model which uses a hashtable to store the vertices' locations.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
  */
-public class MapLayoutModel2D<V>
-    implements LayoutModel2D<V>
+public class MapLayoutModel2D<V> implements LayoutModel2D<V>
 {
     protected Box2D drawableArea;
     protected Map<V, Point2D> points;
@@ -36,7 +35,7 @@ public class MapLayoutModel2D<V>
 
     /**
      * Create a new model.
-     * 
+     *
      * @param drawableArea the drawable area
      */
     public MapLayoutModel2D(Box2D drawableArea)

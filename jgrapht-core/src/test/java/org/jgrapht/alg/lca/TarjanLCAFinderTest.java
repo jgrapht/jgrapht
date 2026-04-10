@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,8 +27,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinderTest
-    extends LCATreeTestBase
+public class TarjanLCAFinderTest extends LCATreeTestBase
 {
     @Override
     <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -49,8 +49,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class TwoApproxMetricTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class TwoApproxMetricTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     /**

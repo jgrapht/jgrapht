@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2023, by Michael Behrisch and Contributors.
+ * (C) Copyright 2010-2026, by Michael Behrisch and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,7 @@ import java.util.*;
  * In summary, one of the most common DIMACS formats was used in the
  * <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">2nd DIMACS challenge</a> and follows
  * the following structure:
- * 
+ *
  * <pre>
  * {@code
  * DIMACS G {
@@ -47,13 +47,13 @@ import java.util.*;
  * }
  * }
  * </pre>
- * 
+ *
  * Although not specified directly in the DIMACS format documentation, this implementation also
  * allows for the a weighted variant:
- * 
+ *
  * <pre>
- * {@code 
- * e <edge source 1> <edge target 1> <edge_weight> 
+ * {@code
+ * e <edge source 1> <edge target 1> <edge_weight>
  * }
  * </pre>
  *
@@ -62,18 +62,16 @@ import java.util.*;
  * the file. It is also possible to instruct the importer to keep the original file numbering of the
  * nodes. Additionally you can also instruct the importer to use zero-based numbering or keep the
  * original number of DIMACS which starts from one.
- * 
+ *
  * Note: the current implementation does not fully implement the DIMACS specifications! Special
  * (rarely used) fields specified as 'Optional Descriptors' are currently not supported (ignored).
  *
  * @author Michael Behrisch (adaptation of GraphReader class)
  * @author Joris Kinable
  * @author Dimitrios Michail
- * 
+ *
  */
-public class DIMACSEventDrivenImporter
-    extends BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
-    implements EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
+public class DIMACSEventDrivenImporter extends BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>> implements EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
 {
     private boolean zeroBasedNumbering;
     private boolean renumberVertices;
@@ -94,10 +92,10 @@ public class DIMACSEventDrivenImporter
 
     /**
      * Set whether to use zero-based numbering for vertices.
-     * 
+     *
      * The DIMACS format by default starts vertices numbering from one. If true then we will use
      * zero-based numbering. Default to true.
-     * 
+     *
      * @param zeroBasedNumbering whether to use zero-based numbering
      * @return the importer
      */
@@ -109,11 +107,11 @@ public class DIMACSEventDrivenImporter
 
     /**
      * Set whether to renumber vertices or not.
-     * 
+     *
      * If true then the vertices are assigned new numbers from $0$ to $n-1$ in the order that they
      * are first encountered in the file. Otherwise, the original numbering (minus one in order to
      * get a zero-based numbering) of the DIMACS file is kept. Defaults to true.
-     * 
+     *
      * @param renumberVertices whether to renumber vertices or not
      * @return the importer
      */
@@ -237,7 +235,7 @@ public class DIMACSEventDrivenImporter
 
     /**
      * Map a vertex identifier to an integer.
-     * 
+     *
      * @param id the vertex identifier
      * @return the integer
      */

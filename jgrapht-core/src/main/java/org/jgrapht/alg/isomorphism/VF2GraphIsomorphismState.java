@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2026, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,8 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import java.util.*;
 
-class VF2GraphIsomorphismState<V, E>
-    extends VF2State<V, E>
+class VF2GraphIsomorphismState<V, E> extends VF2State<V, E>
 {
     public VF2GraphIsomorphismState(
         GraphOrdering<V, E> g1, GraphOrdering<V, E> g2, Comparator<V> vertexComparator,

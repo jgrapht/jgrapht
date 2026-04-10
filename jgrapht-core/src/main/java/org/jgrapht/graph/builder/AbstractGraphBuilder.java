@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Andrew Chen and Contributors.
+ * (C) Copyright 2015-2026, by Andrew Chen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import org.jgrapht.graph.*;
  *
  * @author Andrew Chen
  */
-public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
-    B extends AbstractGraphBuilder<V, E, G, B>>
+public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>, B extends AbstractGraphBuilder<V, E, G, B>>
 {
     protected final G graph;
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2026, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,13 +20,13 @@ package org.jgrapht.util;
 import java.util.*;
 
 /**
- * Utility class to help implement an iterator/enumerator in which the {@link #hasNext()} method needs to
- * calculate the next elements ahead of time.
+ * Utility class to help implement an iterator/enumerator in which the {@link #hasNext()} method
+ * needs to calculate the next elements ahead of time.
  *
  * <p>
  * Many classes which implement an iterator face a common problem: if there is no easy way to
- * calculate {@link #hasNext()} other than to call getNext(), then they save the result for fetching in the
- * next call to getNext(). This utility helps in doing just that.
+ * calculate {@link #hasNext()} other than to call getNext(), then they save the result for fetching
+ * in the next call to getNext(). This utility helps in doing just that.
  *
  * <p>
  * <b>Usage:</b> The new iterator class will hold this class as a member variable and forward the
@@ -54,25 +54,24 @@ import java.util.*;
  *
  *          });
  *      }
- *      
+ *
  *      // forwarding to nextSupplier and return its returned value
  *      public boolean hasMoreElements() {
  *          return this.nextSupplier.hasMoreElements();
  *      }
- *      
+ *
  *      // forwarding to nextSupplier and return its returned value
  *      public Object nextElement() {
  *          return this.nextSupplier.nextElement();
  *      }
  *  }</code>
  * </pre>
- * 
+ *
  * @param <E> the element type
  *
  * @author Assaf Lehr
  */
-public class PrefetchIterator<E>
-    implements Iterator<E>, Enumeration<E>
+public class PrefetchIterator<E> implements Iterator<E>, Enumeration<E>
 {
     private NextElementFunctor<E> innerEnum;
     private E getNextLastResult;
@@ -83,7 +82,7 @@ public class PrefetchIterator<E>
 
     /**
      * Construct a new prefetch iterator.
-     * 
+     *
      * @param aEnum the next element functor
      */
     public PrefetchIterator(NextElementFunctor<E> aEnum)
@@ -159,10 +158,11 @@ public class PrefetchIterator<E>
     /**
      * Tests whether the enumeration started as an empty one. It does not matter if it
      * {@link #hasMoreElements()} now, only at initialization time.
-     * 
-     * <p>Efficiency: if {@link #nextElement()}, {@link #hasMoreElements()} were never used,
-     * it activates the {@link #hasMoreElements()} once. Else it is immediately $(O(1))$
-     * 
+     *
+     * <p>
+     * Efficiency: if {@link #nextElement()}, {@link #hasMoreElements()} were never used, it
+     * activates the {@link #hasMoreElements()} once. Else it is immediately $(O(1))$
+     *
      * @return {@code true} if the enumeration started as an empty one, {@code false} otherwise.
      */
     public boolean isEnumerationStartedEmpty()
@@ -207,7 +207,7 @@ public class PrefetchIterator<E>
 
     /**
      * A functor for the calculation of the next element.
-     * 
+     *
      * @param <EE> the element type
      */
     public interface NextElementFunctor<EE>
@@ -215,7 +215,7 @@ public class PrefetchIterator<E>
         /**
          * Return the next element or throw a {@link NoSuchElementException} if there are no more
          * elements.
-         * 
+         *
          * @return the next element
          * @throws NoSuchElementException in case there is no next element
          */

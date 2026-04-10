@@ -1,5 +1,5 @@
 [![JGrapht Master build](https://github.com/jgrapht/jgrapht/actions/workflows/master-workflow.yaml/badge.svg)](https://github.com/jgrapht/jgrapht/actions/workflows/master-workflow.yaml)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jgrapht/jgrapht/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jgrapht%22)
+[![Maven Central](https://maven-badges.sml.io/maven-central/org.jgrapht/jgrapht/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jgrapht%22)
 [![Snapshot](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Forg%2Fjgrapht%2Fjgrapht-core%2Fmaven-metadata.xml&style=flat-square&label=snapshots&color=%2315252D)](https://central.sonatype.com/repository/maven-snapshots/org/jgrapht/jgrapht/maven-metadata.xml)
 [![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
 [![License](https://img.shields.io/badge/license-EPL%202.0-blue.svg)](https://www.eclipse.org/legal/epl-2.0)
@@ -9,11 +9,11 @@
 
 <img src="https://raw.githubusercontent.com/jgrapht/jgrapht/master/etc/logo/jgrapht-logo-transparent-cropped.png" width="361" height="200" align="right" />
 
-Released: May 2, 2023</p>
+Released: April 10, 2026</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net) and Contributors
 
-(C) Copyright 2003-2023, by Barak Naveh and Contributors. All rights
+(C) Copyright 2003-2026, by Barak Naveh and Contributors. All rights
 reserved.
 
 Please address all contributions, suggestions, and inquiries to the [user mailing list](https://lists.sourceforge.net/lists/listinfo/jgrapht-users)
@@ -100,7 +100,13 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
 ```xml
 <groupId>org.jgrapht</groupId>
 <artifactId>jgrapht-core</artifactId>
-<version>1.5.2</version>
+<version>1.5.3</version>
+```
+
+Starting with version 1.5.3, you can verify that the signing key GPG fingerprint matches:
+
+```
+John Sichi	<jsichi@gmail.com>	78F3 89DC 7C11 455E AD88  97EE 24AE 93BA FAF1 CAD9
 ```
 
 We have also started auto-publishing SNAPSHOT builds for every successful commit to master.  To use the bleeding edge:
@@ -108,7 +114,7 @@ We have also started auto-publishing SNAPSHOT builds for every successful commit
 ```xml
 <groupId>org.jgrapht</groupId>
 <artifactId>jgrapht-core</artifactId>
-<version>1.5.3-SNAPSHOT</version>
+<version>1.6.0-SNAPSHOT</version>
 ```
 
 and make sure the snapshot repository is enabled:

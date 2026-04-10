@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -58,8 +58,7 @@ import java.util.*;
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  */
-public class BoykovKolmogorovMFImpl<V, E>
-    extends MaximumFlowAlgorithmBase<V, E>
+public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
 {
 
     /**
@@ -769,8 +768,7 @@ public class BoykovKolmogorovMFImpl<V, E>
     /**
      * Network vertex extension used to store auxiliary vertex information.
      */
-    private class VertexExtension
-        extends VertexExtensionBase
+    private class VertexExtension extends VertexExtensionBase
     {
 
         /**

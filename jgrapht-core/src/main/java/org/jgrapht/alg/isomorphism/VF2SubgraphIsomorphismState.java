@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2026, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,8 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import java.util.*;
 
-class VF2SubgraphIsomorphismState<V, E>
-    extends VF2State<V, E>
+class VF2SubgraphIsomorphismState<V, E> extends VF2State<V, E>
 {
     public VF2SubgraphIsomorphismState(
         GraphOrdering<V, E> g1, GraphOrdering<V, E> g2, Comparator<V> vertexComparator,
@@ -67,8 +66,8 @@ class VF2SubgraphIsomorphismState<V, E>
                 {
                     if (DEBUG)
                         showLog(
-                            fp, abortmsg + ": edge from " + g2.getVertex(addVertex2)
-                                + " to " + g2.getVertex(other2) + " is missing in the 2nd graph");
+                            fp, abortmsg + ": edge from " + g2.getVertex(addVertex2) + " to "
+                                + g2.getVertex(other2) + " is missing in the 2nd graph");
                     return false;
                 }
             } else {
@@ -96,8 +95,8 @@ class VF2SubgraphIsomorphismState<V, E>
                 if (!g1.hasEdge(addVertex1, other1)) {
                     if (DEBUG)
                         showLog(
-                            fp, abortmsg + ": edge from " + g1.getVertex(addVertex1)
-                                + " to " + g1.getVertex(other1) + " is missing in the 1st graph");
+                            fp, abortmsg + ": edge from " + g1.getVertex(addVertex1) + " to "
+                                + g1.getVertex(other1) + " is missing in the 1st graph");
                     return false;
                 }
             } else {
@@ -147,8 +146,7 @@ class VF2SubgraphIsomorphismState<V, E>
                 {
                     if (DEBUG)
                         showLog(
-                            fp,
-                            abortmsg + ": edge from " + g2.getVertex(other2) + " to "
+                            fp, abortmsg + ": edge from " + g2.getVertex(other2) + " to "
                                 + g2.getVertex(addVertex2) + " is missing in the 2nd graph");
                     return false;
                 }
@@ -177,8 +175,7 @@ class VF2SubgraphIsomorphismState<V, E>
                 if (!g1.hasEdge(other1, addVertex1)) {
                     if (DEBUG)
                         showLog(
-                            fp,
-                            abortmsg + ": edge from " + g1.getVertex(other1) + " to "
+                            fp, abortmsg + ": edge from " + g1.getVertex(other1) + " to "
                                 + g1.getVertex(addVertex1) + " is missing in the 1st graph");
                     return false;
                 }

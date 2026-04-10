@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,8 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for the {@link YenShortestPathIterator}.
  */
-public class YenShortestPathIteratorTest
-    extends BaseKShortestPathTest
+public class YenShortestPathIteratorTest extends BaseKShortestPathTest
 {
     @Test
     public void testNoSourceGraph()

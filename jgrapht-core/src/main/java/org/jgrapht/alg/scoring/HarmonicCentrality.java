@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,8 +56,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class HarmonicCentrality<V, E>
-    extends ClosenessCentrality<V, E>
+public class HarmonicCentrality<V, E> extends ClosenessCentrality<V, E>
 {
     /**
      * Construct a new instance. By default the centrality is normalized and computed using outgoing

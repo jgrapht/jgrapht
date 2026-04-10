@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -138,10 +138,9 @@ public class MutableValueGraphAdapterTest
         valueGraph.addNode("v2");
         valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
 
-        Graph<String,
-            EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
-                valueGraph, new MyValue(1.0),
-                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        Graph<String, EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
+            valueGraph, new MyValue(1.0),
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertEquals(5.0, graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
 
@@ -178,10 +177,9 @@ public class MutableValueGraphAdapterTest
     @Test
     public void testDirectedGraph()
     {
-        Graph<String,
-            EndpointPair<String>> g = new MutableValueGraphAdapter<>(
-                ValueGraphBuilder.directed().allowsSelfLoops(true).build(), new MyValue(1.0),
-                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build(), new MyValue(1.0),
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -245,10 +243,9 @@ public class MutableValueGraphAdapterTest
     @Test
     public void testUndirectedGraph()
     {
-        Graph<String,
-            EndpointPair<String>> g = new MutableValueGraphAdapter<>(
-                ValueGraphBuilder.undirected().allowsSelfLoops(true).build(), new MyValue(1.0),
-                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
+            ValueGraphBuilder.undirected().allowsSelfLoops(true).build(), new MyValue(1.0),
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -313,10 +310,9 @@ public class MutableValueGraphAdapterTest
     public void testSerialization()
         throws Exception
     {
-        Graph<String,
-            EndpointPair<String>> g = new MutableValueGraphAdapter<>(
-                ValueGraphBuilder.directed().allowsSelfLoops(true).build(), new MyValue(1.0),
-                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build(), new MyValue(1.0),
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -369,10 +365,9 @@ public class MutableValueGraphAdapterTest
     public void testSerialization1()
         throws Exception
     {
-        Graph<String,
-            EndpointPair<String>> g = new MutableValueGraphAdapter<>(
-                ValueGraphBuilder.undirected().allowsSelfLoops(true).build(), new MyValue(1.0),
-                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
+            ValueGraphBuilder.undirected().allowsSelfLoops(true).build(), new MyValue(1.0),
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -406,8 +401,7 @@ public class MutableValueGraphAdapterTest
         assertTrue(g2.containsEdge("v3", "v3"));
     }
 
-    private static class MyValue
-        implements Serializable
+    private static class MyValue implements Serializable
     {
         private static final long serialVersionUID = 1L;
 
@@ -433,10 +427,9 @@ public class MutableValueGraphAdapterTest
         g.addNode(1);
         g.putEdgeValue(0, 1, new MyValue(1.0));
 
-        final Graph<Integer,
-            EndpointPair<Integer>> a = new MutableValueGraphAdapter<>(
-                g, new MyValue(1.0d), (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue,
-                null, null, ElementOrderMethod.comparator(Comparator.<Integer> naturalOrder()));
+        final Graph<Integer, EndpointPair<Integer>> a = new MutableValueGraphAdapter<>(
+            g, new MyValue(1.0d), (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue,
+            null, null, ElementOrderMethod.comparator(Comparator.<Integer> naturalOrder()));
 
         EndpointPair<Integer> e1 = a.getEdge(0, 1);
         EndpointPair<Integer> e2 = a.getEdge(1, 0);

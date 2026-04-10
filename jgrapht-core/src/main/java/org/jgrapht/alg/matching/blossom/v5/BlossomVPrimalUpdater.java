@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -561,8 +561,8 @@ class BlossomVPrimalUpdater<V, E>
             current.addChild(prevNode, prevNode.blossomSibling, false);
             prevNode = current;
         }
-        blossom.parentEdge
-            .getOpposite(branchesEndpoint).addChild(branchesEndpoint, blossom.parentEdge, false);
+        blossom.parentEdge.getOpposite(branchesEndpoint)
+            .addChild(branchesEndpoint, blossom.parentEdge, false);
 
         // second traversal, update edge slacks and their presence in heaps
         current = blossomRoot;

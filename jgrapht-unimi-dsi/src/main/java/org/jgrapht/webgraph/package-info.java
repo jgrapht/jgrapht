@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2024, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,8 +17,7 @@
  */
 
 /**
- * Adapters for graphs stored using
- * <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s compressed and succinct
- * formats.
+ * Adapters for graphs stored using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s compressed
+ * and succinct formats.
  */
 package org.jgrapht.webgraph;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -36,8 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Timofey Chudakov
  */
-public class BoykovKolmogorovMFImplTest
-    extends MaximumFlowAlgorithmTest
+public class BoykovKolmogorovMFImplTest extends MaximumFlowAlgorithmTest
 {
 
     private static final double EPS = 1e-9;

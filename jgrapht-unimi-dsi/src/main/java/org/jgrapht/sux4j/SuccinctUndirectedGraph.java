@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -73,12 +73,7 @@ import it.unimi.dsi.sux4j.util.EliasFanoMonotoneLongBigList;
  * @see SuccinctIntUndirectedGraph
  */
 
-
-public class SuccinctUndirectedGraph
-    extends
-    AbstractSuccinctUndirectedGraph<IntIntSortedPair>
-    implements
-    Serializable
+public class SuccinctUndirectedGraph extends AbstractSuccinctUndirectedGraph<IntIntSortedPair> implements Serializable
 {
     private static final long serialVersionUID = 0L;
 
@@ -142,8 +137,7 @@ public class SuccinctUndirectedGraph
      * @see #SuccinctUndirectedGraph(Graph)
      */
 
-    public SuccinctUndirectedGraph(
-        final int numVertices, final List<Pair<Integer, Integer>> edges)
+    public SuccinctUndirectedGraph(final int numVertices, final List<Pair<Integer, Integer>> edges)
     {
         this(new SparseIntUndirectedGraph(numVertices, edges));
     }
@@ -262,10 +256,7 @@ public class SuccinctUndirectedGraph
         return containsEdge(successors, sourceVertex, targetVertex);
     }
 
-    private final static class SuccinctGraphIterables
-        implements
-        GraphIterables<Integer, IntIntSortedPair>,
-        Serializable
+    private final static class SuccinctGraphIterables implements GraphIterables<Integer, IntIntSortedPair>, Serializable
     {
         private static final long serialVersionUID = 0L;
         private final SuccinctUndirectedGraph graph;

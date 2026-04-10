@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,7 +40,7 @@ import java.util.*;
  * <p>
  * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
  * provide a graph which is initialized with a vertex supplier.
- * 
+ *
  * <p>
  * In case the algorithm detects a negative weight cycle it will throw an exception of type
  * {@link NegativeCycleDetectedException} which will contain the detected negative weight cycle.
@@ -50,8 +50,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class JohnsonShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class JohnsonShortestPaths<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     private double[][] distance;
     private E[][] pred;
@@ -178,10 +177,9 @@ public class JohnsonShortestPaths<V, E>
             if (graph.getType().isUndirected()) {
                 V source = graph.getEdgeSource(detectedNegativeEdge);
                 double weight = graph.getEdgeWeight(detectedNegativeEdge);
-                GraphWalk<V,
-                    E> cycle = new GraphWalk<>(
-                        graph, source, source,
-                        Arrays.asList(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
+                GraphWalk<V, E> cycle = new GraphWalk<>(
+                    graph, source, source,
+                    Arrays.asList(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
                 throw new NegativeCycleDetectedException(
                     GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE, cycle);
             }
@@ -307,11 +305,9 @@ public class JohnsonShortestPaths<V, E>
         assert g.getType().isDirected();
 
         // create extra graph
-        Graph<V,
-            E> extraGraph = GraphTypeBuilder
-                .<V, E> directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .edgeSupplier(graph.getEdgeSupplier()).vertexSupplier(graph.getVertexSupplier())
-                .buildGraph();
+        Graph<V, E> extraGraph = GraphTypeBuilder.<V, E> directed().allowingMultipleEdges(true)
+            .allowingSelfLoops(true).edgeSupplier(graph.getEdgeSupplier())
+            .vertexSupplier(graph.getVertexSupplier()).buildGraph();
 
         // add new vertex
         V s = extraGraph.addVertex();
@@ -346,7 +342,7 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * Compute a unique integer for each vertex of the graph
-     * 
+     *
      * @param g the graph
      * @return a map with the result
      */
@@ -360,8 +356,7 @@ public class JohnsonShortestPaths<V, E>
         return numbering;
     }
 
-    class JohnsonSingleSourcePaths
-        implements SingleSourcePaths<V, E>
+    class JohnsonSingleSourcePaths implements SingleSourcePaths<V, E>
     {
         private V source;
 

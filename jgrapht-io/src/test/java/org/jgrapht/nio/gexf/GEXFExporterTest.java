@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -92,9 +92,8 @@ public class GEXFExporterTest
                 + "</gexf>" + NL;
             // @formatter:on
 
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.directed().edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createStringSupplier()).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph();
 
@@ -139,8 +138,8 @@ public class GEXFExporterTest
         exporter.exportGraph(graph, os);
         String res = new String(os.toByteArray(), UTF_8);
 
-        Diff diff = DiffBuilder
-            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        Diff diff = DiffBuilder.compare(res).withTest(output).ignoreWhitespace().checkForIdentical()
+            .build();
         assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 
@@ -193,11 +192,10 @@ public class GEXFExporterTest
                 + "</gexf>" + NL;
             // @formatter:on
 
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().weighted(true).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createStringSupplier()).allowingMultipleEdges(true)
-                .allowingSelfLoops(true).buildGraph();
+        Graph<String, DefaultEdge> graph = GraphTypeBuilder.undirected().weighted(true)
+            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+            .vertexSupplier(SupplierUtil.createStringSupplier()).allowingMultipleEdges(true)
+            .allowingSelfLoops(true).buildGraph();
 
         graph.addVertex("v1");
         graph.addVertex("v2");
@@ -242,8 +240,8 @@ public class GEXFExporterTest
         exporter.exportGraph(graph, os);
         String res = new String(os.toByteArray(), UTF_8);
 
-        Diff diff = DiffBuilder
-            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        Diff diff = DiffBuilder.compare(res).withTest(output).ignoreWhitespace().checkForIdentical()
+            .build();
         assertFalse(diff.hasDifferences(), "XML identical " + diff.toString());
     }
 

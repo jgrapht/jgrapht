@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,22 +27,22 @@ import java.util.function.*;
 
 /**
  * Imports a graph from a GraphML data source.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  * http://en.wikipedia.org/wiki/ GraphML</a> or the
  * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GraphML format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
- * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
  *   <key id="d0" for="node" attr.name="color" attr.type="string">
  *     <default>yellow</default>
@@ -82,17 +82,17 @@ import java.util.function.*;
  * </graphml>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer reads the input into a graph which is provided by the user. In case the graph is
  * weighted and the corresponding edge key with attr.name="weight" is defined, the importer also
  * reads edge weights. Otherwise edge weights are ignored. To test whether the graph is weighted,
  * method {@link Graph#getType()} can be used.
- * 
+ *
  * <p>
  * GraphML-Attributes Values are read as string key-value pairs and passed on to the vertex or edge
  * attribute consumers respectively.
- * 
+ *
  * <p>
  * The provided graph object, where the imported graph will be stored, must be able to support the
  * features of the graph that is read. For example if the GraphML file contains self-loops then the
@@ -100,7 +100,7 @@ import java.util.function.*;
  * completely ignores the attribute "edgedefault" which denotes whether an edge is directed or not.
  * Whether edges are directed or not depends on the underlying implementation of the user provided
  * graph object.
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
@@ -111,21 +111,19 @@ import java.util.function.*;
  * vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
  * vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
  * multiple times.
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
  * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
  * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
  * graph vertex given the vertex identifier read from file.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class GraphMLImporter<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class GraphMLImporter<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     /**
      * Default key used for vertex ID.
@@ -148,7 +146,7 @@ public class GraphMLImporter<V, E>
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -158,7 +156,7 @@ public class GraphMLImporter<V, E>
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
@@ -171,7 +169,7 @@ public class GraphMLImporter<V, E>
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -181,7 +179,7 @@ public class GraphMLImporter<V, E>
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -192,7 +190,7 @@ public class GraphMLImporter<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<String, V> getVertexFactory()
@@ -203,11 +201,11 @@ public class GraphMLImporter<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the file.
      * The method is called with parameter the vertex identifier from the file and should return the
      * actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<String, V> vertexFactory)
@@ -217,19 +215,19 @@ public class GraphMLImporter<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the GraphML file contains self-loops then the graph provided must also support
      * self-loops. The same for multiple edges.
-     * 
+     *
      * <p>
      * If the provided graph is a weighted graph, the importer also reads edge weights.
-     * 
+     *
      * <p>
      * GraphML-Attributes Values are read as string key-value pairs and propagated to the user as
      * events.
-     * 
+     *
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error
@@ -275,15 +273,15 @@ public class GraphMLImporter<V, E>
                     mapNode(vertexAndKey.getFirst()), vertexAndKey.getSecond(), a);
             };
 
-        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
-            Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
+        public final BiConsumer<Pair<Triple<String, String, Double>, String>, Attribute> edgeAttributeConsumer =
+            (edgeAndKey, a) -> {
                 Triple<String, String, Double> qe = edgeAndKey.getFirst();
 
                 if (qe == lastTriple) {
                     if (qe.getThird() != null
                         && edgeWeightAttributeName.equals(edgeAndKey.getSecond())
                         && graph.getType().isWeighted())
-                {
+            {
                         graph.setEdgeWeight(lastEdge, qe.getThird());
                     }
 

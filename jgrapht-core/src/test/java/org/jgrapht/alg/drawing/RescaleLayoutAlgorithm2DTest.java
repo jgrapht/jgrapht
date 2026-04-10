@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test {@link CircularLayoutAlgorithm2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class RescaleLayoutAlgorithm2DTest
@@ -37,9 +37,8 @@ public class RescaleLayoutAlgorithm2DTest
     @Test
     public void testSimple()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -69,9 +68,8 @@ public class RescaleLayoutAlgorithm2DTest
     @Test
     public void testWithDifferentAspectRatio()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -96,9 +94,8 @@ public class RescaleLayoutAlgorithm2DTest
     @Test
     public void testBadInput()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -114,9 +111,8 @@ public class RescaleLayoutAlgorithm2DTest
     @Test
     public void testBadInput1()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(-1d, -1d, 2d, 2d));
         new RescaleLayoutAlgorithm2D<String, DefaultEdge>(3.0).layout(graph, model);

@@ -26,20 +26,18 @@ import java.util.*;
  * Provides an unweighted view on a graph.
  *
  * Algorithms designed for unweighted graphs should also work on weighted graphs. This class
- * emulates an unweighted graph based on a weighted one by returning {@link Graph#DEFAULT_EDGE_WEIGHT}
- * for each edge weight. The underlying weighted graph is provided at the constructor.
- * Modifying operations (adding/removing vertexes/edges) are also passed through to the underlying
- * weighted graph. As edge weight, {@link Graph#DEFAULT_EDGE_WEIGHT} is used. Setting an edge weight is not
- * supported. The edges are not modified. So, if an edge is asked for, the one from the underlying
- * weighted graph is returned. In case the underlying graph is serializable, this one is
- * serializable, too.
+ * emulates an unweighted graph based on a weighted one by returning
+ * {@link Graph#DEFAULT_EDGE_WEIGHT} for each edge weight. The underlying weighted graph is provided
+ * at the constructor. Modifying operations (adding/removing vertexes/edges) are also passed through
+ * to the underlying weighted graph. As edge weight, {@link Graph#DEFAULT_EDGE_WEIGHT} is used.
+ * Setting an edge weight is not supported. The edges are not modified. So, if an edge is asked for,
+ * the one from the underlying weighted graph is returned. In case the underlying graph is
+ * serializable, this one is serializable, too.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class AsUnweightedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable, Graph<V, E>
+public class AsUnweightedGraph<V, E> extends GraphDelegator<V, E> implements Serializable, Graph<V, E>
 {
 
     private static final long serialVersionUID = -5186421272597767751L;

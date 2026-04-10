@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,8 +42,7 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
  * @author Timofey Chudakov
  * @see KolmogorovWeightedPerfectMatching
  */
-public class KolmogorovWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class KolmogorovWeightedMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     /**
      * The graph we are matching on
@@ -149,8 +148,8 @@ public class KolmogorovWeightedMatching<V, E>
     {
         Map<V, V> duplicatedVertices = new HashMap<>();
         GraphType type = initialGraph.getType();
-        Graph<V, E> graphCopy = GraphTypeBuilder
-            .undirected().allowingMultipleEdges(type.isAllowingMultipleEdges())
+        Graph<V, E> graphCopy = GraphTypeBuilder.undirected()
+            .allowingMultipleEdges(type.isAllowingMultipleEdges())
             .allowingSelfLoops(type.isAllowingSelfLoops())
             .vertexSupplier(initialGraph.getVertexSupplier())
             .edgeSupplier(initialGraph.getEdgeSupplier()).weighted(type.isWeighted()).buildGraph();

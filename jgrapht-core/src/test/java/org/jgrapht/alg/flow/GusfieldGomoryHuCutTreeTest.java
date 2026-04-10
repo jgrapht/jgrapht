@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Joris Kinable
  */
-public class GusfieldGomoryHuCutTreeTest
-    extends GusfieldTreeAlgorithmsTestBase
+public class GusfieldGomoryHuCutTreeTest extends GusfieldTreeAlgorithmsTestBase
 {
 
     @Override
@@ -51,13 +50,12 @@ public class GusfieldGomoryHuCutTreeTest
         StoerWagnerMinimumCut<Integer, DefaultWeightedEdge> minimumCutAlg =
             new StoerWagnerMinimumCut<>(network);
         double expectedMinimumCut = minimumCutAlg.minCutWeight();
-        double cheapestEdge = gomoryHuTree
-            .edgeSet().stream().mapToDouble(gomoryHuTree::getEdgeWeight).min().getAsDouble();
+        double cheapestEdge = gomoryHuTree.edgeSet().stream()
+            .mapToDouble(gomoryHuTree::getEdgeWeight).min().getAsDouble();
         assertEquals(expectedMinimumCut, cheapestEdge, 0);
         assertEquals(expectedMinimumCut, alg.calculateMinCut(), 0);
         Set<Integer> partition = alg.getSourcePartition();
-        double cutWeight = network
-            .edgeSet().stream()
+        double cutWeight = network.edgeSet().stream()
             .filter(
                 e -> partition.contains(network.getEdgeSource(e))
                     ^ partition.contains(network.getEdgeTarget(e)))
@@ -87,8 +85,7 @@ public class GusfieldGomoryHuCutTreeTest
                 Set<Integer> intersection = new HashSet<>(sourcePartition);
                 intersection.retainAll(sinkPartition);
                 assertTrue(intersection.isEmpty());
-                cutWeight = network
-                    .edgeSet().stream()
+                cutWeight = network.edgeSet().stream()
                     .filter(
                         e -> sourcePartition.contains(network.getEdgeSource(e))
                             ^ sourcePartition.contains(network.getEdgeTarget(e)))
@@ -102,9 +99,9 @@ public class GusfieldGomoryHuCutTreeTest
                     alg.getGomoryHuTree();
                 List<DefaultWeightedEdge> pathEdges =
                     DijkstraShortestPath.findPathBetween(gomoryHuTreeCopy, i, j).getEdgeList();
-                DefaultWeightedEdge cheapestEdgeInPath = pathEdges
-                    .stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
-                    .orElseThrow(() -> new RuntimeException("path is empty?!"));
+                DefaultWeightedEdge cheapestEdgeInPath =
+                    pathEdges.stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
+                        .orElseThrow(() -> new RuntimeException("path is empty?!"));
                 assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath), 0);
             }
         }

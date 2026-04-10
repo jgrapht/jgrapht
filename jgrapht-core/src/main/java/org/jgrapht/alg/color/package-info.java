@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2024, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,7 +15,6 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-
 
 /**
  * Graph coloring algorithms.

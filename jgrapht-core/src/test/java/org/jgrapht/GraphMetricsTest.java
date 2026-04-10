@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -49,7 +49,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests for GraphMetrics
- * 
+ *
  * @author Joris Kinable
  * @author Alexandru Valeanu
  */
@@ -249,8 +249,8 @@ public class GraphMetricsTest
 
             TarjanSimpleCycles<Integer, DefaultEdge> tarjanSimpleCycles =
                 new TarjanSimpleCycles<>(graph);
-            int minCycle = tarjanSimpleCycles
-                .findSimpleCycles().stream().mapToInt(List::size).min().orElse(Integer.MAX_VALUE);
+            int minCycle = tarjanSimpleCycles.findSimpleCycles().stream().mapToInt(List::size).min()
+                .orElse(Integer.MAX_VALUE);
 
             assertEquals(minCycle, GraphMetrics.getGirth(graph));
         }
@@ -359,10 +359,9 @@ public class GraphMetricsTest
     @Test
     public void testCountTriangles4()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 25; i++) {
@@ -390,10 +389,9 @@ public class GraphMetricsTest
     @Test
     public void testMultipleEdges()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         int[][] edges = { { 0, 1 }, { 1, 2 }, { 2, 0 }, { 1, 3 }, { 2, 3 }, { 2, 1 } };
@@ -406,10 +404,9 @@ public class GraphMetricsTest
     @Test
     public void testMultipleEdges2()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         int[][] edges =

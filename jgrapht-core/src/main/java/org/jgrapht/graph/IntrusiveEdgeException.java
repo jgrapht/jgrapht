@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2023, by Hannes Wellmann and Contributors.
+ * (C) Copyright 2021-2026, by Hannes Wellmann and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,11 +19,10 @@ package org.jgrapht.graph;
 
 /**
  * Special {@link RuntimeException} to signal that {@link IntrusiveEdge} is used incorrectly.
- * 
+ *
  * @author Hannes Wellmann
  */
-public class IntrusiveEdgeException
-    extends RuntimeException
+public class IntrusiveEdgeException extends RuntimeException
 {
     private static final long serialVersionUID = 7261763645809925025L;
 

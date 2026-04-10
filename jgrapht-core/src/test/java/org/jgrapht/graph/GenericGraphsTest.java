@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2023, by HartmutBenz and Contributors.
+ * (C) Copyright 2006-2026, by HartmutBenz and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -129,8 +129,7 @@ public class GenericGraphsTest
 
     // ~ Inner Classes ----------------------------------------------------------
 
-    public static class CustomEdge
-        extends DefaultEdge
+    public static class CustomEdge extends DefaultEdge
     {
         private static final long serialVersionUID = 1L;
 
@@ -156,8 +155,7 @@ public class GenericGraphsTest
         }
     }
 
-    public static class EquivGraph
-        extends AbstractBaseGraph<EquivVertex, DefaultEdge>
+    public static class EquivGraph extends AbstractBaseGraph<EquivVertex, DefaultEdge>
     {
         private static final long serialVersionUID = 8647217182401022498L;
 
@@ -170,8 +168,7 @@ public class GenericGraphsTest
         }
     }
 
-    public static class FooEdge
-        extends DefaultEdge
+    public static class FooEdge extends DefaultEdge
     {
         private static final long serialVersionUID = 1L;
     }
@@ -197,14 +194,12 @@ public class GenericGraphsTest
         }
     }
 
-    public static class BarEdge
-        extends FooEdge
+    public static class BarEdge extends FooEdge
     {
         private static final long serialVersionUID = 1L;
     }
 
-    private class BarVertex
-        extends FooVertex
+    private class BarVertex extends FooVertex
     {
         public BarVertex()
         {

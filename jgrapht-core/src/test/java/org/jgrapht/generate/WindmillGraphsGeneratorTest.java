@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -132,8 +132,8 @@ public class WindmillGraphsGeneratorTest
         assertEquals(girt, GraphMetrics.getGirth(g), 0.00000001);
     }
 
-    private <V,
-        E> void verifyVertexDegree(Graph<V, E> g, WindmillGraphsGenerator.Mode mode, int m, int n)
+    private <V, E> void verifyVertexDegree(
+        Graph<V, E> g, WindmillGraphsGenerator.Mode mode, int m, int n)
     {
         List<V> vertices = new ArrayList<>(g.vertexSet());
         if (mode == WindmillGraphsGenerator.Mode.DUTCHWINDMILL) {

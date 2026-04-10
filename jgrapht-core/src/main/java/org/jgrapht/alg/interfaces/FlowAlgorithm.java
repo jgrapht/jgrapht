@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -92,8 +92,7 @@ public interface FlowAlgorithm<V, E>
      *
      * @param <E> graph edge type
      */
-    class FlowImpl<E>
-        implements Flow<E>
+    class FlowImpl<E> implements Flow<E>
     {
         /**
          * A mapping defining the flow on the network

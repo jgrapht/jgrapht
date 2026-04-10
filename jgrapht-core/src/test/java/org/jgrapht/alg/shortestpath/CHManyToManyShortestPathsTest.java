@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,8 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Semen Chudakov
  */
-public class CHManyToManyShortestPathsTest
-    extends BaseManyToManyShortestPathsTest
+public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTest
 {
     /**
      * Executor which is supplied to the {@link CHManyToManyShortestPaths} in this test case.
@@ -114,8 +113,8 @@ public class CHManyToManyShortestPathsTest
             new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
                 .computeContractionHierarchy();
 
-        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
-            DefaultWeightedEdge> shortestPaths = new CHManyToManyShortestPaths<>(hierarchy)
+        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths =
+            new CHManyToManyShortestPaths<>(hierarchy)
                 .getManyToManyPaths(Set.of(1, 3, 7, 9), Set.of(5));
 
         assertEquals(2.0, shortestPaths.getWeight(1, 5), 1e-9);
@@ -140,8 +139,8 @@ public class CHManyToManyShortestPathsTest
             new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
                 .computeContractionHierarchy();
 
-        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
-            DefaultWeightedEdge> shortestPaths = new CHManyToManyShortestPaths<>(hierarchy)
+        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths =
+            new CHManyToManyShortestPaths<>(hierarchy)
                 .getManyToManyPaths(Set.of(2, 3, 4, 5, 6), Set.of(1));
 
         assertEquals(3.0, shortestPaths.getWeight(2, 1), 1e-9);

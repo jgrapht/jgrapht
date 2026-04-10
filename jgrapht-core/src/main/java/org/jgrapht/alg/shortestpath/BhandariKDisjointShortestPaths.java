@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2018-2026, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,7 +30,7 @@ import java.util.*;
  * <p>
  * The algorithm is running $k$ sequential Bellman-Ford iterations to find the shortest path at each
  * step. Hence, yielding a complexity of $k$*O(Bellman-Ford).
- * 
+ *
  * <ul>
  * <li>Bhandari, Ramesh 1999. Survivable networks: algorithms for diverse routing. 477. Springer. p.
  * 46. ISBN 0-7923-8381-8.
@@ -38,14 +38,13 @@ import java.util.*;
  * <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf"> Disjoint Paths in
  * Networks </a>. Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Assaf Mizrachi
  */
-public class BhandariKDisjointShortestPaths<V, E>
-    extends BaseKDisjointShortestPathsAlgorithm<V, E>
+public class BhandariKDisjointShortestPaths<V, E> extends BaseKDisjointShortestPathsAlgorithm<V, E>
 {
     /**
      * Creates a new instance of the algorithm.

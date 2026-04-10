@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,15 +24,13 @@ import java.util.*;
 
 /**
  * A sparse boolean matrix in Compressed Sparse Row (CSR) format.
- * 
+ *
  * <p>
  * This is a helper class for graph representation and thus does not provide a fully fledged matrix.
- * 
+ *
  * @author Dimitrios Michail
  */
-class CSRBooleanMatrix
-    implements
-    Serializable
+class CSRBooleanMatrix implements Serializable
 {
     private static final long serialVersionUID = -8639339411487665967L;
 
@@ -56,7 +54,7 @@ class CSRBooleanMatrix
 
     /**
      * Create a new CSR boolean matrix
-     * 
+     *
      * @param rows the number of rows
      * @param columns the number of columns
      * @param entries the position of the entries of the matrix
@@ -102,7 +100,7 @@ class CSRBooleanMatrix
 
     /**
      * Get the number of columns of the matrix.
-     * 
+     *
      * @return the number of columns
      */
     public int columns()
@@ -112,7 +110,7 @@ class CSRBooleanMatrix
 
     /**
      * Get the number of rows of the matrix.
-     * 
+     *
      * @return the number of rows
      */
     public int rows()
@@ -122,7 +120,7 @@ class CSRBooleanMatrix
 
     /**
      * Get the number of non-zero entries of a row.
-     * 
+     *
      * @param row the row
      * @return the number of non-zero entries of a row
      */
@@ -135,7 +133,7 @@ class CSRBooleanMatrix
 
     /**
      * Get an iterator over the non-zero entries of a row.
-     * 
+     *
      * @param row the row
      * @return an iterator over the non-zero entries of a row
      */
@@ -148,7 +146,7 @@ class CSRBooleanMatrix
 
     /**
      * Get the position of non-zero entries of a row as a set.
-     * 
+     *
      * @param row the row
      * @return the position of non-zero entries of a row as a set.
      */
@@ -161,9 +159,7 @@ class CSRBooleanMatrix
         return nonZeros;
     }
 
-    private class NonZerosIterator
-        implements
-        Iterator<Integer>
+    private class NonZerosIterator implements Iterator<Integer>
     {
         private int curPos;
         private int toPos;

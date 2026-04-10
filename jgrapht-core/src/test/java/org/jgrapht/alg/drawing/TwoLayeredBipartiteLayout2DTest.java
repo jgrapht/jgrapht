@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link TwoLayeredBipartiteLayout2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class TwoLayeredBipartiteLayout2DTest
@@ -41,9 +41,8 @@ public class TwoLayeredBipartiteLayout2DTest
     @Test
     public void testVertical()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -78,9 +77,8 @@ public class TwoLayeredBipartiteLayout2DTest
     @Test
     public void testHorizontal()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -116,9 +114,8 @@ public class TwoLayeredBipartiteLayout2DTest
     @Test
     public void testWithPartition()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,19 +33,19 @@ import java.util.function.*;
  * http://en.wikipedia.org/wiki/DOT_language</a> and
  * <a href="http://www.graphviz.org/doc/info/lang.html">
  * http://www.graphviz.org/doc/info/lang.html</a>
- * 
+ *
  * <p>
  * The provided graph object, where the imported graph will be stored, must be able to support the
  * features of the graph that is read. For example if the file contains self-loops then the graph
  * provided must also support self-loops. The same for multiple edges. Whether edges are directed or
  * not depends on the underlying implementation of the user provided graph object.
- * 
+ *
  * <p>
  * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  * vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
  * vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
  * multiple times.
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
  * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -68,9 +68,7 @@ import java.util.function.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DOTImporter<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class DOTImporter<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     /**
      * Default key used for vertex ID.
@@ -120,7 +118,7 @@ public class DOTImporter<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<String, V> getVertexFactory()
@@ -131,11 +129,11 @@ public class DOTImporter<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the input.
      * The method is called with parameter the vertex identifier from the input and should return
      * the actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<String, V> vertexFactory)
@@ -146,7 +144,7 @@ public class DOTImporter<V, E>
     /**
      * Get the user custom vertex factory with attributes. This is null by default and the graph
      * supplier is used instead.
-     * 
+     *
      * @return the user custom vertex factory with attributes.
      */
     public BiFunction<String, Map<String, Attribute>, V> getVertexWithAttributesFactory()
@@ -157,13 +155,13 @@ public class DOTImporter<V, E>
     /**
      * Set the user custom vertex factory with attributes. The default behavior is being null in
      * which case the graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the input.
      * The method is called with parameter the vertex identifier from the input and a set of
      * attributes and should return the actual graph vertex to add to the graph. Note that the set
      * of attributes might not be complete, as only attributes available at the first vertex
      * definition are collected.
-     * 
+     *
      * @param vertexWithAttributesFactory a vertex factory with attributes
      */
     public void setVertexWithAttributesFactory(
@@ -175,7 +173,7 @@ public class DOTImporter<V, E>
     /**
      * Get the user custom edges factory with attributes. This is null by default and the graph
      * supplier is used instead.
-     * 
+     *
      * @return the user custom edge factory with attributes.
      */
     public Function<Map<String, Attribute>, E> getEdgeWithAttributesFactory()
@@ -186,12 +184,12 @@ public class DOTImporter<V, E>
     /**
      * Set the user custom edge factory with attributes. The default behavior is being null in which
      * case the graph edge supplier is used.
-     * 
+     *
      * If supplied the edge factory is called every time a new edge is encountered in the input. The
      * method is called with parameter the set of attributes and should return the actual graph edge
      * to add to the graph. Note that the set of attributes might not be complete, as only
      * attributes available at the first edge definition are collected.
-     * 
+     *
      * @param edgeWithAttributesFactory an edge factory with attributes
      */
     public void setEdgeWithAttributesFactory(
@@ -283,8 +281,8 @@ public class DOTImporter<V, E>
             lastEdge = e;
         };
 
-        public final BiConsumer<Pair<String, String>,
-            Map<String, Attribute>> edgeWithAttributesConsumer = (p, attrs) -> {
+        public final BiConsumer<Pair<String, String>, Map<String, Attribute>> edgeWithAttributesConsumer =
+            (p, attrs) -> {
                 String source = p.getFirst();
                 V from = map.get(p.getFirst());
                 if (from == null) {
@@ -311,8 +309,8 @@ public class DOTImporter<V, E>
                 lastEdge = e;
             };
 
-        public final BiConsumer<Pair<Pair<String, String>, String>,
-            Attribute> edgeAttributeConsumer = (p, a) -> {
+        public final BiConsumer<Pair<Pair<String, String>, String>, Attribute> edgeAttributeConsumer =
+            (p, a) -> {
                 if (p.getFirst() == lastPair) {
                     notifyEdgeAttribute(lastEdge, p.getSecond(), a);
                 }

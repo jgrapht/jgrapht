@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,21 +30,19 @@ import java.util.Map.Entry;
 
 /**
  * Import a graph from a DOT file.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
  * http://en.wikipedia.org/wiki/DOT_language</a> and
  * <a href="http://www.graphviz.org/doc/info/lang.html">
  * http://www.graphviz.org/doc/info/lang.html</a>
- * 
+ *
  * <p>
  * The importer notifies interested parties using consumers.
  *
  * @author Dimitrios Michail
  */
-public class DOTEventDrivenImporter
-    extends BaseEventDrivenImporter<String, Pair<String, String>>
-    implements EventDrivenImporter<String, Pair<String, String>>
+public class DOTEventDrivenImporter extends BaseEventDrivenImporter<String, Pair<String, String>> implements EventDrivenImporter<String, Pair<String, String>>
 {
     /**
      * Default key used for the graph ID.
@@ -67,7 +65,7 @@ public class DOTEventDrivenImporter
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
      *        even if they appear together in the input
      * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
@@ -127,8 +125,7 @@ public class DOTEventDrivenImporter
     /*
      * Common error listener for both lexer and parser which throws an exception.
      */
-    private class ThrowingErrorListener
-        extends BaseErrorListener
+    private class ThrowingErrorListener extends BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -145,8 +142,7 @@ public class DOTEventDrivenImporter
      * Listen on parser events and construct the graph. The listener is strongly dependent on the
      * grammar.
      */
-    private class NotifyDOTListener
-        extends DOTBaseListener
+    private class NotifyDOTListener extends DOTBaseListener
     {
         private Set<String> vertices;
 

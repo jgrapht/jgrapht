@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,20 +28,19 @@ import java.util.*;
  * Fruchterman and Reingold Force-Directed Placement Algorithm using the
  * <a href="https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut</a> indexing
  * technique with a <a href="https://en.wikipedia.org/wiki/Quadtree">QuadTree</a>.
- * 
+ *
  * The Barnes-Hut indexing technique is described in the following paper:
  * <ul>
  * <li>J. Barnes and P. Hut. A hierarchical O(N log N) force-calculation algorithm. Nature.
  * 324(4):446--449, 1986.</li>
  * </ul>
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class IndexedFRLayoutAlgorithm2D<V, E>
-    extends FRLayoutAlgorithm2D<V, E>
+public class IndexedFRLayoutAlgorithm2D<V, E> extends FRLayoutAlgorithm2D<V, E>
 {
     /**
      * Default $\theta$ value for approximation using the Barnes-Hut technique
@@ -61,7 +60,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param theta parameter for approximation using the Barnes-Hut technique
      */
@@ -72,7 +71,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param theta parameter for approximation using the Barnes-Hut technique
      * @param normalizationFactor normalization factor for the optimal distance
@@ -84,7 +83,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param theta theta parameter for the Barnes-Hut approximation
      * @param normalizationFactor normalization factor for the optimal distance
@@ -99,7 +98,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param theta theta parameter for the Barnes-Hut approximation
      * @param normalizationFactor normalization factor for the optimal distance
@@ -191,7 +190,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     /**
      * Get the total number of saved comparisons due to the Barnes-Hut technique.
-     * 
+     *
      * @return the total number of saved comparisons
      */
     public long getSavedComparisons()

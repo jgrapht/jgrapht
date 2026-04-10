@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class DIMACSEventDrivenImporterTest

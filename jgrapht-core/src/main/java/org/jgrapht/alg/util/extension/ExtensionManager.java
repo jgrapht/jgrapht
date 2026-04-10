@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,7 +42,7 @@ public class ExtensionManager<T, B extends Extension>
 
     /**
      * Create a new extension manager.
-     * 
+     *
      * @param factory the extension factory to use
      */
     public ExtensionManager(ExtensionFactory<B> factory)
@@ -52,7 +52,7 @@ public class ExtensionManager<T, B extends Extension>
 
     /**
      * Creates and returns an extension object.
-     * 
+     *
      * @return Extension object
      */
     public B createExtension()
@@ -63,7 +63,7 @@ public class ExtensionManager<T, B extends Extension>
     /**
      * Creates a new singleton extension object for original t if no such object exists, returns the
      * old one otherwise.
-     * 
+     *
      * @param t the original object
      * @return the extension object
      */

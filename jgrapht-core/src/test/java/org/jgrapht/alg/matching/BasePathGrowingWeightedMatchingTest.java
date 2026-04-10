@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class BasePathGrowingWeightedMatchingTest
-    extends ApproximateWeightedMatchingTest
+public abstract class BasePathGrowingWeightedMatchingTest extends ApproximateWeightedMatchingTest
 {
 
     public BasePathGrowingWeightedMatchingTest()
@@ -62,9 +61,8 @@ public abstract class BasePathGrowingWeightedMatchingTest
         path.add(Graphs.addEdge(g, 4, 5, 2.5));
         path.add(Graphs.addEdge(g, 5, 6, 5.0));
 
-        PathGrowingWeightedMatching<Integer,
-            DefaultWeightedEdge>.DynamicProgrammingPathSolver pathSolver =
-                pathGrowingAlgo.new DynamicProgrammingPathSolver();
+        PathGrowingWeightedMatching<Integer, DefaultWeightedEdge>.DynamicProgrammingPathSolver pathSolver =
+            pathGrowingAlgo.new DynamicProgrammingPathSolver();
         Pair<Double, Set<DefaultWeightedEdge>> result =
             pathSolver.getMaximumWeightMatching(g, path);
         double weight = result.getFirst();

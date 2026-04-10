@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test {@link MedianGreedyTwoLayeredBipartiteLayout2D} and
  * {@link BarycenterGreedyTwoLayeredBipartiteLayout2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GreedyTwoLayeredBipartiteLayout2DTest
@@ -42,9 +42,8 @@ public class GreedyTwoLayeredBipartiteLayout2DTest
     @Test
     public void testMedian()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -91,9 +90,8 @@ public class GreedyTwoLayeredBipartiteLayout2DTest
     @Test
     public void testBarycenter()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();

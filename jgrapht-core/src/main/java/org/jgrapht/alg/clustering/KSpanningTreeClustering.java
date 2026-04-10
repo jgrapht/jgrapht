@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,32 +27,31 @@ import java.util.*;
 
 /**
  * The k spanning tree clustering algorithm.
- * 
+ *
  * <p>
  * The algorithm finds a minimum spanning tree $T$ using Prim's algorithm, then executes Kruskal's
  * algorithm only on the edges of $T$ until $k$ trees are formed. The resulting trees are the final
  * clusters. The total running time is $O(m + n \log n)$.
- * 
+ *
  * <p>
  * The algorithm is strongly related to single linkage cluster analysis, also known as single-link
  * clustering. For more information see: J. C. Gower and G. J. S. Ross. Minimum Spanning Trees and
  * Single Linkage Cluster Analysis. Journal of the Royal Statistical Society. Series C (Applied
  * Statistics), 18(1):54--64, 1969.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class KSpanningTreeClustering<V, E>
-    implements ClusteringAlgorithm<V>
+public class KSpanningTreeClustering<V, E> implements ClusteringAlgorithm<V>
 {
     private Graph<V, E> graph;
     private int k;
 
     /**
      * Create a new clustering algorithm.
-     * 
+     *
      * @param graph the graph (needs to be undirected)
      * @param k the desired number of clusters
      */

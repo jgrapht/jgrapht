@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -63,8 +63,7 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class GusfieldEquivalentFlowTree<V, E>
-    implements MaximumFlowAlgorithm<V, E>
+public class GusfieldEquivalentFlowTree<V, E> implements MaximumFlowAlgorithm<V, E>
 {
 
     /* Number of vertices in the graph */
@@ -86,7 +85,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
-     * 
+     *
      * @param network input graph
      */
     public GusfieldEquivalentFlowTree(Graph<V, E> network)
@@ -96,7 +95,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
-     * 
+     *
      * @param network input graph
      * @param epsilon precision
      */
@@ -107,7 +106,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
-     * 
+     *
      * @param network input graph
      * @param minimumSTCutAlgorithm algorithm used to compute the minimum $s-t$ cuts
      */
@@ -157,7 +156,7 @@ public class GusfieldEquivalentFlowTree<V, E>
      * Returns the Equivalent Flow Tree as an actual tree (graph). Note that this tree is not
      * necessarily unique. The edge weights represent the flow values/cut weights. This method runs
      * in $O(n)$ time
-     * 
+     *
      * @return Equivalent Flow Tree
      */
     public SimpleWeightedGraph<V, DefaultWeightedEdge> getEquivalentFlowTree()
@@ -177,7 +176,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Unsupported operation
-     * 
+     *
      * @param source source of the flow inside the network
      * @param sink sink of the flow inside the network
      *
@@ -193,7 +192,7 @@ public class GusfieldEquivalentFlowTree<V, E>
     /**
      * Returns the Maximum flow between source and sink. The algorithm is only executed once;
      * successive invocations of this method will return in $O(1)$ time.
-     * 
+     *
      * @param source source vertex
      * @param sink sink vertex
      * @return the Maximum flow between source and sink.
@@ -213,7 +212,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Unsupported operation
-     * 
+     *
      * @return nothing
      */
     @Override
@@ -225,7 +224,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Unsupported operation
-     * 
+     *
      * @param e edge
      * @return nothing
      */

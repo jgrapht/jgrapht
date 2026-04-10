@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import java.util.function.*;
  * @param <E> the graph edge type
  * @author John V. Sichi
  */
-public final class DijkstraShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public final class DijkstraShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     private final double radius;
     private final Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier;

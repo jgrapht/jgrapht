@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,7 +25,6 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 /**
  * Tests for the {@link NaiveLCAFinder}
  *
@@ -35,8 +34,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class NaiveLCAFinderTest
 {
 
-    private static <V,
-        E> void checkLcas(NaiveLCAFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
+    private static <V, E> void checkLcas(
+        NaiveLCAFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
     {
         Set<V> lcaSet = finder.getLCASet(a, b);
         assertTrue(lcaSet.containsAll(expectedSet));

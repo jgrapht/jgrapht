@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Kirill Vishnyakov and Contributors.
+ * (C) Copyright 2018-2026, by Kirill Vishnyakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -48,8 +48,7 @@ import java.util.*;
  * @author Kirill Vishnyakov
  */
 
-public class DinicMFImpl<V, E>
-    extends MaximumFlowAlgorithmBase<V, E>
+public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
 {
 
     /**
@@ -246,8 +245,7 @@ public class DinicMFImpl<V, E>
     /**
      * Extension for vertex class.
      */
-    class VertexExtension
-        extends VertexExtensionBase
+    class VertexExtension extends VertexExtensionBase
     {
 
         /**

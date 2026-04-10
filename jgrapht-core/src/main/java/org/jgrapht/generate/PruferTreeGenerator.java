@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * Generates a random tree using Prüfer sequences.
- * 
+ *
  * <p>
  * A Prüfer sequence of length $n$ is randomly generated and converted into the corresponding tree.
  * </p>
@@ -39,8 +39,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class PruferTreeGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V>
 {
 
     // number of vertices

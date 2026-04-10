@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import java.util.*;
  * @author Semen Chudakov
  * @author Dimitrios Michail
  */
-abstract class BaseManyToManyShortestPaths<V, E>
-    implements ManyToManyShortestPathsAlgorithm<V, E>
+abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPathsAlgorithm<V, E>
 {
 
     protected final Graph<V, E> graph;

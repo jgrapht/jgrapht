@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Szabolcs Besenyei and Contributors.
+ * (C) Copyright 2017-2026, by Szabolcs Besenyei and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,19 +28,18 @@ import java.util.function.*;
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
  * {@link Graphs}, they are re-calculated at each invocation by walking a vertex's incident edges,
  * which becomes inordinately expensive when performed often.
- * 
+ *
  * <p>
  * The cache also keeps track of successors and predecessors for each vertex. This means that the
  * result of the union of calling predecessorsOf(v) and successorsOf(v) is equal to the result of
  * calling neighborsOf(v) for a given vertex v.
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
- * 
+ *
  * @author Szabolcs Besenyei
  */
-public class NeighborCache<V, E>
-    implements GraphListener<V, E>
+public class NeighborCache<V, E> implements GraphListener<V, E>
 {
     private Map<V, Neighbors<V>> successors = new HashMap<>();
     private Map<V, Neighbors<V>> predecessors = new HashMap<>();
@@ -50,7 +49,7 @@ public class NeighborCache<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param graph the input graph
      * @throws NullPointerException if the input graph is {@code null}
      */
@@ -62,7 +61,7 @@ public class NeighborCache<V, E>
     /**
      * Returns the unique predecessors of the given vertex if it exists in the cache, otherwise it
      * is initialized.
-     * 
+     *
      * @param v the given vertex
      * @return the unique predecessors of the given vertex
      */
@@ -74,7 +73,7 @@ public class NeighborCache<V, E>
     /**
      * Returns the unique successors of the given vertex if it exists in the cache, otherwise it is
      * initialized.
-     * 
+     *
      * @param v the given vertex
      * @return the unique successors of the given vertex
      */
@@ -86,7 +85,7 @@ public class NeighborCache<V, E>
     /**
      * Returns the unique neighbors of the given vertex if it exists in the cache, otherwise it is
      * initialized.
-     * 
+     *
      * @param v the given vertex
      * @return the unique neighbors of the given vertex
      */
@@ -124,8 +123,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        assert e
-            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e.getSource() == this.graph
+            : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
@@ -150,8 +149,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
-        assert e
-            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e.getSource() == this.graph
+            : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
@@ -182,8 +181,8 @@ public class NeighborCache<V, E>
     @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
-        assert e
-            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e.getSource() == this.graph
+            : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         successors.remove(e.getVertex());
         predecessors.remove(e.getVertex());

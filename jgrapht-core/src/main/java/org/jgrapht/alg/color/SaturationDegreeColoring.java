@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,7 @@ import java.util.*;
 
 /**
  * The Dsatur greedy coloring algorithm.
- * 
+ *
  * <p>
  * This is the greedy coloring algorithm using saturation degree ordering. The saturation degree of
  * a vertex is defined as the number of different colors to which it is adjacent. The algorithm
@@ -43,7 +43,7 @@ import java.util.*;
  * <li>The smallest hard-to-color graph for algorithm DSATUR. Discrete Mathematics, 236:151--165,
  * 2001.</li>
  * </ul>
- * 
+ *
  * <p>
  * This implementation requires $O(n^2)$ running time and space. The following paper discusses
  * possible improvements in the running time.
@@ -54,17 +54,16 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SaturationDegreeColoring<V, E>
-    implements VertexColoringAlgorithm<V>
+public class SaturationDegreeColoring<V, E> implements VertexColoringAlgorithm<V>
 {
     private final Graph<V, E> graph;
 
     /**
      * Construct a new coloring algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public SaturationDegreeColoring(Graph<V, E> graph)
@@ -166,8 +165,7 @@ public class SaturationDegreeColoring<V, E>
      * Special case comparator for the DSatur algorithm. Compares first by saturation and then by
      * degree (maximum is better in both cases).
      */
-    private class DSaturComparator
-        implements Comparator<V>
+    private class DSaturComparator implements Comparator<V>
     {
         private Map<V, Integer> saturation;
         private Map<V, Integer> degree;
@@ -210,7 +208,7 @@ public class SaturationDegreeColoring<V, E>
 
     /*
      * An addressable binary heap.
-     * 
+     *
      * No checks are performed (on purpose) for invalid handle use, or capacity violations.
      */
     private class Heap

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2023, by Kaiichiro Ota and Contributors.
+ * (C) Copyright 2021-2026, by Kaiichiro Ota and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,8 +24,7 @@ package org.jgrapht.traverse;
  * @author Kaiichiro Ota
  * @since 1.5.2
  */
-public class NotDirectedAcyclicGraphException
-    extends IllegalArgumentException
+public class NotDirectedAcyclicGraphException extends IllegalArgumentException
 {
     private static final String GRAPH_IS_NOT_A_DAG = "Graph is not a DAG";
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2013-2026, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -67,7 +67,7 @@ public interface StrongConnectivityAlgorithm<V, E>
      * Compute the condensation of the given graph. If each strongly connected component is
      * contracted to a single vertex, the resulting graph is a directed acyclic graph, the
      * condensation of the graph.
-     * 
+     *
      * @return the condensation of the given graph
      */
     Graph<Graph<V, E>, DefaultEdge> getCondensation();

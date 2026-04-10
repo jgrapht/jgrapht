@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,11 +23,11 @@ import org.jgrapht.*;
  * Computes an Eulerian cycle of an Eulerian graph. An
  * <a href="http://mathworld.wolfram.com/EulerianGraph.html">Eulerian graph</a> is a graph
  * containing an <a href="http://mathworld.wolfram.com/EulerianCycle.html">Eulerian cycle</a>.
- * 
- * 
+ *
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface EulerianCycleAlgorithm<V, E>
@@ -35,7 +35,7 @@ public interface EulerianCycleAlgorithm<V, E>
 
     /**
      * Compute an Eulerian cycle of a graph.
-     * 
+     *
      * @param graph the input graph
      * @return an Eulerian cycle
      * @throws IllegalArgumentException in case the graph is not Eulerian

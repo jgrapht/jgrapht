@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,26 +21,24 @@ import java.util.*;
 
 /**
  * A weighted variant of the intrusive edges specifics.
- * 
+ *
  * <p>
  * The implementation optimizes the use of {@link DefaultWeightedEdge} and subclasses. For other
  * custom user edge types, a map is used to store vertex source, target and weight.
- * 
+ *
  * @author Barak Naveh
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class WeightedIntrusiveEdgesSpecifics<V, E>
-    extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveWeightedEdge>
-    implements IntrusiveEdgesSpecifics<V, E>
+public class WeightedIntrusiveEdgesSpecifics<V, E> extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveWeightedEdge> implements IntrusiveEdgesSpecifics<V, E>
 {
     private static final long serialVersionUID = 5327226615635500554L;
 
     /**
      * Constructor
-     * 
+     *
      * @param map the map to use for storage
      */
     public WeightedIntrusiveEdgesSpecifics(Map<E, IntrusiveWeightedEdge> map)

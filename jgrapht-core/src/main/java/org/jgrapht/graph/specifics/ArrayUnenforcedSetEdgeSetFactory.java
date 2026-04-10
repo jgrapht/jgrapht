@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,11 +29,10 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Barak Naveh
  */
-public class ArrayUnenforcedSetEdgeSetFactory<V, E>
-    implements EdgeSetFactory<V, E>, Serializable
+public class ArrayUnenforcedSetEdgeSetFactory<V, E> implements EdgeSetFactory<V, E>, Serializable
 {
     private static final long serialVersionUID = 5936902837403445985L;
 

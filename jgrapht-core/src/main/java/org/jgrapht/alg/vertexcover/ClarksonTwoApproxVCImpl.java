@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,8 +38,7 @@ import java.util.stream.*;
  *
  * @author Joris Kinable
  */
-public class ClarksonTwoApproxVCImpl<V, E>
-    implements VertexCoverAlgorithm<V>
+public class ClarksonTwoApproxVCImpl<V, E> implements VertexCoverAlgorithm<V>
 {
 
     private static int vertexCounter = 0;
@@ -49,19 +48,19 @@ public class ClarksonTwoApproxVCImpl<V, E>
 
     /**
      * Constructs a new ClarksonTwoApproxVCImpl instance where all vertices have uniform weights.
-     * 
+     *
      * @param graph input graph
      */
     public ClarksonTwoApproxVCImpl(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireUndirected(graph);
-        this.vertexWeightMap = graph
-            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+        this.vertexWeightMap = graph.vertexSet().stream()
+            .collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
     }
 
     /**
      * Constructs a new ClarksonTwoApproxVCImpl instance
-     * 
+     *
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
      */
@@ -93,25 +92,23 @@ public class ClarksonTwoApproxVCImpl<V, E>
             ux.addNeighbor(vx);
             vx.addNeighbor(ux);
 
-            assert (ux.neighbors.get(vx).equals(
-                vx.neighbors.get(
-                    ux))) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+            assert (ux.neighbors.get(vx).equals(vx.neighbors.get(ux)))
+                : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
         TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
         workingGraph.addAll(vertexEncapsulationMap.values());
-        assert (workingGraph.size() == vertexEncapsulationMap
-            .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
+        assert (workingGraph.size() == vertexEncapsulationMap.size())
+            : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
                 + "vertices in working graph: " + workingGraph.size();
 
         while (!workingGraph.isEmpty()) { // Continue until all edges are covered
 
             // Find a vertex vx for which W(vx)/degree(vx) is minimal
             RatioVertex<V> vx = workingGraph.pollFirst();
-            assert (workingGraph.parallelStream().allMatch(
-                ux -> vx.getRatio() <= ux
-                    .getRatio())) : "vx does not have the smallest ratio among all elements. VX: "
-                        + vx + " WorkingGraph: " + workingGraph;
+            assert (workingGraph.parallelStream().allMatch(ux -> vx.getRatio() <= ux.getRatio()))
+                : "vx does not have the smallest ratio among all elements. VX: " + vx
+                    + " WorkingGraph: " + workingGraph;
 
             // Iterate over all the neighbors ux of vx and update ux.W
             double ratio = vx.getRatio();
@@ -135,8 +132,8 @@ public class ClarksonTwoApproxVCImpl<V, E>
             // Update cover
             cover.add(vx.v);
             weight += vertexWeightMap.get(vx.v);
-            assert (!workingGraph.parallelStream().anyMatch(
-                ux -> ux.id == vx.id)) : "vx should no longer exist in the working graph";
+            assert (!workingGraph.parallelStream().anyMatch(ux -> ux.id == vx.id))
+                : "vx should no longer exist in the working graph";
         }
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Christoph Grüne, Daniel Mock, Oliver Feith and Contributors.
+ * (C) Copyright 2018-2026, by Christoph Grüne, Daniel Mock, Oliver Feith and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,8 +41,7 @@ import java.util.stream.*;
  * @author Daniel Mock
  * @author Oliver Feith
  */
-public class ColorRefinementAlgorithm<V, E>
-    implements VertexColoringAlgorithm<V>
+public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V>
 {
     private final Graph<V, E> graph;
     private final Coloring<V> alpha;
@@ -95,8 +94,7 @@ public class ColorRefinementAlgorithm<V, E>
             Set<Integer> adjacentColors = calculateColorDegrees(currentColor, rep);
 
             // split colors
-            adjacentColors
-                .stream().filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
+            adjacentColors.stream().filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
                 .sorted(Comparator.comparingInt(o -> o)) // canonical order
                 .forEach(color -> splitUpColor(color, refineStack, rep));
 

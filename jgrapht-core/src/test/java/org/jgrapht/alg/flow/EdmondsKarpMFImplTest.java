@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2023, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2008-2026, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,8 +26,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class EdmondsKarpMFImplTest
-    extends MaximumFlowAlgorithmTest
+public class EdmondsKarpMFImplTest extends MaximumFlowAlgorithmTest
 {
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -46,7 +45,9 @@ public class EdmondsKarpMFImplTest
         simple.addVertex(0);
         simple.addVertex(1);
         DefaultWeightedEdge e = simple.addEdge(0, 1);
-        assertThrows(NullPointerException.class, () -> new EdmondsKarpMFImpl<Integer, DefaultWeightedEdge>(null));
+        assertThrows(
+            NullPointerException.class,
+            () -> new EdmondsKarpMFImpl<Integer, DefaultWeightedEdge>(null));
         assertThrows(IllegalArgumentException.class, () -> new EdmondsKarpMFImpl<>(simple, -0.1));
         assertThrows(IllegalArgumentException.class, () -> {
             simple.setEdgeWeight(e, -1.0);

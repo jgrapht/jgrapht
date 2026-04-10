@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2004-2023, by Marden Neubert and Contributors.
+ * (C) Copyright 2004-2026, by Marden Neubert and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,12 +24,11 @@ import java.util.*;
 
 /**
  * A topological ordering iterator for a directed acyclic graph.
- * 
+ *
  * <p>
  * A topological order is a permutation {@code p} of the vertices of a graph such that an edge
- * {@code (i,j)} implies that {@code i} appears before {@code j} in {@code p}.
- * For more information see
- * <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
+ * {@code (i,j)} implies that {@code i} appears before {@code j} in {@code p}. For more information
+ * see <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
  * <a href="http://mathworld.wolfram.com/TopologicalSort.html">wolfram</a>.
  *
  * <p>
@@ -48,8 +47,7 @@ import java.util.*;
  * @author Marden Neubert
  * @author Dimitrios Michail
  */
-public class TopologicalOrderIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+public class TopologicalOrderIterator<V, E> extends AbstractGraphIterator<V, E>
 {
     private Queue<V> queue;
     private Map<V, ModifiableInteger> inDegreeMap;
@@ -58,7 +56,7 @@ public class TopologicalOrderIterator<V, E>
 
     /**
      * Construct a topological order iterator.
-     * 
+     *
      * <p>
      * Traversal will start at one of the graph's <i>sources</i>. See the definition of source at
      * <a href="http://mathworld.wolfram.com/Source.html">
@@ -74,7 +72,7 @@ public class TopologicalOrderIterator<V, E>
 
     /**
      * Construct a topological order iterator.
-     * 
+     *
      * <p>
      * Traversal will start at one of the graph's <i>sources</i>. See the definition of source at
      * <a href="http://mathworld.wolfram.com/Source.html">
@@ -83,7 +81,7 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param graph the directed graph to be iterated
      * @param comparator comparator in order to break ties in case of partial order
-     * 
+     *
      * @throws NotDirectedAcyclicGraphException if {@code graph} is not a DAG
      */
     public TopologicalOrderIterator(Graph<V, E> graph, Comparator<V> comparator)
@@ -129,7 +127,8 @@ public class TopologicalOrderIterator<V, E>
     }
 
     /**
-     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is attempted
+     * @throws IllegalArgumentException if disabling the cross components nature of this iterator is
+     *         attempted
      */
     @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)

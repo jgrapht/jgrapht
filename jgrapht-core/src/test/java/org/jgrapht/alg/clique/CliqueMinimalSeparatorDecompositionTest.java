@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Florian Buenzli and Contributors.
+ * (C) Copyright 2015-2026, by Florian Buenzli and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for the Clique Minimal Separator Decomposition.
- * 
+ *
  * @author Florian Buenzli {@literal <fbuenzli@student.ethz.ch>}
  */
 public class CliqueMinimalSeparatorDecompositionTest
@@ -539,7 +539,7 @@ public class CliqueMinimalSeparatorDecompositionTest
     /**
      * Check whether the subgraph of <code>graph</code> induced by the given <code>vertices</code>
      * is complete, i.e. a clique.
-     * 
+     *
      * @param graph the graph.
      * @param vertices the vertices to induce the subgraph from.
      * @return true if the induced subgraph is a clique.

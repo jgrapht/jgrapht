@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,9 +30,7 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class WeightedUnmodifiableSet<E>
-    extends AbstractSet<E>
-    implements Serializable
+public class WeightedUnmodifiableSet<E> extends AbstractSet<E> implements Serializable
 {
 
     private static final long serialVersionUID = -5913435131882975869L;
@@ -42,7 +40,7 @@ public class WeightedUnmodifiableSet<E>
 
     /**
      * Constructs a WeightedUnmodifiableSet instance
-     * 
+     *
      * @param backingSet underlying set
      */
     public WeightedUnmodifiableSet(Set<E> backingSet)
@@ -53,7 +51,7 @@ public class WeightedUnmodifiableSet<E>
 
     /**
      * Constructs a WeightedUnmodifiableSet instance
-     * 
+     *
      * @param backingSet underlying set
      * @param weight weight of the set
      */

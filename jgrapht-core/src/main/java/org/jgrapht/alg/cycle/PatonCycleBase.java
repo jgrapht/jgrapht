@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2026, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,12 +24,12 @@ import java.util.*;
 
 /**
  * Find a cycle basis of an undirected graph using a variant of Paton's algorithm.
- * 
+ *
  * <p>
  * See:<br>
  * K. Paton, An algorithm for finding a fundamental set of cycles for an undirected linear graph,
  * Comm. ACM 12 (1969), pp. 514-518.
- * 
+ *
  * <p>
  * Note that Paton's algorithm produces a fundamental cycle basis while this implementation produces
  * a <a href=
@@ -44,8 +44,7 @@ import java.util.*;
  *
  * @author Nikolay Ognyanov
  */
-public class PatonCycleBase<V, E>
-    implements CycleBasisAlgorithm<V, E>
+public class PatonCycleBase<V, E> implements CycleBasisAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
@@ -53,8 +52,8 @@ public class PatonCycleBase<V, E>
      * Create a cycle base finder for the specified graph.
      *
      * @param graph the input graph
-     * @throws IllegalArgumentException if the graph argument is {@code null} or the graph is
-     *         not undirected
+     * @throws IllegalArgumentException if the graph argument is {@code null} or the graph is not
+     *         undirected
      */
     public PatonCycleBase(Graph<V, E> graph)
     {
@@ -64,7 +63,7 @@ public class PatonCycleBase<V, E>
     /**
      * Return an undirected cycle basis of a graph. Works only for undirected graphs which do not
      * have multiple (parallel) edges.
-     * 
+     *
      * @return an undirected cycle basis
      * @throws IllegalArgumentException if the graph is not undirected
      * @throws IllegalArgumentException if the graph contains multiple edges between two vertices

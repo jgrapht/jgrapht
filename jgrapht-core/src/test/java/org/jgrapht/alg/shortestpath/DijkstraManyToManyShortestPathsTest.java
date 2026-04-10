@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,8 +29,7 @@ import org.junit.jupiter.api.*;
  *
  * @author Semen Chudakov
  */
-public class DijkstraManyToManyShortestPathsTest
-    extends BaseManyToManyShortestPathsTest
+public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTest
 {
 
     @Test

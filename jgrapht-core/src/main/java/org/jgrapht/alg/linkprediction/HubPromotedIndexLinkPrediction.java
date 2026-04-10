@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,32 +29,31 @@ import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Hub Promoted Index.
- * 
+ *
  * <p>
  * This is a local method which computes $s_{xy} =
  * \frac{2|\Gamma(u)\cap\Gamma(v))|}{min(k(u),k(v))}$ where for a node $v$, $\Gamma(v)$ denotes the
  * set of neighbors of $v$ and $k(v) = |\Gamma(v)|$ denotes the degree of $v$.
  * </p>
- * 
+ *
  * See the following paper:
  * <ul>
  * <li>E. Ravasz, A.L. Somera, D.A. Mongru, Z.N. Oltvai, A.-L. Barabási, Science 297, 1553
  * (2002)</li>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class HubPromotedIndexLinkPrediction<V, E>
-    implements LinkPredictionAlgorithm<V, E>
+public class HubPromotedIndexLinkPrediction<V, E> implements LinkPredictionAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
     /**
      * Create a new prediction
-     * 
+     *
      * @param graph the input graph
      */
     public HubPromotedIndexLinkPrediction(Graph<V, E> graph)

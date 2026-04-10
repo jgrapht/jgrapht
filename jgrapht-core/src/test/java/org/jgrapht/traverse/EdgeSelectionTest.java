@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Sean Hudson and Contributors.
+ * (C) Copyright 2019-2026, by Sean Hudson and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -51,8 +51,7 @@ public class EdgeSelectionTest
             @Override
             protected Set<StatefulEdge> selectOutgoingEdges(StatefulVertex vertex)
             {
-                return graph
-                    .outgoingEdgesOf(vertex).stream().filter(e -> filterEdge(vertex, e))
+                return graph.outgoingEdgesOf(vertex).stream().filter(e -> filterEdge(vertex, e))
                     .collect(Collectors.toSet());
             }
 
@@ -114,8 +113,7 @@ public class EdgeSelectionTest
         return graph;
     }
 
-    private static class StatefulEdge
-        extends DefaultWeightedEdge
+    private static class StatefulEdge extends DefaultWeightedEdge
     {
         private static final long serialVersionUID = 1L;
         private final String color;

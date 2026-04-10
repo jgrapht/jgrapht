@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Tim Shearouse and Contributors.
+ * (C) Copyright 2003-2026, by Tim Shearouse and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,7 +42,7 @@ public final class CompleteGraphDemo
 
     /**
      * Main demo entry point.
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args)

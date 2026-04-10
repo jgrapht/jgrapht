@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,15 +27,14 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class SimpleWeightedGraphMatrixGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class SimpleWeightedGraphMatrixGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     protected List<V> vertices;
     protected double[][] weights;
 
     /**
      * Set the generator vertices.
-     * 
+     *
      * @param vertices the graph vertices
      * @return the generator
      */
@@ -47,7 +46,7 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
 
     /**
      * Set the weights of the generator.
-     * 
+     *
      * @param weights the weights
      * @return the generator
      */

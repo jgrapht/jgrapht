@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,16 +30,14 @@ import java.util.function.*;
 /**
  * A base abstract implementation for the graph adapter class using Guava's {@link Network}. This is
  * a helper class in order to support both mutable and immutable networks.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @param <N> type of the underlying Guava's network
  */
-public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Cloneable, Serializable
+public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>> extends AbstractGraph<V, E> implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -6233085794632237761L;
 
@@ -57,7 +55,7 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the mutable network
      */
     public BaseNetworkAdapter(N network)
@@ -67,11 +65,11 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * 
+     *
      * @throws NullPointerException if {@code network} is {@code null}
      */
     public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
@@ -81,15 +79,17 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the mutable network
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
-     * 
-     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
-     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is {@code null}
+     *
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to
+     *         create a vertex order
+     * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is
+     *         {@code null}
      */
     public BaseNetworkAdapter(
         N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
@@ -110,19 +110,19 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
 
     /**
      * Set the vertex supplier that the graph uses whenever it needs to create new vertices.
-     * 
+     *
      * <p>
      * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
      * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
      * {@link Graph#addVertex(Object)} to add the vertex.
-     * 
+     *
      * <p>
      * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal
-     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * specifically for a new vertex to be added in a graph {@code v} must <i>not</i> be equal to
+     * any other vertex in the graph. More formally, the graph must not contain any vertex
      * {@code v2} such that {@code v2.equals(v)}.
-     * 
+     *
      * @param vertexSupplier the vertex supplier
      */
     public void setVertexSupplier(Supplier<V> vertexSupplier)
@@ -138,19 +138,19 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
 
     /**
      * Set the edge supplier that the graph uses whenever it needs to create new edges.
-     * 
+     *
      * <p>
      * A graph uses the edge supplier to create new edge objects whenever a user calls method
      * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
      * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
-     * 
+     *
      * <p>
      * In contrast with the {@link Supplier} interface, the edge supplier has the additional
      * requirement that a new and distinct result is returned every time it is invoked. More
-     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to
-     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * specifically for a new edge to be added in a graph {@code e} must <i>not</i> be equal to any
+     * other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
      * graph must not contain any edge {@code e2} such that {@code e2.equals(e)}.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      */
     public void setEdgeSupplier(Supplier<E> edgeSupplier)
@@ -161,8 +161,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        return network
-            .edgesConnecting(sourceVertex, targetVertex).stream().findFirst().orElse(null);
+        return network.edgesConnecting(sourceVertex, targetVertex).stream().findFirst()
+            .orElse(null);
     }
 
     @Override
@@ -210,9 +210,9 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     public GraphType getType()
     {
         return (network.isDirected() ? new DefaultGraphType.Builder().directed()
-            : new DefaultGraphType.Builder().undirected())
-                .weighted(false).allowMultipleEdges(network.allowsParallelEdges())
-                .allowSelfLoops(network.allowsSelfLoops()).build();
+            : new DefaultGraphType.Builder().undirected()).weighted(false)
+            .allowMultipleEdges(network.allowsParallelEdges())
+            .allowSelfLoops(network.allowsSelfLoops()).build();
     }
 
     @Override
@@ -296,11 +296,12 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
 
     /**
      * Create the internal vertex order implementation.
-     * 
+     *
      * @param vertexOrderMethod method to use
      * @return the vertex order
-     * 
-     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex order
+     *
+     * @throws IllegalArgumentException if the supplied method cannot be used to create a vertex
+     *         order
      */
     protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
     {
@@ -308,8 +309,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
         case COMPARATOR:
             return ElementOrder.comparator(vertexOrderMethod.comparator());
         case GUAVA_COMPARATOR:
-            if (!network
-                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            if (!network.nodeOrder().type()
+                .equals(com.google.common.graph.ElementOrder.Type.SORTED))
             {
                 throw new IllegalArgumentException(
                     "Guava comparator only usable if node order is SORTED!");

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -55,8 +55,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class AHUUnrootedTreeIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V, E>
 {
 
     private final Graph<V, E> tree1;

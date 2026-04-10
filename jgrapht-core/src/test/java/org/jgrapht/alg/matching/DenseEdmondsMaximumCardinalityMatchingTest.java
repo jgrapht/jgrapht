@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -281,10 +281,9 @@ public final class DenseEdmondsMaximumCardinalityMatchingTest
                     new GnmRandomGraphGenerator<>(n, m);
 
                 for (int i = 0; i < 25; i++) {
-                    Graph<Integer,
-                        DefaultEdge> graph = new SimpleGraph<>(
-                            SupplierUtil.createIntegerSupplier(),
-                            SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                        SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+                        false);
                     generator.generateGraph(graph);
                     DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                         new DenseEdmondsMaximumCardinalityMatching<>(graph);

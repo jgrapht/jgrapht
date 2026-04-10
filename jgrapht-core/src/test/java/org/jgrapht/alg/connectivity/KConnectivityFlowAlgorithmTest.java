@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Azim Barhoumi, Paul Enjalbert and Contributors.
+ * (C) Copyright 2020-2026, by Azim Barhoumi, Paul Enjalbert and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for K-Connectivenness implemented with graph flows.
- * 
+ *
  * @author Azim Barhoumi
  * @author Paul Enjalbert
  */
@@ -44,9 +44,11 @@ public class KConnectivityFlowAlgorithmTest
         graph.addEdge(2, 3);
         graph.addEdge(3, 1);
 
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.getEdgeConnectivity(), "Edge connectivity of a triangle graph should be 2.");
+        assertEquals(
+            2, algo.getEdgeConnectivity(), "Edge connectivity of a triangle graph should be 2.");
     }
 
     @Test
@@ -60,70 +62,65 @@ public class KConnectivityFlowAlgorithmTest
         graph.addEdge(2, 3);
         graph.addEdge(3, 1);
 
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.getVertexConnectivity(), "Vertex connectivity of a triangle graph should be 2.");
+        assertEquals(
+            2, algo.getVertexConnectivity(),
+            "Vertex connectivity of a triangle graph should be 2.");
     }
 
     @Test
     public void testEdgeConnectivityLargeUndirectedGraph()
     {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        
+
         for (int i = 0; i < 8; i++) {
             graph.addVertex(i);
         }
-        
-        int[][] edges = {
-                {0, 1}, {0, 2}, {0, 4},
-                {1, 3}, {1, 5},
-                {2, 3}, {2, 6},
-                {3, 7},
-                {4, 5}, {4, 6},
-                {5, 7},
-                {6, 7}
-        };
-        
+
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 0, 4 }, { 1, 3 }, { 1, 5 }, { 2, 3 }, { 2, 6 },
+            { 3, 7 }, { 4, 5 }, { 4, 6 }, { 5, 7 }, { 6, 7 } };
+
         for (int[] edge : edges) {
             graph.addEdge(edge[0], edge[1]);
         }
 
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(3, algo.getEdgeConnectivity(), "Edge connectivity of a large cycle graph should be 3.");
+        assertEquals(
+            3, algo.getEdgeConnectivity(), "Edge connectivity of a large cycle graph should be 3.");
     }
 
     @Test
     public void testVertexConnectivityLargeUndirectedGraph()
     {
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        
+
         for (int i = 0; i < 8; i++) {
             graph.addVertex(i);
         }
-        
-        int[][] edges = {
-                {0, 1}, {0, 2}, {0, 4},
-                {1, 3}, {1, 5},
-                {2, 3}, {2, 6},
-                {3, 7},
-                {4, 5}, {4, 6},
-                {5, 7},
-                {6, 7}
-        };
-        
+
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 0, 4 }, { 1, 3 }, { 1, 5 }, { 2, 3 }, { 2, 6 },
+            { 3, 7 }, { 4, 5 }, { 4, 6 }, { 5, 7 }, { 6, 7 } };
+
         for (int[] edge : edges) {
             graph.addEdge(edge[0], edge[1]);
         }
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(3, algo.getVertexConnectivity(), "Vertex connectivity of a this cycle graph should be 3.");
+        assertEquals(
+            3, algo.getVertexConnectivity(),
+            "Vertex connectivity of a this cycle graph should be 3.");
     }
 
     @Test
     public void testEdgeConnectivitySmallDirectedGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        SimpleDirectedGraph<Integer, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -131,15 +128,19 @@ public class KConnectivityFlowAlgorithmTest
         graph.addEdge(2, 3);
         graph.addEdge(3, 1);
 
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(1, algo.getEdgeConnectivity(), "Edge connectivity of a directed triangle graph should be 1.");
+        assertEquals(
+            1, algo.getEdgeConnectivity(),
+            "Edge connectivity of a directed triangle graph should be 1.");
     }
 
     @Test
     public void testVertexConnectivitySmallDirectedGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        SimpleDirectedGraph<Integer, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -147,62 +148,63 @@ public class KConnectivityFlowAlgorithmTest
         graph.addEdge(2, 3);
         graph.addEdge(3, 1);
 
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(1, algo.getVertexConnectivity(), "Vertex connectivity of a directed triangle graph should be 1.");
+        assertEquals(
+            1, algo.getVertexConnectivity(),
+            "Vertex connectivity of a directed triangle graph should be 1.");
     }
 
     @Test
     public void testEdgeConnectivityLargeDirectedGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        
+        SimpleDirectedGraph<Integer, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+
         for (int i = 0; i < 6; i++) {
             graph.addVertex(i);
         }
-        
-        int[][] edges = {
-                {0, 1}, {0, 2},
-                {1, 2}, {1, 3}, {1, 4}, {1, 5},
-                {2, 3}, {2, 4}, {2, 4},
-                {3, 4}, {3, 5},
-                {4, 0}, {4, 1}, {4, 2}, {4, 5},
-                {5, 0}, {5, 1}, {5, 2}  
-         };
-        
+
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 1, 2 }, { 1, 3 }, { 1, 4 }, { 1, 5 }, { 2, 3 },
+            { 2, 4 }, { 2, 4 }, { 3, 4 }, { 3, 5 }, { 4, 0 }, { 4, 1 }, { 4, 2 }, { 4, 5 },
+            { 5, 0 }, { 5, 1 }, { 5, 2 } };
+
         for (int[] edge : edges) {
             graph.addEdge(edge[0], edge[1]);
         }
 
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.getEdgeConnectivity(), "Edge connectivity of a large directed cycle graph should be 1.");
+        assertEquals(
+            2, algo.getEdgeConnectivity(),
+            "Edge connectivity of a large directed cycle graph should be 1.");
     }
 
     @Test
     public void testVertexConnectivityLargeDirectedGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        
+        SimpleDirectedGraph<Integer, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+
         for (int i = 0; i < 6; i++) {
             graph.addVertex(i);
         }
-        
-        int[][] edges = {
-                {0, 1}, {0, 2},
-                {1, 2}, {1, 3}, {1, 4}, {1, 5},
-                {2, 3}, {2, 4}, {2, 4},
-                {3, 4}, {3, 5},
-                {4, 0}, {4, 1}, {4, 2}, {4, 5},
-                {5, 0}, {5, 1}, {5, 2}  
-         };
-        
+
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 1, 2 }, { 1, 3 }, { 1, 4 }, { 1, 5 }, { 2, 3 },
+            { 2, 4 }, { 2, 4 }, { 3, 4 }, { 3, 5 }, { 4, 0 }, { 4, 1 }, { 4, 2 }, { 4, 5 },
+            { 5, 0 }, { 5, 1 }, { 5, 2 } };
+
         for (int[] edge : edges) {
             graph.addEdge(edge[0], edge[1]);
         }
-        
-        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo = new KConnectivityFlowAlgorithm<>(graph);
 
-        assertEquals(2, algo.getVertexConnectivity(), "Vertex connectivity of a large directed cycle graph should be 2.");
+        KConnectivityFlowAlgorithm<Integer, DefaultEdge> algo =
+            new KConnectivityFlowAlgorithm<>(graph);
+
+        assertEquals(
+            2, algo.getVertexConnectivity(),
+            "Vertex connectivity of a large directed cycle graph should be 2.");
     }
 }

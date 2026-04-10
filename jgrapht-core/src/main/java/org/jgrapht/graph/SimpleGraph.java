@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,13 +28,12 @@ import java.util.function.*;
  * <a href="http://mathworld.wolfram.com/GraphLoop.html">graph loops</a> or
  * <a href="http://mathworld.wolfram.com/MultipleEdge.html">multiple edges</a>. This particular
  * implementation supports both weighted and unweighted edges.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  */
-public class SimpleGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+public class SimpleGraph<V, E> extends AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = 4607246833824317836L;
 
@@ -50,7 +49,7 @@ public class SimpleGraph<V, E>
 
     /**
      * Creates a new simple graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      * @param weighted whether the graph is weighted or not
@@ -58,15 +57,13 @@ public class SimpleGraph<V, E>
     public SimpleGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
         super(
-            vertexSupplier, edgeSupplier,
-            new DefaultGraphType.Builder()
-                .undirected().allowMultipleEdges(false).allowSelfLoops(false).weighted(weighted)
-                .build());
+            vertexSupplier, edgeSupplier, new DefaultGraphType.Builder().undirected()
+                .allowMultipleEdges(false).allowSelfLoops(false).weighted(weighted).build());
     }
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -80,14 +77,14 @@ public class SimpleGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V,
-        E> GraphBuilder<V, E, ? extends SimpleGraph<V, E>> createBuilder(Supplier<E> edgeSupplier)
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleGraph<V, E>> createBuilder(
+        Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new SimpleGraph<>(null, edgeSupplier, false));
     }

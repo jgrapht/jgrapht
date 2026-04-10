@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.5.3** (Under development)
+- **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
     - Fixed a bug in `DOTExporter` causing graph attributes not to be exported correctly. (contributed by vab2048)
     - Fixed `DoublyLinkedList` for compatibility with Java 21 (reported by Liam Miller-Cushon, contributed by Sung Ho Yoon)
@@ -27,6 +27,8 @@ Changes to JGraphT in each version:
     - Added subgraph support to `DOTExporter` (contributed by Nicolas Rol)
     - Fixed `Graphs.addAllEdges` with custom weighted edge types (contributed by John Sichi)
     - Added `KConnectivityFlowAlgorithm` (contributed by Azim Barhoumi and Paul Enjalbert)
+    - Improved `AsSynchronizedGraph` cache performance (contributed by Andriy Palamarchuk)
+    - Optimized `TransitiveReduction` (contributed by Benoit Chatain Lacelle)
 
 - **version 1.5.2** (2-May-2023)
     - Prepared release cycle 1.5.2: removed deprecated code, updated dependencies (contributed by Joris Kinable)

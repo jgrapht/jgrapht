@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,8 +20,7 @@ package org.jgrapht.alg.vertexcover;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 
-public class EdgeBasedTwoApproxVCImplTest
-    extends VertexCoverTwoApproxTest
+public class EdgeBasedTwoApproxVCImplTest extends VertexCoverTwoApproxTest
 {
     @Override
     public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph)

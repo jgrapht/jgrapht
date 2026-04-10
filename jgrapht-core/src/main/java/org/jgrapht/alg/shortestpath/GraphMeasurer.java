@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -51,7 +51,7 @@ public class GraphMeasurer<V, E>
     /**
      * Constructs a new instance of GraphMeasurer. {@link FloydWarshallShortestPaths} is used as the
      * default shortest path algorithm.
-     * 
+     *
      * @param graph input graph
      */
     public GraphMeasurer(Graph<V, E> graph)
@@ -61,7 +61,7 @@ public class GraphMeasurer<V, E>
 
     /**
      * Constructs a new instance of GraphMeasurer.
-     * 
+     *
      * @param graph input graph
      * @param shortestPathAlgorithm shortest path algorithm used to compute shortest paths between
      *        all pairs of vertices. Recommended algorithms are:
@@ -143,7 +143,7 @@ public class GraphMeasurer<V, E>
      * Compute the <a href="http://mathworld.wolfram.com/GraphPeriphery.html">graph periphery</a>.
      * The periphery of a graph is the set of vertices of graph eccentricity equal to the graph
      * diameter.
-     * 
+     *
      * @return the graph periphery
      */
     public Set<V> getGraphPeriphery()

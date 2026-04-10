@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Andre Immig and Contributors.
+ * (C) Copyright 2018-2026, by Andre Immig and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,15 +35,13 @@ import static java.util.Arrays.asList;
  * @author Andre Immig
  */
 
-public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
-    extends GoldbergMaximumDensitySubgraphTestBase<Pair<Integer, Double>, DefaultEdge>
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest extends GoldbergMaximumDensitySubgraphTestBase<Pair<Integer, Double>, DefaultEdge>
 {
 
     @Override
     protected MaximumDensitySubgraphAlgorithm<Pair<Integer, Double>, DefaultEdge> constructSolver(
         Graph<Pair<Integer, Double>, DefaultEdge> g,
-        Function<Graph<Pair<Integer, Double>, DefaultWeightedEdge>,
-            MinimumSTCutAlgorithm<Pair<Integer, Double>, DefaultWeightedEdge>> alg)
+        Function<Graph<Pair<Integer, Double>, DefaultWeightedEdge>, MinimumSTCutAlgorithm<Pair<Integer, Double>, DefaultWeightedEdge>> alg)
     {
         return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight<>(
             g, s, t, DEFAULT_EPS, alg);

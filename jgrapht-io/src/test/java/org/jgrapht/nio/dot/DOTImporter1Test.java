@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Wil Selwood and Contributors.
+ * (C) Copyright 2015-2026, by Wil Selwood and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -263,7 +263,9 @@ public class DOTImporter1Test
 
     @Test
     public void testExportImportLoop()
-        throws ImportException, ExportException, UnsupportedEncodingException
+        throws ImportException,
+        ExportException,
+        UnsupportedEncodingException
     {
         DirectedMultigraph<String, DefaultEdge> start = new DirectedMultigraph<>(DefaultEdge.class);
         start.addVertex("0");

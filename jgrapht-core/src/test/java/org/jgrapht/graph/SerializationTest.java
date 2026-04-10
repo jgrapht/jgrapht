@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -123,10 +123,8 @@ public class SerializationTest
         for (E e : edgeSet)
             assertInstanceOf(DefaultWeightedEdge.class, e);
         assertEquals(
-            new HashSet<>(weights),
-            edgeSet
-                .stream().map(e -> (DefaultWeightedEdge) e).map(DefaultWeightedEdge::getWeight)
-                .collect(Collectors.toSet()));
+            new HashSet<>(weights), edgeSet.stream().map(e -> (DefaultWeightedEdge) e)
+                .map(DefaultWeightedEdge::getWeight).collect(Collectors.toSet()));
     }
 
     /**

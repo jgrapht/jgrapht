@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2013-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,26 +41,25 @@ public interface SpanningTreeAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    interface SpanningTree<E>
-        extends Iterable<E>
+    interface SpanningTree<E> extends Iterable<E>
     {
         /**
          * Returns the weight of the spanning tree.
-         * 
+         *
          * @return weight of the spanning tree
          */
         double getWeight();
 
         /**
          * Set of edges of the spanning tree.
-         * 
+         *
          * @return edge set of the spanning tree
          */
         Set<E> getEdges();
 
         /**
          * Returns an iterator over the edges in the spanning tree.
-         * 
+         *
          * @return iterator over the edges in the spanning tree.
          */
         @Override
@@ -75,8 +74,7 @@ public interface SpanningTreeAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    class SpanningTreeImpl<E>
-        implements SpanningTree<E>, Serializable
+    class SpanningTreeImpl<E> implements SpanningTree<E>, Serializable
     {
         private static final long serialVersionUID = 402707108331703333L;
 

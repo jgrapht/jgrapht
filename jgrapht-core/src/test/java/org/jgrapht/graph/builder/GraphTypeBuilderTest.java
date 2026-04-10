@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the graph type builder.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GraphTypeBuilderTest
@@ -35,9 +35,8 @@ public class GraphTypeBuilderTest
     @Test
     public void testGraphTypeBuilder()
     {
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .<Integer, DefaultEdge> directed().allowingMultipleEdges(true)
+        Graph<Integer, DefaultEdge> graph =
+            GraphTypeBuilder.<Integer, DefaultEdge> directed().allowingMultipleEdges(true)
                 .allowingSelfLoops(true).edgeClass(DefaultEdge.class).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
@@ -49,9 +48,8 @@ public class GraphTypeBuilderTest
     @Test
     public void testGraphTypeBuilderWithEdgeSupplier()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> graph = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+        Graph<Integer, DefaultWeightedEdge> graph =
+            GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
                 .edgeSupplier(() -> new DefaultWeightedEdge())
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
         assertTrue(graph.getType().isDirected());
@@ -64,9 +62,8 @@ public class GraphTypeBuilderTest
     @Test
     public void testGraphTypeBuilderWithVertexClass()
     {
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+        Graph<Integer, DefaultEdge> graph =
+            GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
                 .vertexClass(Integer.class).edgeClass(DefaultEdge.class).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
@@ -78,9 +75,8 @@ public class GraphTypeBuilderTest
     @Test
     public void testGraphTypeBuilderUndirected()
     {
-        Graph<Integer,
-            DefaultEdge> graph = GraphTypeBuilder
-                .<Integer, DefaultEdge> undirected().allowingMultipleEdges(true)
+        Graph<Integer, DefaultEdge> graph =
+            GraphTypeBuilder.<Integer, DefaultEdge> undirected().allowingMultipleEdges(true)
                 .allowingSelfLoops(false).edgeClass(DefaultEdge.class).buildGraph();
         assertTrue(graph.getType().isUndirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());

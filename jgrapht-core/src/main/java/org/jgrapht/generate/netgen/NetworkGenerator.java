@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,7 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.CollectionUtil;
 import org.jgrapht.util.ElementsSequenceGenerator;
 
@@ -640,8 +639,8 @@ public class NetworkGenerator<V, E>
         // For every tail, compute an upper bound on the number arcs it's
         // possible to generate from it.
         Set<Node> headsSet = new HashSet<>(heads);
-        List<Integer> outDegrees = tails
-            .stream().map(node -> getPossibleArcNum(node, headsSet)).collect(Collectors.toList());
+        List<Integer> outDegrees = tails.stream().map(node -> getPossibleArcNum(node, headsSet))
+            .collect(Collectors.toList());
         long degreeSum = outDegrees.stream().mapToLong(i -> i).sum();
 
         // Add weight bounds as well to make the distribution more uniform.

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Peter Harman and Contributors.
+ * (C) Copyright 2019-2026, by Peter Harman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -58,8 +58,7 @@ import java.util.stream.*;
  *
  * @author Peter Harman
  */
-public class GreedyHeuristicTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     /**
@@ -81,8 +80,7 @@ public class GreedyHeuristicTSP<V, E>
         }
 
         // Sort all the edges by weight
-        Deque<E> edges = graph
-            .edgeSet().stream()
+        Deque<E> edges = graph.edgeSet().stream()
             .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
             .collect(Collectors.toCollection(ArrayDeque::new));
         Set<E> tourEdges = CollectionUtil.newHashSetWithExpectedSize(n);

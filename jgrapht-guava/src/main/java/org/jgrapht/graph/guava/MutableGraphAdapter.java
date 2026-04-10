@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,41 +28,39 @@ import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableGraph}.
- * 
+ *
  * <p>
  * The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as
  * adding or removing vertices and edges are reflected in the underlying graph.
  *
  * <p>
  * See the example below on how to create such an adapter: <blockquote>
- * 
+ *
  * <pre>
  * MutableGraph&lt;String&gt; mutableGraph = GraphBuilder.directed().allowsSelfLoops(true).build();
- * 
+ *
  * mutableGraph.addNode("v1");
  * mutableGraph.addNode("v2");
  * mutableGraph.addEdge("v1", "v2");
- * 
+ *
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new MutableGraphAdapter&lt;&gt;(mutableGraph);
  * </pre>
- * 
+ *
  * </blockquote>
  *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  */
-public class MutableGraphAdapter<V>
-    extends BaseGraphAdapter<V, MutableGraph<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+public class MutableGraphAdapter<V> extends BaseGraphAdapter<V, MutableGraph<V>> implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -7556855931445010748L;
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param graph the graph
-     * 
+     *
      * @throws NullPointerException if {@code graph} is {@code null}
      */
     public MutableGraphAdapter(MutableGraph<V> graph)
@@ -72,11 +70,11 @@ public class MutableGraphAdapter<V>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param graph the graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * 
+     *
      * @throws NullPointerException if {@code graph} is {@code null}
      */
     public MutableGraphAdapter(
@@ -87,15 +85,17 @@ public class MutableGraphAdapter<V>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param graph the graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
      * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
      *        is required in order to make edge source/targets be consistent.
-     * 
-     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to create a vertex order
-     * @throws NullPointerException if either one of {@code graph} or {@code vertexOrderMethod} is {@code null}
+     *
+     * @throws IllegalArgumentException if the supplied {@code vertexOrderMethod} cannot be used to
+     *         create a vertex order
+     * @throws NullPointerException if either one of {@code graph} or {@code vertexOrderMethod} is
+     *         {@code null}
      */
     public MutableGraphAdapter(
         MutableGraph<V> graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
@@ -128,14 +128,15 @@ public class MutableGraphAdapter<V>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * The provided edge object can either be {@code null} or must respect the source and target
      * vertices that are provided as parameters.
-     * 
-     * @throws IllegalArgumentException if either {@code sourceVertex} is not equal to node U
-     *                                  of {@code e} or {@code targetVertex} is not equal to node V
-     *                                  of {@code e}, or if the underlying graph disallows self loops
-     * @throws NullPointerException if either one of {@code sourceVertex} or {@code targetVertex} is {@code null}
+     *
+     * @throws IllegalArgumentException if either {@code sourceVertex} is not equal to node U of
+     *         {@code e} or {@code targetVertex} is not equal to node V of {@code e}, or if the
+     *         underlying graph disallows self loops
+     * @throws NullPointerException if either one of {@code sourceVertex} or {@code targetVertex} is
+     *         {@code null}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
@@ -167,7 +168,8 @@ public class MutableGraphAdapter<V>
     }
 
     /**
-     * @throws UnsupportedOperationException if this graph was not initialized with a vertex supplier
+     * @throws UnsupportedOperationException if this graph was not initialized with a vertex
+     *         supplier
      */
     @Override
     public V addVertex()
@@ -281,7 +283,8 @@ public class MutableGraphAdapter<V>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

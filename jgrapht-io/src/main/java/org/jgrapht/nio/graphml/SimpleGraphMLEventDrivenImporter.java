@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -43,27 +43,27 @@ import java.util.*;
  * later using the edge attribute consumer. Since the same triple instance is used in all cases, an
  * edge may appear having a null weight when it is first reported and having a non-null weight after
  * the edge weight is reported.
- * 
+ *
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GraphML
  * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
  * towards parsing speed.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  * http://en.wikipedia.org/wiki/ GraphML</a> or the
  * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GraphML format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
- * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
  *   <key id="d0" for="node" attr.name="color" attr.type="string" />
  *   <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
@@ -73,7 +73,7 @@ import java.util.*;
  *     </node>
  *     <node id="n1">
  *       <data key="d0">black</data>
- *     </node>     
+ *     </node>
  *     <node id="n2">
  *       <data key="d0">blue</data>
  *     </node>
@@ -105,17 +105,15 @@ import java.util.*;
  * </graphml>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLEventDrivenImporter
-    extends BaseEventDrivenImporter<String, Triple<String, String, Double>>
-    implements EventDrivenImporter<String, Triple<String, String, Double>>
+public class SimpleGraphMLEventDrivenImporter extends BaseEventDrivenImporter<String, Triple<String, String, Double>> implements EventDrivenImporter<String, Triple<String, String, Double>>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -135,7 +133,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -145,7 +143,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
@@ -156,7 +154,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -166,7 +164,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -201,15 +199,13 @@ public class SimpleGraphMLEventDrivenImporter
             SAXParserFactory spf = SAXParserFactory.newInstance();
             if (schemaValidation) {
                 // load schema
-                InputStream xsdStream =
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        GRAPHML_SCHEMA_FILENAME);
+                InputStream xsdStream = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream(GRAPHML_SCHEMA_FILENAME);
                 if (xsdStream == null) {
                     throw new ImportException("Failed to locate GraphML xsd");
                 }
-                InputStream xlinkStream =
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        XLINK_SCHEMA_FILENAME);
+                InputStream xlinkStream = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream(XLINK_SCHEMA_FILENAME);
                 if (xlinkStream == null) {
                     throw new ImportException("Failed to locate XLink xsd");
                 }
@@ -231,8 +227,7 @@ public class SimpleGraphMLEventDrivenImporter
     }
 
     // content handler
-    private class GraphMLHandler
-        extends DefaultHandler
+    private class GraphMLHandler extends DefaultHandler
     {
         private static final String GRAPH = "graph";
         private static final String GRAPH_ID = "id";
@@ -348,8 +343,7 @@ public class SimpleGraphMLEventDrivenImporter
                 String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes)
                     .orElseThrow(() -> new IllegalArgumentException("Key attribute name missing"));
                 currentKey = new Key(
-                    keyId,
-                    keyAttrName, findAttribute(KEY_ATTR_TYPE, attributes)
+                    keyId, keyAttrName, findAttribute(KEY_ATTR_TYPE, attributes)
                         .map(AttributeType::create).orElse(AttributeType.UNKNOWN),
                     findAttribute(KEY_FOR, attributes).orElse("ALL"));
                 break;

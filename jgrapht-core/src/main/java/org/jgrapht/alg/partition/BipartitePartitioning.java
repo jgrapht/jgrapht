@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail, Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -36,8 +36,7 @@ import static org.jgrapht.GraphTests.isEmpty;
  * @author Dimitrios Michail
  * @author Alexandru Valeanu
  */
-public class BipartitePartitioning<V, E>
-    implements PartitioningAlgorithm<V>
+public class BipartitePartitioning<V, E> implements PartitioningAlgorithm<V>
 {
 
     /* Input graph */

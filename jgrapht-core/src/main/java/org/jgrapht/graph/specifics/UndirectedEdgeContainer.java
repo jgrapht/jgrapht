@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2015-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,14 +29,13 @@ import java.util.*;
  * In this edge container we use array lists to minimize memory toll. However, for high-degree
  * vertices we replace the entire edge container with a direct access subclass (to be implemented).
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  */
-public class UndirectedEdgeContainer<V, E>
-    implements Serializable
+public class UndirectedEdgeContainer<V, E> implements Serializable
 {
     private static final long serialVersionUID = -6623207588411170010L;
     Set<E> vertexEdges;

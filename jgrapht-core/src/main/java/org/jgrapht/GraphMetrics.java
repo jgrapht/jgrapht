@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -94,7 +94,7 @@ public abstract class GraphMetrics
      * An algorithm with the same worst case runtime complexity, but a potentially better average
      * runtime complexity of $O(n^2)$ is described in: Itai, A. Rodeh, M. Finding a minimum circuit
      * in a graph. SIAM J. Comput. Vol 7, No 4, 1987.
-     * 
+     *
      * @param graph input graph
      * @param <V> graph vertex type
      * @param <E> graph edge type
@@ -307,16 +307,14 @@ public abstract class GraphMetrics
             vertexOrder.put(v, k++);
         }
 
-        Comparator<V> comparator = Comparator
-            .comparingInt(graph::degreeOf).thenComparingInt(System::identityHashCode)
-            .thenComparingInt(vertexOrder::get);
+        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf)
+            .thenComparingInt(System::identityHashCode).thenComparingInt(vertexOrder::get);
 
         vertexList.sort(comparator);
 
         // vertex v is a heavy-hitter iff degree(v) >= sqrtV
-        List<V> heavyHitterVertices =
-            vertexList.stream().filter(x -> graph.degreeOf(x) >= sqrtV).collect(
-                Collectors.toCollection(ArrayList::new));
+        List<V> heavyHitterVertices = vertexList.stream().filter(x -> graph.degreeOf(x) >= sqrtV)
+            .collect(Collectors.toCollection(ArrayList::new));
 
         // count the number of triangles formed from only heavy-hitter vertices
         long numberTriangles = naiveCountTriangles(graph, heavyHitterVertices);

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,7 +22,7 @@ import org.jgrapht.util.*;
 
 /**
  * Helper methods for graph creation on all tests.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GraphTestsUtils
@@ -30,7 +30,7 @@ public class GraphTestsUtils
 
     /**
      * Create a simple graph with integer vertices and default edges.
-     * 
+     *
      * @return a simple graph with integer vertices and default edges.
      */
     public static Graph<Integer, DefaultEdge> createSimpleGraph()
@@ -41,7 +41,7 @@ public class GraphTestsUtils
 
     /**
      * Create a pseudo graph with integer vertices and default edges.
-     * 
+     *
      * @return a pseudo graph with integer vertices and default edges
      */
     public static Graph<Integer, DefaultEdge> createPseudograph()

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -44,8 +44,7 @@ import java.util.function.*;
  * @author Dimitrios Michail
  * @see DijkstraShortestPath
  */
-public final class BidirectionalDijkstraShortestPath<V, E>
-    extends BaseBidirectionalShortestPathAlgorithm<V, E>
+public final class BidirectionalDijkstraShortestPath<V, E> extends BaseBidirectionalShortestPathAlgorithm<V, E>
 {
     private double radius;
     private final Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier;
@@ -212,8 +211,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
      * @param <V> vertices type
      * @param <E> edges type
      */
-    static class DijkstraSearchFrontier<V, E>
-        extends BaseSearchFrontier<V, E>
+    static class DijkstraSearchFrontier<V, E> extends BaseSearchFrontier<V, E>
     {
 
         final AddressableHeap<Double, Pair<V, E>> heap;

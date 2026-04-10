@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2015-2026, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -280,9 +280,8 @@ public class AllDirectedPaths<V, E>
             for (E outEdge : graph.outgoingEdgesOf(leafNode)) {
                 // Proceed if the outgoing edge is marked and the mark
                 // is sufficiently small
-                if (edgeMinDistancesFromTargets.containsKey(outEdge)
-                    && ((maxPathLength == null) || ((edgeMinDistancesFromTargets.get(outEdge)
-                        + lengthSoFar) <= maxPathLength)))
+                if (edgeMinDistancesFromTargets.containsKey(outEdge) && ((maxPathLength == null)
+                    || ((edgeMinDistancesFromTargets.get(outEdge) + lengthSoFar) <= maxPathLength)))
                 {
                     List<E> newPath = new ArrayList<>(incompletePath);
                     newPath.add(outEdge);

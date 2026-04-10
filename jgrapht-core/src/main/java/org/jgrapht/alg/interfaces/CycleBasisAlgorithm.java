@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * Allows to derive an undirected <a href="https://en.wikipedia.org/wiki/Cycle_basis">cycle
  * basis</a> of a given graph.
- * 
+ *
  * <p>
  * Note that undirected cycle bases are defined for both undirected and directed graphs. For a
  * discussion of different kinds of cycle bases in graphs see the following paper.
@@ -37,21 +37,21 @@ import java.util.*;
  *
  * @param <V> vertex the graph vertex type
  * @param <E> edge the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface CycleBasisAlgorithm<V, E>
 {
     /**
      * Return a list of cycles forming an undirected cycle basis of a graph.
-     * 
+     *
      * @return an undirected cycle basis
      */
     CycleBasis<V, E> getCycleBasis();
 
     /**
      * An undirected cycle basis.
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
@@ -67,7 +67,7 @@ public interface CycleBasisAlgorithm<V, E>
         /**
          * Get the length of the cycle basis. The length of the cycle basis is the sum of the
          * lengths of its cycles. The length of a cycle is the total number of edges of the cycle.
-         * 
+         *
          * @return the length of the cycles basis
          */
         int getLength();
@@ -75,7 +75,7 @@ public interface CycleBasisAlgorithm<V, E>
         /**
          * Get the weight of the cycle basis. The weight of the cycle basis is the sum of the
          * weights of its cycles. The weight of a cycle is the sum of the weights of its edges.
-         * 
+         *
          * @return the length of the cycles basis
          */
         double getWeight();
@@ -94,8 +94,7 @@ public interface CycleBasisAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class CycleBasisImpl<V, E>
-        implements CycleBasis<V, E>, Serializable
+    class CycleBasisImpl<V, E> implements CycleBasis<V, E>, Serializable
     {
         private static final long serialVersionUID = -1420882459022219505L;
 

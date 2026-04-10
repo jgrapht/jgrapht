@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2023, by Vladimir Kostyukov and Contributors.
+ * (C) Copyright 2012-2026, by Vladimir Kostyukov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -333,8 +333,7 @@ public class EqualsAndHashCodeTest
     /**
      * Simple custom edge class.
      */
-    public static class CustomEdge
-        extends DefaultEdge
+    public static class CustomEdge extends DefaultEdge
     {
         private static final long serialVersionUID = 1L;
         private String label;

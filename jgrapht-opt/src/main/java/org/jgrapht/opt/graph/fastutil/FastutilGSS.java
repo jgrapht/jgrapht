@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,38 +27,35 @@ import java.util.function.*;
 
 /**
  * A specifics strategy implementation using fastutil maps for storage.
- * 
+ *
  * <p>
  * Graphs constructed using this strategy require the least amount of memory, at the expense of slow
  * edge retrievals. Methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V
  * u, V v), addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is
- * high (dense graphs). For a fast implementation, use
- * {@link FastutilFastLookupGSS}.
- * 
+ * high (dense graphs). For a fast implementation, use {@link FastutilFastLookupGSS}.
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class FastutilGSS<V, E>
-    implements
-    GraphSpecificsStrategy<V, E>
+public class FastutilGSS<V, E> implements GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = -4319431062943632549L;
 
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {
-        return (BiFunction<Graph<V, E>, GraphType,
-            Specifics<V, E>> & Serializable) (graph, type) -> {
-                if (type.isDirected()) {
-                    return new DirectedSpecifics<>(
-                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
-                } else {
-                    return new UndirectedSpecifics<>(
-                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
-                }
-            };
+        return (BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> & Serializable) (
+            graph, type) -> {
+            if (type.isDirected()) {
+                return new DirectedSpecifics<>(
+                    graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
+            } else {
+                return new UndirectedSpecifics<>(
+                    graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
+            }
+        };
     }
 
     @Override

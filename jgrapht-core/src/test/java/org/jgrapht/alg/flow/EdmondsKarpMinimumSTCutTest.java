@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,8 +27,7 @@ import java.util.*;
 /**
  * @author Joris Kinable
  */
-public class EdmondsKarpMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+public class EdmondsKarpMinimumSTCutTest extends MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(

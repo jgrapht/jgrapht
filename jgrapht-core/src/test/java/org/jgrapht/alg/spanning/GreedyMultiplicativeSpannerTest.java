@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -372,7 +372,10 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V1, V2), -1.0);
         g.setEdgeWeight(g.addEdge(V2, V0), 1.0);
 
-        assertThrows(IllegalArgumentException.class, () -> new GreedyMultiplicativeSpanner<>(g, 2).getSpanner(), "Negative edge weights not permitted.");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new GreedyMultiplicativeSpanner<>(g, 2).getSpanner(),
+            "Negative edge weights not permitted.");
     }
 
 }

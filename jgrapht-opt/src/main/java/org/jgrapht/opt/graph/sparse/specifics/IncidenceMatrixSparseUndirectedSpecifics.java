@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,12 +31,10 @@ import org.jgrapht.graph.DefaultGraphType;
 
 /**
  * Specifics for a sparse undirected graph using an incidence matrix representation.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class IncidenceMatrixSparseUndirectedSpecifics
-    implements
-    SparseGraphSpecifics
+public class IncidenceMatrixSparseUndirectedSpecifics implements SparseGraphSpecifics
 {
     protected static final String UNMODIFIABLE = "this graph is unmodifiable";
 
@@ -46,7 +44,7 @@ public class IncidenceMatrixSparseUndirectedSpecifics
 
     /**
      * Create a new graph from an edge stream
-     * 
+     *
      * @param numVertices number of vertices
      * @param numEdges number of edges
      * @param edges a supplier of an edge stream
@@ -128,9 +126,8 @@ public class IncidenceMatrixSparseUndirectedSpecifics
     @Override
     public GraphType getType()
     {
-        return new DefaultGraphType.Builder()
-            .undirected().weighted(false).modifiable(false).allowMultipleEdges(true)
-            .allowSelfLoops(true).build();
+        return new DefaultGraphType.Builder().undirected().weighted(false).modifiable(false)
+            .allowMultipleEdges(true).allowSelfLoops(true).build();
     }
 
     @Override
@@ -149,7 +146,7 @@ public class IncidenceMatrixSparseUndirectedSpecifics
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * This operation costs $O(d)$ where $d$ is the degree of the source vertex.
      */
     @Override
@@ -180,7 +177,7 @@ public class IncidenceMatrixSparseUndirectedSpecifics
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * This operation costs $O(d)$ where $d$ is the degree of the source vertex.
      */
     @Override

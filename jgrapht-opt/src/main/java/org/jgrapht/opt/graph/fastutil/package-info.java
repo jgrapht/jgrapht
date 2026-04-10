@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2024, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,6 +17,6 @@
  */
 
 /**
- * Specialized graph implementations using the FastUtil library 
+ * Specialized graph implementations using the FastUtil library
  */
 package org.jgrapht.opt.graph.fastutil;

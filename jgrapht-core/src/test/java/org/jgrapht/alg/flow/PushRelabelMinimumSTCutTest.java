@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Joris Kinable
  */
-public class PushRelabelMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(

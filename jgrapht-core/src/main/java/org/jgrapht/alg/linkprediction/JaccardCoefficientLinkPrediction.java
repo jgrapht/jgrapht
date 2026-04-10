@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,13 +29,13 @@ import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Jaccard coefficient.
- * 
+ *
  * <p>
  * This is a local method which computes $s_{xy} =
  * \frac{|\Gamma(u)\cap\Gamma(v))|}{|\Gamma(u)\cup\Gamma(v))|}$ where for a node $v$, $\Gamma(v)$
  * denotes the set of neighbors of $v$.
  * </p>
- * 
+ *
  * See the following two papers:
  * <ul>
  * <li>Liben‐Nowell, David, and Jon Kleinberg. "The link‐prediction problem for social networks."
@@ -44,20 +44,19 @@ import org.jgrapht.alg.util.Pair;
  * <li>Zhou, Tao, Linyuan Lü, and Yi-Cheng Zhang. "Predicting missing links via local information."
  * The European Physical Journal B 71.4 (2009): 623-630.</li>
  * </ul>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class JaccardCoefficientLinkPrediction<V, E>
-    implements LinkPredictionAlgorithm<V, E>
+public class JaccardCoefficientLinkPrediction<V, E> implements LinkPredictionAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
     /**
      * Create a new prediction
-     * 
+     *
      * @param graph the input graph
      */
     public JaccardCoefficientLinkPrediction(Graph<V, E> graph)

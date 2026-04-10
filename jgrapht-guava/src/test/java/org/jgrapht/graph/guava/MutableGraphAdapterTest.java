@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -268,11 +268,9 @@ public class MutableGraphAdapterTest
     public void testSerialization1()
         throws Exception
     {
-        Graph<String,
-            DefaultEdge> g = new MutableNetworkAdapter<>(
-                NetworkBuilder
-                    .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-                SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
+            NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

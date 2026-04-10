@@ -69,9 +69,9 @@
         <checkstyle.version>10.26.1</checkstyle.version>
         <commons-text.version>1.14.0</commons-text.version>
         <dsiutils.version>2.7.4</dsiutils.version>
-        <fastutil.version>8.5.16</fastutil.version>
+        <fastutil.version>8.5.18</fastutil.version>
         <guava.version>33.3.1-jre</guava.version>
-        <hamcrest.version>2.2</hamcrest.version>
+        <hamcrest.version>3.0</hamcrest.version>
         <java.version>11</java.version>
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
@@ -81,15 +81,16 @@
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
         <maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
+        <maven-formatter-plugin.version>2.29.0</maven-formatter-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
+        <maven-shade-plugin.version>3.6.1</maven-shade-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-central-plugin.version>0.9.0</maven-central-plugin.version>
@@ -423,6 +424,27 @@
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <version>${maven-formatter-plugin.version}</version>
+                    <configuration>
+                        <compilerSource>${java.version}</compilerSource>
+                        <compilerCompliance>${java.version}</compilerCompliance>
+                        <compilerTarget>${java.version}</compilerTarget>
+                        <configFile>${main.basedir}/etc/eclipse-formatter-settings.xml</configFile>
+                        <includes>
+                            <include>**/*.java</include>
+                        </includes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.google.code.maven-replacer-plugin</groupId>

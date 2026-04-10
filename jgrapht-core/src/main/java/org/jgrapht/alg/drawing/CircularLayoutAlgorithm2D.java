@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,19 +26,18 @@ import java.util.stream.*;
 
 /**
  * Circular layout.
- * 
+ *
  * <p>
  * The algorithm places the graph vertices on a circle evenly spaced. The vertices are iterated
  * based on the iteration order of the vertex set of the graph. The order can be adjusted by
  * providing an external comparator.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class CircularLayoutAlgorithm2D<V, E>
-    extends BaseLayoutAlgorithm2D<V, E>
+public class CircularLayoutAlgorithm2D<V, E> extends BaseLayoutAlgorithm2D<V, E>
 {
     protected double radius;
     protected Comparator<Double> comparator;
@@ -54,7 +53,7 @@ public class CircularLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param radius the circle radius
      */
     public CircularLayoutAlgorithm2D(double radius)
@@ -65,7 +64,7 @@ public class CircularLayoutAlgorithm2D<V, E>
     /**
      * Create a new layout algorithm. The algorithm will iterate over the vertices of the graph
      * using the provided ordering.
-     * 
+     *
      * @param radius the circle radius
      * @param vertexComparator the vertex comparator. Can be null.
      */

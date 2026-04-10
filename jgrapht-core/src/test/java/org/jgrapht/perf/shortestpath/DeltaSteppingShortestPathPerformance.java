@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -44,8 +44,8 @@ public class DeltaSteppingShortestPathPerformance
 {
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDeltaSteppingGnm(GnmState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingGnm(
+        GnmState data)
     {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree, data.executor)
             .getPaths(0);
@@ -66,8 +66,8 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDeltaSteppingGnp(GnpState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingGnp(
+        GnpState data)
     {
         return new DeltaSteppingShortestPath<>(
             data.graph, 1.0 / (1 + (data.p * data.numOfVertices)), data.executor).getPaths(0);
@@ -88,66 +88,66 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDeltaSteppingBarabasiAlbert(BarabasiAlbertState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingBarabasiAlbert(
+        BarabasiAlbertState data)
     {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.m0, data.executor)
             .getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDijkstraBarabasiAlbert(BarabasiAlbertState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraBarabasiAlbert(
+        BarabasiAlbertState data)
     {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testBellmanFordBarabasiAlbert(BarabasiAlbertState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordBarabasiAlbert(
+        BarabasiAlbertState data)
     {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDeltaSteppingWattsStogatz(WattsStogatzState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingWattsStogatz(
+        WattsStogatzState data)
     {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.k, data.executor).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDijkstraWattsStogatz(WattsStogatzState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraWattsStogatz(
+        WattsStogatzState data)
     {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testBellmanFordWattsStogatz(WattsStogatzState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordWattsStogatz(
+        WattsStogatzState data)
     {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDeltaSteppingComplete(CompleteGraphState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingComplete(
+        CompleteGraphState data)
     {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices, data.executor)
             .getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testDijkstraComplete(CompleteGraphState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraComplete(
+        CompleteGraphState data)
     {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer,
-        DefaultWeightedEdge> testBellmanFordComplete(CompleteGraphState data)
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordComplete(
+        CompleteGraphState data)
     {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
     }
@@ -191,8 +191,7 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @State(Scope.Benchmark)
-    public static class GnmState
-        extends BaseState
+    public static class GnmState extends BaseState
     {
         @Param({ "10000" })
         int numOfVertices;
@@ -215,8 +214,7 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @State(Scope.Benchmark)
-    public static class GnpState
-        extends BaseState
+    public static class GnpState extends BaseState
     {
         @Param({ "10000" })
         int numOfVertices;
@@ -238,8 +236,7 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @State(Scope.Benchmark)
-    public static class BarabasiAlbertState
-        extends BaseState
+    public static class BarabasiAlbertState extends BaseState
     {
         @Param({ "1000" })
         int m0;
@@ -263,8 +260,7 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @State(Scope.Benchmark)
-    public static class WattsStogatzState
-        extends BaseState
+    public static class WattsStogatzState extends BaseState
     {
         @Param({ "10000" })
         int numOfVertices;
@@ -287,8 +283,7 @@ public class DeltaSteppingShortestPathPerformance
     }
 
     @State(Scope.Benchmark)
-    public static class CompleteGraphState
-        extends BaseState
+    public static class CompleteGraphState extends BaseState
     {
         @Param({ "1000", "2000", "3000" })
         int numOfVertices;

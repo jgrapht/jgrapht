@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -43,7 +43,7 @@ public interface MinimumSTCutAlgorithm<V, E>
 
     /**
      * Computes a minimum capacity $s-t$ cut.
-     * 
+     *
      * @param source s
      * @param sink t
      * @return capacity of the cut
@@ -53,7 +53,7 @@ public interface MinimumSTCutAlgorithm<V, E>
     /**
      * Returns the capacity of the cut obtained after the last invocation of
      * {@link #calculateMinCut(Object, Object)}
-     * 
+     *
      * @return capacity of the cut
      */
     double getCutCapacity();
@@ -61,7 +61,7 @@ public interface MinimumSTCutAlgorithm<V, E>
     /**
      * Returns the source partition $S$, $s \in S$, of the cut obtained after the last invocation of
      * {@link #calculateMinCut(Object, Object)}
-     * 
+     *
      * @return source partition S
      */
     Set<V> getSourcePartition();
@@ -69,7 +69,7 @@ public interface MinimumSTCutAlgorithm<V, E>
     /**
      * Returns the sink partition $T$, $t \in T$, of the cut obtained after the last invocation of
      * {@link #calculateMinCut(Object, Object)}
-     * 
+     *
      * @return source partition T
      */
     Set<V> getSinkPartition();
@@ -79,7 +79,7 @@ public interface MinimumSTCutAlgorithm<V, E>
      * invocation of {@link #calculateMinCut(Object, Object)} In case of a directed graph, only the
      * edges with their tail in $S$ and their head in $T$ are returned. In cased of a undirected
      * graph, all edges with one endpoint in $S$ and one endpoint in $T$ are returned.
-     * 
+     *
      * @return set of edges which run from $S$ to $T$
      */
     Set<E> getCutEdges();

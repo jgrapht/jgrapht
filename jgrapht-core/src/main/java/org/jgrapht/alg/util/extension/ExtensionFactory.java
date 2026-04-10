@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,14 +19,14 @@ package org.jgrapht.alg.util.extension;
 
 /**
  * Factory class which creates extension/encapsulation objects
- * 
+ *
  * @param <B> class-type of extension
  */
 public interface ExtensionFactory<B extends Extension>
 {
     /**
      * Factory method which creates a new object which extends Extension
-     * 
+     *
      * @return new object which extends Extension
      */
     B create();

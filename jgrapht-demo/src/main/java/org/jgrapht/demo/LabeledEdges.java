@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2012-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -96,16 +96,16 @@ public class LabeledEdges
  * Custom edge class labeled with relationship type.
  */
 // @example:edgeclass:begin
-class RelationshipEdge
-    extends DefaultEdge
+class RelationshipEdge extends DefaultEdge
 {
+    private static final long serialVersionUID = 4106694993706914417L;
     private String label;
 
     /**
      * Constructs a relationship edge
      *
      * @param label the label of the new edge.
-     * 
+     *
      */
     public RelationshipEdge(String label)
     {

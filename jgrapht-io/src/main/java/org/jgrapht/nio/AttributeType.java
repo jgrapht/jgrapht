@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,7 +19,7 @@ package org.jgrapht.nio;
 
 /**
  * Denotes the type of an attribute.
- * 
+ *
  * @author Dimitrios Michail
  */
 public enum AttributeType
@@ -44,7 +44,7 @@ public enum AttributeType
 
     /**
      * Get a string representation of the attribute type
-     * 
+     *
      * @return the string representation of the attribute type
      */
     public String toString()
@@ -54,7 +54,7 @@ public enum AttributeType
 
     /**
      * Create a type from a string representation
-     * 
+     *
      * @param value the name of the type
      * @return the attribute type
      */

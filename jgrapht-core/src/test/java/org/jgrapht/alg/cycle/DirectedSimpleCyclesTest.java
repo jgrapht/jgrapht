@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2026, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -53,8 +53,7 @@ public class DirectedSimpleCyclesTest
     }
 
     private void testAlgorithm(
-        Function<Graph<Integer, DefaultEdge>,
-            DirectedSimpleCycles<Integer, DefaultEdge>> algProvider)
+        Function<Graph<Integer, DefaultEdge>, DirectedSimpleCycles<Integer, DefaultEdge>> algProvider)
     {
         Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
@@ -93,8 +92,7 @@ public class DirectedSimpleCyclesTest
     }
 
     private void testAlgorithmWithWeightedGraph(
-        Function<Graph<Integer, DefaultWeightedEdge>,
-            DirectedSimpleCycles<Integer, DefaultWeightedEdge>> algProvider)
+        Function<Graph<Integer, DefaultWeightedEdge>, DirectedSimpleCycles<Integer, DefaultWeightedEdge>> algProvider)
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);

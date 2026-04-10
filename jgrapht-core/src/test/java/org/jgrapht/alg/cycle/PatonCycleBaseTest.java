@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Nikolay Ognyanov, Dimitrios Michail and Contributors.
+ * (C) Copyright 2013-2026, by Nikolay Ognyanov, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -115,7 +115,7 @@ public class PatonCycleBaseTest
         //   4 - 5   6   7
         //   |       |
         //   ---------
-        // 
+        //
         // @formatter:on
 
         Set<List<DefaultEdge>> ucb = new PatonCycleBase<>(g).getCycleBasis().getCycles();
@@ -309,7 +309,7 @@ public class PatonCycleBaseTest
         g.addEdge(4, 6);
 
         // @formatter:off
-        // 
+        //
         //        1
         //       /  \
         //      2     3
@@ -317,7 +317,7 @@ public class PatonCycleBaseTest
         //   4 - 5   6   7
         //   |       |
         //   ---------
-        // 
+        //
         // @formatter:on
 
         CycleBasis<Integer, DefaultEdge> ucb = new PatonCycleBase<>(g).getCycleBasis();
@@ -410,7 +410,7 @@ public class PatonCycleBaseTest
         g.addEdge(4, 3);
 
         // @formatter:off
-        // 
+        //
         //        1
         //       /  \
         //      2    3
@@ -418,7 +418,7 @@ public class PatonCycleBaseTest
         //   4 - 5   |
         //   |       |
         //   ---------
-        // 
+        //
         // @formatter:on
 
         CycleBasis<Integer, DefaultEdge> ucb = new PatonCycleBase<>(g).getCycleBasis();
@@ -440,10 +440,9 @@ public class PatonCycleBaseTest
         final int graphs = 10;
         GnpRandomGraphGenerator<Integer, DefaultEdge> gen = new GnpRandomGraphGenerator<>(n, p);
         for (int i = 0; i < graphs; i++) {
-            Graph<Integer,
-                DefaultEdge> g = new SimpleGraph<>(
-                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
-                    false);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
             gen.generateGraph(g);
             CycleBasis<Integer, DefaultEdge> ucb = new PatonCycleBase<>(g).getCycleBasis();
 

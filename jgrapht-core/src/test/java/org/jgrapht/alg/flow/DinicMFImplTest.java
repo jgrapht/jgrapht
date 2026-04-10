@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Kirill Vishnyakov and Contributors.
+ * (C) Copyright 2018-2026, by Kirill Vishnyakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,8 +25,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DinicMFImplTest
-    extends MaximumFlowAlgorithmTest
+public class DinicMFImplTest extends MaximumFlowAlgorithmTest
 {
 
     private DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> g;

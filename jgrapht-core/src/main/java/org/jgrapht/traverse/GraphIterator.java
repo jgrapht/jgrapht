@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,22 +29,20 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public interface GraphIterator<V, E>
-    extends Iterator<V>
+public interface GraphIterator<V, E> extends Iterator<V>
 {
     /**
      * Test whether this iterator is set to traverse the graph across connected components.
      *
-     * @return {@code true} if traverses across connected components, otherwise
-     *         {@code false}.
+     * @return {@code true} if traverses across connected components, otherwise {@code false}.
      */
     boolean isCrossComponentTraversal();
 
     /**
-     * Tests whether the {@code reuseEvents} flag is set. If the flag is set to
-     * {@code true} this class will reuse previously fired events and will not create a new
-     * object for each event. This option increases performance but should be used with care,
-     * especially in multithreaded environment.
+     * Tests whether the {@code reuseEvents} flag is set. If the flag is set to {@code true} this
+     * class will reuse previously fired events and will not create a new object for each event.
+     * This option increases performance but should be used with care, especially in multithreaded
+     * environment.
      *
      * @return the value of the {@code reuseEvents} flag.
      */
@@ -52,9 +50,9 @@ public interface GraphIterator<V, E>
 
     /**
      * Sets a value the {@code reuseEvents} flag. If the {@code reuseEvents} flag is set to
-     * {@code true} this class will reuse previously fired events and will not create a new
-     * object for each event. This option increases performance but should be used with care,
-     * especially in multithreaded environment.
+     * {@code true} this class will reuse previously fired events and will not create a new object
+     * for each event. This option increases performance but should be used with care, especially in
+     * multithreaded environment.
      *
      * @param reuseEvents whether to reuse previously fired event objects instead of creating a new
      *        event object for each event.
@@ -77,7 +75,7 @@ public interface GraphIterator<V, E>
 
     /**
      * Unsupported.
-     * 
+     *
      * @throws UnsupportedOperationException always since operation is not supported
      */
     @Override

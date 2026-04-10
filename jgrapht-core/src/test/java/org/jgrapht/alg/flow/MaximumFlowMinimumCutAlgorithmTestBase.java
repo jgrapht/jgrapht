@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -933,8 +933,8 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new SimpleDirectedWeightedGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
         randomGraphGenerator.generateGraph(directedGraph);
-        directedGraph
-            .edgeSet().stream().forEach(e -> directedGraph.setEdgeWeight(e, rand.nextInt(100)));
+        directedGraph.edgeSet().stream()
+            .forEach(e -> directedGraph.setEdgeWeight(e, rand.nextInt(100)));
         return directedGraph;
     }
 
@@ -1477,8 +1477,8 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new SimpleWeightedGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
         randomGraphGenerator.generateGraph(undirectedGraph);
-        undirectedGraph
-            .edgeSet().stream().forEach(e -> undirectedGraph.setEdgeWeight(e, rand.nextInt(100)));
+        undirectedGraph.edgeSet().stream()
+            .forEach(e -> undirectedGraph.setEdgeWeight(e, rand.nextInt(100)));
         return undirectedGraph;
     }
 }

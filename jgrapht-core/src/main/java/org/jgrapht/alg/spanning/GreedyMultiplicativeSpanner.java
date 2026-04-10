@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,8 +56,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class GreedyMultiplicativeSpanner<V, E>
-    implements SpannerAlgorithm<E>
+public class GreedyMultiplicativeSpanner<V, E> implements SpannerAlgorithm<E>
 {
     private final Graph<V, E> graph;
     private final int k;
@@ -65,10 +64,10 @@ public class GreedyMultiplicativeSpanner<V, E>
 
     /**
      * Constructs instance to compute a $(2k-1)$-spanner of an undirected graph.
-     * 
+     *
      * @param graph an undirected graph
      * @param k positive integer.
-     * 
+     *
      * @throws IllegalArgumentException if the graph is not undirected
      * @throws IllegalArgumentException if k is not positive
      */
@@ -136,8 +135,7 @@ public class GreedyMultiplicativeSpanner<V, E>
 
     }
 
-    private class UnweightedSpannerAlgorithm
-        extends SpannerAlgorithmBase
+    private class UnweightedSpannerAlgorithm extends SpannerAlgorithmBase
     {
         protected Graph<V, E> spanner;
         protected Map<V, Integer> vertexDistance;
@@ -146,9 +144,8 @@ public class GreedyMultiplicativeSpanner<V, E>
 
         public UnweightedSpannerAlgorithm()
         {
-            spanner = GraphTypeBuilder
-                .<V, E> undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .edgeSupplier(graph.getEdgeSupplier()).buildGraph();
+            spanner = GraphTypeBuilder.<V, E> undirected().allowingMultipleEdges(false)
+                .allowingSelfLoops(false).edgeSupplier(graph.getEdgeSupplier()).buildGraph();
             touchedVertices = new ArrayDeque<>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
@@ -212,8 +209,7 @@ public class GreedyMultiplicativeSpanner<V, E>
         }
     }
 
-    private class WeightedSpannerAlgorithm
-        extends SpannerAlgorithmBase
+    private class WeightedSpannerAlgorithm extends SpannerAlgorithmBase
     {
         protected Graph<V, DefaultWeightedEdge> spanner;
         protected AddressableHeap<Double, V> heap;

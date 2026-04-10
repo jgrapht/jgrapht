@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2023, by Tom Conerly and Contributors.
+ * (C) Copyright 2010-2026, by Tom Conerly and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,14 +34,13 @@ import java.util.*;
  *
  * @author Tom Conerly
  */
-public class KruskalMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+public class KruskalMinimumSpanningTree<V, E> implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> graph;
 
     /**
      * Construct a new instance of the algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public KruskalMinimumSpanningTree(Graph<V, E> graph)

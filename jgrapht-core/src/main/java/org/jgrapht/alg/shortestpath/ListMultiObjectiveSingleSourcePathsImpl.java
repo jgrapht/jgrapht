@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,14 +27,13 @@ import java.util.*;
 /**
  * An implementation of {@link MultiObjectiveSingleSourcePaths} which stores one list of paths per
  * vertex.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class ListMultiObjectiveSingleSourcePathsImpl<V, E>
-    implements MultiObjectiveSingleSourcePaths<V, E>, Serializable
+public class ListMultiObjectiveSingleSourcePathsImpl<V, E> implements MultiObjectiveSingleSourcePaths<V, E>, Serializable
 {
     private static final long serialVersionUID = -6213225353391554721L;
 
@@ -55,7 +54,7 @@ public class ListMultiObjectiveSingleSourcePathsImpl<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the graph
      * @param source the source vertex
      * @param paths a list of paths per target vertex

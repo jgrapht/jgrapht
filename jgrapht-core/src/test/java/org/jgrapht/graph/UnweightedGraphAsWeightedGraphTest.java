@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2026, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -111,7 +111,8 @@ public class UnweightedGraphAsWeightedGraphTest
     @Test
     public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
     {
-        assertThrows(IllegalArgumentException.class, () -> new AsWeightedGraph<>(
+        assertThrows(
+            IllegalArgumentException.class, () -> new AsWeightedGraph<>(
                 new DefaultUndirectedGraph<>(String.class), new HashMap<>(), true));
     }
 }

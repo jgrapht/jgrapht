@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2021-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,7 +21,7 @@ package org.jgrapht.opt.graph.sparse;
  * Enumeration for different kind of incoming edges support. Several algorithms do not require the
  * use of incoming edges. In such cases either no support or lazy support of incoming edges may save
  * considerable amount of space.
- * 
+ *
  * @author Dimitrios Michail
  */
 public enum IncomingEdgesSupport

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2021, by Antonia Tsiftsi and Contributors.
+ * (C) Copyright 2021-2026, by Antonia Tsiftsi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,39 +35,36 @@ import org.jheaps.tree.PairingHeap;
 
 /**
  * The Greedy Modularity algorithm.
- * 
+ *
  * <p>
  * The algorithm partitions the vertices of an undirected graph into communities by greedily
- * maximizing the <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a>
- * of possible communities. Greedy modularity maximization begins with each node in its own
- * community and repeatedly joins the pair of communities that lead to the largest modularity
- * until no further increase in modularity is possible (a maximum).
+ * maximizing the <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a> of
+ * possible communities. Greedy modularity maximization begins with each node in its own community
+ * and repeatedly joins the pair of communities that lead to the largest modularity until no further
+ * increase in modularity is possible (a maximum).
  * </p>
- * 
+ *
  * <p>
  * The algorithm is due to Clauset, Newman and Moore. It is described in detail in the following
  * <a href="https://doi.org/10.1103/PhysRevE.70.066111">paper</a>:
  * <ul>
- * <li>Clauset, A., Newman, M. E., & Moore, C. “Finding community structure in very large networks.”
- * Physical Review E 70(6), 2004.
- * </li>
- * </ul> 
+ * <li>Clauset, A., Newman, M. E., &amp; Moore, C. “Finding community structure in very large
+ * networks.” Physical Review E 70(6), 2004.</li>
+ * </ul>
  * </p>
- *  
+ *
  * @author Antonia Tsiftsi
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class GreedyModularityAlgorithm<V, E>
-    implements
-    ClusteringAlgorithm<V>
+public class GreedyModularityAlgorithm<V, E> implements ClusteringAlgorithm<V>
 {
     private final Graph<V, E> graph;
 
     /**
      * Create a new clustering algorithm.
-     * 
+     *
      * @param graph the graph
      */
     public GreedyModularityAlgorithm(Graph<V, E> graph)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Florian Buenzli and Contributors.
+ * (C) Copyright 2015-2026, by Florian Buenzli and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -86,9 +86,8 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private Map<Set<V>, Integer> fullComponentCount = new HashMap<>();
 
     /**
-     * Setup a clique minimal separator decomposition on undirected graph {@code g}.
-     * Loops and multiple (parallel) edges are removed, i.e. the graph is transformed to a
-     * simple graph.
+     * Setup a clique minimal separator decomposition on undirected graph {@code g}. Loops and
+     * multiple (parallel) edges are removed, i.e. the graph is transformed to a simple graph.
      *
      * @param g The graph to decompose.
      */
@@ -106,8 +105,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private void computeMinimalTriangulation()
     {
         // initialize chordGraph with same vertices as graph
-        chordalGraph = GraphTypeBuilder
-            .<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
+        chordalGraph = GraphTypeBuilder.<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
             .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
             .allowingSelfLoops(false).buildGraph();
 
@@ -287,8 +285,8 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     }
 
     /**
-     * Check whether the subgraph of {@code graph} induced by the given {@code vertices}
-     * is complete, i.e. a clique.
+     * Check whether the subgraph of {@code graph} induced by the given {@code vertices} is
+     * complete, i.e. a clique.
      *
      * @param graph the graph.
      * @param vertices the vertices to induce the subgraph from.
@@ -316,11 +314,9 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      */
     private static <V, E> Graph<V, E> copyAsSimpleGraph(Graph<V, E> graph)
     {
-        Graph<V,
-            E> copy = GraphTypeBuilder
-                .<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
-                .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
-                .allowingSelfLoops(false).buildGraph();
+        Graph<V, E> copy = GraphTypeBuilder.<V, E> undirected()
+            .edgeSupplier(graph.getEdgeSupplier()).vertexSupplier(graph.getVertexSupplier())
+            .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
 
         if (graph.getType().isSimple()) {
             Graphs.addGraph(copy, graph);

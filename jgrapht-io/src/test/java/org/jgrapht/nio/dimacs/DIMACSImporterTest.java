@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,8 +40,8 @@ public class DIMACSImporterTest
 
     public <E> Graph<Integer, E> readGraph(InputStream in, Class<E> edgeClass, boolean weighted)
     {
-        Graph<Integer, E> g = GraphTypeBuilder
-            .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
+        Graph<Integer, E> g = GraphTypeBuilder.directed().allowingMultipleEdges(true)
+            .allowingSelfLoops(true).weighted(weighted)
             .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(edgeClass).buildGraph();
 
         DIMACSImporter<Integer, E> importer = new DIMACSImporter<>();
@@ -105,10 +105,8 @@ public class DIMACSImporterTest
                        "a 2 3\n";
         // @formatter:on
 
-        Graph<Integer,
-            DefaultWeightedEdge> graph = readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)),
-                DefaultWeightedEdge.class, false);
+        Graph<Integer, DefaultWeightedEdge> graph = readGraph(
+            new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultWeightedEdge.class, false);
 
         assertEquals(3, graph.vertexSet().size());
         assertEquals(3, graph.edgeSet().size());
@@ -131,17 +129,15 @@ public class DIMACSImporterTest
                        "a 2 3\n";
         // @formatter:on
 
-        Graph<Integer,
-            DefaultWeightedEdge> graph = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultWeightedEdge> graph =
+            GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultWeightedEdgeSupplier()).buildGraph();
 
         DIMACSImporter<Integer, DefaultWeightedEdge> importer = new DIMACSImporter<>();
         importer.setVertexFactory(id -> id + 100);
         importer.importGraph(
-            graph, new InputStreamReader(
-                    new ByteArrayInputStream(input.getBytes(UTF_8)), UTF_8));
+            graph, new InputStreamReader(new ByteArrayInputStream(input.getBytes(UTF_8)), UTF_8));
 
         assertEquals(3, graph.vertexSet().size());
         assertEquals(3, graph.edgeSet().size());
@@ -164,9 +160,7 @@ public class DIMACSImporterTest
         // @formatter:on
 
         try {
-            readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
             fail("No!");
         } catch (ImportException e) {
         }
@@ -182,9 +176,7 @@ public class DIMACSImporterTest
         // @formatter:on
 
         try {
-            readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
             fail("No!");
         } catch (ImportException e) {
         }
@@ -201,9 +193,7 @@ public class DIMACSImporterTest
         // @formatter:on
 
         try {
-            readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
             fail("No!");
         } catch (ImportException e) {
         }
@@ -220,9 +210,7 @@ public class DIMACSImporterTest
         // @formatter:on
 
         try {
-            readGraph(
-                new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class,
-                false);
+            readGraph(new ByteArrayInputStream(input.getBytes(UTF_8)), DefaultEdge.class, false);
             fail("No!");
         } catch (ImportException e) {
         }

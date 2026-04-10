@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2006-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -43,9 +43,7 @@ import java.util.function.*;
  *
  * @author Dimitrios Michail
  */
-public class GmlExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class GmlExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     private static final String CREATOR = "JGraphT GML Exporter";
     private static final String VERSION = "1";
@@ -189,13 +187,14 @@ public class GmlExporter<V, E>
 
     /**
      * Set node craphics section provider
+     *
      * @param vertexGraphicsAttributeProvider the graphics section attributes provider
      */
-    public void setVertexGraphicsAttributeProvider(Function<V, Map<String, Attribute>> vertexGraphicsAttributeProvider)
+    public void setVertexGraphicsAttributeProvider(
+        Function<V, Map<String, Attribute>> vertexGraphicsAttributeProvider)
     {
         this.vertexGraphicsAttributeProvider = Optional.ofNullable(vertexGraphicsAttributeProvider);
     }
-
 
     protected Optional<Map<String, Attribute>> getVertexGraphicsAttributes(V v)
     {
@@ -248,8 +247,10 @@ public class GmlExporter<V, E>
     private void exportVertices(PrintWriter out, Graph<V, E> g)
     {
         boolean exportVertexLabels = parameters.contains(Parameter.EXPORT_VERTEX_LABELS);
-        boolean exportCustomVertexAttributes = parameters.contains(Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES);
-        boolean exportCustomNodeGraphicsAttributes = parameters.contains(Parameter.EXPORT_CUSTOM_VERTEX_GRAPHICS_ATTRIBUTES);
+        boolean exportCustomVertexAttributes =
+            parameters.contains(Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES);
+        boolean exportCustomNodeGraphicsAttributes =
+            parameters.contains(Parameter.EXPORT_CUSTOM_VERTEX_GRAPHICS_ATTRIBUTES);
 
         for (V from : g.vertexSet()) {
             out.println(TAB1 + "node");
@@ -290,7 +291,7 @@ public class GmlExporter<V, E>
 
                         if (FORBIDDEN_VERTEX_CUSTOM_ATTRIBUTE_KEYS.contains(customAttributeKey)) {
                             throw new IllegalArgumentException(
-                                    "Key " + customAttributeKey + " is reserved");
+                                "Key " + customAttributeKey + " is reserved");
                         }
 
                         exportAttribute(out, customAttributeKey, customAttributeValue, TAB3);
@@ -307,7 +308,8 @@ public class GmlExporter<V, E>
     {
         boolean exportEdgeWeights = parameters.contains(Parameter.EXPORT_EDGE_WEIGHTS);
         boolean exportEdgeLabels = parameters.contains(Parameter.EXPORT_EDGE_LABELS);
-        boolean exportCustomEdgeAttributes = parameters.contains(Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES);
+        boolean exportCustomEdgeAttributes =
+            parameters.contains(Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES);
 
         for (E edge : g.edgeSet()) {
             out.println(TAB1 + "edge");

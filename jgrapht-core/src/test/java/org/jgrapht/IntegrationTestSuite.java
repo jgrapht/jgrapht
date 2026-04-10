@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by John Sichi and Contributors.
+ * (C) Copyright 2018-2026, by John Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,12 +22,12 @@ import org.junit.platform.suite.api.*;
 /**
  * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests and
  * optional tests.
- * 
+ *
  * @author John Sichi
  */
-@ExcludePackages({"org.jgrapht.perf"})
+@ExcludePackages({ "org.jgrapht.perf" })
 @ExcludeTags({ "optional" })
-@SelectPackages({"org.jgrapht"})
+@SelectPackages({ "org.jgrapht" })
 @Suite
 public class IntegrationTestSuite
 {

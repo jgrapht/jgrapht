@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class CSVImporterTest
@@ -45,15 +45,13 @@ public class CSVImporterTest
         Graph<String, E> g;
 
         if (directed) {
-            g = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
-                .edgeClass(edgeClass).vertexSupplier(SupplierUtil.createStringSupplier(1))
-                .buildGraph();
+            g = GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(weighted).edgeClass(edgeClass)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1)).buildGraph();
         } else {
-            g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
-                .edgeClass(edgeClass).vertexSupplier(SupplierUtil.createStringSupplier(1))
-                .buildGraph();
+            g = GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(weighted).edgeClass(edgeClass)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1)).buildGraph();
         }
 
         CSVImporter<String, E> importer = new CSVImporter<>(format, delimiter);
@@ -301,7 +299,7 @@ public class CSVImporterTest
     public void testDirectedMatrixNoNodeIdWeighted()
     {
         // @formatter:off
-        String input = 
+        String input =
             ",1.0,13.0,," + NL
           + ",,,," + NL
           + "1.0,,,1.0," + NL

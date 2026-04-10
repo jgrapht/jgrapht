@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2012-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,12 +25,11 @@ import java.util.*;
 
 /**
  * Unit test for the HopcroftKarpMaximumCardinalityBipartiteMatching class
- * 
+ *
  * @author Joris Kinable
  *
  */
-public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest
-    extends MaximumCardinalityBipartiteMatchingTest
+public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest extends MaximumCardinalityBipartiteMatchingTest
 {
 
     @Override

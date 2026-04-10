@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Kirill Vishnyakov and Contributors.
+ * (C) Copyright 2018-2026, by Kirill Vishnyakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -46,8 +46,7 @@ public class ParberryKnightTourTest
         if (!(Math.abs(list.get(0).getFirst() - list.get(list.size() - 1).getFirst()) == 1
             && Math.abs(list.get(0).getSecond() - list.get(list.size() - 1).getSecond()) == 2
             || Math.abs(list.get(0).getFirst() - list.get(list.size() - 1).getFirst()) == 2
-                && Math.abs(list
-                    .get(0).getSecond() - list.get(list.size() - 1).getSecond()) == 1))
+                && Math.abs(list.get(0).getSecond() - list.get(list.size() - 1).getSecond()) == 1))
         {
             return false;
         }

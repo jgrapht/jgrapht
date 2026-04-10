@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Christoph Grüne and Contributors.
+ * (C) Copyright 2018-2026, by Christoph Grüne and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -77,10 +77,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         weights.put(5, 1.0);
         weights.put(6, 1.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
-            DefaultWeightedEdge> cmst =
-                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 1)
-                    .getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst =
+            new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 1)
+                .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertEquals(42.0, cmst.getWeight(), 0.0000001);
@@ -146,10 +145,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         weights.put(4, 3.0);
         weights.put(5, 2.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
-            DefaultWeightedEdge> cmst =
-                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1)
-                    .getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst =
+            new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1)
+                .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
@@ -213,10 +211,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         weights.put(4, 3.0);
         weights.put(5, 2.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
-            DefaultWeightedEdge> cmst =
-                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1)
-                    .getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst =
+            new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1)
+                .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
@@ -283,10 +280,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         weights.put(6, 1.0);
 
         for (int i = 0; i < 30; ++i) {
-            CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
-                DefaultWeightedEdge> cmst =
-                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 20)
-                        .getCapacitatedSpanningTree();
+            CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst =
+                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 20)
+                    .getCapacitatedSpanningTree();
 
             assertNotNull(cmst);
             assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 3, weights));
@@ -367,10 +363,8 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer,
-                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
-                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(
-                        graph, 0, capacity, demands, 1);
+            CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, capacity, demands, 1);
             capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
         } catch (IllegalArgumentException e) {
             testOK = true;

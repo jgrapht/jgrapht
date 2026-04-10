@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Emilio Cruciani and Contributors.
+ * (C) Copyright 2018-2026, by Emilio Cruciani and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -47,8 +47,7 @@ import java.util.*;
  * @param <V> graph node type
  * @param <E> graph edge type
  */
-public class RandomRegularGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final int n;
     private final int d;

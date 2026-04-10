@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Christoph Grüne and Contributors.
+ * (C) Copyright 2018-2026, by Christoph Grüne and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -54,14 +54,12 @@ public interface CapacitatedSpanningTreeAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    interface CapacitatedSpanningTree<V, E>
-        extends Iterable<E>, SpanningTreeAlgorithm.SpanningTree<E>
+    interface CapacitatedSpanningTree<V, E> extends Iterable<E>, SpanningTreeAlgorithm.SpanningTree<E>
     {
 
         /**
-         * Tests whether {@code cmst} is a CMST on {@code graph} with root
-         * {@code root}, capacity {@code capacity} and demand function
-         * {@code demands}.
+         * Tests whether {@code cmst} is a CMST on {@code graph} with root {@code root}, capacity
+         * {@code capacity} and demand function {@code demands}.
          *
          * @param graph the graph
          * @param root the expected root of cmst
@@ -96,8 +94,7 @@ public interface CapacitatedSpanningTreeAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class CapacitatedSpanningTreeImpl<V, E>
-        implements CapacitatedSpanningTree<V, E>, Serializable
+    class CapacitatedSpanningTreeImpl<V, E> implements CapacitatedSpanningTree<V, E>, Serializable
     {
 
         private static final long serialVersionUID = 7088989899889893333L;
@@ -179,10 +176,10 @@ public interface CapacitatedSpanningTreeAlgorithm<V, E>
 
                 if (spanningTreeGraph.containsEdge(root, next)) {
                     if (!currentSubtree.isEmpty()) {
-                        if (!currentSubtree.equals(this
-                            .getPartition()
-                            .get(this.getLabels().get(currentSubtree.iterator().next()))
-                            .getFirst()))
+                        if (!currentSubtree.equals(
+                            this.getPartition()
+                                .get(this.getLabels().get(currentSubtree.iterator().next()))
+                                .getFirst()))
                         {
                             return false;
                         }

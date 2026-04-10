@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -392,10 +392,9 @@ public class EppsteinShortestPathIteratorTest
      */
     private void verifyPath(GraphPath<Integer, DefaultWeightedEdge> path)
     {
-        GraphWalk<Integer,
-            DefaultWeightedEdge> walk = new GraphWalk<>(
-                path.getGraph(), path.getStartVertex(), path.getEndVertex(), path.getVertexList(),
-                path.getEdgeList(), path.getWeight());
+        GraphWalk<Integer, DefaultWeightedEdge> walk = new GraphWalk<>(
+            path.getGraph(), path.getStartVertex(), path.getEndVertex(), path.getVertexList(),
+            path.getEdgeList(), path.getWeight());
         walk.verify();
     }
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,21 +28,20 @@ import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph}.
- * 
+ *
  * <p>
  * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph
  * is immutable, the resulting graph is unmodifiable.
- * 
+ *
  * <p>
  * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
  * graph is weighted.
- * 
+ *
  * <p>
  * Assume for example that the following class is the value type: <blockquote>
- * 
+ *
  * <pre>
- * class MyValue
- *     implements Serializable
+ * class MyValue implements Serializable
  * {
  *     private double value;
  *
@@ -57,37 +56,35 @@ import java.util.function.*;
  *     }
  * }
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * Then one could create an adapter using the following code: <blockquote>
- * 
+ *
  * <pre>
  * MutableValueGraph&lt;String, MyValue&gt; valueGraph =
  *     ValueGraphBuilder.directed().allowsSelfLoops(true).build();
  * valueGraph.addNode("v1");
  * valueGraph.addNode("v2");
  * valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
- * 
+ *
  * ImmutableValueGraph&lt;String, MyValue&gt; immutableValueGraph =
  *     ImmutableValueGraph.copyOf(valueGraph);
- * 
+ *
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new ImmutableValueGraphAdapter&lt;&gt;(
  *     immutableValueGraph, (ToDoubleFunction&lt;MyValue&gt; &amp; Serializable) MyValue::getValue);
- * 
+ *
  * double weight = graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // should return 5.0
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <W> the value type
  */
-public class ImmutableValueGraphAdapter<V, W>
-    extends BaseValueGraphAdapter<V, W, ImmutableValueGraph<V, W>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+public class ImmutableValueGraphAdapter<V, W> extends BaseValueGraphAdapter<V, W, ImmutableValueGraph<V, W>> implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 2629294259825656044L;
 
@@ -95,11 +92,12 @@ public class ImmutableValueGraphAdapter<V, W>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param valueGraph the value graph
      * @param valueConverter a function that converts a value to a double
-     * 
-     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is {@code null}
+     *
+     * @throws NullPointerException if either one of {@code valueGraph} or {@code valueConverter} is
+     *         {@code null}
      */
     public ImmutableValueGraphAdapter(
         ImmutableValueGraph<V, W> valueGraph, ToDoubleFunction<W> valueConverter)
@@ -243,7 +241,8 @@ public class ImmutableValueGraphAdapter<V, W>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

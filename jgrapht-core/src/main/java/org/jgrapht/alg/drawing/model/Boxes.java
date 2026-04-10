@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,14 +23,14 @@ import java.util.*;
 
 /**
  * A collection of utilities to assist with boxes manipulation.
- * 
+ *
  * @author Dimitrios Michail
  */
 public abstract class Boxes
 {
     /**
      * Test whether a box contains a point.
-     * 
+     *
      * @param box the box
      * @param p the point
      * @return true if the point is contained inside the box, false otherwise
@@ -56,7 +56,7 @@ public abstract class Boxes
 
     /**
      * Split a box along the x axis into two equal boxes.
-     * 
+     *
      * @param box the box to split
      * @return a pair with the two resulting boxes
      */
@@ -71,7 +71,7 @@ public abstract class Boxes
 
     /**
      * Split a box along the y axis into two equal boxes.
-     * 
+     *
      * @param box the box to split
      * @return a pair with the two resulting boxes
      */
@@ -86,7 +86,7 @@ public abstract class Boxes
 
     /**
      * Test whether a box contains a point.
-     * 
+     *
      * @param box the box
      * @param p the point
      * @param comparator the comparator to use

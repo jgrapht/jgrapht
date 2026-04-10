@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Oliver Feith and Contributors.
+ * (C) Copyright 2018-2026, by Oliver Feith and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests for the color-refinement algorithm.
- * 
+ *
  * @author Oliver Feith
  */
 public class ColorRefinementAlgorithmTest

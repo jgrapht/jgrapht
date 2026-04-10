@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -72,8 +72,7 @@ import java.util.function.Supplier;
  * @author Semen Chudakov
  * @since January 2018
  */
-public class DeltaSteppingShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting the existence of an edge with negative weight.
@@ -319,9 +318,9 @@ public class DeltaSteppingShortestPath<V, E>
      * computing the maximal edge weight in the graph the task also checks if there exist edges with
      * negative weights.
      */
-    class MaxEdgeWeightTask
-        extends RecursiveTask<Double>
+    class MaxEdgeWeightTask extends RecursiveTask<Double>
     {
+        private static final long serialVersionUID = 6002383842036478735L;
         /**
          * Is used to split a collection and create new recursive tasks during the computation.
          */
@@ -705,8 +704,7 @@ public class DeltaSteppingShortestPath<V, E>
      * Task that is submitted to the {@link #completionService} during shortest path computation for
      * light relax requests relaxation.
      */
-    class LightRelaxTask
-        implements Runnable
+    class LightRelaxTask implements Runnable
     {
         /**
          * Vertices which edges will be relaxed.
@@ -756,8 +754,7 @@ public class DeltaSteppingShortestPath<V, E>
      * Task that is submitted to the {@link #completionService} during shortest path computation for
      * heavy relax requests relaxation.
      */
-    class HeavyRelaxTask
-        implements Runnable
+    class HeavyRelaxTask implements Runnable
     {
         /**
          * Vertices which edges will be relaxed.

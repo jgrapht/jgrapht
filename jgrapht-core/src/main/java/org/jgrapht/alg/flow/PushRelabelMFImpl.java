@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,8 +56,7 @@ import java.util.*;
  * @author Alexey Kudinkin
  *
  */
-public class PushRelabelMFImpl<V, E>
-    extends MaximumFlowAlgorithmBase<V, E>
+public class PushRelabelMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
 {
     // Diagnostic
     private static final boolean DIAGNOSTIC_ENABLED = false;
@@ -219,10 +218,9 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Sets current source to {@code source}, current sink to {@code sink}, then
-     * calculates maximum flow from {@code source} to {@code sink}. Note, that
-     * {@code source} and {@code sink} must be vertices of the {@code network}
-     * passed to the constructor, and they must be different.
+     * Sets current source to {@code source}, current sink to {@code sink}, then calculates maximum
+     * flow from {@code source} to {@code sink}. Note, that {@code source} and {@code sink} must be
+     * vertices of the {@code network} passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex
@@ -279,7 +277,7 @@ public class PushRelabelMFImpl<V, E>
     /*
      * The basic operation PUSH(u, v) is applied if u in an overflowing vertex (i.e. has excess) and
      * u.height = v.height + 1.
-     * 
+     *
      * The operation can be either saturating (if ux.excess >= ex.capacity - ex.flow) or
      * nonsaturating (otherwise).
      */
@@ -317,7 +315,7 @@ public class PushRelabelMFImpl<V, E>
     /*
      * The basic operation RELABEL(u) is applied if u is overflowing (i.e. has excess) and if
      * u.height <= v.height + 1.
-     * 
+     *
      * We can relabel an overflowing vertex $u$ if for every vertex v for which there is residual
      * capacity from u to v, flow cannot be pushed from u to v because v is not downhill from u.
      */
@@ -374,7 +372,7 @@ public class PushRelabelMFImpl<V, E>
     /*
      * The global relabeling heuristic updates the height function by computing shortest path
      * distances in the residual graph from all nodes to the sink.
-     * 
+     *
      * This can be done in linear time by a backwards breadth-first search.
      */
     private void recomputeHeightsHeuristic()
@@ -539,8 +537,7 @@ public class PushRelabelMFImpl<V, E>
     /**
      * Vertex extension for the push-relabel algorithm, which contains an additional height.
      */
-    public class VertexExtension
-        extends VertexExtensionBase
+    public class VertexExtension extends VertexExtensionBase
     {
         private int id;
         private int height; // also called label (or distance label) in some papers

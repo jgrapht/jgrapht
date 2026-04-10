@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2023, by Michael Behrisch and Contributors.
+ * (C) Copyright 2010-2026, by Michael Behrisch and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,14 +25,13 @@ import java.util.*;
 
 /**
  * Brown graph coloring algorithm.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Michael Behrisch
  */
-public class BrownBacktrackColoring<V, E>
-    implements VertexColoringAlgorithm<V>
+public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
 {
     private final List<V> vertexList; // list of all vertices
     private final int[][] neighbors; // for every vertex v, neighbors[v] stores the neighbors of v
@@ -49,7 +48,7 @@ public class BrownBacktrackColoring<V, E>
 
     /**
      * Construct a new Brown backtracking algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public BrownBacktrackColoring(Graph<V, E> graph)
@@ -147,7 +146,7 @@ public class BrownBacktrackColoring<V, E>
     /**
      * Returns the <a href="http://mathworld.wolfram.com/ChromaticNumber.html">chromatic number</a>
      * of the input graph
-     * 
+     *
      * @return chromatic number of the graph
      */
     public int getChromaticNumber()

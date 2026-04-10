@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2021-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,21 +26,19 @@ import org.jgrapht.graph.AbstractGraph;
 
 /**
  * Helper class to ease the implementation of different sparse graphs with different backends.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <S> the type of the graph specifics
  */
-public class AbstractSparseSpecificsGraph<S extends SparseGraphSpecifics>
-    extends
-    AbstractGraph<Integer, Integer>
+public class AbstractSparseSpecificsGraph<S extends SparseGraphSpecifics> extends AbstractGraph<Integer, Integer>
 {
     protected static final String UNMODIFIABLE = "this graph is unmodifiable";
     protected S specifics;
 
     /**
      * Constructor
-     * 
+     *
      * @param specificsSupplier a specifics supplier
      */
     public AbstractSparseSpecificsGraph(Supplier<S> specificsSupplier)

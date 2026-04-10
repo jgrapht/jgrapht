@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -173,12 +173,11 @@ public class DirectedGraphTest
 
     /**
      * A graph implementation with an edge factory using linked hash sets.
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    private class LinkedHashSetDirectedMultigraph<V, E>
-        extends DirectedMultigraph<V, E>
+    private class LinkedHashSetDirectedMultigraph<V, E> extends DirectedMultigraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 

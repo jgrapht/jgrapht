@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -51,8 +51,8 @@ public interface LowestCommonAncestorAlgorithm<V>
      */
     default List<V> getBatchLCA(List<Pair<V, V>> queries)
     {
-        return queries
-            .stream().map(p -> getLCA(p.getFirst(), p.getSecond())).collect(Collectors.toList());
+        return queries.stream().map(p -> getLCA(p.getFirst(), p.getSecond()))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -75,7 +75,7 @@ public interface LowestCommonAncestorAlgorithm<V>
      */
     default List<Set<V>> getBatchLCASet(List<Pair<V, V>> queries)
     {
-        return queries
-            .stream().map(p -> getLCASet(p.getFirst(), p.getSecond())).collect(Collectors.toList());
+        return queries.stream().map(p -> getLCASet(p.getFirst(), p.getSecond()))
+            .collect(Collectors.toList());
     }
 }

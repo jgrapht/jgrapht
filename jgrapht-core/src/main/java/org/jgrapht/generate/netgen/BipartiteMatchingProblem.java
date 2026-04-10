@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -102,8 +102,7 @@ public interface BipartiteMatchingProblem<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class BipartiteMatchingProblemImpl<V, E>
-        implements BipartiteMatchingProblem<V, E>
+    class BipartiteMatchingProblemImpl<V, E> implements BipartiteMatchingProblem<V, E>
     {
         private final Graph<V, E> graph;
         private final Set<V> partition1;

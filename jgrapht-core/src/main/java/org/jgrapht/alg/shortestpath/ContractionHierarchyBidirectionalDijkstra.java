@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -85,8 +85,7 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
  * @see ContractionHierarchyPrecomputation
  * @since July 2019
  */
-public class ContractionHierarchyBidirectionalDijkstra<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
 
     /**
@@ -105,8 +104,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
     /**
      * Supplier for preferable heap implementation.
      */
-    private Supplier<
-        AddressableHeap<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>>> heapSupplier;
+    private Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>>> heapSupplier;
 
     /**
      * Radius of the search.
@@ -148,8 +146,8 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
      * @param heapSupplier supplier of the preferable heap implementation
      */
     public ContractionHierarchyBidirectionalDijkstra(
-        ContractionHierarchy<V, E> hierarchy, double radius, Supplier<
-            AddressableHeap<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>>> heapSupplier)
+        ContractionHierarchy<V, E> hierarchy, double radius,
+        Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>>> heapSupplier)
     {
         super(hierarchy.getGraph());
         this.contractionHierarchy = hierarchy;
@@ -185,8 +183,8 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
             new ContractionSearchFrontier<>(
                 new MaskSubgraph<>(contractionGraph, v -> false, e -> !e.isUpward), heapSupplier);
 
-        ContractionSearchFrontier<ContractionVertex<V>,
-            ContractionEdge<E>> backwardFrontier = new ContractionSearchFrontier<>(
+        ContractionSearchFrontier<ContractionVertex<V>, ContractionEdge<E>> backwardFrontier =
+            new ContractionSearchFrontier<>(
                 new MaskSubgraph<>(
                     new EdgeReversedGraph<>(contractionGraph), v -> false, e -> e.isUpward),
                 heapSupplier);
@@ -223,9 +221,8 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
             } else {
 
                 // frontier scan
-                AddressableHeap.Handle<Double,
-                    Pair<ContractionVertex<V>, ContractionEdge<E>>> node =
-                        frontier.heap.deleteMin();
+                AddressableHeap.Handle<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>> node =
+                    frontier.heap.deleteMin();
                 ContractionVertex<V> v = node.getValue().getFirst();
                 double vDistance = node.getKey();
 
@@ -325,8 +322,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
      * @param <V> vertices type
      * @param <E> edges type
      */
-    static class ContractionSearchFrontier<V, E>
-        extends DijkstraSearchFrontier<V, E>
+    static class ContractionSearchFrontier<V, E> extends DijkstraSearchFrontier<V, E>
     {
         boolean isFinished;
 

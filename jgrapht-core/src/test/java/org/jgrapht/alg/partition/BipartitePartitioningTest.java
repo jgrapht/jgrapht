@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail, Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -39,9 +39,7 @@ import it.unimi.dsi.webgraph.LazyIntSkippableIterator;
  * @author Sebastiano Vigna
  */
 
-public abstract class AbstractImmutableGraphAdapter<E extends IntIntPair>
-    extends
-    AbstractGraph<Integer, E>
+public abstract class AbstractImmutableGraphAdapter<E extends IntIntPair> extends AbstractGraph<Integer, E>
 {
 
     /** The underlying graph. */

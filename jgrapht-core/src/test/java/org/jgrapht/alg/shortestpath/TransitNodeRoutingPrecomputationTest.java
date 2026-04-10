@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -282,16 +282,15 @@ public class TransitNodeRoutingPrecomputationTest
         }
 
         // many-to-many shortest paths
-        Set<Integer> transitVerticesSet =
-            routing.getTransitVertices().stream().map(v -> v.vertex).collect(
-                Collectors.toCollection(HashSet::new));
+        Set<Integer> transitVerticesSet = routing.getTransitVertices().stream().map(v -> v.vertex)
+            .collect(Collectors.toCollection(HashSet::new));
         assertEquals(transitVerticesSet, routing.getTransitVerticesPaths().getSources());
         assertEquals(transitVerticesSet, routing.getTransitVerticesPaths().getTargets());
 
         // check Voronoi diagram
         VoronoiDiagram<Integer> voronoiDiagram = routing.getVoronoiDiagram();
-        for (ContractionVertex<Integer> vertex : routing
-            .getContractionHierarchy().getContractionGraph().vertexSet())
+        for (ContractionVertex<Integer> vertex : routing.getContractionHierarchy()
+            .getContractionGraph().vertexSet())
         {
             int voronoiCellId = voronoiDiagram.getVoronoiCellId(vertex);
             assertTrue(voronoiCellId >= -1 && voronoiCellId < numberOfVertices);
@@ -301,8 +300,8 @@ public class TransitNodeRoutingPrecomputationTest
         AccessVertices<Integer, DefaultWeightedEdge> accessVertices = routing.getAccessVertices();
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> sp =
             new BidirectionalDijkstraShortestPath<>(graph);
-        for (ContractionVertex<Integer> vertex : routing
-            .getContractionHierarchy().getContractionGraph().vertexSet())
+        for (ContractionVertex<Integer> vertex : routing.getContractionHierarchy()
+            .getContractionGraph().vertexSet())
         {
             List<AccessVertex<Integer, DefaultWeightedEdge>> av =
                 accessVertices.getForwardAccessVertices(vertex);
@@ -311,8 +310,8 @@ public class TransitNodeRoutingPrecomputationTest
                     sp.getPath(vertex.vertex, accessVertex.getVertex()), accessVertex.getPath());
             }
         }
-        for (ContractionVertex<Integer> vertex : routing
-            .getContractionHierarchy().getContractionGraph().vertexSet())
+        for (ContractionVertex<Integer> vertex : routing.getContractionHierarchy()
+            .getContractionGraph().vertexSet())
         {
             List<AccessVertex<Integer, DefaultWeightedEdge>> av =
                 accessVertices.getBackwardAccessVertices(vertex);

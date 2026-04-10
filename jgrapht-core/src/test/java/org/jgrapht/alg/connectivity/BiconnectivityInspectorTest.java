@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2023, by France Telecom and Contributors.
+ * (C) Copyright 2007-2026, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -233,11 +233,9 @@ public class BiconnectivityInspectorTest
     @Test
     public void testGithubIssueBug798()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingSelfLoops(false).allowingMultipleEdges(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingSelfLoops(false)
+            .allowingMultipleEdges(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
         g.addVertex(0);
         g.addVertex(1);
         g.addVertex(2);

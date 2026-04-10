@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,7 @@ import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing maximal clique enumeration algorithms.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class MaximalCliqueEnumerationPerformanceTest
@@ -76,8 +76,7 @@ public class MaximalCliqueEnumerationPerformanceTest
         }
     }
 
-    public static class BronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class BronKerboschRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -86,8 +85,7 @@ public class MaximalCliqueEnumerationPerformanceTest
         }
     }
 
-    public static class PivotBronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class PivotBronKerboschRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -96,8 +94,7 @@ public class MaximalCliqueEnumerationPerformanceTest
         }
     }
 
-    public static class DegeneracyBronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class DegeneracyBronKerboschRandomGraphBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)

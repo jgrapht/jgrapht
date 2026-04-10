@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -335,10 +335,8 @@ public class WeakChordalityInspector<V, E>
                 if (i >= separator.getFirst().size()) {
                     separators.add(separator);
                 } else {
-                    queues
-                        .get(
-                            separator
-                                .getFirst().get(separator.getFirst().size() - i - 1).getFirst())
+                    queues.get(
+                        separator.getFirst().get(separator.getFirst().size() - i - 1).getFirst())
                         .add(separator);
                 }
             }

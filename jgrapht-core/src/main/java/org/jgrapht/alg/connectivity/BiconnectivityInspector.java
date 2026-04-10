@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,7 +38,7 @@ import java.util.*;
  * linear time $O(|V|+|E|)$ and is based on a recursive depth-first search. More information about
  * this subject be be found in this wikipedia
  * <a href="https://en.wikipedia.org/wiki/Biconnected_component">article</a>.
- * 
+ *
  * <p>
  * The inspector methods work in a lazy fashion: no computations are performed unless immediately
  * necessary. Computation are done once and results are cached within this class for future need.
@@ -54,7 +54,7 @@ public class BiconnectivityInspector<V, E>
 {
     /**
      * Constructs a new BiconnectivityInspector
-     * 
+     *
      * @param graph the input graph
      */
     public BiconnectivityInspector(Graph<V, E> graph)
@@ -152,7 +152,7 @@ public class BiconnectivityInspector<V, E>
     /**
      * Returns all <a href="http://mathworld.wolfram.com/Block.html">blocks</a> (biconnected
      * components) in the graph. A block is a maximal biconnected subgraph.
-     * 
+     *
      * @return all blocks (biconnected components) in the graph.
      */
     public Set<Graph<V, E>> getBlocks()
@@ -164,7 +164,7 @@ public class BiconnectivityInspector<V, E>
     /**
      * Returns all connected components in the graph. In case the graph is directed, this method
      * returns all weakly connected components.
-     * 
+     *
      * @return all connected components in the graph if the graph is undirected, or all weakly
      *         connected components if the graph is directed.
      */
@@ -182,7 +182,7 @@ public class BiconnectivityInspector<V, E>
     /**
      * Returns the connected component containing the given vertex. If the underlying graph is
      * directed, this method returns a weakly connected component.
-     * 
+     *
      * @param vertex vertex
      * @return the connected component containing the given vertex, or a weakly connected component
      *         if the underlying graph is directed.
@@ -271,7 +271,7 @@ public class BiconnectivityInspector<V, E>
 
     /**
      * Each time a cutpoint is discovered, this method computes the biconnected component
-     * 
+     *
      * @param discTimeCutpoint discovery time of cutpoint
      */
     private void buildBlock(int discTimeCutpoint)
@@ -293,7 +293,7 @@ public class BiconnectivityInspector<V, E>
 
     /**
      * Performs a depth-first search, starting from vertex v
-     * 
+     *
      * @param v vertex
      * @param parent parent of v
      * @return lowpoint of v

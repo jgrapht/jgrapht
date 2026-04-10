@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Tim Shearouse and Contributors.
+ * (C) Copyright 2003-2026, by Tim Shearouse and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,18 +23,17 @@ import java.util.*;
 
 /**
  * Generates a complete graph of any size.
- * 
+ *
  * <p>
  * A complete graph is a graph where every vertex shares an edge with every other vertex. If it is a
  * directed graph, then edges must always exist in both directions.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Tim Shearouse
  */
-public class CompleteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class CompleteGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final int size;
 

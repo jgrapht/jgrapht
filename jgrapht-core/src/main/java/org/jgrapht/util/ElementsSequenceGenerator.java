@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import java.util.*;
  * @param <T> element type
  * @author Timofey Chudakov
  */
-public class ElementsSequenceGenerator<T>
-    implements Iterator<T>, Iterable<T>
+public class ElementsSequenceGenerator<T> implements Iterator<T>, Iterable<T>
 {
 
     /**

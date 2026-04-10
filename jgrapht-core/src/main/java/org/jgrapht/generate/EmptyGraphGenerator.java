@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import java.util.*;
  *
  * @author John V. Sichi
  */
-public class EmptyGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class EmptyGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final int size;
 

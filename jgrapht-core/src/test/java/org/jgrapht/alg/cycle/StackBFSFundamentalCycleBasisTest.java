@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link StackBFSFundamentalCycleBasis}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class StackBFSFundamentalCycleBasisTest
@@ -570,7 +570,7 @@ public class StackBFSFundamentalCycleBasisTest
         graph.addEdge(4, 6);
 
         // @formatter:off
-        // 
+        //
         //        1
         //       /  \
         //      2     3
@@ -578,7 +578,7 @@ public class StackBFSFundamentalCycleBasisTest
         //   4 - 5   6   7
         //   |       |
         //   ---------
-        // 
+        //
         // @formatter:on
         CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
         CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();

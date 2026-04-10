@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,8 +20,7 @@ package org.jgrapht.nio;
 /**
  * An exception that the library throws in case of graph export errors.
  */
-public class ExportException
-    extends RuntimeException
+public class ExportException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 

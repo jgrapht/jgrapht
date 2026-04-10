@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGEXFImporterTest
@@ -48,7 +48,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -56,23 +56,22 @@ public class SimpleGEXFImporterTest
             + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         new SimpleGEXFImporter<String, DefaultEdge>()
@@ -93,7 +92,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -106,23 +105,22 @@ public class SimpleGEXFImporterTest
             + "  </meta>" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         new SimpleGEXFImporter<String, DefaultEdge>()
@@ -143,7 +141,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -151,23 +149,22 @@ public class SimpleGEXFImporterTest
             + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         SimpleGEXFImporter<String, DefaultEdge> importer =
@@ -190,7 +187,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -201,22 +198,21 @@ public class SimpleGEXFImporterTest
             + "      <edge id=\"1\" source=\"v\" target=\"x\" />" + NL
             + "    </edges>" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"u\" label=\"node-u\"/>" + NL 
+            + "      <node id=\"u\" label=\"node-u\"/>" + NL
             + "      <node id=\"v\" label=\"node-v\"/>" + NL
-            + "      <node id=\"x\" label=\"node-x\"/>" + NL 
+            + "      <node id=\"x\" label=\"node-x\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"2\" source=\"u\" target=\"v\" />" + NL            
+            + "      <edge id=\"2\" source=\"u\" target=\"v\" />" + NL
             + "      <edge id=\"3\" source=\"x\" target=\"u\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
@@ -275,7 +271,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -286,10 +282,10 @@ public class SimpleGEXFImporterTest
             + "      <attribute id=\"0\" title=\"color\"  type=\"string\"/>" + NL
             + "      <attribute id=\"1\" title=\"city\"   type=\"liststring\"/>" + NL
             + "      <attribute id=\"2\" title=\"weight\" type=\"double\"/>" + NL
-            + "    </attributes>" + NL                
+            + "    </attributes>" + NL
             + "    <attributes class=\"edge\">" + NL
             + "      <attribute id=\"0\" title=\"length\" type=\"double\"/>" + NL
-            + "    </attributes>" + NL            
+            + "    </attributes>" + NL
             + "    <nodes>" + NL
             + "      <node id=\"1\">" + NL
             + "        <attvalues>" + NL
@@ -305,10 +301,10 @@ public class SimpleGEXFImporterTest
             + "          <attvalue for=\"1\" value=\"NY\"/>" + NL
             + "          <attvalue for=\"2\" value=\"200.0\"/>" + NL
             + "        </attvalues>" + NL
-            + "      </node>" + NL            
+            + "      </node>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" weight=\"1.2\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" weight=\"1.2\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" weight=\"0.1\">" + NL
             + "        <attvalues>" + NL
             + "          <attvalue for=\"0\" value=\"333.0\"/>" + NL
@@ -316,14 +312,13 @@ public class SimpleGEXFImporterTest
             + "      </edge>" + NL
             + "      <edge id=\"1\" source=\"3\" target=\"1\" weight=\"2.0\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.directed().weighted(true).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
@@ -368,29 +363,28 @@ public class SimpleGEXFImporterTest
     {
         assertThrows(ImportException.class, () -> {
             // @formatter:off
-            String input = 
+            String input =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
                 + "      version=\"1.2\" "
                 + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
                 + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
                 + "  <graph defaultedgetype=\"undirected\">" + NL
-                + "    <node id=\"1\" label=\"1\"/>" + NL 
+                + "    <node id=\"1\" label=\"1\"/>" + NL
                 + "    <node id=\"2\" label=\"2\"/>" + NL
-                + "    <node id=\"3\" label=\"3\"/>" + NL 
+                + "    <node id=\"3\" label=\"3\"/>" + NL
                 + "    <edges>" + NL
-                + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+                + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
                 + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
                 + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
                 + "    </edges>" + NL
-                + "  </graph>" + NL 
+                + "  </graph>" + NL
                 + "</gexf>";
             // @formatter:on
 
-            Graph<String,
-                DefaultEdge> g = GraphTypeBuilder
-                    .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                    .vertexSupplier(SupplierUtil.createStringSupplier())
+            Graph<String, DefaultEdge> g =
+                GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                    .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                     .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
             new SimpleGEXFImporter<String, DefaultEdge>()
@@ -403,7 +397,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -416,25 +410,24 @@ public class SimpleGEXFImporterTest
             + "          <node id=\"4\" label=\"4\"/>" + NL
             + "        </nodes>" + NL
             + "        <edges>" + NL
-            + "          <edge id=\"3\" source=\"3\" target=\"4\" />" + NL            
+            + "          <edge id=\"3\" source=\"3\" target=\"4\" />" + NL
             + "        </edges>" + NL
             + "      </node>"
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"0\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"0\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"1\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         SimpleGEXFImporter<String, DefaultEdge> simpleGEXFImporter =

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -51,8 +51,7 @@ public interface VertexCoverAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    interface VertexCover<V>
-        extends Set<V>
+    interface VertexCover<V> extends Set<V>
     {
 
         /**
@@ -70,9 +69,7 @@ public interface VertexCoverAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    class VertexCoverImpl<V>
-        extends WeightedUnmodifiableSet<V>
-        implements VertexCover<V>
+    class VertexCoverImpl<V> extends WeightedUnmodifiableSet<V> implements VertexCover<V>
     {
 
         private static final long serialVersionUID = 3922451519162460179L;

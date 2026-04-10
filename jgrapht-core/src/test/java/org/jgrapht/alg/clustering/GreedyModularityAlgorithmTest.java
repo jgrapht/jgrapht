@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Antonia Tsiftsi and Contributors.
+ * (C) Copyright 2020-2026, by Antonia Tsiftsi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,8 +27,6 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 /**
  * Tests
@@ -40,9 +38,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test1()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
@@ -74,9 +71,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test2()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(0);
@@ -136,9 +132,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void testZacharyKarateClub()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
@@ -269,9 +264,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test4()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
@@ -326,9 +320,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test5()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
@@ -368,9 +361,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test6()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
@@ -416,8 +408,8 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test7()
     {
-        Graph<Integer, DefaultEdge> g = GraphTypeBuilder
-            .directed().allowingSelfLoops(true).vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.directed().allowingSelfLoops(true)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier())
             .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
@@ -455,11 +447,9 @@ public class GreedyModularityAlgorithmTest
     @Test
     public void test8()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+        Graph<Integer, DefaultEdge> g = GraphTypeBuilder.undirected().allowingSelfLoops(true)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         g.addVertex(1);
         g.addVertex(2);

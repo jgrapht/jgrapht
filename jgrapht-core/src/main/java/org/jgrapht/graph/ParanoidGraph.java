@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2007-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,14 +31,13 @@ import java.util.*;
  *
  * @author John Sichi
  */
-public class ParanoidGraph<V, E>
-    extends GraphDelegator<V, E>
+public class ParanoidGraph<V, E> extends GraphDelegator<V, E>
 {
     private static final long serialVersionUID = 5075284167422166539L;
 
     /**
      * Create a new paranoid graph.
-     * 
+     *
      * @param g the underlying wrapped graph
      */
     public ParanoidGraph(Graph<V, E> g)

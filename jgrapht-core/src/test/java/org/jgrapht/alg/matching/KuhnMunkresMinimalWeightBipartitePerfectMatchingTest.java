@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,8 +38,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     /**
      * First partition
      */
-    private enum FirstPartition
-        implements V
+    private enum FirstPartition implements V
     {
         A,
         B,
@@ -70,8 +69,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     /**
      * Second partition
      */
-    private enum SecondPartition
-        implements V
+    private enum SecondPartition implements V
     {
         A,
         B,
@@ -108,8 +106,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         Graph<V, DefaultWeightedEdge> target = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         GraphGenerator<V, DefaultWeightedEdge, V> generator =
-            new SimpleWeightedBipartiteGraphMatrixGenerator<V, DefaultWeightedEdge>()
-                .first(first).second(second).weights(costMatrix);
+            new SimpleWeightedBipartiteGraphMatrixGenerator<V, DefaultWeightedEdge>().first(first)
+                .second(second).weights(costMatrix);
 
         generator.generateGraph(target);
 

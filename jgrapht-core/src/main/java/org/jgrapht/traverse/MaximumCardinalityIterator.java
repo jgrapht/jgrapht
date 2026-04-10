@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -43,8 +43,7 @@ import java.util.*;
  * @param <E> the graph edge type.
  * @author Timofey Chudakov
  */
-public class MaximumCardinalityIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E>
 {
     /**
      * The maximum index of non-empty set in {@code buckets}.
@@ -72,7 +71,7 @@ public class MaximumCardinalityIterator<V, E>
      * Creates a maximum cardinality iterator for the {@code graph}.
      *
      * @param graph the graph to be iterated.
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public MaximumCardinalityIterator(Graph<V, E> graph)

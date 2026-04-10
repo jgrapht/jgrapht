@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public abstract class AbstractGraphIterator<V, E>
-    implements GraphIterator<V, E>
+public abstract class AbstractGraphIterator<V, E> implements GraphIterator<V, E>
 {
     private final Set<TraversalListener<V, E>> traversalListeners = new LinkedHashSet<>();
 
@@ -49,9 +48,9 @@ public abstract class AbstractGraphIterator<V, E>
 
     /**
      * Create a new iterator
-     * 
+     *
      * @param graph the graph
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public AbstractGraphIterator(Graph<V, E> graph)
@@ -65,7 +64,7 @@ public abstract class AbstractGraphIterator<V, E>
 
     /**
      * Get the graph being traversed.
-     * 
+     *
      * @return the graph being traversed
      */
     public Graph<V, E> getGraph()
@@ -78,7 +77,7 @@ public abstract class AbstractGraphIterator<V, E>
      * connected components.
      *
      * @param crossComponentTraversal if {@code true} traverses across connected components.
-     * 
+     *
      * @throws IllegalArgumentException if the argument is invalid for this iterator
      */
     public void setCrossComponentTraversal(boolean crossComponentTraversal)
@@ -89,8 +88,7 @@ public abstract class AbstractGraphIterator<V, E>
     /**
      * Test whether this iterator is set to traverse the graph across connected components.
      *
-     * @return {@code true} if traverses across connected components, otherwise
-     *         {@code false}.
+     * @return {@code true} if traverses across connected components, otherwise {@code false}.
      */
     @Override
     public boolean isCrossComponentTraversal()
@@ -195,7 +193,7 @@ public abstract class AbstractGraphIterator<V, E>
 
     /**
      * Create a vertex traversal event.
-     * 
+     *
      * @param vertex the vertex
      * @return the event
      */
@@ -211,7 +209,7 @@ public abstract class AbstractGraphIterator<V, E>
 
     /**
      * Create an edge traversal event.
-     * 
+     *
      * @param edge the edge
      * @return the event
      */
@@ -230,8 +228,7 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @author Barak Naveh
      */
-    static class FlyweightEdgeEvent<E>
-        extends EdgeTraversalEvent<E>
+    static class FlyweightEdgeEvent<E> extends EdgeTraversalEvent<E>
     {
         private static final long serialVersionUID = 4051327833765000755L;
 
@@ -262,8 +259,7 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @author Barak Naveh
      */
-    static class FlyweightVertexEvent<V>
-        extends VertexTraversalEvent<V>
+    static class FlyweightVertexEvent<V> extends VertexTraversalEvent<V>
     {
         private static final long serialVersionUID = 3834024753848399924L;
 

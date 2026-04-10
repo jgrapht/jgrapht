@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link EdgeBetweennessCentrality}
- * 
+ *
  * @author Dimitrios Michail
  */
 public class EdgeBetweennessCentralityTest
@@ -38,10 +38,9 @@ public class EdgeBetweennessCentralityTest
     @Test
     public void testUndirectedGraph1()
     {
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
 
         g.addVertex("A");
@@ -77,10 +76,9 @@ public class EdgeBetweennessCentralityTest
     @Test
     public void testUndirectedGraph2()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 1; i < 15; i++) {
@@ -116,10 +114,9 @@ public class EdgeBetweennessCentralityTest
     @Test
     public void testDirectedGraph3()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.directed().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 1; i < 15; i++) {
@@ -155,10 +152,9 @@ public class EdgeBetweennessCentralityTest
     @Test
     public void testDirectedGraph3Subset()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.directed().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 1; i < 15; i++) {
@@ -195,11 +191,9 @@ public class EdgeBetweennessCentralityTest
     @Test
     public void testUndirectedGraphWithWeights()
     {
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
+        Graph<String, DefaultEdge> g = GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(true).weighted(true).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+            .vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
 
         g.addVertex("A");
         g.addVertex("B");

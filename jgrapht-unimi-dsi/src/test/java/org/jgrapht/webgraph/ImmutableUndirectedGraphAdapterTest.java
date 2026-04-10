@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -53,11 +53,9 @@ public class ImmutableUndirectedGraphAdapterTest
         m.addArc(1, 1);
         m.addArc(3, 3);
 
-        final ImmutableGraph g =
-            ImmutableGraph
-                .load(
-                    ImmutableDirectedGraphAdapterTest
-                        .storeTempGraph(Transform.symmetrize(m.immutableView())).toString());
+        final ImmutableGraph g = ImmutableGraph.load(
+            ImmutableDirectedGraphAdapterTest
+                .storeTempGraph(Transform.symmetrize(m.immutableView())).toString());
 
         final ImmutableUndirectedGraphAdapter a = new ImmutableUndirectedGraphAdapter(g);
 
@@ -86,8 +84,7 @@ public class ImmutableUndirectedGraphAdapterTest
         assertEquals(edgesOf2, a.outgoingEdgesOf(2));
         assertEquals(edgesOf2, new ObjectOpenHashSet<>(a.iterables().edgesOf(2).iterator()));
         assertEquals(
-            edgesOf2,
-            new ObjectOpenHashSet<>(a.iterables().incomingEdgesOf(2).iterator()));
+            edgesOf2, new ObjectOpenHashSet<>(a.iterables().incomingEdgesOf(2).iterator()));
         assertEquals(
             edgesOf2, new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(2).iterator()));
 

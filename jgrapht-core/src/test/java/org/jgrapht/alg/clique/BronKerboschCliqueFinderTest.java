@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2005-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,8 +27,7 @@ import java.util.concurrent.*;
  *
  * @author John V. Sichi
  */
-public class BronKerboschCliqueFinderTest
-    extends BaseBronKerboschCliqueFinderTest
+public class BronKerboschCliqueFinderTest extends BaseBronKerboschCliqueFinderTest
 {
 
     @Override

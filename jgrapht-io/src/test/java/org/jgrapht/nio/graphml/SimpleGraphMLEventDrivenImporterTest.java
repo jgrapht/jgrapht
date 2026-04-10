@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGraphMLEventDrivenImporterTest
@@ -41,20 +41,20 @@ public class SimpleGraphMLEventDrivenImporterTest
     public void testUndirectedUnweighted()
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -84,9 +84,9 @@ public class SimpleGraphMLEventDrivenImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
             "<key id=\"d1\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\"/>" + NL +

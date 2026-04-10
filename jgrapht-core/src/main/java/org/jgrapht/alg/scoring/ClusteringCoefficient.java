@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,7 +34,7 @@ import java.util.*;
  * a clique. For a vertex $v$ it counts how many of its direct neighbors are connected by an edge
  * over the total number of neighbor pairs. In the case of undirected graphs the total number of
  * possible neighbor pairs is only half compared to directed graphs.
- * 
+ *
  * <p>
  * The local clustering coefficient of a graph was introduced in <i>D. J. Watts and Steven Strogatz
  * (June 1998). "Collective dynamics of 'small-world' networks". Nature. 393 (6684): 440–442.
@@ -59,8 +59,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class ClusteringCoefficient<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Double>
 {
 
     /**

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -55,7 +55,8 @@ public final class HelloJGraphT
      * @throws ExportException if graph cannot be exported.
      */
     public static void main(String[] args)
-        throws URISyntaxException, ExportException
+        throws URISyntaxException,
+        ExportException
     {
         Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
@@ -73,9 +74,8 @@ public final class HelloJGraphT
 
         // find the vertex corresponding to www.jgrapht.org
         // @example:findVertex:begin
-        URI start = hrefGraph
-            .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
-            .get();
+        URI start = hrefGraph.vertexSet().stream()
+            .filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny().get();
         // @example:findVertex:end
 
         // @example:traverse:end

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2018-2026, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,13 +27,12 @@ import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 /**
- * 
+ *
  * Tests for the {@link SuurballeKDisjointShortestPaths} class.
- * 
+ *
  * @author Assaf Mizrachi
  */
-public class SuurballeKDisjointShortestPathsTest
-    extends KDisjointShortestPathsTestCase
+public class SuurballeKDisjointShortestPathsTest extends KDisjointShortestPathsTestCase
 {
 
     @Override

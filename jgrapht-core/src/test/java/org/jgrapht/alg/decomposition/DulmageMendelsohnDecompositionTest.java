@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by CAE Tech Limited and Contributors.
+ * (C) Copyright 2018-2026, by CAE Tech Limited and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -104,10 +104,9 @@ public class DulmageMendelsohnDecompositionTest
             ;
         }
         ;
-        Matching<V,
-            E> perfectMatching = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(
-                new AsSubgraph<>(graph, allPerfectlyMatched), partition1PerfectlyMatched,
-                partition2PerfectlyMatched).getMatching();
+        Matching<V, E> perfectMatching = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(
+            new AsSubgraph<>(graph, allPerfectlyMatched), partition1PerfectlyMatched,
+            partition2PerfectlyMatched).getMatching();
         assertTrue(perfectMatching.isPerfect(), "Core of decomposition must perfectly match");
         // Do all the vertices in the graph appear in the decomposition, and only in one part of it?
         for (V v : graph.vertexSet()) {

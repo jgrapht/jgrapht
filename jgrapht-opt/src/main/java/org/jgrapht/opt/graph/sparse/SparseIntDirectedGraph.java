@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,13 +33,13 @@ import org.jgrapht.opt.graph.sparse.specifics.SparseGraphSpecifics;
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
- * 
+ *
  * <p>
  * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
  * Compressed Sparse Rows (CSR). Constant time source and target lookups are provided by storing the
  * edge lists in arrays. This is a classic format for write-once read-many use cases. Thus, the
  * graph is unmodifiable.
- * 
+ *
  * <p>
  * The question of whether a sparse or dense representation is more appropriate is highly dependent
  * on various factors such as the graph, the machine running the algorithm and the algorithm itself.
@@ -50,21 +50,19 @@ import org.jgrapht.opt.graph.sparse.specifics.SparseGraphSpecifics;
  * for Automatic Computation, J. H. Wilkinson and C. Reinsch, Eds. Vol. 2. Springer-Verlag, Berlin,
  * New York.</li>
  * </ul>
- * 
+ *
  * Additional information about sparse representations can be found in the
  * <a href="https://en.wikipedia.org/wiki/Sparse_matrix">wikipedia</a>.
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SparseIntDirectedGraph
-    extends
-    AbstractSparseSpecificsGraph<SparseGraphSpecifics>
+public class SparseIntDirectedGraph extends AbstractSparseSpecificsGraph<SparseGraphSpecifics>
 {
     protected static final String UNMODIFIABLE = "this graph is unmodifiable";
 
     /**
      * Create a new graph from an edge list.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param edges the edge list
      */
@@ -77,7 +75,7 @@ public class SparseIntDirectedGraph
 
     /**
      * Create a new graph from an edge list.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param edges the edge list
      * @param incomingEdgesSupport whether to support incoming edges or not
@@ -91,7 +89,7 @@ public class SparseIntDirectedGraph
 
     /**
      * Create a new graph from an edge stream.
-     * 
+     *
      * @param numVertices the number of vertices
      * @param numEdges the number of edges
      * @param edges the edge stream

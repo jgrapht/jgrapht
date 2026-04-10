@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Philipp S. Kaesgen and Contributors.
+ * (C) Copyright 2016-2026, by Philipp S. Kaesgen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -258,9 +258,9 @@ public class BergeGraphInspectorTest
          * Non-edges: stimulus.addEdge(1,3); stimulus.addEdge(2,4); stimulus.addEdge(1,5);
          * stimulus.addEdge(2,5); stimulus.addEdge(1,6); stimulus.addEdge(2,6);
          * stimulus.addEdge(4,5);
-         * 
+         *
          * Optional edges: stimulus.addEdge(3,5); stimulus.addEdge(3,6);
-         * 
+         *
          * stimulus.addEdge(5,6); implies non-edge stimulus.addEdge(6,7);
          */
 
@@ -273,7 +273,7 @@ public class BergeGraphInspectorTest
         /*
          * Non-edges either: stimulus.addEdge(3,7); or stimulus.addEdge(4,7); !! Note: one is to
          * choose, otherwise it is a 5-Cycle !!
-         * 
+         *
          * Optional edges if non-edge stimulus.addEdge(5,6); stimulus.addEdge(6,7);
          */
 
@@ -288,12 +288,12 @@ public class BergeGraphInspectorTest
 
         /*
          * Non-edges: stimulus.addEdge(1,9); stimulus.addEdge(2,9); stimulus.addEdge(7,9);
-         * 
+         *
          * Optional edges: stimulus.addEdge(1,8); stimulus.addEdge(2,8); stimulus.addEdge(3,8);
          * stimulus.addEdge(4,8); stimulus.addEdge(6,8); stimulus.addEdge(7,8);
          * stimulus.addEdge(8,10); stimulus.addEdge(3,9); stimulus.addEdge(4,9);
          * stimulus.addEdge(5,9); stimulus.addEdge(6,9);
-         * 
+         *
          */
 
         assertTrue(dut.hasConfigurationType3(stimulus));

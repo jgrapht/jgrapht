@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import java.util.*;
  * algorithm works with directed and undirected graphs which may contain loops and/or multiple
  * (parallel) edges. The running time is linear, i.e. $O(|E|)$ where $|E|$ is the cardinality of the
  * edge set of the graph.
- * 
+ *
  * <p>
  * See the <a href="https://en.wikipedia.org/wiki/Eulerian_path">Wikipedia article</a> for details
  * and references about Eulerian cycles and a short description of Hierholzer's algorithm for the
@@ -41,11 +41,10 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class HierholzerEulerianCycle<V, E>
-    implements EulerianCycleAlgorithm<V, E>
+public class HierholzerEulerianCycle<V, E> implements EulerianCycleAlgorithm<V, E>
 {
     /*
      * The input graph.
@@ -72,7 +71,7 @@ public class HierholzerEulerianCycle<V, E>
      * Test whether a graph is Eulerian. An
      * <a href="http://mathworld.wolfram.com/EulerianGraph.html">Eulerian graph</a> is a graph
      * containing an <a href="http://mathworld.wolfram.com/EulerianCycle.html">Eulerian cycle</a>.
-     * 
+     *
      * @param graph the input graph
      * @return true if the graph is Eulerian, false otherwise
      */
@@ -136,7 +135,7 @@ public class HierholzerEulerianCycle<V, E>
 
     /**
      * Compute an Eulerian cycle of a graph.
-     * 
+     *
      * @param g the input graph
      * @return an Eulerian cycle
      * @throws IllegalArgumentException in case the graph is not Eulerian
@@ -201,7 +200,7 @@ public class HierholzerEulerianCycle<V, E>
     /**
      * Index the graph and create a double-linked list representation suitable for vertex and edge
      * removals in constant time. Ignore any vertices with zero degrees.
-     * 
+     *
      * @param g the graph to index
      */
     protected void initialize(Graph<V, E> g)
@@ -245,7 +244,7 @@ public class HierholzerEulerianCycle<V, E>
     /**
      * Computes a partial cycle assuming that all vertices have an even degree. The partial cycle
      * always begin from the first graph vertex in the vertex list.
-     * 
+     *
      * @return the partial's cycle head and tail nodes as a pair
      */
     protected Pair<EdgeNode, EdgeNode> computePartialCycle()
@@ -278,7 +277,7 @@ public class HierholzerEulerianCycle<V, E>
      * locations for vertices with non-zero degrees. It is important to move vertices with new
      * insert locations to the front of the vertex list, in order to make sure that we always start
      * partial cycles from already visited vertices.
-     * 
+     *
      * @param partialCycle the partial cycle
      * @param partialCycleSourceVertex the source vertex of the first edge in the partial cycle
      */
@@ -306,7 +305,7 @@ public class HierholzerEulerianCycle<V, E>
 
     /**
      * Build final walk
-     * 
+     *
      * @return the final walk
      */
     protected GraphWalk<V, E> buildWalk()

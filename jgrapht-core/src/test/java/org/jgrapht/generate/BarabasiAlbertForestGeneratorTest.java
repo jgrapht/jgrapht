@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -39,11 +39,17 @@ public class BarabasiAlbertForestGeneratorTest
     @Test
     public void testBadParameters()
     {
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(0, 10, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(0, 10, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(-1, 10, 100), "Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(-1, 10, 100),
+            "Bad parameter");
 
-        assertThrows(IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(10, 9, 100),"Bad parameter");
+        assertThrows(
+            IllegalArgumentException.class, () -> new BarabasiAlbertForestGenerator<>(10, 9, 100),
+            "Bad parameter");
     }
 
     @Test

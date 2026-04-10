@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -307,8 +307,8 @@ public class ChinesePostmanTest
         alg.getCPPSolution(g);
     }
 
-    private <V,
-        E> void verifyClosedPath(Graph<V, E> graph, double expectedWeight, int expectedLength)
+    private <V, E> void verifyClosedPath(
+        Graph<V, E> graph, double expectedWeight, int expectedLength)
     {
 
         ChinesePostman<V, E> alg = new ChinesePostman<>();

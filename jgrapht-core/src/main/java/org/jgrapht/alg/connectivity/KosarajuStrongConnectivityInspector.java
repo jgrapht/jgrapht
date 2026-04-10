@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Christian Soltenborn and Contributors.
+ * (C) Copyright 2005-2026, by Christian Soltenborn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -39,8 +39,7 @@ import java.util.*;
  * @author Christian Soltenborn
  * @author Christian Hammer
  */
-public class KosarajuStrongConnectivityInspector<V, E>
-    extends AbstractStrongConnectivityInspector<V, E>
+public class KosarajuStrongConnectivityInspector<V, E> extends AbstractStrongConnectivityInspector<V, E>
 {
     // stores the vertices, ordered by their finishing time in first dfs
     private LinkedList<VertexData<V>> orderedVertices;
@@ -211,8 +210,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
         abstract V getVertex();
     }
 
-    private static final class VertexData1<V>
-        extends VertexData<V>
+    private static final class VertexData1<V> extends VertexData<V>
     {
         private final VertexData<V> finishedData;
 
@@ -235,8 +233,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
         }
     }
 
-    private static final class VertexData2<V>
-        extends VertexData<V>
+    private static final class VertexData2<V> extends VertexData<V>
     {
         private final V vertex;
 

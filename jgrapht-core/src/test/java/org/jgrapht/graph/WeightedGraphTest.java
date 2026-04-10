@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for different edge types on weighted graphs.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class WeightedGraphTest
@@ -108,7 +108,7 @@ public class WeightedGraphTest
         graph1.addVertex(2);
         graph1.addVertex(3);
         String edge1 = "Edge1";
-        graph1.addEdge(1,2, edge1);
+        graph1.addEdge(1, 2, edge1);
 
         DirectedWeightedMultigraph<Integer, String> graph2 =
             (DirectedWeightedMultigraph<Integer, String>) graph1.clone();
@@ -117,6 +117,6 @@ public class WeightedGraphTest
         graph1.setEdgeWeight(edge1, 15.0);
         DirectedWeightedMultigraph<Integer, String> graph3 =
             (DirectedWeightedMultigraph<Integer, String>) graph1.clone();
-        assertEquals(graph1, graph3);        
+        assertEquals(graph1, graph3);
     }
 }

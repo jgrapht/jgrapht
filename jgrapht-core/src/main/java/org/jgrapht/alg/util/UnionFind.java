@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2023, by Tom Conerly and Contributors.
+ * (C) Copyright 2010-2026, by Tom Conerly and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,7 +40,7 @@ public class UnionFind<T>
 
     /**
      * Creates a UnionFind instance with all the elements in separate sets.
-     * 
+     *
      * @param elements the initial elements to include (each element in a singleton set).
      */
     public UnionFind(Set<T> elements)
@@ -156,7 +156,7 @@ public class UnionFind<T>
 
     /**
      * Tests whether two elements are contained in the same set.
-     * 
+     *
      * @param element1 first element
      * @param element2 second element
      * @return true if element1 and element2 are contained in the same set, false otherwise.
@@ -169,7 +169,7 @@ public class UnionFind<T>
     /**
      * Returns the number of sets. Initially, all items are in their own set. The smallest number of
      * sets equals one.
-     * 
+     *
      * @return the number of sets
      */
     public int numberOfSets()
@@ -180,7 +180,7 @@ public class UnionFind<T>
 
     /**
      * Returns the total number of elements in this data structure.
-     * 
+     *
      * @return the total number of elements in this data structure.
      */
     public int size()
@@ -203,7 +203,7 @@ public class UnionFind<T>
     /**
      * Returns a string representation of this data structure. Each component is represented as
      * $\left{v_i:v_1,v_2,v_3,...v_n\right}$, where $v_i$ is the representative of the set.
-     * 
+     *
      * @return string representation of this data structure
      */
     public String toString()
@@ -216,11 +216,12 @@ public class UnionFind<T>
             setRep.get(representative).add(t);
         }
 
-        return setRep
-            .keySet().stream()
+        return setRep.keySet().stream()
             .map(
-                key -> "{" + key + ":" + setRep.get(key).stream().map(Objects::toString).collect(
-                    Collectors.joining(",")) + "}")
+                key -> "{" + key + ":"
+                    + setRep.get(key).stream().map(Objects::toString)
+                        .collect(Collectors.joining(","))
+                    + "}")
             .collect(Collectors.joining(", ", "{", "}"));
     }
 }

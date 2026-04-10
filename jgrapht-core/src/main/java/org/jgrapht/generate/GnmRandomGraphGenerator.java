@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Assaf Lehr, Dimitrios Michail and Contributors.
+ * (C) Copyright 2005-2026, by Assaf Lehr, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,37 +27,36 @@ import java.util.*;
  * Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
- * 
+ *
  * <p>
  * In the $G(n, M)$ model, a graph is chosen uniformly at random from the collection of all graphs
  * which have $n$ nodes and $M$ edges. For example, in the $G(3, 2)$ model, each of the three
  * possible graphs on three vertices and two edges are included with probability $\frac{1}{3}$.
- * 
+ *
  * <p>
  * The implementation creates the vertices and then randomly chooses an edge and tries to add it. If
  * the add fails for any reason (an edge already exists and multiple (parallel) edges are not
  * allowed) it will just choose another and try again. The performance therefore varies
  * significantly based on the probability of successfully constructing an acceptable edge.
- * 
+ *
  * <p>
  * The implementation tries to guess the number of allowed edges based on the following. If
  * self-loops or multiple edges are allowed and requested, the maximum number of edges is
  * {@link Integer#MAX_VALUE}. Otherwise the maximum for undirected graphs with n vertices is
  * $\frac{n(n-1)}{2}$ while for directed $n(n-1)$.
- * 
+ *
  * <p>
  * For the $G(n, p)$ model please see {@link GnpRandomGraphGenerator}.
  *
  * @author Assaf Lehr
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see GnpRandomGraphGenerator
  */
-public class GnmRandomGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class GnmRandomGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ALLOW_LOOPS = false;
     private static final boolean DEFAULT_ALLOW_MULTIPLE_EDGES = false;
@@ -71,7 +70,7 @@ public class GnmRandomGraphGenerator<V, E>
     /**
      * Create a new $G(n, M)$ random graph generator. The generator does not create self-loops or
      * multiple (parallel) edges between the same two vertices.
-     * 
+     *
      * @param n the number of nodes
      * @param m the number of edges
      */
@@ -83,7 +82,7 @@ public class GnmRandomGraphGenerator<V, E>
     /**
      * Create a new $G(n, M)$ random graph generator. The generator does not create self-loops or
      * multiple (parallel) edges between the same two vertices.
-     * 
+     *
      * @param n the number of nodes
      * @param m the number of edges
      * @param seed seed for the random number generator
@@ -95,7 +94,7 @@ public class GnmRandomGraphGenerator<V, E>
 
     /**
      * Create a new $G(n, M)$ random graph generator
-     * 
+     *
      * @param n the number of nodes
      * @param m the number of edges
      * @param seed seed for the random number generator
@@ -110,7 +109,7 @@ public class GnmRandomGraphGenerator<V, E>
 
     /**
      * Create a new $G(n, M)$ random graph generator
-     * 
+     *
      * @param n the number of nodes
      * @param m the number of edges
      * @param rng the random number generator
@@ -135,10 +134,10 @@ public class GnmRandomGraphGenerator<V, E>
 
     /**
      * Generates a random graph based on the $G(n, M)$ model
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
-     * 
+     *
      * @throws IllegalArgumentException if the number of edges, passed in the constructor, cannot be
      *         created on a graph of the concrete type with the specified number of vertices
      * @throws IllegalArgumentException if the graph does not support a requested feature such as
@@ -233,7 +232,7 @@ public class GnmRandomGraphGenerator<V, E>
 
     /**
      * Return the number of allowed edges based on the graph type.
-     * 
+     *
      * @param n number of nodes
      * @param isDirected whether the graph is directed or not
      * @param createLoops if loops are allowed

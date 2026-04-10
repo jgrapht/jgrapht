@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2004-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2004-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -153,8 +153,7 @@ public class CycleDetector<V, E>
      * Exception thrown internally when a cycle is detected during a yes/no cycle test. Must be
      * caught by top-level detection method.
      */
-    private static class CycleDetectedException
-        extends RuntimeException
+    private static class CycleDetectedException extends RuntimeException
     {
         private static final long serialVersionUID = 3834305137802950712L;
     }
@@ -162,8 +161,7 @@ public class CycleDetector<V, E>
     /**
      * Version of DFS which maintains a backtracking path used to probe for cycles.
      */
-    private static class ProbeIterator<V, E>
-        extends DepthFirstIterator<V, E>
+    private static class ProbeIterator<V, E> extends DepthFirstIterator<V, E>
     {
         private List<V> path;
         private Set<V> cycleSet;

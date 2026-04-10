@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2026, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,17 +22,17 @@ import org.jgrapht.*;
 import java.util.*;
 
 /**
- * Implementation of the GraphMapping interface. The performance of {@code  getVertex/EdgeCorrespondence}
- * is based on the performance of the concrete Map class which is passed in the constructor. For example,
- * using {@link HashMap} will provide expected $O(1)$ performance.
+ * Implementation of the GraphMapping interface. The performance of
+ * {@code  getVertex/EdgeCorrespondence} is based on the performance of the concrete Map class which
+ * is passed in the constructor. For example, using {@link HashMap} will provide expected $O(1)$
+ * performance.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Assaf Lehr
  */
-public class DefaultGraphMapping<V, E>
-    implements GraphMapping<V, E>
+public class DefaultGraphMapping<V, E> implements GraphMapping<V, E>
 {
     private Map<V, V> graphMappingForward;
     private Map<V, V> graphMappingReverse;

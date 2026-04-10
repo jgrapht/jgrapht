@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -52,8 +52,7 @@ import java.util.function.*;
  * @see DijkstraManyToManyShortestPaths
  * @see CHManyToManyShortestPaths
  */
-public class DefaultManyToManyShortestPaths<V, E>
-    extends BaseManyToManyShortestPaths<V, E>
+public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E>
 {
 
     /**
@@ -112,8 +111,7 @@ public class DefaultManyToManyShortestPaths<V, E>
      * {@link org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths}.
      * For each pair of source and target vertices stores a corresponding path between them.
      */
-    static class DefaultManyToManyShortestPathsImpl<V, E>
-        extends BaseManyToManyShortestPathsImpl<V, E>
+    static class DefaultManyToManyShortestPathsImpl<V, E> extends BaseManyToManyShortestPathsImpl<V, E>
     {
 
         /**

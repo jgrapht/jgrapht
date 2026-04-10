@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -147,8 +147,8 @@ public abstract class GusfieldTreeAlgorithmsTestBase
     {
         Random rand = new Random(0);
         for (int i = 0; i < 10; i++) {
-            SimpleWeightedGraph<Integer,
-                DefaultWeightedEdge> randomGraph = new SimpleWeightedGraph<>(
+            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
+                new SimpleWeightedGraph<>(
                     SupplierUtil.createIntegerSupplier(),
                     SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             int vertices = rand.nextInt((20 - 10) + 1) + 10; // 10-20 vertices
