@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
     - Added matrix build (Ubuntu, MacOS, Windows) to CI (contributed by Sung Ho Yoon)
     - Tidied up logging in `VF2SubgraphIsomorphismState` (contributed by Albgarsan)
     - Added `FarthestInsertionHeuristicTSP` algorithm (contributed by J. Alejandro Cornejo-Acosta)
+    - Added `GonHeuristic` algorithm in new `alg.centers` package (contributed by J. Alejandro Cornejo-Acosta)
     - Prevent edge weight modification in `AsUnmodifiableGraph` and add tests (contributed by Sung Ho Yoon)
     - Rename `SorensenIndexLinkPrediction` to remove non-ASCII characters (contributed by Feng Wenhan)
     - Fixed backslashing interpretation in `DOTEventDrivenImporter` (contributed by Feng Wenhan)
