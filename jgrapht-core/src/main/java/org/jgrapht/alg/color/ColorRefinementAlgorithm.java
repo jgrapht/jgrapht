@@ -113,7 +113,8 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
      * @param rep the coloring representation
      * @return the list of all colors that have at least one vertex with colorDegree >= 1
      */
-    private Set<Integer> calculateColorDegrees(final int refiningColor, final ColoringRepresentation rep)
+    private Set<Integer> calculateColorDegrees(
+        final int refiningColor, final ColoringRepresentation rep)
     {
         final int n = graph.vertexSet().size();
         final Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
@@ -134,7 +135,7 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
                 inNeighborhood.add(w);
             }
 
-            for (final V w : inNeighborhood){
+            for (final V w : inNeighborhood) {
                 final int newColorDegree = rep.colorDegree.get(w) + 1;
                 rep.colorDegree.put(w, newColorDegree);
                 final int coloring = rep.coloring.get(w);

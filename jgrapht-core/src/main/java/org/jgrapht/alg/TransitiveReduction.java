@@ -174,10 +174,13 @@ public class TransitiveReduction
         // by the reduction.
         for (int i = 0; i < n; i++) {
             // for each index in the original graph
-            for (int j = originalMatrixCopy[i].nextSetBit(0); j >= 0; j = originalMatrixCopy[i].nextSetBit(j + 1)) {
+            for (int j = originalMatrixCopy[i].nextSetBit(0); j >= 0;
+                j = originalMatrixCopy[i].nextSetBit(j + 1))
+            {
                 // if it has been eliminated
                 if (!transitivelyReducedMatrix[i].get(j)) {
-                    directedGraph.removeEdge(directedGraph.getEdge(vertices.get(i), vertices.get(j)));
+                    directedGraph
+                        .removeEdge(directedGraph.getEdge(vertices.get(i), vertices.get(j)));
                 }
             }
         }
