@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.5.3** (Under development)
+- **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
     - Fixed a bug in `DOTExporter` causing graph attributes not to be exported correctly. (contributed by vab2048)
     - Fixed `DoublyLinkedList` for compatibility with Java 21 (reported by Liam Miller-Cushon, contributed by Sung Ho Yoon)
