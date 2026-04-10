@@ -89,7 +89,7 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
 
         // main iteration
         while (!refineStack.isEmpty()) {
-            Integer currentColor = refineStack.pop();
+            int currentColor = refineStack.pop();
 
             Set<Integer> adjacentColors = calculateColorDegrees(currentColor, rep);
 
@@ -113,41 +113,55 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
      * @param rep the coloring representation
      * @return the list of all colors that have at least one vertex with colorDegree >= 1
      */
-    private Set<Integer> calculateColorDegrees(int refiningColor, ColoringRepresentation rep)
+    private Set<Integer> calculateColorDegrees(final int refiningColor, final ColoringRepresentation rep)
     {
-        int n = graph.vertexSet().size();
-        Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
+        final int n = graph.vertexSet().size();
+        final Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
+        // we cache the structure here to optimize perf vs memory traffic
+        // default size of 16 w/ load factor 0.75 is reasonable for most use cases
+        final Set<V> inNeighborhood = new HashSet<>();
 
         // calculate color degree and update maxColorDegree
-        for (V v : rep.colorClasses.get(refiningColor)) {
-            Set<V> inNeighborhood = graph.incomingEdgesOf(v).stream()
-                .map(e -> Graphs.getOppositeVertex(graph, e, v)).collect(Collectors.toSet());
+        for (final V v : rep.colorClasses.get(refiningColor)) {
 
-            for (V w : inNeighborhood) {
-                rep.colorDegree.put(w, rep.colorDegree.get(w) + 1);
-                if (rep.colorDegree.get(w) == 1) {
-                    rep.positiveDegreeColorClasses.get(rep.coloring.get(w)).add(w);
+            final Collection<E> inEdges = graph.incomingEdgesOf(v);
+
+            inNeighborhood.clear();
+            // while the loops could be fused, doing so is slower
+            // likely because this allows keeping the graph in cache
+            for (final E e : inEdges) {
+                final V w = Graphs.getOppositeVertex(graph, e, v);
+                inNeighborhood.add(w);
+            }
+
+            for (final V w : inNeighborhood){
+                final int newColorDegree = rep.colorDegree.get(w) + 1;
+                rep.colorDegree.put(w, newColorDegree);
+                final int coloring = rep.coloring.get(w);
+                if (newColorDegree == 1) {
+                    rep.positiveDegreeColorClasses.get(coloring).add(w);
                 }
-                adjacentColors.add(rep.coloring.get(w));
+                adjacentColors.add(coloring);
 
                 // update maxColorDegree for color(w) if maximum color degree has increased.
-                if (rep.colorDegree.get(w) > rep.maxColorDegree[rep.coloring.get(w)]) {
-                    rep.maxColorDegree[rep.coloring.get(w)] = rep.colorDegree.get(w);
+                if (newColorDegree > rep.maxColorDegree[coloring]) {
+                    rep.maxColorDegree[coloring] = newColorDegree;
                 }
             }
         }
 
         // update minColorDegree
-        for (Integer c : adjacentColors) {
+        for (final int c : adjacentColors) {
             // if there is a vertex with colorDegree(v) = 0 < 1, set minimum color degree to
             // 0
             if (rep.colorClasses.get(c).size() != rep.positiveDegreeColorClasses.get(c).size()) {
                 rep.minColorDegree[c] = 0;
             } else {
                 rep.minColorDegree[c] = rep.maxColorDegree[c];
-                for (V v : rep.positiveDegreeColorClasses.get(c)) {
-                    if (rep.colorDegree.get(v) < rep.minColorDegree[c]) {
-                        rep.minColorDegree[c] = rep.colorDegree.get(v);
+                for (final V v : rep.positiveDegreeColorClasses.get(c)) {
+                    final int colorDegree = rep.colorDegree.get(v);
+                    if (colorDegree < rep.minColorDegree[c]) {
+                        rep.minColorDegree[c] = colorDegree;
                     }
                 }
             }
@@ -272,7 +286,7 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
             }
 
             // ensure the colors lie in in the set {0, ..., maximumColor-1}
-            Integer currentColor = alpha.getColors().get(v);
+            int currentColor = alpha.getColors().get(v);
             if (currentColor + 1 > alpha.getNumberColors() || currentColor < 0) {
                 return false;
             }
