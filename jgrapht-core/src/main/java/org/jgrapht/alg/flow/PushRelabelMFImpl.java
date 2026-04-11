@@ -61,31 +61,18 @@ public class PushRelabelMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     // Diagnostic
     private static final boolean DIAGNOSTIC_ENABLED = false;
 
-    /**
-     * @deprecated use {@link #setUseGlobalRelabelingHeuristic(boolean)} instead
-     */
-    @Deprecated(since = "1.5.2", forRemoval = true)
-    public static boolean USE_GLOBAL_RELABELING_HEURISTIC = true; // @CS.suppress[StaticVariableName]
-    // TODO: make this static field private, rename it to "useGapRelabelingHeuristic" to comply
-    // with checkstyle naming rules and remove the // @CS.supress comment and in jgrapht_checks.xml
-    // the rule SuppressWithNearbyCommentFilter
-    /**
-     * @deprecated use {@link #setUseGapRelabelingHeuristic(boolean)} instead
-     */
-    @Deprecated(since = "1.5.2", forRemoval = true)
-    public static boolean USE_GAP_RELABELING_HEURISTIC = true; // @CS.suppress[StaticVariableName]
-    // TODO: make this static field private, rename it to "useGapRelabelingHeuristic" to comply
-    // with checkstyle naming rules and remove the // @CS.supress comment and in jgrapht_checks.xml
-    // the rule SuppressWithNearbyCommentFilter
+    private boolean useGlobalRelabelingHeuristic = true;
+
+    private boolean useGapRelabelingHeuristic = true;
 
     public static void setUseGlobalRelabelingHeuristic(boolean useGlobalRelabelingHeuristic)
     {
-        USE_GLOBAL_RELABELING_HEURISTIC = useGlobalRelabelingHeuristic;
+        useGlobalRelabelingHeuristic = useGlobalRelabelingHeuristic;
     }
 
     public static void setUseGapRelabelingHeuristic(boolean useGapRelabelingHeuristic)
     {
-        USE_GAP_RELABELING_HEURISTIC = useGapRelabelingHeuristic;
+        useGapRelabelingHeuristic = useGapRelabelingHeuristic;
     }
 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
@@ -203,7 +190,7 @@ public class PushRelabelMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
             push(ex);
         }
 
-        if (USE_GLOBAL_RELABELING_HEURISTIC) {
+        if (useGlobalRelabelingHeuristic) {
             recomputeHeightsHeuristic();
             this.relabelCounter = 0;
         }
@@ -336,7 +323,7 @@ public class PushRelabelMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
 
         countHeight[ux.height]++;
 
-        if (USE_GAP_RELABELING_HEURISTIC) {
+        if (useGapRelabelingHeuristic) {
             /*
              * The gap heuristic detects gaps in the height function. If there is a height 0 < h <
              * |V| for which there is no node u such that u.height = h, then any node v with h <
@@ -419,7 +406,7 @@ public class PushRelabelMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
                 // then we relabel u
                 relabel(ux);
 
-                if (USE_GLOBAL_RELABELING_HEURISTIC) {
+                if (useGlobalRelabelingHeuristic) {
                     // If we already relabeled |V| vertices, then we do a global relabeling
                     // Note: Global relabelings are performed periodically
                     if ((++relabelCounter) == n) {

@@ -186,20 +186,6 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta.
-     *
-     * @param graph the graph
-     * @param delta bucket width
-     * @deprecated replaced with
-     *             {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta)
-    {
-        this(graph, delta, DEFAULT_PARALLELISM);
-    }
-
-    /**
      * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}. It
      * is up to a user of this algorithm to handle the creation and termination of the provided
      * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
@@ -238,39 +224,6 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         Objects.requireNonNull(executor, "executor must not be null!");
         Objects.requireNonNull(executor, "vertexComparator must not be null!");
         init(graph, delta, executor, vertexComparator);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given graph, parallelism.
-     *
-     * @param graph the graph
-     * @param parallelism maximum number of threads used in the computations
-     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism)
-    {
-        this(graph, 0.0, parallelism);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given graph, delta, parallelism. If delta is
-     * $0.0$ it will be computed during the algorithm execution. In general if the value of
-     * $\frac{maximum edge weight}{maximum outdegree}$ is known beforehand, it is preferable to
-     * specify it via this constructor, because processing the whole graph to compute this value may
-     * significantly slow down the algorithm.
-     *
-     * @param graph the graph
-     * @param delta bucket width
-     * @param parallelism maximum number of threads used in the computations
-     * @deprecated replaced with
-     *             {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism)
-    {
-        super(graph);
-        init(graph, delta, ConcurrencyUtil.createThreadPoolExecutor(parallelism), null);
     }
 
     /**

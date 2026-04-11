@@ -37,14 +37,6 @@ public class RatioVertex<V> implements Comparable<RatioVertex<V>>
     /** weight of the vertex **/
     public double weight;
 
-    /**
-     * unique id, used to guarantee that compareTo never returns 0
-     *
-     * @deprecated use {@link #id} instead
-     **/
-    @Deprecated(since = "1.5.2", forRemoval = true)
-    public final int ID; // @CS.suppress[MemberName]
-
     /** unique id, used to guarantee that compareTo never returns 0 **/
     public final int id;
 
@@ -63,7 +55,7 @@ public class RatioVertex<V> implements Comparable<RatioVertex<V>>
      */
     public RatioVertex(int id, V v, double weight)
     {
-        this.id = this.ID = id;
+        this.id = id;
         this.v = v;
         this.weight = weight;
         neighbors = new LinkedHashMap<>();
