@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":42,"i1":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -144,7 +144,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;V&gt;</code></dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">VertexDegreeComparator&lt;V,&#8203;E&gt;</span>
+<pre>public abstract class <span class="typeNameLabel">VertexDegreeComparator&lt;V,&#8203;E&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;V&gt;</pre>
 <div class="block">Compares two vertices based on their degree.
@@ -163,33 +163,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<section>
-<ul class="blockList">
-<li class="blockList"><a id="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="VertexDegreeComparator.Order.html" title="enum in org.jgrapht.alg.util">VertexDegreeComparator.Order</a></span></code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a></div>
-</div>
-</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section>
 <ul class="blockList">
@@ -204,22 +177,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.jgrapht.Graph)">VertexDegreeComparator</a></span>&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>,&#8203;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">E</a>&gt;&nbsp;g)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a></div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.jgrapht.Graph,org.jgrapht.alg.util.VertexDegreeComparator.Order)">VertexDegreeComparator</a></span>&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>,&#8203;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">E</a>&gt;&nbsp;g,
-                      <a href="VertexDegreeComparator.Order.html" title="enum in org.jgrapht.alg.util">VertexDegreeComparator.Order</a>&nbsp;order)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a> for ascending order or
-             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#reversed()" title="class or interface in java.util" class="externalLink"><code>reverse the comparator </code></a> for descending order.</div>
-</div>
-</td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">VertexDegreeComparator</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -233,23 +192,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compare(V,V)">compare</a></span>&#8203;(<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>&nbsp;v1,
-       <a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>&nbsp;v2)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static &lt;V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;V&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(org.jgrapht.Graph)">of</a></span>&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;?&gt;&nbsp;g)</code></th>
 <td class="colLast">
@@ -269,7 +218,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#reversed()" title="class or interface in java.util" class="externalLink">reversed</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparing(java.util.Comparator)" title="class or interface in java.util" class="externalLink">thenComparing</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparing(java.util.function.Function)" title="class or interface in java.util" class="externalLink">thenComparing</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparing(java.util.function.Function,java.util.Comparator)" title="class or interface in java.util" class="externalLink">thenComparing</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparingDouble(java.util.function.ToDoubleFunction)" title="class or interface in java.util" class="externalLink">thenComparingDouble</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparingInt(java.util.function.ToIntFunction)" title="class or interface in java.util" class="externalLink">thenComparingInt</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparingLong(java.util.function.ToLongFunction)" title="class or interface in java.util" class="externalLink">thenComparingLong</a></code></li>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#compare(T,T)" title="class or interface in java.util" class="externalLink">compare</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#reversed()" title="class or interface in java.util" class="externalLink">reversed</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparing(java.util.Comparator)" title="class or interface in java.util" class="externalLink">thenComparing</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparing(java.util.function.Function)" title="class or interface in java.util" class="externalLink">thenComparing</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparing(java.util.function.Function,java.util.Comparator)" title="class or interface in java.util" class="externalLink">thenComparing</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparingDouble(java.util.function.ToDoubleFunction)" title="class or interface in java.util" class="externalLink">thenComparingDouble</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparingInt(java.util.function.ToIntFunction)" title="class or interface in java.util" class="externalLink">thenComparingInt</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#thenComparingLong(java.util.function.ToLongFunction)" title="class or interface in java.util" class="externalLink">thenComparingLong</a></code></li>
 </ul>
 </li>
 </ul>
@@ -287,46 +236,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(org.jgrapht.Graph)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>VertexDegreeComparator</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true,
-            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#since()" title="class or interface in java.lang" class="externalLink">since</a>="1.5.1")
-public&nbsp;VertexDegreeComparator&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>,&#8203;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">E</a>&gt;&nbsp;g)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a></div>
-</div>
-<div class="block">Creates a comparator for comparing the degrees of vertices in the specified graph. The
- comparator compares in ascending order of degrees (lowest first).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>g</code> - graph with respect to which the degree is calculated.</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(org.jgrapht.Graph,org.jgrapht.alg.util.VertexDegreeComparator.Order)">
+<a id="&lt;init&gt;()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VertexDegreeComparator</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true,
-            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#since()" title="class or interface in java.lang" class="externalLink">since</a>="1.5.1")
-public&nbsp;VertexDegreeComparator&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>,&#8203;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">E</a>&gt;&nbsp;g,
-                              <a href="VertexDegreeComparator.Order.html" title="enum in org.jgrapht.alg.util">VertexDegreeComparator.Order</a>&nbsp;order)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a> for ascending order or
-             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#reversed()" title="class or interface in java.util" class="externalLink"><code>reverse the comparator </code></a> for descending order.</div>
-</div>
-<div class="block">Creates a comparator for comparing the degrees of vertices in the specified graph.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>g</code> - graph with respect to which the degree is calculated.</dd>
-<dd><code>order</code> - order in which the vertices are sorted (ascending or descending)</dd>
-</dl>
+<pre>public&nbsp;VertexDegreeComparator()</pre>
 </li>
 </ul>
 </li>
@@ -342,7 +258,7 @@ public&nbsp;VertexDegreeComparator&#8203;(<a href="../../Graph.html" title="inte
 <a id="of(org.jgrapht.Graph)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>of</h4>
 <pre class="methodSignature">public static&nbsp;&lt;V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;V&gt;&nbsp;of&#8203;(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,&#8203;?&gt;&nbsp;g)</pre>
@@ -359,35 +275,6 @@ public&nbsp;VertexDegreeComparator&#8203;(<a href="../../Graph.html" title="inte
 <dd><code>g</code> - graph with respect to which the degree is calculated.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>Comparator</code> to compare vertices by their degree in ascending order</dd>
-</dl>
-</li>
-</ul>
-<a id="compare(java.lang.Object,java.lang.Object)">
-<!--   -->
-</a><a id="compare(V,V)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>compare</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true,
-            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#since()" title="class or interface in java.lang" class="externalLink">since</a>="1.5.1")
-public&nbsp;int&nbsp;compare&#8203;(<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>&nbsp;v1,
-                   <a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>&nbsp;v2)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">use <a href="#of(org.jgrapht.Graph)"><code>of(Graph)</code></a></div>
-</div>
-<div class="block">Compare the degrees of <code>v1</code> and <code>v2</code>, taking into account whether ascending or
- descending order is used.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true#compare(T,T)" title="class or interface in java.util" class="externalLink">compare</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;<a href="VertexDegreeComparator.html" title="type parameter in VertexDegreeComparator">V</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>v1</code> - the first vertex to be compared.</dd>
-<dd><code>v2</code> - the second vertex to be compared.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>-1 if <code>v1</code> comes before <code>v2</code>, +1 if <code>v1</code> comes after <code>v2</code>, 0
-         if equal.</dd>
 </dl>
 </li>
 </ul>
@@ -445,7 +332,7 @@ public&nbsp;int&nbsp;compare&#8203;(<a href="VertexDegreeComparator.html" title=
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
