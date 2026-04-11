@@ -29,7 +29,7 @@
         <url>https://github.com/jgrapht/jgrapht.git</url>
         <connection>scm:git:git://github.com/jgrapht/jgrapht.git</connection>
         <developerConnection>scm:git:git@github.com:jgrapht/jgrapht.git</developerConnection>
-        <tag>jgrapht-1.5.2</tag>
+        <tag>jgrapht-1.5.3</tag>
     </scm>
     <distributionManagement>
         <repository>
