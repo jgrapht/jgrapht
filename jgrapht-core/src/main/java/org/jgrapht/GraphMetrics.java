@@ -301,7 +301,7 @@ public abstract class GraphMetrics
 
         // Fix vertex order for unique comparison of vertices
         Map<V, Integer> vertexOrder =
-            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+            HashMap.newHashMap(graph.vertexSet().size());
         int k = 0;
         for (V v : graph.vertexSet()) {
             vertexOrder.put(v, k++);

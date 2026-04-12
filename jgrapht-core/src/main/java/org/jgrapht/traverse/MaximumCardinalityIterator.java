@@ -82,7 +82,7 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
             GraphTests.requireUndirected(graph);
             buckets = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
             buckets.set(0, new LinkedHashSet<>(graph.vertexSet()));
-            cardinalityMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+            cardinalityMap = HashMap.newHashMap(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 cardinalityMap.put(v, 0);
             }
