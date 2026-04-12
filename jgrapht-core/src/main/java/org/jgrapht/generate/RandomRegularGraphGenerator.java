@@ -168,7 +168,7 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
             int s2 = keys[i];
             for (int j = 0; j < i; j++) {
                 int s1 = keys[j];
-                Map.Entry<Integer, Integer> e = new AbstractMap.SimpleImmutableEntry<>(s1, s2);
+                Map.Entry<Integer, Integer> e = Map.entry(s1, s2);
                 if (!edges.contains(e)) {
                     return true;
                 }
@@ -210,8 +210,7 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
                         s2 = temp;
                     }
 
-                    Map.Entry<Integer, Integer> edge =
-                        new AbstractMap.SimpleImmutableEntry<>(s1, s2);
+                    Map.Entry<Integer, Integer> edge = Map.entry(s1, s2);
                     if (s1 != s2 && !edges.contains(edge)) {
                         edges.add(edge);
                     } else {

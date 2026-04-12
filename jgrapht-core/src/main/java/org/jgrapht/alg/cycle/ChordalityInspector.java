@@ -279,7 +279,7 @@ public class ChordalityInspector<V, E>
         // except for a and b.
         // then it finds a chordless subcycle in linear time and returns it.
 
-        List<V> cycle = new ArrayList<>(Arrays.asList(a, b, c));
+        List<V> cycle = new ArrayList<>(List.of(a, b, c));
         Map<V, Boolean> visited =
             HashMap.newHashMap(graph.vertexSet().size());
         for (V vertex : graph.vertexSet()) {

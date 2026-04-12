@@ -179,7 +179,7 @@ public class JohnsonShortestPaths<V, E> extends BaseShortestPathAlgorithm<V, E>
                 double weight = graph.getEdgeWeight(detectedNegativeEdge);
                 GraphWalk<V, E> cycle = new GraphWalk<>(
                     graph, source, source,
-                    Arrays.asList(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
+                    List.of(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
                 throw new NegativeCycleDetectedException(
                     GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE, cycle);
             }

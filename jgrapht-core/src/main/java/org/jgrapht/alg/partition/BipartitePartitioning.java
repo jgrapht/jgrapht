@@ -121,7 +121,7 @@ public class BipartitePartitioning<V, E> implements PartitioningAlgorithm<V>
         even.removeAll(odd);
 
         computed = true;
-        cachedPartitioning = new PartitioningImpl<>(Arrays.asList(even, odd));
+        cachedPartitioning = new PartitioningImpl<>(List.of(even, odd));
         return cachedPartitioning;
     }
 

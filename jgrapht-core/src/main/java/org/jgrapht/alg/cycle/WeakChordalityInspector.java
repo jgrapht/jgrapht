@@ -618,7 +618,7 @@ public class WeakChordalityInspector<V, E>
     private List<V> findCycle(
         Set<V> visited, Graph<V, E> graph, V tarInSep, V tar, V sour, V sourInSep)
     {
-        List<V> cycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
+        List<V> cycle = new ArrayList<>(List.of(tarInSep, tar, sour));
         Deque<V> stack = new ArrayDeque<>();
         stack.add(sourInSep);
 
@@ -669,7 +669,7 @@ public class WeakChordalityInspector<V, E>
     private List<V> minimizeCycle(
         Graph<V, E> graph, List<V> cycle, V tar, V tarInSep, V sour, V sourInSep)
     {
-        List<V> minimizedCycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
+        List<V> minimizedCycle = new ArrayList<>(List.of(tarInSep, tar, sour));
         Set<V> forwardVertices = new HashSet<>(cycle);
         forwardVertices.remove(tar);
         forwardVertices.remove(sour);

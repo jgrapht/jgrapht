@@ -148,7 +148,7 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
         Map<V, List<GraphPath<V, E>>> paths = new HashMap<>();
         for (V sink : graph.vertexSet()) {
             if (sink.equals(source)) {
-                paths.put(sink, Arrays.asList(createEmptyPath(source, sink)));
+                paths.put(sink, List.of(createEmptyPath(source, sink)));
             } else {
                 paths.put(sink, nodeLabels.get(sink).stream().map(l -> {
                     double weight = 0d;

@@ -413,7 +413,7 @@ public abstract class GraphTests
     {
         return new BipartitePartitioning<>(graph).isValidPartitioning(
             new PartitioningAlgorithm.PartitioningImpl<>(
-                Arrays.asList((Set<V>) firstPartition, (Set<V>) secondPartition)));
+                List.of((Set<V>) firstPartition, (Set<V>) secondPartition)));
     }
 
     /**

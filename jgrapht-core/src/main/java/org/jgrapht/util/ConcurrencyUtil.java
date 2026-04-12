@@ -19,6 +19,7 @@ package org.jgrapht.util;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,9 @@ public class ConcurrencyUtil
      */
     public static ThreadPoolExecutor createThreadPoolExecutor(int parallelism)
     {
-        return (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelism);
+        ThreadFactory factory =
+            Thread.ofPlatform().name("jgrapht-worker-", 0).daemon(true).factory();
+        return (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelism, factory);
     }
 
     /**
