@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Hannes Wellmann and Contributors.
+ * (C) Copyright 2020-2026, by Hannes Wellmann and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -103,7 +103,8 @@ public class NearestNeighborHeuristicTSPTest
 
     @Test
     public void testConstructorWithRandomNumberGenerator()
-        throws URISyntaxException, IOException
+        throws URISyntaxException,
+        IOException
     {
         int randomSeed = 0;
         int tours = graph.vertexSet().size();

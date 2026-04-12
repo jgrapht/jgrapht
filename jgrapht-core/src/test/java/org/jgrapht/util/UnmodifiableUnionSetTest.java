@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link UnmodifiableUnionSet}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class UnmodifiableUnionSetTest
@@ -89,12 +89,12 @@ public class UnmodifiableUnionSetTest
             Set.of(1, 2, 3, 4, 5), Set.of(6, 7, 8, 9, 10, 11, 12, 13, 14, 15));
         assertEquals(15, union.size());
 
-        List<Integer> collectedElementsAsList = StreamSupport
-            .stream(union.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
+        List<Integer> collectedElementsAsList = StreamSupport.stream(union.spliterator(), false)
+            .collect(Collectors.toCollection(ArrayList::new));
         assertEquals(15, collectedElementsAsList.size());
 
-        Set<Integer> collectedElementsAsSet = StreamSupport
-            .stream(union.spliterator(), false).collect(Collectors.toCollection(HashSet::new));
+        Set<Integer> collectedElementsAsSet = StreamSupport.stream(union.spliterator(), false)
+            .collect(Collectors.toCollection(HashSet::new));
         assertEquals(15, collectedElementsAsSet.size());
 
         IntStream.rangeClosed(1, 15).forEach(x -> assertTrue(collectedElementsAsList.contains(x)));
@@ -108,12 +108,12 @@ public class UnmodifiableUnionSetTest
             new UnmodifiableUnionSet<>(Set.of(1, 2, 3, 4, 5), Set.of(3, 4, 5, 6, 7, 8, 9, 10));
         assertEquals(10, union.size());
 
-        List<Integer> collectedElementsAsList = StreamSupport
-            .stream(union.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
+        List<Integer> collectedElementsAsList = StreamSupport.stream(union.spliterator(), false)
+            .collect(Collectors.toCollection(ArrayList::new));
         assertEquals(10, collectedElementsAsList.size());
 
-        Set<Integer> collectedElementsAsSet = StreamSupport
-            .stream(union.spliterator(), false).collect(Collectors.toCollection(HashSet::new));
+        Set<Integer> collectedElementsAsSet = StreamSupport.stream(union.spliterator(), false)
+            .collect(Collectors.toCollection(HashSet::new));
         assertEquals(10, collectedElementsAsSet.size());
 
         IntStream.rangeClosed(1, 10).forEach(x -> assertTrue(collectedElementsAsList.contains(x)));
@@ -225,8 +225,7 @@ public class UnmodifiableUnionSetTest
     /**
      * Set wrapper for counting calls to individual methods.
      */
-    private static class ProfilingSet<E>
-        extends AbstractSet<E>
+    private static class ProfilingSet<E> extends AbstractSet<E>
     {
         private Set<E> delegate;
 

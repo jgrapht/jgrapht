@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,7 +25,6 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 import org.jgrapht.util.CollectionUtil;
-import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
@@ -268,8 +267,8 @@ class TransitNodeRoutingPrecomputation<V, E>
         fillContractionVerticesList();
 
         contractedTransitVerticesSet = selectTopKTransitVertices(numberOfTransitVertices);
-        transitVerticesSet = contractedTransitVerticesSet
-            .stream().map(v -> v.vertex).collect(Collectors.toCollection(HashSet::new));
+        transitVerticesSet = contractedTransitVerticesSet.stream().map(v -> v.vertex)
+            .collect(Collectors.toCollection(HashSet::new));
         transitVerticesList = new ArrayList<>(transitVerticesSet);
 
         VoronoiDiagramComputation voronoiDiagramComputation = new VoronoiDiagramComputation();
@@ -406,8 +405,7 @@ class TransitNodeRoutingPrecomputation<V, E>
         /**
          * For every vertex added to the {@code heap} stores a corresponding handle.
          */
-        private Map<ContractionVertex<V>,
-            AddressableHeap.Handle<Double, ContractionVertex<V>>> seen;
+        private Map<ContractionVertex<V>, AddressableHeap.Handle<Double, ContractionVertex<V>>> seen;
 
         /**
          * For every vertex stores an id of a corresponding Voronoi cell center.
@@ -691,8 +689,7 @@ class TransitNodeRoutingPrecomputation<V, E>
                         if (!v1.equals(v2) && !result.contains(v2)) {
                             if (forwardAccessVertices) {
                                 if (manyToManyShortestPaths.getWeight(v, v1) + transitVerticesPaths
-                                    .getWeight(v1, v2) <= manyToManyShortestPaths
-                                        .getWeight(v, v2))
+                                    .getWeight(v1, v2) <= manyToManyShortestPaths.getWeight(v, v2))
                                 {
                                     result.add(v2);
                                 }
@@ -1163,8 +1160,7 @@ class TransitNodeRoutingPrecomputation<V, E>
     /**
      * Task which is used to perform {@code ContractionHierarchyBFS} in parallel.
      */
-    private class AVAndLFConstructionTask
-        implements Runnable
+    private class AVAndLFConstructionTask implements Runnable
     {
         /**
          * Id of this task.
@@ -1234,8 +1230,7 @@ class TransitNodeRoutingPrecomputation<V, E>
     /**
      * Task which is used to unpack contracted many-to-many shortest paths between transit vertices.
      */
-    private class PathsUnpackingTask
-        implements Runnable
+    private class PathsUnpackingTask implements Runnable
     {
         /**
          * Id of this task.

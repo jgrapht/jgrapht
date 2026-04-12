@@ -5,14 +5,9 @@
     <artifactId>jgrapht</artifactId>
     <packaging>pom</packaging>
     <name>JGraphT - Parent</name>
-    <version>1.5.3-SNAPSHOT</version>
+    <version>1.6.0-SNAPSHOT</version>
     <description>A Java class library for graph-theory data structures and algorithms.</description>
     <url>http://www.jgrapht.org</url>
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
     <licenses>
         <license>
             <name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -29,8 +24,15 @@
         <url>https://github.com/jgrapht/jgrapht.git</url>
         <connection>scm:git:git://github.com/jgrapht/jgrapht.git</connection>
         <developerConnection>scm:git:git@github.com:jgrapht/jgrapht.git</developerConnection>
-        <tag>jgrapht-1.5.2</tag>
+        <tag>jgrapht-1.5.3</tag>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>ossrh-staging-api</name>
+            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     <issueManagement>
         <url>https://github.com/jgrapht/jgrapht/issues</url>
     </issueManagement>
@@ -66,27 +68,29 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
         <apfloat.version>1.14.0</apfloat.version>
-        <checkstyle.version>10.26.1</checkstyle.version>
+        <checkstyle.version>13.4.0</checkstyle.version>
         <commons-text.version>1.14.0</commons-text.version>
         <dsiutils.version>2.7.4</dsiutils.version>
-        <fastutil.version>8.5.16</fastutil.version>
+        <fastutil.version>8.5.18</fastutil.version>
         <guava.version>33.3.1-jre</guava.version>
-        <hamcrest.version>2.2</hamcrest.version>
-        <java.version>11</java.version>
+        <hamcrest.version>3.0</hamcrest.version>
+        <java.version>21</java.version>
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
         <jmh.version>1.37</jmh.version>
         <junit.version>6.0.3</junit.version>
         <junit.platform.version>1.10.1</junit.platform.version>
+        <junit.version>6.0.0</junit.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
-        <maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
+        <maven-bundle-plugin.version>6.0.2</maven-bundle-plugin.version>
+        <maven-formatter-plugin.version>2.29.0</maven-formatter-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-shade-plugin.version>3.6.1</maven-shade-plugin.version>
@@ -220,7 +224,7 @@
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-suite</artifactId>
-                <version>${junit.platform.version}</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -241,10 +245,6 @@
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <release>${java.version}</release>
-                        <compilerArgs>
-                            <arg>--add-modules</arg>
-                                <arg>java.xml</arg>
-                        </compilerArgs>
                     </configuration>
                     <executions>
                         <execution>
@@ -423,6 +423,27 @@
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <version>${maven-formatter-plugin.version}</version>
+                    <configuration>
+                        <compilerSource>${java.version}</compilerSource>
+                        <compilerCompliance>${java.version}</compilerCompliance>
+                        <compilerTarget>${java.version}</compilerTarget>
+                        <configFile>${main.basedir}/etc/eclipse-formatter-settings.xml</configFile>
+                        <includes>
+                            <include>**/*.java</include>
+                        </includes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.google.code.maven-replacer-plugin</groupId>

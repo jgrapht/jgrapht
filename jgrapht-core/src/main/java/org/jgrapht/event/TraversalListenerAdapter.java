@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,14 +20,13 @@ package org.jgrapht.event;
 /**
  * An empty do-nothing implementation of the {@link TraversalListener} interface used for
  * subclasses.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  */
-public class TraversalListenerAdapter<V, E>
-    implements TraversalListener<V, E>
+public class TraversalListenerAdapter<V, E> implements TraversalListener<V, E>
 {
     /**
      * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)

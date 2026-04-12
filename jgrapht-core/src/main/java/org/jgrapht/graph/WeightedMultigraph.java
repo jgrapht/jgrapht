@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,12 +28,11 @@ import java.util.function.*;
  * weighted multigraph have weights. If you're unsure about multigraphs, see:
  * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class WeightedMultigraph<V, E>
-    extends Multigraph<V, E>
+public class WeightedMultigraph<V, E> extends Multigraph<V, E>
 {
     private static final long serialVersionUID = -6009321659287373874L;
 
@@ -49,7 +48,7 @@ public class WeightedMultigraph<V, E>
 
     /**
      * Creates a new graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      */
@@ -60,7 +59,7 @@ public class WeightedMultigraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -74,7 +73,7 @@ public class WeightedMultigraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type

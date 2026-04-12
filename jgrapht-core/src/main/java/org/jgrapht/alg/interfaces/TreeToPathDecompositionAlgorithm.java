@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -50,7 +50,7 @@ public interface TreeToPathDecompositionAlgorithm<V, E>
     {
         /**
          * Set of edges of the path decomposition.
-         * 
+         *
          * @return edge set of the path decomposition
          */
         Set<E> getEdges();
@@ -77,8 +77,7 @@ public interface TreeToPathDecompositionAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class PathDecompositionImpl<V, E>
-        implements PathDecomposition<V, E>, Serializable
+    class PathDecompositionImpl<V, E> implements PathDecomposition<V, E>, Serializable
     {
 
         private static final long serialVersionUID = 8468626434814461297L;
@@ -97,8 +96,8 @@ public interface TreeToPathDecompositionAlgorithm<V, E>
             this.edges = edges;
 
             Set<GraphPath<V, E>> arrayUnenforcedSet =
-                paths.stream().map(path -> new GraphWalk<>(graph, path, path.size())).collect(
-                    Collectors.toCollection(ArrayUnenforcedSet::new));
+                paths.stream().map(path -> new GraphWalk<>(graph, path, path.size()))
+                    .collect(Collectors.toCollection(ArrayUnenforcedSet::new));
 
             this.paths = Collections.unmodifiableSet(arrayUnenforcedSet);
         }

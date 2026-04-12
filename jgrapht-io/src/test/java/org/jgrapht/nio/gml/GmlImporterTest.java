@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -162,9 +162,8 @@ public class GmlImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g;
-        g = GraphTypeBuilder
-            .directed().weighted(false).allowingSelfLoops(true).allowingMultipleEdges(true)
-            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+        g = GraphTypeBuilder.directed().weighted(false).allowingSelfLoops(true)
+            .allowingMultipleEdges(true).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
             .vertexSupplier(SupplierUtil.createStringSupplier(1)).buildGraph();
 
         GmlImporter<String, DefaultEdge> importer = new GmlImporter<>();
@@ -467,7 +466,9 @@ public class GmlImporterTest
 
     @Test
     public void testExportImport()
-        throws ImportException, ExportException, UnsupportedEncodingException
+        throws ImportException,
+        ExportException,
+        UnsupportedEncodingException
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
@@ -932,15 +933,13 @@ public class GmlImporterTest
         Graph<String, E> g;
 
         if (directed) {
-            g = GraphTypeBuilder
-                .directed().weighted(weighted).allowingSelfLoops(true).allowingMultipleEdges(true)
-                .edgeClass(edgeClass).vertexSupplier(SupplierUtil.createStringSupplier(1))
-                .buildGraph();
+            g = GraphTypeBuilder.directed().weighted(weighted).allowingSelfLoops(true)
+                .allowingMultipleEdges(true).edgeClass(edgeClass)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1)).buildGraph();
         } else {
-            g = GraphTypeBuilder
-                .undirected().weighted(weighted).allowingSelfLoops(true).allowingMultipleEdges(true)
-                .edgeClass(edgeClass).vertexSupplier(SupplierUtil.createStringSupplier(1))
-                .buildGraph();
+            g = GraphTypeBuilder.undirected().weighted(weighted).allowingSelfLoops(true)
+                .allowingMultipleEdges(true).edgeClass(edgeClass)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1)).buildGraph();
         }
 
         GmlImporter<String, E> importer = new GmlImporter<>();

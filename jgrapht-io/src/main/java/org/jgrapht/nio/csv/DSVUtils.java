@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,7 +19,7 @@ package org.jgrapht.nio.csv;
 
 /**
  * Helper utilities for escaping and unescaping Delimiter-separated values.
- * 
+ *
  * @author Dimitrios Michail
  */
 class DSVUtils
@@ -31,7 +31,7 @@ class DSVUtils
 
     /**
      * Test if a character can be used as a delimiter in a Delimiter-separated values file.
-     * 
+     *
      * @param delimiter the character to test
      * @return {@code true} if the character can be used as a delimiter, {@code} false otherwise
      */
@@ -42,7 +42,7 @@ class DSVUtils
 
     /**
      * Escape a Delimiter-separated values string.
-     * 
+     *
      * @param input the input
      * @param delimiter the delimiter
      * @return the escaped output
@@ -70,7 +70,7 @@ class DSVUtils
 
     /**
      * Unescape a Delimiter-separated values string.
-     * 
+     *
      * @param input the input
      * @param delimiter the delimiter
      * @return the unescaped output

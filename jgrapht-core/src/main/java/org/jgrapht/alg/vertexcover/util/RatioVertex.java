@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,22 +29,13 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class RatioVertex<V>
-    implements Comparable<RatioVertex<V>>
+public class RatioVertex<V> implements Comparable<RatioVertex<V>>
 {
     /** original vertex **/
     public final V v;
 
     /** weight of the vertex **/
     public double weight;
-
-    /**
-     * unique id, used to guarantee that compareTo never returns 0
-     * 
-     * @deprecated use {@link #id} instead
-     **/
-    @Deprecated(since = "1.5.2", forRemoval = true)
-    public final int ID; // @CS.suppress[MemberName]
 
     /** unique id, used to guarantee that compareTo never returns 0 **/
     public final int id;
@@ -57,14 +48,14 @@ public class RatioVertex<V>
 
     /**
      * Create a new ratio vertex
-     * 
+     *
      * @param id unique id
      * @param v the vertex
      * @param weight the vertex weight
      */
     public RatioVertex(int id, V v, double weight)
     {
-        this.id = this.ID = id;
+        this.id = id;
         this.v = v;
         this.weight = weight;
         neighbors = new LinkedHashMap<>();
@@ -72,7 +63,7 @@ public class RatioVertex<V>
 
     /**
      * Add a neighbor.
-     * 
+     *
      * @param v the neighbor
      */
     public void addNeighbor(RatioVertex<V> v)
@@ -88,7 +79,7 @@ public class RatioVertex<V>
 
     /**
      * Remove a neighbor.
-     * 
+     *
      * @param v the neighbor to remove
      */
     public void removeNeighbor(RatioVertex<V> v)
@@ -99,7 +90,7 @@ public class RatioVertex<V>
 
     /**
      * Returns the degree of the vertex
-     * 
+     *
      * @return degree of the vertex
      */
     public int getDegree()
@@ -109,7 +100,7 @@ public class RatioVertex<V>
 
     /**
      * Returns the ratio between the vertex' weight and its degree
-     * 
+     *
      * @return the ratio between the vertex' weight and its degree
      */
     public double getRatio()

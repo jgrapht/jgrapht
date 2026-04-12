@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,20 +23,19 @@ import java.util.function.*;
 
 /**
  * A layout model wrapper which adds support for listeners.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
  */
-public class ListenableLayoutModel2D<V>
-    implements LayoutModel2D<V>
+public class ListenableLayoutModel2D<V> implements LayoutModel2D<V>
 {
     protected LayoutModel2D<V> model;
     protected List<BiConsumer<V, Point2D>> listeners;
 
     /**
      * Create a new model
-     * 
+     *
      * @param model the underlying layout model
      */
     public ListenableLayoutModel2D(LayoutModel2D<V> model)
@@ -95,7 +94,7 @@ public class ListenableLayoutModel2D<V>
 
     /**
      * Add a new listener.
-     * 
+     *
      * @param listener the listener to add
      * @return the newly added listener
      */
@@ -107,7 +106,7 @@ public class ListenableLayoutModel2D<V>
 
     /**
      * Remove a listener.
-     * 
+     *
      * @param listener the listener to remove
      * @return true if the listener was removed, false otherwise
      */
@@ -118,7 +117,7 @@ public class ListenableLayoutModel2D<V>
 
     /**
      * Notify all registered listeners.
-     * 
+     *
      * @param vertex the vertex
      * @param point the vertex location
      */

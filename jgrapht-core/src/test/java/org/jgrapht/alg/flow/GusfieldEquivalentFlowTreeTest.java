@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Joris Kinable
  */
-public class GusfieldEquivalentFlowTreeTest
-    extends GusfieldTreeAlgorithmsTestBase
+public class GusfieldEquivalentFlowTreeTest extends GusfieldTreeAlgorithmsTestBase
 {
     @Override
     public void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network)
@@ -51,8 +50,8 @@ public class GusfieldEquivalentFlowTreeTest
         StoerWagnerMinimumCut<Integer, DefaultWeightedEdge> minimumCutAlg =
             new StoerWagnerMinimumCut<>(network);
         double expectedMinimumCut = minimumCutAlg.minCutWeight();
-        double cheapestEdge = equivalentFlowTree
-            .edgeSet().stream().mapToDouble(equivalentFlowTree::getEdgeWeight).min().getAsDouble();
+        double cheapestEdge = equivalentFlowTree.edgeSet().stream()
+            .mapToDouble(equivalentFlowTree::getEdgeWeight).min().getAsDouble();
         assertEquals(expectedMinimumCut, cheapestEdge, 0);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm =
@@ -72,9 +71,9 @@ public class GusfieldEquivalentFlowTreeTest
                 // i-j cut
                 List<DefaultWeightedEdge> pathEdges =
                     DijkstraShortestPath.findPathBetween(equivalentFlowTree, i, j).getEdgeList();
-                DefaultWeightedEdge cheapestEdgeInPath = pathEdges
-                    .stream().min(Comparator.comparing(equivalentFlowTree::getEdgeWeight))
-                    .orElseThrow(() -> new RuntimeException("path is empty?!"));
+                DefaultWeightedEdge cheapestEdgeInPath =
+                    pathEdges.stream().min(Comparator.comparing(equivalentFlowTree::getEdgeWeight))
+                        .orElseThrow(() -> new RuntimeException("path is empty?!"));
                 assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath), 0);
             }
         }

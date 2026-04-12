@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,9 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Joris Kinable
  */
-public abstract class WeightedVertexCoverExactTest
-    extends VertexCoverExactTest
-    implements WeightedVertexCoverTest
+public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest implements WeightedVertexCoverTest
 {
 
     // ------- Exact algorithms ------

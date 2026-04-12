@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -241,9 +241,9 @@ public class ContractionHierarchyPrecomputation<V, E>
         ThreadPoolExecutor executor)
     {
         this.graph = graph;
-        this.contractionGraph = GraphTypeBuilder
-            .<ContractionVertex<V>, ContractionEdge<E>> directed().weighted(true)
-            .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
+        this.contractionGraph =
+            GraphTypeBuilder.<ContractionVertex<V>, ContractionEdge<E>> directed().weighted(true)
+                .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
         this.parallelism = executor.getMaximumPoolSize();
         this.shortcutsSearchHeapSupplier = shortcutsSearchHeapSupplier;
 
@@ -500,8 +500,8 @@ public class ContractionHierarchyPrecomputation<V, E>
      */
     private void contractIndependentSet(int independentSetStart, int independentSetEnd)
     {
-        vertices.subList(independentSetStart, independentSetEnd).forEach(
-            v -> contractVertex(v, contractionLevelCounter.getAndIncrement()));
+        vertices.subList(independentSetStart, independentSetEnd)
+            .forEach(v -> contractVertex(v, contractionLevelCounter.getAndIncrement()));
     }
 
     /**
@@ -673,11 +673,10 @@ public class ContractionHierarchyPrecomputation<V, E>
             boolean containedPredecessor = successors.remove(predecessor); // might contain the
                                                                            // predecessor vertex
 
-            Map<ContractionVertex<V>,
-                AddressableHeap.Handle<Double, ContractionVertex<V>>> distances =
-                    iterateToSuccessors(
-                        maskedContractionGraph, predecessor, successors, vertex,
-                        contractionGraph.getEdgeWeight(inEdge) + maxOutgoingEdgeWeight);
+            Map<ContractionVertex<V>, AddressableHeap.Handle<Double, ContractionVertex<V>>> distances =
+                iterateToSuccessors(
+                    maskedContractionGraph, predecessor, successors, vertex,
+                    contractionGraph.getEdgeWeight(inEdge) + maxOutgoingEdgeWeight);
 
             for (ContractionVertex<V> successor : successors) {
                 ContractionEdge<E> outEdge = contractionGraph.getEdge(vertex, successor);
@@ -716,15 +715,13 @@ public class ContractionHierarchyPrecomputation<V, E>
      * @param radius search distance limit
      * @return computed distances for reached vertices
      */
-    private Map<ContractionVertex<V>,
-        AddressableHeap.Handle<Double, ContractionVertex<V>>> iterateToSuccessors(
-            Graph<ContractionVertex<V>, ContractionEdge<E>> graph, ContractionVertex<V> source,
-            Set<ContractionVertex<V>> successors, ContractionVertex<V> vertexToIgnore,
-            double radius)
+    private Map<ContractionVertex<V>, AddressableHeap.Handle<Double, ContractionVertex<V>>> iterateToSuccessors(
+        Graph<ContractionVertex<V>, ContractionEdge<E>> graph, ContractionVertex<V> source,
+        Set<ContractionVertex<V>> successors, ContractionVertex<V> vertexToIgnore, double radius)
     {
         AddressableHeap<Double, ContractionVertex<V>> heap = shortcutsSearchHeapSupplier.get();
-        Map<ContractionVertex<V>,
-            AddressableHeap.Handle<Double, ContractionVertex<V>>> distanceMap = new HashMap<>();
+        Map<ContractionVertex<V>, AddressableHeap.Handle<Double, ContractionVertex<V>>> distanceMap =
+            new HashMap<>();
 
         updateDistance(source, 0.0, heap, distanceMap);
 
@@ -1104,8 +1101,7 @@ public class ContractionHierarchyPrecomputation<V, E>
     /**
      * Caches passed shortcuts into a list.
      */
-    private class ToListConsumer
-        implements BiConsumer<ContractionEdge<E>, ContractionEdge<E>>
+    private class ToListConsumer implements BiConsumer<ContractionEdge<E>, ContractionEdge<E>>
     {
         /**
          * Resulting list of shortcuts.
@@ -1132,8 +1128,7 @@ public class ContractionHierarchyPrecomputation<V, E>
      * statistics. This consumer is used to run $\textit{simulative}$ contraction - a type of
      * contraction used to compute only the vertex priority.
      */
-    private class ToStatisticsConsumer
-        implements BiConsumer<ContractionEdge<E>, ContractionEdge<E>>
+    private class ToStatisticsConsumer implements BiConsumer<ContractionEdge<E>, ContractionEdge<E>>
     {
         /**
          * Resulting statistics instance.
@@ -1161,8 +1156,7 @@ public class ContractionHierarchyPrecomputation<V, E>
      * updating neighbours priorities and marking upward edges. To achieve good load balancing
      * segment of vertices in {@code vertices} is divided into chunks using {@code taskId}.
      */
-    private class ContractionTask
-        implements Runnable
+    private class ContractionTask implements Runnable
     {
         /**
          * Id of this task.

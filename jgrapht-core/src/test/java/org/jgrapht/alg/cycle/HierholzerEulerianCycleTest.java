@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for class {@link HierholzerEulerianCycle}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class HierholzerEulerianCycleTest
@@ -409,8 +409,8 @@ public class HierholzerEulerianCycleTest
             }
             List<DefaultEdge> edges = new ArrayList<>(g.edgeSet());
             for (DefaultEdge e : edges) {
-                IntStream.rangeClosed(0, 2 * rng.nextInt(10)).forEach(
-                    i -> g.addEdge(g.getEdgeSource(e), g.getEdgeTarget(e)));
+                IntStream.rangeClosed(0, 2 * rng.nextInt(10))
+                    .forEach(i -> g.addEdge(g.getEdgeSource(e), g.getEdgeTarget(e)));
             }
 
             GraphPath<Integer, DefaultEdge> cycle =

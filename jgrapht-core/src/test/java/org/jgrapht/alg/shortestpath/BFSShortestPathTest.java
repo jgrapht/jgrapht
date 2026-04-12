@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Karri Sai Satish Kumar Reddy and Contributors.
+ * (C) Copyright 2018-2026, by Karri Sai Satish Kumar Reddy and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -54,8 +54,7 @@ import java.util.function.*;
  * @author Thomas Breitbart
  * @see AStarShortestPath
  */
-public class BidirectionalAStarShortestPath<V, E>
-    extends BaseBidirectionalShortestPathAlgorithm<V, E>
+public class BidirectionalAStarShortestPath<V, E> extends BaseBidirectionalShortestPathAlgorithm<V, E>
 {
     /**
      * Heuristic used for forward search.
@@ -206,8 +205,7 @@ public class BidirectionalAStarShortestPath<V, E>
     /**
      * Maintains search frontier during shortest path computation.
      */
-    class AStarSearchFrontier
-        extends BaseSearchFrontier<V, E>
+    class AStarSearchFrontier extends BaseSearchFrontier<V, E>
     {
         /**
          * End vertex of the frontier.
@@ -296,8 +294,7 @@ public class BidirectionalAStarShortestPath<V, E>
     /**
      * Helper class for backward search, since it should operate on the reversed graph.
      */
-    class ReversedGraphHeuristic
-        implements AStarAdmissibleHeuristic<V>
+    class ReversedGraphHeuristic implements AStarAdmissibleHeuristic<V>
     {
 
         private final AStarAdmissibleHeuristic<V> heuristic;
@@ -340,8 +337,7 @@ public class BidirectionalAStarShortestPath<V, E>
     /**
      * Termination criterion for the consistent heuristics.
      */
-    class ConsistentTerminationCriterion
-        extends TerminationCriterion
+    class ConsistentTerminationCriterion extends TerminationCriterion
     {
         final double sourceTargetEstimate;
 
@@ -364,8 +360,7 @@ public class BidirectionalAStarShortestPath<V, E>
     /**
      * Termination criterion for the inconsistent heuristics.
      */
-    class InconsistentTerminationCriterion
-        extends TerminationCriterion
+    class InconsistentTerminationCriterion extends TerminationCriterion
     {
         InconsistentTerminationCriterion(AStarSearchFrontier forward, AStarSearchFrontier backward)
         {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -58,8 +58,7 @@ import java.util.function.*;
  * @author Semen Chudakov
  * @see PathValidator
  */
-public class YenShortestPathIterator<V, E>
-    implements Iterator<GraphPath<V, E>>
+public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>>
 {
     /**
      * Underlying graph.
@@ -273,10 +272,9 @@ public class YenShortestPathIterator<V, E>
         double partialPathWeight = 0.0;
         int firstDeviationIndex = vertices.indexOf(firstDeviation);
         for (int i = firstDeviationIndex; i < edges.size(); ++i) {
-            GraphPath<V,
-                E> partialPath = new GraphWalk<>(
-                    path.getGraph(), path.getStartVertex(), vertices.get(i),
-                    vertices.subList(0, i + 1), edges.subList(0, i), partialPathWeight);
+            GraphPath<V, E> partialPath = new GraphWalk<>(
+                path.getGraph(), path.getStartVertex(), vertices.get(i), vertices.subList(0, i + 1),
+                edges.subList(0, i), partialPathWeight);
             E edge = edges.get(i);
             boolean isValid = pathValidator.isValidPath(partialPath, edge);
             if (!isValid) {
@@ -545,9 +543,9 @@ public class YenShortestPathIterator<V, E>
      * Helper class which represents the shortest paths tree using which the spur parts are computed
      * and appended to the candidate paths
      */
-    class YenShortestPathsTree
-        extends TreeSingleSourcePathsImpl<V, E>
+    class YenShortestPathsTree extends TreeSingleSourcePathsImpl<V, E>
     {
+        private static final long serialVersionUID = -6377037876112951123L;
         /**
          * Vertices which are masked in the {@code g}.
          */

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,9 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Joris Kinable
  */
-public abstract class WeightedVertexCoverTwoApproxTest
-    extends VertexCoverTwoApproxTest
-    implements WeightedVertexCoverTest
+public abstract class WeightedVertexCoverTwoApproxTest extends VertexCoverTwoApproxTest implements WeightedVertexCoverTest
 {
 
     // ------- Approximation algorithms ------
@@ -55,7 +53,6 @@ public abstract class WeightedVertexCoverTwoApproxTest
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
         assertTrue(isCover(g, vertexCover));
         assertEquals(
-            vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
-            0);
+            vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(), 0);
     }
 }

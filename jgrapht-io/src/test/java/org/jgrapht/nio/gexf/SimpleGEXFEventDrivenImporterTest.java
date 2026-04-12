@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGEXFEventDrivenImporterTest
@@ -41,7 +41,7 @@ public class SimpleGEXFEventDrivenImporterTest
     public void testUndirectedUnweighted()
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -49,16 +49,16 @@ public class SimpleGEXFEventDrivenImporterTest
             + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
@@ -86,7 +86,7 @@ public class SimpleGEXFEventDrivenImporterTest
     public void testWithAttributesWeightedGraphs()
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -94,16 +94,16 @@ public class SimpleGEXFEventDrivenImporterTest
             + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"n0\" label=\"node 0\"/>" + NL 
+            + "      <node id=\"n0\" label=\"node 0\"/>" + NL
             + "      <node id=\"n1\" label=\"node 1\"/>" + NL
-            + "      <node id=\"n2\" label=\"node 2\"/>" + NL 
+            + "      <node id=\"n2\" label=\"node 2\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"e0\" source=\"n0\" target=\"n2\" weight=\"2.0\" />" + NL            
+            + "      <edge id=\"e0\" source=\"n0\" target=\"n2\" weight=\"2.0\" />" + NL
             + "      <edge id=\"e1\" source=\"n0\" target=\"n1\" weight=\"3.0\" />" + NL
             + "      <edge id=\"e2\" source=\"n1\" target=\"n2\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
         SimpleGEXFEventDrivenImporter importer = new SimpleGEXFEventDrivenImporter();

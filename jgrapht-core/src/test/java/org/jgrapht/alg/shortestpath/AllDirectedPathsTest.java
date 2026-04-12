@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2016-2026, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -217,7 +217,9 @@ public class AllDirectedPathsTest
         Set<String> sources = vertexSet(I1);
         Set<String> targets = vertexSet(O1);
 
-        assertThrows(IllegalArgumentException.class, () -> pathFindingAlg.getAllPaths(sources, targets, false, null));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> pathFindingAlg.getAllPaths(sources, targets, false, null));
     }
 
     @Test

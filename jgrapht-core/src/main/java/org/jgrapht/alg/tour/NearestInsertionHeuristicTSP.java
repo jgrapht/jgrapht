@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Peter Harman and Contributors.
+ * (C) Copyright 2019-2026, by Peter Harman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -63,8 +63,7 @@ import java.util.stream.*;
  *
  * @author Peter Harman
  */
-public class NearestInsertionHeuristicTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class NearestInsertionHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     private GraphPath<V, E> subtour;
@@ -165,8 +164,8 @@ public class NearestInsertionHeuristicTSP<V, E>
      */
     private Map<V, Closest<V>> getClosest(List<V> tourVertices, Set<V> unvisited, Graph<V, E> graph)
     {
-        return tourVertices
-            .stream().collect(Collectors.toMap(v -> v, v -> getClosest(v, unvisited, graph)));
+        return tourVertices.stream()
+            .collect(Collectors.toMap(v -> v, v -> getClosest(v, unvisited, graph)));
     }
 
     /**
@@ -298,8 +297,7 @@ public class NearestInsertionHeuristicTSP<V, E>
      *
      * @param <V> vertex type
      */
-    private static class Closest<V>
-        implements Comparable<Closest<V>>
+    private static class Closest<V> implements Comparable<Closest<V>>
     {
 
         private final V tourVertex;

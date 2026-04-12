@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -258,7 +258,8 @@ public class GraphWalkTest
     public void testIllegalConcatPath1()
     {
         assertThrows(IllegalArgumentException.class, () -> {
-            Graph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
             graph.addVertex(0);
             GraphWalk<Integer, DefaultEdge> gw1 = GraphWalk.emptyWalk(graph);
             GraphWalk<Integer, DefaultEdge> gw2 = GraphWalk.singletonWalk(graph, 0, 10);
@@ -273,7 +274,8 @@ public class GraphWalkTest
     public void testIllegalConcatPath2()
     {
         assertThrows(IllegalArgumentException.class, () -> {
-            Graph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> graph =
+                new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
             graph.addVertex(0);
             graph.addVertex(1);
             GraphWalk<Integer, DefaultEdge> gw1 = GraphWalk.singletonWalk(graph, 0, 10);

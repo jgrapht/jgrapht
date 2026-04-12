@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,15 +22,15 @@ import org.jgrapht.*;
 /**
  * An algorithm improving the result of solving the
  * <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian cycle problem</a>.
- * 
+ *
  * <p>
  * A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit, is a
  * graph cycle (i.e., closed loop) through a graph that visits each node exactly once (Skiena 1990,
  * p. 196).
- * 
+ *
  * An improvement algorithm could be one that optimises the cycle for lower cost, or that updates
  * the cycle to match changes in the graph.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *

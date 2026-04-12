@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -45,9 +45,7 @@ import java.util.function.*;
  *
  * @author Dimitrios Michail
  */
-public class GEXFExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class GEXFExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     private static final String LABEL_ATTRIBUTE_NAME = "label";
     private static final String WEIGHT_ATTRIBUTE_NAME = "weight";
@@ -110,7 +108,7 @@ public class GEXFExporter<V, E>
 
         /**
          * Get a string representation of the attribute category
-         * 
+         *
          * @return the string representation of the attribute category
          */
         public String toString()
@@ -147,7 +145,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Return if a particular parameter of the exporter is enabled
-     * 
+     *
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
@@ -158,7 +156,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Set the value of a parameter of the exporter
-     * 
+     *
      * @param p the parameter
      * @param value the value to set
      */
@@ -173,7 +171,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Register a GEXF Attribute
-     * 
+     *
      * @param name the attribute name
      * @param category the attribute category
      * @param type the attribute type
@@ -185,7 +183,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Register a GEXF Attribute
-     * 
+     *
      * @param name the attribute name
      * @param category the attribute category
      * @param type the attribute type
@@ -199,7 +197,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Register a GEXF Attribute
-     * 
+     *
      * @param name the attribute name
      * @param category the attribute category
      * @param type the attribute type
@@ -235,7 +233,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Unregister a GraphML-Attribute
-     * 
+     *
      * @param name the attribute name
      * @param category the attribute category
      */
@@ -262,7 +260,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Get the creator for the meta field.
-     * 
+     *
      * @return the creator for the meta field
      */
     public String getCreator()
@@ -272,7 +270,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Set the creator for the meta field.
-     * 
+     *
      * @param creator the creator for the meta field
      */
     public void setCreator(String creator)
@@ -282,7 +280,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Get the keywords for the meta field.
-     * 
+     *
      * @return the keywords for the meta field
      */
     public String getKeywords()
@@ -292,7 +290,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Set the keywords for the meta field.
-     * 
+     *
      * @param keywords the keywords for the meta field
      */
     public void setKeywords(String keywords)
@@ -302,7 +300,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Get the description for the meta field.
-     * 
+     *
      * @return the description for the meta field
      */
     public String getDescription()
@@ -312,7 +310,7 @@ public class GEXFExporter<V, E>
 
     /**
      * Set the description for the meta field.
-     * 
+     *
      * @param description the description for the meta field
      */
     public void setDescription(String description)

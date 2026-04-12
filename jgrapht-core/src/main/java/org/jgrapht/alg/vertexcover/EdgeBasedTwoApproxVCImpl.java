@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Linda Buisman and Contributors.
+ * (C) Copyright 2003-2026, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,15 +38,14 @@ import java.util.*;
  *
  * @author Linda Buisman
  */
-public class EdgeBasedTwoApproxVCImpl<V, E>
-    implements VertexCoverAlgorithm<V>
+public class EdgeBasedTwoApproxVCImpl<V, E> implements VertexCoverAlgorithm<V>
 {
 
     private final Graph<V, E> graph;
 
     /**
      * Constructs a new EdgeBasedTwoApproxVCImpl instance
-     * 
+     *
      * @param graph input graph
      */
     public EdgeBasedTwoApproxVCImpl(Graph<V, E> graph)

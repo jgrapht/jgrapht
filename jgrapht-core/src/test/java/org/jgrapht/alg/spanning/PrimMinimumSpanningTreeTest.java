@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,8 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
-public class PrimMinimumSpanningTreeTest
-    extends MinimumSpanningTreeTest
+public class PrimMinimumSpanningTreeTest extends MinimumSpanningTreeTest
 {
 
     @Override

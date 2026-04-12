@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -37,8 +37,7 @@ import java.util.*;
  * @param <V> graph vertex type
  * @param <E> graph edge type
  */
-public class WindmillGraphsGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class WindmillGraphsGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     /**
      * WINDMILL and DUTCHWINDMILL Modes for the Constructor
@@ -56,7 +55,7 @@ public class WindmillGraphsGenerator<V, E>
     /**
      * Constructs a GeneralizedPetersenGraphGenerator used to generate a Generalized Petersen graphs
      * $GP(n,k)$.
-     * 
+     *
      * @param mode indicate whether the generator should generate Windmill graphs or Dutch Windmill
      *        graphs
      * @param m number of copies of $C_n$ (Dutch Windmill graph) or $K_n$ (Windmill graph)

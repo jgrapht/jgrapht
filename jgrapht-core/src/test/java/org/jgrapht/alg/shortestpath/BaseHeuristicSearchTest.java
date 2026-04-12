@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ * (C) Copyright 2019-2026, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -187,8 +187,7 @@ public class BaseHeuristicSearchTest
         }
     }
 
-    public static class ManhattanDistance
-        implements AStarAdmissibleHeuristic<Node>
+    public static class ManhattanDistance implements AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)
@@ -204,8 +203,7 @@ public class BaseHeuristicSearchTest
         }
     }
 
-    public static class EuclideanDistance
-        implements AStarAdmissibleHeuristic<Node>
+    public static class EuclideanDistance implements AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)

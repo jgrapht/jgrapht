@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Semen Chudakov
  */
-public class BidirectionalAStarShortestPathTest
-    extends BaseHeuristicSearchTest
+public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest
 {
     private static final String S = "S";
     private static final String T = "T";
@@ -197,9 +196,8 @@ public class BidirectionalAStarShortestPathTest
     {
         DijkstraShortestPath<Integer, DefaultWeightedEdge> dijkstraShortestPath =
             new DijkstraShortestPath<>(graph);
-        BidirectionalAStarShortestPath<Integer,
-            DefaultWeightedEdge> bidirectionalAStarShortestPath =
-                new BidirectionalAStarShortestPath<>(graph, heuristic);
+        BidirectionalAStarShortestPath<Integer, DefaultWeightedEdge> bidirectionalAStarShortestPath =
+            new BidirectionalAStarShortestPath<>(graph, heuristic);
         GraphPath<Integer, DefaultWeightedEdge> path1 =
             dijkstraShortestPath.getPath(source, target);
         GraphPath<Integer, DefaultWeightedEdge> path2 =

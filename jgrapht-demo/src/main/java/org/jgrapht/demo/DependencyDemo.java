@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2023, by Rob Janes and Contributors.
+ * (C) Copyright 2012-2026, by Rob Janes and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,7 +35,7 @@ public class DependencyDemo
     /**
      * Test creating a directed graph, checking it for cycles and either outputting cycles detected
      * or topological ordering if not.
-     * 
+     *
      * @param createCycles true - create a directed graph which contains cycles. false - create a
      *        directed graph which does not contain any cycles.
      */
@@ -117,7 +117,7 @@ public class DependencyDemo
 
     /**
      * Generate two cases, one with cycles, this is dependencies and one without.
-     * 
+     *
      * @param args Ignored.
      */
     public static void main(String[] args)

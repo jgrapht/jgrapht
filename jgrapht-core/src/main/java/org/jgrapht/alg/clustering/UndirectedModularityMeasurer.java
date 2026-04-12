@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,7 +29,7 @@ import org.jgrapht.Graphs;
 
 /**
  * A <a href="https://en.wikipedia.org/wiki/Modularity_(networks)">modularity</a> measurer.
- * 
+ *
  * <p>
  * This is a utility class which computes the modularity function. It takes as input a list of
  * vertex classes $C$ and a graph $G$ and calculates: $Q = \frac{1}{2m} \sum_{ij} \left( A_{ij} -
@@ -37,7 +37,7 @@ import org.jgrapht.Graphs;
  * the degree of vertex $i$. $A_{ij}$ is either $1$ or $0$ depending on whether edge $(i,j)$ belongs
  * to the graph and $\delta(C_i, C_j)$ is 1 if vertices $i$ and $j$ belong to the same class, $0$
  * otherwise.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
@@ -53,7 +53,7 @@ public class UndirectedModularityMeasurer<V, E>
 
     /**
      * Construct a new measurer
-     * 
+     *
      * @param graph the input graph
      */
     public UndirectedModularityMeasurer(Graph<V, E> graph)
@@ -65,7 +65,7 @@ public class UndirectedModularityMeasurer<V, E>
 
     /**
      * Compute the modularity of a vertex partition.
-     * 
+     *
      * @param partitions the partitions
      * @return the modularity
      */
@@ -122,7 +122,7 @@ public class UndirectedModularityMeasurer<V, E>
 
     /**
      * Pre-compute vertex (weighted) degrees.
-     * 
+     *
      * @param graph the input graph
      */
     private void precomputeDegrees(Graph<V, E> graph)

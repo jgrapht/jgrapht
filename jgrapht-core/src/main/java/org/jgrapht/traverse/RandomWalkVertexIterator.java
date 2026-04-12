@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,26 +32,25 @@ import org.jgrapht.Graphs;
 
 /**
  * A random walk iterator.
- * 
+ *
  * "Given a graph and a starting point, we select a neighbor of it at random, and move to this
  * neighbor; then we select a neighbor of this point at random, and move to it etc. The (random)
  * sequence of points selected this way is a random walk on the graph." This very simple definition,
  * together with a comprehensive survey can be found at: "Lovász, L. (1993). Random walks on graphs:
  * A survey. Combinatorics, Paul erdos is eighty, 2(1), 1-46."
- * 
+ *
  * In its default variant the probability of selecting an outgoing edge is one over the (out) degree
  * of the vertex. In case the user requests a weighted walk, then the probability of each edge is
  * equal to its weight divided by the total weight of all outgoing edges. The walk can also be
  * bounded by a maximum number of hops (edges traversed). The iterator returns
  * {@link NoSuchElementException} when this bound is reached.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class RandomWalkVertexIterator<V, E>
-    implements Iterator<V>
+public class RandomWalkVertexIterator<V, E> implements Iterator<V>
 {
     private final Random rng;
     private final Graph<V, E> graph;
@@ -63,10 +62,10 @@ public class RandomWalkVertexIterator<V, E>
 
     /**
      * Create a new iterator
-     * 
+     *
      * @param graph the graph
      * @param vertex the starting vertex
-     * 
+     *
      * @throws IllegalArgumentException if {@code graph} does not contain {@code vertex}
      * @throws NullPointerException if either one of {@code graph} or {@code vertex} is {@code null}
      */
@@ -77,11 +76,11 @@ public class RandomWalkVertexIterator<V, E>
 
     /**
      * Create a new iterator
-     * 
+     *
      * @param graph the graph
      * @param vertex the starting vertex
      * @param maxHops maximum hops to perform during the walk
-     * 
+     *
      * @throws IllegalArgumentException if {@code graph} does not contain {@code vertex}
      * @throws NullPointerException if either one of {@code graph} or {@code vertex} is {@code null}
      */
@@ -92,14 +91,14 @@ public class RandomWalkVertexIterator<V, E>
 
     /**
      * Create a new iterator
-     * 
+     *
      * @param graph the graph
      * @param vertex the starting vertex
      * @param maxHops maximum hops to perform during the walk
      * @param weighted whether to perform a weighted random walk (compute probabilities based on the
      *        edge weights)
      * @param rng the random number generator
-     * 
+     *
      * @throws IllegalArgumentException if {@code graph} does not contain {@code vertex}
      * @throws NullPointerException if either one of {@code graph} or {@code vertex} is {@code null}
      */
@@ -151,8 +150,8 @@ public class RandomWalkVertexIterator<V, E>
         E e = null;
         if (weighted) {
             double outEdgesWeight = outEdgesTotalWeight.computeIfAbsent(nextVertex, v -> {
-                return graph.outgoingEdgesOf(v).stream().collect(
-                    Collectors.summingDouble(graph::getEdgeWeight));
+                return graph.outgoingEdgesOf(v).stream()
+                    .collect(Collectors.summingDouble(graph::getEdgeWeight));
             });
             double p = outEdgesWeight * rng.nextDouble();
             double cumulativeP = 0d;

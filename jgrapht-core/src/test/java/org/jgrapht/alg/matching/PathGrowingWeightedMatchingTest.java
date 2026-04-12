@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,11 +23,10 @@ import org.jgrapht.graph.*;
 
 /**
  * Unit tests for the PathGrowingWeightedMatching algorithm
- * 
+ *
  * @author Dimitrios Michail
  */
-public class PathGrowingWeightedMatchingTest
-    extends BasePathGrowingWeightedMatchingTest
+public class PathGrowingWeightedMatchingTest extends BasePathGrowingWeightedMatchingTest
 {
 
     @Override

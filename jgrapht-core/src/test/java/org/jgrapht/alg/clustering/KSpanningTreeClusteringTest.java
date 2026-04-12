@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,10 +38,9 @@ public class KSpanningTreeClusteringTest
     @Test
     public void test1()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 9; i++)
@@ -75,10 +74,9 @@ public class KSpanningTreeClusteringTest
     @Test
     public void test2()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 9; i++)
@@ -113,10 +111,9 @@ public class KSpanningTreeClusteringTest
     @Test
     public void testOneCluster()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 9; i++)
@@ -145,10 +142,9 @@ public class KSpanningTreeClusteringTest
     @Test
     public void testNClusters()
     {
-        Graph<Integer,
-            DefaultWeightedEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
+        Graph<Integer, DefaultWeightedEdge> g =
+            GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .weighted(true).edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
         for (int i = 0; i < 9; i++)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,15 +40,14 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class GreedyMaximumCardinalityMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class GreedyMaximumCardinalityMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final boolean sort;
 
     /**
      * Creates a new GreedyMaximumCardinalityMatching instance.
-     * 
+     *
      * @param graph graph
      * @param sort sort the edges prior to starting the greedy algorithm
      */
@@ -105,8 +104,7 @@ public class GreedyMaximumCardinalityMatching<V, E>
         return new MatchingImpl<>(graph, edges, cost);
     }
 
-    private class EdgeDegreeComparator
-        implements Comparator<E>
+    private class EdgeDegreeComparator implements Comparator<E>
     {
         @Override
         public int compare(E e1, E e2)

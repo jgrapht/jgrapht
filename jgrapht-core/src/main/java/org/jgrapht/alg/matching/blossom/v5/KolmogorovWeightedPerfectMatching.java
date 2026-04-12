@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -137,8 +137,7 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
  * @see BlossomVPrimalUpdater
  * @see BlossomVDualUpdater
  */
-public class KolmogorovWeightedPerfectMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+public class KolmogorovWeightedPerfectMatching<V, E> implements MatchingAlgorithm<V, E>
 {
     /**
      * Default epsilon used in the algorithm

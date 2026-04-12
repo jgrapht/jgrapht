@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -145,8 +145,7 @@ public interface MaximumFlowProblem<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class MaximumFlowProblemImpl<V, E>
-        implements MaximumFlowProblem<V, E>
+    class MaximumFlowProblemImpl<V, E> implements MaximumFlowProblem<V, E>
     {
         private final Graph<V, E> graph;
         private final Set<V> sources;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2013-2026, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import java.util.*;
  * @author Sarah Komla-Ebri
  * @author Hannes Wellmann
  */
-public class GabowStrongConnectivityInspector<V, E>
-    extends AbstractStrongConnectivityInspector<V, E>
+public class GabowStrongConnectivityInspector<V, E> extends AbstractStrongConnectivityInspector<V, E>
 {
     // the sequence of (original) vertices encountered but not yet assigned to a component
     private Deque<VertexNumber<V>> stackS = new ArrayDeque<>();

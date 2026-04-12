@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2015-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -61,7 +61,7 @@ public class GraphPerformanceTest
 
         /**
          * Creates a random graph using the Random Graph Generator
-         * 
+         *
          * @return random graph
          */
         abstract SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph();
@@ -165,14 +165,13 @@ public class GraphPerformanceTest
      * Graph class which relies on the (legacy) DirectedSpecifics implementation. This class is
      * optimized for low memory usage, but performs edge retrieval operations fairly slow.
      */
-    public static class MemoryEfficientDirectedGraphBenchmark
-        extends DirectedGraphBenchmarkBase
+    public static class MemoryEfficientDirectedGraphBenchmark extends DirectedGraphBenchmarkBase
     {
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer,
-                DefaultWeightedEdge> graph = new MemoryEfficientDirectedWeightedGraph<>(
+            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+                new MemoryEfficientDirectedWeightedGraph<>(
                     SupplierUtil.createIntegerSupplier(1),
                     SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             rgg.generateGraph(graph);
@@ -184,14 +183,13 @@ public class GraphPerformanceTest
      * Graph class which relies on the FastLookupDirectedSpecifics. This class is optimized to
      * perform quick edge retrievals.
      */
-    public static class FastLookupDirectedGraphBenchmark
-        extends DirectedGraphBenchmarkBase
+    public static class FastLookupDirectedGraphBenchmark extends DirectedGraphBenchmarkBase
     {
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer,
-                DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(
+            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+                new SimpleDirectedWeightedGraph<>(
                     SupplierUtil.createIntegerSupplier(1),
                     SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             rgg.generateGraph(graph);
@@ -218,12 +216,11 @@ public class GraphPerformanceTest
 
     /**
      * Creates an memory efficient graph implementation.
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static class MemoryEfficientDirectedWeightedGraph<V, E>
-        extends SimpleDirectedWeightedGraph<V, E>
+    public static class MemoryEfficientDirectedWeightedGraph<V, E> extends SimpleDirectedWeightedGraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 

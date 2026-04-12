@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,10 +21,10 @@ import java.util.*;
 
 /**
  * An interface for all algorithms which assign scores to vertices of a graph.
- * 
+ *
  * @param <V> the vertex type
  * @param <D> the score type
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface VertexScoringAlgorithm<V, D>
@@ -32,14 +32,14 @@ public interface VertexScoringAlgorithm<V, D>
 
     /**
      * Get a map with the scores of all vertices
-     * 
+     *
      * @return a map with all scores
      */
     Map<V, D> getScores();
 
     /**
      * Get a vertex score
-     * 
+     *
      * @param v the vertex
      * @return the score
      */

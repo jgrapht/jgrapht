@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,12 +22,11 @@ import java.util.*;
 
 /**
  * A 2-dimensional box (rectangle).
- * 
+ *
  * @author Dimitrios Michail
  *
  */
-public class Box2D
-    implements Serializable
+public class Box2D implements Serializable
 {
     private static final long serialVersionUID = -1855277817131669241L;
 
@@ -43,7 +42,7 @@ public class Box2D
 
     /**
      * Create a new box
-     * 
+     *
      * @param width the width
      * @param height the height
      */
@@ -54,7 +53,7 @@ public class Box2D
 
     /**
      * Create a new box
-     * 
+     *
      * @param x the x coordinate of the lower-left corner
      * @param y the y coordinate of the lower-left corner
      * @param width the width
@@ -72,7 +71,7 @@ public class Box2D
 
     /**
      * Create a new box
-     * 
+     *
      * @param coordinates the lower left corner coordinates
      * @param sides width and height
      */
@@ -90,7 +89,7 @@ public class Box2D
 
     /**
      * Get the minimum x coordinate
-     * 
+     *
      * @return the minimum x coordinate
      */
     public double getMinX()
@@ -100,7 +99,7 @@ public class Box2D
 
     /**
      * Get the minimum y coordinate
-     * 
+     *
      * @return the minimum y coordinate
      */
     public double getMinY()
@@ -110,7 +109,7 @@ public class Box2D
 
     /**
      * Get the width
-     * 
+     *
      * @return the width
      */
     public double getWidth()
@@ -120,7 +119,7 @@ public class Box2D
 
     /**
      * Get the height
-     * 
+     *
      * @return the height
      */
     public double getHeight()
@@ -130,7 +129,7 @@ public class Box2D
 
     /**
      * Get the maximum x coordinate
-     * 
+     *
      * @return the maximum x coordinate
      */
     public double getMaxX()
@@ -140,7 +139,7 @@ public class Box2D
 
     /**
      * Get the maximum y coordinate
-     * 
+     *
      * @return the maximum y coordinate
      */
     public double getMaxY()
@@ -184,7 +183,7 @@ public class Box2D
 
     /**
      * Create a new box
-     * 
+     *
      * @param width the width
      * @param height the height
      * @return the box
@@ -196,7 +195,7 @@ public class Box2D
 
     /**
      * Create a new box
-     * 
+     *
      * @param x the x coordinate of the lower-left corner
      * @param y the y coordinate of the lower-left corner
      * @param width the width

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,8 +25,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class ToleranceDoubleComparator
-    implements Comparator<Double>, Serializable
+public class ToleranceDoubleComparator implements Comparator<Double>, Serializable
 {
     private static final long serialVersionUID = -3819451375975842372L;
 
@@ -47,7 +46,7 @@ public class ToleranceDoubleComparator
 
     /**
      * Construct a new comparator with a specified tolerance.
-     * 
+     *
      * @param epsilon the tolerance
      */
     public ToleranceDoubleComparator(double epsilon)
@@ -61,11 +60,11 @@ public class ToleranceDoubleComparator
     /**
      * Compares two floating point values. Returns 0 if they are equal, -1 if {@literal o1 < o2}, 1
      * otherwise
-     * 
+     *
      * @param o1 the first value
      * @param o2 the second value
      * @return 0 if they are equal, -1 if {@literal o1 < o2}, 1 otherwise
-     * 
+     *
      * @throws NullPointerException if either one of the arguments is {@code null}
      */
     @Override

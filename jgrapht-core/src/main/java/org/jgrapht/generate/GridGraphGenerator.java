@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011-2023, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2011-2026, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import java.util.*;
  *
  * @author Assaf Mizrachi
  */
-public class GridGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class GridGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     /**
      * Role for the vertices at the corners.

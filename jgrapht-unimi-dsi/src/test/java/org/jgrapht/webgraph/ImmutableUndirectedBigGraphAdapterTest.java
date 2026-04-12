@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -53,11 +53,10 @@ public class ImmutableUndirectedBigGraphAdapterTest
         m.addArc(1, 1);
         m.addArc(3, 3);
 
-        final ImmutableGraph g = ImmutableGraph
-            .load(
-                ImmutableDirectedBigGraphAdapterTest
-                    .storeTempGraph(ImmutableGraph.wrap(Transform.symmetrize(m.immutableView())))
-                    .toString());
+        final ImmutableGraph g = ImmutableGraph.load(
+            ImmutableDirectedBigGraphAdapterTest
+                .storeTempGraph(ImmutableGraph.wrap(Transform.symmetrize(m.immutableView())))
+                .toString());
 
         final ImmutableUndirectedBigGraphAdapter a = new ImmutableUndirectedBigGraphAdapter(g);
 
@@ -182,8 +181,8 @@ public class ImmutableUndirectedBigGraphAdapterTest
         for (int i = 0; i < 30; i++)
             m.addArc(0, i);
         final it.unimi.dsi.webgraph.ImmutableGraph v = m.immutableView();
-        final ImmutableUndirectedBigGraphAdapter a = new ImmutableUndirectedBigGraphAdapter(
-            ImmutableGraph.wrap(Transform.symmetrize(v)));
+        final ImmutableUndirectedBigGraphAdapter a =
+            new ImmutableUndirectedBigGraphAdapter(ImmutableGraph.wrap(Transform.symmetrize(v)));
         assertEquals(LongLongPair.of(0L, 1L), a.getEdge(0L, 1L));
         assertEquals(LongLongPair.of(0L, 1L), a.getEdge(1L, 0L));
         assertEquals(null, a.getEdge(0L, 50L));
@@ -192,12 +191,10 @@ public class ImmutableUndirectedBigGraphAdapterTest
     @Test
     public void testEdgeCoherence()
     {
-        final ImmutableGraph m = ImmutableGraph
-            .wrap(
-                new ArrayListMutableGraph(2, new int[][] { new int[] { 0, 1 }, new int[] { 1, 0 } })
-                    .immutableView());
-        final ImmutableUndirectedBigGraphAdapter a =
-            new ImmutableUndirectedBigGraphAdapter(m);
+        final ImmutableGraph m = ImmutableGraph.wrap(
+            new ArrayListMutableGraph(2, new int[][] { new int[] { 0, 1 }, new int[] { 1, 0 } })
+                .immutableView());
+        final ImmutableUndirectedBigGraphAdapter a = new ImmutableUndirectedBigGraphAdapter(m);
 
         assertEquals(a.getEdgeSource(a.getEdge(0L, 1L)), a.getEdgeSource(a.getEdge(1L, 0L)));
     }

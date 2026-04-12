@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -50,8 +50,7 @@ import java.util.*;
  * @author Barak Naveh
  * @author John V. Sichi
  */
-public class ConnectivityInspector<V, E>
-    implements GraphListener<V, E>
+public class ConnectivityInspector<V, E> implements GraphListener<V, E>
 {
     private List<Set<V>> connectedSets;
     private Map<V, Set<V>> vertexToConnectedSet;
@@ -115,14 +114,14 @@ public class ConnectivityInspector<V, E>
     }
 
     /**
-     * Returns a list of {@code Set} s, where each set contains all vertices that are in the
-     * same maximally connected component. All graph vertices occur in exactly one set. For more on
+     * Returns a list of {@code Set} s, where each set contains all vertices that are in the same
+     * maximally connected component. All graph vertices occur in exactly one set. For more on
      * maximally connected component, see
      * <a href="http://www.nist.gov/dads/HTML/maximallyConnectedComponent.html">
      * http://www.nist.gov/dads/HTML/maximallyConnectedComponent.html</a>.
      *
-     * @return Returns a list of {@code Set} s, where each set contains all vertices that are
-     *         in the same maximally connected component.
+     * @return Returns a list of {@code Set} s, where each set contains all vertices that are in the
+     *         same maximally connected component.
      */
     public List<Set<V>> connectedSets()
     {
@@ -171,9 +170,9 @@ public class ConnectivityInspector<V, E>
      * @param sourceVertex one end of the path.
      * @param targetVertex another end of the path.
      *
-     * @return {@code true} if and only if the source and target vertex are in the same
-     *         connected component (undirected graph), or in the same weakly connected component
-     *         (directed graph).
+     * @return {@code true} if and only if the source and target vertex are in the same connected
+     *         component (undirected graph), or in the same weakly connected component (directed
+     *         graph).
      */
     public boolean pathExists(V sourceVertex, V targetVertex)
     {
@@ -234,8 +233,7 @@ public class ConnectivityInspector<V, E>
      *
      * @author Barak Naveh
      */
-    private class MyTraversalListener
-        extends TraversalListenerAdapter<V, E>
+    private class MyTraversalListener extends TraversalListenerAdapter<V, E>
     {
         private Set<V> currentConnectedSet;
 

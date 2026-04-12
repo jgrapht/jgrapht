@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,35 +27,33 @@ import java.io.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableNetwork}.
- * 
+ *
  * <p>
  * Since the underlying network is immutable, the resulting graph is unmodifiable.
- * 
+ *
  * <p>
  * Example usage: <blockquote>
- * 
+ *
  * <pre>
  * MutableNetwork&lt;String, DefaultEdge&gt; mutableNetwork =
  *     NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
- * 
+ *
  * mutableNetwork.addNode("v1");
- * 
+ *
  * ImmutableNetworkGraph&lt;String, DefaultEdge&gt; immutableNetwork =
  *     ImmutableNetwork.copyOf(mutableNetwork);
- * 
+ *
  * Graph&lt;String, DefaultEdge&gt; graph = new ImmutableNetworkAdapter&lt;&gt;(immutableNetwork);
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class ImmutableNetworkAdapter<V, E>
-    extends BaseNetworkAdapter<V, E, ImmutableNetwork<V, E>>
-    implements Graph<V, E>, Cloneable, Serializable
+public class ImmutableNetworkAdapter<V, E> extends BaseNetworkAdapter<V, E, ImmutableNetwork<V, E>> implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 8776276294297681092L;
 
@@ -63,7 +61,7 @@ public class ImmutableNetworkAdapter<V, E>
 
     /**
      * Create a new network adapter.
-     * 
+     *
      * @param network the immutable network
      */
     public ImmutableNetworkAdapter(ImmutableNetwork<V, E> network)
@@ -210,7 +208,8 @@ public class ImmutableNetworkAdapter<V, E>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

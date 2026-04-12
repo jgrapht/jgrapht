@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,7 +56,8 @@ public class PruferTreeGeneratorTest
     @Test
     public void testInvalidPruferSequence()
     {
-        assertThrows(IllegalArgumentException.class, () -> new PruferTreeGenerator<>(new int[] { 10 }));
+        assertThrows(
+            IllegalArgumentException.class, () -> new PruferTreeGenerator<>(new int[] { 10 }));
     }
 
     @Test
@@ -137,7 +138,8 @@ public class PruferTreeGeneratorTest
 
             completeGraphGenerator.generateGraph(tree);
 
-            PruferTreeGenerator<Integer, DefaultEdge> generator = new PruferTreeGenerator<>(100, 0x99);
+            PruferTreeGenerator<Integer, DefaultEdge> generator =
+                new PruferTreeGenerator<>(100, 0x99);
 
             generator.generateGraph(tree);
         });

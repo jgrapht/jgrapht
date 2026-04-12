@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * An algorithm which computes multi-objective shortest paths between vertices.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Emilio Cruciani and Contributors.
+ * (C) Copyright 2018-2026, by Emilio Cruciani and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -49,8 +49,7 @@ import java.util.*;
  *
  * @author Emilio Cruciani
  */
-public class PlantedPartitionGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ALLOW_SELFLOOPS = false;
 

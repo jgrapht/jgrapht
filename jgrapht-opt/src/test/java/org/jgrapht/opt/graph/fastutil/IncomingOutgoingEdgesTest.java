@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -148,23 +148,19 @@ public class IncomingOutgoingEdgesTest
         testDirectedGraph(() -> new DirectedPseudograph<>(DefaultEdge.class));
 
         testAddDuplicateEdgeDirectedGraph(
-            () -> GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+            () -> GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(true)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
         testAddDuplicateEdgeDirectedGraph(
-            () -> GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(false)
+            () -> GraphTypeBuilder.directed().allowingMultipleEdges(true).allowingSelfLoops(false)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
         testAddDuplicateEdgeDirectedGraph(
-            () -> GraphTypeBuilder
-                .directed().allowingMultipleEdges(false).allowingSelfLoops(true)
+            () -> GraphTypeBuilder.directed().allowingMultipleEdges(false).allowingSelfLoops(true)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
         testAddDuplicateEdgeDirectedGraph(
-            () -> GraphTypeBuilder
-                .directed().allowingMultipleEdges(false).allowingSelfLoops(false)
+            () -> GraphTypeBuilder.directed().allowingMultipleEdges(false).allowingSelfLoops(false)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
     }
@@ -197,7 +193,7 @@ public class IncomingOutgoingEdgesTest
         assertEquals(Collections.emptySet(), g.edgesOf(3));
         assertEquals(0, g.degreeOf(3));
     }
-    
+
     /**
      * Test the most general version of the undirected graph.
      */
@@ -270,26 +266,22 @@ public class IncomingOutgoingEdgesTest
     public void testUndirectedGraph()
     {
         testUndirectedGraph(() -> new Pseudograph<>(DefaultEdge.class));
-        
+
         testAddDuplicateEdgeUndirectedGraph(
-            () -> GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+            () -> GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
         testAddDuplicateEdgeUndirectedGraph(
-            () -> GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(false)
+            () -> GraphTypeBuilder.undirected().allowingMultipleEdges(true).allowingSelfLoops(false)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
         testAddDuplicateEdgeUndirectedGraph(
-            () -> GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true)
+            () -> GraphTypeBuilder.undirected().allowingMultipleEdges(false).allowingSelfLoops(true)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
         testAddDuplicateEdgeUndirectedGraph(
-            () -> GraphTypeBuilder
-                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+            () -> GraphTypeBuilder.undirected().allowingMultipleEdges(false)
+                .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
     }
 

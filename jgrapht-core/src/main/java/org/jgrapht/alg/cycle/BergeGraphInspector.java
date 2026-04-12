@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Philipp S. Kaesgen and Contributors.
+ * (C) Copyright 2016-2026, by Philipp S. Kaesgen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -47,14 +47,14 @@ import java.util.stream.*;
  * Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2): 143--186, 2003.
  * <p>
  * Special Thanks to Maria Chudnovsky for her kind help.
- * 
+ *
  * <p>
  * The runtime complexity of this implementation is $O(|V|^9|)$. This implementation is far more
  * efficient than simplistically testing whether graph $G$ or its complement $\overline{G}$ have an
  * odd cycle, because testing whether one graph can be found as an induced subgraph of another is
  * <a href="https://en.wikipedia.org/wiki/Induced_subgraph_isomorphism_problem">known</a> to be
  * NP-hard.
- * 
+ *
  * @author Philipp S. Kaesgen (pkaesgen@freenet.de)
  *
  * @param <V> the graph vertex type
@@ -68,7 +68,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Lists the vertices which are covered by two paths
-     * 
+     *
      * @param p1 A Path in g
      * @param p2 A Path in g
      * @return Set of vertices covered by both p1 and p2
@@ -83,7 +83,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Assembles a GraphPath of the Paths S and T. Required for the Pyramid Checker
-     * 
+     *
      * @param g A Graph
      * @param pathS A Path in g
      * @param pathT A Path in g
@@ -123,8 +123,8 @@ public class BergeGraphInspector<V, E>
             if (intersection.size() != 1 || !intersection.contains(m))
                 return null;
             if (pathS.getVertexList().stream().anyMatch(
-                s -> s != m && pathT
-                    .getVertexList().stream().anyMatch(t -> t != m && g.containsEdge(s, t))))
+                s -> s != m && pathT.getVertexList().stream()
+                    .anyMatch(t -> t != m && g.containsEdge(s, t))))
                 return null;
             List<E> edgeList = new LinkedList<>();
             edgeList.addAll(pathT.getEdgeList());
@@ -176,7 +176,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Checks whether a graph contains a pyramid. Running time: O(|V(g)|^9)
-     * 
+     *
      * @param g Graph
      * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g
      *         contains no pyramid
@@ -185,11 +185,11 @@ public class BergeGraphInspector<V, E>
     {
         /*
          * A pyramid looks like this:
-         * 
+         *
          * b2-(T2)-m2-(S2)-s2 / | \ b1---(T1)-m1-(S1)-s1--a \ | / b3-(T3)-m3-(S3)-s3
-         * 
+         *
          * Note that b1, b2, and b3 are connected and all names in parentheses are paths
-         * 
+         *
          */
         Set<Set<V>> visitedTriangles = new HashSet<>();
         for (V b1 : g.vertexSet()) {
@@ -401,7 +401,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Finds all Components of a set F contained in V(g)
-     * 
+     *
      * @param g A graph
      * @param f A vertex subset of g
      * @return Components of F in g
@@ -413,7 +413,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Checks whether a graph contains a Jewel. Running time: O(|V(g)|^6)
-     * 
+     *
      * @param g Graph
      * @return Decides whether there is a jewel in g
      */
@@ -498,7 +498,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Checks whether a graph contains a clean shortest odd hole. Running time: O(|V(g)|^4)
-     * 
+     *
      * @param g Graph containing no pyramid or jewel
      * @return Decides whether g contains a clean shortest odd hole
      */
@@ -557,7 +557,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Returns a path in g from start to end avoiding the vertices in X
-     * 
+     *
      * @param g A Graph
      * @param start start vertex
      * @param end end vertex
@@ -578,7 +578,7 @@ public class BergeGraphInspector<V, E>
     /**
      * Checks whether the vertex set of a graph without a vertex set X contains a shortest odd hole.
      * Running time: O(|V(g)|^4)
-     * 
+     *
      * @param g Graph containing neither pyramid nor jewel
      * @param x Subset of V(g) and a possible Cleaner for an odd hole
      * @return Determines whether g has an odd hole such that X is a near-cleaner for it
@@ -651,7 +651,7 @@ public class BergeGraphInspector<V, E>
     /**
      * Checks whether a clean shortest odd hole is in g or whether X is a cleaner for an amenable
      * shortest odd hole
-     * 
+     *
      * @param g A graph, containing no pyramid or jewel
      * @param x A subset X of V(g) and a possible Cleaner for an odd hole
      * @return Returns whether g has an odd hole or there is no shortest odd hole in C such that X
@@ -665,7 +665,7 @@ public class BergeGraphInspector<V, E>
     /**
      * Checks whether a graph has a configuration of type T1. A configuration of type T1 in g is a
      * hole of length 5
-     * 
+     *
      * @param g A Graph
      * @return whether g contains a configuration of Type T1 (5-cycle)
      */
@@ -712,7 +712,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * A vertex y is X-complete if y contained in V(g)\X is adjacent to every vertex in X.
-     * 
+     *
      * @param g A Graph
      * @param y Vertex whose X-completeness is to assess
      * @param x Set of vertices
@@ -725,7 +725,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Returns all anticomponents of a graph and a vertex set.
-     * 
+     *
      * @param g A Graph
      * @param y A set of vertices
      * @return List of anticomponents of Y in g
@@ -756,7 +756,7 @@ public class BergeGraphInspector<V, E>
      * X-complete or adjacent to v2 or adjacent to v3</li>
      * </ul>
      * An example is the complement graph of a cycle-7-graph
-     * 
+     *
      * @param g A Graph
      * @return whether g contains a configuration of Type T2
      */
@@ -846,7 +846,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Reports whether v has at least one neighbour in set
-     * 
+     *
      * @param g A Graph
      * @param set A set of vertices
      * @param v A vertex
@@ -860,7 +860,7 @@ public class BergeGraphInspector<V, E>
     /**
      * For each anticomponent X, find the maximal connected subset F' containing v5 with the
      * properties that v1,v2 have no neighbours in F' and no vertex of F'\v5 is X-complete
-     * 
+     *
      * @param g A Graph
      * @param setX A set of vertices
      * @param v1 A vertex
@@ -880,7 +880,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Reports whether a vertex has at least one nonneighbour in X
-     * 
+     *
      * @param g A Graph
      * @param v A Vertex
      * @param setX A set of vertices
@@ -906,7 +906,7 @@ public class BergeGraphInspector<V, E>
      * adjacent to v1 or adjacent to v2</li>
      * <li>if v5v6 is an edge then v6 is not X-complete</li>
      * </ul>
-     * 
+     *
      * @param g A Graph
      * @return whether g contains a configuration of Type T3
      */
@@ -989,8 +989,8 @@ public class BergeGraphInspector<V, E>
                                                 edgeList.add(g.getEdge(v4, v1));
                                             }
 
-                                            double weight = edgeList
-                                                .stream().mapToDouble(g::getEdgeWeight).sum();
+                                            double weight = edgeList.stream()
+                                                .mapToDouble(g::getEdgeWeight).sum();
                                             certificate =
                                                 new GraphWalk<>(g, v1, v1, edgeList, weight);
                                         }
@@ -1012,7 +1012,7 @@ public class BergeGraphInspector<V, E>
     /**
      * If true, the graph is not Berge. Checks whether g contains a Pyramid, Jewel, configuration
      * type 1, 2 or 3.
-     * 
+     *
      * @param g A Graph
      * @return whether g contains a pyramid, a jewel, a T1, a T2, or a T3
      */
@@ -1024,7 +1024,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * N(a,b) is the set of all {a,b}-complete vertices
-     * 
+     *
      * @param g A Graph
      * @param a A Vertex
      * @param b A Vertex
@@ -1032,15 +1032,14 @@ public class BergeGraphInspector<V, E>
      */
     private Set<V> n(Graph<V, E> g, V a, V b)
     {
-        return g
-            .vertexSet().stream().filter(t -> g.containsEdge(t, a) && g.containsEdge(t, b))
+        return g.vertexSet().stream().filter(t -> g.containsEdge(t, a) && g.containsEdge(t, b))
             .collect(Collectors.toSet());
     }
 
     /**
      * r(a,b,c) is the cardinality of the largest anticomponent of N(a,b) that contains a
      * nonneighbour of c (or 0, if c is N(a,b)-complete)
-     * 
+     *
      * @param g a Graph
      * @param nAB The set of all {a,b}-complete vertices
      * @param c A vertex
@@ -1058,7 +1057,7 @@ public class BergeGraphInspector<V, E>
     /**
      * Y(a,b,c) is the union of all anticomponents of N(a,b) that have cardinality strictly greater
      * than r(a,b,c)
-     * 
+     *
      * @param g A graph
      * @param nAB The set of all {a,b}-complete vertices
      * @param c A vertex
@@ -1079,7 +1078,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * W(a,b,c) is the anticomponent of N(a,b)+{c} that contains c
-     * 
+     *
      * @param g A graph
      * @param nAB The set of all {a,b}-complete vertices
      * @param c A vertex
@@ -1099,7 +1098,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Z(a,b,c) is the set of all (Y(a,b,c)+W(a,b,c))-complete vertices
-     * 
+     *
      * @param g A graph
      * @param nAB The set of all {a,b}-complete vertices
      * @param c A vertex
@@ -1120,7 +1119,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * X(a,b,c)=Y(a,b,c)+Z(a,b,c)
-     * 
+     *
      * @param g A graph
      * @param nAB The set of all {a,b}-complete vertices
      * @param c A vertex
@@ -1137,7 +1136,7 @@ public class BergeGraphInspector<V, E>
     /**
      * A triple (a,b,c) of vertices is relevant if a,b are distinct and nonadjacent, and c is not
      * contained in N(a,b) (possibly c is contained in {a,b}).
-     * 
+     *
      * @param g A graph
      * @param a A vertex
      * @param b A vertex
@@ -1151,7 +1150,7 @@ public class BergeGraphInspector<V, E>
 
     /**
      * Returns a set of vertex sets that may be near-cleaners for an amenable hole in g.
-     * 
+     *
      * @param g A graph
      * @return possible near-cleaners
      */
@@ -1201,13 +1200,13 @@ public class BergeGraphInspector<V, E>
      * thus, if there is an odd hole. If an odd hole is found, this checker will output that $G$ is
      * not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
      * and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
-     * 
+     *
      * <p>
      * A certificate can be obtained through the {@link BergeGraphInspector#getCertificate} method,
      * if {@code computeCertificate} is {@code true}.
      * <p>
      * Running this method takes $O(|V|^9)$, and computing the certificate takes $O(|V|^5)$.
-     * 
+     *
      * @param g A graph
      * @param computeCertificate toggles certificate computation
      * @return whether g is Berge and, thus, perfect
@@ -1258,13 +1257,13 @@ public class BergeGraphInspector<V, E>
      * thus, if there is an odd hole. If an odd hole is found, this checker will output that $G$ is
      * not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
      * and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
-     * 
+     *
      * <p>
      * This method by default does not compute a certificate. For obtaining a certificate, call
      * {@link BergeGraphInspector#isBerge} with {@code computeCertificate=true}.
      * <p>
      * Running this method takes $O(|V|^9)$.
-     * 
+     *
      * @param g A graph
      * @return whether g is Berge and, thus, perfect
      */

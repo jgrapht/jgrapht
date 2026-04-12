@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,28 +23,27 @@ import java.util.*;
 
 /**
  * Barabási-Albert growth and preferential attachment forest generator.
- * 
+ *
  * <p>
  * The general graph generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of
  * scaling in random networks. Science, 286:509-512, 1999.
- * 
+ *
  * <p>
  * The generator starts with a $t$ isolated nodes and grows the network by adding $n - t$ additional
  * nodes. The additional nodes are added one by one and each of them is connected to one previously
  * added node, where the probability of connecting to a node is proportional to its degree.
- * 
+ *
  * <p>
  * Note that this Barabàsi-Albert generator only works on undirected graphs. For a version that
  * works on both directed and undirected graphs and generates only connected graphs see
  * {@link BarabasiAlbertGraphGenerator}.
- * 
+ *
  * @author Alexandru Valeanu
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class BarabasiAlbertForestGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E, V>
 {
 
     private final Random rng;
@@ -53,7 +52,7 @@ public class BarabasiAlbertForestGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param t number of trees
      * @param n final number of nodes
      * @throws IllegalArgumentException in case of invalid parameters
@@ -65,7 +64,7 @@ public class BarabasiAlbertForestGenerator<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param t number of trees
      * @param n final number of nodes
      * @param seed seed for the random number generator

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2024, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,7 +18,7 @@
 
 /**
  * Graph Exchange XML Format (GEXF) importers/exporters.
- * 
+ *
  * See <a href="https://gephi.org/gexf/format/">here</a> for a description of the format.
  */
 package org.jgrapht.nio.gexf;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -1616,7 +1616,8 @@ public class KolmogorovWeightedMatchingTest
         test(options, edges, objectiveSense == MAXIMIZE ? maxWeight : minWeight, objectiveSense);
     }
 
-    private void test(BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
+    private void test(
+        BlossomVOptions options, int[][] edges, double result, ObjectiveSense objectiveSense)
     {
         DefaultUndirectedGraph<Integer, DefaultEdge> graph =
             (DefaultUndirectedGraph<Integer, DefaultEdge>) TestUtil.createUndirected(edges);

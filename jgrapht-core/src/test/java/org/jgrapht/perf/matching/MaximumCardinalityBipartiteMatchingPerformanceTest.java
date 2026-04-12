@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,7 @@ import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing matching algorithms for bipartite graphs.
- * 
+ *
  * @author Joris Kinable
  */
 public class MaximumCardinalityBipartiteMatchingPerformanceTest
@@ -86,8 +86,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
-    public static class EdmondsMaxCardinalityBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class EdmondsMaxCardinalityBipartiteMatchingBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(
@@ -98,8 +97,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
-    public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2023, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2026, by Peter Giles and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -606,10 +606,9 @@ public class DirectedAcyclicGraphTest
     {
         GraphSpecificsStrategy<String, DefaultEdge> graphSpecificsStrategy =
             new FastLookupGraphSpecificsStrategy<>();
-        DirectedAcyclicGraph<String,
-            DefaultEdge> graph = new DirectedAcyclicGraph<>(
-                SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false,
-                false, graphSpecificsStrategy);
+        DirectedAcyclicGraph<String, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, false,
+            graphSpecificsStrategy);
         String a = "A";
         String b = "B";
 
@@ -635,10 +634,9 @@ public class DirectedAcyclicGraphTest
                     return vertex -> new HashSet<>();
                 }
             };
-        DirectedAcyclicGraph<String,
-            DefaultEdge> graph = new DirectedAcyclicGraph<>(
-                SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false,
-                false, graphSpecificsStrategy);
+        DirectedAcyclicGraph<String, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, false,
+            graphSpecificsStrategy);
         String a = "A";
         String b = "B";
 
@@ -667,11 +665,9 @@ public class DirectedAcyclicGraphTest
     private Graph<Long, DefaultEdge> setUpDagWithMultipleEdges(
         int levels, int verticesPerLevel, double edgeProb, Random rng)
     {
-        Graph<Long,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().allowingMultipleEdges(true).allowingSelfLoops(false)
-                .vertexSupplier(SupplierUtil.createLongSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        Graph<Long, DefaultEdge> g = GraphTypeBuilder.directed().allowingMultipleEdges(true)
+            .allowingSelfLoops(false).vertexSupplier(SupplierUtil.createLongSupplier())
+            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         Long[][] vertices = new Long[levels][verticesPerLevel];
         for (int i = 0; i < levels; i++) {
@@ -733,8 +729,7 @@ public class DirectedAcyclicGraphTest
 
     // it is nice for tests to be easily repeatable, so we use a graph generator
     // that we can seed for specific configurations
-    public static class RepeatableRandomGraphGenerator<V, E>
-        implements GraphGenerator<V, E, V>
+    public static class RepeatableRandomGraphGenerator<V, E> implements GraphGenerator<V, E, V>
     {
         private Random randomizer;
         private int numOfVertexes;

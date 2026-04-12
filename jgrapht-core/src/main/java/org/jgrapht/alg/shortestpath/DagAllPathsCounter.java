@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2025, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2015-2026, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,42 +26,55 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
- * Counts the number of simple directed paths in a Directed Acyclic Graph (DAG)
- * between a given source and target using dynamic programming in topological order.
+ * Counts the number of simple directed paths in a Directed Acyclic Graph (DAG) between a given
+ * source and target using dynamic programming in topological order.
  *
- * <p>For large graphs the number of paths can be extremely large; values are returned as
- * {@link java.math.BigInteger}.</p>
+ * <p>
+ * For large graphs the number of paths can be extremely large; values are returned as
+ * {@link java.math.BigInteger}.
+ * </p>
  *
- * <p>Usage constraints: the provided graph must be directed and acyclic. An
- * {@link IllegalArgumentException} is thrown otherwise.</p>
+ * <p>
+ * Usage constraints: the provided graph must be directed and acyclic. An
+ * {@link IllegalArgumentException} is thrown otherwise.
+ * </p>
  */
-public final class DagAllPathsCounter {
+public final class DagAllPathsCounter
+{
 
-    private DagAllPathsCounter() {
+    private DagAllPathsCounter()
+    {
         // utility
     }
 
     /**
-     * Count the number of simple directed paths from {@code source} to {@code target}
-     * in the given directed acyclic graph.
+     * Count the number of simple directed paths from {@code source} to {@code target} in the given
+     * directed acyclic graph.
      *
-     * <p>Edge case semantics:</p>
+     * <p>
+     * Edge case semantics:
+     * </p>
      * <ul>
-     *   <li>If {@code source} or {@code target} is not contained in the graph, throws {@link IllegalArgumentException}.</li>
-     *   <li>If {@code source.equals(target)}, the empty path (length 0) is counted as one path and paths that leave
-     *   {@code source} and return to it cannot exist in a DAG, thus the result is 1.</li>
-     *   <li>If there is no path from {@code source} to {@code target}, returns {@link BigInteger#ZERO}.</li>
+     * <li>If {@code source} or {@code target} is not contained in the graph, throws
+     * {@link IllegalArgumentException}.</li>
+     * <li>If {@code source.equals(target)}, the empty path (length 0) is counted as one path and
+     * paths that leave {@code source} and return to it cannot exist in a DAG, thus the result is
+     * 1.</li>
+     * <li>If there is no path from {@code source} to {@code target}, returns
+     * {@link BigInteger#ZERO}.</li>
      * </ul>
      *
-     * @param graph  directed acyclic graph
+     * @param graph directed acyclic graph
      * @param source source vertex
      * @param target target vertex
      * @param <V> vertex type
      * @param <E> edge type
      * @return number of simple directed paths from {@code source} to {@code target}
-     * @throws IllegalArgumentException if the graph is not directed, not acyclic, or vertices are missing
+     * @throws IllegalArgumentException if the graph is not directed, not acyclic, or vertices are
+     *         missing
      */
-    public static <V, E> BigInteger countAllPaths(Graph<V, E> graph, V source, V target) {
+    public static <V, E> BigInteger countAllPaths(Graph<V, E> graph, V source, V target)
+    {
         Objects.requireNonNull(graph, "graph");
         Objects.requireNonNull(source, "source");
         Objects.requireNonNull(target, "target");
@@ -120,16 +133,20 @@ public final class DagAllPathsCounter {
         for (int i = si; i < topo.size(); i++) {
             V u = topo.get(i);
             BigInteger wu = ways.get(u);
-            if (wu.signum() == 0) continue; // unreachable
+            if (wu.signum() == 0)
+                continue; // unreachable
             // Early stop if we have passed the target in topological order
-            if (i > ti) break;
+            if (i > ti)
+                break;
             for (E e : graph.outgoingEdgesOf(u)) {
                 V v = graph.getEdgeTarget(e);
-                // For directed graphs, some representations may return u as target; handle via check
+                // For directed graphs, some representations may return u as target; handle via
+                // check
                 if (u.equals(v)) {
                     v = graph.getEdgeSource(e);
                 }
-                // Since the graph is a DAG and topologically sorted, v should appear after u; no extra checks needed
+                // Since the graph is a DAG and topologically sorted, v should appear after u; no
+                // extra checks needed
                 ways.put(v, ways.get(v).add(wu));
             }
         }

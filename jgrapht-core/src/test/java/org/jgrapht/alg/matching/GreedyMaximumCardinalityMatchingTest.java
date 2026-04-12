@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for GreedyMaximumCardinalityMatching
- * 
+ *
  * @author Joris Kinable
  */
 public class GreedyMaximumCardinalityMatchingTest

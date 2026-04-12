@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGraphMLImporterTest
@@ -46,27 +46,26 @@ public class SimpleGraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         new SimpleGraphMLImporter<String, DefaultEdge>()
@@ -87,27 +86,26 @@ public class SimpleGraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         SimpleGraphMLImporter<String, DefaultEdge> importer =
@@ -130,27 +128,26 @@ public class SimpleGraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"v\" target=\"x\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"v\" target=\"x\"/>" + NL +
             "<node id=\"u\"/>" + NL +
-            "<node id=\"v\"/>" + NL + 
-            "<node id=\"x\"/>" + NL +  
-            "<edge source=\"u\" target=\"v\"/>" + NL + 
-            "<edge source=\"x\" target=\"u\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"v\"/>" + NL +
+            "<node id=\"x\"/>" + NL +
+            "<edge source=\"u\" target=\"v\"/>" + NL +
+            "<edge source=\"x\" target=\"u\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
@@ -205,9 +202,9 @@ public class SimpleGraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
             "<key id=\"d1\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\"/>" + NL +
@@ -234,10 +231,9 @@ public class SimpleGraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(true).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
@@ -272,24 +268,23 @@ public class SimpleGraphMLImporterTest
     {
         assertThrows(ImportException.class, () -> {
             // @formatter:off
-            String input = 
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+            String input =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-                "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-                "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+                "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+                "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
                 "<nOde id=\"1\"/>" + NL +
-                "<node id=\"2\"/>" + NL + 
-                "<myedge source=\"1\" target=\"2\"/>" + NL + 
-                "</graph>" + NL + 
+                "<node id=\"2\"/>" + NL +
+                "<myedge source=\"1\" target=\"2\"/>" + NL +
+                "</graph>" + NL +
                 "</graphml>";
             // @formatter:on
 
-            Graph<String,
-                DefaultEdge> g = GraphTypeBuilder
-                    .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                    .vertexSupplier(SupplierUtil.createStringSupplier())
+            Graph<String, DefaultEdge> g =
+                GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                    .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                     .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
             new SimpleGraphMLImporter<String, DefaultEdge>()
@@ -338,10 +333,9 @@ public class SimpleGraphMLImporterTest
                 "</graphml>";
             // @formatter:on
 
-            Graph<String,
-                DefaultEdge> g = GraphTypeBuilder
-                    .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                    .vertexSupplier(SupplierUtil.createStringSupplier())
+            Graph<String, DefaultEdge> g =
+                GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                    .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                     .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
             new SimpleGraphMLImporter<String, DefaultEdge>()
@@ -370,10 +364,9 @@ public class SimpleGraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        Graph<String,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+        Graph<String, DefaultEdge> g =
+            GraphTypeBuilder.undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();

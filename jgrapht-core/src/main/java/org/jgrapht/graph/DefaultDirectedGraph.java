@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,13 +26,12 @@ import java.util.function.*;
  * The default implementation of a directed graph. A default directed graph is a non-simple directed
  * graph in which multiple (parallel) edges between any two vertices are <i>not</i> permitted, but
  * loops are.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  */
-public class DefaultDirectedGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+public class DefaultDirectedGraph<V, E> extends AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -2066644490824847621L;
 
@@ -48,7 +47,7 @@ public class DefaultDirectedGraph<V, E>
 
     /**
      * Creates a new graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      * @param weighted whether the graph is weighted or not
@@ -57,15 +56,13 @@ public class DefaultDirectedGraph<V, E>
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
         super(
-            vertexSupplier, edgeSupplier,
-            new DefaultGraphType.Builder()
-                .directed().allowMultipleEdges(false).allowSelfLoops(true).weighted(weighted)
-                .build());
+            vertexSupplier, edgeSupplier, new DefaultGraphType.Builder().directed()
+                .allowMultipleEdges(false).allowSelfLoops(true).weighted(weighted).build());
     }
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -79,7 +76,7 @@ public class DefaultDirectedGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type

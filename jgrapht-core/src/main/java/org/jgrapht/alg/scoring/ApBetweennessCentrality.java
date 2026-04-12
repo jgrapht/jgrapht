@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2017-2026, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,7 +35,7 @@ import org.jheaps.tree.PairingHeap;
 
 /**
  * Betweenness centrality with arbitrary precision arithmetic.
- * 
+ *
  * <p>
  * Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a
  * node $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
@@ -43,7 +43,7 @@ import org.jheaps.tree.PairingHeap;
  * from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
  * $v$. For more details see
  * <a href="https://en.wikipedia.org/wiki/Betweenness_centrality">wikipedia</a>.
- * 
+ *
  * The algorithm is based on
  * <ul>
  * <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". Journal of
@@ -58,17 +58,16 @@ import org.jheaps.tree.PairingHeap;
  * representation needs a number of bits which is logarithmic in the instance size. There are
  * instances where this is not true, and thus it is not safe to assume that arithmetic takes
  * constant time.
- * 
+ *
  * This class uses arbitrary precision arithmetic (except for the execution of Dijkstra's
  * algorithm). The precision can be adjusted by the constructor parameters.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Assaf Mizrachi
  */
-public class ApBetweennessCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Apfloat>
+public class ApBetweennessCentrality<V, E> implements VertexScoringAlgorithm<V, Apfloat>
 {
     /**
      * Underlying graph
@@ -90,7 +89,7 @@ public class ApBetweennessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      */
     public ApBetweennessCentrality(Graph<V, E> graph)
@@ -100,7 +99,7 @@ public class ApBetweennessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where
      *        $n$ is the number of vertices of the graph
@@ -112,7 +111,7 @@ public class ApBetweennessCentrality<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where
      *        $n$ is the number of vertices of the graph
@@ -269,8 +268,7 @@ public class ApBetweennessCentrality<V, E>
         boolean isEmpty();
     }
 
-    private class WeightedQueue
-        implements MyQueue<V, Double>
+    private class WeightedQueue implements MyQueue<V, Double>
     {
 
         AddressableHeap<Double, V> delegate = new PairingHeap<>();
@@ -306,8 +304,7 @@ public class ApBetweennessCentrality<V, E>
 
     }
 
-    private class UnweightedQueue
-        implements MyQueue<V, Double>
+    private class UnweightedQueue implements MyQueue<V, Double>
     {
 
         Queue<V> delegate = new ArrayDeque<>();

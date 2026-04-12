@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -59,9 +59,7 @@ import it.unimi.dsi.sux4j.util.EliasFanoIndexedMonotoneLongBigList;
  * @param <E> the graph edge type
  */
 
-public abstract class AbstractSuccinctUndirectedGraph<E>
-    extends
-    AbstractSuccinctGraph<E>
+public abstract class AbstractSuccinctUndirectedGraph<E> extends AbstractSuccinctGraph<E>
 {
     private static final long serialVersionUID = 0L;
 
@@ -82,9 +80,7 @@ public abstract class AbstractSuccinctUndirectedGraph<E>
      * @param <E> the graph edge type
      */
 
-    protected final static class CumulativeSuccessors<E>
-        implements
-        LongIterator
+    protected final static class CumulativeSuccessors<E> implements LongIterator
     {
         private final Graph<Integer, E> graph;
         private final long n;
@@ -161,9 +157,7 @@ public abstract class AbstractSuccinctUndirectedGraph<E>
      *
      * @param <E> the graph edge type
      */
-    protected final static class CumulativeDegrees<E>
-        implements
-        LongIterator
+    protected final static class CumulativeDegrees<E> implements LongIterator
     {
         private final int n;
         private int x = -1;
@@ -236,9 +230,8 @@ public abstract class AbstractSuccinctUndirectedGraph<E>
     @Override
     public GraphType getType()
     {
-        return new DefaultGraphType.Builder()
-            .directed().weighted(false).modifiable(false).allowMultipleEdges(false)
-            .allowSelfLoops(true).build();
+        return new DefaultGraphType.Builder().directed().weighted(false).modifiable(false)
+            .allowMultipleEdges(false).allowSelfLoops(true).build();
     }
 
 }

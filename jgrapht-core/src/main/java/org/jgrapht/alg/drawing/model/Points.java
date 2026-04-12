@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,7 @@ import java.util.function.*;
 
 /**
  * A collection of utilities to assist with point manipulation.
- * 
+ *
  * @author Dimitrios Michail
  */
 public abstract class Points
@@ -33,7 +33,7 @@ public abstract class Points
 
     /**
      * Compute the length of a vector. The length of vector $(x,y)$ is given by $\sqrt{x^2+y^2}$.
-     * 
+     *
      * @param v the vector
      * @return the length of a vector
      */
@@ -44,7 +44,7 @@ public abstract class Points
 
     /**
      * Add 2-dimensional vectors
-     * 
+     *
      * @param a the first vector
      * @param b the second vector
      * @return the vector $a+b$
@@ -56,7 +56,7 @@ public abstract class Points
 
     /**
      * Subtract 2-dimensional vectors
-     * 
+     *
      * @param a the first vector
      * @param b the second vector
      * @return the vector $a-b$
@@ -68,7 +68,7 @@ public abstract class Points
 
     /**
      * Given a vector $a$ compute $-a$.
-     * 
+     *
      * @param a the vector
      * @return the vector $-a$
      */
@@ -79,7 +79,7 @@ public abstract class Points
 
     /**
      * Multiply a vector with a scalar.
-     * 
+     *
      * @param a the vector
      * @param scalar the scalar
      * @return the result of scalar multiplication
@@ -91,23 +91,23 @@ public abstract class Points
 
     /**
      * Multiply a vector with a scalar.
-     * 
+     *
      * @param a the vector
      * @param scalar the scalar
      * @param mult the multiplication operator
      * @return the result of scalar multiplication
-     * 
+     *
      * @param <S> the scalar type
      */
-    public static <
-        S> Point2D scalarMultiply(Point2D a, S scalar, BiFunction<Double, S, Double> mult)
+    public static <S> Point2D scalarMultiply(
+        Point2D a, S scalar, BiFunction<Double, S, Double> mult)
     {
         return Point2D.of(mult.apply(a.getX(), scalar), mult.apply(a.getY(), scalar));
     }
 
     /**
      * Compare two points for equality using tolerance 1e-9.
-     * 
+     *
      * @param p1 the first point
      * @param p2 the second point
      * @return whether the two points are equal or not

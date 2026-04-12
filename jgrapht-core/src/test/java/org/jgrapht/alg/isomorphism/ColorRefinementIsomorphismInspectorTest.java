@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Abdallah Atouani and Contributors.
+ * (C) Copyright 2018-2026, by Abdallah Atouani and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -58,7 +58,8 @@ public class ColorRefinementIsomorphismInspectorTest
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
             new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        assertThrows(IsomorphismUndecidableException.class, () -> isomorphismInspector.isomorphismExists());
+        assertThrows(
+            IsomorphismUndecidableException.class, () -> isomorphismInspector.isomorphismExists());
 
         assertFalse(isomorphismInspector.getMappings().hasNext());
 

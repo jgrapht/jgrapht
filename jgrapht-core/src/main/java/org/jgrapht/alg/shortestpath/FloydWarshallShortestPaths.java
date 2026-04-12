@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2023, by Tom Larkworthy and Contributors.
+ * (C) Copyright 2009-2026, by Tom Larkworthy and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,14 +26,14 @@ import java.util.*;
 
 /**
  * The Floyd-Warshall algorithm.
- * 
+ *
  * <p>
  * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm"> Floyd-Warshall algorithm</a>
  * finds all shortest paths (all $n^2$ of them) in $O(n^3)$ time. Note that during construction
  * time, no computations are performed! All computations are performed the first time one of the
  * member methods of this class is invoked. The results are stored, so all subsequent calls to the
  * same method are computationally efficient.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -42,8 +42,7 @@ import java.util.*;
  * @author Joris Kinable
  * @author Dimitrios Michail
  */
-public class FloydWarshallShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class FloydWarshallShortestPaths<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     private final List<V> vertices;
     private final List<Integer> degrees;
@@ -59,7 +58,7 @@ public class FloydWarshallShortestPaths<V, E>
 
     /**
      * Create a new instance of the Floyd-Warshall all-pairs shortest path algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public FloydWarshallShortestPaths(Graph<V, E> graph)
@@ -102,7 +101,7 @@ public class FloydWarshallShortestPaths<V, E>
 
     /**
      * Get the total number of shortest paths. Does not count the paths from a vertex to itself.
-     * 
+     *
      * @return total number of shortest paths
      */
     public int getShortestPathsCount()
@@ -190,7 +189,7 @@ public class FloydWarshallShortestPaths<V, E>
      * If the next invocation would query the first hop on the shortest path from $c$ to $b$, vertex
      * $d$ would be returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the first vertex.
-     * 
+     *
      * @param a source vertex
      * @param b target vertex
      * @return next hop on the shortest path from a to b, or null when there exists no path from $a$
@@ -218,7 +217,7 @@ public class FloydWarshallShortestPaths<V, E>
      * $e$, vertex $d$ would be returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the vertex. The first invocation of this
      * method populates a last hop matrix.
-     * 
+     *
      * @param a source vertex
      * @param b target vertex
      * @return last hop on the shortest path from $a$ to $b$, or null when there exists no path from
@@ -358,8 +357,7 @@ public class FloydWarshallShortestPaths<V, E>
         }
     }
 
-    class FloydWarshallSingleSourcePaths
-        implements SingleSourcePaths<V, E>
+    class FloydWarshallSingleSourcePaths implements SingleSourcePaths<V, E>
     {
         private final V source;
 

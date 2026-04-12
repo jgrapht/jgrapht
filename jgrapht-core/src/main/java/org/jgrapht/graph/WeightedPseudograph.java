@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,12 +28,11 @@ import java.util.function.*;
  * weights. If you're unsure about pseudographs, see:
  * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class WeightedPseudograph<V, E>
-    extends Pseudograph<V, E>
+public class WeightedPseudograph<V, E> extends Pseudograph<V, E>
 {
     private static final long serialVersionUID = 3037964528481084240L;
 
@@ -49,7 +48,7 @@ public class WeightedPseudograph<V, E>
 
     /**
      * Creates a new weighted graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      */
@@ -60,7 +59,7 @@ public class WeightedPseudograph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -74,7 +73,7 @@ public class WeightedPseudograph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type

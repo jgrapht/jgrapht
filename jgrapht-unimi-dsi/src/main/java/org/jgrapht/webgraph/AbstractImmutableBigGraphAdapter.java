@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -39,9 +39,7 @@ import it.unimi.dsi.fastutil.longs.LongSets;
  * @author Sebastiano Vigna
  */
 
-public abstract class AbstractImmutableBigGraphAdapter<E extends LongLongPair>
-    extends
-    AbstractGraph<Long, E>
+public abstract class AbstractImmutableBigGraphAdapter<E extends LongLongPair> extends AbstractGraph<Long, E>
 {
 
     /** The underlying graph. */

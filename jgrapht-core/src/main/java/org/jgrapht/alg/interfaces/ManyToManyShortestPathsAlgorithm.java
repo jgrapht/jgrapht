@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,8 +28,7 @@ import java.util.*;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public interface ManyToManyShortestPathsAlgorithm<V, E>
-    extends ShortestPathAlgorithm<V, E>
+public interface ManyToManyShortestPathsAlgorithm<V, E> extends ShortestPathAlgorithm<V, E>
 {
 
     /**
@@ -96,8 +95,7 @@ public interface ManyToManyShortestPathsAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    abstract class BaseManyToManyShortestPathsImpl<V, E>
-        implements ManyToManyShortestPaths<V, E>
+    abstract class BaseManyToManyShortestPathsImpl<V, E> implements ManyToManyShortestPaths<V, E>
     {
         /**
          * Set of source vertices.

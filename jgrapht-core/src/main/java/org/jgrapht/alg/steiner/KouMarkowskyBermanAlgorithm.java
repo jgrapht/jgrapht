@@ -56,9 +56,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
  * @see SteinerTreeAlgorithm
  * @see <a href="https://en.wikipedia.org/wiki/Steiner_tree_problem">Steiner tree problem</a>
  */
-public class KouMarkowskyBermanAlgorithm<V, E>
-    implements
-    SteinerTreeAlgorithm<V, E>
+public class KouMarkowskyBermanAlgorithm<V, E> implements SteinerTreeAlgorithm<V, E>
 {
 
     private final Graph<V, E> graph;

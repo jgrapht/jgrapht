@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Christoph Zauner and Contributors.
+ * (C) Copyright 2003-2026, by Christoph Zauner and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,7 +21,7 @@ import java.util.regex.*;
 
 /**
  * Class with DOT format related utilities.
- * 
+ *
  * @author Christoph Zauner
  */
 class DOTUtils

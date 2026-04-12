@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for the {@link YenKShortestPath}.
  */
-public class YenKShortestPathTest
-    extends BaseKShortestPathTest
+public class YenKShortestPathTest extends BaseKShortestPathTest
 {
     /**
      * Seed value which is used to generate random graphs by
@@ -76,7 +75,7 @@ public class YenKShortestPathTest
             graph.addVertex(2);
             new YenKShortestPath<>(graph).getPaths(1, 2, 1);
         });
-        
+
     }
 
     @Test

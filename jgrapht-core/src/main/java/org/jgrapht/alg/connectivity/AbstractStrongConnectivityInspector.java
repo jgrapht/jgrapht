@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Christian Soltenborn and Contributors.
+ * (C) Copyright 2005-2026, by Christian Soltenborn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,7 @@ import java.util.*;
  * @author Christian Hammer
  * @author Dimitrios Michail
  */
-abstract class AbstractStrongConnectivityInspector<V, E>
-    implements StrongConnectivityAlgorithm<V, E>
+abstract class AbstractStrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V, E>
 {
     protected final Graph<V, E> graph;
     protected List<Set<V>> stronglyConnectedSets;

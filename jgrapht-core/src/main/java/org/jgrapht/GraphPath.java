@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2008-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -122,7 +122,7 @@ public interface GraphPath<V, E>
 
     /**
      * Returns the length of the path, measured in the number of edges.
-     * 
+     *
      * @return the length of the path, measured in the number of edges
      */
     default int getLength()

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2004-2023, by Michael Behrisch, Dimitrios Michail and Contributors.
+ * (C) Copyright 2004-2026, by Michael Behrisch, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,21 +27,20 @@ import java.util.*;
  * <a href="https://en.wikipedia.org/wiki/Random_graph">Random Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
- * 
+ *
  * The user provides the sizes $n_1$ and $n_2$ of the two partitions $(n_1+n_2=n)$ and a number $m$
  * which is the total number of edges to create. The generator supports both directed and undirected
  * graphs.
  *
  * @author Michael Behrisch
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see GnpRandomBipartiteGraphGenerator
  */
-public class GnmRandomBipartiteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class GnmRandomBipartiteGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int n1;
@@ -56,7 +55,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
      * = n1 + n2$ and the bipartite graph has one partition with size $n_1$ and one partition with
      * size $n_2$. In this model a graph is chosen uniformly at random from the collection of
      * bipartite graphs whose partitions have sizes $n_1$ and $n_2$ respectively and $m$ edges.
-     * 
+     *
      * @param n1 number of vertices of the first partition
      * @param n2 number of vertices of the second partition
      * @param m the number of edges
@@ -71,7 +70,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
      * = n1 + n2$ and the bipartite graph has one partition with size $n_1$ and one partition with
      * size $n_2$. In this model a graph is chosen uniformly at random from the collection of
      * bipartite graphs whose partitions have sizes $n_1$ and $n_2$ respectively and m edges.
-     * 
+     *
      * @param n1 number of vertices of the first partition
      * @param n2 number of vertices of the second partition
      * @param m the number of edges
@@ -87,7 +86,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
      * = n_1 + n_2$ and the bipartite graph has one partition with size $n_1$ and one partition with
      * size $n_2$. In this model a graph is chosen uniformly at random from the collection of
      * bipartite graphs whose partitions have sizes $n_1$ and $n_2$ respectively and $m$ edges.
-     * 
+     *
      * @param n1 number of vertices of the first partition
      * @param n2 number of vertices of the second partition
      * @param m the number of edges
@@ -112,7 +111,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
 
     /**
      * Generates a random bipartite graph.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      */
@@ -194,7 +193,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
     /**
      * Returns the first partition of vertices in the bipartite graph. This partition is guaranteed
      * to be smaller than or equal in size to the second partition.
-     * 
+     *
      * @return one partition of the bipartite graph
      */
     public Set<V> getFirstPartition()
@@ -208,7 +207,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
     /**
      * Returns the second partitions of vertices in the bipartite graph. This partition is
      * guaranteed to be larger than or equal in size to the first partition.
-     * 
+     *
      * @return one partition of the bipartite graph
      */
     public Set<V> getSecondPartition()

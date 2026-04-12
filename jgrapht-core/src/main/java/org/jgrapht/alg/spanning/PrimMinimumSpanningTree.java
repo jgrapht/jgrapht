@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2013-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,14 +41,13 @@ import java.util.*;
  * @author Alexandru Valeanu
  * @author Alexey Kudinkin
  */
-public class PrimMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+public class PrimMinimumSpanningTree<V, E> implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> g;
 
     /**
      * Construct a new instance of the algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public PrimMinimumSpanningTree(Graph<V, E> graph)

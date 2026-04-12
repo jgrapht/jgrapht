@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,7 +24,7 @@ import java.nio.charset.*;
 
 /**
  * Interface for graph importers
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
@@ -37,7 +37,7 @@ public interface GraphImporter<V, E>
      * It is the callers responsibility to ensure the {@code InputStream} is closed after this
      * method returned.
      * </p>
-     * 
+     *
      * @param g the graph
      * @param in the input stream
      * @throws ImportException in case any error occurs, such as I/O or parse error
@@ -53,7 +53,7 @@ public interface GraphImporter<V, E>
      * It is the callers responsibility to ensure the {@code Reader} is closed after this method
      * returned.
      * </p>
-     * 
+     *
      * @param g the graph
      * @param in the input reader
      * @throws ImportException in case any error occurs, such as I/O or parse error
@@ -62,7 +62,7 @@ public interface GraphImporter<V, E>
 
     /**
      * Import a graph from the given {@link File}.
-     * 
+     *
      * @param g the graph
      * @param file the file to read from
      * @throws ImportException in case any error occurs, such as I/O or parse error

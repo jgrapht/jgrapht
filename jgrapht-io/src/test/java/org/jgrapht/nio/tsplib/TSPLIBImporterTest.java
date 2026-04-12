@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Hannes Wellmann and Contributors.
+ * (C) Copyright 2020-2026, by Hannes Wellmann and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -65,8 +65,8 @@ public class TSPLIBImporterTest
         public String toString()
         {
             String indexStr = index >= 0 ? indexFormat.format(index) + " " : "";
-            return indexStr + Arrays.stream(elements).mapToObj(coordinateFormat::format).collect(
-                Collectors.joining(" "));
+            return indexStr + Arrays.stream(elements).mapToObj(coordinateFormat::format)
+                .collect(Collectors.joining(" "));
         }
     }
 
@@ -288,11 +288,11 @@ public class TSPLIBImporterTest
         assertTour(tour, expectedTour, otherFilesMetaData.getVertexToNodeMapping());
     }
 
-    private static <
-        T> void assertTour(List<T> vertexTour, List<Integer> expectedTour, Map<T, Node> vertex2node)
+    private static <T> void assertTour(
+        List<T> vertexTour, List<Integer> expectedTour, Map<T, Node> vertex2node)
     {
-        List<Integer> integerTour = vertexTour
-            .stream().map(vertex2node::get).map(Node::getNumber).collect(Collectors.toList());
+        List<Integer> integerTour = vertexTour.stream().map(vertex2node::get).map(Node::getNumber)
+            .collect(Collectors.toList());
         assertEquals(expectedTour, integerTour);
     }
 
@@ -668,14 +668,14 @@ public class TSPLIBImporterTest
 
     // utility methods
 
-    private static Pair<Graph<Object, DefaultWeightedEdge>,
-        Metadata<Object, DefaultWeightedEdge>> importGraphFromFile(StringJoiner fileContent)
+    private static Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> importGraphFromFile(
+        StringJoiner fileContent)
     {
         return importGraphFromFile(fileContent.toString());
     }
 
-    private static Pair<Graph<Object, DefaultWeightedEdge>,
-        Metadata<Object, DefaultWeightedEdge>> importGraphFromFile(String fileContent)
+    private static Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> importGraphFromFile(
+        String fileContent)
     {
         Graph<Object, DefaultWeightedEdge> graph =
             new SimpleWeightedGraph<>(Object::new, DefaultWeightedEdge::new);

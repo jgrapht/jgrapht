@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Antonia Tsiftsi and Contributors.
+ * (C) Copyright 2020-2026, by Antonia Tsiftsi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,7 +28,6 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests
@@ -40,9 +39,8 @@ public class NaiveGreedyModularityAlgorithmTest
     @Test
     public void test1()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).weighted(true)
                 .allowingSelfLoops(true).allowingMultipleEdges(true).buildGraph();
 
@@ -75,9 +73,8 @@ public class NaiveGreedyModularityAlgorithmTest
     @Test
     public void test2()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).weighted(true)
                 .allowingSelfLoops(true).allowingMultipleEdges(true).buildGraph();
 
@@ -138,9 +135,8 @@ public class NaiveGreedyModularityAlgorithmTest
     @Test
     public void testZacharyKarateClub()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).weighted(true)
                 .allowingSelfLoops(true).allowingMultipleEdges(true).buildGraph();
 
@@ -272,9 +268,8 @@ public class NaiveGreedyModularityAlgorithmTest
     @Test
     public void test4()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).weighted(true)
                 .allowingSelfLoops(true).allowingMultipleEdges(true).buildGraph();
 
@@ -330,9 +325,8 @@ public class NaiveGreedyModularityAlgorithmTest
     @Test
     public void test5()
     {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+        Graph<Integer, DefaultEdge> g =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).weighted(true)
                 .allowingSelfLoops(true).allowingMultipleEdges(true).buildGraph();
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -214,7 +214,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
     /**
      * Takes a set of odd vertices with cardinality $2$ or more, and splits them into $2$ new
      * non-empty sets.
-     * 
+     *
      * @param cluster group of odd vertices
      * @param queue clusters with cardinality $2$ or more
      */
@@ -257,7 +257,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
 
     /**
      * Efficient way to compute the intersection between two sets
-     * 
+     *
      * @param set1 set $1$
      * @param set2 set $2$
      * @return intersection of set $1$ and $2$
@@ -329,8 +329,8 @@ public class PadbergRaoOddMinimumCutset<V, E>
     {
         Predicate<E> predicate = e -> sourcePartitionMinimumCut.contains(network.getEdgeSource(e))
             ^ sourcePartitionMinimumCut.contains(network.getEdgeTarget(e));
-        return network.edgeSet().stream().filter(predicate).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return network.edgeSet().stream().filter(predicate)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

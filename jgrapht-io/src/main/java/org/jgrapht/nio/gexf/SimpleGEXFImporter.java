@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,11 +27,11 @@ import java.util.function.*;
 
 /**
  * Imports a graph from a GEXF data source.
- * 
+ *
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GEXF
  * specification, oriented towards parsing speed.
- * 
+ *
  * <p>
  * The importer uses the graph suppliers ({@link Graph#getVertexSupplier()} and
  * {@link Graph#getEdgeSupplier()}) in order to create new vertices and edges. Moreover, it notifies
@@ -39,16 +39,16 @@ import java.util.function.*;
  * input file. Users can register consumers for vertex, edge and graph attributes after construction
  * of the importer. Finally, default attribute values and any nested elements are completely
  * ignored.
- * 
+ *
  * <p>
  * For a description of the format see <a href="https://gephi.org/gexf/format/index.html">
  * https://gephi.org/gexf/format/index.html</a> or the
  * <a href="https://gephi.org/gexf/format/primer.html">GEXF Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GEXF format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
@@ -78,13 +78,13 @@ import java.util.function.*;
  * </gexf>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer reads the input into a graph which is provided by the user. In case the graph is
  * weighted and the corresponding edge attribute "weight" is defined, the importer also reads edge
  * weights. Otherwise edge weights are ignored. To test whether the graph is weighted, method
  * {@link Graph#getType()} can be used.
- * 
+ *
  * <p>
  * The provided graph object, where the imported graph will be stored, must be able to support the
  * features of the graph that is read. For example if the GEXF file contains self-loops then the
@@ -92,32 +92,30 @@ import java.util.function.*;
  * completely ignores the global attribute "defaultedgetype" and the edge attribute "type" which
  * denotes whether an edge is directed or not. Whether edges are directed or not depends on the
  * underlying implementation of the user provided graph object.
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.2draft
  * <a href="https://gephi.org/gexf/1.2draft/gexf.xsd">GEXF Schema</a>. The user can (not
  * recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}. Older
  * schemas are not supported.
- * 
+ *
  * <p>
  * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  * vertices in the input file are reported as a vertex attribute named
  * {@link #DEFAULT_VERTEX_ID_KEY}.
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
  * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
  * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
  * graph vertex given the vertex identifier read from file.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class SimpleGEXFImporter<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class SimpleGEXFImporter<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     /**
      * Default key used for vertex ID.
@@ -139,7 +137,7 @@ public class SimpleGEXFImporter<V, E>
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -149,7 +147,7 @@ public class SimpleGEXFImporter<V, E>
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -160,7 +158,7 @@ public class SimpleGEXFImporter<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<String, V> getVertexFactory()
@@ -171,11 +169,11 @@ public class SimpleGEXFImporter<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the file.
      * The method is called with parameter the vertex identifier from the file and should return the
      * actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<String, V> vertexFactory)
@@ -185,12 +183,12 @@ public class SimpleGEXFImporter<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the GraphML file contains self-loops then the graph provided must also support
      * self-loops. The same for multiple edges.
-     * 
+     *
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error
@@ -235,14 +233,14 @@ public class SimpleGEXFImporter<V, E>
                     mapNode(vertexAndKey.getFirst()), vertexAndKey.getSecond(), a);
             };
 
-        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
-            Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
+        public final BiConsumer<Pair<Triple<String, String, Double>, String>, Attribute> edgeAttributeConsumer =
+            (edgeAndKey, a) -> {
                 Triple<String, String, Double> qe = edgeAndKey.getFirst();
 
                 if (qe == lastTriple) {
                     if (qe.getThird() != null && WEIGHT.equals(edgeAndKey.getSecond())
                         && graph.getType().isWeighted())
-                {
+            {
                         graph.setEdgeWeight(lastEdge, qe.getThird());
                     }
 

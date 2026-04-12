@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,17 +30,17 @@ import java.util.*;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
  * http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  *
  * <p>
  * Below is small example of a graph in GML format.
- * 
+ *
  * <pre>
  * graph [
- *   node [ 
+ *   node [
  *     id 1
  *   ]
  *   node [
@@ -52,7 +52,7 @@ import java.util.*;
  *   ]
  *   edge [
  *     source 1
- *     target 2 
+ *     target 2
  *     weight 2.0
  *     label "Edge between 1 and 2"
  *   ]
@@ -64,40 +64,38 @@ import java.util.*;
  *   ]
  * ]
  * </pre>
- * 
+ *
  * <p>
  * If the input file contains edge weights then the importer also reads edge weights. The importer
  * also supports reading additional string attributes such as label or custom user attributes.
  * String attributes are unescaped as if they are Java strings.
- * 
+ *
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
  * of the graph. Moreover, complicated nested structures are simply returned as a whole. For
  * example, in the following graph
- * 
+ *
  * <pre>
  * graph [
- *   node [ 
+ *   node [
  *     id 1
  *   ]
- *   node [ 
+ *   node [
  *     id 2
  *   ]
  *   edge [
  *     source 1
- *     target 2 
+ *     target 2
  *     points [ x 1.0 y 2.0 ]
  *   ]
  * ]
  * </pre>
- * 
+ *
  * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
- * 
+ *
  * @author Dimitrios Michail
  */
-public class GmlEventDrivenImporter
-    extends BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
-    implements EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
+public class GmlEventDrivenImporter extends BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>> implements EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
 {
     /**
      * Constructs a new importer.
@@ -139,8 +137,7 @@ public class GmlEventDrivenImporter
         }
     }
 
-    private class ThrowingErrorListener
-        extends BaseErrorListener
+    private class ThrowingErrorListener extends BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -154,8 +151,7 @@ public class GmlEventDrivenImporter
     }
 
     // notify from parse tree
-    private class NotifyGmlListener
-        extends GmlBaseListener
+    private class NotifyGmlListener extends GmlBaseListener
     {
         private static final String NODE = "node";
         private static final String EDGE = "edge";

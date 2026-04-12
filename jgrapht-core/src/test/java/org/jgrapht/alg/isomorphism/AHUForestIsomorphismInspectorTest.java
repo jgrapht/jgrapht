@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -49,7 +49,8 @@ public class AHUForestIsomorphismInspectorTest
             tree1.addVertex("3");
 
             AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
-                new AHUForestIsomorphismInspector<>(tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
+                new AHUForestIsomorphismInspector<>(
+                    tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
 
             forestIsomorphism.isomorphismExists();
         });
@@ -92,7 +93,10 @@ public class AHUForestIsomorphismInspectorTest
     @Test
     public void testNullGraphs()
     {
-        assertThrows(NullPointerException.class, () -> new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null));
+        assertThrows(
+            NullPointerException.class,
+            () -> new AHUForestIsomorphismInspector<String, DefaultEdge>(
+                null, new HashSet<>(), null, null));
     }
 
     @Test
@@ -151,20 +155,19 @@ public class AHUForestIsomorphismInspectorTest
     {
         Map<Integer, Integer> map = new HashMap<>();
 
-        Pair<Graph<Integer, DefaultEdge>,
-            Graph<Integer, DefaultEdge>> pair = parseGraph(
-                "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]",
-                "[{2,1}, {3,0}, {4,0}, {5,1}, {6,1}, {7,0}, {8,1}, {9,6}, {10,1}, {11,6}, "
-                    + "{12,0}, {13,7}, {14,5}, {15,1}, {16,0}, {17,0}, {18,17}, {19,7}]",
-                "{0=12, 1=10, 2=0, 3=8, 4=3, 5=16, 6=7, 7=18, 8=11, 9=17, 10=6, 11=14, 12=9, "
-                    + "13=5, 14=15, 15=2, 16=19, 17=13, 18=4, 19=1}",
-                map);
+        Pair<Graph<Integer, DefaultEdge>, Graph<Integer, DefaultEdge>> pair = parseGraph(
+            "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]",
+            "[{2,1}, {3,0}, {4,0}, {5,1}, {6,1}, {7,0}, {8,1}, {9,6}, {10,1}, {11,6}, "
+                + "{12,0}, {13,7}, {14,5}, {15,1}, {16,0}, {17,0}, {18,17}, {19,7}]",
+            "{0=12, 1=10, 2=0, 3=8, 4=3, 5=16, 6=7, 7=18, 8=11, 9=17, 10=6, 11=14, 12=9, "
+                + "13=5, 14=15, 15=2, 16=19, 17=13, 18=4, 19=1}",
+            map);
 
         Graph<Integer, DefaultEdge> forest1 = pair.getFirst();
         Graph<Integer, DefaultEdge> forest2 = pair.getSecond();
 
-        Set<Integer> roots1 = new ConnectivityInspector<>(forest1)
-            .connectedSets().stream().map(x -> x.iterator().next()).collect(Collectors.toSet());
+        Set<Integer> roots1 = new ConnectivityInspector<>(forest1).connectedSets().stream()
+            .map(x -> x.iterator().next()).collect(Collectors.toSet());
 
         Set<Integer> roots2 = roots1.stream().map(map::get).collect(Collectors.toSet());
 
@@ -224,8 +227,8 @@ public class AHUForestIsomorphismInspectorTest
 
             Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
 
-            Set<Integer> roots1 = new ConnectivityInspector<>(tree1)
-                .connectedSets().stream().map(x -> x.iterator().next()).collect(Collectors.toSet());
+            Set<Integer> roots1 = new ConnectivityInspector<>(tree1).connectedSets().stream()
+                .map(x -> x.iterator().next()).collect(Collectors.toSet());
 
             Set<Integer> roots2 =
                 roots1.stream().map(x -> pair.getSecond().get(x)).collect(Collectors.toSet());
@@ -252,8 +255,8 @@ public class AHUForestIsomorphismInspectorTest
 
         Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
 
-        Set<Integer> roots1 = new ConnectivityInspector<>(tree1)
-            .connectedSets().stream().map(x -> x.iterator().next()).collect(Collectors.toSet());
+        Set<Integer> roots1 = new ConnectivityInspector<>(tree1).connectedSets().stream()
+            .map(x -> x.iterator().next()).collect(Collectors.toSet());
 
         Set<Integer> roots2 =
             roots1.stream().map(x -> pair.getSecond().get(x)).collect(Collectors.toSet());

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,35 +27,33 @@ import java.io.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableGraph}.
- * 
+ *
  * <p>
  * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying graph is
  * immutable, the resulting graph is unmodifiable.
  *
  * <p>
  * See the example below on how to create such an adapter: <blockquote>
- * 
+ *
  * <pre>
  * MutableGraph&lt;String&gt; mutableGraph = GraphBuilder.directed().allowsSelfLoops(true).build();
- * 
+ *
  * mutableGraph.addNode("v1");
  * mutableGraph.addNode("v2");
  * mutableGraph.addEdge("v1", "v2");
- * 
+ *
  * ImmutableGraph&lt;String&gt; immutableGraph = ImmutableGraph.copyOf(mutableGraph);
- * 
+ *
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new ImmutableGraphAdapter&lt;&gt;(immutableGraph);
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  */
-public class ImmutableGraphAdapter<V>
-    extends BaseGraphAdapter<V, ImmutableGraph<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+public class ImmutableGraphAdapter<V> extends BaseGraphAdapter<V, ImmutableGraph<V>> implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -6619929013881511474L;
 
@@ -63,9 +61,9 @@ public class ImmutableGraphAdapter<V>
 
     /**
      * Create a new adapter.
-     * 
+     *
      * @param graph the graph
-     * 
+     *
      * @throws NullPointerException if {@code graph} is {@code null}
      */
     public ImmutableGraphAdapter(ImmutableGraph<V> graph)
@@ -207,7 +205,8 @@ public class ImmutableGraphAdapter<V>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

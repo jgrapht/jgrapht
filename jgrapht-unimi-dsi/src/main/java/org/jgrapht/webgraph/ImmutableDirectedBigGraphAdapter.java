@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,11 +56,7 @@ import it.unimi.dsi.lang.FlyweightPrototype;
  * @author Sebastiano Vigna
  */
 
-public class ImmutableDirectedBigGraphAdapter
-    extends
-    AbstractImmutableBigGraphAdapter<LongLongPair>
-    implements
-    FlyweightPrototype<ImmutableDirectedBigGraphAdapter>
+public class ImmutableDirectedBigGraphAdapter extends AbstractImmutableBigGraphAdapter<LongLongPair> implements FlyweightPrototype<ImmutableDirectedBigGraphAdapter>
 {
 
     private final ImmutableGraph immutableTranspose;
@@ -197,9 +193,8 @@ public class ImmutableDirectedBigGraphAdapter
     @Override
     public GraphType getType()
     {
-        return new DefaultGraphType.Builder()
-            .weighted(false).modifiable(false).allowMultipleEdges(false).allowSelfLoops(true)
-            .directed().build();
+        return new DefaultGraphType.Builder().weighted(false).modifiable(false)
+            .allowMultipleEdges(false).allowSelfLoops(true).directed().build();
     }
 
     @Override

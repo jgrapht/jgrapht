@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -66,8 +66,7 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class ALTAdmissibleHeuristic<V, E>
-    implements AStarAdmissibleHeuristic<V>
+public class ALTAdmissibleHeuristic<V, E> implements AStarAdmissibleHeuristic<V>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;

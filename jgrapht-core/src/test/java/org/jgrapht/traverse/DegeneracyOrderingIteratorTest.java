@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -119,8 +119,7 @@ public class DegeneracyOrderingIteratorTest
             listener.toString());
     }
 
-    private static class TestTraversalListener<V, E>
-        implements TraversalListener<V, E>
+    private static class TestTraversalListener<V, E> implements TraversalListener<V, E>
     {
 
         private StringBuilder sb = new StringBuilder();

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2023, by Tom Larkworthy and Contributors.
+ * (C) Copyright 2009-2026, by Tom Larkworthy and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,10 +42,9 @@ public class FloydWarshallShortestPathsTest
 
         for (int i = 0; i < 10; i++) {
             // Generate directed graph
-            SimpleDirectedGraph<Integer,
-                DefaultWeightedEdge> directed = new SimpleDirectedGraph<>(
-                    SupplierUtil.createIntegerSupplier(),
-                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+            SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed = new SimpleDirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER,
+                false);
             gen.generateGraph(directed);
 
             // setup our shortest path measurer
@@ -74,10 +73,9 @@ public class FloydWarshallShortestPathsTest
             }
 
             // Generate Undirected graph
-            SimpleGraph<Integer,
-                DefaultWeightedEdge> undirected = new SimpleGraph<>(
-                    SupplierUtil.createIntegerSupplier(),
-                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+            SimpleGraph<Integer, DefaultWeightedEdge> undirected = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER,
+                false);
             gen.generateGraph(undirected);
 
             // setup our shortest path measurer

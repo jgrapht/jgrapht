@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2006-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,9 +38,7 @@ import java.util.*;
  * @author John V. Sichi
  * @see AsUndirectedGraph
  */
-public class EdgeReversedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Graph<V, E>
+public class EdgeReversedGraph<V, E> extends GraphDelegator<V, E> implements Graph<V, E>
 {
     private static final long serialVersionUID = -3806030402468293063L;
 

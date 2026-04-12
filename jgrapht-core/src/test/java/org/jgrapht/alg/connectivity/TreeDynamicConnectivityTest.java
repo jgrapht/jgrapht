@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -128,10 +128,9 @@ public class TreeDynamicConnectivityTest
 
     private Graph<Integer, DefaultEdge> generateTree(int nodeNum, int start)
     {
-        Graph<Integer,
-            DefaultEdge> tree = new DefaultUndirectedGraph<>(
-                SupplierUtil.createIntegerSupplier(start), SupplierUtil.createDefaultEdgeSupplier(),
-                false);
+        Graph<Integer, DefaultEdge> tree = new DefaultUndirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(start), SupplierUtil.createDefaultEdgeSupplier(),
+            false);
 
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen =
             new BarabasiAlbertForestGenerator<>(1, nodeNum, RANDOM);

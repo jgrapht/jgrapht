@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2023, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2026, by Peter Giles and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -59,9 +59,7 @@ import org.jgrapht.util.*;
  *
  * @author Peter Giles
  */
-public class DirectedAcyclicGraph<V, E>
-    extends AbstractBaseGraph<V, E>
-    implements Iterable<V>
+public class DirectedAcyclicGraph<V, E> extends AbstractBaseGraph<V, E> implements Iterable<V>
 {
     private static final long serialVersionUID = 4522128427004938150L;
 
@@ -200,9 +198,8 @@ public class DirectedAcyclicGraph<V, E>
     {
         super(
             vertexSupplier, edgeSupplier,
-            new DefaultGraphType.Builder()
-                .directed().allowMultipleEdges(allowMultipleEdges).allowSelfLoops(false)
-                .weighted(weighted).allowCycles(false).build(),
+            new DefaultGraphType.Builder().directed().allowMultipleEdges(allowMultipleEdges)
+                .allowSelfLoops(false).weighted(weighted).allowCycles(false).build(),
             graphSpecificsStrategy);
         this.visitedStrategyFactory =
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
@@ -621,8 +618,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected interface TopoOrderMap<V>
-        extends Serializable
+    protected interface TopoOrderMap<V> extends Serializable
     {
         /**
          * Add a vertex at the given topological index.
@@ -708,8 +704,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected interface VisitedStrategyFactory
-        extends Serializable
+    protected interface VisitedStrategyFactory extends Serializable
     {
         /**
          * Create a new instance of {@link VisitedStrategy}.
@@ -725,8 +720,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected static class TopoVertexBiMap<V>
-        implements TopoOrderMap<V>
+    protected static class TopoVertexBiMap<V> implements TopoOrderMap<V>
     {
         private static final long serialVersionUID = 1L;
 
@@ -784,8 +778,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected class TopoVertexMap
-        implements TopoOrderMap<V>
+    protected class TopoVertexMap implements TopoOrderMap<V>
     {
         private static final long serialVersionUID = 1L;
 
@@ -863,8 +856,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected static class Region
-        implements Serializable
+    protected static class Region implements Serializable
     {
         private static final long serialVersionUID = 1L;
 
@@ -938,8 +930,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author John V. Sichi
      */
-    protected static class VisitedBitSetImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+    protected static class VisitedBitSetImpl implements VisitedStrategy, VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1003,8 +994,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected static class VisitedArrayListImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+    protected static class VisitedArrayListImpl implements VisitedStrategy, VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1075,8 +1065,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected static class VisitedHashSetImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+    protected static class VisitedHashSetImpl implements VisitedStrategy, VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1125,8 +1114,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    protected static class VisitedArrayImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+    protected static class VisitedArrayImpl implements VisitedStrategy, VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1190,8 +1178,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    private static class CycleFoundException
-        extends Exception
+    private static class CycleFoundException extends Exception
     {
         private static final long serialVersionUID = 5583471522212552754L;
     }
@@ -1201,16 +1188,15 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    private class TopoComparator
-        implements Comparator<V>, Serializable
+    private class TopoComparator implements Comparator<V>, Serializable
     {
         private static final long serialVersionUID = 8144905376266340066L;
 
         @Override
         public int compare(V o1, V o2)
         {
-            return topoOrderMap
-                .getTopologicalIndex(o1).compareTo(topoOrderMap.getTopologicalIndex(o2));
+            return topoOrderMap.getTopologicalIndex(o1)
+                .compareTo(topoOrderMap.getTopologicalIndex(o2));
         }
 
     }
@@ -1220,8 +1206,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @author Peter Giles
      */
-    private class TopoIterator
-        implements Iterator<V>
+    private class TopoIterator implements Iterator<V>
     {
         private int currentTopoIndex;
         private final long expectedTopoModCount = topoModCount;

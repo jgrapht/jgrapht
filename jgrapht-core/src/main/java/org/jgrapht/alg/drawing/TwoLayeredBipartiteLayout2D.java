@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,20 +32,19 @@ import org.jgrapht.alg.util.Pair;
 
 /**
  * A two layered bipartite layout.
- * 
+ *
  * The algorithm draws a bipartite graph using straight edges. Vertices are arranged along two
  * vertical or horizontal lines. No attempt is made to minimize edge crossings.
- * 
+ *
  * The order of the vertices can be adjusted by providing a vertex comparator. Similarly the user
  * can also determine the two partitions or can let the algorithm compute them.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class TwoLayeredBipartiteLayout2D<V, E>
-    implements LayoutAlgorithm2D<V, E>
+public class TwoLayeredBipartiteLayout2D<V, E> implements LayoutAlgorithm2D<V, E>
 {
     protected Comparator<V> vertexComparator;
     protected boolean vertical;
@@ -61,7 +60,7 @@ public class TwoLayeredBipartiteLayout2D<V, E>
 
     /**
      * Create a new layout
-     * 
+     *
      * @param partition one of the two partitions, can be null
      * @param vertexComparator vertex order, can be null
      * @param vertical draw on two vertical or horizontal lines
@@ -76,7 +75,7 @@ public class TwoLayeredBipartiteLayout2D<V, E>
 
     /**
      * Adjust the vertex comparator which specifies the vertex order.
-     * 
+     *
      * @param vertexComparator the vertex comparator, or null in order to use the graph ordering
      * @return the layout algorithm instance
      */
@@ -88,7 +87,7 @@ public class TwoLayeredBipartiteLayout2D<V, E>
 
     /**
      * Adjust whether the layout will be vertical or horizontal.
-     * 
+     *
      * @param vertical if true vertical, otherwize horizontal
      * @return the layout algorithm instance
      */
@@ -101,7 +100,7 @@ public class TwoLayeredBipartiteLayout2D<V, E>
     /**
      * Specify the first of the two bipartite partitions. If not provided, the algorithm computes a
      * partitioning.
-     * 
+     *
      * @param partition the partition
      * @return the layout algorithm instance
      */
@@ -189,7 +188,7 @@ public class TwoLayeredBipartiteLayout2D<V, E>
 
     /**
      * Compute the vertex partitions.
-     * 
+     *
      * @param graph the input graph
      * @return a pair of two vertex lists
      */

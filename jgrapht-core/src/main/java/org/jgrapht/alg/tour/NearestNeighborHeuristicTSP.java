@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Peter Harman and Contributors.
+ * (C) Copyright 2019-2026, by Peter Harman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -69,8 +69,7 @@ import static org.jgrapht.util.ArrayUtil.*;
  * @author Peter Harman
  * @author Hannes Wellmann
  */
-public class NearestNeighborHeuristicTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class NearestNeighborHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     private Random rng;

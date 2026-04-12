@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,7 +56,9 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test
     public void testNullGraphs()
     {
-        assertThrows(NullPointerException.class, () -> new AHURootedTreeIsomorphismInspector<>(null, null, null, null));
+        assertThrows(
+            NullPointerException.class,
+            () -> new AHURootedTreeIsomorphismInspector<>(null, null, null, null));
     }
 
     @Test
@@ -123,15 +125,13 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test
     public void testCornerCase2()
     {
-        Graph<Integer,
-            DefaultEdge> tree1 = parseGraph(
-                "[1, 2, 5, 6, 8, 9, 10, 11, 14, 15]",
-                "[{2,1}, {5,1}, {6,1}, {8,1}, {9,6}, {10,1}, {11,6}, {14,5}, {15,1}]");
+        Graph<Integer, DefaultEdge> tree1 = parseGraph(
+            "[1, 2, 5, 6, 8, 9, 10, 11, 14, 15]",
+            "[{2,1}, {5,1}, {6,1}, {8,1}, {9,6}, {10,1}, {11,6}, {14,5}, {15,1}]");
 
-        Graph<Integer,
-            DefaultEdge> tree2 = parseGraph(
-                "[1, 18, 3, 19, 4, 5, 8, 9, 12, 13]",
-                "[{8,12}, {3,12}, {18,12}, {9,12}, {5,18}, {19,12}, {13,12}, {4,13}, {1,18}]");
+        Graph<Integer, DefaultEdge> tree2 = parseGraph(
+            "[1, 18, 3, 19, 4, 5, 8, 9, 12, 13]",
+            "[{8,12}, {3,12}, {18,12}, {9,12}, {5,18}, {19,12}, {13,12}, {4,13}, {1,18}]");
 
         AHURootedTreeIsomorphismInspector<Integer, DefaultEdge> isomorphism =
             new AHURootedTreeIsomorphismInspector<>(tree1, 1, tree2, 12);

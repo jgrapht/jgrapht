@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test {@link FloydWarshallShortestPaths} on pseudo graphs.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class FloydWarshallPseudographsTest

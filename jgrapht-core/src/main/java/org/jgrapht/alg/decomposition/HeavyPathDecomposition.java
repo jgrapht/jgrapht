@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -64,8 +64,7 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class HeavyPathDecomposition<V, E>
-    implements TreeToPathDecompositionAlgorithm<V, E>
+public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgorithm<V, E>
 {
 
     private final Graph<V, E> graph;

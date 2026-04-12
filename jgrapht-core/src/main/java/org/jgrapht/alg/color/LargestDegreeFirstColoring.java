@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * The largest degree first greedy coloring algorithm.
- * 
+ *
  * <p>
  * This is the greedy coloring algorithm which orders the vertices by non-increasing degree. See the
  * following paper for details.
@@ -36,15 +36,14 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class LargestDegreeFirstColoring<V, E>
-    extends GreedyColoring<V, E>
+public class LargestDegreeFirstColoring<V, E> extends GreedyColoring<V, E>
 {
     /**
      * Construct a new coloring algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public LargestDegreeFirstColoring(Graph<V, E> graph)

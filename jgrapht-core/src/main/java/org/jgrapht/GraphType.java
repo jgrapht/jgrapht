@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,55 +19,55 @@ package org.jgrapht;
 
 /**
  * A graph type.
- * 
+ *
  * <p>
  * The graph type describes various properties of a graph such as whether it is directed, undirected
  * or mixed, whether it contain self-loops (a self-loop is an edge where the source vertex is the
  * same as the target vertex), whether it contain multiple (parallel) edges (multiple edges which
  * connect the same pair of vertices) and whether it is weighted or not.
- * 
+ *
  * <p>
  * The type of a graph can be queried on runtime using method {@link Graph#getType()}. This way, for
  * example, an algorithm can have different behavior based on whether the input graph is directed or
  * undirected, etc.
- * 
+ *
  * @author Dimitrios Michail
  */
 public interface GraphType
 {
     /**
      * Returns {@code true} if all edges of the graph are directed, false otherwise.
-     * 
+     *
      * @return true if all edges of the graph are directed, false otherwise
      */
     boolean isDirected();
 
     /**
      * Returns {@code true} if all edges of the graph are undirected, false otherwise.
-     * 
+     *
      * @return {@code true} if all edges of the graph are undirected, false otherwise
      */
     boolean isUndirected();
 
     /**
-     * Returns {@code true} if the graph contain both directed and undirected edges, false otherwise.
-     * 
+     * Returns {@code true} if the graph contain both directed and undirected edges, false
+     * otherwise.
+     *
      * @return {@code true} if the graph contain both directed and undirected edges, false otherwise
      */
     boolean isMixed();
 
     /**
-     * Returns {@code true} if and only if multiple (parallel) edges are allowed in this graph.
-     * The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
-     * v2.
+     * Returns {@code true} if and only if multiple (parallel) edges are allowed in this graph. The
+     * meaning of multiple edges is that there can be many edges going from vertex v1 to vertex v2.
      *
      * @return {@code true} if and only if multiple (parallel) edges are allowed.
      */
     boolean isAllowingMultipleEdges();
 
     /**
-     * Returns {@code true} if and only if self-loops are allowed in this graph. A self loop is
-     * an edge that its source and target vertices are the same.
+     * Returns {@code true} if and only if self-loops are allowed in this graph. A self loop is an
+     * edge that its source and target vertices are the same.
      *
      * @return {@code true} if and only if graph self-loops are allowed.
      */
@@ -89,77 +89,77 @@ public interface GraphType
 
     /**
      * Returns {@code true} if the graph is simple, {@code false} otherwise.
-     * 
+     *
      * @return {@code true} if the graph is simple, {@code false} otherwise
      */
     boolean isSimple();
 
     /**
      * Returns {@code true} if the graph is a pseudograph, {@code false} otherwise.
-     * 
+     *
      * @return {@code true} if the graph is a pseudograph, {@code false} otherwise
      */
     boolean isPseudograph();
 
     /**
      * Returns {@code true} if the graph is a multigraph, {@code false} otherwise.
-     * 
+     *
      * @return {@code true} if the graph is a multigraph, {@code false} otherwise
      */
     boolean isMultigraph();
 
     /**
      * Returns {@code true} if the graph is modifiable, {@code false} otherwise.
-     * 
+     *
      * @return {@code true} if the graph is modifiable, {@code false} otherwise
      */
     boolean isModifiable();
 
     /**
      * Create a directed variant of the current graph type.
-     * 
+     *
      * @return a directed variant of the current graph type
      */
     GraphType asDirected();
 
     /**
      * Create an undirected variant of the current graph type.
-     * 
+     *
      * @return an undirected variant of the current graph type
      */
     GraphType asUndirected();
 
     /**
      * Create a mixed variant of the current graph type.
-     * 
+     *
      * @return a mixed variant of the current graph type
      */
     GraphType asMixed();
 
     /**
      * Create an unweighted variant of the current graph type.
-     * 
+     *
      * @return an unweighted variant of the current graph type
      */
     GraphType asUnweighted();
 
     /**
      * Create a weighted variant of the current graph type.
-     * 
+     *
      * @return a weighted variant of the current graph type
      */
     GraphType asWeighted();
 
     /**
      * Create a modifiable variant of the current graph type.
-     * 
+     *
      * @return a modifiable variant of the current graph type
      */
     GraphType asModifiable();
 
     /**
      * Create an unmodifiable variant of the current graph type.
-     * 
+     *
      * @return a unmodifiable variant of the current graph type
      */
     GraphType asUnmodifiable();

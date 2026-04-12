@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Amr ALHOSSARY and Contributors.
+ * (C) Copyright 2019-2026, by Amr ALHOSSARY and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,13 +38,34 @@ public class DirectedScaleFreeGraphGeneratorTest
     @Test
     public void testBadParameters()
     {
-        assertThrows(IllegalArgumentException.class, () -> new DirectedScaleFreeGraphGenerator<>(-0.5f, 0.33f, 0.5f, 0.5f, 500, 500, SEED), "Bad alpha checking");
-        assertThrows(IllegalArgumentException.class, () -> new DirectedScaleFreeGraphGenerator<>(0.33f, -0.5f, 0.5f, 0.5f, 500, 500, SEED), "Bad gamma checking");
-        assertThrows(IllegalArgumentException.class, () -> new DirectedScaleFreeGraphGenerator<>(0.66f, 0.66f, 0.5f, 0.5f, 500, 500, SEED), "Bad alpha + gamma checking");
-        assertThrows(IllegalArgumentException.class, () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, -0.5f, 0.5f, 500, 500, SEED), "Bad deltaIn checking");
-        assertThrows(IllegalArgumentException.class, () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, -0.5f, 500, 500, SEED), "Bad deltaOut checking");
-        assertThrows(IllegalArgumentException.class, () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, -1, SEED),"Bad target checking");
-        assertThrows(NullPointerException.class, () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 500, 500, null), "Bad random number generator checking");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(-0.5f, 0.33f, 0.5f, 0.5f, 500, 500, SEED),
+            "Bad alpha checking");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(0.33f, -0.5f, 0.5f, 0.5f, 500, 500, SEED),
+            "Bad gamma checking");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(0.66f, 0.66f, 0.5f, 0.5f, 500, 500, SEED),
+            "Bad alpha + gamma checking");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, -0.5f, 0.5f, 500, 500, SEED),
+            "Bad deltaIn checking");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, -0.5f, 500, 500, SEED),
+            "Bad deltaOut checking");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, -1, SEED),
+            "Bad target checking");
+        assertThrows(
+            NullPointerException.class,
+            () -> new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 500, 500, null),
+            "Bad random number generator checking");
 
     }
 

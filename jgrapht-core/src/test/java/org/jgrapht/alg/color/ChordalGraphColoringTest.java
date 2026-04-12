@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -123,8 +123,8 @@ public class ChordalGraphColoringTest
      * @param <V> the graph vertex type.
      * @param <E> the graph edge type.
      */
-    private <V,
-        E> void assertIsColoring(Graph<V, E> graph, VertexColoringAlgorithm.Coloring<V> coloring)
+    private <V, E> void assertIsColoring(
+        Graph<V, E> graph, VertexColoringAlgorithm.Coloring<V> coloring)
     {
         Map<V, Integer> colors = coloring.getColors();
         for (V vertex : graph.vertexSet()) {

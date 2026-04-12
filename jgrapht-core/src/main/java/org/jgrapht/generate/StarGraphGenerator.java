@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2023, by Andrew Newell and Contributors.
+ * (C) Copyright 2008-2026, by Andrew Newell and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import java.util.*;
  *
  * @author Andrew Newell
  */
-public class StarGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class StarGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     public static final String CENTER_VERTEX = "Center Vertex";
 

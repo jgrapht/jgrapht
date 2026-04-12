@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2017-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -48,8 +48,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class HeldKarpTSP<V, E>
-    extends HamiltonianCycleAlgorithmBase<V, E>
+public class HeldKarpTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
 
     private double memo(int previousNode, int state, double[][] c, double[][] w)

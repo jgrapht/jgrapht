@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Hannes Wellmann and Contributors.
+ * (C) Copyright 2020-2026, by Hannes Wellmann and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -64,7 +64,8 @@ public class CollectionUtil
      *
      * @param <K> the type of keys in the returned {@code LinkedHashMap}
      * @param <V> the type of values in the returned {@code LinkedHashMap}
-     * @param expectedSize expected size of mappings that will be put into the returned {@code LinkedHashMap}
+     * @param expectedSize expected size of mappings that will be put into the returned
+     *        {@code LinkedHashMap}
      * @return an empty {@code LinkedHashMap} with sufficient capacity to hold expectedSize mappings
      * @see HashMap
      */
@@ -83,7 +84,8 @@ public class CollectionUtil
      * </p>
      *
      * @param <E> the type of elements in the returned {@code HashSet}
-     * @param expectedSize expected number of elements that will be add to the returned {@code HashSet}
+     * @param expectedSize expected number of elements that will be add to the returned
+     *        {@code HashSet}
      * @return an empty {@code HashSet} with sufficient capacity to hold expectedSize elements
      * @see HashMap
      */
@@ -102,7 +104,8 @@ public class CollectionUtil
      * </p>
      *
      * @param <E> the type of elements in the returned {@code LinkedHashSet}
-     * @param expectedSize expected number of elements that will be add to the returned {@code LinkedHashSet}
+     * @param expectedSize expected number of elements that will be add to the returned
+     *        {@code LinkedHashSet}
      * @return an empty {@code LinkedHashSet} with sufficient capacity to hold expectedSize elements
      * @see HashMap
      */

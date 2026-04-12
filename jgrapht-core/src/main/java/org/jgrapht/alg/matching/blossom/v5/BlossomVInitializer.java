@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -214,8 +214,8 @@ class BlossomVInitializer<V, E>
         nodes[nodeNum] = new BlossomVNode(nodeNum); // auxiliary node to keep track of the first
                                                     // item in the linked list of tree roots
         i = 0;
-        double minEdgeWeight = graph
-            .edgeSet().stream().map(graph::getEdgeWeight).min(Comparator.naturalOrder()).orElse(0d);
+        double minEdgeWeight = graph.edgeSet().stream().map(graph::getEdgeWeight)
+            .min(Comparator.naturalOrder()).orElse(0d);
         // maps edges
         for (E e : graph.edgeSet()) {
             BlossomVNode source = vertexMap.get(graph.getEdgeSource(e));

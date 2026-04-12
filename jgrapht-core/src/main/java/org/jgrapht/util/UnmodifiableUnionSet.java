@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,9 +27,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-public class UnmodifiableUnionSet<E>
-    extends AbstractSet<E>
-    implements Serializable
+public class UnmodifiableUnionSet<E> extends AbstractSet<E> implements Serializable
 {
     private static final long serialVersionUID = -1937327799873331354L;
 
@@ -38,7 +36,7 @@ public class UnmodifiableUnionSet<E>
 
     /**
      * Constructs a new set.
-     * 
+     *
      * @param first the first set
      * @param second the second set
      */
@@ -58,7 +56,7 @@ public class UnmodifiableUnionSet<E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * Since the view is live, this operation is no longer a constant time operation.
      */
     @Override
@@ -112,8 +110,7 @@ public class UnmodifiableUnionSet<E>
         }
     }
 
-    private class UnionIterator
-        implements Iterator<E>
+    private class UnionIterator implements Iterator<E>
     {
         private SetSizeOrdering ordering;
         private boolean inBiggerSet;

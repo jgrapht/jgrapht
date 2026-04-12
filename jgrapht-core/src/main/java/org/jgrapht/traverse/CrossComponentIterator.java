@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public abstract class CrossComponentIterator<V, E, D>
-    extends AbstractGraphIterator<V, E>
+public abstract class CrossComponentIterator<V, E, D> extends AbstractGraphIterator<V, E>
 {
     private static final int CCS_BEFORE_COMPONENT = 1;
     private static final int CCS_WITHIN_COMPONENT = 2;
@@ -75,7 +74,7 @@ public abstract class CrossComponentIterator<V, E, D>
      * Creates a new iterator for the specified graph.
      *
      * @param g the graph to be iterated
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public CrossComponentIterator(Graph<V, E> g)
@@ -85,8 +84,8 @@ public abstract class CrossComponentIterator<V, E, D>
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
-     * vertex. If the specified start vertex is {@code null},
-     * Iteration will start at an arbitrary graph vertex.
+     * vertex. If the specified start vertex is {@code null}, Iteration will start at an arbitrary
+     * graph vertex.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
@@ -101,14 +100,14 @@ public abstract class CrossComponentIterator<V, E, D>
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
-     * vertices. If the specified start vertices is {@code null},
-     * Iteration will start at an arbitrary graph vertex.
+     * vertices. If the specified start vertices is {@code null}, Iteration will start at an
+     * arbitrary graph vertex.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
      *
-     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not
-     *                                  a vertex of {@code g}
+     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not a
+     *         vertex of {@code g}
      * @throws NullPointerException if {@code g} is {@code null}
      */
     public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices)
@@ -239,8 +238,7 @@ public abstract class CrossComponentIterator<V, E, D>
     protected abstract void encounterVertex(V vertex, E edge);
 
     /**
-     * Returns the vertex to be returned in the following call to the iterator {@code next}
-     * method.
+     * Returns the vertex to be returned in the following call to the iterator {@code next} method.
      *
      * @return the next vertex to be returned by this iterator.
      */
@@ -251,9 +249,9 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex a vertex which has already been seen.
      *
-     * @return data associated with the seen vertex or {@code null} if no data was associated
-     *         with the vertex. A {@code null} return can also indicate that the vertex was
-     *         explicitly associated with {@code null}.
+     * @return data associated with the seen vertex or {@code null} if no data was associated with
+     *         the vertex. A {@code null} return can also indicate that the vertex was explicitly
+     *         associated with {@code null}.
      */
     protected D getSeenData(V vertex)
     {
@@ -286,10 +284,9 @@ public abstract class CrossComponentIterator<V, E, D>
      * @param vertex a vertex which has been seen.
      * @param data data to be associated with the seen vertex.
      *
-     * @return previous value associated with specified vertex or {@code null}
-     *         if no data was associated with the vertex. A {@code null} return
-     *         can also indicate that the vertex was explicitly associated with
-     *         {@code null}.
+     * @return previous value associated with specified vertex or {@code null} if no data was
+     *         associated with the vertex. A {@code null} return can also indicate that the vertex
+     *         was explicitly associated with {@code null}.
      */
     protected D putSeenData(V vertex, D data)
     {

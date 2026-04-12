@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -74,11 +74,7 @@ import it.unimi.dsi.sux4j.util.EliasFanoMonotoneLongBigList;
  * @see SuccinctDirectedGraph
  */
 
-public class SuccinctIntDirectedGraph
-    extends
-    AbstractSuccinctDirectedGraph<Integer>
-    implements
-    Serializable
+public class SuccinctIntDirectedGraph extends AbstractSuccinctDirectedGraph<Integer> implements Serializable
 {
     private static final long serialVersionUID = 0L;
     /** The cumulative list of outdegrees. */
@@ -133,8 +129,7 @@ public class SuccinctIntDirectedGraph
             predecessors = new EliasFanoIndexedMonotoneLongBigList(
                 m, (long) n * n - m,
                 new CumulativeSuccessors<>(graph, iterables::incomingEdgesOf, false));
-        }
-        else {
+        } else {
             cumulativeIndegrees = predecessors = null;
         }
     }
@@ -240,7 +235,6 @@ public class SuccinctIntDirectedGraph
     {
         this(numVertices, numEdges, edges, true);
     }
-
 
     @Override
     public boolean containsEdge(final Integer e)
@@ -352,10 +346,7 @@ public class SuccinctIntDirectedGraph
 
     }
 
-    private final static class SuccinctGraphIterables
-        implements
-        GraphIterables<Integer, Integer>,
-        Serializable
+    private final static class SuccinctGraphIterables implements GraphIterables<Integer, Integer>, Serializable
     {
         private static final long serialVersionUID = 0L;
         private final SuccinctIntDirectedGraph graph;

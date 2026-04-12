@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2013-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -49,8 +49,7 @@ public interface MatchingAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    interface Matching<V, E>
-        extends Iterable<E>
+    interface Matching<V, E> extends Iterable<E>
     {
         /**
          * Returns the graph over which this matching is defined.
@@ -75,7 +74,7 @@ public interface MatchingAlgorithm<V, E>
 
         /**
          * Returns true if vertex v is incident to an edge in this matching.
-         * 
+         *
          * @param v vertex
          * @return true if vertex v is incident to an edge in this matching.
          */
@@ -88,7 +87,7 @@ public interface MatchingAlgorithm<V, E>
         /**
          * Returns true if the matching is a perfect matching. A matching is perfect if every vertex
          * in the graph is incident to an edge in the matching.
-         * 
+         *
          * @return true if the matching is perfect. By definition, a perfect matching consists of
          *         exactly $\frac{1}{2|V|}$ edges, and the number of vertices in the graph must be
          *         even.
@@ -100,7 +99,7 @@ public interface MatchingAlgorithm<V, E>
 
         /**
          * Returns an iterator over the edges in the matching.
-         * 
+         *
          * @return iterator over the edges in the matching.
          */
         @Override
@@ -112,12 +111,11 @@ public interface MatchingAlgorithm<V, E>
 
     /**
      * A default implementation of the matching interface.
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class MatchingImpl<V, E>
-        implements Matching<V, E>, Serializable
+    class MatchingImpl<V, E> implements Matching<V, E>, Serializable
     {
         private static final long serialVersionUID = 4767675421846527768L;
 

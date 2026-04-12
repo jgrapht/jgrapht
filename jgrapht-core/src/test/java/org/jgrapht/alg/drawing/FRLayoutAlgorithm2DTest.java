@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link FRLayoutAlgorithm2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class FRLayoutAlgorithm2DTest
@@ -44,9 +44,8 @@ public class FRLayoutAlgorithm2DTest
     @Test
     public void testGraph1()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -74,7 +73,7 @@ public class FRLayoutAlgorithm2DTest
 
         // @formatter:off
         //  6        4
-        //   \      / 
+        //   \      /
         //    2 -- 1
         //   /      \
         //  5        3
@@ -99,9 +98,8 @@ public class FRLayoutAlgorithm2DTest
     @Test
     public void testInitializerSamePosition()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();
@@ -139,9 +137,8 @@ public class FRLayoutAlgorithm2DTest
     @Test
     public void testGraphWithIsolatedVertex()
     {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+        Graph<String, DefaultEdge> graph =
+            GraphTypeBuilder.undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         String v1 = graph.addVertex();

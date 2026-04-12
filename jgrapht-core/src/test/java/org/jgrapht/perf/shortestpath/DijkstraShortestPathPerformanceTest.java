@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -62,10 +62,10 @@ public class DijkstraShortestPathPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, rng, false);
             }
 
-            this.graph = GraphTypeBuilder
-                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(true)
-                .allowingSelfLoops(true).buildGraph();
+            this.graph =
+                GraphTypeBuilder.directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                    .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .allowingMultipleEdges(true).allowingSelfLoops(true).buildGraph();
 
             generator.generateGraph(graph);
 
@@ -85,8 +85,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class DijkstraBenchmark
-        extends BenchmarkBase
+    public static class DijkstraBenchmark extends BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -102,8 +101,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class BFSShortestPathBenchmark
-        extends BenchmarkBase
+    public static class BFSShortestPathBenchmark extends BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -119,8 +117,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class ClosestFirstIteratorBenchmark
-        extends BenchmarkBase
+    public static class ClosestFirstIteratorBenchmark extends BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -157,8 +154,8 @@ public class DijkstraShortestPathPerformanceTest
                     }
                 }
 
-                public org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths<Integer,
-                    DefaultWeightedEdge> getPaths(Integer source)
+                public org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> getPaths(
+                    Integer source)
                 {
                     throw new UnsupportedOperationException();
                 }
@@ -172,8 +169,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class BidirectionalDijkstraBenchmark
-        extends BenchmarkBase
+    public static class BidirectionalDijkstraBenchmark extends BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -190,8 +186,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class AStarNoHeuristicBenchmark
-        extends BenchmarkBase
+    public static class AStarNoHeuristicBenchmark extends BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -208,8 +203,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class AStarALTBenchmark
-        extends BenchmarkBase
+    public static class AStarALTBenchmark extends BenchmarkBase
     {
         private int totalLandmarks;
 
@@ -237,8 +231,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class BidirectionalAStarNoHeuristicBenchmark
-        extends BenchmarkBase
+    public static class BidirectionalAStarNoHeuristicBenchmark extends BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -254,8 +247,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class BidirectionalAStarALTBenchmark
-        extends BenchmarkBase
+    public static class BidirectionalAStarALTBenchmark extends BenchmarkBase
     {
         private int totalLandmarks;
 

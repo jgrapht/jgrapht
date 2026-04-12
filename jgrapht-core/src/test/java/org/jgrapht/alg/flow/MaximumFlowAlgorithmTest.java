@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Joris Kinable
  */
-public abstract class MaximumFlowAlgorithmTest
-    extends MaximumFlowMinimumCutAlgorithmTestBase
+public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgorithmTestBase
 {
 
     abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(

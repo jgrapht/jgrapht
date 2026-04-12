@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2024-2024, by Sung Ho Yoon and Contributors.
+ * (C) Copyright 2024-2026, by Sung Ho Yoon and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,8 @@ import org.jgrapht.*;
 import org.junit.jupiter.api.*;
 
 @DisplayName("Unmodifiable graph view tests")
-public class AsUnmodifiableGraphTest {
+public class AsUnmodifiableGraphTest
+{
 
     private DefaultWeightedEdge loop;
     private DefaultWeightedEdge e12;
@@ -39,8 +40,7 @@ public class AsUnmodifiableGraphTest {
     @BeforeEach
     public void setUp()
     {
-        this.baseGraph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        this.baseGraph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         baseGraph.addVertex(v1);
         baseGraph.addVertex(v2);
@@ -56,7 +56,8 @@ public class AsUnmodifiableGraphTest {
 
     @DisplayName("Test null graph")
     @Test
-    public void testNullGraph() {
+    public void testNullGraph()
+    {
         assertThrows(NullPointerException.class, () -> new AsUnmodifiableGraph<>(null));
     }
 
@@ -76,15 +77,18 @@ public class AsUnmodifiableGraphTest {
 
     @DisplayName("Test vertex addition")
     @Test
-    public void testAddVertex() {
+    public void testAddVertex()
+    {
         assertThrows(UnsupportedOperationException.class, () -> unmodifiableGraph.addVertex());
         assertThrows(UnsupportedOperationException.class, () -> unmodifiableGraph.addVertex("v5"));
     }
 
     @DisplayName("Test edge weight modification")
     @Test
-    public void testSetEdgeWeight() {
-        assertThrows(UnsupportedOperationException.class, () -> unmodifiableGraph.setEdgeWeight(v1, v2, 0d));
+    public void testSetEdgeWeight()
+    {
+        assertThrows(
+            UnsupportedOperationException.class, () -> unmodifiableGraph.setEdgeWeight(v1, v2, 0d));
         assertEquals(6d, baseGraph.getEdgeWeight(e12));
     }
 }

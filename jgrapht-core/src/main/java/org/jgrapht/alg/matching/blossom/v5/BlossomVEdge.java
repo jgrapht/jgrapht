@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -230,8 +230,7 @@ class BlossomVEdge
      * <b>Note:</b> this iterator must return the blossom root in the first branch, i.e. when the
      * direction is 0. This feature is needed to setup the blossomSibling references correctly
      */
-    public static class BlossomNodesIterator
-        implements Iterator<BlossomVNode>
+    public static class BlossomNodesIterator implements Iterator<BlossomVNode>
     {
         /**
          * Blossom's root

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,7 @@ import java.util.function.*;
  *
  * @author John V. Sichi
  */
-public class WheelGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class WheelGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     /**
      * Role for the hub vertex.
@@ -61,8 +60,8 @@ public class WheelGraphGenerator<V, E>
      * Construct a new WheelGraphGenerator.
      *
      * @param size number of vertices to be generated.
-     * @param inwardSpokes if {@code true} and graph is directed, spokes are oriented from rim
-     *        to hub; else from hub to rim.
+     * @param inwardSpokes if {@code true} and graph is directed, spokes are oriented from rim to
+     *        hub; else from hub to rim.
      *
      * @throws IllegalArgumentException in case the number of vertices is negative
      */

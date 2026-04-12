@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2023, by Leo Crawford and Contributors.
+ * (C) Copyright 2013-2026, by Leo Crawford and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,7 +19,6 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
@@ -66,8 +65,7 @@ import java.util.*;
  * @author Leo Crawford
  * @author Alexandru Valeanu
  */
-public class NaiveLCAFinder<V, E>
-    implements LowestCommonAncestorAlgorithm<V>
+public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
     private final Graph<V, E> graph;
 

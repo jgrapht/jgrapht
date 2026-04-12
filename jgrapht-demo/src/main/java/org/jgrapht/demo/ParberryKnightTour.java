@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Kirill Vishnyakov and Contributors.
+ * (C) Copyright 2018-2026, by Kirill Vishnyakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -92,7 +92,7 @@ public class ParberryKnightTour
 
     /**
      * Constructor.
-     * 
+     *
      * @param n width of the board.
      * @param m height of the board.
      */
@@ -122,7 +122,7 @@ public class ParberryKnightTour
     /**
      * Generates a closed knight's tour for a piece of the board which is being set by left-upper
      * and right-bottom cells.
-     * 
+     *
      * @param start left-upper cell of the piece of the original chessboard.
      * @param end right-bottom cell of the piece of the original chessboard.
      * @return closed knight's tour on this piece of the board.
@@ -208,7 +208,7 @@ public class ParberryKnightTour
 
         /*
          * Removing edges A, B, C and D.
-         * 
+         *
          * ######################################### #*******************|*******************#
          * #*******************|*******************# #*******************|*******************#
          * #******TOUR 1*******|******TOUR 2*******# #*******************|*******************#
@@ -223,7 +223,7 @@ public class ParberryKnightTour
 
         /*
          * Adding edges E, F, G, H to contract the quadrants.
-         * 
+         *
          * ######################################### #*******************|*******************#
          * #*******************|*******************# #*******************|*******************#
          * #******TOUR 1*******|******TOUR 2*******# #*******************|*******************#
@@ -240,7 +240,7 @@ public class ParberryKnightTour
          * Relation between nodes in structured array and endpoints of the edges to be
          * deleted/added. Note that you don't know the direction of the edges A, B, C, D, so you
          * have to check both options.
-         * 
+         *
          * ######################################### #**0***************2|**0***************2#
          * #1******************|1******************# #*****************3*|*****************3*#
          * #******TOUR 1*******|******TOUR 2*******# #*******************|*******************#
@@ -251,32 +251,32 @@ public class ParberryKnightTour
          * #*******************|*******************# #*4*****************|*4*****************#
          * #******************6|******************6# #5***************7**|5***************7**#
          * ######################################### _________________________________
-         * 
+         *
          * A.start = tour1.forStructured[6]; A.end = tour1.forStructured[7];
-         * 
+         *
          * or
-         * 
+         *
          * A.end = tour1.forStructured[6]; A.start = tour1.forStructured[7];
          * __________________________________
-         * 
+         *
          * B.start = tour2.forStructured[4]; B.end = tour2.forStructured[5];
-         * 
+         *
          * or
-         * 
+         *
          * B.end = tour2.forStructured[4]; B.start = tour2.forStructured[5];
          * __________________________________
-         * 
+         *
          * C.start = tour4.forStructured[0]; C.end = tour4.forStructured[1];
-         * 
+         *
          * or
-         * 
+         *
          * C.end = tour4.forStructured[0]; C.start = tour4.forStructured[1];
          * __________________________________
-         * 
+         *
          * D.start = tour2.forStructured[2]; D.end = tour2.forStructured[3];
-         * 
+         *
          * or
-         * 
+         *
          * D.end = tour2.forStructured[2]; D.start = tour2.forStructured[3];
          * __________________________________
          */
@@ -350,7 +350,7 @@ public class ParberryKnightTour
 
     /**
      * Returns a closed knight's tour.
-     * 
+     *
      * @return closed knight's tour.
      */
 

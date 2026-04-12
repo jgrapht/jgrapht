@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author John V. Sichi
  */
-public class DijkstraShortestPathTest
-    extends ShortestPathTestCase
+public class DijkstraShortestPathTest extends ShortestPathTestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -154,7 +153,8 @@ public class DijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(V1, V2);
         g.setEdgeWeight(we12, -100.0);
 
-        assertThrows(IllegalArgumentException.class, () -> new DijkstraShortestPath<>(g).getPath(V1, V2));
+        assertThrows(
+            IllegalArgumentException.class, () -> new DijkstraShortestPath<>(g).getPath(V1, V2));
     }
 
 }

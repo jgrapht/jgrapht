@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -198,9 +198,8 @@ public class ContractionHierarchyBidirectionalDijkstraTest
      */
     private void test(Graph<Integer, DefaultWeightedEdge> graph, Integer source)
     {
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> dijkstraShortestPaths =
-                new DijkstraShortestPath<>(graph).getPaths(source);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
+            new DijkstraShortestPath<>(graph).getPaths(source);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> data =
             new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2026, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,7 +19,7 @@ package org.jgrapht.util;
 
 /**
  * Math Utilities.
- * 
+ *
  * @author Assaf Lehr
  */
 public class MathUtil
@@ -27,7 +27,7 @@ public class MathUtil
 
     /**
      * Calculate the factorial of $n$.
-     * 
+     *
      * @param n the input number
      * @return the factorial
      */

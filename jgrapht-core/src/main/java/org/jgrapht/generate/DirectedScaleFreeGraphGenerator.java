@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Amr ALHOSSARY and Contributors.
+ * (C) Copyright 2019-2026, by Amr ALHOSSARY and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,21 +41,20 @@ import java.util.*;
  * <li><b>gamma</b> is the probability that the new edge is from an existing vertex v to a new
  * vertex w, where v is chosen according to d_out + delta_out.
  * </ul>
- * 
+ *
  * <p>
  * In their original paper, the graph continues to grow according to a certain power law until a
  * certain number of edges is reached irrespective to the number of nodes.<br>
  * However, because the target number of edges is not known beforehand, in this implementation, we
  * added another feature that enables the user to grow the curve according to that power law until
  * the target number of edges or target number of nodes is reached.
- * 
+ *
  * @author Amr ALHOSSARY
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DirectedScaleFreeGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class DirectedScaleFreeGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
     private final Random rng;
 
@@ -119,7 +118,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Constructs a Generator.
-     * 
+     *
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -144,7 +143,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Constructs a Generator using a seed for the random number generator.
-     * 
+     *
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -172,7 +171,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Constructs a Generator using a seed for the random number generator and sets the two
      * relaxation options {@code allowingMultipleEdges} and {@code allowingSelfLoops}.
-     * 
+     *
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -204,7 +203,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Construct a new generator using the provided random number generator.
-     * 
+     *
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -254,7 +253,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Construct a new generator using the provided random number generator and sets the two
      * relaxation options {@code allowingMultipleEdges} and {@code allowingSelfLoops}.
-     * 
+     *
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -286,10 +285,10 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Generates an instance of the {@link Graph}.
-     * 
+     *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
-     * 
+     *
      * @throws TooManyFailuresException When the method fails {@link #maxFailures} times to add a
      *         new edge to the growing graph.
      * @throws IllegalArgumentException When the graph does not support Multiple edges or self loop
@@ -385,7 +384,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Select a vertex from the currently available vertices, using the passed bias.
-     * 
+     *
      * @param target The target graph
      * @param allNewNodes All (new) nodes in the target graph
      * @param allNewEdgesSet All (new) edges in the target graph
@@ -425,7 +424,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
 
     /**
      * Returns the maximum allowed number of consecutive failed attempts to add an edge.
-     * 
+     *
      * @return maxFailure field.
      */
     public int getMaxFailures()
@@ -436,7 +435,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Sets the maximum allowed number of consecutive failed attempts to add an edge (must be non
      * negative).
-     * 
+     *
      * @param maxFailures Maximum allowed (non negative) number of consecutive failed attempts to
      *        add an edge.
      */
@@ -451,7 +450,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Returns whether the generated graph may contain multiple (parallel) edges between the same
      * two vertices.
-     * 
+     *
      * @return whether the generated graph may contain multiple (parallel) edges between the same
      *         two vertices
      */
@@ -463,7 +462,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Sets whether the generated graph may contain multiple (parallel) edges between the same two
      * vertices
-     * 
+     *
      * @param allowingMultipleEdges whether the generated graph may contain multiple (parallel)
      *        edges between the same two vertices
      */
@@ -475,7 +474,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Returns whether the generated graph may contain multiple (parallel) edges between the same
      * two vertices
-     * 
+     *
      * @return whether the generated graph many contain multiple (parallel) edges between the same
      *         two vertices
      */
@@ -487,7 +486,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * Sets whether the generated graph may contain multiple (parallel) edges between the same two
      * vertices
-     * 
+     *
      * @param allowingSelfLoops whether the generated graph many contain multiple (parallel) edges
      *        between the same two vertices
      */

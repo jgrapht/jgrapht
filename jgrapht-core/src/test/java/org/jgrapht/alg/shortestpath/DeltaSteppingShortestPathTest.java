@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -95,8 +95,8 @@ public class DeltaSteppingShortestPathTest
     {
         int maxNumberOfVertices = 10;
         for (int numberOfVertices = 2; numberOfVertices < maxNumberOfVertices; ++numberOfVertices) {
-            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>,
-                List<DefaultWeightedEdge>> testInput = generateLineGraphTestInput(numberOfVertices);
+            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>> testInput =
+                generateLineGraphTestInput(numberOfVertices);
             Graph<Integer, DefaultWeightedEdge> graph = testInput.getFirst();
             List<Integer> vertices = testInput.getSecond();
             List<DefaultWeightedEdge> edges = testInput.getThird();
@@ -130,8 +130,7 @@ public class DeltaSteppingShortestPathTest
     @Test
     public void testComparableVertices()
     {
-        class ComparableVertex
-            implements Comparable<ComparableVertex>
+        class ComparableVertex implements Comparable<ComparableVertex>
         {
             @Override
             public int compareTo(ComparableVertex comparableVertex)
@@ -258,12 +257,10 @@ public class DeltaSteppingShortestPathTest
 
     private void test(Graph<Integer, DefaultWeightedEdge> graph, Integer source)
     {
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> dijkstraShortestPaths =
-                new DijkstraShortestPath<>(graph).getPaths(source);
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> deltaSteppingShortestPaths =
-                new DeltaSteppingShortestPath<>(graph, executor).getPaths(source);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
+            new DijkstraShortestPath<>(graph).getPaths(source);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> deltaSteppingShortestPaths =
+            new DeltaSteppingShortestPath<>(graph, executor).getPaths(source);
         assertEqualPaths(dijkstraShortestPaths, deltaSteppingShortestPaths, graph.vertexSet());
     }
 
@@ -292,8 +289,8 @@ public class DeltaSteppingShortestPathTest
         return graph;
     }
 
-    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>,
-        List<DefaultWeightedEdge>> generateLineGraphTestInput(int numberOfVertices)
+    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>> generateLineGraphTestInput(
+        int numberOfVertices)
     {
         Graph<Integer, DefaultWeightedEdge> result =
             new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);

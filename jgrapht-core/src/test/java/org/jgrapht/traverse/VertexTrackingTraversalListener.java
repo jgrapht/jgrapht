@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2016-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,8 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * TraversalListener for testing basic graph traversal invariants
  */
-public class VertexTrackingTraversalListener<V, E>
-    extends TraversalListenerAdapter<V, E>
+public class VertexTrackingTraversalListener<V, E> extends TraversalListenerAdapter<V, E>
 {
     private Set<V> verticesTraversed = new HashSet<>();
     private Set<V> verticesFinished = new HashSet<>();

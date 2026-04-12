@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2023, by Ewgenij Proschak and Contributors.
+ * (C) Copyright 2005-2026, by Ewgenij Proschak and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,28 +24,27 @@ import java.util.concurrent.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm.
- * 
+ *
  * <p>
  * Implementation of the Bron-Kerbosch clique enumeration algorithm as described in:
  * <ul>
  * <li>R. Samudrala and J. Moult. A graph-theoretic algorithm for comparative modeling of protein
  * structure. Journal of Molecular Biology, 279(1):287--302, 1998.</li>
  * </ul>
- * 
+ *
  * <p>
  * The algorithm first computes all maximal cliques and then returns the result to the user. A
  * timeout can be set using the constructor parameters.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see PivotBronKerboschCliqueFinder
  * @see DegeneracyBronKerboschCliqueFinder
  *
  * @author Ewgenij Proschak
  */
-public class BronKerboschCliqueFinder<V, E>
-    extends BaseBronKerboschCliqueFinder<V, E>
+public class BronKerboschCliqueFinder<V, E> extends BaseBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.

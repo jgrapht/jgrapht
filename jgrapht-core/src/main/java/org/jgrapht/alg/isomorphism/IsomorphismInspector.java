@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2026, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ public interface IsomorphismInspector<V, E>
 {
     /**
      * Get an iterator over all calculated (isomorphic) mappings between two graphs.
-     * 
+     *
      * @return an iterator over all calculated (isomorphic) mappings between two graphs
      * @throws IsomorphismUndecidableException if the inspector cannot decide whether the graphs are
      *         isomorphic

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,14 +24,13 @@ import org.jgrapht.event.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see GraphListener
  * @see VertexSetListener
  *
  * @author Barak Naveh
  */
-public interface ListenableGraph<V, E>
-    extends Graph<V, E>
+public interface ListenableGraph<V, E> extends Graph<V, E>
 {
     /**
      * Adds the specified graph listener to this graph, if not already present.

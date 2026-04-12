@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi, Dimitrios Michail and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -48,8 +48,7 @@ import java.util.function.*;
  * @author John V. Sichi
  * @author Dimitrios Michail
  */
-class DijkstraClosestFirstIterator<V, E>
-    implements Iterator<V>
+class DijkstraClosestFirstIterator<V, E> implements Iterator<V>
 {
     private final Graph<V, E> graph;
     private final V source;

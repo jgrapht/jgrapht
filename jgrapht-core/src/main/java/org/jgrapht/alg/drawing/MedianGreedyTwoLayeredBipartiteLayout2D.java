@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,25 +33,24 @@ import org.jgrapht.alg.util.Pair;
 /**
  * The median heuristic greedy algorithm for edge crossing minimization in two layered bipartite
  * layouts.
- * 
+ *
  * The algorithm draws a bipartite graph using straight edges. Vertices are arranged along two
  * vertical or horizontal lines, trying to minimize crossings. This algorithm targets the one-sided
  * problem where one of the two layers is considered fixed and the algorithm is allowed to adjust
  * the positions of vertices in the other layer.
- * 
+ *
  * The algorithm is described in the following paper: Eades, Peter, and Nicholas C. Wormald. "Edge
  * crossings in drawings of bipartite graphs." Algorithmica 11.4 (1994): 379-403.
- * 
+ *
  * The problem of minimizing edge crossings when drawing bipartite graphs as two layered graphs is
  * NP-complete and the median heuristic is a 3-approximation algorithm.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
-    extends TwoLayeredBipartiteLayout2D<V, E>
+public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E> extends TwoLayeredBipartiteLayout2D<V, E>
 {
     /**
      * Create a new layout
@@ -63,7 +62,7 @@ public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
 
     /**
      * Create a new layout
-     * 
+     *
      * @param partition one of the two partitions, can be null
      * @param vertexComparator vertex order, can be null
      * @param vertical draw on two vertical or horizontal lines

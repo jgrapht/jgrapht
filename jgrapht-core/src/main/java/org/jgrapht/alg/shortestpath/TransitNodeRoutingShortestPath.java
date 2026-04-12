@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -73,8 +73,7 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  * @see TransitNodeRoutingPrecomputation
  * @see BidirectionalDijkstraShortestPath
  */
-public class TransitNodeRoutingShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
 
     /**

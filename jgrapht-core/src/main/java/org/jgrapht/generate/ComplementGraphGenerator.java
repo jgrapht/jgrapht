@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,8 +42,7 @@ import java.util.*;
  * @param <V> vertex type
  * @param <E> edge type
  */
-public class ComplementGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+public class ComplementGraphGenerator<V, E> implements GraphGenerator<V, E, V>
 {
 
     private final Graph<V, E> graph;
@@ -51,7 +50,7 @@ public class ComplementGraphGenerator<V, E>
 
     /**
      * Complement Graph Generator
-     * 
+     *
      * @param graph input graph
      */
     public ComplementGraphGenerator(Graph<V, E> graph)

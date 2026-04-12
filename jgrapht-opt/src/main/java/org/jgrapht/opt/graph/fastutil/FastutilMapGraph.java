@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,30 +24,29 @@ import java.util.function.*;
 
 /**
  * A graph implementation using fastutil's map implementations for storage.
- * 
- * <p>The following example creates a simple undirected weighted graph: <blockquote>
- * 
+ *
+ * <p>
+ * The following example creates a simple undirected weighted graph: <blockquote>
+ *
  * <pre>
- * Graph&lt;String,
- *     DefaultWeightedEdge&gt; g = new FastutilMapGraph&lt;&gt;(
- *         SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
- *         DefaultGraphType.simple().asWeighted());
+ * Graph&lt;String, DefaultWeightedEdge&gt; g = new FastutilMapGraph&lt;&gt;(
+ *     SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
+ *     DefaultGraphType.simple().asWeighted());
  * </pre>
- * 
+ *
  * </blockquote>
- * 
- * <p>In case you have integer vertices, consider using the {@link FastutilMapIntVertexGraph}.
+ *
+ * <p>
+ * In case you have integer vertices, consider using the {@link FastutilMapIntVertexGraph}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @see FastutilMapIntVertexGraph
- * 
+ *
  * @author Dimitrios Michail
  */
-public class FastutilMapGraph<V, E>
-    extends
-    AbstractBaseGraph<V, E>
+public class FastutilMapGraph<V, E> extends AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -2261627370606792673L;
 
@@ -66,14 +65,14 @@ public class FastutilMapGraph<V, E>
     {
         super(
             vertexSupplier, edgeSupplier, type,
-            fastLookups ? new FastutilFastLookupGSS<>()
-                : new FastutilGSS<>());
+            fastLookups ? new FastutilFastLookupGSS<>() : new FastutilGSS<>());
     }
 
     /**
      * Construct a new graph.
-     * 
-     * <p>By default we index vertex pairs to allow (expected) constant time edge lookups.
+     *
+     * <p>
+     * By default we index vertex pairs to allow (expected) constant time edge lookups.
      *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null

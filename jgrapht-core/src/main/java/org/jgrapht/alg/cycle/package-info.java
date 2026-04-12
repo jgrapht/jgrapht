@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2024, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,9 +18,9 @@
 
 /**
  * Algorithms related to graph cycles.
- * 
+ *
  * <h2>Algorithms for enumeration of simple cycles in graphs</h2>
- * 
+ *
  * Contains four different algorithms for the enumeration of simple cycles in directed graphs. The
  * worst case time complexity of the algorithms is:
  * <ol>
@@ -32,13 +32,13 @@
  * where $V$ is the number of vertices, $E$ is the number of edges and $C$ is the number of the
  * simple cycles in the graph. All the above implementations work correctly with loops but not with
  * multiple edges. Space complexity for all cases is $O(V+E)$.
- * 
+ *
  * <p>
  * The worst case performance is achieved for graphs with special structure, so on practical
  * workloads an algorithm with higher worst case complexity may outperform an algorithm with lower
  * worst case complexity. Note also that "administrative costs" of algorithms with better worst case
  * performance are higher. Also higher is their memory cost.
- * 
+ *
  * <p>
  * See the following papers for details of the above algorithms:
  * <ol>
@@ -58,7 +58,7 @@
  * </ol>
  *
  * <h2>Algorithms for the computation of undirected cycle basis</h2>
- * 
+ *
  * <ol>
  * <li>A variant of Paton's algorithm {@link org.jgrapht.alg.cycle.PatonCycleBase}, performing a BFS
  * using a stack which returns a weakly fundamental cycle basis. Supports graphs with self-loops but
@@ -82,9 +82,9 @@
  * <li>Narsingh Deo, G. Prabhu, and M. S. Krishnamoorthy. Algorithms for Generating Fundamental
  * Cycles in a Graph. ACM Trans. Math. Softw. 8, 1, 26-42, 1982.</li>
  * </ol>
- * 
+ *
  * <h2>Algorithms for the computation of Eulerian cycles</h2>
- * 
+ *
  * <ol>
  * <li>An implementation of {@link org.jgrapht.alg.cycle.HierholzerEulerianCycle Hierholzer}'s
  * algorithm for finding an Eulerian cycle in Eulerian graphs.</li>

@@ -23,12 +23,11 @@ import java.util.*;
 
 /**
  * The greedy coloring algorithm with a random vertex ordering.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class RandomGreedyColoring<V, E>
-    extends GreedyColoring<V, E>
+public class RandomGreedyColoring<V, E> extends GreedyColoring<V, E>
 {
     /*
      * Random number generator
@@ -37,7 +36,7 @@ public class RandomGreedyColoring<V, E>
 
     /**
      * Construct a new coloring algorithm.
-     * 
+     *
      * @param graph the input graph
      */
     public RandomGreedyColoring(Graph<V, E> graph)
@@ -47,7 +46,7 @@ public class RandomGreedyColoring<V, E>
 
     /**
      * Construct a new coloring algorithm
-     * 
+     *
      * @param graph the input graph
      * @param rng the random number generator
      */

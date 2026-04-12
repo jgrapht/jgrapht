@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -37,15 +37,13 @@ import java.util.function.*;
  * This class is mostly used as a base for extending subclasses. It can also be used in order to
  * override the vertex and edge supplier of a graph.
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  */
-public class GraphDelegator<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Serializable
+public class GraphDelegator<V, E> extends AbstractGraph<V, E> implements Graph<V, E>, Serializable
 {
     private static final long serialVersionUID = -215068279981825448L;
 
@@ -60,7 +58,7 @@ public class GraphDelegator<V, E>
      * Constructs a new {@code GraphDelegator}.
      *
      * @param graph the backing graph (the delegate).
-     * 
+     *
      * @throws NullPointerException if argument is {@code null}
      */
     public GraphDelegator(Graph<V, E> graph)
@@ -70,13 +68,13 @@ public class GraphDelegator<V, E>
 
     /**
      * Constructs a new {@code GraphDelegator}.
-     * 
+     *
      * @param graph the backing graph (the delegate).
      * @param vertexSupplier vertex supplier for the delegator. Can be null in which case the
      *        backing graph vertex supplier will be used.
      * @param edgeSupplier edge supplier for the delegator. Can be null in which case the backing
      *        graph edge supplier will be used.
-     * 
+     *
      * @throws NullPointerException if {@code graph} is {@code null}
      */
     public GraphDelegator(Graph<V, E> graph, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
@@ -88,8 +86,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @return the vertex supplier of this delegator or the backing graph's
-     *         vertex supplier if this delegator does not have a vertex supplier
+     * @return the vertex supplier of this delegator or the backing graph's vertex supplier if this
+     *         delegator does not have a vertex supplier
      */
     @Override
     public Supplier<V> getVertexSupplier()
@@ -102,8 +100,8 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @return the edge supplier of this delegator or the backing graph's
-     *         edge supplier if this delegator does not have an edge supplier
+     * @return the edge supplier of this delegator or the backing graph's edge supplier if this
+     *         delegator does not have an edge supplier
      */
     @Override
     public Supplier<E> getEdgeSupplier()
@@ -134,7 +132,6 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @throws ClassCastException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      * @throws UnsupportedOperationException {@inheritDoc}
@@ -368,7 +365,7 @@ public class GraphDelegator<V, E>
 
     /**
      * Return the backing graph (the delegate).
-     * 
+     *
      * @return the backing graph (the delegate)
      */
     protected Graph<V, E> getDelegate()

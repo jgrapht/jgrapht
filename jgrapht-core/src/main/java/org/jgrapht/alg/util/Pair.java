@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2026, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,13 +22,12 @@ import java.util.*;
 
 /**
  * Generic pair.
- * 
+ *
  * @param <A> the first element type
  * @param <B> the second element type
- * 
+ *
  */
-public class Pair<A, B>
-    implements Serializable
+public class Pair<A, B> implements Serializable
 {
     private static final long serialVersionUID = 8176288675989092842L;
 
@@ -44,7 +43,7 @@ public class Pair<A, B>
 
     /**
      * Create a new pair
-     * 
+     *
      * @param a the first element
      * @param b the second element
      */
@@ -56,7 +55,7 @@ public class Pair<A, B>
 
     /**
      * Get the first element of the pair
-     * 
+     *
      * @return the first element of the pair
      */
     public A getFirst()
@@ -66,7 +65,7 @@ public class Pair<A, B>
 
     /**
      * Get the second element of the pair
-     * 
+     *
      * @return the second element of the pair
      */
     public B getSecond()
@@ -102,7 +101,7 @@ public class Pair<A, B>
      * @param e The element in question
      *
      * @return true if contains the element, false otherwise
-     * 
+     *
      * @param <E> the element type
      */
     @SuppressWarnings("unlikely-arg-type")

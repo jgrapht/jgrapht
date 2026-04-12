@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,8 +26,7 @@ import org.jgrapht.*;
  *
  * @author Dimitrios Michail
  */
-class IntrusiveWeightedEdge
-    extends IntrusiveEdge
+class IntrusiveWeightedEdge extends IntrusiveEdge
 {
     private static final long serialVersionUID = 2890534758523920741L;
 

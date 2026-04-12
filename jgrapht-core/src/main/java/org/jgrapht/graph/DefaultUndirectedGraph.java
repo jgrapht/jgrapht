@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import java.util.function.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DefaultUndirectedGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+public class DefaultUndirectedGraph<V, E> extends AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -2066644490824847621L;
 
@@ -47,7 +46,7 @@ public class DefaultUndirectedGraph<V, E>
 
     /**
      * Creates a new graph.
-     * 
+     *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null
      * @param weighted whether the graph is weighted or not
@@ -56,15 +55,13 @@ public class DefaultUndirectedGraph<V, E>
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
         super(
-            vertexSupplier, edgeSupplier,
-            new DefaultGraphType.Builder()
-                .undirected().allowMultipleEdges(false).allowSelfLoops(true).weighted(weighted)
-                .build());
+            vertexSupplier, edgeSupplier, new DefaultGraphType.Builder().undirected()
+                .allowMultipleEdges(false).allowSelfLoops(true).weighted(weighted).build());
     }
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -78,7 +75,7 @@ public class DefaultUndirectedGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeSupplier the edge supplier of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2026, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * A depth-first iterator for a directed or undirected graph.
- * 
+ *
  * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
@@ -36,8 +36,7 @@ import java.util.*;
  * @author Liviu Rau
  * @author Barak Naveh
  */
-public class DepthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
+public class DepthFirstIterator<V, E> extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
 {
     /**
      * Sentinel object. Unfortunately, we can't use null, because ArrayDeque won't accept those. And
@@ -82,12 +81,12 @@ public class DepthFirstIterator<V, E>
     /**
      * Creates a new depth-first iterator for the specified graph. Iteration will start at the
      * specified start vertex and will be limited to the connected component that includes that
-     * vertex. If the specified start vertex is {@code null}, iteration will start at an
-     * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
+     * vertex. If the specified start vertex is {@code null}, iteration will start at an arbitrary
+     * vertex and will not be limited, that is, will be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
-     * 
+     *
      * @throws IllegalArgumentException if {@code g} does not contain {@code startVertex}
      * @throws NullPointerException if {@code g} is {@code null}
      */
@@ -104,9 +103,9 @@ public class DepthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
-     * 
-     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not
-     *                                  a vertex of {@code g}
+     *
+     * @throws IllegalArgumentException if {@code startVertices} contains an element that is not a
+     *         vertex of {@code g}
      * @throws NullPointerException if {@code g} is {@code null}
      */
     public DepthFirstIterator(Graph<V, E> g, Iterable<V> startVertices)

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2023, by France Telecom and Contributors.
+ * (C) Copyright 2007-2026, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,8 +21,7 @@ import org.jgrapht.graph.*;
 
 /**
  */
-public class NotBiconnectedGraph
-    extends SimpleGraph<String, DefaultEdge>
+public class NotBiconnectedGraph extends SimpleGraph<String, DefaultEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

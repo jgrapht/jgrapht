@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2023, by Trevor Harmon and Contributors.
+ * (C) Copyright 2006-2026, by Trevor Harmon and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -44,9 +44,7 @@ import java.util.function.*;
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
-public class GraphMLExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class GraphMLExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     // registered attributes
     private Map<String, AttributeDetails> registeredAttributes = new LinkedHashMap<>();
@@ -116,7 +114,7 @@ public class GraphMLExporter<V, E>
 
         /**
          * Get a string representation of the attribute category
-         * 
+         *
          * @return the string representation of the attribute category
          */
         public String toString()
@@ -127,7 +125,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Register a GraphML-Attribute
-     * 
+     *
      * @param name the attribute name
      * @param category the attribute category
      * @param type the attribute type
@@ -139,7 +137,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Register a GraphML-Attribute
-     * 
+     *
      * @param name the attribute name
      * @param category the attribute category
      * @param type the attribute type
@@ -166,7 +164,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Unregister a GraphML-Attribute
-     * 
+     *
      * @param name the attribute name
      */
     public void unregisterAttribute(String name)
@@ -244,7 +242,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Get the attribute name for vertex labels
-     * 
+     *
      * @return the attribute name
      */
     public String getVertexLabelAttributeName()
@@ -254,7 +252,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Set the attribute name to use for vertex labels.
-     * 
+     *
      * @param vertexLabelAttributeName the attribute name
      */
     public void setVertexLabelAttributeName(String vertexLabelAttributeName)
@@ -271,7 +269,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Get the attribute name for edge labels
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeLabelAttributeName()
@@ -281,7 +279,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Set the attribute name to use for edge labels.
-     * 
+     *
      * @param edgeLabelAttributeName the attribute name
      */
     public void setEdgeLabelAttributeName(String edgeLabelAttributeName)
@@ -298,7 +296,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -308,7 +306,7 @@ public class GraphMLExporter<V, E>
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)

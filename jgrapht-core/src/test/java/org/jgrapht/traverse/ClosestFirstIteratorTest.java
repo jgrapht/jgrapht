@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author John V. Sichi, Patrick Sharp
  */
-public class ClosestFirstIteratorTest
-    extends CrossComponentIteratorTest
+public class ClosestFirstIteratorTest extends CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

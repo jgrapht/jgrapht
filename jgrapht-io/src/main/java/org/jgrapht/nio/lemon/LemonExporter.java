@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,7 @@ import java.util.function.*;
 
 /**
  * Exports a graph into Lemon graph format (LGF).
- * 
+ *
  * <p>
  * This is the custom graph format used in the <a href="https://lemon.cs.elte.hu">Lemon</a> graph
  * library.
@@ -37,9 +37,7 @@ import java.util.function.*;
  *
  * @author Dimitrios Michail
  */
-public class LemonExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class LemonExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     private static final String CREATOR = "JGraphT Lemon (LGF) Exporter";
     private static final String VERSION = "1";
@@ -98,7 +96,7 @@ public class LemonExporter<V, E>
 
     /**
      * Return if a particular parameter of the exporter is enabled
-     * 
+     *
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
@@ -109,7 +107,7 @@ public class LemonExporter<V, E>
 
     /**
      * Set the value of a parameter of the exporter
-     * 
+     *
      * @param p the parameter
      * @param value the value to set
      */

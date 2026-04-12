@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -167,10 +167,9 @@ public class ListenableGraphTest
     @Test
     public void testWithVertexSupplier()
     {
-        Graph<String,
-            DefaultEdge> wrappedGraph = GraphTypeBuilder
-                .undirected().weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createStringSupplier(15)).buildGraph();
+        Graph<String, DefaultEdge> wrappedGraph = GraphTypeBuilder.undirected().weighted(false)
+            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+            .vertexSupplier(SupplierUtil.createStringSupplier(15)).buildGraph();
 
         ListenableGraph<String, DefaultEdge> g = new DefaultListenableGraph<>(wrappedGraph);
         SimpleVertexListener<String> listener = new SimpleVertexListener<>();
@@ -276,8 +275,7 @@ public class ListenableGraphTest
      *
      * @author Barak Naveh
      */
-    private class MyGraphListener<E>
-        implements GraphListener<Object, E>
+    private class MyGraphListener<E> implements GraphListener<Object, E>
     {
         @Override
         public void edgeAdded(GraphEdgeChangeEvent<Object, E> e)
@@ -313,8 +311,7 @@ public class ListenableGraphTest
     /**
      * A listener on the tested graph.
      */
-    private class SimpleVertexListener<V>
-        implements VertexSetListener<V>
+    private class SimpleVertexListener<V> implements VertexSetListener<V>
     {
         private V lastVertex;
 

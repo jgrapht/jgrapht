@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import java.util.*;
  * @param <V> graph vertex type
  * @param <E> graph edge type
  */
-public class GeneralizedPetersenGraphGenerator<V, E>
-    implements GraphGenerator<V, E, List<V>>
+public class GeneralizedPetersenGraphGenerator<V, E> implements GraphGenerator<V, E, List<V>>
 {
 
     private final int n;
@@ -52,7 +51,7 @@ public class GeneralizedPetersenGraphGenerator<V, E>
     /**
      * Constructs a GeneralizedPetersenGraphGenerator used to generate a Generalized Petersen graphs
      * $GP(n,k)$.
-     * 
+     *
      * @param n size of the regular polygon (cycle graph $C_n$)
      * @param k size of the star polygon ${n,k}$
      */
@@ -69,7 +68,7 @@ public class GeneralizedPetersenGraphGenerator<V, E>
 
     /**
      * Generates the Generalized Petersen Graph
-     * 
+     *
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements

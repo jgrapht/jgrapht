@@ -108,8 +108,6 @@
         <module name="StringLiteralEquality" />
 
         <module name="SuppressWithNearbyCommentFilter">
-            <!-- TODO: remove this after next release -->
-            <property name="commentFormat" value="@CS\.suppress\[(\w+(\|\w+)*)\]" />
             <property name="checkFormat" value="$1" />
             <property name="influenceFormat" value="1" />
         </module>

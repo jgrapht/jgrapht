@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,13 +23,12 @@ import java.util.function.Supplier;
 
 /**
  * A wrapper around a supplier of an iterable.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <E> the element type
  */
-public class LiveIterableWrapper<E>
-    implements Iterable<E>
+public class LiveIterableWrapper<E> implements Iterable<E>
 {
     private Supplier<Iterable<E>> supplier;
 
@@ -43,7 +42,7 @@ public class LiveIterableWrapper<E>
 
     /**
      * Create a new wrapper
-     * 
+     *
      * @param supplier the supplier which provides the iterable
      */
     public LiveIterableWrapper(Supplier<Iterable<E>> supplier)
@@ -59,7 +58,7 @@ public class LiveIterableWrapper<E>
 
     /**
      * Get the supplier
-     * 
+     *
      * @return the supplier
      */
     public Supplier<Iterable<E>> getSupplier()
@@ -69,7 +68,7 @@ public class LiveIterableWrapper<E>
 
     /**
      * Set the supplier
-     * 
+     *
      * @param supplier the supplier
      */
     public void setSupplier(Supplier<Iterable<E>> supplier)

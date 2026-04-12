@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2021, by Sebastiano Vigna and Contributors.
+ * (C) Copyright 2020-2026, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,11 +38,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSets;
  * @param <E> the graph edge type
  */
 
-public abstract class AbstractSuccinctGraph<E>
-    extends
-    AbstractGraph<Integer, E>
-    implements
-    Serializable
+public abstract class AbstractSuccinctGraph<E> extends AbstractGraph<Integer, E> implements Serializable
 {
     private static final long serialVersionUID = 0L;
 

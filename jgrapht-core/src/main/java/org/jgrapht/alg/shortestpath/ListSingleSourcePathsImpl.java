@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,18 +26,17 @@ import java.util.*;
 
 /**
  * An implementation of {@link SingleSourcePaths} which stores one path per vertex.
- * 
+ *
  * <p>
  * This is an explicit representation which stores all paths. For a more compact representation see
  * {@link TreeSingleSourcePathsImpl}.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class ListSingleSourcePathsImpl<V, E>
-    implements SingleSourcePaths<V, E>, Serializable
+public class ListSingleSourcePathsImpl<V, E> implements SingleSourcePaths<V, E>, Serializable
 {
     private static final long serialVersionUID = -60070018446561686L;
 
@@ -58,7 +57,7 @@ public class ListSingleSourcePathsImpl<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the graph
      * @param source the source vertex
      * @param paths one path per target vertex

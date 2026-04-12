@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -44,8 +44,7 @@ import java.util.*;
  * @param <V> graph vertex type
  * @param <E> graph edge type
  */
-public class Graph6Sparse6Exporter<V, E>
-    implements GraphExporter<V, E>
+public class Graph6Sparse6Exporter<V, E> implements GraphExporter<V, E>
 {
 
     /**

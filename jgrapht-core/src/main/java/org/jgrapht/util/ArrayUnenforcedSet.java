@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2006-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,14 +28,12 @@ import java.util.*;
  * Note that for equals/hashCode, the class implements the Set behavior (unordered), not the list
  * behavior (ordered); the fact that it subclasses ArrayList should be considered an implementation
  * detail.
- * 
+ *
  * @param <E> the element type
  *
  * @author John V. Sichi
  */
-public class ArrayUnenforcedSet<E>
-    extends ArrayList<E>
-    implements Set<E>
+public class ArrayUnenforcedSet<E> extends ArrayList<E> implements Set<E>
 {
     private static final long serialVersionUID = -7413250161201811238L;
 
@@ -84,8 +82,7 @@ public class ArrayUnenforcedSet<E>
     /**
      * Multiple inheritance helper.
      */
-    private class SetForEquality
-        extends AbstractSet<E>
+    private class SetForEquality extends AbstractSet<E>
     {
         @Override
         public Iterator<E> iterator()

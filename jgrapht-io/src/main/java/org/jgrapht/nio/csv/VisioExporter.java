@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Avner Linder and Contributors.
+ * (C) Copyright 2003-2026, by Avner Linder and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -42,9 +42,7 @@ import java.util.function.*;
  *
  * @author Avner Linder
  */
-public class VisioExporter<V, E>
-    extends BaseExporter<V, E>
-    implements GraphExporter<V, E>
+public class VisioExporter<V, E> extends BaseExporter<V, E> implements GraphExporter<V, E>
 {
     /**
      * Creates a new VisioExporter.

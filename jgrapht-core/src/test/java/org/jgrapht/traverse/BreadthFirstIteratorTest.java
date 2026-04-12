@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2026, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Liviu Rau
  * @author Patrick Sharp
  */
-public class BreadthFirstIteratorTest
-    extends CrossComponentIteratorTest
+public class BreadthFirstIteratorTest extends CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

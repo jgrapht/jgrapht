@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2026, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,8 +41,8 @@ import java.util.*;
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This
- * graph will be serializable if the backing graph is serializable.
+ * but relies on {@code Object}'s {@code equals} and {@code hashCode} methods. This graph will be
+ * serializable if the backing graph is serializable.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -50,9 +50,7 @@ import java.util.*;
  *
  * @author John V. Sichi
  */
-public class AsUndirectedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable, Graph<V, E>
+public class AsUndirectedGraph<V, E> extends GraphDelegator<V, E> implements Serializable, Graph<V, E>
 {
     private static final long serialVersionUID = 325983813283133557L;
 
@@ -109,7 +107,7 @@ public class AsUndirectedGraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
@@ -120,7 +118,7 @@ public class AsUndirectedGraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override

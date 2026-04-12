@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -72,8 +72,7 @@ import java.util.function.Supplier;
  * @author Semen Chudakov
  * @since January 2018
  */
-public class DeltaSteppingShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting the existence of an edge with negative weight.
@@ -187,20 +186,6 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta.
-     *
-     * @param graph the graph
-     * @param delta bucket width
-     * @deprecated replaced with
-     *             {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta)
-    {
-        this(graph, delta, DEFAULT_PARALLELISM);
-    }
-
-    /**
      * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}. It
      * is up to a user of this algorithm to handle the creation and termination of the provided
      * {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
@@ -239,39 +224,6 @@ public class DeltaSteppingShortestPath<V, E>
         Objects.requireNonNull(executor, "executor must not be null!");
         Objects.requireNonNull(executor, "vertexComparator must not be null!");
         init(graph, delta, executor, vertexComparator);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given graph, parallelism.
-     *
-     * @param graph the graph
-     * @param parallelism maximum number of threads used in the computations
-     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism)
-    {
-        this(graph, 0.0, parallelism);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given graph, delta, parallelism. If delta is
-     * $0.0$ it will be computed during the algorithm execution. In general if the value of
-     * $\frac{maximum edge weight}{maximum outdegree}$ is known beforehand, it is preferable to
-     * specify it via this constructor, because processing the whole graph to compute this value may
-     * significantly slow down the algorithm.
-     *
-     * @param graph the graph
-     * @param delta bucket width
-     * @param parallelism maximum number of threads used in the computations
-     * @deprecated replaced with
-     *             {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
-     */
-    @Deprecated
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism)
-    {
-        super(graph);
-        init(graph, delta, ConcurrencyUtil.createThreadPoolExecutor(parallelism), null);
     }
 
     /**
@@ -319,9 +271,9 @@ public class DeltaSteppingShortestPath<V, E>
      * computing the maximal edge weight in the graph the task also checks if there exist edges with
      * negative weights.
      */
-    class MaxEdgeWeightTask
-        extends RecursiveTask<Double>
+    class MaxEdgeWeightTask extends RecursiveTask<Double>
     {
+        private static final long serialVersionUID = 6002383842036478735L;
         /**
          * Is used to split a collection and create new recursive tasks during the computation.
          */
@@ -705,8 +657,7 @@ public class DeltaSteppingShortestPath<V, E>
      * Task that is submitted to the {@link #completionService} during shortest path computation for
      * light relax requests relaxation.
      */
-    class LightRelaxTask
-        implements Runnable
+    class LightRelaxTask implements Runnable
     {
         /**
          * Vertices which edges will be relaxed.
@@ -756,8 +707,7 @@ public class DeltaSteppingShortestPath<V, E>
      * Task that is submitted to the {@link #completionService} during shortest path computation for
      * heavy relax requests relaxation.
      */
-    class HeavyRelaxTask
-        implements Runnable
+    class HeavyRelaxTask implements Runnable
     {
         /**
          * Vertices which edges will be relaxed.

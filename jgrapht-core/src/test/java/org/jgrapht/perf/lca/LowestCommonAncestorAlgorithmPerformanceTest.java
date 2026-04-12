@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -105,8 +105,8 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
 
             generator.generateGraph(forest, null);
 
-            Set<Integer> roots = new ConnectivityInspector<>(forest)
-                .connectedSets().stream().map(x -> x.iterator().next()).collect(Collectors.toSet());
+            Set<Integer> roots = new ConnectivityInspector<>(forest).connectedSets().stream()
+                .map(x -> x.iterator().next()).collect(Collectors.toSet());
 
             assert roots.size() == NUMBER_TREES;
 
@@ -123,8 +123,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class BinaryLiftingLCARandomTreeBenchmark
-        extends RandomTreeBenchmarkBase
+    public static class BinaryLiftingLCARandomTreeBenchmark extends RandomTreeBenchmarkBase
     {
 
         @Override
@@ -135,8 +134,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class EulerTourRMQLCARandomTreeBenchmark
-        extends RandomTreeBenchmarkBase
+    public static class EulerTourRMQLCARandomTreeBenchmark extends RandomTreeBenchmarkBase
     {
 
         @Override
@@ -147,8 +145,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class TarjanLCARandomTreeBenchmark
-        extends RandomTreeBenchmarkBase
+    public static class TarjanLCARandomTreeBenchmark extends RandomTreeBenchmarkBase
     {
 
         @Override
@@ -159,8 +156,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class HeavyPathRandomTreeBenchmark
-        extends RandomTreeBenchmarkBase
+    public static class HeavyPathRandomTreeBenchmark extends RandomTreeBenchmarkBase
     {
 
         @Override
@@ -171,8 +167,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class BinaryLiftingLCARandomForestBenchmark
-        extends RandomForestBenchmarkBase
+    public static class BinaryLiftingLCARandomForestBenchmark extends RandomForestBenchmarkBase
     {
 
         @Override
@@ -183,8 +178,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class EulerTourRMQLCARandomForestBenchmark
-        extends RandomForestBenchmarkBase
+    public static class EulerTourRMQLCARandomForestBenchmark extends RandomForestBenchmarkBase
     {
 
         @Override
@@ -195,8 +189,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class TarjanLCARandomForestBenchmark
-        extends RandomForestBenchmarkBase
+    public static class TarjanLCARandomForestBenchmark extends RandomForestBenchmarkBase
     {
 
         @Override
@@ -207,8 +200,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-    public static class HeavyPathRandomForestBenchmark
-        extends RandomForestBenchmarkBase
+    public static class HeavyPathRandomForestBenchmark extends RandomForestBenchmarkBase
     {
 
         @Override

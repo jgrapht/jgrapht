@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2026, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,8 +35,7 @@ import java.util.*;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public abstract class VF2AbstractIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+public abstract class VF2AbstractIsomorphismInspector<V, E> implements IsomorphismInspector<V, E>
 {
     protected Graph<V, E> graph1, graph2;
 

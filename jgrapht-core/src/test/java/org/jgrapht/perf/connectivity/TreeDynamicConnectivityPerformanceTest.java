@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2020-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -101,10 +101,9 @@ public class TreeDynamicConnectivityPerformanceTest
             forest = new DefaultUndirectedGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 false);
-            Graph<Integer,
-                DefaultEdge> secondTree = new DefaultUndirectedGraph<>(
-                    SupplierUtil.createIntegerSupplier(treeSize),
-                    SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer, DefaultEdge> secondTree = new DefaultUndirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(treeSize),
+                SupplierUtil.createDefaultEdgeSupplier(), false);
             connectivity = new TreeDynamicConnectivity<>();
 
             gen.generateGraph(forest);

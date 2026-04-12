@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2023, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2026, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,8 +21,7 @@ import org.jgrapht.*;
 
 import java.util.*;
 
-abstract class VF2MappingIterator<V, E>
-    implements Iterator<GraphMapping<V, E>>
+abstract class VF2MappingIterator<V, E> implements Iterator<GraphMapping<V, E>>
 {
     protected Comparator<V> vertexComparator;
     protected Comparator<E> edgeComparator;

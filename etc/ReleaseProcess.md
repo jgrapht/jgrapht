@@ -10,11 +10,13 @@
 1. Review/update github issues to make sure they reflect the current state.  If there were important bug/feature changes, it is worth mentioning them in the README.md release notes.
 1. Run `mvn clean; mvn javadoc:aggregate` to build the javadoc and make sure it is generated without errors/warnings. Fix where necessary. Make sure Eclipse build is warning-free.
 1. Run all the JUnit tests via `mvn test`. Fix where necessary.
-1. Reformat all code [using Eclipse](codeFormatter.sh). 
+1. Reformat all code via `mvn formatter:format`.
 1. Commit all work and push to github, merge with master branch. Locally, switch back to the master branch and perform a `git pull upstream master` to ensure that the local and upstream master are synced after merging the code formatting changes.
-1. Run `mvn -Dmaven.artifact.threads=1 -DskipTests clean deploy` to push the latest snapshot to Sonatype.
-1. Run `mvn package -DskipTests; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central
-1. Publish the release [using the Sonatype UI](http://central.sonatype.org/pages/releasing-the-deployment.html). Make sure to login to the old https://oss.sonatype.org/, and NOT https://s01.oss.sonatype.org/ or you will get a `Incorrect username, password or no permission to use the Nexus User Interface.` error!
+1. Run `mvn package org.sonatype.central:central-publishing-maven-plugin:publish -DskipTests=true --settings etc/snapshot-settings.xml` to push the latest snapshot to Sonatype.  (You need to set environment variables CENTRAL_USER and CENTRAL_PASSWORD first.)
+1. Run `mvn package -DskipTests; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central.  You may need to follow up with `git push` as well.
+1. Complete the release staging via [the REST API](https://ossrh-staging-api.central.sonatype.com/swagger-ui/#/default/manual_upload_default_repository).  Use the `Authorize` button first, then for the `defaultRepository` POST, use `org.jgrapht` for the `requested_namespace`, `user_managed` for the `publishing_type`, and the new version number for the `deployment_name`.
+1. (Ponder the fact that this really is the state of the art in open source release management, and bang your head against a hard surface.)
+1. Verify the staged release [using the Maven Central UI](https://central.sonatype.com/publishing/deployments), then publish it there.
 1. Before continuing, restart from a fresh clone to make sure your workspace is clean, and checkout the release branch there by performing a `git checkout jgrapht-x.y.z`.  Otherwise, if you have old files lying around that are hidden by `.gitignore`, they may get accidentally included in the release archive.
 1. Run `mvn javadoc:aggregate; mvn -DskipTests install` from the new release branch to produce the release archive distribution
 1. Upload the release archive distribution to sourceforge using the File Release System.

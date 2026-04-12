@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2026, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,8 +30,7 @@ import org.jgrapht.*;
  *
  * @author Barak Naveh
  */
-public class GraphEdgeChangeEvent<V, E>
-    extends GraphChangeEvent
+public class GraphEdgeChangeEvent<V, E> extends GraphChangeEvent
 {
     private static final long serialVersionUID = -4421610303769803253L;
 

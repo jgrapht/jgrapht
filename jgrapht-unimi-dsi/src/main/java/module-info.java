@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2024, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,7 +18,7 @@
 
 /**
  * Provides graph implementations using succinct data structures.
- * 
+ *
  * @since 1.5.1
  */
 module org.jgrapht.unimi.dsi

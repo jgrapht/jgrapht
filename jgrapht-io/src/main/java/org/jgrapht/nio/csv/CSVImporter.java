@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,7 @@ import java.util.function.*;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.
- * 
+ *
  * <p>
  * The importer supports various different formats which can be adjusted using the
  * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
@@ -36,7 +36,7 @@ import java.util.function.*;
  * {@link #setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter, boolean) setParameter} method. See
  * {@link CSVFormat} for a description of the formats.
  * </p>
- * 
+ *
  * <p>
  * The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
  * also adjust the separator to something like semicolon or pipe instead of comma. In such a case,
@@ -44,33 +44,31 @@ import java.util.function.*;
  * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
  * values</a> for more information.
  * </p>
- * 
+ *
  * <p>
  * This importer does not distinguish between {@link CSVFormat#EDGE_LIST} and
  * {@link CSVFormat#ADJACENCY_LIST}. In both cases it assumes the format is
  * {@link CSVFormat#ADJACENCY_LIST}.
  * </p>
- * 
+ *
  * <p>
  * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  * vertices in the original file are reported as a vertex attribute named "ID".
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
  * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
  * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
  * graph vertex given the vertex identifier read from file.
- * 
+ *
  * @see CSVFormat
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class CSVImporter<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class CSVImporter<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
     private static final String DEFAULT_VERTEX_ID_KEY = "ID";
@@ -91,7 +89,7 @@ public class CSVImporter<V, E>
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param format format to use out of the supported ones
      */
     public CSVImporter(CSVFormat format)
@@ -101,7 +99,7 @@ public class CSVImporter<V, E>
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param format format to use out of the supported ones
      * @param delimiter delimiter to use (comma, semicolon, pipe, etc.)
      */
@@ -118,7 +116,7 @@ public class CSVImporter<V, E>
 
     /**
      * Get the format that the importer is using.
-     * 
+     *
      * @return the input format
      */
     public CSVFormat getFormat()
@@ -128,7 +126,7 @@ public class CSVImporter<V, E>
 
     /**
      * Set the format of the importer
-     * 
+     *
      * @param format the format to use
      */
     public void setFormat(CSVFormat format)
@@ -138,7 +136,7 @@ public class CSVImporter<V, E>
 
     /**
      * Get the delimiter (comma, semicolon, pipe, etc).
-     * 
+     *
      * @return the delimiter
      */
     public char getDelimiter()
@@ -148,7 +146,7 @@ public class CSVImporter<V, E>
 
     /**
      * Set the delimiter (comma, semicolon, pipe, etc).
-     * 
+     *
      * @param delimiter the delimiter to use
      */
     public void setDelimiter(char delimiter)
@@ -161,7 +159,7 @@ public class CSVImporter<V, E>
 
     /**
      * Return if a particular parameter of the exporter is enabled
-     * 
+     *
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
@@ -172,7 +170,7 @@ public class CSVImporter<V, E>
 
     /**
      * Set the value of a parameter of the exporter
-     * 
+     *
      * @param p the parameter
      * @param value the value to set
      */
@@ -188,7 +186,7 @@ public class CSVImporter<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<String, V> getVertexFactory()
@@ -199,11 +197,11 @@ public class CSVImporter<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the file.
      * The method is called with parameter the vertex identifier from the file and should return the
      * actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<String, V> vertexFactory)
@@ -213,15 +211,15 @@ public class CSVImporter<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the input contains self-loops then the graph provided must also support
      * self-loops. The same for multiple edges.
-     * 
+     *
      * <p>
      * If the provided graph is a weighted graph, the importer also reads edge weights.
-     * 
+     *
      * @param graph the graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error

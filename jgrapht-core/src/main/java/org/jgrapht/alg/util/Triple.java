@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,15 +22,14 @@ import java.util.*;
 
 /**
  * Generic triple (3-tuple).
- * 
+ *
  * @param <A> the first element type
  * @param <B> the second element type
  * @param <C> the third element type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class Triple<A, B, C>
-    implements Serializable
+public class Triple<A, B, C> implements Serializable
 {
     private static final long serialVersionUID = -7076291895521537427L;
 
@@ -51,7 +50,7 @@ public class Triple<A, B, C>
 
     /**
      * Create a new triple
-     * 
+     *
      * @param a the first element
      * @param b the second element
      * @param c the third element
@@ -65,7 +64,7 @@ public class Triple<A, B, C>
 
     /**
      * Get the first element
-     * 
+     *
      * @return the first element
      */
     public A getFirst()
@@ -75,7 +74,7 @@ public class Triple<A, B, C>
 
     /**
      * Get the second element
-     * 
+     *
      * @return the second element
      */
     public B getSecond()
@@ -85,7 +84,7 @@ public class Triple<A, B, C>
 
     /**
      * Get the third element
-     * 
+     *
      * @return the third element
      */
     public C getThird()

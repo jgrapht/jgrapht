@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,16 +30,16 @@ import java.util.function.*;
 
 /**
  * Dijkstra Shortest Path implementation specialized for graphs with integer vertices.
- * 
+ *
  * <p>
  * This class avoids using hash tables when the vertices are numbered from $0$ to $n-1$ where $n$ is
  * the number of vertices of the graph. If vertices are not in this range, then they are mapped in
  * this range using an open addressing hash table (linear probing).
- * 
+ *
  * <p>
  * This implementation should be faster than our more generic one which is
  * {@link DijkstraShortestPath} since it avoids the extensive use of hash tables.
- * 
+ *
  * <p>
  * By default a 4-ary heap is used. The user is free to use a custom heap implementation during
  * construction time. Regarding the choice of heap, it is generally known that it depends on the
@@ -48,13 +48,12 @@ import java.util.function.*;
  * back-to-basics empirical study of priority queues." 2014 Proceedings of the Sixteenth Workshop on
  * Algorithm Engineering and Experiments (ALENEX). Society for Industrial and Applied Mathematics,
  * 2014.
- * 
+ *
  * @param <E> the graph edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public final class IntVertexDijkstraShortestPath<E>
-    extends BaseShortestPathAlgorithm<Integer, E>
+public final class IntVertexDijkstraShortestPath<E> extends BaseShortestPathAlgorithm<Integer, E>
 {
     private final Supplier<AddressableHeap<Double, Integer>> heapSupplier;
 
@@ -111,7 +110,7 @@ public final class IntVertexDijkstraShortestPath<E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>
      * Note that in the case of Dijkstra's algorithm it is more efficient to compute all
      * single-source shortest paths using this method than repeatedly invoking
@@ -269,8 +268,7 @@ public final class IntVertexDijkstraShortestPath<E>
 
     }
 
-    private class ArrayBasedSingleSourcePathsImpl
-        implements SingleSourcePaths<Integer, E>, Serializable
+    private class ArrayBasedSingleSourcePathsImpl implements SingleSourcePaths<Integer, E>, Serializable
     {
         private static final long serialVersionUID = 2912496450441089175L;
 

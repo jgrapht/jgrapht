@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Christoph Grüne and Contributors.
+ * (C) Copyright 2018-2026, by Christoph Grüne and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,8 +21,7 @@ package org.jgrapht.alg.isomorphism;
  * Implementation of IsomorphismUndecidableException to indicate undecidable isomorphism cases in
  * isomorphism inspectors
  */
-public class IsomorphismUndecidableException
-    extends RuntimeException
+public class IsomorphismUndecidableException extends RuntimeException
 {
 
     private static final long serialVersionUID = 4703220562690821852L;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Andre Immig and Contributors.
+ * (C) Copyright 2018-2026, by Andre Immig and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -94,8 +94,7 @@ import java.util.stream.*;
  *
  * @author Andre Immig
  */
-public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
-    implements MaximumDensitySubgraphAlgorithm<V, E>
+public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E> implements MaximumDensitySubgraphAlgorithm<V, E>
 {
 
     private double lower, upper, epsilon;
@@ -110,7 +109,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
@@ -120,8 +119,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
      */
     public GoldbergMaximumDensitySubgraphAlgorithmBase(
         Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon,
-        Function<Graph<V, DefaultWeightedEdge>,
-            MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
+        Function<Graph<V, DefaultWeightedEdge>, MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
     {
         if (graph.containsVertex(s) || graph.containsVertex(t)) {
             throw new IllegalArgumentException("Source or sink vertex already in graph");
@@ -146,9 +144,9 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
      */
     private Graph<V, DefaultWeightedEdge> buildNetwork()
     {
-        return GraphTypeBuilder
-            .<V, DefaultWeightedEdge> directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-            .weighted(true).edgeSupplier(DefaultWeightedEdge::new).buildGraph();
+        return GraphTypeBuilder.<V, DefaultWeightedEdge> directed().allowingMultipleEdges(true)
+            .allowingSelfLoops(true).weighted(true).edgeSupplier(DefaultWeightedEdge::new)
+            .buildGraph();
     }
 
     /**
@@ -183,10 +181,10 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
      */
     private double getMinimalCapacity()
     {
-        DoubleStream sourceWeights = this.graph.vertexSet().stream().mapToDouble(
-            v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(v, t)));
-        DoubleStream sinkWeights = this.graph.vertexSet().stream().mapToDouble(
-            v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(s, v)));
+        DoubleStream sourceWeights = this.graph.vertexSet().stream()
+            .mapToDouble(v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(v, t)));
+        DoubleStream sinkWeights = this.graph.vertexSet().stream()
+            .mapToDouble(v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(s, v)));
         OptionalDouble min = DoubleStream.concat(sourceWeights, sinkWeights).min();
         return min.isPresent() ? min.getAsDouble() : 0;
     }
@@ -221,7 +219,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
      * lower-upper until interval is smaller than epsilon In case no solution is found because
      * epsilon is too big, the computation continues until a (first) solution is found, thereby
      * avoiding to return an empty graph.
-     * 
+     *
      * @return max density subgraph of the graph
      */
     public Graph<V, E> calculateDensest()
@@ -249,7 +247,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
 
     /**
      * Computes density of a maximum density subgraph.
-     * 
+     *
      * @return the actual density of the maximum density subgraph
      */
     public double getDensity()
@@ -266,7 +264,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
 
     /**
      * Getter for network weights of edges su for u in V
-     * 
+     *
      * @param vertex of V
      * @return weight of the edge (s,v)
      */
@@ -274,7 +272,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
 
     /**
      * Getter for network weights of edges ut for u in V
-     * 
+     *
      * @param vertex of V
      * @return weight of the edge (v,t)
      */

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -531,8 +531,7 @@ class BlossomVNode
      * caller. That's why it is safe to modify the current edge (move it to another node, for
      * example).
      */
-    public class IncidentEdgeIterator
-        implements Iterator<BlossomVEdge>
+    public class IncidentEdgeIterator implements Iterator<BlossomVEdge>
     {
 
         /**

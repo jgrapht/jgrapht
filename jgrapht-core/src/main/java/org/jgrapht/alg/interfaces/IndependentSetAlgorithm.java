@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2026, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -45,8 +45,7 @@ public interface IndependentSetAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    interface IndependentSet<V>
-        extends Set<V>
+    interface IndependentSet<V> extends Set<V>
     {
 
         /**
@@ -65,9 +64,7 @@ public interface IndependentSetAlgorithm<V>
      *
      * @param <V> the vertex type
      */
-    class IndependentSetImpl<V>
-        extends WeightedUnmodifiableSet<V>
-        implements IndependentSet<V>
+    class IndependentSetImpl<V> extends WeightedUnmodifiableSet<V> implements IndependentSet<V>
     {
 
         private static final long serialVersionUID = 4572451196544323306L;

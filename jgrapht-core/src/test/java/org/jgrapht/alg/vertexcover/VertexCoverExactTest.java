@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2023, by Linda Buisman and Contributors.
+ * (C) Copyright 2003-2026, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Linda Buisman
  */
-public abstract class VertexCoverExactTest
-    implements VertexCoverTest
+public abstract class VertexCoverExactTest implements VertexCoverTest
 {
 
     // ------- Exact algorithms ------

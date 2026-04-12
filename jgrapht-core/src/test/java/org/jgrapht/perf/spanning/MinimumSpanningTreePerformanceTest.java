@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,7 @@ import java.util.function.*;
 
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.
- * 
+ *
  * @author Dimitrios Michail
  * @author Alexandru Valeanu
  */
@@ -67,8 +67,8 @@ public class MinimumSpanningTreePerformanceTest
                     false);
             }
 
-            DirectedWeightedPseudograph<Integer,
-                DefaultWeightedEdge> weightedDenseGraph = new DirectedWeightedPseudograph<>(
+            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedDenseGraph =
+                new DirectedWeightedPseudograph<>(
                     SupplierUtil.createIntegerSupplier(),
                     SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
@@ -89,8 +89,8 @@ public class MinimumSpanningTreePerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT_SPARSE, PERF_BENCHMARK_EDGES_COUNT_SPARSE);
             }
 
-            DirectedWeightedPseudograph<Integer,
-                DefaultWeightedEdge> weightedSparseGraph = new DirectedWeightedPseudograph<>(
+            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedSparseGraph =
+                new DirectedWeightedPseudograph<>(
                     SupplierUtil.createIntegerSupplier(),
                     SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
@@ -116,8 +116,7 @@ public class MinimumSpanningTreePerformanceTest
         }
     }
 
-    public static class PrimBenchmark
-        extends BenchmarkBase
+    public static class PrimBenchmark extends BenchmarkBase
     {
         @Override
         SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
@@ -133,8 +132,7 @@ public class MinimumSpanningTreePerformanceTest
         }
     }
 
-    public static class KruskalBenchmark
-        extends BenchmarkBase
+    public static class KruskalBenchmark extends BenchmarkBase
     {
         @Override
         SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
@@ -150,8 +148,7 @@ public class MinimumSpanningTreePerformanceTest
         }
     }
 
-    public static class BoruvkaBenchmark
-        extends BenchmarkBase
+    public static class BoruvkaBenchmark extends BenchmarkBase
     {
         @Override
         SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(

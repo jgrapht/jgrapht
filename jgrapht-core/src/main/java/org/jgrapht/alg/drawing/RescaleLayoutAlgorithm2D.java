@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2020-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,24 +28,23 @@ import org.jgrapht.alg.drawing.model.Point2D;
 /**
  * A layout algorithm which re-scales vertex positions to (center-scale,center+scale) in all
  * dimensions.
- * 
+ *
  * The algorithm first subtracts the mean on each axis separately, then all values are adjusted so
  * that the maximum magnitude becomes scale. The result is finally translated back to the old
  * center. This procedure preserves the aspect ratio.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class RescaleLayoutAlgorithm2D<V, E>
-    extends BaseLayoutAlgorithm2D<V, E>
+public class RescaleLayoutAlgorithm2D<V, E> extends BaseLayoutAlgorithm2D<V, E>
 {
     private double scale;
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param scale the scale parameter
      */
     public RescaleLayoutAlgorithm2D(double scale)
@@ -65,8 +64,8 @@ public class RescaleLayoutAlgorithm2D<V, E>
 
         double maxX = 0d, maxY = 0d;
 
-        OptionalDouble optMeanX = StreamSupport
-            .stream(model.spliterator(), false).mapToDouble(e -> e.getValue().getX()).average();
+        OptionalDouble optMeanX = StreamSupport.stream(model.spliterator(), false)
+            .mapToDouble(e -> e.getValue().getX()).average();
         if (optMeanX.isPresent()) {
             double meanX = optMeanX.getAsDouble();
             for (V v : graph.vertexSet()) {
@@ -78,8 +77,8 @@ public class RescaleLayoutAlgorithm2D<V, E>
             }
         }
 
-        OptionalDouble optMeanY = StreamSupport
-            .stream(model.spliterator(), false).mapToDouble(e -> e.getValue().getY()).average();
+        OptionalDouble optMeanY = StreamSupport.stream(model.spliterator(), false)
+            .mapToDouble(e -> e.getValue().getY()).average();
         if (optMeanY.isPresent()) {
             double meanY = optMeanY.getAsDouble();
             for (V v : graph.vertexSet()) {

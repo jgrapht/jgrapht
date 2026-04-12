@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,7 +24,7 @@ import java.nio.charset.*;
 
 /**
  * Interface for graph exporters
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
@@ -37,7 +37,7 @@ public interface GraphExporter<V, E>
      * It is the callers responsibility to ensure the {@code OutputStream} is closed after this
      * method returned.
      * </p>
-     * 
+     *
      * @param g the graph to export
      * @param out the output stream
      * @throws ExportException in case any error occurs
@@ -53,7 +53,7 @@ public interface GraphExporter<V, E>
      * It is the callers responsibility to ensure the {@code Writer} is closed after this method
      * returned.
      * </p>
-     * 
+     *
      * @param g the graph to export
      * @param writer the output writer
      * @throws ExportException in case any error occurs
@@ -62,7 +62,7 @@ public interface GraphExporter<V, E>
 
     /**
      * Export a graph to the given {@link File}.
-     * 
+     *
      * @param g the graph to export
      * @param file the file to write to
      * @throws ExportException in case any error occurs

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Semen Chudakov and Contributors.
+ * (C) Copyright 2018-2026, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -146,8 +146,7 @@ public class KShortestPathsPerformance
         }
     }
 
-    public static class YenState
-        extends RandomGraphState
+    public static class YenState extends RandomGraphState
     {
         @Param({ "true", "false" })
         boolean createPathValidator;

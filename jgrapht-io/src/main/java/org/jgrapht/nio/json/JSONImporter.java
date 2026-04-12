@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2023, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2026, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -38,9 +38,9 @@ import org.jgrapht.nio.ImportException;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
- * 
+ *
  * Below is a small example of a graph in JSON format.
- * 
+ *
  * <pre>
  * {
  *   "nodes": [
@@ -54,17 +54,17 @@ import org.jgrapht.nio.ImportException;
  *   ]
  * }
  * </pre>
- * 
+ *
  * <p>
  * In case the graph is weighted then the importer also reads edge weights. Otherwise edge weights
  * are ignored. The importer also supports reading additional string attributes such as label or
  * custom user attributes.
- * 
+ *
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
  * of the graph. Moreover, complicated nested structures which are inside vertices or edges are
  * simply returned as a whole. For example, in the following graph
- * 
+ *
  * <pre>
  * {
  *   "nodes": [
@@ -76,16 +76,16 @@ import org.jgrapht.nio.ImportException;
  *   ]
  * }
  * </pre>
- * 
+ *
  * the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same
  * is done for arrays or any other arbitrary nested structure.
- * 
+ *
  * <p>
  * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
  * vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
  * vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
  * multiple times.
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
  * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
@@ -95,22 +95,20 @@ import org.jgrapht.nio.ImportException;
  * is responsible for creating a new graph vertex given the vertex identifier read from file
  * together with all available attributes of the vertex at the location of the file where the vertex
  * is first defined.
- * 
+ *
  * <p>
  * The default behavior of the importer is to use the graph edge supplier in order to create edges.
  * The user can also bypass edge creation by providing a custom edge factory method using
  * {@link #setEdgeWithAttributesFactory(Function)}. The factory method is responsible to create a
  * new graph edge given all available attributes of the edge at the location of the file where the
  * edge is first defined.
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class JSONImporter<V, E>
-    extends BaseEventDrivenImporter<V, E>
-    implements GraphImporter<V, E>
+public class JSONImporter<V, E> extends BaseEventDrivenImporter<V, E> implements GraphImporter<V, E>
 {
     /**
      * Default key used for vertex ID.
@@ -141,16 +139,16 @@ public class JSONImporter<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the file contains self-loops then the graph provided must also support self-loops.
      * The same for multiple edges.
-     * 
+     *
      * <p>
      * If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
      * edge weights are ignored.
-     * 
+     *
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error
@@ -187,7 +185,7 @@ public class JSONImporter<V, E>
     /**
      * Get the user custom vertex factory. This is null by default and the graph supplier is used
      * instead.
-     * 
+     *
      * @return the user custom vertex factory
      */
     public Function<String, V> getVertexFactory()
@@ -198,11 +196,11 @@ public class JSONImporter<V, E>
     /**
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the file.
      * The method is called with parameter the vertex identifier from the file and should return the
      * actual graph vertex to add to the graph.
-     * 
+     *
      * @param vertexFactory a vertex factory
      */
     public void setVertexFactory(Function<String, V> vertexFactory)
@@ -213,13 +211,13 @@ public class JSONImporter<V, E>
     /**
      * Set the user custom vertex factory with attributes. The default behavior is being null in
      * which case the graph vertex supplier is used.
-     * 
+     *
      * If supplied the vertex factory is called every time a new vertex is encountered in the input.
      * The method is called with parameter the vertex identifier from the input and a set of
      * attributes and should return the actual graph vertex to add to the graph. Note that the set
      * of attributes might not be complete, as only attributes available at the first vertex
      * definition are collected.
-     * 
+     *
      * @param vertexWithAttributesFactory a vertex factory with attributes
      */
     public void setVertexWithAttributesFactory(
@@ -231,7 +229,7 @@ public class JSONImporter<V, E>
     /**
      * Get the user custom edges factory with attributes. This is null by default and the graph
      * supplier is used instead.
-     * 
+     *
      * @return the user custom edge factory with attributes.
      */
     public Function<Map<String, Attribute>, E> getEdgeWithAttributesFactory()
@@ -242,12 +240,12 @@ public class JSONImporter<V, E>
     /**
      * Set the user custom edge factory with attributes. The default behavior is being null in which
      * case the graph edge supplier is used.
-     * 
+     *
      * If supplied the edge factory is called every time a new edge is encountered in the input. The
      * method is called with parameter the set of attributes and should return the actual graph edge
      * to add to the graph. Note that the set of attributes might not be complete, as only
      * attributes available at the first edge definition are collected.
-     * 
+     *
      * @param edgeWithAttributesFactory an edge factory with attributes
      */
     public void setEdgeWithAttributesFactory(
@@ -258,7 +256,7 @@ public class JSONImporter<V, E>
 
     /**
      * Get the name used for the vertices collection in the file.
-     * 
+     *
      * @return the name used for the vertices collection in the file.
      */
     public String getVerticesCollectionName()
@@ -268,7 +266,7 @@ public class JSONImporter<V, E>
 
     /**
      * Set the name used for the vertices collection in the file.
-     * 
+     *
      * @param verticesCollectionName the name
      */
     public void setVerticesCollectionName(String verticesCollectionName)
@@ -278,7 +276,7 @@ public class JSONImporter<V, E>
 
     /**
      * Get the name used for the edges collection in the file.
-     * 
+     *
      * @return the name used for the edges collection in the file.
      */
     public String getEdgesCollectionName()
@@ -288,7 +286,7 @@ public class JSONImporter<V, E>
 
     /**
      * Set the name used for the edges collection in the file.
-     * 
+     *
      * @param edgesCollectionName the name
      */
     public void setEdgesCollectionName(String edgesCollectionName)
@@ -380,8 +378,8 @@ public class JSONImporter<V, E>
             lastEdge = e;
         };
 
-        public final BiConsumer<Triple<String, String, Double>,
-            Map<String, Attribute>> edgeWithAttributesConsumer = (t, attrs) -> {
+        public final BiConsumer<Triple<String, String, Double>, Map<String, Attribute>> edgeWithAttributesConsumer =
+            (t, attrs) -> {
                 String source = t.getFirst();
                 V from = map.get(source);
                 if (from == null) {
@@ -408,8 +406,8 @@ public class JSONImporter<V, E>
                 lastEdge = e;
             };
 
-        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
-            Attribute> edgeAttributeConsumer = (p, a) -> {
+        public final BiConsumer<Pair<Triple<String, String, Double>, String>, Attribute> edgeAttributeConsumer =
+            (p, a) -> {
                 Triple<String, String, Double> t = p.getFirst();
                 if (t == lastTriple) {
                     notifyEdgeAttribute(lastEdge, p.getSecond(), a);

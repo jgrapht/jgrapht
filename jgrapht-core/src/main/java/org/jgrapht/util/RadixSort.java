@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2023, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2026, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,25 +24,17 @@ import java.util.*;
  *
  * This algorithms runs in $O(N + V)$ time and uses $O(N + V)$ extra memory, where $V = 256$.
  *
- * If $N \leq RadixSort.CUT\_OFF$ then the standard Java sorting algorithm is used.
+ * If $N \leq RadixSort.cutOff$ then the standard Java sorting algorithm is used.
  *
  * The specified list must be modifiable, but need not be resizable.
  */
 public class RadixSort
 {
+    private static int cutOff = 40;
 
-    /**
-     * @deprecated use {@link #setCutOff(int)} instead
-     */
-    @Deprecated(since = "1.5.2", forRemoval = true)
-    public static int CUT_OFF = 40; // @CS.suppress[StaticVariableName]
-    // TODO: make this static field private, rename it to "cutOff" to comply
-    // with checkstyle naming rules and remove the // @CS.supress comment and in jgrapht_checks.xml
-    // the rule SuppressWithNearbyCommentFilter
-
-    public static void setCutOff(int cutOff)
+    public static void setCutOff(int c)
     {
-        CUT_OFF = cutOff;
+        cutOff = c;
     }
 
     private static final int MAX_DIGITS = 32;
@@ -88,7 +80,7 @@ public class RadixSort
 
         final int n = list.size();
 
-        if (n <= CUT_OFF) {
+        if (n <= cutOff) {
             list.sort(null);
             return;
         }
