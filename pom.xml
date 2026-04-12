@@ -81,7 +81,7 @@
         <junit.version>6.0.0</junit.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
-        <maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
+        <maven-bundle-plugin.version>6.0.2</maven-bundle-plugin.version>
         <maven-formatter-plugin.version>2.29.0</maven-formatter-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
