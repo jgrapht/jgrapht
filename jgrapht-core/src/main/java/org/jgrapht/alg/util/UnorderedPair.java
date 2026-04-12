@@ -59,10 +59,8 @@ public class UnorderedPair<A, B> extends Pair<A, B> implements Serializable
     {
         if (this == o)
             return true;
-        else if (!(o instanceof UnorderedPair))
+        if (!(o instanceof UnorderedPair<?, ?> other))
             return false;
-
-        @SuppressWarnings("unchecked") UnorderedPair<A, B> other = (UnorderedPair<A, B>) o;
 
         return (Objects.equals(first, other.first) && Objects.equals(second, other.second))
             || (Objects.equals(first, other.second) && Objects.equals(second, other.first));

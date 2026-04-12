@@ -150,10 +150,9 @@ public class Triple<A, B, C> implements Serializable
     {
         if (this == o)
             return true;
-        else if (!(o instanceof Triple))
+        if (!(o instanceof Triple<?, ?, ?> other))
             return false;
 
-        @SuppressWarnings("unchecked") Triple<A, B, C> other = (Triple<A, B, C>) o;
         return Objects.equals(first, other.first) && Objects.equals(second, other.second)
             && Objects.equals(third, other.third);
     }

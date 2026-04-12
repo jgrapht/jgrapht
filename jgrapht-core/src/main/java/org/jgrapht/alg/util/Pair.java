@@ -125,10 +125,9 @@ public class Pair<A, B> implements Serializable
     {
         if (this == o)
             return true;
-        else if (!(o instanceof Pair))
+        if (!(o instanceof Pair<?, ?> other))
             return false;
 
-        @SuppressWarnings("unchecked") Pair<A, B> other = (Pair<A, B>) o;
         return Objects.equals(first, other.first) && Objects.equals(second, other.second);
     }
 

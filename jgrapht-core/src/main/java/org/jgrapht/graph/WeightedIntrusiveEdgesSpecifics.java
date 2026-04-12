@@ -49,8 +49,8 @@ public class WeightedIntrusiveEdgesSpecifics<V, E> extends BaseIntrusiveEdgesSpe
     @Override
     public boolean add(E e, V sourceVertex, V targetVertex)
     {
-        if (e instanceof IntrusiveWeightedEdge) {
-            return addIntrusiveEdge(e, sourceVertex, targetVertex, (IntrusiveWeightedEdge) e);
+        if (e instanceof IntrusiveWeightedEdge iwe) {
+            return addIntrusiveEdge(e, sourceVertex, targetVertex, iwe);
 
         } else {
             int previousSize = edgeMap.size();
@@ -88,8 +88,8 @@ public class WeightedIntrusiveEdgesSpecifics<V, E> extends BaseIntrusiveEdgesSpe
     @Override
     protected IntrusiveWeightedEdge getIntrusiveEdge(E e)
     {
-        if (e instanceof IntrusiveWeightedEdge) {
-            return (IntrusiveWeightedEdge) e;
+        if (e instanceof IntrusiveWeightedEdge iwe) {
+            return iwe;
         }
         return edgeMap.get(e);
     }

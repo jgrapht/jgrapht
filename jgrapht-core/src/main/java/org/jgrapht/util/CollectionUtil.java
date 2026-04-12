@@ -140,8 +140,8 @@ public class CollectionUtil
      */
     public static <E> E getElement(Iterable<E> iterable, int index)
     {
-        if (iterable instanceof List) {
-            return ((List<E>) iterable).get(index);
+        if (iterable instanceof List<E> list) {
+            return list.get(index);
         }
         Iterator<E> it = iterable.iterator();
         for (int i = 0; i < index && it.hasNext(); i++) {

@@ -442,10 +442,9 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
         {
             if (this == o)
                 return true;
-            else if (!(o instanceof PathSetKey))
+            if (!(o instanceof PathSetKey other))
                 return false;
 
-            @SuppressWarnings("unchecked") PathSetKey<VV> other = (PathSetKey<VV>) o;
             return Objects.equals(head, other.head) && Objects.equals(tail, other.tail)
                 && Objects.equals(labels, other.labels);
         }

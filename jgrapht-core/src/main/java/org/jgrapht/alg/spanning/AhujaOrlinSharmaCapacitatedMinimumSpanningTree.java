@@ -1427,9 +1427,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E> extends Abstra
                 @Override
                 public boolean containsKey(Object key)
                 {
-                    if (key instanceof Pair) {
+                    if (key instanceof Pair<?, ?> p) {
                         return improvementGraphVertexMapping
-                            .containsKey(((Pair<?, ?>) key).getFirst())
+                            .containsKey(p.getFirst())
                             || pathExchangeVertexMapping.containsKey(key) || key.equals(origin);
                     }
                     return false;
@@ -1446,12 +1446,12 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E> extends Abstra
                 @Override
                 public Integer get(Object key)
                 {
-                    if (key instanceof Pair) {
+                    if (key instanceof Pair<?, ?> p) {
                         if (improvementGraphVertexMapping
-                            .containsKey(((Pair<?, ?>) key).getFirst()))
+                            .containsKey(p.getFirst()))
                         {
                             return capacitatedSpanningTreeSolutionRepresentation.getLabel(
-                                improvementGraphVertexMapping.get(((Pair<?, ?>) key).getFirst()));
+                                improvementGraphVertexMapping.get(p.getFirst()));
                         }
                         if (key.equals(origin)) {
                             return originVertexLabel;

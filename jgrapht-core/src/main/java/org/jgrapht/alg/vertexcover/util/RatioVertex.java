@@ -131,9 +131,8 @@ public class RatioVertex<V> implements Comparable<RatioVertex<V>>
     {
         if (this == o)
             return true;
-        else if (!(o instanceof RatioVertex))
+        if (!(o instanceof RatioVertex<?> other))
             return false;
-        RatioVertex<V> other = TypeUtil.uncheckedCast(o);
         return this.id == other.id;
     }
 
