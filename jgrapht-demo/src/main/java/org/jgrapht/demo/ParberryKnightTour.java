@@ -144,7 +144,7 @@ public class ParberryKnightTour
 
         if (Math.max(nDim, mDim) <= 12) {
             return new WarnsdorffRuleKnightTourHeuristic(nDim, mDim)
-                .getTour(TourType.CLOSED, true, start.getFirst(), start.getSecond());
+                .getTour(KnightTour.TourType.CLOSED, true, start.getFirst(), start.getSecond());
         }
 
         /*
