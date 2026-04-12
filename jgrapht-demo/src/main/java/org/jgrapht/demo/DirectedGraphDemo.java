@@ -42,6 +42,10 @@ import java.util.*;
  */
 public class DirectedGraphDemo
 {
+    private DirectedGraphDemo()
+    {
+    }
+
     /**
      * The starting point for the demo.
      *

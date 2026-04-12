@@ -28,6 +28,10 @@ import org.jgrapht.graph.builder.*;
  */
 public final class GraphBuilderDemo
 {
+    private GraphBuilderDemo()
+    {
+    }
+
     /**
      * Main demo entry point.
      *

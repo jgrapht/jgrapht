@@ -31,6 +31,9 @@ import java.util.*;
  **/
 public class DependencyDemo
 {
+    private DependencyDemo()
+    {
+    }
 
     /**
      * Test creating a directed graph, checking it for cycles and either outputting cycles detected

@@ -30,6 +30,10 @@ import java.util.*;
  */
 public class LabeledEdges
 {
+    private LabeledEdges()
+    {
+    }
+
     private static final String FRIEND = "friend";
     private static final String ENEMY = "enemy";
 
