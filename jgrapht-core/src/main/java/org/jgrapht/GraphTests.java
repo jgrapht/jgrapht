@@ -33,6 +33,7 @@ import java.util.stream.*;
  * @author Dimitrios Michail
  * @author Joris Kinable
  * @author Alexandru Valeanu
+ * @author Wissal Chbani
  */
 public abstract class GraphTests
 {
@@ -42,6 +43,99 @@ public abstract class GraphTests
     private static final String GRAPH_MUST_BE_UNDIRECTED = "Graph must be undirected";
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
     private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
+
+    /**
+     * Test whether a graph is linear (path graph).
+     * A graph is linear if:
+     * 1. It is undirected.
+     * 2. Every vertex has degree <= 2.
+     * 3. The graph is connected.
+     * The graph contains no cycles.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is linear, false otherwise
+     */
+    public static <V, E> boolean isLinear(Graph<V, E> graph) {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        if (graph.getType().isDirected()) {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
+        }
+
+        if (graph.vertexSet().size() == 0 || graph.vertexSet().size() == 1) {
+            return true;
+        }
+
+        for (V v : graph.vertexSet()) {
+            if (graph.degreeOf(v) > 2) {
+                return false;
+            }
+        }
+
+        ConnectivityInspector<V, E> inspector = new ConnectivityInspector<>(graph);
+        if (!inspector.isConnected()) {
+            return false;
+        }
+
+        if (!(graph.edgeSet().size() == graph.vertexSet().size() - 1)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Test whether a cycle is chordless (induced).
+     *
+     * <p>
+     * A cycle is chordless if there are no edges between non-consecutive
+     * vertices in the cycle. A chordless cycle is also known as an induced
+     * cycle or hole.
+     * </p>
+     *
+     * @param graph the graph containing the cycle
+     * @param cycle the cycle to test (must be a valid cycle)
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the cycle is chordless, false otherwise
+     * @throws NullPointerException if graph or cycle is null
+     * @throws IllegalArgumentException if the path is not a valid cycle
+     */
+    public static <V, E> boolean isChordless(Graph<V, E> graph, GraphPath<V, E> cycle) {
+
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        Objects.requireNonNull(cycle, "Cycle cannot be null");
+
+        List<V> vertices = cycle.getVertexList();
+
+        if (vertices.size() <4) {
+            throw new IllegalArgumentException("A cycle must have at least 3 vertices");
+        }
+
+        if (!vertices.get(0).equals(vertices.get(vertices.size() - 1))) {
+            throw new IllegalArgumentException("Path is not a cycle (first vertex != last vertex)");
+        }
+
+        int n = vertices.size() - 1;
+
+        for (int i = 0; i<n; i++) {
+            for (int j = i + 2; j < n; j++) {
+                if (i == 0 && j == n-1) {
+                    continue;
+                }
+
+                V v1 = vertices.get(i);
+                V v2 = vertices.get(j);
+
+                if (graph.containsEdge(v1, v2)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
