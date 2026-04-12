@@ -78,8 +78,7 @@
         <jgraphx.version>4.2.2</jgraphx.version>
         <jheaps.version>0.14</jheaps.version>
         <jmh.version>1.37</jmh.version>
-        <junit.version>5.11.4</junit.version>
-        <junit.platform.version>1.11.4</junit.platform.version>
+        <junit.version>6.0.0</junit.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
         <maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
@@ -223,7 +222,7 @@
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-suite</artifactId>
-                <version>${junit.platform.version}</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
