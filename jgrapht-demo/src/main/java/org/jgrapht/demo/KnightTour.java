@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Class that represents container for knight's tour.
  */
-class KnightTour
+public class KnightTour
 {
 
     /**
@@ -42,7 +42,7 @@ class KnightTour
      * @param <E> type of a value storing in a node.
      */
 
-    class DoublyLinkedList<E>
+    public class DoublyLinkedList<E>
     {
 
         /**
@@ -170,7 +170,7 @@ class KnightTour
      *
      */
 
-    static class Node<E>
+    public static class Node<E>
     {
 
         /**

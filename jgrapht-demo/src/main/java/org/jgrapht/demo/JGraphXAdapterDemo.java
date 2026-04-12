@@ -29,53 +29,39 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on
- * JGraphAdapterDemo.
+ * A demo that shows how to use JGraphX to visualize JGraphT graphs.
  *
  */
-public class JGraphXAdapterDemo extends JApplet
+public final class JGraphXAdapterDemo
 {
-    private static final long serialVersionUID = 2202072534703043194L;
-
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
-    private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
+    private JGraphXAdapterDemo()
+    {
+    }
 
     /**
-     * An alternative starting point for this demo, to also allow running this applet as an
-     * application.
+     * The starting point for the demo.
      *
      * @param args command line arguments
      */
     public static void main(String[] args)
-    {
-        JGraphXAdapterDemo applet = new JGraphXAdapterDemo();
-        applet.init();
-
-        JFrame frame = new JFrame();
-        frame.getContentPane().add(applet);
-        frame.setTitle("JGraphT Adapter to JGraphX Demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    @Override
-    public void init()
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
             new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
 
         // create a visualization using JGraph, via an adapter
-        jgxAdapter = new JGraphXAdapter<>(g);
+        JGraphXAdapter<String, DefaultEdge> jgxAdapter = new JGraphXAdapter<>(g);
 
-        setPreferredSize(DEFAULT_SIZE);
+        JFrame frame = new JFrame("JGraphT Adapter to JGraphX Demo");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setPreferredSize(DEFAULT_SIZE);
+
         mxGraphComponent component = new mxGraphComponent(jgxAdapter);
         component.setConnectable(false);
         component.getGraph().setAllowDanglingEdges(false);
-        getContentPane().add(component);
-        resize(DEFAULT_SIZE);
+        frame.getContentPane().add(component);
 
         String v1 = "v1";
         String v2 = "v2";
@@ -104,7 +90,9 @@ public class JGraphXAdapterDemo extends JApplet
         layout.setMoveCircle(true);
 
         layout.execute(jgxAdapter.getDefaultParent());
-        // that's all there is to it!...
+
+        frame.pack();
+        frame.setVisible(true);
     }
 }
 // @example:full:end

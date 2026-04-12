@@ -150,10 +150,10 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     }
 
     private void checkCorrectness(
-        List<Pair<Integer, Integer>> tour, TourType type, int n, int m, int shiftX, int shiftY,
+        List<Pair<Integer, Integer>> tour, KnightTour.TourType type, int n, int m, int shiftX, int shiftY,
         boolean structured)
     {
-        if (type == TourType.CLOSED) {
+        if (type == KnightTour.TourType.CLOSED) {
             assertTrue(checkClosed(tour.get(0), tour.get(tour.size() - 1)));
         } else {
             assertTrue(checkOpen(tour.get(0), tour.get(tour.size() - 1)));
@@ -167,104 +167,104 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     public void warnsdorff8x8OpenWithShift()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(8);
-        container = solver.getTour(TourType.OPEN, false, 10, 143);
-        checkCorrectness(container.toList(), TourType.OPEN, 8, 8, 10, 143, false);
+        container = solver.getTour(KnightTour.TourType.OPEN, false, 10, 143);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 8, 8, 10, 143, false);
     }
 
     @Test
     public void warnsdorff10x10Open()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(10);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 10, 10, 0, 0, false);
+        container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 10, 10, 0, 0, false);
     }
 
     @Test
     public void warnsdorff37x10Open()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(37, 10);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 37, 10, 0, 0, false);
+        container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 37, 10, 0, 0, false);
     }
 
     @Test
     public void warnsdorff41x41Open()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(41, 41);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 41, 41, 0, 0, false);
+        container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 41, 41, 0, 0, false);
     }
 
     @Test
     public void warnsdorff41x41OpenStructured()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(41, 41);
-        container = solver.getTour(TourType.OPEN, true, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 41, 41, 0, 0, true);
+        container = solver.getTour(KnightTour.TourType.OPEN, true, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 41, 41, 0, 0, true);
     }
 
     @Test
     public void warnsdorff10x10Closed()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(10);
-        container = solver.getTour(TourType.CLOSED, false, 0, 0);
-        checkCorrectness(container.toList(), TourType.CLOSED, 10, 10, 0, 0, false);
+        container = solver.getTour(KnightTour.TourType.CLOSED, false, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.CLOSED, 10, 10, 0, 0, false);
     }
 
     @Test
     public void warnsdorff34x34ClosedWithShift()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(34);
-        container = solver.getTour(TourType.CLOSED, false, 20, 89);
-        checkCorrectness(container.toList(), TourType.CLOSED, 34, 34, 20, 89, false);
+        container = solver.getTour(KnightTour.TourType.CLOSED, false, 20, 89);
+        checkCorrectness(container.toList(), KnightTour.TourType.CLOSED, 34, 34, 20, 89, false);
     }
 
     @Test
     public void warnsdorff63x23OpenStructured()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(63, 23);
-        container = solver.getTour(TourType.OPEN, true, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 63, 23, 0, 0, true);
+        container = solver.getTour(KnightTour.TourType.OPEN, true, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 63, 23, 0, 0, true);
     }
 
     @Test
     public void warnsdorff49x34Closed()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(49, 34);
-        container = solver.getTour(TourType.CLOSED, false, 0, 0);
-        checkCorrectness(container.toList(), TourType.CLOSED, 49, 34, 0, 0, false);
+        container = solver.getTour(KnightTour.TourType.CLOSED, false, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.CLOSED, 49, 34, 0, 0, false);
     }
 
     @Test
     public void warnsdorff34x34ClosedStructuredWithShift()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(34);
-        container = solver.getTour(TourType.CLOSED, true, 20, 89);
-        checkCorrectness(container.toList(), TourType.CLOSED, 34, 34, 20, 89, true);
+        container = solver.getTour(KnightTour.TourType.CLOSED, true, 20, 89);
+        checkCorrectness(container.toList(), KnightTour.TourType.CLOSED, 34, 34, 20, 89, true);
     }
 
     @Test
     public void warnsdorff18x34ClosedStructuredWithShift()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(18, 34);
-        container = solver.getTour(TourType.CLOSED, true, 7, 7);
-        checkCorrectness(container.toList(), TourType.CLOSED, 18, 34, 7, 7, true);
+        container = solver.getTour(KnightTour.TourType.CLOSED, true, 7, 7);
+        checkCorrectness(container.toList(), KnightTour.TourType.CLOSED, 18, 34, 7, 7, true);
     }
 
     @Test
     public void warnsdorff42x42ClosedStructured()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(42, 42);
-        container = solver.getTour(TourType.CLOSED, true, 0, 0);
-        checkCorrectness(container.toList(), TourType.CLOSED, 42, 42, 0, 0, true);
+        container = solver.getTour(KnightTour.TourType.CLOSED, true, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.CLOSED, 42, 42, 0, 0, true);
     }
 
     @Test
     public void warnsdorff40x20OpenStructured()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(40, 20);
-        container = solver.getTour(TourType.OPEN, true, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 40, 20, 0, 0, true);
+        container = solver.getTour(KnightTour.TourType.OPEN, true, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 40, 20, 0, 0, true);
     }
 
     @Test
@@ -272,7 +272,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     {
         assertThrows(IllegalArgumentException.class, () -> {
             solver = new WarnsdorffRuleKnightTourHeuristic(2, 200);
-            container = solver.getTour(TourType.OPEN, false, 0, 0);
+            container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
         });
     }
 
@@ -281,7 +281,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     {
         assertThrows(IllegalArgumentException.class, () -> {
             solver = new WarnsdorffRuleKnightTourHeuristic(5, 3);
-            container = solver.getTour(TourType.OPEN, false, 0, 0);
+            container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
         });
     }
 
@@ -290,7 +290,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     {
         assertThrows(IllegalArgumentException.class, () -> {
             solver = new WarnsdorffRuleKnightTourHeuristic(3, 6);
-            container = solver.getTour(TourType.OPEN, false, 0, 0);
+            container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
         });
     }
 
@@ -299,7 +299,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     {
         assertThrows(IllegalArgumentException.class, () -> {
             solver = new WarnsdorffRuleKnightTourHeuristic(4, 4);
-            container = solver.getTour(TourType.OPEN, false, 0, 0);
+            container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
         });
     }
 
@@ -308,7 +308,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     {
         assertThrows(IllegalArgumentException.class, () -> {
             solver = new WarnsdorffRuleKnightTourHeuristic(31, 31);
-            container = solver.getTour(TourType.CLOSED, false, 0, 0);
+            container = solver.getTour(KnightTour.TourType.CLOSED, false, 0, 0);
         });
     }
 
@@ -317,7 +317,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     {
         assertThrows(IllegalArgumentException.class, () -> {
             solver = new WarnsdorffRuleKnightTourHeuristic(4, 6);
-            container = solver.getTour(TourType.CLOSED, false, 0, 0);
+            container = solver.getTour(KnightTour.TourType.CLOSED, false, 0, 0);
         });
     }
 
@@ -325,8 +325,8 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     public void warnsdorffOpenNonStructured4x6()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(4, 6);
-        container = solver.getTour(TourType.OPEN, false, 0, 0);
-        checkCorrectness(container.toList(), TourType.OPEN, 4, 6, 0, 0, false);
+        container = solver.getTour(KnightTour.TourType.OPEN, false, 0, 0);
+        checkCorrectness(container.toList(), KnightTour.TourType.OPEN, 4, 6, 0, 0, false);
     }
 
     @Test
@@ -362,7 +362,7 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     public void warnsdorffDoubleInvocationToArrayList()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(49, 34);
-        container = solver.getTour(TourType.CLOSED, false, 0, 0);
+        container = solver.getTour(KnightTour.TourType.CLOSED, false, 0, 0);
         List<Pair<Integer, Integer>> arr1 = container.toList();
         List<Pair<Integer, Integer>> arr2 = container.toList();
         assertEquals(arr1.size(), arr2.size());
@@ -372,11 +372,11 @@ public class WarnsdorffRuleKnightTourHeuristicTest
     public void warnsdorffDoubleInvocationToArrayListAndgetTour()
     {
         solver = new WarnsdorffRuleKnightTourHeuristic(40, 40);
-        container = solver.getTour(TourType.CLOSED, false, 0, 0);
+        container = solver.getTour(KnightTour.TourType.CLOSED, false, 0, 0);
         List<Pair<Integer, Integer>> arr1 = container.toList();
         List<Pair<Integer, Integer>> arr2 = container.toList();
         assertEquals(arr1.size(), arr2.size());
-        container = solver.getTour(TourType.OPEN, true, 10, 10);
+        container = solver.getTour(KnightTour.TourType.OPEN, true, 10, 10);
         arr1 = container.toList();
         arr2 = container.toList();
         assertEquals(arr1.size(), arr2.size());
