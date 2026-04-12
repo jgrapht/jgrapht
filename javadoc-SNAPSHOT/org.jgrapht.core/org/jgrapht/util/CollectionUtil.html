@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -121,31 +121,35 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns from the given <code>Iterable</code> the element with the given <code>index</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;K,<wbr>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link">HashMap</a><wbr>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#newHashMapWithExpectedSize(int)" class="member-name-link">newHashMapWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a> with an initial capacity that is sufficient to hold
- <code>expectedSize</code> mappings without rehashing its internal backing storage.</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#newHashMapWithExpectedSize(int)" class="member-name-link">newHashMapWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html#newHashMap(int)" title="class or interface in java.util" class="external-link"><code>HashMap.newHashMap(int)</code></a> instead, available since Java 19.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a><wbr>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#newHashSetWithExpectedSize(int)" class="member-name-link">newHashSetWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link"><code>HashSet</code></a> with an initial capacity that is sufficient to hold
- <code>expectedSize</code> elements without rehashing its internal backing storage.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;K,<wbr>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a><wbr>&lt;E&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#newHashSetWithExpectedSize(int)" class="member-name-link">newHashSetWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html#newHashSet(int)" title="class or interface in java.util" class="external-link"><code>HashSet.newHashSet(int)</code></a> instead, available since Java 19.</div>
+</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link">LinkedHashMap</a><wbr>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#newLinkedHashMapWithExpectedSize(int)" class="member-name-link">newLinkedHashMapWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> with an initial capacity that is sufficient to hold
- <code>expectedSize</code> mappings without rehashing its internal backing storage.</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#newLinkedHashMapWithExpectedSize(int)" class="member-name-link">newLinkedHashMapWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html#newLinkedHashMap(int)" title="class or interface in java.util" class="external-link"><code>LinkedHashMap.newLinkedHashMap(int)</code></a> instead, available since Java 19.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link">LinkedHashSet</a><wbr>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#newLinkedHashSetWithExpectedSize(int)" class="member-name-link">newLinkedHashSetWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link"><code>LinkedHashSet</code></a> with an initial capacity that is sufficient to hold
- <code>expectedSize</code> elements without rehashing its internal backing storage.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link">LinkedHashSet</a><wbr>&lt;E&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#newLinkedHashSetWithExpectedSize(int)" class="member-name-link">newLinkedHashSetWithExpectedSize</a><wbr>(int&nbsp;expectedSize)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html#newLinkedHashSet(int)" title="class or interface in java.util" class="external-link"><code>LinkedHashSet.newLinkedHashSet(int)</code></a> instead, available since Java 19.</div>
+</div>
 </div>
 </div>
 </div>
@@ -167,8 +171,12 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <li>
 <section class="detail" id="newHashMapWithExpectedSize(int)">
 <h3>newHashMapWithExpectedSize</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
 V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link">HashMap</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name">newHashMapWithExpectedSize</span><wbr><span class="parameters">(int&nbsp;expectedSize)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html#newHashMap(int)" title="class or interface in java.util" class="external-link"><code>HashMap.newHashMap(int)</code></a> instead, available since Java 19.</div>
+</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a> with an initial capacity that is sufficient to hold
  <code>expectedSize</code> mappings without rehashing its internal backing storage.
  <p>
@@ -198,8 +206,12 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="newLinkedHashMapWithExpectedSize(int)">
 <h3>newLinkedHashMapWithExpectedSize</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
 V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link">LinkedHashMap</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name">newLinkedHashMapWithExpectedSize</span><wbr><span class="parameters">(int&nbsp;expectedSize)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html#newLinkedHashMap(int)" title="class or interface in java.util" class="external-link"><code>LinkedHashMap.newLinkedHashMap(int)</code></a> instead, available since Java 19.</div>
+</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> with an initial capacity that is sufficient to hold
  <code>expectedSize</code> mappings without rehashing its internal backing storage.
  <p>
@@ -228,7 +240,11 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="newHashSetWithExpectedSize(int)">
 <h3>newHashSetWithExpectedSize</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name">newHashSetWithExpectedSize</span><wbr><span class="parameters">(int&nbsp;expectedSize)</span></div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name">newHashSetWithExpectedSize</span><wbr><span class="parameters">(int&nbsp;expectedSize)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html#newHashSet(int)" title="class or interface in java.util" class="external-link"><code>HashSet.newHashSet(int)</code></a> instead, available since Java 19.</div>
+</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link"><code>HashSet</code></a> with an initial capacity that is sufficient to hold
  <code>expectedSize</code> elements without rehashing its internal backing storage.
  <p>
@@ -256,7 +272,11 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="newLinkedHashSetWithExpectedSize(int)">
 <h3>newLinkedHashSetWithExpectedSize</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link">LinkedHashSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name">newLinkedHashSetWithExpectedSize</span><wbr><span class="parameters">(int&nbsp;expectedSize)</span></div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link">LinkedHashSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name">newLinkedHashSetWithExpectedSize</span><wbr><span class="parameters">(int&nbsp;expectedSize)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html#newLinkedHashSet(int)" title="class or interface in java.util" class="external-link"><code>LinkedHashSet.newLinkedHashSet(int)</code></a> instead, available since Java 19.</div>
+</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link"><code>LinkedHashSet</code></a> with an initial capacity that is sufficient to hold
  <code>expectedSize</code> elements without rehashing its internal backing storage.
  <p>
