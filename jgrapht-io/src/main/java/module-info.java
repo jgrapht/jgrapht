@@ -39,5 +39,5 @@ module org.jgrapht.io
     requires transitive org.jgrapht.core;
     requires transitive org.apache.commons.text;
     requires transitive java.xml;
-    requires transitive org.antlr.antlr4.runtime;
+    requires org.antlr.antlr4.runtime;
 }

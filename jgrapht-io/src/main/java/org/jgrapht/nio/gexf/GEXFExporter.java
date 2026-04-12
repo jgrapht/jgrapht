@@ -140,7 +140,7 @@ public class GEXFExporter<V, E> extends BaseExporter<V, E> implements GraphExpor
         this.parameters = new HashSet<>();
 
         // enable meta by default
-        this.setParameter(Parameter.EXPORT_META, true);
+        this.parameters.add(Parameter.EXPORT_META);
     }
 
     /**
