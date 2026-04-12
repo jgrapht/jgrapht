@@ -18,6 +18,7 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
@@ -132,6 +133,77 @@ public class TransitiveReductionTest
     public void testReduceNull()
     {
         assertThrows(NullPointerException.class, () -> TransitiveReduction.INSTANCE.reduce(null));
+    }
+
+    @Test
+    public void testCyclicGraph()
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "D");
+        graph.addEdge("D", "A");
+        assertThrows(IllegalArgumentException.class, () -> TransitiveReduction.INSTANCE.reduce(graph));
+    }
+
+    @Test
+    public void testAcyclicGraphNoCheck()
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("A", "C");
+        assertFalse(new CycleDetector<>(graph).detectCycles());
+        TransitiveReduction.INSTANCE.reduce(graph, false);
+        int correctEdgeCount = 2;
+        assertEquals(correctEdgeCount, graph.edgeSet().size());
+    }
+
+    @Test
+    public void testCyclicGraphNoCheck()
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "A");
+        TransitiveReduction.INSTANCE.reduce(graph, false);
+        // CAVEAT: See how dangerous it is to call reduce(Graph, boolean) without the default cyclicity check?
+        // There will be no exception, but the reduction does the wrong thing in this case, i.e. falsely remove all
+        // existing edges!
+        // You really only should set this parameter to 'false' if you are sure the input graph is in fact acyclic.
+        int correctEdgeCount = 3;
+        assertNotEquals(correctEdgeCount, graph.edgeSet().size());
+    }
+
+    @Test
+    public void testGraphContainingStronglyConnectedComponent()
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "D");
+        graph.addEdge("D", "B");
+        graph.addEdge("C", "E");
+        assertThrows(IllegalArgumentException.class, () -> TransitiveReduction.INSTANCE.reduce(graph));
     }
 
     @Test
