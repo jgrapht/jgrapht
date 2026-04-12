@@ -104,7 +104,7 @@ public class TreeMeasurer<V, E>
         if (diameterPath.size() % 2 == 1)
             graphCenter = Collections.singleton(diameterPath.get(diameterPath.size() / 2));
         else {
-            graphCenter = CollectionUtil.newLinkedHashSetWithExpectedSize(2);
+            graphCenter = LinkedHashSet.newLinkedHashSet(2);
             graphCenter.add(diameterPath.get(diameterPath.size() / 2));
             graphCenter.add(diameterPath.get(diameterPath.size() / 2 - 1));
         }

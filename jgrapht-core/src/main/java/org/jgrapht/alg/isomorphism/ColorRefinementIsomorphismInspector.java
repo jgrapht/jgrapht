@@ -453,11 +453,9 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         {
             if (this == o)
                 return true;
-            else if (!(o instanceof DistinctGraphObject))
+            if (!(o instanceof DistinctGraphObject<?, ?, ?> other))
                 return false;
 
-            @SuppressWarnings("unchecked") DistinctGraphObject<T, V, E> other =
-                (DistinctGraphObject<T, V, E>) o;
             return Objects.equals(getObject(), other.getObject()) && getGraph() == other.getGraph();
         }
 

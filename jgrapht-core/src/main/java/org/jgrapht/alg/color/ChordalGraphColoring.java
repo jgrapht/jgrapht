@@ -93,12 +93,12 @@ public class ChordalGraphColoring<V, E> implements VertexColoringAlgorithm<V>
             List<V> perfectEliminationOrder = chordalityInspector.getPerfectEliminationOrder();
 
             Map<V, Integer> vertexColoring =
-                CollectionUtil.newHashMapWithExpectedSize(perfectEliminationOrder.size());
+                HashMap.newHashMap(perfectEliminationOrder.size());
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
             for (V vertex : perfectEliminationOrder) {
                 Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
                 Set<Integer> predecessorColors =
-                    CollectionUtil.newHashSetWithExpectedSize(predecessors.size());
+                    HashSet.newHashSet(predecessors.size());
                 predecessors.forEach(v -> predecessorColors.add(vertexColoring.get(v)));
 
                 // find the minimum unused color in the set of predecessors
@@ -124,7 +124,7 @@ public class ChordalGraphColoring<V, E> implements VertexColoringAlgorithm<V>
     private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
     {
         Map<V, Integer> vertexInOrder =
-            CollectionUtil.newHashMapWithExpectedSize(vertexOrder.size());
+            HashMap.newHashMap(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
             vertexInOrder.put(vertex, i++);

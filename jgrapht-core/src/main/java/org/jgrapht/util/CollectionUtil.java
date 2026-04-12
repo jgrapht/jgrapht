@@ -47,7 +47,9 @@ public class CollectionUtil
      * @param expectedSize of mappings that will be put into the returned {@code HashMap}
      * @return an empty {@code HashMap} with sufficient capacity to hold expectedSize mappings
      * @see HashMap
+     * @deprecated Use {@link HashMap#newHashMap(int)} instead, available since Java 19.
      */
+    @Deprecated
     public static <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize)
     {
         return new HashMap<>(capacityForSize(expectedSize));
@@ -68,7 +70,9 @@ public class CollectionUtil
      *        {@code LinkedHashMap}
      * @return an empty {@code LinkedHashMap} with sufficient capacity to hold expectedSize mappings
      * @see HashMap
+     * @deprecated Use {@link LinkedHashMap#newLinkedHashMap(int)} instead, available since Java 19.
      */
+    @Deprecated
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMapWithExpectedSize(int expectedSize)
     {
         return new LinkedHashMap<>(capacityForSize(expectedSize));
@@ -88,7 +92,9 @@ public class CollectionUtil
      *        {@code HashSet}
      * @return an empty {@code HashSet} with sufficient capacity to hold expectedSize elements
      * @see HashMap
+     * @deprecated Use {@link HashSet#newHashSet(int)} instead, available since Java 19.
      */
+    @Deprecated
     public static <E> HashSet<E> newHashSetWithExpectedSize(int expectedSize)
     {
         return new HashSet<>(capacityForSize(expectedSize));
@@ -108,7 +114,9 @@ public class CollectionUtil
      *        {@code LinkedHashSet}
      * @return an empty {@code LinkedHashSet} with sufficient capacity to hold expectedSize elements
      * @see HashMap
+     * @deprecated Use {@link LinkedHashSet#newLinkedHashSet(int)} instead, available since Java 19.
      */
+    @Deprecated
     public static <E> LinkedHashSet<E> newLinkedHashSetWithExpectedSize(int expectedSize)
     {
         return new LinkedHashSet<>(capacityForSize(expectedSize));
@@ -132,8 +140,8 @@ public class CollectionUtil
      */
     public static <E> E getElement(Iterable<E> iterable, int index)
     {
-        if (iterable instanceof List) {
-            return ((List<E>) iterable).get(index);
+        if (iterable instanceof List<E> list) {
+            return list.get(index);
         }
         Iterator<E> it = iterable.iterator();
         for (int i = 0; i < index && it.hasNext(); i++) {

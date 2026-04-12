@@ -78,7 +78,7 @@ abstract class AbstractStrongConnectivityInspector<V, E> implements StrongConnec
 
         Graph<Graph<V, E>, DefaultEdge> condensation = new SimpleDirectedGraph<>(DefaultEdge.class);
         Map<V, Graph<V, E>> vertexToComponent =
-            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+            HashMap.newHashMap(graph.vertexSet().size());
 
         for (Set<V> set : sets) {
             Graph<V, E> component = new AsSubgraph<>(graph, set, null);

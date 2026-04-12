@@ -122,7 +122,7 @@ public class ChordalGraphMaxCliqueFinder<V, E> implements CliqueAlgorithm<V>
     private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
     {
         Map<V, Integer> vertexInOrder =
-            CollectionUtil.newHashMapWithExpectedSize(vertexOrder.size());
+            HashMap.newHashMap(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
             vertexInOrder.put(vertex, i++);

@@ -154,10 +154,8 @@ public class WeightedUnmodifiableSet<E> extends AbstractSet<E> implements Serial
     {
         if (this == o)
             return true;
-        if (!(o instanceof WeightedUnmodifiableSet))
+        if (!(o instanceof WeightedUnmodifiableSet<?> other))
             return false;
-        @SuppressWarnings("unchecked") WeightedUnmodifiableSet<E> other =
-            (WeightedUnmodifiableSet<E>) o;
         return this.backingSet.equals(other.backingSet);
     }
 

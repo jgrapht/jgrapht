@@ -61,7 +61,7 @@ public class LargestDegreeFirstColoring<V, E> extends GreedyColoring<V, E>
         // compute degrees and maximum degree
         int n = graph.vertexSet().size();
         int maxDegree = 0;
-        Map<V, Integer> degree = CollectionUtil.newHashMapWithExpectedSize(n);
+        Map<V, Integer> degree = HashMap.newHashMap(n);
         for (V v : graph.vertexSet()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);

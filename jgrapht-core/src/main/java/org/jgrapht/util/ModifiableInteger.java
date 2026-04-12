@@ -153,8 +153,8 @@ public class ModifiableInteger extends Number implements Comparable<ModifiableIn
     @Override
     public boolean equals(Object o)
     {
-        if (o instanceof ModifiableInteger) {
-            return this.value == ((ModifiableInteger) o).value;
+        if (o instanceof ModifiableInteger mi) {
+            return this.value == mi.value;
         }
 
         return false;

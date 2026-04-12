@@ -58,9 +58,9 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E>
         this.graph2 = g2.getGraph();
 
         this.forwardMapping =
-            CollectionUtil.newHashMapWithExpectedSize(this.graph1.vertexSet().size());
+            HashMap.newHashMap(this.graph1.vertexSet().size());
         this.backwardMapping =
-            CollectionUtil.newHashMapWithExpectedSize(this.graph1.vertexSet().size());
+            HashMap.newHashMap(this.graph1.vertexSet().size());
 
         for (V v : graph1.vertexSet()) {
             int vNumber = g1.getVertexNumber(v);
@@ -319,8 +319,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E>
      */
     public IsomorphicGraphMapping<V, E> compose(IsomorphicGraphMapping<V, E> otherMapping)
     {
-        Map<V, V> fMap = CollectionUtil.newHashMapWithExpectedSize(forwardMapping.size());
-        Map<V, V> bMap = CollectionUtil.newHashMapWithExpectedSize(forwardMapping.size());
+        Map<V, V> fMap = HashMap.newHashMap(forwardMapping.size());
+        Map<V, V> bMap = HashMap.newHashMap(forwardMapping.size());
 
         for (V v : graph1.vertexSet()) {
             V u = otherMapping.getVertexCorrespondence(forwardMapping.get(v), true);
@@ -342,8 +342,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E>
      */
     public static <V, E> IsomorphicGraphMapping<V, E> identity(Graph<V, E> graph)
     {
-        Map<V, V> fMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        Map<V, V> bMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+        Map<V, V> fMap = HashMap.newHashMap(graph.vertexSet().size());
+        Map<V, V> bMap = HashMap.newHashMap(graph.vertexSet().size());
 
         for (V v : graph.vertexSet()) {
             fMap.put(v, v);

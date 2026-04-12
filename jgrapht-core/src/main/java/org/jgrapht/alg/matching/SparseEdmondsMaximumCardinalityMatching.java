@@ -164,7 +164,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E> implements MatchingAl
         {
             // index graph
             this.nodes = graph.vertexSet().size();
-            this.vertexIndexMap = CollectionUtil.newHashMapWithExpectedSize(nodes);
+            this.vertexIndexMap = HashMap.newHashMap(nodes);
             this.vertexMap = (V[]) new Object[nodes];
             int vIndex = 0;
             for (V vertex : graph.vertexSet()) {

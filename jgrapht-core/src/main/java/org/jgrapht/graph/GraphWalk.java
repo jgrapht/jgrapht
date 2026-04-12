@@ -214,11 +214,10 @@ public class GraphWalk<V, E> implements GraphPath<V, E>, Serializable
     @Override
     public boolean equals(Object o)
     {
-        if (o == null || !(o instanceof GraphWalk))
-            return false;
-        else if (this == o)
+        if (this == o)
             return true;
-        @SuppressWarnings("unchecked") GraphWalk<V, E> other = (GraphWalk<V, E>) o;
+        if (!(o instanceof GraphWalk<?, ?> other))
+            return false;
         if (this.isEmpty() && other.isEmpty())
             return true;
 

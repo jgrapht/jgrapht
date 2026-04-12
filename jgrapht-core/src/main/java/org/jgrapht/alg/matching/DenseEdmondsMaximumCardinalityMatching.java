@@ -628,7 +628,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E> implements MatchingAlg
         private SimpleMatching(int n)
         {
             this.match = new int[n];
-            this.exposed = CollectionUtil.newHashSetWithExpectedSize(n);
+            this.exposed = HashSet.newHashSet(n);
 
             Arrays.fill(match, UNMATCHED);
             IntStream.range(0, n).forEach(exposed::add);

@@ -18,6 +18,7 @@
 package org.jgrapht.traverse;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -27,7 +28,6 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
-import org.jgrapht.util.CollectionUtil;
 
 /**
  * A lexicographical breadth-first iterator for an undirected graph.
@@ -206,7 +206,7 @@ public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E>
         BucketList(Collection<V> vertices)
         {
             head = new Bucket(vertices);
-            bucketMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
+            bucketMap = HashMap.newHashMap(vertices.size());
             for (V vertex : vertices) {
                 bucketMap.put(vertex, head);
             }
