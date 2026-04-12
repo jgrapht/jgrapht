@@ -20,7 +20,7 @@ Please address all contributions, suggestions, and inquiries to the [user mailin
 
 ## Introduction
 
-JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It runs on Java 2 Platform (requires JDK 11 or later starting with JGraphT 1.5.0).
+JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It runs on Java 2 Platform (requires JDK 21 or later starting with JGraphT 1.6.0).
 
 JGraphT may be used under the terms of either the
 
@@ -150,9 +150,9 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 
 ## Dependencies
 
-- JGraphT requires JDK 11 or later to build starting with version 1.5.0.
+- JGraphT requires JDK 21 or later to build starting with version 1.6.0.
 - [JHeaps](https://www.jheaps.org/) is a library with priority queues. JHeaps is licensed under the terms of the Apache License, Version 2.0.
-- [JUnit](https://www.junit.org) is a unit testing framework. You need JUnit only if you want to run the unit tests.  JUnit is licensed under the terms of the Eclipse Public License - v 2.0. The JUnit tests included with JGraphT have been created using JUnit 5.
+- [JUnit](https://www.junit.org) is a unit testing framework. You need JUnit only if you want to run the unit tests.  JUnit is licensed under the terms of the Eclipse Public License - v 2.0. The JUnit tests included with JGraphT have been created using JUnit 6.
 - [XMLUnit](https://www.xmlunit.org/) extends JUnit with XML capabilities. You need XMLUnit only if you want to run the unit tests.  XMLUnit is licensed under the terms of the BSD License.
 - [JGraphX](https://github.com/jgraph/jgraphx) is a graph visualizations and editing component (the successor to the older JGraph library). You need JGraphX only if you want to use the JGraphXAdapter to visualize the JGraphT graph interactively via JGraphX. JGraphX is licensed under the terms of the BSD license.
 - [ANTLR](https://www.antlr.org) is a parser generator.  It is used for reading text files containing graph representations, and is only required by the jgrapht-io module.  ANTLR v4 is licensed under the terms of the [BSD license](https://www.antlr.org/license.html).
