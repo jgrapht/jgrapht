@@ -79,7 +79,7 @@ public class TwoApproxMetricTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
         }
 
         // Perform a depth-first-search traversal
-        Set<V> found = CollectionUtil.newHashSetWithExpectedSize(n);
+        Set<V> found = HashSet.newHashSet(n);
         List<V> tour = new ArrayList<>(n + 1);
         V start = vertices.iterator().next();
         Iterator<V> dfsIt = new DepthFirstIterator<>(mst, start);

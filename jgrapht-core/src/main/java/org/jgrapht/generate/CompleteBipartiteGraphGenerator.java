@@ -50,8 +50,8 @@ public class CompleteBipartiteGraphGenerator<V, E> implements GraphGenerator<V, 
         }
         this.sizeA = partitionA;
         this.sizeB = partitionB;
-        this.partitionA = CollectionUtil.newLinkedHashSetWithExpectedSize(sizeA);
-        this.partitionB = CollectionUtil.newLinkedHashSetWithExpectedSize(sizeB);
+        this.partitionA = LinkedHashSet.newLinkedHashSet(sizeA);
+        this.partitionB = LinkedHashSet.newLinkedHashSet(sizeB);
     }
 
     /**

@@ -151,7 +151,7 @@ public class GreedyMultiplicativeSpanner<V, E> implements SpannerAlgorithm<E>
                 spanner.addVertex(v);
                 touchedVertices.push(v);
             }
-            vertexDistance = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+            vertexDistance = HashMap.newHashMap(graph.vertexSet().size());
             queue = new ArrayDeque<>();
         }
 

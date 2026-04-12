@@ -83,9 +83,9 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
         Deque<E> edges = graph.edgeSet().stream()
             .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
             .collect(Collectors.toCollection(ArrayDeque::new));
-        Set<E> tourEdges = CollectionUtil.newHashSetWithExpectedSize(n);
+        Set<E> tourEdges = HashSet.newHashSet(n);
         // Create a Map to track the degree of each vertex in tour
-        Map<V, Integer> vertexDegree = CollectionUtil.newHashMapWithExpectedSize(n);
+        Map<V, Integer> vertexDegree = HashMap.newHashMap(n);
         // Create a UnionFind to track forming of loops
         UnionFind<V> tourSet = new UnionFind<>(graph.vertexSet());
 

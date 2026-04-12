@@ -200,7 +200,7 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
         // instantiate community structure
         communities = new ArrayList<>(this.l);
         for (int i = 0; i < this.l; i++) {
-            communities.add(CollectionUtil.newLinkedHashSetWithExpectedSize(this.k));
+            communities.add(LinkedHashSet.newLinkedHashSet(this.k));
         }
 
         // empty graph case

@@ -107,7 +107,7 @@ public class KosarajuStrongConnectivityInspector<V, E> extends AbstractStrongCon
      */
     private void createVertexData()
     {
-        vertexToVertexData = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+        vertexToVertexData = HashMap.newHashMap(graph.vertexSet().size());
 
         for (V vertex : graph.vertexSet()) {
             vertexToVertexData.put(vertex, new VertexData2<>(vertex, false, false));

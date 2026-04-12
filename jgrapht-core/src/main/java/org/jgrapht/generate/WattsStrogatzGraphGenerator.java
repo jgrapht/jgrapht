@@ -155,7 +155,7 @@ public class WattsStrogatzGraphGenerator<V, E> implements GraphGenerator<V, E, V
 
         // create ring lattice
         List<V> ring = new ArrayList<>(n);
-        Map<V, List<E>> adj = CollectionUtil.newLinkedHashMapWithExpectedSize(n);
+        Map<V, List<E>> adj = LinkedHashMap.newLinkedHashMap(n);
 
         for (int i = 0; i < n; i++) {
             V v = target.addVertex();

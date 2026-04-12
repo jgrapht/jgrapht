@@ -87,7 +87,7 @@ public class GabowStrongConnectivityInspector<V, E> extends AbstractStrongConnec
     private void createVertexNumber()
     {
         c = graph.vertexSet().size();
-        vertexToVertexNumber = CollectionUtil.newHashMapWithExpectedSize(c);
+        vertexToVertexNumber = HashMap.newHashMap(c);
 
         for (V vertex : graph.vertexSet()) {
             vertexToVertexNumber.put(vertex, new VertexNumber<>(vertex));
@@ -140,7 +140,7 @@ public class GabowStrongConnectivityInspector<V, E> extends AbstractStrongConnec
             scc = Collections.singleton(r.vertex);
             r.number = c;
         } else {
-            scc = CollectionUtil.newHashSetWithExpectedSize(sccSize);
+            scc = HashSet.newHashSet(sccSize);
             for (int i = 0; i < sccSize; i++) {
                 VertexNumber<V> r = stackS.pop();
                 scc.add(r.vertex);

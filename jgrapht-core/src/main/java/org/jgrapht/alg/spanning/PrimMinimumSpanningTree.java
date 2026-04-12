@@ -63,7 +63,7 @@ public class PrimMinimumSpanningTree<V, E> implements SpanningTreeAlgorithm<E>
     public SpanningTree<E> getSpanningTree()
     {
         Set<E> minimumSpanningTreeEdgeSet =
-            CollectionUtil.newHashSetWithExpectedSize(g.vertexSet().size());
+            HashSet.newHashSet(g.vertexSet().size());
         double spanningTreeWeight = 0d;
 
         final int n = g.vertexSet().size();

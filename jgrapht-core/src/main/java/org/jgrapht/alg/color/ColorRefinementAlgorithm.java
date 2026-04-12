@@ -117,7 +117,7 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
         final int refiningColor, final ColoringRepresentation rep)
     {
         final int n = graph.vertexSet().size();
-        final Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
+        final Set<Integer> adjacentColors = LinkedHashSet.newLinkedHashSet(n);
         // we cache the structure here to optimize perf vs memory traffic
         // default size of 16 w/ load factor 0.75 is reasonable for most use cases
         final Set<V> inNeighborhood = new HashSet<>();

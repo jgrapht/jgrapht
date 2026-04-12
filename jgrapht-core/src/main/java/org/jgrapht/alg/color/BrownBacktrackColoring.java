@@ -57,7 +57,7 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
         final int numVertices = graph.vertexSet().size();
         vertexList = new ArrayList<>(numVertices);
         neighbors = new int[numVertices][];
-        indexMap = CollectionUtil.newHashMapWithExpectedSize(numVertices);
+        indexMap = HashMap.newHashMap(numVertices);
         for (V vertex : graph.vertexSet()) {
             neighbors[vertexList.size()] = new int[graph.edgesOf(vertex).size()];
             indexMap.put(vertex, vertexList.size());

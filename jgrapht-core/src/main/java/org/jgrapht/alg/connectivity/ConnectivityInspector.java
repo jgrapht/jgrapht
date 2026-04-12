@@ -142,7 +142,7 @@ public class ConnectivityInspector<V, E> implements GraphListener<V, E>
         // If source and target are in the same set, do nothing, otherwise, merge sets
         if (sourceSet != targetSet) {
             Set<V> merge =
-                CollectionUtil.newHashSetWithExpectedSize(sourceSet.size() + targetSet.size());
+                HashSet.newHashSet(sourceSet.size() + targetSet.size());
             merge.addAll(sourceSet);
             merge.addAll(targetSet);
             connectedSets.remove(sourceSet);

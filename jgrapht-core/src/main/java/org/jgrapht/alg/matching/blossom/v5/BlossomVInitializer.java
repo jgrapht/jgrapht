@@ -202,7 +202,7 @@ class BlossomVInitializer<V, E>
         edges = new BlossomVEdge[expectedEdgeNum];
         graphVertices = new ArrayList<>(nodeNum);
         graphEdges = new ArrayList<>(expectedEdgeNum);
-        HashMap<V, BlossomVNode> vertexMap = CollectionUtil.newHashMapWithExpectedSize(nodeNum);
+        HashMap<V, BlossomVNode> vertexMap = HashMap.newHashMap(nodeNum);
         int i = 0;
         // maps nodes
         for (V vertex : graph.vertexSet()) {

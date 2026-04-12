@@ -21,7 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem;
-import org.jgrapht.util.CollectionUtil;
 import org.jgrapht.util.ElementsSequenceGenerator;
 
 import java.util.*;
@@ -362,11 +361,11 @@ public class NetworkGenerator<V, E>
         this.graph = Objects.requireNonNull(graph);
 
         this.nodes = new ArrayList<>();
-        this.graphVertexMapping = CollectionUtil.newHashMapWithExpectedSize(config.getNodeNum());
+        this.graphVertexMapping = HashMap.newHashMap(config.getNodeNum());
 
         this.supplyMap = new HashMap<>();
-        this.capacityMap = CollectionUtil.newHashMapWithExpectedSize(config.getArcNum());
-        this.costMap = CollectionUtil.newHashMapWithExpectedSize(config.getArcNum());
+        this.capacityMap = HashMap.newHashMap(config.getArcNum());
+        this.costMap = HashMap.newHashMap(config.getArcNum());
 
         this.networkInfo = new NetworkInfo<>(config);
 

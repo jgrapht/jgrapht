@@ -124,7 +124,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> extends HamiltonianCyc
             eulerianCycleAlgorithm.getEulerianCycle(mstAndMatching);
 
         // form a closed tour from the Hamiltonian cycle
-        Set<V> visited = CollectionUtil.newHashSetWithExpectedSize(n);
+        Set<V> visited = HashSet.newHashSet(n);
         List<V> tourVertices = eulerianCycle.getVertexList().stream().filter(visited::add)
             .collect(Collectors.toList());
 

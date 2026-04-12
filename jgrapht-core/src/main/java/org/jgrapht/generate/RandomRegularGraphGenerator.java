@@ -189,7 +189,7 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
         }
 
         // set of final edges to add to target graph
-        Set<Map.Entry<Integer, Integer>> edges = CollectionUtil.newHashSetWithExpectedSize(n * d);
+        Set<Map.Entry<Integer, Integer>> edges = HashSet.newHashSet(n * d);
         do {
             List<Integer> stubs = new ArrayList<>(n * d);
             for (int i = 0; i < n * d; i++) {

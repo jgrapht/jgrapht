@@ -250,7 +250,7 @@ public class ChordalityInspector<V, E>
     private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
     {
         Map<V, Integer> vertexInOrder =
-            CollectionUtil.newHashMapWithExpectedSize(vertexOrder.size());
+            HashMap.newHashMap(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
             vertexInOrder.put(vertex, i++);
@@ -281,7 +281,7 @@ public class ChordalityInspector<V, E>
 
         List<V> cycle = new ArrayList<>(Arrays.asList(a, b, c));
         Map<V, Boolean> visited =
-            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+            HashMap.newHashMap(graph.vertexSet().size());
         for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }

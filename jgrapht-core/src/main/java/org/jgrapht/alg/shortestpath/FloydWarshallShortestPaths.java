@@ -72,7 +72,7 @@ public class FloydWarshallShortestPaths<V, E> extends BaseShortestPathAlgorithm<
         this.vertices = new ArrayList<>(graph.vertexSet());
         Collections.sort(vertices, VertexDegreeComparator.of(graph));
         this.degrees = new ArrayList<>();
-        this.vertexIndices = CollectionUtil.newHashMapWithExpectedSize(this.vertices.size());
+        this.vertexIndices = HashMap.newHashMap(this.vertices.size());
 
         int i = 0;
         int minDegreeOne = vertices.size();

@@ -25,12 +25,12 @@ import org.jgrapht.alg.interfaces.MinimumCycleMeanAlgorithm;
 import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.CollectionUtil;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -157,10 +157,10 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
         this.maximumIterations = maximumIterations;
         this.comparator = new ToleranceDoubleComparator(toleranceEpsilon);
 
-        this.policyGraph = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        this.reachedVertices = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        this.vertexLevel = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        this.vertexDistance = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+        this.policyGraph = HashMap.newHashMap(graph.vertexSet().size());
+        this.reachedVertices = HashMap.newHashMap(graph.vertexSet().size());
+        this.vertexLevel = HashMap.newHashMap(graph.vertexSet().size());
+        this.vertexDistance = HashMap.newHashMap(graph.vertexSet().size());
     }
 
     /**

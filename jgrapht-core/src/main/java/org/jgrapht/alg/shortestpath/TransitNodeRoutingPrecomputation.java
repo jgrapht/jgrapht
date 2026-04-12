@@ -24,7 +24,6 @@ import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.MaskSubgraph;
-import org.jgrapht.util.CollectionUtil;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
@@ -306,9 +305,9 @@ class TransitNodeRoutingPrecomputation<V, E>
     private ManyToManyShortestPaths<V, E> unpackPaths(ManyToManyShortestPaths<V, E> shortestPaths)
     {
         Map<V, Map<V, GraphPath<V, E>>> pathsMap =
-            CollectionUtil.newHashMapWithExpectedSize(numberOfTransitVertices);
+            HashMap.newHashMap(numberOfTransitVertices);
         for (V v : transitVerticesList) {
-            pathsMap.put(v, CollectionUtil.newHashMapWithExpectedSize(numberOfTransitVertices));
+            pathsMap.put(v, HashMap.newHashMap(numberOfTransitVertices));
         }
 
         for (int taskId = 0; taskId < parallelism; ++taskId) {
@@ -333,7 +332,7 @@ class TransitNodeRoutingPrecomputation<V, E>
     {
         int numberOfVertices = contractionGraph.vertexSet().size();
         Set<ContractionVertex<V>> result =
-            CollectionUtil.newHashSetWithExpectedSize(numberOfTransitVertices);
+            HashSet.newHashSet(numberOfTransitVertices);
         for (ContractionVertex<V> vertex : contractionGraph.vertexSet()) {
             if (vertex.contractionLevel >= numberOfVertices - numberOfTransitVertices) {
                 result.add(vertex);

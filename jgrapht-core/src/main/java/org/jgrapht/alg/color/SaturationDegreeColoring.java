@@ -83,15 +83,15 @@ public class SaturationDegreeColoring<V, E> implements VertexColoringAlgorithm<V
          */
         int n = graph.vertexSet().size();
         int maxColor = -1;
-        Map<V, Integer> colors = CollectionUtil.newHashMapWithExpectedSize(n);
-        Map<V, BitSet> adjColors = CollectionUtil.newHashMapWithExpectedSize(n);
-        Map<V, Integer> saturation = CollectionUtil.newHashMapWithExpectedSize(n);
+        Map<V, Integer> colors = HashMap.newHashMap(n);
+        Map<V, BitSet> adjColors = HashMap.newHashMap(n);
+        Map<V, Integer> saturation = HashMap.newHashMap(n);
 
         /*
          * Compute degrees, available colors, and maximum degree.
          */
         int maxDegree = 0;
-        Map<V, Integer> degree = CollectionUtil.newHashMapWithExpectedSize(n);
+        Map<V, Integer> degree = HashMap.newHashMap(n);
         for (V v : graph.vertexSet()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);

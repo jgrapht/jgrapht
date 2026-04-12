@@ -392,7 +392,7 @@ public class WeakChordalityInspector<V, E>
             bucketsByLabel.add(new HashSet<>());
         }
         List<Integer> labels = new ArrayList<>(Collections.nCopies(n, -1));
-        Set<Integer> unvisited = CollectionUtil.newHashSetWithExpectedSize(separator.size());
+        Set<Integer> unvisited = HashSet.newHashSet(separator.size());
         separator.forEach(pair -> {
             unvisited.add(pair.getFirst());
             labels.set(pair.getFirst(), 0);
@@ -589,7 +589,7 @@ public class WeakChordalityInspector<V, E>
     private GraphPath<V, E> findHole(
         Graph<V, E> graph, V sourceInSeparator, V source, V target, V targetInSeparator)
     {
-        Set<V> visited = CollectionUtil.newHashSetWithExpectedSize(graph.vertexSet().size());
+        Set<V> visited = HashSet.newHashSet(graph.vertexSet().size());
         visited.add(target);
         visited.add(source);
 
@@ -719,7 +719,7 @@ public class WeakChordalityInspector<V, E>
         V source = graph.getEdgeSource(edge);
         V target = graph.getEdgeTarget(edge);
         Set<V> neighborhood = neighborhoodSetOf(graph, edge);
-        Map<V, Byte> dfsMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+        Map<V, Byte> dfsMap = HashMap.newHashMap(graph.vertexSet().size());
 
         // 0 - unvisited (white), 1 - neighbor of the edge (red), 2 - visited (black)
         for (V vertex : graph.vertexSet()) {
