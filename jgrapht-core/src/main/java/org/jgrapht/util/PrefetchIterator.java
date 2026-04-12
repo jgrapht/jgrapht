@@ -49,7 +49,7 @@ import java.util.*;
  *                  if (counter &lt;= 100)
  *                      throw new NoSuchElementException();
  *                  else
- *                      return new Integer(counter);
+ *                      return Integer.valueOf(counter);
  *              }
  *
  *          });
