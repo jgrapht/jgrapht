@@ -60,6 +60,12 @@ import java.util.stream.*;
  */
 public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
+    /**
+     * Constructs a new instance.
+     */
+    public GreedyHeuristicTSP()
+    {
+    }
 
     /**
      * Computes a tour using the greedy heuristic.

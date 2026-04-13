@@ -37,6 +37,13 @@ public abstract class CentersLocationAlgorithmBase<V, E> implements CentersLocat
 {
 
     /**
+     * Constructs a new centers location algorithm base.
+     */
+    public CentersLocationAlgorithmBase()
+    {
+    }
+
+    /**
      * Checks that graph is undirected, complete, and non-empty
      *
      * @param graph the graph

@@ -28,5 +28,5 @@ module org.jgrapht.guava
 
     requires transitive org.jgrapht.core;
     requires transitive com.google.common;
-    requires transitive org.jheaps;
+    requires org.jheaps;
 }

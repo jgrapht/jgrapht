@@ -50,6 +50,7 @@ public class StoerWagnerMinimumCut<V, E>
      * @throws IllegalArgumentException if a negative weight edge is found
      * @throws IllegalArgumentException if graph has less than 2 vertices
      */
+    @SuppressWarnings("this-escape")
     public StoerWagnerMinimumCut(Graph<V, E> graph)
     {
         GraphTests.requireUndirected(graph, "Graph must be undirected");

@@ -25,9 +25,16 @@ import java.io.*;
  *
  * @author John V. Sichi
  */
-class IntrusiveEdge implements Cloneable, Serializable
+public class IntrusiveEdge implements Cloneable, Serializable
 {
     private static final long serialVersionUID = 3258408452177932855L;
+
+    /**
+     * Constructs a new intrusive edge.
+     */
+    public IntrusiveEdge()
+    {
+    }
 
     Object source;
 

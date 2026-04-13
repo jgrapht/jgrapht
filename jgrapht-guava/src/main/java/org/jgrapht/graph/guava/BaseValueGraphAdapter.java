@@ -106,6 +106,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>> e
      * @throws NullPointerException if any one of {@code valueGraph}, {@code valueConverter}, or
      *         {@code vertexOrderMethod} is {@code null}
      */
+    @SuppressWarnings("this-escape")
     public BaseValueGraphAdapter(
         VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
         Supplier<EndpointPair<V>> edgeSupplier, ElementOrderMethod<V> vertexOrderMethod)

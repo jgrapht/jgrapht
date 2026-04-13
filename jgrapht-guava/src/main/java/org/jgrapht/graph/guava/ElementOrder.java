@@ -33,7 +33,7 @@ import java.util.Map;
  *
  * @author Dimitrios Michail
  */
-class ElementOrder<V> implements Serializable
+public class ElementOrder<V> implements Serializable
 {
     private static final long serialVersionUID = -3732847114940656189L;
 

@@ -68,6 +68,13 @@ public class ChinesePostman<V, E>
 {
 
     /**
+     * Constructs a new Chinese Postman solver.
+     */
+    public ChinesePostman()
+    {
+    }
+
+    /**
      * Solves the Chinese Postman Problem on the given graph. For Undirected graph, this
      * implementation uses the @{@link KolmogorovWeightedPerfectMatching} matching algorithm; for
      * directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used instead.

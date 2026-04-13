@@ -102,7 +102,7 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E> extends BaseS
      * @param <V> vertices type
      * @param <E> edges type
      */
-    abstract static class BaseSearchFrontier<V, E>
+    public abstract static class BaseSearchFrontier<V, E>
     {
         /**
          * Frontier`s graph.

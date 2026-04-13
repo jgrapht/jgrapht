@@ -66,6 +66,7 @@ public class BlockCutpointGraph<V, E> extends SimpleGraph<Graph<V, E>, DefaultEd
      *
      * @param graph the input graph
      */
+    @SuppressWarnings("this-escape")
     public BlockCutpointGraph(Graph<V, E> graph)
     {
         super(DefaultEdge.class);

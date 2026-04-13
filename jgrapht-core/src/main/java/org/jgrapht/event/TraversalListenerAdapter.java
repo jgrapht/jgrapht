@@ -29,6 +29,13 @@ package org.jgrapht.event;
 public class TraversalListenerAdapter<V, E> implements TraversalListener<V, E>
 {
     /**
+     * Constructs a new traversal listener adapter.
+     */
+    public TraversalListenerAdapter()
+    {
+    }
+
+    /**
      * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)
      */
     @Override

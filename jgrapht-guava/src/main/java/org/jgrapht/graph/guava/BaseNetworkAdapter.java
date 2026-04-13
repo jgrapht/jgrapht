@@ -91,6 +91,7 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>> extends 
      * @throws NullPointerException if either one of {@code network} or {@code vertexOrderMethod} is
      *         {@code null}
      */
+    @SuppressWarnings("this-escape")
     public BaseNetworkAdapter(
         N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
         ElementOrderMethod<V> vertexOrderMethod)

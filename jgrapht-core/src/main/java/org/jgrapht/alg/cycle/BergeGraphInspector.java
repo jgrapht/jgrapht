@@ -63,6 +63,13 @@ import java.util.stream.*;
 public class BergeGraphInspector<V, E>
 {
 
+    /**
+     * Constructs a new Berge graph inspector.
+     */
+    public BergeGraphInspector()
+    {
+    }
+
     private GraphPath<V, E> certificate = null;
     private boolean certify = false;
 

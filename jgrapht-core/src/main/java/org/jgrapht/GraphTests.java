@@ -36,6 +36,10 @@ import java.util.stream.*;
  */
 public abstract class GraphTests
 {
+    private GraphTests()
+    {
+    }
+
     private static final String GRAPH_CANNOT_BE_NULL = "Graph cannot be null";
     private static final String GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED =
         "Graph must be directed or undirected";

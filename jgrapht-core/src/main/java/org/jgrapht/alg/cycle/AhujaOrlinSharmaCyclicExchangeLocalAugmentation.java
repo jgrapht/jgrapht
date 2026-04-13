@@ -437,6 +437,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
             return Objects.hash(this.head, this.tail, this.labels);
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
         public boolean equals(Object o)
         {

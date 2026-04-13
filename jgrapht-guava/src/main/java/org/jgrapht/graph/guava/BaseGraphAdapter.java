@@ -97,6 +97,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      * @throws NullPointerException if either one of {@code graph} or {@code vertexOrderMethod} is
      *         {@code null}
      */
+    @SuppressWarnings("this-escape")
     public BaseGraphAdapter(
         G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
         ElementOrderMethod<V> vertexOrderMethod)

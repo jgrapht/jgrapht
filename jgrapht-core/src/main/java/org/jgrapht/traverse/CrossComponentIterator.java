@@ -77,6 +77,7 @@ public abstract class CrossComponentIterator<V, E, D> extends AbstractGraphItera
      *
      * @throws NullPointerException if argument is {@code null}
      */
+    @SuppressWarnings("this-escape")
     public CrossComponentIterator(Graph<V, E> g)
     {
         this(g, (V) null);
@@ -93,6 +94,7 @@ public abstract class CrossComponentIterator<V, E, D> extends AbstractGraphItera
      * @throws IllegalArgumentException if {@code g} does not contain {@code startVertex}
      * @throws NullPointerException if {@code g} is {@code null}
      */
+    @SuppressWarnings("this-escape")
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
         this(g, startVertex == null ? null : Collections.singletonList(startVertex));
@@ -110,6 +112,7 @@ public abstract class CrossComponentIterator<V, E, D> extends AbstractGraphItera
      *         vertex of {@code g}
      * @throws NullPointerException if {@code g} is {@code null}
      */
+    @SuppressWarnings("this-escape")
     public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices)
     {
         super(g);

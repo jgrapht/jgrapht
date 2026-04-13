@@ -42,6 +42,13 @@ public class DefaultGraphSpecificsStrategy<V, E> implements GraphSpecificsStrate
 {
     private static final long serialVersionUID = 7615319421753562075L;
 
+    /**
+     * Constructs a new default graph specifics strategy.
+     */
+    public DefaultGraphSpecificsStrategy()
+    {
+    }
+
     @Override
     public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
     {

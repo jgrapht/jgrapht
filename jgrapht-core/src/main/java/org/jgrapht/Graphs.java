@@ -31,6 +31,10 @@ import java.util.function.*;
 public abstract class Graphs
 {
 
+    private Graphs()
+    {
+    }
+
     /**
      * Creates a new edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.

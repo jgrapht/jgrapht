@@ -30,6 +30,10 @@ import java.util.*;
 public abstract class Cycles
 {
 
+    private Cycles()
+    {
+    }
+
     /**
      * Transform a simple cycle from an edge set representation to a graph path. A simple cycle
      * contains vertices with degrees either zero or two. This method treats directed graphs as

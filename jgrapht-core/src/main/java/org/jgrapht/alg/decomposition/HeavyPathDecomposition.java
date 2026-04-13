@@ -354,6 +354,13 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     public class InternalState
     {
         /**
+         * Constructs a new internal state.
+         */
+        public InternalState()
+        {
+        }
+
+        /**
          * Returns the parent of vertex $v$ in the internal DFS tree/forest. If the vertex $v$ has
          * not been explored or it is the root of its tree, $null$ will be returned.
          *

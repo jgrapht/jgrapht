@@ -66,6 +66,12 @@ import static org.jgrapht.util.ArrayUtil.*;
  */
 public class PalmerHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
+    /**
+     * Constructs a new instance.
+     */
+    public PalmerHamiltonianCycle()
+    {
+    }
 
     /**
      * Computes a Hamiltonian tour.

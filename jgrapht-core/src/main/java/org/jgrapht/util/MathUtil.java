@@ -25,6 +25,10 @@ package org.jgrapht.util;
 public class MathUtil
 {
 
+    private MathUtil()
+    {
+    }
+
     /**
      * Calculate the factorial of $n$.
      *

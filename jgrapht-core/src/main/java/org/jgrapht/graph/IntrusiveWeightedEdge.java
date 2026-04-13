@@ -26,9 +26,16 @@ import org.jgrapht.*;
  *
  * @author Dimitrios Michail
  */
-class IntrusiveWeightedEdge extends IntrusiveEdge
+public class IntrusiveWeightedEdge extends IntrusiveEdge
 {
     private static final long serialVersionUID = 2890534758523920741L;
+
+    /**
+     * Constructs a new intrusive weighted edge.
+     */
+    public IntrusiveWeightedEdge()
+    {
+    }
 
     double weight = Graph.DEFAULT_EDGE_WEIGHT;
 

@@ -29,6 +29,13 @@ public class DefaultEdge extends IntrusiveEdge
     private static final long serialVersionUID = 3258408452177932855L;
 
     /**
+     * Constructs a new edge.
+     */
+    public DefaultEdge()
+    {
+    }
+
+    /**
      * Retrieves the source of this edge. This is protected, for use by subclasses only (e.g. for
      * implementing toString).
      *

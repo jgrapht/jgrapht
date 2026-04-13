@@ -28,6 +28,10 @@ import java.util.*;
  */
 public abstract class Boxes
 {
+    private Boxes()
+    {
+    }
+
     /**
      * Test whether a box contains a point.
      *

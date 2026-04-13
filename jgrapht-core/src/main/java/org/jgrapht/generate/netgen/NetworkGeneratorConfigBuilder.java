@@ -29,6 +29,13 @@ package org.jgrapht.generate.netgen;
  */
 public class NetworkGeneratorConfigBuilder
 {
+    /**
+     * Constructs a new network generator config builder.
+     */
+    public NetworkGeneratorConfigBuilder()
+    {
+    }
+
     int nodeNum = 0;
     int arcNum = 0;
     int sourceNum = 0;

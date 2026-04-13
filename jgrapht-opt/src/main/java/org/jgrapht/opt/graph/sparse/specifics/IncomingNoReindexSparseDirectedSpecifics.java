@@ -50,6 +50,7 @@ public class IncomingNoReindexSparseDirectedSpecifics extends NoIncomingNoReinde
      * @param lazyIncomingEdges whether to lazily support incoming edge traversals, only if actually
      *        needed by the user
      */
+    @SuppressWarnings("this-escape")
     public IncomingNoReindexSparseDirectedSpecifics(
         int numVertices, int numEdges, Supplier<Stream<Pair<Integer, Integer>>> edges,
         boolean lazyIncomingEdges)

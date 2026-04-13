@@ -526,6 +526,14 @@ public class PushRelabelMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      */
     public class VertexExtension extends VertexExtensionBase
     {
+        /**
+         * Constructs a new vertex extension.
+         */
+        public VertexExtension()
+        {
+            super();
+        }
+
         private int id;
         private int height; // also called label (or distance label) in some papers
         private boolean active;
