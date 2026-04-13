@@ -64,6 +64,7 @@ org.jgrapht.nio.tsplib
 module:org.jgrapht.opt
 org.jgrapht.opt.graph.fastutil
 org.jgrapht.opt.graph.sparse
+org.jgrapht.opt.graph.sparse.specifics
 module:org.jgrapht.unimi.dsi
 org.jgrapht.sux4j
 org.jgrapht.webgraph
