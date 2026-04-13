@@ -32,6 +32,7 @@ import java.util.Map;
  * internal state. Construction of elements is performed in a lazy manner.
  *
  * @author Dimitrios Michail
+ * @param <V> the element type
  */
 public class ElementOrder<V> implements Serializable
 {
