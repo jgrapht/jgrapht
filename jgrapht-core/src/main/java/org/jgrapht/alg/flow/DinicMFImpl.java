@@ -245,8 +245,15 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     /**
      * Extension for vertex class.
      */
-    class VertexExtension extends VertexExtensionBase
+    public class VertexExtension extends VertexExtensionBase
     {
+        /**
+         * Constructs a new vertex extension.
+         */
+        public VertexExtension()
+        {
+            super();
+        }
 
         /**
          * Stores index of the first unexplored edge from current vertex.

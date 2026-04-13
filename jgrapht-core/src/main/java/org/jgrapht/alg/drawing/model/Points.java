@@ -28,6 +28,10 @@ import java.util.function.*;
  */
 public abstract class Points
 {
+    private Points()
+    {
+    }
+
     private static final ToleranceDoubleComparator TOLERANCE_DOUBLE_COMPARATOR =
         new ToleranceDoubleComparator(1e-9);
 

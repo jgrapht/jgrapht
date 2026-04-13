@@ -86,6 +86,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
      *
      * @throws IllegalArgumentException if the graph is null.
      */
+    @SuppressWarnings("this-escape")
     public JGraphXAdapter(ListenableGraph<V, E> graph)
     {
         // call normal constructor with graph class
@@ -103,6 +104,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
      *
      * @throws IllegalArgumentException if the parameter is null
      */
+    @SuppressWarnings("this-escape")
     public JGraphXAdapter(Graph<V, E> graph)
     {
         super();

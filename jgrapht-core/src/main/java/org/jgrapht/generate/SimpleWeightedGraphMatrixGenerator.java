@@ -29,6 +29,13 @@ import java.util.*;
  */
 public class SimpleWeightedGraphMatrixGenerator<V, E> implements GraphGenerator<V, E, V>
 {
+    /**
+     * Constructs a new simple weighted graph matrix generator.
+     */
+    public SimpleWeightedGraphMatrixGenerator()
+    {
+    }
+
     protected List<V> vertices;
     protected double[][] weights;
 

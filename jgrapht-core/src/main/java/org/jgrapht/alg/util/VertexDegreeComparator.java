@@ -37,6 +37,10 @@ import java.util.*;
  */
 public abstract class VertexDegreeComparator<V, E> implements Comparator<V>
 {
+    private VertexDegreeComparator()
+    {
+    }
+
     /**
      * Returns a {@link Comparator} that compares vertices by their degrees in the specified graph.
      * <p>

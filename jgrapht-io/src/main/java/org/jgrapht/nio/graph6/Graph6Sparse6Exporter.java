@@ -221,7 +221,7 @@ public class Graph6Sparse6Exporter<V, E> implements GraphExporter<V, E>
         if (bitIndex == 6)
             writeByte();
         if (bit)
-            currentByte |= 1 << (5 - bitIndex);
+            currentByte = (byte) (currentByte | (1 << (5 - bitIndex)));
         bitIndex++;
     }
 

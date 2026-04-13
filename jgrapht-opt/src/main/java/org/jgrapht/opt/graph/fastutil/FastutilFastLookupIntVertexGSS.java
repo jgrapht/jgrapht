@@ -44,6 +44,13 @@ public class FastutilFastLookupIntVertexGSS<E> implements GraphSpecificsStrategy
 {
     private static final long serialVersionUID = 6098261533235930603L;
 
+    /**
+     * Constructs a new fast lookup integer vertex graph specifics strategy.
+     */
+    public FastutilFastLookupIntVertexGSS()
+    {
+    }
+
     @Override
     public BiFunction<Graph<Integer, E>, GraphType, Specifics<Integer, E>> getSpecificsFactory()
     {

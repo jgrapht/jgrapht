@@ -46,6 +46,13 @@ import java.util.*;
  */
 public class HierholzerEulerianCycle<V, E> implements EulerianCycleAlgorithm<V, E>
 {
+    /**
+     * Constructs a new Hierholzer Eulerian cycle algorithm.
+     */
+    public HierholzerEulerianCycle()
+    {
+    }
+
     /*
      * The input graph.
      */

@@ -42,6 +42,10 @@ import java.util.*;
  */
 public final class PerformanceDemo
 {
+    private PerformanceDemo()
+    {
+    }
+
     /**
      * The starting point for the demo.
      *

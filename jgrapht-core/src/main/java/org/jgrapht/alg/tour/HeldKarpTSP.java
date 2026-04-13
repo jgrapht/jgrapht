@@ -50,6 +50,12 @@ import java.util.*;
  */
 public class HeldKarpTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
+    /**
+     * Constructs a new instance.
+     */
+    public HeldKarpTSP()
+    {
+    }
 
     private double memo(int previousNode, int state, double[][] c, double[][] w)
     {

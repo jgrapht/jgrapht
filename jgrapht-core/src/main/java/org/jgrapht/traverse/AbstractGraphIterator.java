@@ -226,9 +226,10 @@ public abstract class AbstractGraphIterator<V, E> implements GraphIterator<V, E>
     /**
      * A reusable edge event.
      *
+     * @param <E> the graph edge type
      * @author Barak Naveh
      */
-    static class FlyweightEdgeEvent<E> extends EdgeTraversalEvent<E>
+    public static class FlyweightEdgeEvent<E> extends EdgeTraversalEvent<E>
     {
         private static final long serialVersionUID = 4051327833765000755L;
 
@@ -257,9 +258,10 @@ public abstract class AbstractGraphIterator<V, E> implements GraphIterator<V, E>
     /**
      * A reusable vertex event.
      *
+     * @param <V> the graph vertex type
      * @author Barak Naveh
      */
-    static class FlyweightVertexEvent<V> extends VertexTraversalEvent<V>
+    public static class FlyweightVertexEvent<V> extends VertexTraversalEvent<V>
     {
         private static final long serialVersionUID = 3834024753848399924L;
 

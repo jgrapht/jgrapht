@@ -113,6 +113,7 @@ public abstract class AbstractBaseGraph<V, E> extends AbstractGraph<V, E> implem
      * @throws NullPointerException if either one of {@code type} or {@code graphSpecificsStragegy}
      *         is {@code null}, or if {@code graphSpecificsStragegy} generates {@code null}
      */
+    @SuppressWarnings("this-escape")
     protected AbstractBaseGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type,
         GraphSpecificsStrategy<V, E> graphSpecificsStrategy)

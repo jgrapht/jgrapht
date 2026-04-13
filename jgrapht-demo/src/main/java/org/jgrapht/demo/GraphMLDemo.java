@@ -40,6 +40,10 @@ import java.util.function.*;
  */
 public final class GraphMLDemo
 {
+    private GraphMLDemo()
+    {
+    }
+
     // number of vertices
     private static final int SIZE = 6;
 

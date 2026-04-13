@@ -32,8 +32,9 @@ import java.util.Map;
  * internal state. Construction of elements is performed in a lazy manner.
  *
  * @author Dimitrios Michail
+ * @param <V> the element type
  */
-class ElementOrder<V> implements Serializable
+public class ElementOrder<V> implements Serializable
 {
     private static final long serialVersionUID = -3732847114940656189L;
 

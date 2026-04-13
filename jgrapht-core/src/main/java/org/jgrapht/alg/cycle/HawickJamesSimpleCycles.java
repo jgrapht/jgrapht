@@ -89,7 +89,7 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
         blocked = new boolean[nVertices];
         stack = new ArrayDeque<>(nVertices);
 
-        b = new ArrayList[nVertices];
+        b = (List<Integer>[]) new List<?>[nVertices];
         for (int i = 0; i < nVertices; i++) {
             b[i] = new ArrayList<>();
         }

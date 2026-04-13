@@ -28,6 +28,13 @@ public class DefaultWeightedEdge extends IntrusiveWeightedEdge
     private static final long serialVersionUID = -3259071493169286685L;
 
     /**
+     * Constructs a new weighted edge.
+     */
+    public DefaultWeightedEdge()
+    {
+    }
+
+    /**
      * Retrieves the source of this edge. This is protected, for use by subclasses only (e.g. for
      * implementing toString).
      *

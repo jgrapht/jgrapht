@@ -51,6 +51,12 @@ import java.util.*;
  */
 public class TwoApproxMetricTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
+    /**
+     * Constructs a new instance.
+     */
+    public TwoApproxMetricTSP()
+    {
+    }
 
     /**
      * Computes a 2-approximate tour.

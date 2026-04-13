@@ -39,6 +39,12 @@ import java.util.*;
  */
 public abstract class HamiltonianCycleAlgorithmBase<V, E> implements HamiltonianCycleAlgorithm<V, E>
 {
+    /**
+     * Constructs a new Hamiltonian cycle algorithm base.
+     */
+    public HamiltonianCycleAlgorithmBase()
+    {
+    }
 
     /**
      * Transform from a List representation to a graph path.

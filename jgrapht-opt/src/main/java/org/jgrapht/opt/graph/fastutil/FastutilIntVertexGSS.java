@@ -38,6 +38,13 @@ public class FastutilIntVertexGSS<E> implements GraphSpecificsStrategy<Integer, 
 {
     private static final long serialVersionUID = 803286406699705306L;
 
+    /**
+     * Constructs a new integer vertex graph specifics strategy.
+     */
+    public FastutilIntVertexGSS()
+    {
+    }
+
     @Override
     public BiFunction<Graph<Integer, E>, GraphType, Specifics<Integer, E>> getSpecificsFactory()
     {

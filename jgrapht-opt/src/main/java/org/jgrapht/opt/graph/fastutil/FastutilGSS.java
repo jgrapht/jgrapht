@@ -43,6 +43,13 @@ public class FastutilGSS<V, E> implements GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = -4319431062943632549L;
 
+    /**
+     * Constructs a new graph specifics strategy.
+     */
+    public FastutilGSS()
+    {
+    }
+
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {

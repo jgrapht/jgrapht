@@ -37,6 +37,10 @@ import java.util.function.*;
 // @example:class:begin
 public final class CompleteGraphDemo
 {
+    private CompleteGraphDemo()
+    {
+    }
+
     // number of vertices
     private static final int SIZE = 10;
 

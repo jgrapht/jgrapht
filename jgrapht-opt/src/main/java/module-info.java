@@ -25,7 +25,8 @@ module org.jgrapht.opt
 {
     exports org.jgrapht.opt.graph.fastutil;
     exports org.jgrapht.opt.graph.sparse;
+    exports org.jgrapht.opt.graph.sparse.specifics;
 
     requires transitive org.jgrapht.core;
-    requires transitive it.unimi.dsi.fastutil;
+    requires it.unimi.dsi.fastutil;
 }

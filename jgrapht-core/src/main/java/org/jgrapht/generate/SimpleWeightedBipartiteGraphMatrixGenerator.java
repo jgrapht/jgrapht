@@ -29,6 +29,13 @@ import java.util.*;
  */
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E> implements GraphGenerator<V, E, V>
 {
+    /**
+     * Constructs a new simple weighted bipartite graph matrix generator.
+     */
+    public SimpleWeightedBipartiteGraphMatrixGenerator()
+    {
+    }
+
     protected List<V> first;
     protected List<V> second;
     protected double[][] weights;

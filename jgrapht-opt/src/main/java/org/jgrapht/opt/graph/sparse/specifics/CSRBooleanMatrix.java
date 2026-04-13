@@ -30,7 +30,7 @@ import java.util.*;
  *
  * @author Dimitrios Michail
  */
-class CSRBooleanMatrix implements Serializable
+public class CSRBooleanMatrix implements Serializable
 {
     private static final long serialVersionUID = -8639339411487665967L;
 

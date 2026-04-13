@@ -42,6 +42,13 @@ public class FastLookupGraphSpecificsStrategy<V, E> implements GraphSpecificsStr
 {
     private static final long serialVersionUID = -5490869870275054280L;
 
+    /**
+     * Constructs a new fast lookup graph specifics strategy.
+     */
+    public FastLookupGraphSpecificsStrategy()
+    {
+    }
+
     @Override
     public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
     {

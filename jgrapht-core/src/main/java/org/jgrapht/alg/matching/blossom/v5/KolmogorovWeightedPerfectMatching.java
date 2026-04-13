@@ -881,6 +881,13 @@ public class KolmogorovWeightedPerfectMatching<V, E> implements MatchingAlgorith
     public static class Statistics
     {
         /**
+         * Constructs a new statistics instance.
+         */
+        public Statistics()
+        {
+        }
+
+        /**
          * Number of shrink operations
          */
         int shrinkNum = 0;

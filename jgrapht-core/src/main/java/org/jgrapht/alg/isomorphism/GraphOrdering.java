@@ -31,7 +31,7 @@ import java.util.*;
  * @param <E> the type of the edges
  */
 
-final class GraphOrdering<V, E>
+public final class GraphOrdering<V, E>
 {
     private final Graph<V, E> graph;
 

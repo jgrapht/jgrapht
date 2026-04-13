@@ -117,6 +117,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E> implemen
      * @param epsilon to use for internal computation
      * @param algFactory function to construct the subalgorithm
      */
+    @SuppressWarnings("this-escape")
     public GoldbergMaximumDensitySubgraphAlgorithmBase(
         Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon,
         Function<Graph<V, DefaultWeightedEdge>, MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)

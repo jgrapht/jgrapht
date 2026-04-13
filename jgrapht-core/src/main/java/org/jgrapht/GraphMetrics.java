@@ -33,6 +33,10 @@ import java.util.stream.*;
 public abstract class GraphMetrics
 {
 
+    private GraphMetrics()
+    {
+    }
+
     /**
      * Compute the <a href="http://mathworld.wolfram.com/GraphDiameter.html">diameter</a> of the
      * graph. The diameter of a graph is defined as $\max_{v\in V}\epsilon(v)$, where $\epsilon(v)$

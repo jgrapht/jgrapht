@@ -75,6 +75,12 @@ import java.util.stream.*;
  */
 public class ChristofidesThreeHalvesApproxMetricTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E>
 {
+    /**
+     * Constructs a new instance.
+     */
+    public ChristofidesThreeHalvesApproxMetricTSP()
+    {
+    }
 
     /**
      * Computes a $3/2$-approximate tour.

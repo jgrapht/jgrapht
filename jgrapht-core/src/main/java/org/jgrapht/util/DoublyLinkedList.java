@@ -58,6 +58,13 @@ import java.util.function.*;
  */
 public class DoublyLinkedList<E> extends AbstractSequentialList<E> implements Deque<E>
 {
+    /**
+     * Constructs an empty doubly linked list.
+     */
+    public DoublyLinkedList()
+    {
+    }
+
     /** The first element of the list, {@code null} if this list is empty. */
     private ListNode<E> head = null;
     private int size;

@@ -247,8 +247,15 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         return maxFlow;
     }
 
-    class VertexExtensionBase implements Extension
+    public class VertexExtensionBase implements Extension
     {
+        /**
+         * Constructs a new vertex extension base.
+         */
+        public VertexExtensionBase()
+        {
+        }
+
         private final List<AnnotatedFlowEdge> outgoing = new ArrayList<>();
 
         V prototype;
@@ -261,8 +268,15 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         }
     }
 
-    class AnnotatedFlowEdge implements Extension
+    public class AnnotatedFlowEdge implements Extension
     {
+        /**
+         * Constructs a new annotated flow edge.
+         */
+        public AnnotatedFlowEdge()
+        {
+        }
+
         /* Edge source */
         private VertexExtensionBase source;
         /* Edge target */
