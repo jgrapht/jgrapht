@@ -72,7 +72,7 @@
         <commons-text.version>1.14.0</commons-text.version>
         <dsiutils.version>2.7.4</dsiutils.version>
         <fastutil.version>8.5.18</fastutil.version>
-        <guava.version>33.3.1-jre</guava.version>
+        <guava.version>33.6.0-jre</guava.version>
         <hamcrest.version>3.0</hamcrest.version>
         <java.version>21</java.version>
         <jgraphx.version>4.2.2</jgraphx.version>
