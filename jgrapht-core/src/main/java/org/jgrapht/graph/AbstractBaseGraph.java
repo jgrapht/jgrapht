@@ -333,11 +333,8 @@ public abstract class AbstractBaseGraph<V, E> extends AbstractGraph<V, E> implem
     {
         if (v == null) {
             throw new NullPointerException();
-        } else if (containsVertex(v)) {
-            return false;
         } else {
-            specifics.addVertex(v);
-            return true;
+            return specifics.addVertex(v);
         }
     }
 
