@@ -69,6 +69,7 @@ The files below make up the table of contents for a release distribution archive
     - `commons-text-x.y.jar` Apache Commons Text library
     - `fastutil-x.y.z.jar` Fastutil library
     - `guava-x.y-jre.jar` Guava library
+    - `failureaccess-x.y-jre.jar` companion for Guava library
     - `jsap-x.y.jar` Jsap library
     - `logback-classic-x.y.z.jar` Logger
     - `logback-core-x.y.z.jar` Logger
