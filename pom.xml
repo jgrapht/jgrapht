@@ -99,7 +99,7 @@
         <sux4j.version>5.4.1</sux4j.version>
         <webgraph-big.version>3.7.1</webgraph-big.version>
         <webgraph.version>3.6.12</webgraph.version>
-        <xmlunit-core.version>2.10.3</xmlunit-core.version>
+        <xmlunit-core.version>2.11.0</xmlunit-core.version>
     </properties>
 
     <dependencyManagement>
