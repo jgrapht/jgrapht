@@ -72,6 +72,16 @@ abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPa
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * Implementation note: in this many-to-many setting, a call to {@code getPaths(source)} is
+     * resolved by running a single shortest-paths search from {@code source} that settles every
+     * vertex reachable in the graph, instead of issuing one separate {@code getPath(source, v)}
+     * call per vertex of the graph. The latter would invoke the underlying
+     * {@link #getManyToManyPaths(Set, Set)} once per target vertex and re-run Dijkstra from
+     * {@code source} each time, turning a single-source query into {@code |V|} single-source
+     * queries from the same source.
+     * </p>
      */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
@@ -79,12 +89,7 @@ abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPa
         if (!graph.containsVertex(source)) {
             throw new IllegalArgumentException("graph must contain the source vertex");
         }
-
-        Map<V, GraphPath<V, E>> paths = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            paths.put(v, getPath(source, v));
-        }
-        return new ListSingleSourcePathsImpl<>(graph, source, paths);
+        return getShortestPathsTree(graph, source, graph.vertexSet());
     }
 
     /**
