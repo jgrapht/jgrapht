@@ -165,6 +165,55 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
         super.testOnRandomGraphs(40, 5, new int[][] { { 10, 15 }, { 10, 10 }, { 15, 10 } }, 10);
     }
 
+    /**
+     * Regression test that protects CHManyToManyShortestPaths against a future accidental
+     * silent-bypass of its contraction-hierarchy preprocessing on the inherited
+     * {@link BaseManyToManyShortestPaths#getPaths(Object)} path.
+     *
+     * <p>
+     * If a future maintainer were to push the optimization recently added to
+     * {@link DijkstraManyToManyShortestPaths#getPaths(Object)} up into the abstract base class,
+     * {@code CHManyToManyShortestPaths.getPaths(source)} would silently route through plain
+     * Dijkstra over the original graph instead of the contracted hierarchy. Both produce
+     * correct paths so behavioral equivalence alone cannot detect a silent switch; this test
+     * therefore at minimum locks in correctness against a fresh oracle. Combined with the
+     * sibling spy test on {@code DefaultManyToManyShortestPaths}, it provides a tripwire on
+     * any base-class change that would alter the dispatch path.
+     * </p>
+     */
+    @Test
+    public void testGetPathsMatchesDijkstraOracle()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph = getSimpleGraph();
+        ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
+                .computeContractionHierarchy();
+
+        CHManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new CHManyToManyShortestPaths<>(hierarchy);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> paths =
+            alg.getPaths(1);
+
+        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
+            new DijkstraShortestPath<>(graph);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> oraclePaths =
+            oracle.getPaths(1);
+
+        assertEquals(graph, paths.getGraph());
+        assertEquals(Integer.valueOf(1), paths.getSourceVertex());
+        for (Integer target : graph.vertexSet()) {
+            assertEquals(
+                oraclePaths.getWeight(target), paths.getWeight(target), 1e-9,
+                "weight mismatch for target " + target);
+            if (oraclePaths.getPath(target) != null) {
+                assertEquals(
+                    oraclePaths.getPath(target).getVertexList(),
+                    paths.getPath(target).getVertexList(),
+                    "vertex-list mismatch for target " + target);
+            }
+        }
+    }
+
     @Override
     protected ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> getAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph)

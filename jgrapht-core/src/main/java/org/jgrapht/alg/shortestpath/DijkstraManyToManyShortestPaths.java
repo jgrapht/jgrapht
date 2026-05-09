@@ -66,6 +66,26 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * In this Dijkstra-based implementation, a single {@code getPaths(source)} call runs one
+     * shortest-paths search from {@code source} that settles every reachable vertex. The
+     * inherited fallback in {@link BaseManyToManyShortestPaths} would otherwise dispatch one
+     * {@link #getPath(Object, Object)} call per vertex of the graph, each of which re-runs a
+     * fresh Dijkstra from the same source via {@link #getManyToManyPaths(Set, Set)}.
+     * </p>
+     */
+    @Override
+    public ShortestPathAlgorithm.SingleSourcePaths<V, E> getPaths(V source)
+    {
+        if (!graph.containsVertex(source)) {
+            throw new IllegalArgumentException("graph must contain the source vertex");
+        }
+        return getShortestPathsTree(graph, source, graph.vertexSet());
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets)

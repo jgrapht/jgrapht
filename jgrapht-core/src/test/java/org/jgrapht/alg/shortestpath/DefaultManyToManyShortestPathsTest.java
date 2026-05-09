@@ -17,10 +17,16 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
@@ -83,6 +89,81 @@ public class DefaultManyToManyShortestPathsTest extends BaseManyToManyShortestPa
     public void testOnRandomGraphs()
     {
         super.testOnRandomGraphs(30, 5, new int[][] { { 5, 10 }, { 5, 5 }, { 10, 5 } }, 10);
+    }
+
+    /**
+     * Regression test that protects DefaultManyToManyShortestPaths against an accidental
+     * silent-bypass of its user-supplied algorithm function on the inherited
+     * {@link BaseManyToManyShortestPaths#getPaths(Object)} path.
+     *
+     * <p>
+     * If a future maintainer were to push the optimization recently added to
+     * {@link DijkstraManyToManyShortestPaths#getPaths(Object)} up into the abstract base class,
+     * the user-supplied algorithm function would stop being consulted on
+     * {@code getPaths(source)} calls. This test wraps the function in a counting spy and
+     * asserts that the spy is invoked, so any such silent rerouting fails loudly here.
+     * </p>
+     */
+    @Test
+    public void testGetPathsConsultsProvidedAlgorithmFunction()
+    {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.setEdgeWeight(graph.addEdge(1, 2), 1.0);
+        graph.setEdgeWeight(graph.addEdge(2, 3), 1.0);
+        graph.setEdgeWeight(graph.addEdge(1, 3), 3.0);
+
+        AtomicInteger getPathInvocations = new AtomicInteger(0);
+        Function<Graph<Integer, DefaultWeightedEdge>,
+            ShortestPathAlgorithm<Integer, DefaultWeightedEdge>> spyFunction =
+                g -> new ShortestPathAlgorithm<Integer, DefaultWeightedEdge>()
+                {
+                    private final ShortestPathAlgorithm<Integer, DefaultWeightedEdge> inner =
+                        new DijkstraShortestPath<>(g);
+
+                    @Override
+                    public GraphPath<Integer, DefaultWeightedEdge> getPath(
+                        Integer source, Integer sink)
+                    {
+                        getPathInvocations.incrementAndGet();
+                        return inner.getPath(source, sink);
+                    }
+
+                    @Override
+                    public double getPathWeight(Integer source, Integer sink)
+                    {
+                        return inner.getPathWeight(source, sink);
+                    }
+
+                    @Override
+                    public SingleSourcePaths<Integer, DefaultWeightedEdge> getPaths(Integer source)
+                    {
+                        return inner.getPaths(source);
+                    }
+                };
+
+        DefaultManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new DefaultManyToManyShortestPaths<>(graph, spyFunction);
+        SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
+
+        // Sanity: the result must agree with a fresh oracle on every reachable target.
+        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
+            new DijkstraShortestPath<>(graph);
+        for (Integer target : graph.vertexSet()) {
+            assertEquals(
+                oracle.getPathWeight(1, target), paths.getWeight(target), 1e-12);
+        }
+        // The whole point of this test: the user-supplied function must be reached.
+        // The exact invocation count is implementation detail of the inherited base-class
+        // fallback, so we only assert it is positive.
+        assertTrue(
+            getPathInvocations.get() > 0,
+            "DefaultManyToManyShortestPaths.getPaths(source) must consult the user-supplied "
+                + "algorithm function; a zero invocation count indicates the function was "
+                + "silently bypassed (e.g. by a base-class shortcut).");
     }
 
     @Override
