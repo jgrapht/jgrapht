@@ -116,9 +116,14 @@ public class AllDirectedPaths<V, E>
             return Collections.emptyList();
         }
 
-        // Decorate the edges with the minimum path lengths through them
-        Map<E, Integer> edgeMinDistancesFromTargets =
-            edgeMinDistancesBackwards(targetVertices, maxPathLength);
+        // Decorate the edges with the minimum path lengths through them.
+        // Sandwich pruning: only retain edges whose source vertex is also forward-reachable from
+        // some source within the remaining budget, so that the edge can actually lie on a
+        // sources -> targets path of length at most maxPathLength.
+        Map<V, Integer> vertexMinDistancesFromSources =
+            vertexMinDistancesForwards(sourceVertices, maxPathLength);
+        Map<E, Integer> edgeMinDistancesFromTargets = edgeMinDistancesBackwards(
+            targetVertices, vertexMinDistancesFromSources, maxPathLength);
 
         // Generate all the paths
 
@@ -128,16 +133,34 @@ public class AllDirectedPaths<V, E>
     }
 
     /**
-     * Compute the minimum number of edges in a path to the targets through each edge, so long as it
-     * is not greater than a bound.
+     * Compute the minimum number of edges in a path to the targets through each edge, so long as
+     * it is not greater than a bound and the edge can lie on at least one path of length at most
+     * {@code maxPathLength} from some source vertex to some target vertex.
+     *
+     * <p>
+     * The sandwich condition is enforced via {@code vertexMinDistancesFromSources}: an edge
+     * {@code (u, v)} is retained only when {@code u} is forward-reachable from some source and
+     * {@code dF(u) + (1 + dB(v)) <= maxPathLength} (when bounded), where {@code dF(u)} is the
+     * forward BFS distance from the source set to {@code u} and {@code 1 + dB(v)} is the backward
+     * BFS distance to a target through this edge. Edges that fail the sandwich cannot appear on
+     * any feasible source -> target path and would therefore never be traversed by the forward
+     * enumeration in {@link #generatePaths}; dropping them keeps the decoration map smaller and
+     * avoids continuing the backward walk through unreachable parts of the graph.
+     * </p>
      *
      * @param targetVertices the target vertices
+     * @param vertexMinDistancesFromSources forward BFS distances from the source set, computed
+     *        with the same {@code maxPathLength} bound; vertices not in the map are not
+     *        forward-reachable within that bound
      * @param maxPathLength maximum number of edges to allow in a path (if null, all edges will be
      *        considered, which may be expensive)
      *
-     * @return the minimum number of edges in a path from each edge to the targets, encoded in a Map
+     * @return the minimum number of edges in a path from each edge to the targets, encoded in a
+     *         Map
      */
-    private Map<E, Integer> edgeMinDistancesBackwards(Set<V> targetVertices, Integer maxPathLength)
+    private Map<E, Integer> edgeMinDistancesBackwards(
+        Set<V> targetVertices, Map<V, Integer> vertexMinDistancesFromSources,
+        Integer maxPathLength)
     {
         /*
          * We walk backwards through the network from the target vertices, marking edges and
@@ -157,10 +180,13 @@ public class AllDirectedPaths<V, E>
             }
         }
 
-        // Bootstrap the process with the target vertices
+        // Bootstrap the process with target vertices that are forward-reachable from some source.
+        // Targets that no source can reach cannot anchor a feasible path, so we skip them.
         for (V target : targetVertices) {
-            vertexMinDistances.put(target, 0);
-            verticesToProcess.add(target);
+            if (vertexMinDistancesFromSources.containsKey(target)) {
+                vertexMinDistances.put(target, 0);
+                verticesToProcess.add(target);
+            }
         }
 
         // Work through the node queue. When it's empty, we're done!
@@ -172,6 +198,20 @@ public class AllDirectedPaths<V, E>
             // Check whether the incoming edges of this node are correctly
             // decorated
             for (E edge : graph.incomingEdgesOf(vertex)) {
+                V edgeSource = graph.getEdgeSource(edge);
+
+                // Sandwich prune: drop edges whose source side is not reachable from the source
+                // set, or whose total forward + backward length already exceeds the budget.
+                Integer forwardOfSource = vertexMinDistancesFromSources.get(edgeSource);
+                if (forwardOfSource == null) {
+                    continue;
+                }
+                if (maxPathLength != null
+                    && forwardOfSource + childDistance > maxPathLength)
+                {
+                    continue;
+                }
+
                 // Mark the edge if needed
                 if (!edgeMinDistances.containsKey(edge)
                     || (edgeMinDistances.get(edge) > childDistance))
@@ -180,7 +220,6 @@ public class AllDirectedPaths<V, E>
                 }
 
                 // Mark the edge's source vertex if needed
-                V edgeSource = graph.getEdgeSource(edge);
                 if (!vertexMinDistances.containsKey(edgeSource)
                     || (vertexMinDistances.get(edgeSource) > childDistance))
                 {
@@ -195,6 +234,51 @@ public class AllDirectedPaths<V, E>
 
         assert verticesToProcess.isEmpty();
         return edgeMinDistances;
+    }
+
+    /**
+     * Compute the minimum number of edges in a forward BFS from the source vertices, capped at
+     * {@code maxPathLength} when given. Used together with
+     * {@link #edgeMinDistancesBackwards(Set, Map, Integer)} to apply sandwich-style pruning of the
+     * edge decoration map.
+     *
+     * @param sourceVertices the source vertices
+     * @param maxPathLength maximum number of forward edges to expand (if null, the BFS is
+     *        unrestricted)
+     *
+     * @return for every vertex reachable from {@code sourceVertices} within {@code maxPathLength}
+     *         edges, its minimum forward distance from the source set
+     */
+    private Map<V, Integer> vertexMinDistancesForwards(
+        Set<V> sourceVertices, Integer maxPathLength)
+    {
+        Map<V, Integer> vertexMinDistances = new HashMap<>();
+        Queue<V> verticesToProcess = new ArrayDeque<>();
+
+        for (V source : sourceVertices) {
+            if (!vertexMinDistances.containsKey(source)) {
+                vertexMinDistances.put(source, 0);
+                verticesToProcess.add(source);
+            }
+        }
+
+        for (V vertex; (vertex = verticesToProcess.poll()) != null;) {
+            int currentDistance = vertexMinDistances.get(vertex);
+            if (maxPathLength != null && currentDistance >= maxPathLength) {
+                continue;
+            }
+            int childDistance = currentDistance + 1;
+
+            for (E edge : graph.outgoingEdgesOf(vertex)) {
+                V child = graph.getEdgeTarget(edge);
+                if (!vertexMinDistances.containsKey(child)) {
+                    vertexMinDistances.put(child, childDistance);
+                    verticesToProcess.add(child);
+                }
+            }
+        }
+
+        return vertexMinDistances;
     }
 
     /**

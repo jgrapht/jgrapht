@@ -223,6 +223,39 @@ public class AllDirectedPathsTest
     }
 
     @Test
+    public void testTargetReachableButSourceUnreachableBranchIsIgnored()
+    {
+        // Sandwich-prune sanity check: a vertex that can reach the target but is not
+        // reachable from any source must not appear on any returned path, and must not
+        // cause the algorithm to spend time relaxing it.
+        DefaultDirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("S");
+        graph.addVertex("A");
+        graph.addVertex("T");
+        graph.addEdge("S", "A");
+        graph.addEdge("A", "T");
+
+        // Dead source-side branch: U and V can reach T (U -> T) but no edge from S
+        // ever leads into U or V.
+        graph.addVertex("U");
+        graph.addVertex("V");
+        graph.addEdge("U", "T");
+        graph.addEdge("V", "U");
+
+        AllDirectedPaths<String, DefaultEdge> alg = new AllDirectedPaths<>(graph);
+
+        List<GraphPath<String, DefaultEdge>> simplePaths = alg.getAllPaths("S", "T", true, 5);
+        assertEquals(1, simplePaths.size());
+        assertEquals(Arrays.asList("S", "A", "T"), simplePaths.get(0).getVertexList());
+
+        List<GraphPath<String, DefaultEdge>> nonSimplePaths = alg.getAllPaths(
+            Collections.singleton("S"), Collections.singleton("T"), false, 5);
+        assertEquals(1, nonSimplePaths.size());
+        assertEquals(Arrays.asList("S", "A", "T"), nonSimplePaths.get(0).getVertexList());
+    }
+
+    @Test
     public void testZeroLengthPaths()
     {
         // Verify fix for https://github.com/jgrapht/jgrapht/issues/640.
