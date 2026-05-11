@@ -246,6 +246,185 @@ public class AllDirectedPathsTest
                     path, path.getLength())));
     }
 
+    @Test
+    public void testNonSimpleModeAdjacentVerticesWithSelfLoops()
+    {
+        // Two-vertex graph 0 → 1 with self-loops on both. Non-simple paths from 0 to 1 of length
+        // ≤ 3 are:
+        //   0→1 (length 1)
+        //   0→0→1, 0→1→1 (length 2)
+        //   0→0→0→1, 0→0→1→1, 0→1→1→1 (length 3)
+        // Total = 6.
+        DefaultDirectedGraph<Integer, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addEdge(0, 0);
+        graph.addEdge(1, 1);
+        graph.addEdge(0, 1);
+
+        List<GraphPath<Integer, DefaultEdge>> paths =
+            new AllDirectedPaths<>(graph).getAllPaths(0, 1, false, 3);
+        assertEquals(6, paths.size());
+    }
+
+    @Test
+    public void testNonSimpleModeCycleWithoutSelfLoops()
+    {
+        // Triangle 0 → 1 → 2 → 0. Non-simple paths from 0 to 1 of length ≤ 4 are:
+        //   0→1 (length 1)
+        //   0→1→2→0→1 (length 4)
+        // No length-2 or length-3 walk from 0 ends at 1.
+        DefaultDirectedGraph<Integer, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 0);
+
+        List<GraphPath<Integer, DefaultEdge>> paths =
+            new AllDirectedPaths<>(graph).getAllPaths(0, 1, false, 4);
+        assertEquals(2, paths.size());
+    }
+
+    @Test
+    public void testNonSimpleModePathValidatorStillRespected()
+    {
+        // The pathValidator must still be invoked when simplePathsOnly = false, even after the
+        // refactor that guards the pathVertices set behind the simple-paths flag.
+        DefaultDirectedGraph<Integer, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addEdge(0, 0);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 2);
+
+        // Reject any edge into vertex 1.
+        PathValidator<Integer, DefaultEdge> validator =
+            (partialPath, edge) -> graph.getEdgeTarget(edge) != 1;
+        List<GraphPath<Integer, DefaultEdge>> paths =
+            new AllDirectedPaths<>(graph, validator).getAllPaths(0, 2, false, 3);
+        // Every walk from 0 to 2 must traverse 0→1 (the only path to 1) and then 1→2.
+        // The validator forbids any edge into 1, so no walks should reach 2.
+        assertTrue(paths.isEmpty());
+    }
+
+    @Test
+    public void testNonSimpleModeMaxLengthBoundary()
+    {
+        DefaultDirectedGraph<Integer, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addEdge(0, 0);
+        graph.addEdge(0, 1);
+
+        AllDirectedPaths<Integer, DefaultEdge> alg = new AllDirectedPaths<>(graph);
+
+        // maxLength=0: only the trivial zero-length walk when source == target.
+        List<GraphPath<Integer, DefaultEdge>> zeroLen =
+            alg.getAllPaths(Set.of(0), Set.of(0), false, 0);
+        assertEquals(1, zeroLen.size());
+        assertEquals(0, zeroLen.get(0).getLength());
+
+        // maxLength=1: zero-length walk at 0, plus 0→0 self-loop, plus 0→1 direct edge.
+        List<GraphPath<Integer, DefaultEdge>> oneLen =
+            alg.getAllPaths(Set.of(0), Set.of(0, 1), false, 1);
+        assertEquals(3, oneLen.size());
+    }
+
+    @Test
+    public void testNonSimpleModeMatchesBruteForce()
+    {
+        // Property-style: for a few seeded random small cyclic digraphs, compare the
+        // multiset of vertex-sequences returned by getAllPaths against a brute-force walk
+        // enumeration. The refactor changes the per-pop inner loop and the queue impl; this
+        // test fails loudly if either changes the produced walk multiset.
+        long[] seeds = { 1L, 2L, 3L, 5L, 7L };
+        for (long seed : seeds) {
+            DefaultDirectedGraph<Integer, DefaultEdge> graph =
+                buildRandomCyclicGraph(new Random(seed), 5, 0.4, 0.2);
+            Integer source = 0;
+            Integer target = graph.vertexSet().size() - 1;
+            int maxLength = 4;
+
+            List<List<Integer>> bruteForce =
+                bruteForceWalks(graph, source, target, maxLength);
+            List<GraphPath<Integer, DefaultEdge>> actual =
+                new AllDirectedPaths<>(graph).getAllPaths(source, target, false, maxLength);
+            List<List<Integer>> actualVertexLists = new ArrayList<>(actual.size());
+            for (GraphPath<Integer, DefaultEdge> path : actual) {
+                actualVertexLists.add(path.getVertexList());
+            }
+
+            assertEquals(
+                bruteForce.size(), actualVertexLists.size(),
+                "walk count mismatch for seed=" + seed);
+            // Compare as multisets — order of enumeration is not part of the contract.
+            assertEquals(
+                new HashSet<>(bruteForce), new HashSet<>(actualVertexLists),
+                "walk multiset mismatch for seed=" + seed);
+        }
+    }
+
+    private static DefaultDirectedGraph<Integer, DefaultEdge> buildRandomCyclicGraph(
+        Random rng, int n, double edgeProbability, double selfLoopProbability)
+    {
+        DefaultDirectedGraph<Integer, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        for (int v = 0; v < n; v++) {
+            graph.addVertex(v);
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    if (rng.nextDouble() < selfLoopProbability) {
+                        graph.addEdge(i, j);
+                    }
+                } else if (rng.nextDouble() < edgeProbability) {
+                    graph.addEdge(i, j);
+                }
+            }
+        }
+        return graph;
+    }
+
+    private static List<List<Integer>> bruteForceWalks(
+        Graph<Integer, DefaultEdge> graph, Integer source, Integer target, int maxLength)
+    {
+        List<List<Integer>> walks = new ArrayList<>();
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.push(source);
+        bruteForceWalksRec(graph, target, maxLength, stack, walks);
+        return walks;
+    }
+
+    private static void bruteForceWalksRec(
+        Graph<Integer, DefaultEdge> graph, Integer target, int remaining, Deque<Integer> stack,
+        List<List<Integer>> walks)
+    {
+        Integer current = stack.peek();
+        if (target.equals(current)) {
+            List<Integer> walk = new ArrayList<>(stack);
+            Collections.reverse(walk);
+            walks.add(walk);
+        }
+        if (remaining == 0) {
+            return;
+        }
+        for (DefaultEdge edge : graph.outgoingEdgesOf(current)) {
+            Integer next = graph.getEdgeTarget(edge);
+            stack.push(next);
+            bruteForceWalksRec(graph, target, remaining - 1, stack, walks);
+            stack.pop();
+        }
+    }
+
     private static Graph<String, DefaultEdge> toyGraph()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
