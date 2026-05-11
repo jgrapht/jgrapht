@@ -168,6 +168,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Azim Barhoumi](https://github.com/Aziiiiim)
 - [Andriy Palamarchuk](https://github.com/apalamarchuk-csi)
 - [Benoit Chatain Lacelle](https://github.com/blacelle)
+- [Shai Eilat](https://github.com/seilat)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
