@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -155,6 +158,210 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
         DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
             new DijkstraManyToManyShortestPaths<>(graph);
         assertThrows(IllegalArgumentException.class, () -> alg.getPaths(42));
+    }
+
+    @Test
+    public void testGetPathsSingleVertexGraph()
+    {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(7);
+        DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new DijkstraManyToManyShortestPaths<>(graph);
+
+        SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(7);
+        assertEquals(Integer.valueOf(7), paths.getSourceVertex());
+        assertEquals(0d, paths.getWeight(7), 0d);
+        assertNotNull(paths.getPath(7));
+        assertEquals(0, paths.getPath(7).getLength());
+    }
+
+    @Test
+    public void testGetPathsSourceHasNoOutgoingEdges()
+    {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        for (int v : new int[] { 1, 2, 3 }) {
+            graph.addVertex(v);
+        }
+        graph.setEdgeWeight(graph.addEdge(2, 3), 1d);
+        DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new DijkstraManyToManyShortestPaths<>(graph);
+
+        SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
+        assertEquals(0d, paths.getWeight(1), 0d);
+        assertNull(paths.getPath(2));
+        assertNull(paths.getPath(3));
+        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(2), 0d);
+        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(3), 0d);
+    }
+
+    @Test
+    public void testGetPathsDisconnectedGraph()
+    {
+        // Two disjoint components: source reaches {1,2,3}, isolated component is {10,11}
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        for (int v : new int[] { 1, 2, 3, 10, 11 }) {
+            graph.addVertex(v);
+        }
+        graph.setEdgeWeight(graph.addEdge(1, 2), 1d);
+        graph.setEdgeWeight(graph.addEdge(2, 3), 1d);
+        graph.setEdgeWeight(graph.addEdge(10, 11), 1d);
+        DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new DijkstraManyToManyShortestPaths<>(graph);
+        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
+            new DijkstraShortestPath<>(graph);
+        SingleSourcePaths<Integer, DefaultWeightedEdge> expected = oracle.getPaths(1);
+
+        SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
+        for (int target : new int[] { 1, 2, 3 }) {
+            assertEquals(expected.getWeight(target), paths.getWeight(target), 1e-12);
+            assertEquals(
+                expected.getPath(target).getVertexList(), paths.getPath(target).getVertexList());
+        }
+        assertNull(paths.getPath(10));
+        assertNull(paths.getPath(11));
+        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(10), 0d);
+        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(11), 0d);
+    }
+
+    @Test
+    public void testGetPathsCyclicGraphWithSelfLoopOnSource()
+    {
+        // Graph with cycles, including a self-loop on source. The optimized override
+        // must still return the trivial zero-length walk for source == target rather than
+        // following the self-loop. DijkstraClosestFirstIterator handles cycles correctly;
+        // this test pins that behavior.
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        for (int v : new int[] { 1, 2, 3, 4 }) {
+            graph.addVertex(v);
+        }
+        graph.setEdgeWeight(graph.addEdge(1, 1), 5d); // self-loop on source
+        graph.setEdgeWeight(graph.addEdge(1, 2), 1d);
+        graph.setEdgeWeight(graph.addEdge(2, 3), 1d);
+        graph.setEdgeWeight(graph.addEdge(3, 2), 1d); // back-edge creating a 2↔3 cycle
+        graph.setEdgeWeight(graph.addEdge(3, 4), 1d);
+        DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new DijkstraManyToManyShortestPaths<>(graph);
+        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
+            new DijkstraShortestPath<>(graph);
+        SingleSourcePaths<Integer, DefaultWeightedEdge> expected = oracle.getPaths(1);
+
+        SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
+        for (int target : new int[] { 1, 2, 3, 4 }) {
+            assertEquals(expected.getWeight(target), paths.getWeight(target), 1e-12);
+            assertEquals(
+                expected.getPath(target).getVertexList(), paths.getPath(target).getVertexList());
+        }
+        // Source-to-source path is the zero-length walk, not the self-loop.
+        assertEquals(0d, paths.getWeight(1), 0d);
+        assertEquals(0, paths.getPath(1).getLength());
+    }
+
+    @Test
+    public void testGetPathsCalledTwiceReturnsConsistentResults()
+    {
+        // Two back-to-back calls on the same source must produce the same SingleSourcePaths
+        // content. Pins against any latent stateful caching bug introduced by the override.
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = buildSampleGraph(11L, 30);
+        DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+            new DijkstraManyToManyShortestPaths<>(graph);
+
+        Integer source = graph.vertexSet().iterator().next();
+        SingleSourcePaths<Integer, DefaultWeightedEdge> first = alg.getPaths(source);
+        SingleSourcePaths<Integer, DefaultWeightedEdge> second = alg.getPaths(source);
+        for (Integer target : graph.vertexSet()) {
+            assertEquals(first.getWeight(target), second.getWeight(target), 1e-12);
+            GraphPath<Integer, DefaultWeightedEdge> firstPath = first.getPath(target);
+            GraphPath<Integer, DefaultWeightedEdge> secondPath = second.getPath(target);
+            if (firstPath == null) {
+                assertNull(secondPath);
+            } else {
+                assertEquals(firstPath.getVertexList(), secondPath.getVertexList());
+            }
+        }
+    }
+
+    @Test
+    public void testGetPathsFuzzAgainstDijkstraOracle()
+    {
+        // For 10 seeded random directed weighted graphs of varying sizes and densities,
+        // assert that dmm.getPaths(source) matches DijkstraShortestPath.getPaths(source) on
+        // every target. Failure mode: a regression introduced into the getPaths(V) override
+        // that diverges from the canonical Dijkstra answer for some graph shape we didn't
+        // hand-build.
+        long[] seeds = { 1L, 2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L, 23L };
+        int[] vertexCounts = { 10, 20, 35, 50, 80 };
+        for (long seed : seeds) {
+            Random rng = new Random(seed);
+            int n = vertexCounts[(int) (Math.abs(seed) % vertexCounts.length)];
+            DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+                buildRandomGraph(rng, n);
+            DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
+                new DijkstraManyToManyShortestPaths<>(graph);
+            DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
+                new DijkstraShortestPath<>(graph);
+
+            for (Integer source : graph.vertexSet()) {
+                SingleSourcePaths<Integer, DefaultWeightedEdge> expected = oracle.getPaths(source);
+                SingleSourcePaths<Integer, DefaultWeightedEdge> actual = alg.getPaths(source);
+                for (Integer target : graph.vertexSet()) {
+                    double expectedWeight = expected.getWeight(target);
+                    double actualWeight = actual.getWeight(target);
+                    assertEquals(
+                        expectedWeight, actualWeight, 1e-9,
+                        "weight mismatch for seed=" + seed + " src=" + source + " tgt=" + target);
+                    GraphPath<Integer, DefaultWeightedEdge> expectedPath = expected.getPath(target);
+                    GraphPath<Integer, DefaultWeightedEdge> actualPath = actual.getPath(target);
+                    if (expectedPath == null) {
+                        assertNull(
+                            actualPath,
+                            "expected null path for seed=" + seed + " src=" + source + " tgt="
+                                + target);
+                    } else {
+                        assertTrue(
+                            actualPath != null,
+                            "expected non-null path for seed=" + seed + " src=" + source + " tgt="
+                                + target);
+                        assertEquals(
+                            expectedPath.getWeight(), actualPath.getWeight(), 1e-9,
+                            "path weight mismatch for seed=" + seed + " src=" + source + " tgt="
+                                + target);
+                    }
+                }
+            }
+        }
+    }
+
+    private static DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> buildSampleGraph(
+        long seed, int n)
+    {
+        return buildRandomGraph(new Random(seed), n);
+    }
+
+    private static DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> buildRandomGraph(
+        Random rng, int n)
+    {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        for (int v = 0; v < n; v++) {
+            graph.addVertex(v);
+        }
+        // Density chosen to give a mix of reachable and unreachable target pairs for most seeds.
+        double p = 0.2;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && rng.nextDouble() < p) {
+                    DefaultWeightedEdge edge = graph.addEdge(i, j);
+                    if (edge != null) {
+                        graph.setEdgeWeight(edge, 1d + rng.nextInt(1000));
+                    }
+                }
+            }
+        }
+        return graph;
     }
 
     @Override
