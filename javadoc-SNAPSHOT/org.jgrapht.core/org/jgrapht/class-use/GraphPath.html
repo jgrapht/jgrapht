@@ -277,17 +277,36 @@ E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPat
 <div class="block">Builds shortest path between <code>source</code> and <code>sink</code> based on the information
  provided by search frontiers and common vertex.</div>
 </div>
-<div class="col-first odd-row-color"><code>static &lt;V,<wbr>
-E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;V,<wbr>E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BellmanFordShortestPath.</span><code><a href="../alg/shortestpath/BellmanFordShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
- V&nbsp;source,
- V&nbsp;sink)</code></div>
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">V</a>,<wbr><a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AStarSpurEngine.</span><code><a href="../alg/shortestpath/AStarSpurEngine.html#findPath(org.jgrapht.Graph,V,V,java.util.Set,java.util.Set,java.util.Map)" class="member-name-link">findPath</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">V</a>,<wbr><a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">E</a>&gt;&nbsp;graph,
+ <a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">V</a>&nbsp;sink,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">V</a>&gt;&nbsp;bannedVertices,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">E</a>&gt;&nbsp;bannedEdges,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../alg/shortestpath/AStarSpurEngine.html" title="type parameter in AStarSpurEngine">V</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;reverseDistancesToSink)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">V</a>,<wbr><a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DijkstraSpurEngine.</span><code><a href="../alg/shortestpath/DijkstraSpurEngine.html#findPath(org.jgrapht.Graph,V,V,java.util.Set,java.util.Set,java.util.Map)" class="member-name-link">findPath</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">V</a>,<wbr><a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">E</a>&gt;&nbsp;graph,
+ <a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">V</a>&nbsp;sink,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">V</a>&gt;&nbsp;bannedVertices,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">E</a>&gt;&nbsp;bannedEdges,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../alg/shortestpath/DijkstraSpurEngine.html" title="type parameter in DijkstraSpurEngine">V</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;reverseDistancesToSink)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">V</a>,<wbr><a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SpurShortestPathEngine.</span><code><a href="../alg/shortestpath/SpurShortestPathEngine.html#findPath(org.jgrapht.Graph,V,V,java.util.Set,java.util.Set,java.util.Map)" class="member-name-link">findPath</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">V</a>,<wbr><a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">E</a>&gt;&nbsp;graph,
+ <a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">V</a>&nbsp;sink,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">V</a>&gt;&nbsp;bannedVertices,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">E</a>&gt;&nbsp;bannedEdges,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../alg/shortestpath/SpurShortestPathEngine.html" title="type parameter in SpurShortestPathEngine">V</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;reverseDistancesToSink)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Find a path between two vertices.</div>
+<div class="block">Compute an exact shortest path from <code>source</code> to <code>sink</code> on <code>graph</code> ignoring
+ vertices in <code>bannedVertices</code> and edges in <code>bannedEdges</code>.</div>
 </div>
 <div class="col-first even-row-color"><code>static &lt;V,<wbr>
 E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;V,<wbr>E&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BFSShortestPath.</span><code><a href="../alg/shortestpath/BFSShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
+<div class="col-second even-row-color"><span class="type-name-label">BellmanFordShortestPath.</span><code><a href="../alg/shortestpath/BellmanFordShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
  V&nbsp;source,
  V&nbsp;sink)</code></div>
 <div class="col-last even-row-color">
@@ -295,7 +314,7 @@ E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPat
 </div>
 <div class="col-first odd-row-color"><code>static &lt;V,<wbr>
 E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;V,<wbr>E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BidirectionalDijkstraShortestPath.</span><code><a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
+<div class="col-second odd-row-color"><span class="type-name-label">BFSShortestPath.</span><code><a href="../alg/shortestpath/BFSShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
  V&nbsp;source,
  V&nbsp;sink)</code></div>
 <div class="col-last odd-row-color">
@@ -303,108 +322,116 @@ E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPat
 </div>
 <div class="col-first even-row-color"><code>static &lt;V,<wbr>
 E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;V,<wbr>E&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DijkstraShortestPath.</span><code><a href="../alg/shortestpath/DijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
+<div class="col-second even-row-color"><span class="type-name-label">BidirectionalDijkstraShortestPath.</span><code><a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
  V&nbsp;source,
  V&nbsp;sink)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Find a path between two vertices.</div>
 </div>
-<div class="col-first odd-row-color"><code>static &lt;E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">IntVertexDijkstraShortestPath.</span><code><a href="../alg/shortestpath/IntVertexDijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,java.lang.Integer,java.lang.Integer)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>E&gt;&nbsp;graph,
+<div class="col-first odd-row-color"><code>static &lt;V,<wbr>
+E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;V,<wbr>E&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DijkstraShortestPath.</span><code><a href="../alg/shortestpath/DijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,V,V)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;V,<wbr>E&gt;&nbsp;graph,
+ V&nbsp;source,
+ V&nbsp;sink)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Find a path between two vertices.</div>
+</div>
+<div class="col-first even-row-color"><code>static &lt;E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>E&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">IntVertexDijkstraShortestPath.</span><code><a href="../alg/shortestpath/IntVertexDijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,java.lang.Integer,java.lang.Integer)" class="member-name-link">findPathBetween</a><wbr>(<a href="../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>E&gt;&nbsp;graph,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;source,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;sink)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Find a path between two vertices.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">NegativeCycleDetectedException.</span><code><a href="../alg/shortestpath/NegativeCycleDetectedException.html#getCycle()" class="member-name-link">getCycle</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">NegativeCycleDetectedException.</span><code><a href="../alg/shortestpath/NegativeCycleDetectedException.html#getCycle()" class="member-name-link">getCycle</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Get the actual negative cycle, or null if not provided.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">V</a>,<wbr><a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AStarShortestPath.</span><code><a href="../alg/shortestpath/AStarShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">V</a>&nbsp;sourceVertex,
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">V</a>,<wbr><a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AStarShortestPath.</span><code><a href="../alg/shortestpath/AStarShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">V</a>&nbsp;sourceVertex,
  <a href="../alg/shortestpath/AStarShortestPath.html" title="type parameter in AStarShortestPath">V</a>&nbsp;targetVertex)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Calculates (and returns) the shortest path from the sourceVertex to the targetVertex.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BellmanFordShortestPath.</span><code><a href="../alg/shortestpath/BellmanFordShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">V</a>&nbsp;source,
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BellmanFordShortestPath.</span><code><a href="../alg/shortestpath/BellmanFordShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/BellmanFordShortestPath.html" title="type parameter in BellmanFordShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BFSShortestPath.</span><code><a href="../alg/shortestpath/BFSShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">V</a>&nbsp;source,
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BFSShortestPath.</span><code><a href="../alg/shortestpath/BFSShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/BFSShortestPath.html" title="type parameter in BFSShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BidirectionalAStarShortestPath.</span><code><a href="../alg/shortestpath/BidirectionalAStarShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">V</a>&nbsp;source,
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BidirectionalAStarShortestPath.</span><code><a href="../alg/shortestpath/BidirectionalAStarShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/BidirectionalAStarShortestPath.html" title="type parameter in BidirectionalAStarShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BidirectionalDijkstraShortestPath.</span><code><a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">V</a>&nbsp;source,
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BidirectionalDijkstraShortestPath.</span><code><a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/BidirectionalDijkstraShortestPath.html" title="type parameter in BidirectionalDijkstraShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">V</a>,<wbr><a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ContractionHierarchyBidirectionalDijkstra.</span><code><a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">V</a>&nbsp;source,
- <a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">V</a>&nbsp;sink)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>,<wbr><a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">DeltaSteppingShortestPath.</span><code><a href="../alg/shortestpath/DeltaSteppingShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&nbsp;source,
- <a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">V</a>,<wbr><a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DijkstraShortestPath.</span><code><a href="../alg/shortestpath/DijkstraShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">V</a>&nbsp;source,
- <a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">V</a>,<wbr><a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">FloydWarshallShortestPaths.</span><code><a href="../alg/shortestpath/FloydWarshallShortestPaths.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">V</a>&nbsp;a,
- <a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">V</a>&nbsp;b)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../alg/shortestpath/IntVertexDijkstraShortestPath.html" title="type parameter in IntVertexDijkstraShortestPath">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">IntVertexDijkstraShortestPath.</span><code><a href="../alg/shortestpath/IntVertexDijkstraShortestPath.html#getPath(java.lang.Integer,java.lang.Integer)" class="member-name-link">getPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;source,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;sink)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">V</a>,<wbr><a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JohnsonShortestPaths.</span><code><a href="../alg/shortestpath/JohnsonShortestPaths.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">V</a>&nbsp;source,
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">V</a>,<wbr><a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ContractionHierarchyBidirectionalDijkstra.</span><code><a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/ContractionHierarchyBidirectionalDijkstra.html" title="type parameter in ContractionHierarchyBidirectionalDijkstra">V</a>&nbsp;sink)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>,<wbr><a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DeltaSteppingShortestPath.</span><code><a href="../alg/shortestpath/DeltaSteppingShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/DeltaSteppingShortestPath.html" title="type parameter in DeltaSteppingShortestPath">V</a>&nbsp;sink)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">V</a>,<wbr><a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DijkstraShortestPath.</span><code><a href="../alg/shortestpath/DijkstraShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/DijkstraShortestPath.html" title="type parameter in DijkstraShortestPath">V</a>&nbsp;sink)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">V</a>,<wbr><a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FloydWarshallShortestPaths.</span><code><a href="../alg/shortestpath/FloydWarshallShortestPaths.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">V</a>&nbsp;a,
+ <a href="../alg/shortestpath/FloydWarshallShortestPaths.html" title="type parameter in FloydWarshallShortestPaths">V</a>&nbsp;b)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../alg/shortestpath/IntVertexDijkstraShortestPath.html" title="type parameter in IntVertexDijkstraShortestPath">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">IntVertexDijkstraShortestPath.</span><code><a href="../alg/shortestpath/IntVertexDijkstraShortestPath.html#getPath(java.lang.Integer,java.lang.Integer)" class="member-name-link">getPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;source,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;sink)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">V</a>,<wbr><a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JohnsonShortestPaths.</span><code><a href="../alg/shortestpath/JohnsonShortestPaths.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">V</a>&nbsp;source,
  <a href="../alg/shortestpath/JohnsonShortestPaths.html" title="type parameter in JohnsonShortestPaths">V</a>&nbsp;sink)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/ListSingleSourcePathsImpl.html" title="type parameter in ListSingleSourcePathsImpl">V</a>,<wbr><a href="../alg/shortestpath/ListSingleSourcePathsImpl.html" title="type parameter in ListSingleSourcePathsImpl">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ListSingleSourcePathsImpl.</span><code><a href="../alg/shortestpath/ListSingleSourcePathsImpl.html#getPath(V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/ListSingleSourcePathsImpl.html" title="type parameter in ListSingleSourcePathsImpl">V</a>&nbsp;targetVertex)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/ListSingleSourcePathsImpl.html" title="type parameter in ListSingleSourcePathsImpl">V</a>,<wbr><a href="../alg/shortestpath/ListSingleSourcePathsImpl.html" title="type parameter in ListSingleSourcePathsImpl">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ListSingleSourcePathsImpl.</span><code><a href="../alg/shortestpath/ListSingleSourcePathsImpl.html#getPath(V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/ListSingleSourcePathsImpl.html" title="type parameter in ListSingleSourcePathsImpl">V</a>&nbsp;targetVertex)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Return the path from the source vertex to the sink vertex.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">V</a>,<wbr><a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TransitNodeRoutingShortestPath.</span><code><a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">V</a>&nbsp;source,
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">V</a>,<wbr><a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransitNodeRoutingShortestPath.</span><code><a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html#getPath(V,V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/TransitNodeRoutingShortestPath.html" title="type parameter in TransitNodeRoutingShortestPath">V</a>&nbsp;sink)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Get a shortest path from a source vertex to a sink vertex.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html" title="type parameter in TreeSingleSourcePathsImpl">V</a>,<wbr><a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html" title="type parameter in TreeSingleSourcePathsImpl">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TreeSingleSourcePathsImpl.</span><code><a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html#getPath(V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html" title="type parameter in TreeSingleSourcePathsImpl">V</a>&nbsp;targetVertex)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html" title="type parameter in TreeSingleSourcePathsImpl">V</a>,<wbr><a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html" title="type parameter in TreeSingleSourcePathsImpl">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TreeSingleSourcePathsImpl.</span><code><a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html#getPath(V)" class="member-name-link">getPath</a><wbr>(<a href="../alg/shortestpath/TreeSingleSourcePathsImpl.html" title="type parameter in TreeSingleSourcePathsImpl">V</a>&nbsp;targetVertex)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Return the path from the source vertex to the sink vertex.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/EppsteinShortestPathIterator.html" title="type parameter in EppsteinShortestPathIterator">V</a>,<wbr><a href="../alg/shortestpath/EppsteinShortestPathIterator.html" title="type parameter in EppsteinShortestPathIterator">E</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">EppsteinShortestPathIterator.</span><code><a href="../alg/shortestpath/EppsteinShortestPathIterator.html#next()" class="member-name-link">next</a>()</code></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/YenShortestPathIterator.html" title="type parameter in YenShortestPathIterator">V</a>,<wbr><a href="../alg/shortestpath/YenShortestPathIterator.html" title="type parameter in YenShortestPathIterator">E</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">YenShortestPathIterator.</span><code><a href="../alg/shortestpath/YenShortestPathIterator.html#next()" class="member-name-link">next</a>()</code></div>
+<div class="col-first even-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/EppsteinShortestPathIterator.html" title="type parameter in EppsteinShortestPathIterator">V</a>,<wbr><a href="../alg/shortestpath/EppsteinShortestPathIterator.html" title="type parameter in EppsteinShortestPathIterator">E</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">EppsteinShortestPathIterator.</span><code><a href="../alg/shortestpath/EppsteinShortestPathIterator.html#next()" class="member-name-link">next</a>()</code></div>
 <div class="col-last even-row-color"></div>
+<div class="col-first odd-row-color"><code><a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a><wbr>&lt;<a href="../alg/shortestpath/YenShortestPathIterator.html" title="type parameter in YenShortestPathIterator">V</a>,<wbr><a href="../alg/shortestpath/YenShortestPathIterator.html" title="type parameter in YenShortestPathIterator">E</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">YenShortestPathIterator.</span><code><a href="../alg/shortestpath/YenShortestPathIterator.html#next()" class="member-name-link">next</a>()</code></div>
+<div class="col-last odd-row-color"></div>
 </div>
 <div class="caption"><span>Methods in <a href="../alg/shortestpath/package-summary.html">org.jgrapht.alg.shortestpath</a> that return types with arguments of type <a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a></span></div>
 <div class="summary-table three-column-summary">
@@ -427,25 +454,30 @@ E&gt;&nbsp;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPat
 <div class="col-last odd-row-color">
 <div class="block">Calculate (and return) all paths from the source vertex to the target vertex.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">V</a>,<wbr><a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">E</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">EppsteinKShortestPath.</span><code><a href="../alg/shortestpath/EppsteinKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">V</a>&nbsp;source,
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="type parameter in BoundedPrunedYenKShortestPath">V</a>,<wbr><a href="../alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="type parameter in BoundedPrunedYenKShortestPath">E</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BoundedPrunedYenKShortestPath.</span><code><a href="../alg/shortestpath/BoundedPrunedYenKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="type parameter in BoundedPrunedYenKShortestPath">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="type parameter in BoundedPrunedYenKShortestPath">V</a>&nbsp;sink,
+ int&nbsp;k)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">V</a>,<wbr><a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">E</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">EppsteinKShortestPath.</span><code><a href="../alg/shortestpath/EppsteinKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/EppsteinKShortestPath.html" title="type parameter in EppsteinKShortestPath">V</a>&nbsp;sink,
  int&nbsp;k)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Computes <code>k</code> shortest paths between <code>source</code> and <code>sink</code>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="type parameter in ListMultiObjectiveSingleSourcePathsImpl">V</a>,<wbr><a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="type parameter in ListMultiObjectiveSingleSourcePathsImpl">E</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ListMultiObjectiveSingleSourcePathsImpl.</span><code><a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html#getPaths(V)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="type parameter in ListMultiObjectiveSingleSourcePathsImpl">V</a>&nbsp;targetVertex)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">V</a>,<wbr><a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">E</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MartinShortestPath.</span><code><a href="../alg/shortestpath/MartinShortestPath.html#getPaths(V,V)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">V</a>&nbsp;source,
- <a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">V</a>&nbsp;sink)</code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="type parameter in ListMultiObjectiveSingleSourcePathsImpl">V</a>,<wbr><a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="type parameter in ListMultiObjectiveSingleSourcePathsImpl">E</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ListMultiObjectiveSingleSourcePathsImpl.</span><code><a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html#getPaths(V)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="type parameter in ListMultiObjectiveSingleSourcePathsImpl">V</a>&nbsp;targetVertex)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">V</a>,<wbr><a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">E</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">YenKShortestPath.</span><code><a href="../alg/shortestpath/YenKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">V</a>&nbsp;source,
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">V</a>,<wbr><a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">E</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MartinShortestPath.</span><code><a href="../alg/shortestpath/MartinShortestPath.html#getPaths(V,V)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">V</a>&nbsp;source,
+ <a href="../alg/shortestpath/MartinShortestPath.html" title="type parameter in MartinShortestPath">V</a>&nbsp;sink)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../GraphPath.html" title="interface in org.jgrapht">GraphPath</a>&lt;<a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">V</a>,<wbr><a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">E</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YenKShortestPath.</span><code><a href="../alg/shortestpath/YenKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths</a><wbr>(<a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">V</a>&nbsp;source,
  <a href="../alg/shortestpath/YenKShortestPath.html" title="type parameter in YenKShortestPath">V</a>&nbsp;sink,
  int&nbsp;k)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Computes <code>k</code> shortest loopless paths between <code>source</code> and <code>sink</code>.</div>
 </div>
 </div>

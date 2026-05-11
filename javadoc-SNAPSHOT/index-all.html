@@ -843,6 +843,8 @@ loadScripts(document, 'script');</script>
 <dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/package-summary.html#algorithms-for-the-computation-of-undirected-cycle-basis-heading" class="search-tag-link">Algorithms for the computation of undirected cycle basis</a> - Search tag in package org.jgrapht.alg.cycle</dt>
 <dd>Section</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#algorithm-sketch-heading" class="search-tag-link">Algorithm sketch</a> - Search tag in class org.jgrapht.alg.shortestpath.BoundedPrunedYenKShortestPath</dt>
+<dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/util/AliasMethodSampler.html" class="type-name-link" title="class in org.jgrapht.alg.util">AliasMethodSampler</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/util/package-summary.html">org.jgrapht.alg.util</a></dt>
 <dd>
 <div class="block">The alias method for sampling from a discrete probability distribution.</div>
@@ -1094,6 +1096,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Create a new instance of the A* shortest path algorithm.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" class="type-name-link" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html">org.jgrapht.alg.shortestpath</a></dt>
+<dd>
+<div class="block">Spur shortest-path engine that delegates to JGraphT's <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarShortestPath.html" title="class in org.jgrapht.alg.shortestpath"><code>AStarShortestPath</code></a>, using the
+ <code>reverseDistancesToSink</code> hint as an admissible heuristic.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html#%3Cinit%3E()" class="member-name-link">AStarSpurEngine()</a> - Constructor for class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/DefaultGraphType.html#asUndirected()" class="member-name-link">asUndirected()</a> - Method in class org.jgrapht.graph.<a href="org.jgrapht.core/org/jgrapht/graph/DefaultGraphType.html" title="class in org.jgrapht.graph">DefaultGraphType</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/GraphType.html#asUndirected()" class="member-name-link">asUndirected()</a> - Method in interface org.jgrapht.<a href="org.jgrapht.core/org/jgrapht/GraphType.html" title="interface in org.jgrapht">GraphType</a></dt>
@@ -1567,6 +1576,22 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Construct a new instance of the algorithm.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" class="type-name-link" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html">org.jgrapht.alg.shortestpath</a></dt>
+<dd>
+<div class="block">Experimental bounded-pruned variant of Yen's $k$ shortest loopless paths algorithm.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#%3Cinit%3E(org.jgrapht.Graph)" class="member-name-link">BoundedPrunedYenKShortestPath(Graph&lt;V, E&gt;)</a> - Constructor for class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath</a></dt>
+<dd>
+<div class="block">Default constructor using <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath"><code>DijkstraSpurEngine</code></a> as the spur shortest-path back-end.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#%3Cinit%3E(org.jgrapht.Graph,org.jgrapht.alg.shortestpath.SpurShortestPathEngine)" class="member-name-link">BoundedPrunedYenKShortestPath(Graph&lt;V, E&gt;, SpurShortestPathEngine&lt;V, E&gt;)</a> - Constructor for class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath</a></dt>
+<dd>
+<div class="block">Constructor with a pluggable <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" title="interface in org.jgrapht.alg.shortestpath"><code>SpurShortestPathEngine</code></a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" class="type-name-link" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html">org.jgrapht.alg.shortestpath</a></dt>
+<dd>
+<div class="block">Run statistics.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/model/Box2D.html" class="type-name-link" title="class in org.jgrapht.alg.drawing.model">Box2D</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/drawing/model/package-summary.html">org.jgrapht.alg.drawing.model</a></dt>
 <dd>
 <div class="block">A 2-dimensional box (rectangle).</div>
@@ -1786,6 +1811,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Calculate the set of reachable vertices from $s$ in the residual graph.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarShortestPath.html#cameFrom" class="member-name-link">cameFrom</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarShortestPath.html" title="class in org.jgrapht.alg.shortestpath">AStarShortestPath</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#candidateHeapPops" class="member-name-link">candidateHeapPops</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#candidateHeapPushes" class="member-name-link">candidateHeapPushes</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/flow/mincost/CapacityScalingMinimumCostFlow.html#CAP_INF" class="member-name-link">CAP_INF</a> - Static variable in class org.jgrapht.alg.flow.mincost.<a href="org.jgrapht.core/org/jgrapht/alg/flow/mincost/CapacityScalingMinimumCostFlow.html" title="class in org.jgrapht.alg.flow.mincost">CapacityScalingMinimumCostFlow</a></dt>
 <dd>
@@ -3466,6 +3495,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructs a new weighted edge.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#deferredTasksLeft" class="member-name-link">deferredTasksLeft</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/clique/DegeneracyBronKerboschCliqueFinder.html" class="type-name-link" title="class in org.jgrapht.alg.clique">DegeneracyBronKerboschCliqueFinder&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/clique/package-summary.html">org.jgrapht.alg.clique</a></dt>
 <dd>
 <div class="block">Bron-Kerbosch maximal clique enumeration algorithm with pivot and degeneracy ordering.</div>
@@ -3679,6 +3710,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructs a new instance of the algorithm for a given graph.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" class="type-name-link" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html">org.jgrapht.alg.shortestpath</a></dt>
+<dd>
+<div class="block">Spur shortest-path engine that delegates to JGraphT's <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraShortestPath.html" title="class in org.jgrapht.alg.shortestpath"><code>DijkstraShortestPath</code></a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html#%3Cinit%3E()" class="member-name-link">DijkstraSpurEngine()</a> - Constructor for class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.io/org/jgrapht/nio/dimacs/DIMACSEventDrivenImporter.html" class="type-name-link" title="class in org.jgrapht.nio.dimacs">DIMACSEventDrivenImporter</a> - Class in <a href="org.jgrapht.io/org/jgrapht/nio/dimacs/package-summary.html">org.jgrapht.nio.dimacs</a></dt>
 <dd>
 <div class="block">A generic importer using consumers for DIMACS format.</div>
@@ -4537,6 +4574,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html#endVertex" class="member-name-link">endVertex</a> - Variable in class org.jgrapht.graph.<a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html" title="class in org.jgrapht.graph">GraphWalk</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#engineName()" class="member-name-link">engineName()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/util/FixedSizeIntegerQueue.html#enqueue(int)" class="member-name-link">enqueue(int)</a> - Method in class org.jgrapht.alg.util.<a href="org.jgrapht.core/org/jgrapht/alg/util/FixedSizeIntegerQueue.html" title="class in org.jgrapht.alg.util">FixedSizeIntegerQueue</a></dt>
 <dd>
 <div class="block">Add an element to the queue.</div>
@@ -4655,9 +4694,22 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Interface for an importer using consumers.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#exactness-heading" class="search-tag-link">Exactness</a> - Search tag in class org.jgrapht.alg.shortestpath.BoundedPrunedYenKShortestPath</dt>
+<dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/scoring/KatzCentrality.html#exogenousFactorDefaultFunction()" class="member-name-link">exogenousFactorDefaultFunction()</a> - Static method in class org.jgrapht.alg.scoring.<a href="org.jgrapht.core/org/jgrapht/alg/scoring/KatzCentrality.html" title="class in org.jgrapht.alg.scoring">KatzCentrality</a></dt>
 <dd>
 <div class="block">Exogenous factor default function (the constant function returning 1).</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#expandedVertices" class="member-name-link">expandedVertices</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html#expandedVertices()" class="member-name-link">expandedVertices()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html#expandedVertices()" class="member-name-link">expandedVertices()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#expandedVertices()" class="member-name-link">expandedVertices()</a> - Method in interface org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" title="interface in org.jgrapht.alg.shortestpath">SpurShortestPathEngine</a></dt>
+<dd>
+<div class="block">Number of vertices the engine has expanded (popped from its open set) since the last
+ <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#resetCounters()"><code>SpurShortestPathEngine.resetCounters()</code></a> call.</div>
 </dd>
 <dt><a href="org.jgrapht.io/org/jgrapht/nio/gml/GmlExporter.Parameter.html#EXPORT_CUSTOM_EDGE_ATTRIBUTES" class="member-name-link">EXPORT_CUSTOM_EDGE_ATTRIBUTES</a> - Enum constant in enum class org.jgrapht.nio.gml.<a href="org.jgrapht.io/org/jgrapht/nio/gml/GmlExporter.Parameter.html" title="enum class in org.jgrapht.nio.gml">GmlExporter.Parameter</a></dt>
 <dd>
@@ -4917,6 +4969,15 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/CycleDetector.html#findCyclesContainingVertex(V)" class="member-name-link">findCyclesContainingVertex(V)</a> - Method in class org.jgrapht.alg.cycle.<a href="org.jgrapht.core/org/jgrapht/alg/cycle/CycleDetector.html" title="class in org.jgrapht.alg.cycle">CycleDetector</a></dt>
 <dd>
 <div class="block">Finds the vertex set for the subgraph of all cycles which contain a particular vertex.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html#findPath(org.jgrapht.Graph,V,V,java.util.Set,java.util.Set,java.util.Map)" class="member-name-link">findPath(Graph&lt;V, E&gt;, V, V, Set&lt;V&gt;, Set&lt;E&gt;, Map&lt;V, Double&gt;)</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html#findPath(org.jgrapht.Graph,V,V,java.util.Set,java.util.Set,java.util.Map)" class="member-name-link">findPath(Graph&lt;V, E&gt;, V, V, Set&lt;V&gt;, Set&lt;E&gt;, Map&lt;V, Double&gt;)</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#findPath(org.jgrapht.Graph,V,V,java.util.Set,java.util.Set,java.util.Map)" class="member-name-link">findPath(Graph&lt;V, E&gt;, V, V, Set&lt;V&gt;, Set&lt;E&gt;, Map&lt;V, Double&gt;)</a> - Method in interface org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" title="interface in org.jgrapht.alg.shortestpath">SpurShortestPathEngine</a></dt>
+<dd>
+<div class="block">Compute an exact shortest path from <code>source</code> to <code>sink</code> on <code>graph</code> ignoring
+ vertices in <code>bannedVertices</code> and edges in <code>bannedEdges</code>.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/IntVertexDijkstraShortestPath.html#findPathBetween(org.jgrapht.Graph,java.lang.Integer,java.lang.Integer)" class="member-name-link">findPathBetween(Graph&lt;Integer, E&gt;, Integer, Integer)</a> - Static method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/IntVertexDijkstraShortestPath.html" title="class in org.jgrapht.alg.shortestpath">IntVertexDijkstraShortestPath</a></dt>
 <dd>
@@ -7896,6 +7957,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the $k$ shortest simple paths in increasing order of weight.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths(V, V, int)</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/EppsteinKShortestPath.html#getPaths(V,V,int)" class="member-name-link">getPaths(V, V, int)</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/EppsteinKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">EppsteinKShortestPath</a></dt>
 <dd>
 <div class="block">Computes <code>k</code> shortest paths between <code>source</code> and <code>sink</code>.</div>
@@ -8371,6 +8434,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the statistics describing the performance characteristics of the algorithm.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#getStats()" class="member-name-link">getStats()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/SteinerTreeAlgorithm.html#getSteinerTree(java.util.Set)" class="member-name-link">getSteinerTree(Set&lt;V&gt;)</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/SteinerTreeAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm</a></dt>
 <dd>
 <div class="block">Computes a Steiner tree.</div>
@@ -11661,6 +11726,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructs a k-connectivity algorithm for the given graph.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#key-idea-heading" class="search-tag-link">Key idea</a> - Search tag in class org.jgrapht.alg.shortestpath.BoundedPrunedYenKShortestPath</dt>
+<dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html#kittellGraph()" class="member-name-link">kittellGraph()</a> - Static method in class org.jgrapht.generate.<a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html" title="class in org.jgrapht.generate">NamedGraphGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html#klein3RegularGraph()" class="member-name-link">klein3RegularGraph()</a> - Static method in class org.jgrapht.generate.<a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html" title="class in org.jgrapht.generate">NamedGraphGenerator</a></dt>
@@ -12181,6 +12248,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Construct a new instance</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#materializedCandidates" class="member-name-link">materializedCandidates</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/MathUtil.html" class="type-name-link" title="class in org.jgrapht.util">MathUtil</a> - Class in <a href="org.jgrapht.core/org/jgrapht/util/package-summary.html">org.jgrapht.util</a></dt>
 <dd>
 <div class="block">Math Utilities.</div>
@@ -12636,6 +12705,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/lca/NaiveLCAFinder.html#%3Cinit%3E(org.jgrapht.Graph)" class="member-name-link">NaiveLCAFinder(Graph&lt;V, E&gt;)</a> - Constructor for class org.jgrapht.alg.lca.<a href="org.jgrapht.core/org/jgrapht/alg/lca/NaiveLCAFinder.html" title="class in org.jgrapht.alg.lca">NaiveLCAFinder</a></dt>
 <dd>
 <div class="block">Create a new instance of the naive LCA finder.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html#name()" class="member-name-link">name()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html#name()" class="member-name-link">name()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#name()" class="member-name-link">name()</a> - Method in interface org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" title="interface in org.jgrapht.alg.shortestpath">SpurShortestPathEngine</a></dt>
+<dd>
+<div class="block">Symbolic name of the engine, used in benchmark reports.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html" class="type-name-link" title="class in org.jgrapht.generate">NamedGraphGenerator&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/generate/package-summary.html">org.jgrapht.generate</a></dt>
 <dd>
@@ -13655,6 +13732,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SuurballeKDisjointShortestPaths.html#pathList" class="member-name-link">pathList</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SuurballeKDisjointShortestPaths.html" title="class in org.jgrapht.alg.shortestpath">SuurballeKDisjointShortestPaths</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html#pathQueries()" class="member-name-link">pathQueries()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html#pathQueries()" class="member-name-link">pathQueries()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#pathQueries()" class="member-name-link">pathQueries()</a> - Method in interface org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" title="interface in org.jgrapht.alg.shortestpath">SpurShortestPathEngine</a></dt>
+<dd>
+<div class="block">Number of shortest-path queries answered since the last <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#resetCounters()"><code>SpurShortestPathEngine.resetCounters()</code></a> call.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html#paths" class="member-name-link">paths</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/ListMultiObjectiveSingleSourcePathsImpl.html" title="class in org.jgrapht.alg.shortestpath">ListMultiObjectiveSingleSourcePathsImpl</a></dt>
 <dd>
 <div class="block">One path per vertex</div>
@@ -14067,6 +14152,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">This method will remove all transitive edges from the graph passed as input parameter.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#references-heading" class="search-tag-link">References</a> - Search tag in class org.jgrapht.alg.shortestpath.BoundedPrunedYenKShortestPath</dt>
+<dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/DirectedAcyclicGraph.Region.html#%3Cinit%3E(int,int)" class="member-name-link">Region(int, int)</a> - Constructor for class org.jgrapht.graph.<a href="org.jgrapht.core/org/jgrapht/graph/DirectedAcyclicGraph.Region.html" title="class in org.jgrapht.graph">DirectedAcyclicGraph.Region</a></dt>
 <dd>
 <div class="block">Construct a new region.</div>
@@ -14623,6 +14710,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/util/UnionFind.html#reset()" class="member-name-link">reset()</a> - Method in class org.jgrapht.alg.util.<a href="org.jgrapht.core/org/jgrapht/alg/util/UnionFind.html" title="class in org.jgrapht.alg.util">UnionFind</a></dt>
 <dd>
 <div class="block">Resets the UnionFind data structure: each element is placed in its own singleton set.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html#resetCounters()" class="member-name-link">resetCounters()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">AStarSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html#resetCounters()" class="member-name-link">resetCounters()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/DijkstraSpurEngine.html" title="class in org.jgrapht.alg.shortestpath">DijkstraSpurEngine</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html#resetCounters()" class="member-name-link">resetCounters()</a> - Method in interface org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" title="interface in org.jgrapht.alg.shortestpath">SpurShortestPathEngine</a></dt>
+<dd>
+<div class="block">Reset internal counters.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/linkprediction/ResourceAllocationIndexLinkPrediction.html" class="type-name-link" title="class in org.jgrapht.alg.linkprediction">ResourceAllocationIndexLinkPrediction&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/linkprediction/package-summary.html">org.jgrapht.alg.linkprediction</a></dt>
 <dd>
@@ -15443,6 +15538,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A set of paths starting from a single source vertex.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#shortestPathCalls" class="member-name-link">shortestPathCalls</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/ConcurrencyUtil.html#shutdownExecutionService(java.util.concurrent.ExecutorService)" class="member-name-link">shutdownExecutionService(ExecutorService)</a> - Static method in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/ConcurrencyUtil.html" title="class in org.jgrapht.util">ConcurrencyUtil</a></dt>
 <dd>
 <div class="block">Shuts down the <code>executor</code>.</div>
@@ -15596,6 +15693,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/WeightedUnmodifiableSet.html#size()" class="member-name-link">size()</a> - Method in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/WeightedUnmodifiableSet.html" title="class in org.jgrapht.util">WeightedUnmodifiableSet</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#skippedImpossibleSpurTasks" class="member-name-link">skippedImpossibleSpurTasks</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>
+<div class="block">Number of spur indices that were skipped exactly because the spur node had no legal
+ outgoing edge after applying the prefix-vertex bans and the Yen banned-edge rule.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/color/SmallestDegreeLastColoring.html" class="type-name-link" title="class in org.jgrapht.alg.color">SmallestDegreeLastColoring&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/color/package-summary.html">org.jgrapht.alg.color</a></dt>
 <dd>
 <div class="block">The smallest degree last greedy coloring algorithm.</div>
@@ -15791,6 +15893,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Splits the tree into two parts.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SpurShortestPathEngine.html" class="type-name-link" title="interface in org.jgrapht.alg.shortestpath">SpurShortestPathEngine&lt;V,<wbr>E&gt;</a> - Interface in <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html">org.jgrapht.alg.shortestpath</a></dt>
+<dd>
+<div class="block">Abstract subroutine for the spur shortest-path computations performed by
+ <a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath"><code>BoundedPrunedYenKShortestPath</code></a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#spurTasksCreated" class="member-name-link">spurTasksCreated</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#spurTasksMaterialized" class="member-name-link">spurTasksMaterialized</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/StackBFSFundamentalCycleBasis.html" class="type-name-link" title="class in org.jgrapht.alg.cycle">StackBFSFundamentalCycleBasis&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/cycle/package-summary.html">org.jgrapht.alg.cycle</a></dt>
 <dd>
 <div class="block">Generate a set of fundamental cycles by building a spanning tree (forest) using an implementation
@@ -15832,6 +15943,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructs a new statistics instance.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#%3Cinit%3E()" class="member-name-link">Stats()</a> - Constructor for class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/SteinerTreeAlgorithm.html" class="type-name-link" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm&lt;V,<wbr>E&gt;</a> - Interface in <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/package-summary.html">org.jgrapht.alg.interfaces</a></dt>
 <dd>
 <div class="block">An algorithm which computes a
@@ -16289,6 +16402,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/KolmogorovWeightedPerfectMatching.Statistics.html#toString()" class="member-name-link">toString()</a> - Method in class org.jgrapht.alg.matching.blossom.v5.<a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/KolmogorovWeightedPerfectMatching.Statistics.html" title="class in org.jgrapht.alg.matching.blossom.v5">KolmogorovWeightedPerfectMatching.Statistics</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#toString()" class="member-name-link">toString()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/similarity/ZhangShashaTreeEditDistance.EditOperation.html#toString()" class="member-name-link">toString()</a> - Method in class org.jgrapht.alg.similarity.<a href="org.jgrapht.core/org/jgrapht/alg/similarity/ZhangShashaTreeEditDistance.EditOperation.html" title="class in org.jgrapht.alg.similarity">ZhangShashaTreeEditDistance.EditOperation</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/StoerWagnerMinimumCut.VertexAndWeight.html#toString()" class="member-name-link">toString()</a> - Method in class org.jgrapht.alg.<a href="org.jgrapht.core/org/jgrapht/alg/StoerWagnerMinimumCut.VertexAndWeight.html" title="class in org.jgrapht.alg">StoerWagnerMinimumCut.VertexAndWeight</a></dt>
@@ -16665,6 +16780,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Unpacks <code>edge</code> by recursively going from source to target.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html#unreachableSpurs" class="member-name-link">unreachableSpurs</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.Stats.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath.Stats</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.io/org/jgrapht/nio/graphml/GraphMLExporter.html#unregisterAttribute(java.lang.String)" class="member-name-link">unregisterAttribute(String)</a> - Method in class org.jgrapht.nio.graphml.<a href="org.jgrapht.io/org/jgrapht/nio/graphml/GraphMLExporter.html" title="class in org.jgrapht.nio.graphml">GraphMLExporter</a></dt>
 <dd>
 <div class="block">Unregister a GraphML-Attribute</div>
@@ -17455,6 +17572,8 @@ the order they are declared.</div>
 <dd>
 <div class="block">Set the weights of the generator.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#what-this-class-does-not-yet-claim-heading" class="search-tag-link">What this class does NOT yet claim</a> - Search tag in class org.jgrapht.alg.shortestpath.BoundedPrunedYenKShortestPath</dt>
+<dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/WheelGraphGenerator.html" class="type-name-link" title="class in org.jgrapht.generate">WheelGraphGenerator&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/generate/package-summary.html">org.jgrapht.generate</a></dt>
 <dd>
 <div class="block">Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel graph</a> of any size.</div>
