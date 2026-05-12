@@ -221,7 +221,7 @@ public class AllDirectedPaths<V, E>
          * edges whose minimum distances is small enough.
          */
         List<GraphPath<V, E>> completePaths = new ArrayList<>();
-        Deque<List<E>> incompletePaths = new LinkedList<>();
+        Deque<List<E>> incompletePaths = new ArrayDeque<>();
 
         // Input sanity checking
         if (maxPathLength != null && maxPathLength < 0) {
@@ -271,10 +271,17 @@ public class AllDirectedPaths<V, E>
             E leafEdge = incompletePath.get(lengthSoFar - 1);
             V leafNode = graph.getEdgeTarget(leafEdge);
 
-            Set<V> pathVertices = new HashSet<>();
-            for (E pathEdge : incompletePath) {
-                pathVertices.add(graph.getEdgeSource(pathEdge));
-                pathVertices.add(graph.getEdgeTarget(pathEdge));
+            // pathVertices is only consulted by the simple-path filter below;
+            // building it in non-simple mode is wasted work proportional to path length.
+            Set<V> pathVertices;
+            if (simplePathsOnly) {
+                pathVertices = new HashSet<>();
+                for (E pathEdge : incompletePath) {
+                    pathVertices.add(graph.getEdgeSource(pathEdge));
+                    pathVertices.add(graph.getEdgeTarget(pathEdge));
+                }
+            } else {
+                pathVertices = null;
             }
 
             for (E outEdge : graph.outgoingEdgesOf(leafNode)) {
