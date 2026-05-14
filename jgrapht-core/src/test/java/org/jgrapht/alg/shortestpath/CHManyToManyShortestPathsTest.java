@@ -194,24 +194,7 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> paths =
             alg.getPaths(1);
 
-        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
-            new DijkstraShortestPath<>(graph);
-        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> oraclePaths =
-            oracle.getPaths(1);
-
-        assertEquals(graph, paths.getGraph());
-        assertEquals(Integer.valueOf(1), paths.getSourceVertex());
-        for (Integer target : graph.vertexSet()) {
-            assertEquals(
-                oraclePaths.getWeight(target), paths.getWeight(target), 1e-9,
-                "weight mismatch for target " + target);
-            if (oraclePaths.getPath(target) != null) {
-                assertEquals(
-                    oraclePaths.getPath(target).getVertexList(),
-                    paths.getPath(target).getVertexList(),
-                    "vertex-list mismatch for target " + target);
-            }
-        }
+        assertCorrectPaths(graph, paths, 1, graph.vertexSet());
     }
 
     @Override

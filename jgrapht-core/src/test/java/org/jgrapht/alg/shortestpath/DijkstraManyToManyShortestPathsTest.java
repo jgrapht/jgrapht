@@ -18,10 +18,8 @@
 package org.jgrapht.alg.shortestpath;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 
@@ -123,30 +121,15 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
 
         DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
             new DijkstraManyToManyShortestPaths<>(graph);
-        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
-            new DijkstraShortestPath<>(graph);
-        SingleSourcePaths<Integer, DefaultWeightedEdge> oraclePaths = oracle.getPaths(1);
-
         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
-        assertEquals(graph, paths.getGraph());
-        assertEquals(Integer.valueOf(1), paths.getSourceVertex());
 
-        // Source vertex itself
-        assertEquals(0d, paths.getWeight(1), 1e-12);
-        assertNotNull(paths.getPath(1));
+        // Source, reachable targets, and unreachable target (5) all covered by the oracle
+        // helper — assertCorrectPaths handles the null-path / +Inf-weight contract for
+        // unreachable vertices.
+        assertCorrectPaths(graph, paths, 1, graph.vertexSet());
+
+        // Pin the source-vertex contract explicitly: zero-length walk.
         assertEquals(0, paths.getPath(1).getLength());
-
-        // Reachable targets
-        for (Integer target : new Integer[] { 2, 3, 4 }) {
-            assertEquals(oraclePaths.getWeight(target), paths.getWeight(target), 1e-12);
-            assertEquals(
-                oraclePaths.getPath(target).getVertexList(),
-                paths.getPath(target).getVertexList());
-        }
-
-        // Unreachable target (5): SingleSourcePaths contract is null path / +Inf weight
-        assertNull(paths.getPath(5));
-        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(5), 0d);
     }
 
     @Test
@@ -170,9 +153,7 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
             new DijkstraManyToManyShortestPaths<>(graph);
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(7);
-        assertEquals(Integer.valueOf(7), paths.getSourceVertex());
-        assertEquals(0d, paths.getWeight(7), 0d);
-        assertNotNull(paths.getPath(7));
+        assertCorrectPaths(graph, paths, 7, graph.vertexSet());
         assertEquals(0, paths.getPath(7).getLength());
     }
 
@@ -189,11 +170,7 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
             new DijkstraManyToManyShortestPaths<>(graph);
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
-        assertEquals(0d, paths.getWeight(1), 0d);
-        assertNull(paths.getPath(2));
-        assertNull(paths.getPath(3));
-        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(2), 0d);
-        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(3), 0d);
+        assertCorrectPaths(graph, paths, 1, graph.vertexSet());
     }
 
     @Test
@@ -210,20 +187,9 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
         graph.setEdgeWeight(graph.addEdge(10, 11), 1d);
         DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
             new DijkstraManyToManyShortestPaths<>(graph);
-        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
-            new DijkstraShortestPath<>(graph);
-        SingleSourcePaths<Integer, DefaultWeightedEdge> expected = oracle.getPaths(1);
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
-        for (int target : new int[] { 1, 2, 3 }) {
-            assertEquals(expected.getWeight(target), paths.getWeight(target), 1e-12);
-            assertEquals(
-                expected.getPath(target).getVertexList(), paths.getPath(target).getVertexList());
-        }
-        assertNull(paths.getPath(10));
-        assertNull(paths.getPath(11));
-        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(10), 0d);
-        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(11), 0d);
+        assertCorrectPaths(graph, paths, 1, graph.vertexSet());
     }
 
     @Test
@@ -245,18 +211,10 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
         graph.setEdgeWeight(graph.addEdge(3, 4), 1d);
         DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
             new DijkstraManyToManyShortestPaths<>(graph);
-        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
-            new DijkstraShortestPath<>(graph);
-        SingleSourcePaths<Integer, DefaultWeightedEdge> expected = oracle.getPaths(1);
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
-        for (int target : new int[] { 1, 2, 3, 4 }) {
-            assertEquals(expected.getWeight(target), paths.getWeight(target), 1e-12);
-            assertEquals(
-                expected.getPath(target).getVertexList(), paths.getPath(target).getVertexList());
-        }
+        assertCorrectPaths(graph, paths, 1, graph.vertexSet());
         // Source-to-source path is the zero-length walk, not the self-loop.
-        assertEquals(0d, paths.getWeight(1), 0d);
         assertEquals(0, paths.getPath(1).getLength());
     }
 
@@ -301,36 +259,9 @@ public class DijkstraManyToManyShortestPathsTest extends BaseManyToManyShortestP
                 buildRandomGraph(rng, n);
             DijkstraManyToManyShortestPaths<Integer, DefaultWeightedEdge> alg =
                 new DijkstraManyToManyShortestPaths<>(graph);
-            DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
-                new DijkstraShortestPath<>(graph);
 
             for (Integer source : graph.vertexSet()) {
-                SingleSourcePaths<Integer, DefaultWeightedEdge> expected = oracle.getPaths(source);
-                SingleSourcePaths<Integer, DefaultWeightedEdge> actual = alg.getPaths(source);
-                for (Integer target : graph.vertexSet()) {
-                    double expectedWeight = expected.getWeight(target);
-                    double actualWeight = actual.getWeight(target);
-                    assertEquals(
-                        expectedWeight, actualWeight, 1e-9,
-                        "weight mismatch for seed=" + seed + " src=" + source + " tgt=" + target);
-                    GraphPath<Integer, DefaultWeightedEdge> expectedPath = expected.getPath(target);
-                    GraphPath<Integer, DefaultWeightedEdge> actualPath = actual.getPath(target);
-                    if (expectedPath == null) {
-                        assertNull(
-                            actualPath,
-                            "expected null path for seed=" + seed + " src=" + source + " tgt="
-                                + target);
-                    } else {
-                        assertTrue(
-                            actualPath != null,
-                            "expected non-null path for seed=" + seed + " src=" + source + " tgt="
-                                + target);
-                        assertEquals(
-                            expectedPath.getWeight(), actualPath.getWeight(), 1e-9,
-                            "path weight mismatch for seed=" + seed + " src=" + source + " tgt="
-                                + target);
-                    }
-                }
+                assertCorrectPaths(graph, alg.getPaths(source), source, graph.vertexSet());
             }
         }
     }

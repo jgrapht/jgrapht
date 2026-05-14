@@ -17,7 +17,6 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -149,13 +148,9 @@ public class DefaultManyToManyShortestPathsTest extends BaseManyToManyShortestPa
             new DefaultManyToManyShortestPaths<>(graph, spyFunction);
         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = alg.getPaths(1);
 
-        // Sanity: the result must agree with a fresh oracle on every reachable target.
-        DijkstraShortestPath<Integer, DefaultWeightedEdge> oracle =
-            new DijkstraShortestPath<>(graph);
-        for (Integer target : graph.vertexSet()) {
-            assertEquals(
-                oracle.getPathWeight(1, target), paths.getWeight(target), 1e-12);
-        }
+        // Sanity: the result must agree with a fresh oracle on every target.
+        assertCorrectPaths(graph, paths, 1, graph.vertexSet());
+
         // The whole point of this test: the user-supplied function must be reached.
         // The exact invocation count is implementation detail of the inherited base-class
         // fallback, so we only assert it is positive.

@@ -26,6 +26,7 @@ import org.jgrapht.util.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -371,6 +372,47 @@ public abstract class BaseManyToManyShortestPathsTest
                 GraphPath<Integer, DefaultWeightedEdge> actual = paths.getPath(source, target);
                 assertEquals(expected.getWeight(), actual.getWeight(), 1e-9);
                 assertEquals(expected.getVertexList(), actual.getVertexList());
+            }
+        }
+    }
+
+    /**
+     * Asserts that the {@code SingleSourcePaths} returned by a many-to-many algorithm's
+     * {@code getPaths(V)} call is correct. {@link DijkstraShortestPath} is the certificate of
+     * correctness. Handles both reachable targets (matching weight + vertex list) and
+     * unreachable targets ({@code null} path / {@code +Inf} weight) per the
+     * {@link ShortestPathAlgorithm.SingleSourcePaths} contract.
+     *
+     * @param graph a graph
+     * @param paths single-source shortest paths object returned by the algorithm under test
+     * @param source source vertex
+     * @param targets target vertices
+     */
+    protected void assertCorrectPaths(
+        Graph<Integer, DefaultWeightedEdge> graph,
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> paths,
+        Integer source, Iterable<Integer> targets)
+    {
+        assertEquals(graph, paths.getGraph());
+        assertEquals(source, paths.getSourceVertex());
+
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> expectedPaths =
+            new DijkstraShortestPath<>(graph).getPaths(source);
+
+        for (Integer target : targets) {
+            String tag = " for target " + target;
+            assertEquals(expectedPaths.getWeight(target), paths.getWeight(target), 1e-9,
+                "weight mismatch" + tag);
+            GraphPath<Integer, DefaultWeightedEdge> expectedPath = expectedPaths.getPath(target);
+            GraphPath<Integer, DefaultWeightedEdge> actualPath = paths.getPath(target);
+            if (expectedPath == null) {
+                assertNull(actualPath, "expected null path" + tag);
+            } else {
+                assertNotNull(actualPath, "expected non-null path" + tag);
+                assertEquals(expectedPath.getWeight(), actualPath.getWeight(), 1e-9,
+                    "path weight mismatch" + tag);
+                assertEquals(expectedPath.getVertexList(), actualPath.getVertexList(),
+                    "vertex-list mismatch" + tag);
             }
         }
     }
