@@ -276,6 +276,29 @@ E&gt;&nbsp;<a href="../interfaces/ShortestPathAlgorithm.SingleSourcePaths.html" 
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="getPaths(V)">
+<h3 id="getPaths(java.lang.Object)">getPaths</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../interfaces/ShortestPathAlgorithm.SingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm.SingleSourcePaths</a>&lt;<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>,<wbr><a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">E</a>&gt;</span>&nbsp;<span class="element-name">getPaths</span><wbr><span class="parameters">(<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>&nbsp;source)</span></div>
+<div class="block">Compute all shortest paths starting from a single source vertex.
+
+ <p>
+ In this Dijkstra-based implementation, a single <code>getPaths(source)</code> call runs one
+ shortest-paths search from <code>source</code> that settles every reachable vertex. The
+ inherited fallback in <code>BaseManyToManyShortestPaths</code> would otherwise dispatch one
+ <a href="../interfaces/ShortestPathAlgorithm.html#getPath(V,V)"><code>ShortestPathAlgorithm.getPath(Object, Object)</code></a> call per vertex of the graph, each of which re-runs a
+ fresh Dijkstra from the same source via <a href="#getManyToManyPaths(java.util.Set,java.util.Set)"><code>getManyToManyPaths(Set, Set)</code></a>.
+ </p></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../interfaces/ShortestPathAlgorithm.html#getPaths(V)">getPaths</a></code>&nbsp;in interface&nbsp;<code><a href="../interfaces/ShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm</a>&lt;<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>,<wbr><a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">E</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>source</code> - the source vertex</dd>
+<dt>Returns:</dt>
+<dd>the shortest paths</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getManyToManyPaths(java.util.Set,java.util.Set)">
 <h3>getManyToManyPaths</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../interfaces/ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths.html" title="interface in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths</a>&lt;<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>,<wbr><a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">E</a>&gt;</span>&nbsp;<span class="element-name">getManyToManyPaths</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>&gt;&nbsp;sources,
@@ -324,21 +347,6 @@ E&gt;&nbsp;<a href="../interfaces/ShortestPathAlgorithm.SingleSourcePaths.html" 
 <dt>Returns:</dt>
 <dd>the weight of the shortest path from a source vertex to a sink vertex, or
          <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html#POSITIVE_INFINITY" title="class or interface in java.lang" class="external-link"><code>Double.POSITIVE_INFINITY</code></a> if no path exists</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getPaths(V)">
-<h3 id="getPaths(java.lang.Object)">getPaths</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../interfaces/ShortestPathAlgorithm.SingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm.SingleSourcePaths</a>&lt;<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>,<wbr><a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">E</a>&gt;</span>&nbsp;<span class="element-name">getPaths</span><wbr><span class="parameters">(<a href="DijkstraManyToManyShortestPaths.html" title="type parameter in DijkstraManyToManyShortestPaths">V</a>&nbsp;source)</span></div>
-<div class="block">Compute all shortest paths starting from a single source vertex.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../interfaces/ShortestPathAlgorithm.html#getPaths(V)">getPaths</a></code>&nbsp;in interface&nbsp;<code><a href="../interfaces/ShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</code></dd>
-<dt>Parameters:</dt>
-<dd><code>source</code> - the source vertex</dd>
-<dt>Returns:</dt>
-<dd>the shortest paths</dd>
 </dl>
 </section>
 </li>
