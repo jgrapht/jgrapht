@@ -94,6 +94,10 @@
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.lca=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.matching=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED
+                                --add-opens org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED
+                                --add-opens org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.spanning=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.util=ALL-UNNAMED
                             </argLine>
