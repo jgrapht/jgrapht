@@ -102,7 +102,18 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AllDirectedPaths&lt;V,<wbr>E&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A Dijkstra-like algorithm to find all paths between two sets of nodes in a directed graph, with
- options to search only simple paths and to limit the path length.</div>
+ options to search only simple paths and to limit the path length.
+
+ <p>
+ The algorithm runs in two phases. Preprocessing decorates each edge with the minimum number of
+ edges still needed to reach a target. Enumeration then walks the decorated edges from the source
+ set, using the decoration to abandon any partial path that cannot complete within the budget. By
+ default a forward BFS from the source set is also run as part of preprocessing, so that edges
+ whose source endpoint is not reachable from any requested source within the budget are dropped
+ from the decoration up front. This can substantially reduce preprocessing cost on graphs where a
+ non-trivial fraction of the target-reachable subgraph is not reachable from the sources. See
+ <a href="#setForwardPruning(boolean)"><code>setForwardPruning(boolean)</code></a> for how to disable it.
+ </p></div>
 <dl class="notes">
 <dt>Author:</dt>
 <dd>Andrew Gainer-Dewar, Google LLC</dd>
@@ -156,6 +167,16 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;maxPathLength)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Calculate (and return) all paths from the source vertex to the target vertex.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isForwardPruning()" class="member-name-link">isForwardPruning</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Whether the preprocessing step currently applies the forward-pruning optimisation.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setForwardPruning(boolean)" class="member-name-link">setForwardPruning</a><wbr>(boolean&nbsp;forwardPruning)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Configure whether the preprocessing step applies the forward-pruning optimisation.</div>
 </div>
 </div>
 </div>
@@ -214,6 +235,51 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="setForwardPruning(boolean)">
+<h3>setForwardPruning</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setForwardPruning</span><wbr><span class="parameters">(boolean&nbsp;forwardPruning)</span></div>
+<div class="block">Configure whether the preprocessing step applies the forward-pruning optimisation.
+
+ <p>
+ When forward pruning is enabled (the default), <a href="#getAllPaths(V,V,boolean,java.lang.Integer)"><code>getAllPaths(V, V, boolean, java.lang.Integer)</code></a> first runs a forward
+ BFS from the source set and uses the result to drop edges whose source endpoint is not
+ reachable from any source within the bound, or whose forward-plus-backward length exceeds
+ the bound. The prune is exact &mdash; it never drops an edge that could lie on a feasible
+ source-to-target walk &mdash; and can be a large win when a substantial fraction of the
+ graph is backward-reachable from the targets but not forward-reachable from the sources.
+ On graphs where the prune never fires (e.g. small dense strongly-connected digraphs), the
+ optimisation adds the cost of one extra <code>O(V + E)</code> BFS per <code>getAllPaths</code>
+ call.
+ </p>
+
+ <p>
+ Setting forward pruning to <code>false</code> recovers the historical preprocessing behaviour
+ exactly &mdash; useful when the cost of the extra BFS is known to dominate.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>forwardPruning</code> - whether to apply the forward-pruning preprocessing step</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isForwardPruning()">
+<h3>isForwardPruning</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isForwardPruning</span>()</div>
+<div class="block">Whether the preprocessing step currently applies the forward-pruning optimisation.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> if forward pruning is enabled</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="#setForwardPruning(boolean)"><code>setForwardPruning(boolean)</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="getAllPaths(V,V,boolean,java.lang.Integer)">
 <h3 id="getAllPaths(java.lang.Object,java.lang.Object,boolean,java.lang.Integer)">getAllPaths</h3>
