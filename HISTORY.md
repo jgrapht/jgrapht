@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
     - Upgraded to Java 21, fixed warnings, and modernized code (contributed by Joris Kinable)
     - Added `BoundedPrunedYenKShortestPath` (contributed by Shai Eilat)
     - Optimized `AllDirectedPaths` in non-simple-paths mode (contributed by Shai Eilat)
+    - Optimized `AllDirectedPaths` with forward pruning (contributed by Shai Eilat)
     - Optimized `DijkstraManyToManyShortestPaths.getPaths(v)` (contributed by Shai Eilat)
 
 - **version 1.5.3** (10-Apr-2026)
