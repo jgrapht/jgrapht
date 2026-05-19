@@ -44,10 +44,11 @@ import java.util.*;
  * </ul>
  *
  * <p>
- * Both files are written by {@code scripts/andorra_to_csv.py}; refer to that script for
- * the GPKG schema and the preprocessing rules (routable {@code fclass} filter,
- * coordinate snapping, oneway handling, parallel-edge dedupe). Other regions can be
- * loaded by adapting the script to a different Geofabrik download.
+ * Both files are written by {@link org.jgrapht.perf.util.GpkgRoadGraphPreprocessor};
+ * refer to that class for the GPKG schema and the preprocessing rules (routable
+ * {@code fclass} filter, coordinate snapping, oneway handling, parallel-edge dedupe).
+ * The preprocessor accepts any free-tier Geofabrik GPKG, so other regions can be loaded
+ * the same way.
  *
  * <p>
  * Edge weights are great-circle distances in metres (Haversine, R = 6,371,008.8 m), so

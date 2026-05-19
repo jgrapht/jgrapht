@@ -21,15 +21,18 @@ to vendor here.
    Unzip it; the archive contains a single `andorra.gpkg` (~11 MB).
 
 2. From the repository root, run the preprocessor against the GPKG and write
-   the CSVs into this directory:
+   the CSVs into this directory. The preprocessor is the test-scope class
+   `org.jgrapht.perf.util.GpkgRoadGraphPreprocessor`; invoke it via Maven:
 
    ```
-   python scripts/andorra_to_csv.py \
-       /path/to/andorra.gpkg \
-       jgrapht-core/src/test/resources/perf/osm/andorra-edges.csv.gz
+   mvn -pl jgrapht-core exec:java \
+       -Dexec.classpathScope=test \
+       -Dexec.mainClass=org.jgrapht.perf.util.GpkgRoadGraphPreprocessor \
+       -Dexec.args="/path/to/andorra.gpkg jgrapht-core/src/test/resources/perf/osm/andorra-edges.csv.gz"
    ```
 
-   The script writes both `andorra-edges.csv.gz` and the companion
+   or directly with `java -cp <test-classpath> org.jgrapht.perf.util.GpkgRoadGraphPreprocessor <gpkg> <out.csv.gz>`.
+   The preprocessor writes both `andorra-edges.csv.gz` and the companion
    `andorra-edges.nodes.csv.gz` next to it. Total output is ~700 KB.
 
 3. After the CSVs are in place, the smoke test and benches load automatically
@@ -50,7 +53,7 @@ The preprocessor only assumes the standard Geofabrik free-tier GPKG schema
 (`gis_osm_roads_free` with `oneway`, `fclass`, `geom` columns). Any other
 country or sub-region from
 <https://download.geofabrik.de/> works the same way; pick a small region first
-because the script does an in-memory Tarjan SCC pass.
+because the preprocessor runs an in-memory Kosaraju SCC pass.
 
 The generic readers in `org.jgrapht.perf.util` accept arbitrary paths via
 `readFile(Path)`, so contributors loading a custom region do not need to place
