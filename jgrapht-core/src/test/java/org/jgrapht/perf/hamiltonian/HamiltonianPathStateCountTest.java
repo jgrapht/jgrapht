@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HamiltonianPathStateCountTest
 {
 
-    private static final int[] SIZES = { 8, 12 };
+    private static final int[] SIZES = { 8, 12, 16 };
 
     @Test
     public void stateCountsByFamily()

@@ -41,8 +41,8 @@ import java.util.concurrent.*;
  * benchmark wiring builds and runs at all. Use it before {@link #testBaseline()}.</li>
  * <li>{@link #testBaseline()} runs a broader baseline covering all configured graph families
  * (path, cycle, complete, sparse Erdos-Renyi, three-leaf star, modular bridge-joined
- * triangles, and a directed acyclic chain with shortcuts) at {@code n in {8, 12}}. Total wall
- * time on commodity hardware is in the low minutes.</li>
+ * triangles, and a directed acyclic chain with shortcuts) at {@code n in {8, 12, 16}}. Total
+ * wall time on commodity hardware is in the low minutes.</li>
  * </ul>
  * Both drivers force exactly one fork, short warmup/measurement budgets, and {@code -p}-style
  * runtime overrides via {@link OptionsBuilder#param(String, String...)} are honoured by JMH if
@@ -61,7 +61,7 @@ public class HamiltonianPathPerformanceTest
         PATH, CYCLE, COMPLETE, SPARSE, STAR_NEG, MODULAR_BRIDGES, DAG_POS
     }
 
-    @Param({ "8", "12" })
+    @Param({ "8", "12", "16" })
     public int n;
 
     @Param({ "PATH", "CYCLE", "COMPLETE", "SPARSE", "STAR_NEG", "MODULAR_BRIDGES", "DAG_POS" })
@@ -112,8 +112,8 @@ public class HamiltonianPathPerformanceTest
     }
 
     /**
-     * Baseline driver: covers all benchmark graph families at {@code n in {8, 12}}. Designed
-     * to be bounded; each cell takes a few seconds to measure.
+     * Baseline driver: covers all benchmark graph families at {@code n in {8, 12, 16}}.
+     * Designed to be bounded; each cell takes a few seconds to measure.
      */
     @Test
     public void testBaseline()
