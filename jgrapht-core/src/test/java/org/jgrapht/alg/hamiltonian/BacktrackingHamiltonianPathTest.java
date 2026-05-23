@@ -183,6 +183,44 @@ public class BacktrackingHamiltonianPathTest
     }
 
     @Test
+    public void disjointStronglyConnectedComponentsHaveNoPath()
+    {
+        // Two strongly-connected pairs with no edge between them. The SCC condensation has two
+        // vertices and zero edges, so no Hamiltonian projection exists.
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 4; i++) {
+            graph.addVertex(i);
+        }
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 0);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 2);
+
+        assertNull(findPath(graph));
+    }
+
+    @Test
+    public void chainOfStronglyConnectedComponentsHasPath()
+    {
+        // SCC A = {0, 1, 2} (triangle); SCC B = {3, 4, 5} (triangle); single bridge 2 -> 3.
+        // Condensation is A -> B, a chain DAG, so a Hamiltonian path is possible. Example:
+        // 0 -> 1 -> 2 -> 3 -> 4 -> 5.
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 6; i++) {
+            graph.addVertex(i);
+        }
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 0);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 3);
+        graph.addEdge(2, 3);
+
+        assertHamiltonianPath(graph, findPath(graph));
+    }
+
+    @Test
     public void directedGraphWithUnreachableVertexHasNoPath()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);

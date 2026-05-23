@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
 import java.util.*;
 
@@ -55,6 +56,10 @@ import java.util.*;
  * <li>For undirected graphs, every cut vertex (articulation point) must belong to at most two
  * biconnected blocks. A Hamiltonian path visits each vertex once with at most two path-edges
  * incident to it, so it cannot enter more than two blocks meeting at a single cut vertex.</li>
+ * <li>For directed graphs, the strongly connected component condensation must itself admit a
+ * Hamiltonian path. Any Hamiltonian path in the original directed graph projects to one on the
+ * condensation DAG; when that condensation has no Hamiltonian path, the original graph cannot
+ * either.</li>
  * <li>At every search step the current endpoint must be able to reach every still-unvisited
  * vertex through unvisited intermediaries. Otherwise the branch is pruned.</li>
  * <li>Candidate next vertices are tried in ascending order of their remaining (unvisited)
@@ -83,6 +88,8 @@ public class BacktrackingHamiltonianPath<V, E>
     implements HamiltonianPathAlgorithm<V, E>
 {
 
+    private long statesExpanded;
+
     /**
      * Constructs a new instance.
      */
@@ -90,11 +97,26 @@ public class BacktrackingHamiltonianPath<V, E>
     {
     }
 
+    /**
+     * Returns the number of DFS nodes the search explored during the most recent call to
+     * {@link #getPath(Graph)}. A "state" corresponds to one entry into the recursive extension
+     * routine, i.e. one partial path the solver considered. The counter is reset at the start
+     * of every {@code getPath} invocation and is intended for benchmarking and diagnostic use
+     * rather than as a stable part of the algorithmic contract.
+     *
+     * @return states (partial paths) explored during the last search
+     */
+    public long getStatesExpanded()
+    {
+        return statesExpanded;
+    }
+
     @Override
     public GraphPath<V, E> getPath(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, "graph must not be null");
         GraphTests.requireDirectedOrUndirected(graph);
+        statesExpanded = 0L;
         if (graph.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Graph contains no vertices");
         }
@@ -109,6 +131,9 @@ public class BacktrackingHamiltonianPath<V, E>
         final boolean directed = graph.getType().isDirected();
 
         if (!directed && !cheapUndirectedPrechecks(graph)) {
+            return null;
+        }
+        if (directed && !cheapDirectedPrechecks(graph)) {
             return null;
         }
 
@@ -176,6 +201,64 @@ public class BacktrackingHamiltonianPath<V, E>
     }
 
     /**
+     * Cheap necessary conditions for the existence of a Hamiltonian path in a directed graph.
+     * The condensation DAG of strongly connected components must itself admit a Hamiltonian
+     * path; otherwise the original graph cannot. Returns {@code true} when this necessary
+     * condition is satisfied (a Hamiltonian path may or may not exist in the original) and
+     * {@code false} when the condensation rules it out.
+     */
+    private boolean cheapDirectedPrechecks(Graph<V, E> graph)
+    {
+        KosarajuStrongConnectivityInspector<V, E> scc =
+            new KosarajuStrongConnectivityInspector<>(graph);
+        List<Graph<V, E>> components = scc.getStronglyConnectedComponents();
+        if (components.size() <= 1) {
+            // single SCC: condensation is one vertex, no further pruning possible here
+            return true;
+        }
+        Graph<Graph<V, E>, DefaultEdge> condensation = scc.getCondensation();
+        return condensationAdmitsHamiltonianPath(condensation);
+    }
+
+    /**
+     * Linear-time Hamiltonian path existence test on the SCC condensation DAG. Uses the
+     * standard longest-path-in-DAG DP over a topological order; if the longest path has fewer
+     * vertices than the condensation does, no Hamiltonian projection exists.
+     */
+    private boolean condensationAdmitsHamiltonianPath(Graph<Graph<V, E>, DefaultEdge> condensation)
+    {
+        final int n = condensation.vertexSet().size();
+        if (n <= 1) {
+            return true;
+        }
+        Map<Graph<V, E>, Integer> position = new HashMap<>(n);
+        List<Graph<V, E>> topo = new ArrayList<>(n);
+        new TopologicalOrderIterator<>(condensation).forEachRemaining(c -> {
+            position.put(c, topo.size());
+            topo.add(c);
+        });
+        int[] longest = new int[n];
+        Arrays.fill(longest, 1);
+        int best = 1;
+        for (int i = 0; i < n; i++) {
+            Graph<V, E> v = topo.get(i);
+            for (DefaultEdge e : condensation.incomingEdgesOf(v)) {
+                int u = position.get(condensation.getEdgeSource(e));
+                if (longest[u] + 1 > longest[i]) {
+                    longest[i] = longest[u] + 1;
+                }
+            }
+            if (longest[i] > best) {
+                best = longest[i];
+                if (best == n) {
+                    return true;
+                }
+            }
+        }
+        return best == n;
+    }
+
+    /**
      * Degree of {@code v} in an undirected graph, ignoring self-loops since they cannot
      * participate in a simple path.
      */
@@ -230,6 +313,7 @@ public class BacktrackingHamiltonianPath<V, E>
      */
     private boolean extend(int[][] adjacency, int[] pathIdx, boolean[] visited, int depth, int n)
     {
+        statesExpanded++;
         if (depth == n) {
             return true;
         }

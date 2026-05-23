@@ -57,13 +57,13 @@ public class HamiltonianPathPerformanceTest
 
     public enum GraphFamily
     {
-        PATH, CYCLE, COMPLETE, SPARSE
+        PATH, CYCLE, COMPLETE, SPARSE, STAR_NEG, MODULAR_BRIDGES, DAG_POS
     }
 
     @Param({ "8", "12" })
     public int n;
 
-    @Param({ "PATH", "CYCLE", "COMPLETE", "SPARSE" })
+    @Param({ "PATH", "CYCLE", "COMPLETE", "SPARSE", "STAR_NEG", "MODULAR_BRIDGES", "DAG_POS" })
     public GraphFamily family;
 
     Graph<Integer, DefaultEdge> graph;
@@ -71,41 +71,7 @@ public class HamiltonianPathPerformanceTest
     @Setup(Level.Trial)
     public void buildGraph()
     {
-        Random random = new Random(0xBEEFCAFE12345678L ^ ((long) n << 16) ^ family.ordinal());
-        graph = new SimpleGraph<>(DefaultEdge.class);
-        for (int i = 0; i < n; i++) {
-            graph.addVertex(i);
-        }
-        switch (family) {
-        case PATH:
-            for (int i = 0; i < n - 1; i++) {
-                graph.addEdge(i, i + 1);
-            }
-            break;
-        case CYCLE:
-            for (int i = 0; i < n; i++) {
-                graph.addEdge(i, (i + 1) % n);
-            }
-            break;
-        case COMPLETE:
-            for (int i = 0; i < n; i++) {
-                for (int j = i + 1; j < n; j++) {
-                    graph.addEdge(i, j);
-                }
-            }
-            break;
-        case SPARSE:
-            // p ~= 3/n keeps average degree around 3, where backtracking pruning helps most.
-            double p = 3.0 / n;
-            for (int i = 0; i < n; i++) {
-                for (int j = i + 1; j < n; j++) {
-                    if (random.nextDouble() < p) {
-                        graph.addEdge(i, j);
-                    }
-                }
-            }
-            break;
-        }
+        graph = GraphBuilders.build(family, n);
     }
 
     @Benchmark
