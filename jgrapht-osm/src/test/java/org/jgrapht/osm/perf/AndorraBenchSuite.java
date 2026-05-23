@@ -15,18 +15,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.shortestpath.osm;
+package org.jgrapht.osm.perf;
 
-import org.jgrapht.perf.util.*;
 import org.junit.jupiter.api.*;
 
 import java.nio.file.*;
 
 /**
- * Manual JMH entry points for the {@code osm/Andorra*Bench} harnesses. Class name ends
- * in {@code Suite} (not {@code Test}) so the maven-surefire default include pattern does
- * not pick it up; each method is invoked explicitly via, for example,
- * {@code mvn -pl jgrapht-core -Dtest=AndorraBenchSuite#runM2M test}.
+ * Manual JMH entry points for the {@code org.jgrapht.osm.perf.Andorra*Bench} harnesses.
+ * Class name ends in {@code Suite} (not {@code Test}) so the maven-surefire default
+ * include pattern does not pick it up; each method is invoked explicitly via, for
+ * example, {@code mvn -pl jgrapht-osm -Dtest=AndorraBenchSuite#runM2M test}.
  *
  * <p>
  * Each method writes its JMH summary to {@code target/jmh-andorra/<bench>.txt} so the

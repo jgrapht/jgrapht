@@ -15,9 +15,8 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.util;
+package org.jgrapht.osm;
 
-import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.graph.*;
 
@@ -32,30 +31,31 @@ import java.util.zip.*;
 /**
  * Reads a Geofabrik-style OpenStreetMap GPKG snapshot of a region's road network and
  * writes the largest strongly-connected component as a pair of gzipped CSV files that
- * {@link WeightedEdgeListCsvReader} and {@link CoordinatesCsvReader} can load directly.
+ * {@link OsmCsvGraphLoader} loads back into a {@code Graph<Integer, ...>}.
  *
  * <p>
- * Output schema:
+ * Output schema (both files are headerless, gzip-compressed UTF-8 CSV):
  * <ul>
  *   <li>{@code <prefix>.csv.gz} &mdash; {@code src,dst,weight_m} (one directed edge per
- *       line, weight is the Haversine great-circle distance in metres).</li>
+ *       line, weight is the Haversine great-circle distance in metres). Headerless so
+ *       the file can be consumed directly by {@code CSVImporter} from
+ *       {@code jgrapht-io}.</li>
  *   <li>{@code <prefix>.nodes.csv.gz} &mdash; {@code node_id,lat,lon} (one vertex per
- *       line, coordinates in decimal degrees).</li>
+ *       line, coordinates in decimal degrees). Loaded via
+ *       {@link OsmCoordinatesReader}.</li>
  * </ul>
  *
  * <p>
- * Invoke from the command line with two arguments &mdash; the GPKG path and the desired
- * edges output path:
+ * Invoke from the command line:
  *
  * <pre>{@code
- * java -cp <test-classpath> org.jgrapht.perf.util.GpkgRoadGraphPreprocessor \
+ * java --module-path <...> --module org.jgrapht.osm/org.jgrapht.osm.GpkgRoadGraphPreprocessor \
  *     /path/to/region.gpkg \
- *     jgrapht-core/src/test/resources/perf/osm/region-edges.csv.gz
+ *     /path/to/region-edges.csv.gz
  * }</pre>
  *
  * <p>
- * The class also exposes {@link #run(Path, Path)} for programmatic invocation from
- * JUnit tests and other tooling.
+ * or programmatically via {@link #run(Path, Path)} from any test or application code.
  *
  * <h2>GPKG schema assumptions</h2>
  *
@@ -94,8 +94,8 @@ public final class GpkgRoadGraphPreprocessor
      */
     public static final double COORD_PRECISION = 1e7;
 
-    /** IUGG mean Earth radius in metres. */
-    public static final double EARTH_RADIUS_M = 6_371_008.8;
+    /** IUGG mean Earth radius in metres, matching {@link HaversineHeuristic}. */
+    public static final double EARTH_RADIUS_M = HaversineHeuristic.EARTH_RADIUS_M;
 
     private GpkgRoadGraphPreprocessor()
     {
@@ -197,7 +197,6 @@ public final class GpkgRoadGraphPreprocessor
         }
 
         Path edgesAbs = edgesOutPath.toAbsolutePath();
-        Path nodesAbs = nodesOutPath.toAbsolutePath();
         if (edgesAbs.getParent() != null) {
             Files.createDirectories(edgesAbs.getParent());
         }
@@ -358,7 +357,6 @@ public final class GpkgRoadGraphPreprocessor
         throws IOException
     {
         try (Writer w = newGzWriter(edgesOutPath)) {
-            w.write("src,dst,weight_m\n");
             for (Map.Entry<Long, Double> e : bestEdge.entrySet()) {
                 long key = e.getKey();
                 int src = (int) (key >>> 32);
@@ -378,7 +376,6 @@ public final class GpkgRoadGraphPreprocessor
         throws IOException
     {
         try (Writer w = newGzWriter(nodesOutPath)) {
-            w.write("node_id,lat,lon\n");
             for (int newId = 0; newId < sortedScc.size(); newId++) {
                 int oldId = sortedScc.get(newId);
                 double[] c = coordLatLon.get(oldId);

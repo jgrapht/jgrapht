@@ -15,45 +15,27 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.shortestpath.osm;
+package org.jgrapht.osm;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.perf.util.*;
 import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
 
 /**
- * Builds the Andorra OSM road graph used by the {@code osm/Andorra*Bench} JMH harnesses,
- * and serves as a worked example of how to combine
- * {@link WeightedEdgeListCsvReader}, {@link CoordinatesCsvReader}, and
- * {@link HaversineHeuristic} to load any geographic road graph for benchmarking.
+ * Test fixture helper that loads the Andorra OSM road graph from the gzipped CSVs
+ * expected under {@code jgrapht-osm/src/test/resources/perf/osm/}, and serves as a
+ * worked example of how to compose {@link OsmCsvGraphLoader},
+ * {@link OsmCoordinatesReader}, and {@link HaversineHeuristic}. Used by the bench
+ * classes in {@code org.jgrapht.osm.perf} and by the smoke test.
  *
  * <p>
- * The source dataset is a Geofabrik "free" GPKG snapshot of OpenStreetMap (Andorra)
- * preprocessed into two gzipped CSV resources expected under
- * {@code src/test/resources/perf/osm/} (the binaries are <em>not</em> committed;
- * contributors generate them locally as described in the README beside that directory):
- *
- * <ul>
- * <li>{@code andorra-edges.csv.gz} &mdash; {@code src,dst,weight_m} per directed edge
- * inside the largest strongly-connected component.</li>
- * <li>{@code andorra-edges.nodes.csv.gz} &mdash; {@code node_id,lat,lon} per vertex.</li>
- * </ul>
- *
- * <p>
- * Both files are written by {@link org.jgrapht.perf.util.GpkgRoadGraphPreprocessor};
- * refer to that class for the GPKG schema and the preprocessing rules (routable
- * {@code fclass} filter, coordinate snapping, oneway handling, parallel-edge dedupe).
- * The preprocessor accepts any free-tier Geofabrik GPKG, so other regions can be loaded
- * the same way.
- *
- * <p>
- * Edge weights are great-circle distances in metres (Haversine, R = 6,371,008.8 m), so
- * a {@link HaversineHeuristic} built from {@link AndorraData#coords} is an admissible A*
- * heuristic for any path query on the loaded graph.
+ * The CSVs are <em>not</em> committed; contributors generate them locally from a
+ * Geofabrik free-tier GPKG using {@link GpkgRoadGraphPreprocessor}. See the README
+ * beside the {@code src/test/resources/perf/osm/} directory for download and
+ * preprocessing instructions.
  *
  * @author Shai Eilat
  */
@@ -71,8 +53,7 @@ public final class AndorraGraphLoader
     /**
      * Returns {@code true} when both Andorra fixtures are present on the classpath, so
      * tests and benches that depend on them can skip cleanly when a contributor has not
-     * yet produced the CSVs. See the README under
-     * {@code src/test/resources/perf/osm/} for instructions.
+     * yet produced the CSVs.
      *
      * @return whether the Andorra fixtures are available
      */
@@ -83,12 +64,14 @@ public final class AndorraGraphLoader
     }
 
     /**
-     * Load the Andorra road graph plus the per-node coordinate map.
+     * Loads the Andorra road graph plus the per-node coordinate map. Vertices are
+     * pre-added in node-id order so the graph's vertex set is the dense range
+     * {@code 0 .. N-1}, which the bench classes rely on for {@code rng.nextInt(N)}
+     * sampling.
      *
      * @return loaded data bundle
-     * @throws IllegalStateException if the Andorra CSV fixtures are not on the classpath;
-     *         the message points at the README with download and preprocessing
-     *         instructions
+     * @throws IllegalStateException if the Andorra CSV fixtures are not on the
+     *         classpath; the message points at the README
      */
     public static AndorraData load()
     {
@@ -96,18 +79,14 @@ public final class AndorraGraphLoader
             throw new IllegalStateException(
                 "Andorra CSV fixtures not on the classpath ("
                     + EDGES_RESOURCE + ", " + NODES_RESOURCE + "). "
-                    + "See jgrapht-core/src/test/resources/perf/osm/README.md for "
+                    + "See jgrapht-osm/src/test/resources/perf/osm/README.md for "
                     + "download and preprocessing instructions.");
         }
         try {
-            Map<Integer, double[]> coords = new CoordinatesCsvReader<Integer>()
-                .gzipped(true)
-                .readResource(AndorraGraphLoader.class, NODES_RESOURCE);
+            Map<Integer, double[]> coords =
+                OsmCoordinatesReader.readGzippedResource(
+                    AndorraGraphLoader.class, NODES_RESOURCE);
 
-            // SimpleDirectedWeightedGraph so Eppstein-style algorithms can consume the
-            // result; the preprocessor already deduplicates parallel edges so loading
-            // does not violate the simple-graph contract. Pre-add vertices in node-id
-            // order to keep the vertex set dense and contiguous.
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
                 new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
             graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
@@ -117,10 +96,14 @@ public final class AndorraGraphLoader
                 graph.addVertex(id);
             }
 
-            new WeightedEdgeListCsvReader<Integer, DefaultWeightedEdge>(graph)
-                .gzipped(true)
-                .addMissingVertices(false)
-                .readResource(AndorraGraphLoader.class, EDGES_RESOURCE);
+            try (java.io.InputStream in =
+                AndorraGraphLoader.class.getResourceAsStream(EDGES_RESOURCE))
+            {
+                if (in == null) {
+                    throw new IOException("missing resource: " + EDGES_RESOURCE);
+                }
+                OsmCsvGraphLoader.loadGzippedInto(in, graph);
+            }
 
             return new AndorraData(graph, coords);
         } catch (IOException e) {

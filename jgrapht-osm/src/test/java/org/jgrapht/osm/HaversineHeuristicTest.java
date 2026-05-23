@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.util;
+package org.jgrapht.osm;
 
 import org.junit.jupiter.api.*;
 
@@ -52,7 +52,6 @@ class HaversineHeuristicTest
     @Test
     void newYorkToLondonReferenceDistance()
     {
-        // Reference great-circle distance ~5,570 km.
         Map<Integer, double[]> coords = Map.of(
             0, new double[] { 40.7128, -74.0060 }, // New York
             1, new double[] { 51.5074, -0.1278 }); // London
@@ -73,7 +72,6 @@ class HaversineHeuristicTest
         HaversineHeuristic<Integer> mars =
             new HaversineHeuristic<>(coords::get, 3_389_500.0);
 
-        // 90 degrees of longitude on the equator is a quarter of the great circle.
         assertEquals(
             Math.PI / 2 * HaversineHeuristic.EARTH_RADIUS_M,
             earth.getCostEstimate(0, 1),

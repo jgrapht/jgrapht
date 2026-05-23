@@ -58,11 +58,6 @@
             <artifactId>jmh-generator-annprocess</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -81,40 +76,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <configuration>
-                            <!--
-                                The Andorra OSM bench preprocessor under
-                                org.jgrapht.perf.util uses sqlite-jdbc (test scope) to
-                                read GPKG files. java.sql is a JDK module and is not
-                                required by the production org.jgrapht.core module; this
-                                grants test code access without polluting module-info.
-                            -->
-                            <compilerArgs>
-                                <arg>--add-modules</arg>
-                                <arg>java.sql</arg>
-                                <arg>--add-reads</arg>
-                                <arg>org.jgrapht.core=java.sql</arg>
-                            </compilerArgs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>default-test</id>
                         <configuration>
                             <argLine>
-                                --add-modules java.sql
-                                --add-reads org.jgrapht.core=java.sql
                                 --add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED
-                                <!-- 
+                                <!--
                                     Manually export performance test packages
                                     Ref: https://github.com/jgrapht/jgrapht/issues/1170
                                 -->
@@ -125,12 +94,7 @@
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.lca=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.matching=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath=ALL-UNNAMED
-                                --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED
-                                --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED
-                                --add-opens org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED
-                                --add-opens org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.spanning=ALL-UNNAMED
-                                --add-exports org.jgrapht.core/org.jgrapht.perf.util=ALL-UNNAMED
                             </argLine>
                             <excludes>
                                 <exclude>**/perf/**</exclude>

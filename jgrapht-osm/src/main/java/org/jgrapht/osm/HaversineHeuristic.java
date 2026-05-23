@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.util;
+package org.jgrapht.osm;
 
 import org.jgrapht.alg.interfaces.*;
 

@@ -15,11 +15,12 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.shortestpath.osm;
+package org.jgrapht.osm.perf;
 
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.osm.*;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.*;
@@ -40,10 +41,10 @@ import java.util.concurrent.*;
  */
 @BenchmarkMode(Mode.AverageTime)
 @Fork(value = 1, warmups = 0, jvmArgs = {
-    "--add-opens=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED",
-    "--add-opens=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED",
-    "--add-exports=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED",
-    "--add-exports=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED"
+    "--add-opens=org.jgrapht.osm/org.jgrapht.osm.perf=ALL-UNNAMED",
+    "--add-opens=org.jgrapht.osm/org.jgrapht.osm.perf.jmh_generated=ALL-UNNAMED",
+    "--add-exports=org.jgrapht.osm/org.jgrapht.osm.perf=ALL-UNNAMED",
+    "--add-exports=org.jgrapht.osm/org.jgrapht.osm.perf.jmh_generated=ALL-UNNAMED"
 })
 @Warmup(iterations = 2, time = 5)
 @Measurement(iterations = 3, time = 5)

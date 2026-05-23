@@ -15,20 +15,20 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.shortestpath.osm;
+package org.jgrapht.osm;
 
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.perf.util.*;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 /**
- * Smoke test for {@link AndorraGraphLoader}. Verifies the committed test resource
- * decodes to the expected vertex/edge counts, that Dijkstra can route through the
- * resulting graph, and that the {@link HaversineHeuristic} is admissible against the
+ * Smoke test for {@link AndorraGraphLoader}. Skips cleanly when the CSV fixtures are
+ * absent so the test suite stays green on a clean checkout. When the fixtures are
+ * present, asserts the expected vertex / edge counts, that Dijkstra can route through
+ * the loaded graph, and that the {@link HaversineHeuristic} is admissible against the
  * routed weight.
  *
  * @author Shai Eilat
@@ -41,7 +41,7 @@ class AndorraGraphLoaderSmokeTest
         assumeTrue(
             AndorraGraphLoader.isFixtureAvailable(),
             "Andorra CSV fixtures not on classpath; "
-                + "see jgrapht-core/src/test/resources/perf/osm/README.md for setup");
+                + "see jgrapht-osm/src/test/resources/perf/osm/README.md for setup");
 
         AndorraGraphLoader.AndorraData data = AndorraGraphLoader.load();
 
@@ -49,8 +49,6 @@ class AndorraGraphLoaderSmokeTest
         assertEquals(67354, data.graph.edgeSet().size(), "andorra largest SCC edge count");
         assertEquals(36618, data.coords.size(), "node coordinate map size");
 
-        // pick the two vertices furthest apart by ID — works because the SCC is strongly
-        // connected, so a shortest path must exist.
         int source = 0;
         int sink = data.graph.vertexSet().size() - 1;
         DijkstraShortestPath<Integer, DefaultWeightedEdge> dijkstra =

@@ -15,13 +15,14 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.shortestpath.osm;
+package org.jgrapht.osm.perf;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.AllDirectedPaths;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.osm.AndorraGraphLoader;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -46,23 +47,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * Andorra-OSM benchmark for {@link AllDirectedPaths} non-simple mode (i.e. enumerating
  * length-bounded walks). The full Andorra SCC is too large for non-simple-mode walk
- * enumeration; we instead carve out a BFS-radius ball around a random anchor (~80–250
+ * enumeration; we instead carve out a BFS-radius ball around a random anchor (~80&ndash;250
  * vertices) and enumerate length-bounded walks inside that subgraph.
- *
- * <p>
- * Running this bench on master and on {@code alldirectedpaths-skip-unused-visited}
- * (PR #1341) or {@code alldirectedpaths-source-sandwich-prune} yields the before/after
- * speedup for the {@code ArrayDeque}/unused-visited fix (#1341) and the optional
- * {@code useSandwichPrune} reachability prune (C3, dev-list hold).
  *
  * @author Shai Eilat
  */
 @BenchmarkMode(Mode.AverageTime)
 @Fork(value = 1, warmups = 0, jvmArgs = {
-    "--add-opens=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED",
-    "--add-opens=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED",
-    "--add-exports=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm=ALL-UNNAMED",
-    "--add-exports=org.jgrapht.core/org.jgrapht.perf.shortestpath.osm.jmh_generated=ALL-UNNAMED"
+    "--add-opens=org.jgrapht.osm/org.jgrapht.osm.perf=ALL-UNNAMED",
+    "--add-opens=org.jgrapht.osm/org.jgrapht.osm.perf.jmh_generated=ALL-UNNAMED",
+    "--add-exports=org.jgrapht.osm/org.jgrapht.osm.perf=ALL-UNNAMED",
+    "--add-exports=org.jgrapht.osm/org.jgrapht.osm.perf.jmh_generated=ALL-UNNAMED"
 })
 @Warmup(iterations = 2, time = 5)
 @Measurement(iterations = 3, time = 10)
@@ -109,12 +104,7 @@ public class AndorraAllDirectedPathsNonSimpleBench
         {
             data = AndorraGraphLoader.load();
 
-            // Step 1: pick the graph vertex closest to the Andorra la Vella anchor.
             int anchor = nearestNode(ANCHOR_LAT, ANCHOR_LON);
-
-            // Step 2: BFS ball from the anchor at the requested radius. The walk-enumeration
-            // cost is super-linear in the ball size; we cap at 1500 vertices so a single
-            // @Benchmark call stays under a few seconds even at maxPathLen = 8.
             Set<Integer> ball = boundedBfsBall(anchor, bfsRadius, /* sizeCap= */ 1500);
             if (ball.size() < 50) {
                 throw new IllegalStateException(
@@ -123,8 +113,6 @@ public class AndorraAllDirectedPathsNonSimpleBench
                         + "to be updated");
             }
 
-            // Step 3: choose a sink at maximum BFS-hop distance from the anchor inside the ball.
-            // That deepest reachable vertex tends to expand the walk count the most.
             int chosenSink = -1;
             int bestHops = -1;
             for (Integer v : ball) {
@@ -145,7 +133,6 @@ public class AndorraAllDirectedPathsNonSimpleBench
             subgraph = new AsSubgraph<>(data.graph, ball);
             source = anchor;
             sink = chosenSink;
-            // Setup runs once per trial; JMH propagates the stdout to the surefire log.
             double[] anchorCoords = data.coords.get(anchor);
             System.out.printf(
                 "[AndorraAdpState] anchor=%d (%.4f, %.4f) ball=%d sink=%d hops=%d radius=%d "
@@ -162,8 +149,6 @@ public class AndorraAllDirectedPathsNonSimpleBench
                 double[] c = entry.getValue();
                 double dLat = c[0] - targetLat;
                 double dLon = c[1] - targetLon;
-                // Squared lat/lon distance is enough for nearest-vertex selection inside a
-                // single small country; Haversine would just slow the linear scan down.
                 double d = dLat * dLat + dLon * dLon;
                 if (d < bestDist) {
                     bestDist = d;

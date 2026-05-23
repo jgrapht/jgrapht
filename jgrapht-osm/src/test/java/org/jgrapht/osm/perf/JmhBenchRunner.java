@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.util;
+package org.jgrapht.osm.perf;
 
 import org.openjdk.jmh.results.format.*;
 import org.openjdk.jmh.runner.*;
@@ -27,25 +27,14 @@ import java.util.concurrent.*;
 
 /**
  * Small helper to run a JMH benchmark class programmatically and write its summary to a
- * dedicated output file. Useful when the surefire {@code -Dtest=...} workflow is needed
- * (so JMH inherits the surefire JVM's module path / {@code argLine}) rather than the
- * command-line {@code org.openjdk.jmh.Main} entry point.
+ * dedicated output file. Used by {@link AndorraBenchSuite} so the OSM benches can be
+ * dispatched through surefire ({@code -Dtest=AndorraBenchSuite#runM2M}) and inherit the
+ * surefire JVM's {@code argLine}.
  *
  * <p>
- * The runner uses {@code forks=0} so the bench runs in-process; this trades JMH's normal
- * forked-JVM isolation for compatibility with the surefire module path. For
- * publication-quality numbers, prefer launching via {@code org.openjdk.jmh.Main} from the
- * shell with {@code forks=1}.
- *
- * <p>
- * Typical use from a contributor's JUnit class:
- *
- * <pre>{@code
- * @Test
- * void runMyBench() throws Exception {
- *     JmhBenchRunner.runAverageTime(MyBench.class, Path.of("target/jmh-out/my-bench.txt"));
- * }
- * }</pre>
+ * The runner uses {@code forks=0} so the bench runs in-process. For publication-quality
+ * numbers, prefer launching via {@code org.openjdk.jmh.Main} from the shell with
+ * {@code forks=1}.
  *
  * @author Shai Eilat
  */
