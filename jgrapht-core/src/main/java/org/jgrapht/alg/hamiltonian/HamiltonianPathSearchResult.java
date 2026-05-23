@@ -72,6 +72,14 @@ public final class HamiltonianPathSearchResult<V, E>
         this.statesExpanded = statesExpanded;
     }
 
+    private static void requireNonNegativeStates(long statesExpanded)
+    {
+        if (statesExpanded < 0L) {
+            throw new IllegalArgumentException(
+                "statesExpanded must be non-negative, got " + statesExpanded);
+        }
+    }
+
     /**
      * Creates a result for a successful search.
      *
@@ -85,6 +93,7 @@ public final class HamiltonianPathSearchResult<V, E>
         GraphPath<V, E> path, long statesExpanded)
     {
         Objects.requireNonNull(path, "path must not be null");
+        requireNonNegativeStates(statesExpanded);
         return new HamiltonianPathSearchResult<>(Status.PATH_FOUND, path, statesExpanded);
     }
 
@@ -98,6 +107,7 @@ public final class HamiltonianPathSearchResult<V, E>
      */
     public static <V, E> HamiltonianPathSearchResult<V, E> provenAbsent(long statesExpanded)
     {
+        requireNonNegativeStates(statesExpanded);
         return new HamiltonianPathSearchResult<>(Status.PROVEN_ABSENT, null, statesExpanded);
     }
 
@@ -111,6 +121,7 @@ public final class HamiltonianPathSearchResult<V, E>
      */
     public static <V, E> HamiltonianPathSearchResult<V, E> aborted(long statesExpanded)
     {
+        requireNonNegativeStates(statesExpanded);
         return new HamiltonianPathSearchResult<>(Status.ABORTED, null, statesExpanded);
     }
 

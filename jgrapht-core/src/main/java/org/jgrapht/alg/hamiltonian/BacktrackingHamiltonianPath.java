@@ -413,11 +413,11 @@ public class BacktrackingHamiltonianPath<V, E>
         if (aborted) {
             return false;
         }
-        statesExpanded++;
-        if (maxStatesLimit > 0L && statesExpanded > maxStatesLimit) {
+        if (maxStatesLimit > 0L && statesExpanded >= maxStatesLimit) {
             aborted = true;
             return false;
         }
+        statesExpanded++;
         if (depth == n) {
             return true;
         }

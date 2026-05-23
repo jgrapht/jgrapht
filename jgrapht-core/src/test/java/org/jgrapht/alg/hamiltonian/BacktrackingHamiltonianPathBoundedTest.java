@@ -113,7 +113,24 @@ public class BacktrackingHamiltonianPathBoundedTest
         HamiltonianPathSearchResult<Integer, DefaultEdge> result = search(graph, 2L);
         assertEquals(Status.ABORTED, result.getStatus());
         assertTrue(result.getPath().isEmpty());
-        assertTrue(result.getStatesExpanded() >= 2L);
+        // The check-before-increment guard in extend() keeps the counter at most at maxStates;
+        // here it should stop exactly at the configured budget.
+        assertEquals(2L, result.getStatesExpanded());
+    }
+
+    @Test
+    public void statesExpandedNeverExceedsMaxStates()
+    {
+        // Property check on the off-by-one fix: for a range of small budgets, the reported
+        // state count must never exceed maxStates.
+        Graph<Integer, DefaultEdge> graph = complete(10);
+        for (long budget = 1L; budget <= 20L; budget++) {
+            HamiltonianPathSearchResult<Integer, DefaultEdge> result = search(graph, budget);
+            long limit = budget;
+            assertTrue(
+                result.getStatesExpanded() <= limit,
+                () -> "states " + result.getStatesExpanded() + " > maxStates " + limit);
+        }
     }
 
     @Test
@@ -162,6 +179,17 @@ public class BacktrackingHamiltonianPathBoundedTest
         assertEquals(Status.ABORTED, aborted.getStatus());
         assertTrue(aborted.getPath().isEmpty());
         assertEquals(42L, aborted.getStatesExpanded());
+    }
+
+    @Test
+    public void factoriesRejectNegativeStateCounts()
+    {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> HamiltonianPathSearchResult.provenAbsent(-1L));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> HamiltonianPathSearchResult.aborted(-1L));
     }
 
     private static Graph<Integer, DefaultEdge> path(int n)
