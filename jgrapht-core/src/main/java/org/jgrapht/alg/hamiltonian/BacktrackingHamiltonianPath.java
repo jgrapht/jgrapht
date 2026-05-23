@@ -56,6 +56,10 @@ import java.util.*;
  * <li>For undirected graphs, every cut vertex (articulation point) must belong to at most two
  * biconnected blocks. A Hamiltonian path visits each vertex once with at most two path-edges
  * incident to it, so it cannot enter more than two blocks meeting at a single cut vertex.</li>
+ * <li>For undirected graphs, the bridge tree (whose nodes are the 2-edge-connected components
+ * and whose edges are the original graph's bridges) must itself be a path. Equivalently, no
+ * 2-edge-connected component may have more than two incident bridges, since a Hamiltonian
+ * path enters and leaves each such component at most once.</li>
  * <li>For directed graphs, the strongly connected component condensation must itself admit a
  * Hamiltonian path. Any Hamiltonian path in the original directed graph projects to one on the
  * condensation DAG; when that condensation has no Hamiltonian path, the original graph cannot
@@ -92,6 +96,8 @@ public class BacktrackingHamiltonianPath<V, E>
 {
 
     private long statesExpanded;
+    private long maxStatesLimit;
+    private boolean aborted;
 
     /**
      * Constructs a new instance.
@@ -124,6 +130,7 @@ public class BacktrackingHamiltonianPath<V, E>
         Objects.requireNonNull(graph, "graph must not be null");
         GraphTests.requireDirectedOrUndirected(graph);
         statesExpanded = 0L;
+        aborted = false;
         if (graph.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Graph contains no vertices");
         }
@@ -162,8 +169,49 @@ public class BacktrackingHamiltonianPath<V, E>
                 return buildResult(graph, indexToVertex, pathIdx);
             }
             visited[start] = false;
+            if (aborted) {
+                return null;
+            }
         }
         return null;
+    }
+
+    /**
+     * Performs a Hamiltonian path search with an upper bound on the number of DFS states the
+     * solver may explore. Unlike {@link #getPath(Graph)} this overload distinguishes three
+     * possible outcomes via {@link HamiltonianPathSearchResult}: a path is found, the search
+     * proved no path exists, or the search aborted because it reached the state limit. The
+     * structural prechecks (connectivity, leaf count, cut vertex degree, bridge tree degree,
+     * SCC condensation) run before the limited DFS and are not counted against the budget;
+     * graphs they reject return {@link HamiltonianPathSearchResult.Status#PROVEN_ABSENT}.
+     *
+     * @param graph the input graph
+     * @param maxStates the maximum number of DFS states (partial paths) the search is allowed
+     *        to explore; must be positive
+     * @return a {@link HamiltonianPathSearchResult} describing the outcome
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws IllegalArgumentException if {@code maxStates} is not positive or the graph is
+     *         empty or not directed/undirected
+     */
+    public HamiltonianPathSearchResult<V, E> searchWithStateLimit(
+        Graph<V, E> graph, long maxStates)
+    {
+        if (maxStates <= 0L) {
+            throw new IllegalArgumentException("maxStates must be positive, got " + maxStates);
+        }
+        long previousLimit = this.maxStatesLimit;
+        this.maxStatesLimit = maxStates;
+        try {
+            GraphPath<V, E> path = getPath(graph);
+            if (aborted) {
+                return HamiltonianPathSearchResult.aborted(statesExpanded);
+            }
+            return path != null
+                ? HamiltonianPathSearchResult.found(path, statesExpanded)
+                : HamiltonianPathSearchResult.provenAbsent(statesExpanded);
+        } finally {
+            this.maxStatesLimit = previousLimit;
+        }
     }
 
     /**
@@ -186,7 +234,9 @@ public class BacktrackingHamiltonianPath<V, E>
                 }
             }
         }
-        return cutVertexBlockDegreeWithinPathBudget(graph);
+        BiconnectivityInspector<V, E> bcc = new BiconnectivityInspector<>(graph);
+        return cutVertexBlockDegreeWithinPathBudget(bcc)
+            && bridgeTreeDegreeWithinPathBudget(graph, bcc);
     }
 
     /**
@@ -196,11 +246,51 @@ public class BacktrackingHamiltonianPath<V, E>
      * uses at most two edges at any internal vertex, so it cannot weave through more than two
      * such components.
      */
-    private boolean cutVertexBlockDegreeWithinPathBudget(Graph<V, E> graph)
+    private boolean cutVertexBlockDegreeWithinPathBudget(BiconnectivityInspector<V, E> bcc)
     {
-        BiconnectivityInspector<V, E> bcc = new BiconnectivityInspector<>(graph);
         for (V cut : bcc.getCutpoints()) {
             if (bcc.getBlocks(cut).size() > 2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Necessary condition: in the bridge tree (where 2-edge-connected components are nodes and
+     * bridges are edges) every component must have at most two incident bridges. A Hamiltonian
+     * path passing through a 2-edge-connected component enters and leaves it at most once, so
+     * it can use at most two of the component's incident bridges. This prune catches some
+     * graphs the cut-vertex check misses, in particular those where each bridge attaches to a
+     * different vertex inside a single component.
+     */
+    private boolean bridgeTreeDegreeWithinPathBudget(
+        Graph<V, E> graph, BiconnectivityInspector<V, E> bcc)
+    {
+        Set<E> bridges = bcc.getBridges();
+        if (bridges.size() <= 2) {
+            return true; // with at most 2 bridges, the bridge tree has degree <= 2 at every node
+        }
+        Set<E> bridgeSet =
+            bridges instanceof HashSet ? bridges : new HashSet<>(bridges);
+        Graph<V, E> bridgeFree = new MaskSubgraph<>(graph, v -> false, bridgeSet::contains);
+        ConnectivityInspector<V, E> components = new ConnectivityInspector<>(bridgeFree);
+        List<Set<V>> componentSets = components.connectedSets();
+        Map<V, Integer> vertexToComponent = new HashMap<>(graph.vertexSet().size());
+        for (int i = 0; i < componentSets.size(); i++) {
+            for (V v : componentSets.get(i)) {
+                vertexToComponent.put(v, i);
+            }
+        }
+        int[] incident = new int[componentSets.size()];
+        for (E bridge : bridgeSet) {
+            int cu = vertexToComponent.get(graph.getEdgeSource(bridge));
+            int cv = vertexToComponent.get(graph.getEdgeTarget(bridge));
+            incident[cu]++;
+            if (cu != cv) {
+                incident[cv]++;
+            }
+            if (incident[cu] > 2 || incident[cv] > 2) {
                 return false;
             }
         }
@@ -320,7 +410,14 @@ public class BacktrackingHamiltonianPath<V, E>
      */
     private boolean extend(int[][] adjacency, int[] pathIdx, boolean[] visited, int depth, int n)
     {
+        if (aborted) {
+            return false;
+        }
         statesExpanded++;
+        if (maxStatesLimit > 0L && statesExpanded > maxStatesLimit) {
+            aborted = true;
+            return false;
+        }
         if (depth == n) {
             return true;
         }

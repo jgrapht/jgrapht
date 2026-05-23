@@ -287,10 +287,10 @@ public class BacktrackingHamiltonianPathTest
     @Test
     public void selfLoopOnCutVertexIsIgnored()
     {
-        // BiconnectivityInspector may treat each self-loop as a separate biconnected block,
-        // which would inflate a cut vertex's block count and trigger a spurious rejection. The
-        // cut-vertex precheck must filter self-loops first so the solver's documented
-        // "self-loops are ignored" semantics holds even on articulation vertices.
+        // Regression test for the cut-vertex precheck on graphs with self-loops. The solver
+        // documents that self-loops are ignored. This test verifies that BiconnectivityInspector
+        // does not inflate a cut vertex's block count because of a self-loop and therefore does
+        // not cause a spurious rejection.
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(0);
         graph.addVertex(1);
@@ -306,8 +306,8 @@ public class BacktrackingHamiltonianPathTest
     public void selfLoopsOnMultipleCutVerticesAreIgnored()
     {
         // Path 0-1-2-3-4 with self-loops on every internal vertex. Every internal vertex is a
-        // cut vertex, so a self-loop-counts-as-extra-block bug would push the block count past
-        // 2 on each and spuriously reject the graph.
+        // cut vertex, so this guards against any future behavior where self-loops would inflate
+        // block counts and spuriously reject the graph.
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         for (int i = 0; i < 5; i++) {
             graph.addVertex(i);
@@ -320,6 +320,44 @@ public class BacktrackingHamiltonianPathTest
         graph.addEdge(3, 3);
 
         assertHamiltonianPath(graph, findPath(graph));
+    }
+
+    @Test
+    public void squareWithThreeBridgedTrianglesHasNoPath()
+    {
+        // Square C = {0,1,2,3} with three triangles attached via bridges to vertices 0, 1, 2.
+        // Every cut vertex has exactly 2 blocks (cut-vertex check passes), but the central
+        // square has 3 incident bridges, so the bridge tree has a node of degree 3 and no
+        // Hamiltonian path exists. The bridge-tree precheck must catch this.
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 13; i++) {
+            graph.addVertex(i);
+        }
+        // Square
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(0, 3);
+        // Triangle 1
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 6);
+        graph.addEdge(4, 6);
+        // Triangle 2
+        graph.addEdge(7, 8);
+        graph.addEdge(8, 9);
+        graph.addEdge(7, 9);
+        // Triangle 3
+        graph.addEdge(10, 11);
+        graph.addEdge(11, 12);
+        graph.addEdge(10, 12);
+        // Bridges
+        graph.addEdge(0, 4);
+        graph.addEdge(1, 7);
+        graph.addEdge(2, 10);
+
+        // Held-Karp oracle confirms no Hamiltonian path exists.
+        assertNull(new HeldKarpHamiltonianPath<Integer, DefaultEdge>().getPath(graph));
+        assertNull(findPath(graph));
     }
 
     @Test
