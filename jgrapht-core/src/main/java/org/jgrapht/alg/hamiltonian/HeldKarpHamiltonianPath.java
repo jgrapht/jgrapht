@@ -48,7 +48,10 @@ import java.util.*;
  * <p>
  * The algorithm is exact and deterministic. It supports directed and undirected graphs and
  * tolerates parallel edges and self-loops (self-loops are ignored because they cannot extend a
- * simple path). It returns {@code null} when no Hamiltonian path exists.
+ * simple path). In multigraphs, parallel edges between the same vertex pair collapse to a
+ * single DP transition; the returned path uses an arbitrary representative edge selected via
+ * {@link Graph#getEdge} and is not weight-optimised across parallel edges. It returns
+ * {@code null} when no Hamiltonian path exists.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

@@ -43,6 +43,11 @@ import java.util.*;
  * solve Hamiltonian path on cyclic directed graphs, use {@link BacktrackingHamiltonianPath} or
  * {@link HeldKarpHamiltonianPath}.
  *
+ * <p>
+ * In multigraphs, parallel edges between the same vertex pair do not change the result. The
+ * returned path uses an arbitrary representative edge selected via {@link Graph#getEdge} and
+ * is not weight-optimised across parallel edges.
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *

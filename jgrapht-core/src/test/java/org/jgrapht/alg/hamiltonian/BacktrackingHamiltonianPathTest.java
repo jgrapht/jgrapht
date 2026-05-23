@@ -285,6 +285,44 @@ public class BacktrackingHamiltonianPathTest
     }
 
     @Test
+    public void selfLoopOnCutVertexIsIgnored()
+    {
+        // BiconnectivityInspector may treat each self-loop as a separate biconnected block,
+        // which would inflate a cut vertex's block count and trigger a spurious rejection. The
+        // cut-vertex precheck must filter self-loops first so the solver's documented
+        // "self-loops are ignored" semantics holds even on articulation vertices.
+        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 1); // self-loop on the cut vertex
+
+        assertHamiltonianPath(graph, findPath(graph));
+    }
+
+    @Test
+    public void selfLoopsOnMultipleCutVerticesAreIgnored()
+    {
+        // Path 0-1-2-3-4 with self-loops on every internal vertex. Every internal vertex is a
+        // cut vertex, so a self-loop-counts-as-extra-block bug would push the block count past
+        // 2 on each and spuriously reject the graph.
+        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+        for (int i = 0; i < 5; i++) {
+            graph.addVertex(i);
+        }
+        for (int i = 0; i < 4; i++) {
+            graph.addEdge(i, i + 1);
+        }
+        graph.addEdge(1, 1);
+        graph.addEdge(2, 2);
+        graph.addEdge(3, 3);
+
+        assertHamiltonianPath(graph, findPath(graph));
+    }
+
+    @Test
     public void undirectedGraphWithArticulationStillHasPath()
     {
         // Two triangles joined at a single vertex form an articulation point.

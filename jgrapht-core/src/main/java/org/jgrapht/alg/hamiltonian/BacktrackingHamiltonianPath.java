@@ -71,7 +71,10 @@ import java.util.*;
  * Empty graphs are rejected with an {@link IllegalArgumentException}, matching the convention
  * used by other Hamiltonian / TSP solvers in JGraphT (for example
  * {@link org.jgrapht.alg.tour.HeldKarpTSP}). Graphs with self-loops are accepted but self-loops
- * are ignored, since they cannot be part of a simple path.
+ * are ignored, since they cannot be part of a simple path. In multigraphs, parallel edges
+ * between the same pair of vertices collapse into a single DFS branch and the returned path
+ * picks an arbitrary representative edge via {@link Graph#getEdge}; the result is not
+ * weight-optimised across parallel edges.
  *
  * <p>
  * The returned {@link GraphPath} is a {@link GraphWalk} whose vertex list contains every vertex
@@ -101,8 +104,12 @@ public class BacktrackingHamiltonianPath<V, E>
      * Returns the number of DFS nodes the search explored during the most recent call to
      * {@link #getPath(Graph)}. A "state" corresponds to one entry into the recursive extension
      * routine, i.e. one partial path the solver considered. The counter is reset at the start
-     * of every {@code getPath} invocation and is intended for benchmarking and diagnostic use
-     * rather than as a stable part of the algorithmic contract.
+     * of every {@code getPath} invocation.
+     *
+     * <p>
+     * This value is intended for diagnostics and benchmarking, similar to
+     * {@code AStarShortestPath#getNumberOfExpandedNodes()}. The exact counting semantics may
+     * change if the implementation changes.
      *
      * @return states (partial paths) explored during the last search
      */

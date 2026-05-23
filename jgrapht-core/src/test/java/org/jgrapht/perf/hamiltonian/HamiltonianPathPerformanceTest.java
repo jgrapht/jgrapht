@@ -39,9 +39,10 @@ import java.util.concurrent.*;
  * <ul>
  * <li>{@link #testSmoke()} fires a minimal subset (one family, one size) to verify that the
  * benchmark wiring builds and runs at all. Use it before {@link #testBaseline()}.</li>
- * <li>{@link #testBaseline()} runs a broader baseline (path, cycle, complete, sparse Erdos-Renyi
- * graph families at {@code n in {8, 12}}). Total wall time on commodity hardware is in the low
- * minutes.</li>
+ * <li>{@link #testBaseline()} runs a broader baseline covering all configured graph families
+ * (path, cycle, complete, sparse Erdos-Renyi, three-leaf star, modular bridge-joined
+ * triangles, and a directed acyclic chain with shortcuts) at {@code n in {8, 12}}. Total wall
+ * time on commodity hardware is in the low minutes.</li>
  * </ul>
  * Both drivers force exactly one fork, short warmup/measurement budgets, and {@code -p}-style
  * runtime overrides via {@link OptionsBuilder#param(String, String...)} are honoured by JMH if
@@ -111,8 +112,8 @@ public class HamiltonianPathPerformanceTest
     }
 
     /**
-     * Baseline driver: covers the four graph families at {@code n in {8, 12}}. Designed to be
-     * bounded; each cell takes a few seconds to measure.
+     * Baseline driver: covers all benchmark graph families at {@code n in {8, 12}}. Designed
+     * to be bounded; each cell takes a few seconds to measure.
      */
     @Test
     public void testBaseline()

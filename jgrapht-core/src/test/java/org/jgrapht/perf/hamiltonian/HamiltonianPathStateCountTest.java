@@ -33,10 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * states.
  *
  * <p>
- * This is invoked as a regular JUnit test but produces stdout output rather than assertions on
- * exact numbers, which would be fragile across machines. The only correctness assertion is
- * existence agreement between {@link BacktrackingHamiltonianPath} and
- * {@link HeldKarpHamiltonianPath}; the printed columns are diagnostic only.
+ * This test lives in {@code org.jgrapht.perf.hamiltonian} alongside the JMH benchmarks. The
+ * {@code jgrapht-core} surefire configuration excludes {@code **&#47;perf/**} from the default
+ * test execution, so this harness does not run in normal CI; it is invoked explicitly via
+ * {@code mvn -pl jgrapht-core -Dtest=HamiltonianPathStateCountTest test}. The diagnostic
+ * columns are printed to stdout because exact state counts vary with future pruning changes;
+ * the only enforced assertion is existence agreement between
+ * {@link BacktrackingHamiltonianPath} and {@link HeldKarpHamiltonianPath}.
  */
 public class HamiltonianPathStateCountTest
 {
