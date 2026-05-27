@@ -31,11 +31,12 @@ import java.util.concurrent.*;
  *
  * <p>
  * Exercises the full many-to-many computation followed by a single-source view, on the
- * 36,618-vertex / 67,354-edge Andorra strongly-connected component. Serves as a worked
- * example of how to plug {@link AndorraGraphLoader} into a JMH harness: load the graph
- * once per trial, refresh the (source, target) sets each iteration, and time the
- * algorithm. Contributors can copy this class as a starting point for their own
- * many-to-many or all-pairs shortest-path benchmarks on real road graphs.
+ * Andorra strongly-connected component (~36-37k vertices / ~67k edges depending on the
+ * upstream Geofabrik snapshot). Serves as a worked example of how to plug
+ * {@link AndorraGraphLoader} into a JMH harness: load the graph once per trial, refresh
+ * the (source, target) sets each iteration, and time the algorithm. Contributors can
+ * copy this class as a starting point for their own many-to-many or all-pairs
+ * shortest-path benchmarks on real road graphs.
  *
  * @author Shai Eilat
  */
