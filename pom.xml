@@ -96,7 +96,6 @@
         <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
         <maven-central-plugin.version>0.10.0</maven-central-plugin.version>
         <replacer.version>1.5.3</replacer.version>
-        <sqlite-jdbc.version>3.50.3.0</sqlite-jdbc.version>
         <sux4j.version>5.4.1</sux4j.version>
         <webgraph-big.version>3.7.1</webgraph-big.version>
         <webgraph.version>3.6.12</webgraph.version>
@@ -236,11 +235,6 @@
                 <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.xerial</groupId>
-                <artifactId>sqlite-jdbc</artifactId>
-                <version>${sqlite-jdbc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

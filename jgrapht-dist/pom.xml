@@ -34,6 +34,10 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-osm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>jgrapht-ext</artifactId>
         </dependency>
         <dependency>

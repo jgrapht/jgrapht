@@ -60,6 +60,7 @@ The files below make up the table of contents for a release distribution archive
     - `jgrapht-opt-x.y.z.jar` optimized graph implementations
     - `jgrapht-ext-x.y.z.jar` extensions
     - `jgrapht-io-x.y.z.jar` Importers/Exporters for various graph formats
+    - `jgrapht-osm-x.y.z.jar` OpenStreetMap road-graph integration (GPKG preprocessor + CSV loader + Haversine A* heuristic)
     - `jgrapht-guava-x.y.z.jar` Adapter classes for the Guava library
     - `jgrapht-unimi-dsi-x.y.z.jar` Webgraph adapter and succinct graph implementations
     - `jgraphx-a.b.c.jar` JGraphX dependency library
@@ -74,6 +75,7 @@ The files below make up the table of contents for a release distribution archive
     - `logback-classic-x.y.z.jar` Logger
     - `logback-core-x.y.z.jar` Logger
     - `slf4j-api-x.y.z.jar` Logger api
+    - `sqlite-jdbc-x.y.z.jar` SQLite JDBC driver (used by jgrapht-osm to read GeoPackage files)
     - `sux4j-x.y.z.jar` Sux4j library
     - `webgraph-x.y.z.jar` Webgraph library
     - `webgraph-big-z.y.z.jar` Webgraph big library
@@ -163,6 +165,7 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 - [webgraph](https://webgraph.di.unimi.it/) provides a framework for graph compression enabling management of very large graphs. Webgraph is only required by the jgrapht-unimi-dsi module.
 - [sux4j](https://sux.di.unimi.it/) provides implementations of basic succinct data structures. Sux4j is only required by the jgrapht-unimi-dsi module.
 - [jsap](https://www.martiansoftware.com/jsap/) provides a simple argument parser. Jsap is only required by the jgrapht-unimi-dsi module.
+- [sqlite-jdbc](https://github.com/xerial/sqlite-jdbc) is a JDBC driver for SQLite used to read OGC GeoPackage (`.gpkg`) files. It is only required by the jgrapht-osm module. sqlite-jdbc is licensed under the terms of the Apache License, Version 2.0.
 - [apfloat](https://www.apfloat.org/apfloat_java/) provides support for high performance arbitrary precision arithmetic. Apfloat is licensed under the terms of the MIT license.
 
 ## Online Resources
