@@ -94,9 +94,6 @@ public final class GpkgRoadGraphPreprocessor
      */
     public static final double COORD_PRECISION = 1e7;
 
-    /** IUGG mean Earth radius in metres, matching {@link HaversineHeuristic}. */
-    public static final double EARTH_RADIUS_M = HaversineHeuristic.EARTH_RADIUS_M;
-
     private GpkgRoadGraphPreprocessor()
     {
     }
@@ -160,14 +157,13 @@ public final class GpkgRoadGraphPreprocessor
                 }
                 int a = idForCoord(coordToId, coordLatLon, k1, lat1, lon1);
                 int b = idForCoord(coordToId, coordLatLon, k2, lat2, lon2);
-                double weight = haversineMeters(lat1, lon1, lat2, lon2);
+                double weight = HaversineHeuristic.distanceMeters(lat1, lon1, lat2, lon2);
                 if ("T".equals(oneway)) {
-                    rawEdges.add(new long[] { b, a, Double.doubleToRawLongBits(weight) });
+                    rawEdges.add(packEdge(b, a, weight));
                 } else {
-                    rawEdges.add(new long[] { a, b, Double.doubleToRawLongBits(weight) });
+                    rawEdges.add(packEdge(a, b, weight));
                     if (!"F".equals(oneway)) {
-                        rawEdges.add(
-                            new long[] { b, a, Double.doubleToRawLongBits(weight) });
+                        rawEdges.add(packEdge(b, a, weight));
                     }
                 }
             });
@@ -239,17 +235,14 @@ public final class GpkgRoadGraphPreprocessor
         return id;
     }
 
-    private static double haversineMeters(
-        double lat1, double lon1, double lat2, double lon2)
+    /**
+     * Packs a directed edge into a {@code long[3]} tuple of {@code {src, dst,
+     * doubleToRawLongBits(weight)}}. The packed form keeps the per-edge memory low
+     * during the in-memory accumulation pass before SCC analysis runs.
+     */
+    private static long[] packEdge(int src, int dst, double weight)
     {
-        double phi1 = Math.toRadians(lat1);
-        double phi2 = Math.toRadians(lat2);
-        double dPhi = Math.toRadians(lat2 - lat1);
-        double dLambda = Math.toRadians(lon2 - lon1);
-        double sdp = Math.sin(dPhi / 2);
-        double sdl = Math.sin(dLambda / 2);
-        double a = sdp * sdp + Math.cos(phi1) * Math.cos(phi2) * sdl * sdl;
-        return 2 * EARTH_RADIUS_M * Math.asin(Math.min(1.0, Math.sqrt(a)));
+        return new long[] { src, dst, Double.doubleToRawLongBits(weight) };
     }
 
     private static void readSegments(Path gpkgPath, SegmentSink sink)

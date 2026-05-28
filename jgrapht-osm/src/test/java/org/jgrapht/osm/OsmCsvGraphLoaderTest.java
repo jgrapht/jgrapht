@@ -22,9 +22,8 @@ import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
-import java.nio.charset.*;
-import java.util.zip.*;
 
+import static org.jgrapht.osm.TestStreams.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -86,12 +85,4 @@ class OsmCsvGraphLoaderTest
             () -> OsmCsvGraphLoader.loadGzippedResource(getClass(), "/does-not-exist.csv.gz"));
     }
 
-    private static InputStream gzipOf(String body) throws IOException
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (GZIPOutputStream out = new GZIPOutputStream(baos)) {
-            out.write(body.getBytes(StandardCharsets.UTF_8));
-        }
-        return new ByteArrayInputStream(baos.toByteArray());
-    }
 }

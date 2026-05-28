@@ -95,10 +95,44 @@ public final class HaversineHeuristic<V>
         if (s == null || t == null) {
             return 0.0;
         }
-        double phi1 = Math.toRadians(s[0]);
-        double phi2 = Math.toRadians(t[0]);
-        double dPhi = Math.toRadians(t[0] - s[0]);
-        double dLambda = Math.toRadians(t[1] - s[1]);
+        return distanceMeters(s[0], s[1], t[0], t[1], radiusMeters);
+    }
+
+    /**
+     * Computes the great-circle distance in metres between two
+     * {@code (lat, lon)} points (in decimal degrees) on Earth, using the
+     * {@link #EARTH_RADIUS_M default radius}.
+     *
+     * @param lat1 latitude of the first point in decimal degrees
+     * @param lon1 longitude of the first point in decimal degrees
+     * @param lat2 latitude of the second point in decimal degrees
+     * @param lon2 longitude of the second point in decimal degrees
+     * @return the great-circle distance in metres
+     */
+    public static double distanceMeters(
+        double lat1, double lon1, double lat2, double lon2)
+    {
+        return distanceMeters(lat1, lon1, lat2, lon2, EARTH_RADIUS_M);
+    }
+
+    /**
+     * Computes the great-circle distance in metres between two
+     * {@code (lat, lon)} points (in decimal degrees) on a sphere of the given radius.
+     *
+     * @param lat1 latitude of the first point in decimal degrees
+     * @param lon1 longitude of the first point in decimal degrees
+     * @param lat2 latitude of the second point in decimal degrees
+     * @param lon2 longitude of the second point in decimal degrees
+     * @param radiusMeters the sphere radius in metres
+     * @return the great-circle distance in metres
+     */
+    public static double distanceMeters(
+        double lat1, double lon1, double lat2, double lon2, double radiusMeters)
+    {
+        double phi1 = Math.toRadians(lat1);
+        double phi2 = Math.toRadians(lat2);
+        double dPhi = Math.toRadians(lat2 - lat1);
+        double dLambda = Math.toRadians(lon2 - lon1);
         double sdp = Math.sin(dPhi / 2);
         double sdl = Math.sin(dLambda / 2);
         double a = sdp * sdp + Math.cos(phi1) * Math.cos(phi2) * sdl * sdl;
