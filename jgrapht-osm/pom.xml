@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jgrapht</groupId>
+        <artifactId>jgrapht</artifactId>
+        <version>1.6.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>jgrapht-osm</artifactId>
+    <name>JGraphT - OSM</name>
+    <properties>
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <sqlite-jdbc.version>3.50.3.0</sqlite-jdbc.version>
+    </properties>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License Version 2.1, February 1999</name>
+            <url>http://jgrapht.sourceforge.net/LGPL.html</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>Eclipse Public License (EPL) 2.0</name>
+            <url>http://www.eclipse.org/legal/epl-v20.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <argLine>
+                                --add-exports org.jgrapht.osm/org.jgrapht.osm.perf=ALL-UNNAMED
+                                --add-exports org.jgrapht.osm/org.jgrapht.osm.perf.jmh_generated=ALL-UNNAMED
+                                --add-opens org.jgrapht.osm/org.jgrapht.osm.perf=ALL-UNNAMED
+                                --add-opens org.jgrapht.osm/org.jgrapht.osm.perf.jmh_generated=ALL-UNNAMED
+                            </argLine>
+                            <excludes>
+                                <exclude>**/perf/**</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>${sqlite-jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

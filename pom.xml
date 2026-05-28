@@ -116,6 +116,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>jgrapht-osm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>jgrapht-ext</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -479,6 +484,7 @@
     <modules>
         <module>jgrapht-core</module>
         <module>jgrapht-io</module>
+        <module>jgrapht-osm</module>
         <module>jgrapht-opt</module>
         <module>jgrapht-ext</module>
         <module>jgrapht-guava</module>

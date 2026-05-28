@@ -83,7 +83,7 @@
                         <configuration>
                             <argLine>
                                 --add-exports org.jgrapht.core/org.jgrapht.interfaces=ALL-UNNAMED
-                                <!-- 
+                                <!--
                                     Manually export performance test packages
                                     Ref: https://github.com/jgrapht/jgrapht/issues/1170
                                 -->

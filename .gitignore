@@ -37,3 +37,6 @@ pom.xml.releaseBackup
 .classpath
 docs/javadoc*
 docs/_site
+
+# allow checked-in jgrapht-osm sample fixture
+!jgrapht-osm/src/test/resources/perf/osm/sample-*.csv.gz
