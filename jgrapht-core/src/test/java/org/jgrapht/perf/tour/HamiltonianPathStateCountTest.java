@@ -15,12 +15,12 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.hamiltonian;
+package org.jgrapht.perf.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.hamiltonian.*;
+import org.jgrapht.alg.tour.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.perf.hamiltonian.HamiltonianPathPerformanceTest.GraphFamily;
+import org.jgrapht.perf.tour.HamiltonianPathPerformanceTest.GraphFamily;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * states.
  *
  * <p>
- * This test lives in {@code org.jgrapht.perf.hamiltonian} alongside the JMH benchmarks. The
+ * This test lives in {@code org.jgrapht.perf.tour} alongside the JMH benchmarks. The
  * {@code jgrapht-core} surefire configuration excludes {@code **&#47;perf/**} from the default
  * test execution, so this harness does not run in normal CI; it is invoked explicitly via
  * {@code mvn -pl jgrapht-core -Dtest=HamiltonianPathStateCountTest test}. The diagnostic

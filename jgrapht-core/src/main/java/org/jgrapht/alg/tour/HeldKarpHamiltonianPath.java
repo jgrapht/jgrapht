@@ -15,11 +15,9 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.hamiltonian;
+package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
 import java.util.*;
@@ -59,7 +57,7 @@ import java.util.*;
  * @author seilat
  */
 public class HeldKarpHamiltonianPath<V, E>
-    implements HamiltonianPathAlgorithm<V, E>
+    extends HamiltonianPathAlgorithmBase<V, E>
 {
 
     /**
@@ -84,15 +82,11 @@ public class HeldKarpHamiltonianPath<V, E>
     {
         Objects.requireNonNull(graph, "graph must not be null");
         GraphTests.requireDirectedOrUndirected(graph);
-        if (graph.vertexSet().isEmpty()) {
-            throw new IllegalArgumentException("Graph contains no vertices");
-        }
+        requireNotEmpty(graph);
 
         final int n = graph.vertexSet().size();
         if (n == 1) {
-            V only = graph.vertexSet().iterator().next();
-            return new GraphWalk<>(
-                graph, only, only, Collections.singletonList(only), Collections.emptyList(), 0d);
+            return singletonPath(graph);
         }
         if (n > MAX_VERTICES) {
             throw new IllegalArgumentException(
@@ -160,42 +154,6 @@ public class HeldKarpHamiltonianPath<V, E>
         for (int idx : reversed) {
             vertices.add(indexList.get(idx));
         }
-        List<E> edges = new ArrayList<>(n - 1);
-        double weight = 0d;
-        for (int i = 1; i < n; i++) {
-            V a = vertices.get(i - 1);
-            V b = vertices.get(i);
-            E edge = graph.getEdge(a, b);
-            edges.add(edge);
-            weight += graph.getEdgeWeight(edge);
-        }
-        return new GraphWalk<>(graph, vertices.get(0), vertices.get(n - 1), vertices, edges, weight);
-    }
-
-    private int[][] buildAdjacency(
-        Graph<V, E> graph, List<V> indexList, Map<V, Integer> vertexMap, boolean directed)
-    {
-        final int n = indexList.size();
-        int[][] adjacency = new int[n][];
-        for (int u = 0; u < n; u++) {
-            V uVertex = indexList.get(u);
-            Set<Integer> neighbours = new LinkedHashSet<>();
-            Iterable<E> edges = directed ? graph.outgoingEdgesOf(uVertex) : graph.edgesOf(uVertex);
-            for (E e : edges) {
-                V other = directed
-                    ? graph.getEdgeTarget(e) : Graphs.getOppositeVertex(graph, e, uVertex);
-                if (other.equals(uVertex)) {
-                    continue;
-                }
-                neighbours.add(vertexMap.get(other));
-            }
-            int[] row = new int[neighbours.size()];
-            int idx = 0;
-            for (int v : neighbours) {
-                row[idx++] = v;
-            }
-            adjacency[u] = row;
-        }
-        return adjacency;
+        return vertexListToPath(vertices, graph);
     }
 }

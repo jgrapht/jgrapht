@@ -95,7 +95,7 @@
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.matching=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.shortestpath=ALL-UNNAMED
                                 --add-exports org.jgrapht.core/org.jgrapht.perf.spanning=ALL-UNNAMED
-                                --add-exports org.jgrapht.core/org.jgrapht.perf.hamiltonian=ALL-UNNAMED
+                                --add-exports org.jgrapht.core/org.jgrapht.perf.tour=ALL-UNNAMED
                             </argLine>
                             <excludes>
                                 <exclude>**/perf/**</exclude>

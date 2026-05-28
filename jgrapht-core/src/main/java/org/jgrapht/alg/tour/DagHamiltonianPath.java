@@ -15,12 +15,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.hamiltonian;
+package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.cycle.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 
 import java.util.*;
@@ -54,7 +52,7 @@ import java.util.*;
  * @author seilat
  */
 public class DagHamiltonianPath<V, E>
-    implements HamiltonianPathAlgorithm<V, E>
+    extends HamiltonianPathAlgorithmBase<V, E>
 {
 
     /**
@@ -69,15 +67,11 @@ public class DagHamiltonianPath<V, E>
     {
         Objects.requireNonNull(graph, "graph must not be null");
         GraphTests.requireDirected(graph);
-        if (graph.vertexSet().isEmpty()) {
-            throw new IllegalArgumentException("Graph contains no vertices");
-        }
+        requireNotEmpty(graph);
 
         final int n = graph.vertexSet().size();
         if (n == 1) {
-            V only = graph.vertexSet().iterator().next();
-            return new GraphWalk<>(
-                graph, only, only, Collections.singletonList(only), Collections.emptyList(), 0d);
+            return singletonPath(graph);
         }
 
         if (new CycleDetector<>(graph).detectCycles()) {
@@ -129,17 +123,6 @@ public class DagHamiltonianPath<V, E>
             reversed.push(topo.get(cur));
             cur = predecessor[cur];
         }
-        List<V> vertices = new ArrayList<>(reversed);
-
-        List<E> edges = new ArrayList<>(n - 1);
-        double weight = 0d;
-        for (int i = 1; i < n; i++) {
-            V a = vertices.get(i - 1);
-            V b = vertices.get(i);
-            E edge = graph.getEdge(a, b);
-            edges.add(edge);
-            weight += graph.getEdgeWeight(edge);
-        }
-        return new GraphWalk<>(graph, vertices.get(0), vertices.get(n - 1), vertices, edges, weight);
+        return vertexListToPath(new ArrayList<>(reversed), graph);
     }
 }

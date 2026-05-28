@@ -18,7 +18,7 @@
 package org.jgrapht.demo;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.hamiltonian.*;
+import org.jgrapht.alg.tour.*;
 import org.jgrapht.graph.*;
 
 /**

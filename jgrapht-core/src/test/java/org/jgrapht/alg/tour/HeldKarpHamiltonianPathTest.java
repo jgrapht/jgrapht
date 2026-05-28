@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.hamiltonian;
+package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.jgrapht.alg.hamiltonian.HamiltonianPathValidator.assertHamiltonianPath;
+import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertHamiltonianPath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

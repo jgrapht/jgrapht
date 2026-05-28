@@ -9,7 +9,7 @@ Changes to JGraphT in each version:
     - Optimized `AllDirectedPaths` in non-simple-paths mode (contributed by Shai Eilat)
     - Optimized `AllDirectedPaths` with forward pruning (contributed by Shai Eilat)
     - Optimized `DijkstraManyToManyShortestPaths.getPaths(v)` (contributed by Shai Eilat)
-    - Added exact Hamiltonian path algorithms in new `alg.hamiltonian` package: `BacktrackingHamiltonianPath` (DFS with cut-vertex, bridge-tree, SCC and reachability pruning, plus a bounded-execution `searchWithStateLimit` returning a tri-state `HamiltonianPathSearchResult`), `HeldKarpHamiltonianPath` (small-graph DP), and `DagHamiltonianPath` (polynomial DAG special case) (contributed by Shai Eilat)
+    - Added exact Hamiltonian path algorithms in `alg.tour` next to the existing Hamiltonian cycle/tour code: `BacktrackingHamiltonianPath` (DFS with cut-vertex, bridge-tree, SCC and reachability pruning, plus a bounded-execution `searchWithStateLimit` returning a tri-state `HamiltonianPathSearchResult`), `HeldKarpHamiltonianPath` (small-graph DP), and `DagHamiltonianPath` (polynomial DAG special case) (contributed by Shai Eilat)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)

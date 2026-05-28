@@ -15,11 +15,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.hamiltonian;
+package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
-import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 
@@ -92,7 +91,7 @@ import java.util.*;
  * @author seilat
  */
 public class BacktrackingHamiltonianPath<V, E>
-    implements HamiltonianPathAlgorithm<V, E>
+    extends HamiltonianPathAlgorithmBase<V, E>
 {
 
     private long statesExpanded;
@@ -131,15 +130,11 @@ public class BacktrackingHamiltonianPath<V, E>
         GraphTests.requireDirectedOrUndirected(graph);
         statesExpanded = 0L;
         aborted = false;
-        if (graph.vertexSet().isEmpty()) {
-            throw new IllegalArgumentException("Graph contains no vertices");
-        }
+        requireNotEmpty(graph);
 
         final int n = graph.vertexSet().size();
         if (n == 1) {
-            V only = graph.vertexSet().iterator().next();
-            return new GraphWalk<>(
-                graph, only, only, Collections.singletonList(only), Collections.emptyList(), 0d);
+            return singletonPath(graph);
         }
 
         final boolean directed = graph.getType().isDirected();
@@ -372,38 +367,6 @@ public class BacktrackingHamiltonianPath<V, E>
     }
 
     /**
-     * Builds an adjacency-list representation indexed by vertex index. For directed graphs only
-     * outgoing edges are recorded. Self-loops are skipped because they cannot extend a simple
-     * path. Parallel edges collapse to a single neighbour entry to avoid redundant DFS branches.
-     */
-    private int[][] buildAdjacency(
-        Graph<V, E> graph, List<V> indexToVertex, Map<V, Integer> vertexToIndex, boolean directed)
-    {
-        final int n = indexToVertex.size();
-        int[][] adjacency = new int[n][];
-        for (int u = 0; u < n; u++) {
-            V uVertex = indexToVertex.get(u);
-            Set<Integer> neighbours = new LinkedHashSet<>();
-            Iterable<E> edges = directed ? graph.outgoingEdgesOf(uVertex) : graph.edgesOf(uVertex);
-            for (E e : edges) {
-                V other = directed
-                    ? graph.getEdgeTarget(e) : Graphs.getOppositeVertex(graph, e, uVertex);
-                if (other.equals(uVertex)) {
-                    continue;
-                }
-                neighbours.add(vertexToIndex.get(other));
-            }
-            int[] row = new int[neighbours.size()];
-            int idx = 0;
-            for (int v : neighbours) {
-                row[idx++] = v;
-            }
-            adjacency[u] = row;
-        }
-        return adjacency;
-    }
-
-    /**
      * Recursive DFS extension. Returns {@code true} and leaves {@code pathIdx} filled with a
      * Hamiltonian vertex sequence as soon as one is discovered. Applies reachability pruning
      * and minimum-remaining-values candidate ordering.
@@ -521,24 +484,15 @@ public class BacktrackingHamiltonianPath<V, E>
     }
 
     /**
-     * Materialises a found vertex-index sequence as a {@link GraphPath}.
+     * Materialises a found vertex-index sequence as a {@link GraphPath} via
+     * {@link HamiltonianPathAlgorithmBase#vertexListToPath}.
      */
     private GraphPath<V, E> buildResult(Graph<V, E> graph, List<V> indexToVertex, int[] pathIdx)
     {
-        final int n = pathIdx.length;
-        List<V> vertices = new ArrayList<>(n);
+        List<V> vertices = new ArrayList<>(pathIdx.length);
         for (int i : pathIdx) {
             vertices.add(indexToVertex.get(i));
         }
-        List<E> edges = new ArrayList<>(n - 1);
-        double weight = 0d;
-        for (int i = 1; i < n; i++) {
-            V u = vertices.get(i - 1);
-            V v = vertices.get(i);
-            E edge = graph.getEdge(u, v);
-            edges.add(edge);
-            weight += graph.getEdgeWeight(edge);
-        }
-        return new GraphWalk<>(graph, vertices.get(0), vertices.get(n - 1), vertices, edges, weight);
+        return vertexListToPath(vertices, graph);
     }
 }

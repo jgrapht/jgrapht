@@ -15,10 +15,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.hamiltonian;
+package org.jgrapht.perf.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.hamiltonian.*;
+import org.jgrapht.alg.tour.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 import org.openjdk.jmh.annotations.*;
@@ -105,8 +105,8 @@ public class HamiltonianPathPerformanceTest
             .measurementIterations(1).measurementTime(TimeValue.seconds(1))
             .forks(1).shouldFailOnError(true).shouldDoGC(true)
             .jvmArgsAppend(
-                "--add-exports", "org.jgrapht.core/org.jgrapht.perf.hamiltonian.jmh_generated=ALL-UNNAMED",
-                "--add-opens", "org.jgrapht.core/org.jgrapht.perf.hamiltonian=ALL-UNNAMED")
+                "--add-exports", "org.jgrapht.core/org.jgrapht.perf.tour.jmh_generated=ALL-UNNAMED",
+                "--add-opens", "org.jgrapht.core/org.jgrapht.perf.tour=ALL-UNNAMED")
             .build();
         new Runner(opt).run();
     }
@@ -126,8 +126,8 @@ public class HamiltonianPathPerformanceTest
             .measurementIterations(2).measurementTime(TimeValue.seconds(1))
             .forks(1).shouldFailOnError(true).shouldDoGC(true)
             .jvmArgsAppend(
-                "--add-exports", "org.jgrapht.core/org.jgrapht.perf.hamiltonian.jmh_generated=ALL-UNNAMED",
-                "--add-opens", "org.jgrapht.core/org.jgrapht.perf.hamiltonian=ALL-UNNAMED")
+                "--add-exports", "org.jgrapht.core/org.jgrapht.perf.tour.jmh_generated=ALL-UNNAMED",
+                "--add-opens", "org.jgrapht.core/org.jgrapht.perf.tour=ALL-UNNAMED")
             .build();
         new Runner(opt).run();
     }

@@ -36,7 +36,6 @@ module org.jgrapht.core
     exports org.jgrapht.alg.drawing.model;
     exports org.jgrapht.alg.flow;
     exports org.jgrapht.alg.flow.mincost;
-    exports org.jgrapht.alg.hamiltonian;
     exports org.jgrapht.alg.independentset;
     exports org.jgrapht.alg.interfaces;
     exports org.jgrapht.alg.isomorphism;

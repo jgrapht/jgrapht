@@ -15,11 +15,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.perf.hamiltonian;
+package org.jgrapht.perf.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.perf.hamiltonian.HamiltonianPathPerformanceTest.GraphFamily;
+import org.jgrapht.perf.tour.HamiltonianPathPerformanceTest.GraphFamily;
 
 import java.util.*;
 
