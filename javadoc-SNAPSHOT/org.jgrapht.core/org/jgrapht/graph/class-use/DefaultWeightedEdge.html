@@ -65,8 +65,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Flow related algorithms.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.jgrapht.util">org.jgrapht.util</a></div>
+<div class="col-first even-row-color"><a href="#org.jgrapht.osm">org.jgrapht.osm</a></div>
 <div class="col-last even-row-color">
+<div class="block">OpenStreetMap road-graph integration: GPKG preprocessing, CSV loading, and Haversine
+ heuristic for A* over geographic graphs.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.jgrapht.util">org.jgrapht.util</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Non-graph-specific data structures, algorithms, and utilities used by <b>JGraphT</b>.</div>
 </div>
 </div>
@@ -174,6 +179,48 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">GusfieldGomoryHuCutTree.</span><code><a href="../../alg/flow/GusfieldGomoryHuCutTree.html#getGomoryHuTree()" class="member-name-link">getGomoryHuTree</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns the Gomory-Hu Tree as an actual tree (graph).</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.jgrapht.osm">
+<h2>Uses of <a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a> in <a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a></h2>
+<div class="caption"><span>Methods in <a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a> that return types with arguments of type <a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../Graph.html" title="interface in org.jgrapht">Graph</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OsmCsvGraphLoader.</span><code><a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzipped(java.io.InputStream)" class="member-name-link">loadGzipped</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;gzippedCsv)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Loads the gzipped edges stream into a freshly created
+ <a href="../SimpleDirectedWeightedGraph.html" title="class in org.jgrapht.graph"><code>SimpleDirectedWeightedGraph</code></a><code>&lt;Integer, DefaultWeightedEdge&gt;</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../Graph.html" title="interface in org.jgrapht">Graph</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OsmCsvGraphLoader.</span><code><a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzippedFile(java.nio.file.Path)" class="member-name-link">loadGzippedFile</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Loads the gzipped edges file into a freshly created
+ <a href="../SimpleDirectedWeightedGraph.html" title="class in org.jgrapht.graph"><code>SimpleDirectedWeightedGraph</code></a><code>&lt;Integer, DefaultWeightedEdge&gt;</code>.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../../Graph.html" title="interface in org.jgrapht">Graph</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OsmCsvGraphLoader.</span><code><a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzippedResource(java.lang.Class,java.lang.String)" class="member-name-link">loadGzippedResource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;anchor,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resource)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Loads the gzipped edges resource into a freshly created
+ <a href="../SimpleDirectedWeightedGraph.html" title="class in org.jgrapht.graph"><code>SimpleDirectedWeightedGraph</code></a><code>&lt;Integer, DefaultWeightedEdge&gt;</code>.</div>
+</div>
+</div>
+<div class="caption"><span>Method parameters in <a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a> with type arguments of type <a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OsmCsvGraphLoader.</span><code><a href="../../../../../org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzippedInto(java.io.InputStream,org.jgrapht.Graph)" class="member-name-link">loadGzippedInto</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;gzippedCsv,
+ <a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="../DefaultWeightedEdge.html" title="class in org.jgrapht.graph">DefaultWeightedEdge</a>&gt;&nbsp;graph)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Loads the gzipped edges stream into the caller-supplied graph.</div>
 </div>
 </div>
 </section>

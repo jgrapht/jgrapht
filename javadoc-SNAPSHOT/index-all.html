@@ -2696,6 +2696,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructs a line graph of the input graph.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html#COORD_PRECISION" class="member-name-link">COORD_PRECISION</a> - Static variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor</a></dt>
+<dd>
+<div class="block">Multiplier for snapping <code>(lon, lat)</code> pairs to integer keys before deduping
+ shared endpoints between adjacent line-strings.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/model/Box2D.html#coordinates" class="member-name-link">coordinates</a> - Variable in class org.jgrapht.alg.drawing.model.<a href="org.jgrapht.core/org/jgrapht/alg/drawing/model/Box2D.html" title="class in org.jgrapht.alg.drawing.model">Box2D</a></dt>
 <dd>
 <div class="block">The coordinates of the lower corner</div>
@@ -3974,6 +3979,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a new weighted graph.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#distanceMeters(double,double,double,double)" class="member-name-link">distanceMeters(double, double, double, double)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>
+<div class="block">Computes the great-circle distance in metres between two
+ <code>(lat, lon)</code> points (in decimal degrees) on Earth, using the
+ <a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#EARTH_RADIUS_M"><code>default radius</code></a>.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#distanceMeters(double,double,double,double,double)" class="member-name-link">distanceMeters(double, double, double, double, double)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>
+<div class="block">Computes the great-circle distance in metres between two
+ <code>(lat, lon)</code> points (in decimal degrees) on a sphere of the given radius.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/netgen/Distributor.html" class="type-name-link" title="class in org.jgrapht.generate.netgen">Distributor&lt;K&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/generate/netgen/package-summary.html">org.jgrapht.generate.netgen</a></dt>
 <dd>
 <div class="block">Distributes value units among keys given lower and upper bound constraints.</div>
@@ -4119,6 +4135,10 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/HierholzerEulerianCycle.EdgeNode.html#e" class="member-name-link">e</a> - Variable in class org.jgrapht.alg.cycle.<a href="org.jgrapht.core/org/jgrapht/alg/cycle/HierholzerEulerianCycle.EdgeNode.html" title="class in org.jgrapht.alg.cycle">HierholzerEulerianCycle.EdgeNode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#EARTH_RADIUS_M" class="member-name-link">EARTH_RADIUS_M</a> - Static variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>
+<div class="block">IUGG mean Earth radius in metres.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/event/EdgeTraversalEvent.html#edge" class="member-name-link">edge</a> - Variable in class org.jgrapht.event.<a href="org.jgrapht.core/org/jgrapht/event/EdgeTraversalEvent.html" title="class in org.jgrapht.event">EdgeTraversalEvent</a></dt>
 <dd>
 <div class="block">The traversed edge.</div>
@@ -4338,6 +4358,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Transform from a Set representation to a graph path.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html#edgesInLargestScc" class="member-name-link">edgesInLargestScc</a> - Variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a></dt>
+<dd>
+<div class="block">Edge count after parallel-edge dedup.</div>
+</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/AbstractSparseSpecificsGraph.html#edgesOf(java.lang.Integer)" class="member-name-link">edgesOf(Integer)</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/AbstractSparseSpecificsGraph.html" title="class in org.jgrapht.opt.graph.sparse.specifics">AbstractSparseSpecificsGraph</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/IncidenceMatrixSparseUndirectedSpecifics.html#edgesOf(java.lang.Integer)" class="member-name-link">edgesOf(Integer)</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/IncidenceMatrixSparseUndirectedSpecifics.html" title="class in org.jgrapht.opt.graph.sparse.specifics">IncidenceMatrixSparseUndirectedSpecifics</a></dt>
@@ -4415,6 +4439,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/event/GraphEdgeChangeEvent.html#edgeSource" class="member-name-link">edgeSource</a> - Variable in class org.jgrapht.event.<a href="org.jgrapht.core/org/jgrapht/event/GraphEdgeChangeEvent.html" title="class in org.jgrapht.event">GraphEdgeChangeEvent</a></dt>
 <dd>
 <div class="block">The source vertex of the edge that this event is related to.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html#edgesOut" class="member-name-link">edgesOut</a> - Variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a></dt>
+<dd>
+<div class="block">Edges CSV output path.</div>
 </dd>
 <dt><a href="org.jgrapht.guava/org/jgrapht/graph/guava/BaseGraphAdapter.html#edgeSupplier" class="member-name-link">edgeSupplier</a> - Variable in class org.jgrapht.graph.guava.<a href="org.jgrapht.guava/org/jgrapht/graph/guava/BaseGraphAdapter.html" title="class in org.jgrapht.graph.guava">BaseGraphAdapter</a></dt>
 <dd>&nbsp;</dd>
@@ -5937,6 +5965,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">An admissible heuristic estimate from a source vertex to a target vertex.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#getCostEstimate(V,V)" class="member-name-link">getCostEstimate(V, V)</a> - Method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/netgen/BipartiteMatchingProblem.BipartiteMatchingProblemImpl.html#getCosts()" class="member-name-link">getCosts()</a> - Method in class org.jgrapht.generate.netgen.<a href="org.jgrapht.core/org/jgrapht/generate/netgen/BipartiteMatchingProblem.BipartiteMatchingProblemImpl.html" title="class in org.jgrapht.generate.netgen">BipartiteMatchingProblem.BipartiteMatchingProblemImpl</a></dt>
 <dd>
 <div class="block">Returns a cost function of this problem.</div>
@@ -9340,6 +9370,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html#gossetGraph()" class="member-name-link">gossetGraph()</a> - Static method in class org.jgrapht.generate.<a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html" title="class in org.jgrapht.generate">NamedGraphGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" class="type-name-link" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor</a> - Class in <a href="org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a></dt>
+<dd>
+<div class="block">Reads a Geofabrik-style OpenStreetMap GPKG snapshot of a region's road network and
+ writes the largest strongly-connected component as a pair of gzipped CSV files that
+ <a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html" title="class in org.jgrapht.osm"><code>OsmCsvGraphLoader</code></a> loads back into a <code>Graph&lt;Integer, ...&gt;</code>.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" class="type-name-link" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a> - Class in <a href="org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a></dt>
+<dd>
+<div class="block">Summary statistics from a preprocessor run.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html#gpkg-schema-assumptions-heading" class="search-tag-link">GPKG schema assumptions</a> - Search tag in class org.jgrapht.osm.GpkgRoadGraphPreprocessor</dt>
+<dd>Section</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/clique/BronKerboschCliqueFinder.html#graph" class="member-name-link">graph</a> - Variable in class org.jgrapht.alg.clique.<a href="org.jgrapht.core/org/jgrapht/alg/clique/BronKerboschCliqueFinder.html" title="class in org.jgrapht.alg.clique">BronKerboschCliqueFinder</a></dt>
 <dd>
 <div class="block">The underlying graph</div>
@@ -10152,6 +10194,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Checks if a vertex $v$ from the first graph has a corresponding vertex in the second graph</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" class="type-name-link" title="class in org.jgrapht.osm">HaversineHeuristic&lt;V&gt;</a> - Class in <a href="org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a></dt>
+<dd>
+<div class="block">Great-circle (Haversine) admissible heuristic for A* over geographic graphs.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#%3Cinit%3E(java.util.function.Function)" class="member-name-link">HaversineHeuristic(Function&lt;V, double[]&gt;)</a> - Constructor for class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>
+<div class="block">Constructs a heuristic backed by the given coordinate lookup, using the default
+ Earth radius.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#%3Cinit%3E(java.util.function.Function,double)" class="member-name-link">HaversineHeuristic(Function&lt;V, double[]&gt;, double)</a> - Constructor for class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>
+<div class="block">Constructs a heuristic with a custom sphere radius.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/HawickJamesSimpleCycles.html" class="type-name-link" title="class in org.jgrapht.alg.cycle">HawickJamesSimpleCycles&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/cycle/package-summary.html">org.jgrapht.alg.cycle</a></dt>
 <dd>
 <div class="block">Find all simple cycles of a directed graph using the algorithm described by Hawick and James.</div>
@@ -10818,6 +10873,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/RescaleLayoutAlgorithm2D.html#initializer" class="member-name-link">initializer</a> - Variable in class org.jgrapht.alg.drawing.<a href="org.jgrapht.core/org/jgrapht/alg/drawing/RescaleLayoutAlgorithm2D.html" title="class in org.jgrapht.alg.drawing">RescaleLayoutAlgorithm2D</a></dt>
 <dd>
 <div class="block">A model initializer</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html#inputSegments" class="member-name-link">inputSegments</a> - Variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a></dt>
+<dd>
+<div class="block">Number of consecutive vertex pairs (segments) read from the GPKG.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/util/UnionFind.html#inSameSet(T,T)" class="member-name-link">inSameSet(T, T)</a> - Method in class org.jgrapht.alg.util.<a href="org.jgrapht.core/org/jgrapht/alg/util/UnionFind.html" title="class in org.jgrapht.alg.util">UnionFind</a></dt>
 <dd>
@@ -12096,6 +12155,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Create a new wrapper</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzipped(java.io.InputStream)" class="member-name-link">loadGzipped(InputStream)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html" title="class in org.jgrapht.osm">OsmCsvGraphLoader</a></dt>
+<dd>
+<div class="block">Loads the gzipped edges stream into a freshly created
+ <a href="org.jgrapht.core/org/jgrapht/graph/SimpleDirectedWeightedGraph.html" title="class in org.jgrapht.graph"><code>SimpleDirectedWeightedGraph</code></a><code>&lt;Integer, DefaultWeightedEdge&gt;</code>.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzippedFile(java.nio.file.Path)" class="member-name-link">loadGzippedFile(Path)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html" title="class in org.jgrapht.osm">OsmCsvGraphLoader</a></dt>
+<dd>
+<div class="block">Loads the gzipped edges file into a freshly created
+ <a href="org.jgrapht.core/org/jgrapht/graph/SimpleDirectedWeightedGraph.html" title="class in org.jgrapht.graph"><code>SimpleDirectedWeightedGraph</code></a><code>&lt;Integer, DefaultWeightedEdge&gt;</code>.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzippedInto(java.io.InputStream,org.jgrapht.Graph)" class="member-name-link">loadGzippedInto(InputStream, Graph&lt;Integer, DefaultWeightedEdge&gt;)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html" title="class in org.jgrapht.osm">OsmCsvGraphLoader</a></dt>
+<dd>
+<div class="block">Loads the gzipped edges stream into the caller-supplied graph.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html#loadGzippedResource(java.lang.Class,java.lang.String)" class="member-name-link">loadGzippedResource(Class&lt;?&gt;, String)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html" title="class in org.jgrapht.osm">OsmCsvGraphLoader</a></dt>
+<dd>
+<div class="block">Loads the gzipped edges resource into a freshly created
+ <a href="org.jgrapht.core/org/jgrapht/graph/SimpleDirectedWeightedGraph.html" title="class in org.jgrapht.graph"><code>SimpleDirectedWeightedGraph</code></a><code>&lt;Integer, DefaultWeightedEdge&gt;</code>.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/MathUtil.html#log2(int)" class="member-name-link">log2(int)</a> - Static method in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/MathUtil.html" title="class in org.jgrapht.util">MathUtil</a></dt>
 <dd>
 <div class="block">Calculate the floor of the binary logarithm of $n$.</div>
@@ -12167,6 +12245,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.demo/org/jgrapht/demo/PerformanceDemo.html#main(java.lang.String%5B%5D)" class="member-name-link">main(String[])</a> - Static method in class org.jgrapht.demo.<a href="org.jgrapht.demo/org/jgrapht/demo/PerformanceDemo.html" title="class in org.jgrapht.demo">PerformanceDemo</a></dt>
 <dd>
 <div class="block">The starting point for the demo.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html#main(java.lang.String%5B%5D)" class="member-name-link">main(String[])</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor</a></dt>
+<dd>
+<div class="block">CLI entry point.</div>
 </dd>
 <dt><a href="org.jgrapht.unimi.dsi/org/jgrapht/webgraph/AbstractImmutableGraphAdapter.html#makeEdge(int,int)" class="member-name-link">makeEdge(int, int)</a> - Method in class org.jgrapht.webgraph.<a href="org.jgrapht.unimi.dsi/org/jgrapht/webgraph/AbstractImmutableGraphAdapter.html" title="class in org.jgrapht.webgraph">AbstractImmutableGraphAdapter</a></dt>
 <dd>&nbsp;</dd>
@@ -12985,6 +13067,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the first <a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.ListNode.html" title="class in org.jgrapht.util"><code>node</code></a> holding the specified <code>element</code> in this list.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html#nodesOut" class="member-name-link">nodesOut</a> - Variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a></dt>
+<dd>
+<div class="block">Nodes CSV output path.</div>
+</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/NoIncomingNoReindexSparseDirectedSpecifics.html" class="type-name-link" title="class in org.jgrapht.opt.graph.sparse.specifics">NoIncomingNoReindexSparseDirectedSpecifics</a> - Class in <a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/package-summary.html">org.jgrapht.opt.graph.sparse.specifics</a></dt>
 <dd>
 <div class="block">Specifics for a sparse directed graph which does not re-index the edges and does not support
@@ -13132,6 +13218,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.html#offer(E)" class="member-name-link">offer(E)</a> - Method in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a></dt>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.html#offerFirst(E)" class="member-name-link">offerFirst(E)</a> - Method in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a></dt>
 <dt><a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.html#offerLast(E)" class="member-name-link">offerLast(E)</a> - Method in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/DoublyLinkedList.html" title="class in org.jgrapht.util">DoublyLinkedList</a></dt>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html#ofMap(java.util.Map)" class="member-name-link">ofMap(Map&lt;V, double[]&gt;)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/HaversineHeuristic.html" title="class in org.jgrapht.osm">HaversineHeuristic</a></dt>
+<dd>
+<div class="block">Convenience factory for the common case where coordinates are stored in a
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarShortestPath.html#openList" class="member-name-link">openList</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/AStarShortestPath.html" title="class in org.jgrapht.alg.shortestpath">AStarShortestPath</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/FRLayoutAlgorithm2D.html#optimalDistance" class="member-name-link">optimalDistance</a> - Variable in class org.jgrapht.alg.drawing.<a href="org.jgrapht.core/org/jgrapht/alg/drawing/FRLayoutAlgorithm2D.html" title="class in org.jgrapht.alg.drawing">FRLayoutAlgorithm2D</a></dt>
@@ -13414,6 +13505,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Implementations of different sparse graphs with different tradeoffs.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/module-summary.html">org.jgrapht.osm</a> - module org.jgrapht.osm</dt>
+<dd>
+<div class="block">OpenStreetMap road-graph integration for JGraphT.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a> - package org.jgrapht.osm</dt>
+<dd>
+<div class="block">OpenStreetMap road-graph integration: GPKG preprocessing, CSV loading, and Haversine
+ heuristic for A* over geographic graphs.</div>
+</dd>
 <dt><a href="org.jgrapht.unimi.dsi/org/jgrapht/sux4j/package-summary.html">org.jgrapht.sux4j</a> - package org.jgrapht.sux4j</dt>
 <dd>
 <div class="block">Immutable graphs stored using <a href="http://sux4j.di.unimi.it/">Sux4J</a>'s quasi-succinct data
@@ -13440,6 +13540,17 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SuurballeKDisjointShortestPaths.html#originalGraph" class="member-name-link">originalGraph</a> - Variable in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/SuurballeKDisjointShortestPaths.html" title="class in org.jgrapht.alg.shortestpath">SuurballeKDisjointShortestPaths</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html" class="type-name-link" title="class in org.jgrapht.osm">OsmCoordinatesReader</a> - Class in <a href="org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a></dt>
+<dd>
+<div class="block">Reads a headerless <code>node_id,lat,lon</code> CSV (the companion file produced by
+ <a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" title="class in org.jgrapht.osm"><code>GpkgRoadGraphPreprocessor</code></a>) into a <code>Map&lt;Integer, double[]&gt;</code> keyed by node
+ id, with each value an array <code>{lat, lon}</code> in decimal degrees.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCsvGraphLoader.html" class="type-name-link" title="class in org.jgrapht.osm">OsmCsvGraphLoader</a> - Class in <a href="org.jgrapht.osm/org/jgrapht/osm/package-summary.html">org.jgrapht.osm</a></dt>
+<dd>
+<div class="block">Loads a headerless weighted edge-list CSV (the format produced by
+ <a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" title="class in org.jgrapht.osm"><code>GpkgRoadGraphPreprocessor</code></a>) into a target <a href="org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht"><code>Graph</code></a>.</div>
+</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/AbstractSparseSpecificsGraph.html#outDegreeOf(java.lang.Integer)" class="member-name-link">outDegreeOf(Integer)</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/AbstractSparseSpecificsGraph.html" title="class in org.jgrapht.opt.graph.sparse.specifics">AbstractSparseSpecificsGraph</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/IncidenceMatrixSparseUndirectedSpecifics.html#outDegreeOf(java.lang.Integer)" class="member-name-link">outDegreeOf(Integer)</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/IncidenceMatrixSparseUndirectedSpecifics.html" title="class in org.jgrapht.opt.graph.sparse.specifics">IncidenceMatrixSparseUndirectedSpecifics</a></dt>
@@ -14136,6 +14247,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Create a new ratio vertex</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html#readGzipped(java.io.InputStream)" class="member-name-link">readGzipped(InputStream)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html" title="class in org.jgrapht.osm">OsmCoordinatesReader</a></dt>
+<dd>
+<div class="block">Reads the gzipped coordinates stream into a map.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html#readGzippedFile(java.nio.file.Path)" class="member-name-link">readGzippedFile(Path)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html" title="class in org.jgrapht.osm">OsmCoordinatesReader</a></dt>
+<dd>
+<div class="block">Reads the gzipped coordinates file into a map.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html#readGzippedResource(java.lang.Class,java.lang.String)" class="member-name-link">readGzippedResource(Class&lt;?&gt;, String)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/OsmCoordinatesReader.html" title="class in org.jgrapht.osm">OsmCoordinatesReader</a></dt>
+<dd>
+<div class="block">Reads the gzipped coordinates resource into a map.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/vertexcover/RecursiveExactVCImpl.html" class="type-name-link" title="class in org.jgrapht.alg.vertexcover">RecursiveExactVCImpl&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/vertexcover/package-summary.html">org.jgrapht.alg.vertexcover</a></dt>
 <dd>
 <div class="block">Finds a minimum vertex cover in a undirected graph.</div>
@@ -14781,9 +14904,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">the designated root of the CMST.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html#ROUTABLE_FCLASSES" class="member-name-link">ROUTABLE_FCLASSES</a> - Static variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor</a></dt>
+<dd>
+<div class="block">Geofabrik <code>fclass</code> values considered routable road segments.</div>
+</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/CSRBooleanMatrix.html#rows()" class="member-name-link">rows()</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/CSRBooleanMatrix.html" title="class in org.jgrapht.opt.graph.sparse.specifics">CSRBooleanMatrix</a></dt>
 <dd>
 <div class="block">Get the number of rows of the matrix.</div>
+</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html#run(java.nio.file.Path,java.nio.file.Path)" class="member-name-link">run(Path, Path)</a> - Static method in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor</a></dt>
+<dd>
+<div class="block">Library entry point.</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
@@ -17330,6 +17461,10 @@ the order they are declared.</div>
 <dd>
 <div class="block">Set the generator vertices.</div>
 </dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html#verticesAll" class="member-name-link">verticesAll</a> - Variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a></dt>
+<dd>
+<div class="block">Total distinct vertex count across all components.</div>
+</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/IncidenceMatrixSparseUndirectedSpecifics.html#verticesCount()" class="member-name-link">verticesCount()</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/IncidenceMatrixSparseUndirectedSpecifics.html" title="class in org.jgrapht.opt.graph.sparse.specifics">IncidenceMatrixSparseUndirectedSpecifics</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/NoIncomingNoReindexSparseDirectedSpecifics.html#verticesCount()" class="member-name-link">verticesCount()</a> - Method in class org.jgrapht.opt.graph.sparse.specifics.<a href="org.jgrapht.opt/org/jgrapht/opt/graph/sparse/specifics/NoIncomingNoReindexSparseDirectedSpecifics.html" title="class in org.jgrapht.opt.graph.sparse.specifics">NoIncomingNoReindexSparseDirectedSpecifics</a></dt>
@@ -17340,6 +17475,10 @@ the order they are declared.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/HierholzerEulerianCycle.html#verticesHead" class="member-name-link">verticesHead</a> - Variable in class org.jgrapht.alg.cycle.<a href="org.jgrapht.core/org/jgrapht/alg/cycle/HierholzerEulerianCycle.html" title="class in org.jgrapht.alg.cycle">HierholzerEulerianCycle</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html#verticesInLargestScc" class="member-name-link">verticesInLargestScc</a> - Variable in class org.jgrapht.osm.<a href="org.jgrapht.osm/org/jgrapht/osm/GpkgRoadGraphPreprocessor.Result.html" title="class in org.jgrapht.osm">GpkgRoadGraphPreprocessor.Result</a></dt>
+<dd>
+<div class="block">Vertex count in the largest strongly-connected component.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/isomorphism/VF2AbstractIsomorphismInspector.html" class="type-name-link" title="class in org.jgrapht.alg.isomorphism">VF2AbstractIsomorphismInspector&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/isomorphism/package-summary.html">org.jgrapht.alg.isomorphism</a></dt>
 <dd>
 <div class="block">Base implementation of the VF2 algorithm using its feature of detecting
