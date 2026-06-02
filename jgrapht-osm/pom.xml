@@ -10,7 +10,7 @@
     <name>JGraphT - OSM</name>
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>
-        <sqlite-jdbc.version>3.50.3.0</sqlite-jdbc.version>
+        <sqlite-jdbc.version>3.53.1.0</sqlite-jdbc.version>
     </properties>
     <licenses>
         <license>
