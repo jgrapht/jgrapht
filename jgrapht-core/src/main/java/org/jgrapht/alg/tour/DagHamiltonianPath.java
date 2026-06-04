@@ -18,7 +18,7 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.traverse.*;
 
 import java.util.*;
@@ -27,19 +27,29 @@ import java.util.*;
  * Polynomial-time Hamiltonian path algorithm for directed acyclic graphs.
  *
  * <p>
- * Hamiltonian path existence in a directed acyclic graph (DAG) can be decided in linear time by
- * checking whether the longest directed path covers all vertices. This implementation computes
- * a topological order, runs the standard longest-path-in-DAG dynamic program, and reconstructs
- * a Hamiltonian path when the longest path's length equals the vertex count.
+ * Hamiltonian path existence in a directed acyclic graph (DAG) reduces to deciding whether the
+ * longest directed path covers all vertices. This implementation computes a topological order,
+ * runs the standard longest-path-in-DAG dynamic program over that order, and reconstructs a
+ * Hamiltonian path when the longest path's length equals the vertex count.
+ *
+ * <p>
+ * The longest-path-in-DAG DP is a textbook reduction; see for example CLRS, "Introduction to
+ * Algorithms" (4th ed.), section on single-source shortest paths in DAGs, which dualises to
+ * longest-path by negating edge weights, and the MIT 6.s078 lecture notes
+ * (<a href="https://people.csail.mit.edu/virgi/6.s078/lecture17.pdf">lecture 17 on dynamic
+ * programming, MIT 6.s078, Spring 2022</a>) for the Hamiltonian-path framing.
  *
  * <p>
  * Total complexity is {@code O(|V| + |E|)} time and {@code O(|V|)} space.
  *
  * <p>
  * This class only accepts directed acyclic graphs. Passing a directed graph that contains a
- * cycle, an undirected graph, or {@code null} causes an {@link IllegalArgumentException}. To
- * solve Hamiltonian path on cyclic directed graphs, use {@link BacktrackingHamiltonianPath} or
- * {@link HeldKarpHamiltonianPath}.
+ * cycle, an undirected graph, or {@code null} causes an {@link IllegalArgumentException}
+ * (specifically, a
+ * {@link org.jgrapht.traverse.NotDirectedAcyclicGraphException} for the cyclic case, surfaced
+ * from {@link TopologicalOrderIterator} as the topological pass discovers the cycle). To solve
+ * the Hamiltonian path problem on cyclic directed graphs, use
+ * {@link BacktrackingHamiltonianPath} or {@link HeldKarpHamiltonianPath}.
  *
  * <p>
  * In multigraphs, parallel edges between the same vertex pair do not change the result. The
@@ -63,7 +73,7 @@ public class DagHamiltonianPath<V, E>
     }
 
     @Override
-    public GraphPath<V, E> getPath(Graph<V, E> graph)
+    public HamiltonianPathSearchResult<V, E> getPath(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, "graph must not be null");
         GraphTests.requireDirected(graph);
@@ -71,17 +81,18 @@ public class DagHamiltonianPath<V, E>
 
         final int n = graph.vertexSet().size();
         if (n == 1) {
-            return singletonPath(graph);
-        }
-
-        if (new CycleDetector<>(graph).detectCycles()) {
-            throw new IllegalArgumentException(
-                "DagHamiltonianPath requires an acyclic graph; cycle detected. "
-                    + "Use BacktrackingHamiltonianPath or HeldKarpHamiltonianPath instead.");
+            return HamiltonianPathSearchResult.found(singletonPath(graph), 0L);
         }
 
         List<V> topo = new ArrayList<>(n);
-        new TopologicalOrderIterator<>(graph).forEachRemaining(topo::add);
+        try {
+            new TopologicalOrderIterator<>(graph).forEachRemaining(topo::add);
+        } catch (NotDirectedAcyclicGraphException ex) {
+            throw new IllegalArgumentException(
+                "DagHamiltonianPath requires an acyclic graph; cycle detected. "
+                    + "Use BacktrackingHamiltonianPath or HeldKarpHamiltonianPath instead.",
+                ex);
+        }
         Map<V, Integer> position = new HashMap<>(n);
         for (int i = 0; i < n; i++) {
             position.put(topo.get(i), i);
@@ -92,19 +103,18 @@ public class DagHamiltonianPath<V, E>
         Arrays.fill(longest, 1);
         Arrays.fill(predecessor, -1);
 
+        // No self-loop check is needed here: TopologicalOrderIterator throws
+        // NotDirectedAcyclicGraphException on any self-loop (an edge v->v is a length-1 cycle),
+        // so by this point every incoming edge has a distinct source.
         int bestEnd = 0;
         int bestLength = 1;
         for (int i = 0; i < n; i++) {
             V v = topo.get(i);
             for (E e : graph.incomingEdgesOf(v)) {
-                V u = graph.getEdgeSource(e);
-                if (u.equals(v)) {
-                    continue; // self-loop; cannot occur in a DAG but guarded for safety
-                }
-                int candidate = longest[position.get(u)] + 1;
-                if (candidate > longest[i]) {
-                    longest[i] = candidate;
-                    predecessor[i] = position.get(u);
+                int u = position.get(graph.getEdgeSource(e));
+                if (longest[u] + 1 > longest[i]) {
+                    longest[i] = longest[u] + 1;
+                    predecessor[i] = u;
                 }
             }
             if (longest[i] > bestLength) {
@@ -114,7 +124,7 @@ public class DagHamiltonianPath<V, E>
         }
 
         if (bestLength != n) {
-            return null;
+            return HamiltonianPathSearchResult.provenAbsent(n);
         }
 
         Deque<V> reversed = new ArrayDeque<>(n);
@@ -123,6 +133,7 @@ public class DagHamiltonianPath<V, E>
             reversed.push(topo.get(cur));
             cur = predecessor[cur];
         }
-        return vertexListToPath(new ArrayList<>(reversed), graph);
+        return HamiltonianPathSearchResult.found(
+            vertexListToPath(new ArrayList<>(reversed), graph), n);
     }
 }

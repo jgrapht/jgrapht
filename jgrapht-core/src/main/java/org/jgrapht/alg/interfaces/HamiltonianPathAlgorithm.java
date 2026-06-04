@@ -51,19 +51,32 @@ public interface HamiltonianPathAlgorithm<V, E>
 {
 
     /**
-     * Computes a Hamiltonian path in the given graph.
+     * Computes a Hamiltonian path in the given graph and returns a tri-state
+     * {@link HamiltonianPathSearchResult}.
      *
      * <p>
-     * Returns a {@link GraphPath} whose vertex list contains every vertex of the graph exactly
-     * once and whose consecutive vertices are connected by an edge of the graph (respecting edge
-     * direction in directed graphs). Returns {@code null} when the implementation has proven
-     * that no Hamiltonian path exists. Implementations that perform bounded search must
-     * distinguish proven absence from search abortion via their own API and must not return
-     * {@code null} for an aborted search.
+     * The return value distinguishes:
+     * <ul>
+     * <li>{@link HamiltonianPathSearchResult.Status#PATH_FOUND} — the algorithm produced a
+     * Hamiltonian path; it is accessible via
+     * {@link HamiltonianPathSearchResult#getPath()}.</li>
+     * <li>{@link HamiltonianPathSearchResult.Status#PROVEN_ABSENT} — the algorithm ran to
+     * completion (or was rejected by a sound precheck) and proved that no Hamiltonian path
+     * exists.</li>
+     * <li>{@link HamiltonianPathSearchResult.Status#ABORTED} — the algorithm performed a bounded
+     * search that hit its limit before completing. Whether a Hamiltonian path exists in the
+     * graph is unknown.</li>
+     * </ul>
+     *
+     * <p>
+     * Unbounded implementations only return {@code PATH_FOUND} or {@code PROVEN_ABSENT}.
+     * Implementations that accept an execution budget (e.g. a maximum state count) may also
+     * return {@code ABORTED}; such bounded variants must never report {@code PROVEN_ABSENT}
+     * for a search that was stopped early.
      *
      * @param graph the input graph
-     * @return a Hamiltonian path, or {@code null} if no such path exists
+     * @return a {@link HamiltonianPathSearchResult} describing the search outcome
      */
-    GraphPath<V, E> getPath(Graph<V, E> graph);
+    HamiltonianPathSearchResult<V, E> getPath(Graph<V, E> graph);
 
 }

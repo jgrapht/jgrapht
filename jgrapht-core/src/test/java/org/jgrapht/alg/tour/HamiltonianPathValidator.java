@@ -18,6 +18,8 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.HamiltonianPathSearchResult.Status;
 
 import java.util.*;
 
@@ -45,6 +47,31 @@ final class HamiltonianPathValidator
 {
     private HamiltonianPathValidator()
     {
+    }
+
+    /**
+     * Asserts that {@code result} reports {@link Status#PATH_FOUND} and that the contained
+     * path is a structurally valid Hamiltonian path on {@code graph}.
+     */
+    static <V, E> void assertHamiltonianPath(
+        Graph<V, E> graph, HamiltonianPathSearchResult<V, E> result)
+    {
+        assertNotNull(result, "expected a HamiltonianPathSearchResult but got null");
+        assertEquals(Status.PATH_FOUND, result.getStatus(),
+            () -> "expected PATH_FOUND but got " + result.getStatus());
+        GraphPath<V, E> path = result.getPath().orElse(null);
+        assertHamiltonianPath(graph, path);
+    }
+
+    /**
+     * Asserts that {@code result} reports {@link Status#PROVEN_ABSENT} and carries no path.
+     */
+    static <V, E> void assertProvenAbsent(HamiltonianPathSearchResult<V, E> result)
+    {
+        assertNotNull(result, "expected a HamiltonianPathSearchResult but got null");
+        assertEquals(Status.PROVEN_ABSENT, result.getStatus(),
+            () -> "expected PROVEN_ABSENT but got " + result.getStatus());
+        assertTrue(result.getPath().isEmpty(), "PROVEN_ABSENT result must carry no path");
     }
 
     static <V, E> void assertHamiltonianPath(Graph<V, E> graph, GraphPath<V, E> path)

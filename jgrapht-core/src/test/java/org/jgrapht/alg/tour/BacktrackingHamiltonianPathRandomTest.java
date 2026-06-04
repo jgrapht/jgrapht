@@ -18,6 +18,7 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
@@ -71,11 +72,12 @@ public class BacktrackingHamiltonianPathRandomTest
     private void runOne(Graph<Integer, DefaultEdge> graph)
     {
         boolean oracle = bruteForceExists(graph);
-        GraphPath<Integer, DefaultEdge> found =
+        HamiltonianPathSearchResult<Integer, DefaultEdge> result =
             new BacktrackingHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
-        assertEquals(oracle, found != null, () -> "disagreement on graph " + graph);
-        if (found != null) {
-            assertHamiltonianPath(graph, found);
+        boolean found = result.getPath().isPresent();
+        assertEquals(oracle, found, () -> "disagreement on graph " + graph);
+        if (found) {
+            assertHamiltonianPath(graph, result);
         }
     }
 

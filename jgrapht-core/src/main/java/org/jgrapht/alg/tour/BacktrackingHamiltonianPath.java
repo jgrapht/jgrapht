@@ -19,8 +19,10 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -33,7 +35,23 @@ import java.util.*;
  * The algorithm performs depth-first search over simple paths. From each candidate start vertex
  * it tries to extend the current path by an unused adjacent vertex; the first path that visits
  * every vertex exactly once is returned. If the exhaustive search proves that no such path
- * exists, {@code null} is returned.
+ * exists, a {@link HamiltonianPathSearchResult.Status#PROVEN_ABSENT} result is returned.
+ *
+ * <p>
+ * The unbounded {@link #getPath(Graph)} entry point only returns {@code PATH_FOUND} or
+ * {@code PROVEN_ABSENT}. The bounded {@link #searchWithStateLimit(Graph, long)} variant may
+ * additionally return {@link HamiltonianPathSearchResult.Status#ABORTED} when the search hits
+ * its state budget before completing.
+ *
+ * <p>
+ * The depth-first search is informed by classic backtracking ideas for Hamiltonian path
+ * existence (see Rubin, F., "A Search Procedure for Hamilton Paths and Circuits", JACM 21(4),
+ * 1974) augmented with Warnsdorff-style minimum-remaining-values candidate ordering (after
+ * Warnsdorff, "Des R&ouml;sselsprunges einfachste und allgemeinste L&ouml;sung", 1823) and
+ * standard constraint-satisfaction reachability propagation (Tsang, "Foundations of Constraint
+ * Satisfaction", 1993). The structural prechecks (block / cut-vertex / bridge / SCC) implement
+ * well-known necessary conditions from graph theory; see Diestel, "Graph Theory", chapter 3
+ * for the underlying decompositions.
  *
  * <p>
  * The general Hamiltonian path problem is NP-complete. This implementation is exact and runs in
@@ -124,61 +142,17 @@ public class BacktrackingHamiltonianPath<V, E>
     }
 
     @Override
-    public GraphPath<V, E> getPath(Graph<V, E> graph)
+    public HamiltonianPathSearchResult<V, E> getPath(Graph<V, E> graph)
     {
-        Objects.requireNonNull(graph, "graph must not be null");
-        GraphTests.requireDirectedOrUndirected(graph);
-        statesExpanded = 0L;
-        aborted = false;
-        requireNotEmpty(graph);
-
-        final int n = graph.vertexSet().size();
-        if (n == 1) {
-            return singletonPath(graph);
-        }
-
-        final boolean directed = graph.getType().isDirected();
-
-        if (!directed && !cheapUndirectedPrechecks(graph)) {
-            return null;
-        }
-        if (directed && !cheapDirectedPrechecks(graph)) {
-            return null;
-        }
-
-        List<V> indexToVertex = new ArrayList<>(graph.vertexSet());
-        Map<V, Integer> vertexToIndex = new HashMap<>(n);
-        for (int i = 0; i < n; i++) {
-            vertexToIndex.put(indexToVertex.get(i), i);
-        }
-
-        int[][] adjacency = buildAdjacency(graph, indexToVertex, vertexToIndex, directed);
-
-        int[] pathIdx = new int[n];
-        boolean[] visited = new boolean[n];
-
-        for (int start = 0; start < n; start++) {
-            pathIdx[0] = start;
-            visited[start] = true;
-            if (extend(adjacency, pathIdx, visited, 1, n)) {
-                return buildResult(graph, indexToVertex, pathIdx);
-            }
-            visited[start] = false;
-            if (aborted) {
-                return null;
-            }
-        }
-        return null;
+        return search(graph, 0L);
     }
 
     /**
      * Performs a Hamiltonian path search with an upper bound on the number of DFS states the
-     * solver may explore. Unlike {@link #getPath(Graph)} this overload distinguishes three
-     * possible outcomes via {@link HamiltonianPathSearchResult}: a path is found, the search
-     * proved no path exists, or the search aborted because it reached the state limit. The
-     * structural prechecks (connectivity, leaf count, cut vertex degree, bridge tree degree,
-     * SCC condensation) run before the limited DFS and are not counted against the budget;
-     * graphs they reject return {@link HamiltonianPathSearchResult.Status#PROVEN_ABSENT}.
+     * solver may explore. The structural prechecks (connectivity, leaf count, cut vertex
+     * degree, bridge tree degree, SCC condensation) run before the limited DFS and are not
+     * counted against the budget; graphs they reject return
+     * {@link HamiltonianPathSearchResult.Status#PROVEN_ABSENT}.
      *
      * @param graph the input graph
      * @param maxStates the maximum number of DFS states (partial paths) the search is allowed
@@ -194,19 +168,53 @@ public class BacktrackingHamiltonianPath<V, E>
         if (maxStates <= 0L) {
             throw new IllegalArgumentException("maxStates must be positive, got " + maxStates);
         }
-        long previousLimit = this.maxStatesLimit;
-        this.maxStatesLimit = maxStates;
-        try {
-            GraphPath<V, E> path = getPath(graph);
+        return search(graph, maxStates);
+    }
+
+    private HamiltonianPathSearchResult<V, E> search(Graph<V, E> graph, long maxStates)
+    {
+        Objects.requireNonNull(graph, "graph must not be null");
+        GraphTests.requireDirectedOrUndirected(graph);
+        statesExpanded = 0L;
+        aborted = false;
+        maxStatesLimit = maxStates;
+        requireNotEmpty(graph);
+
+        final int n = graph.vertexSet().size();
+        if (n == 1) {
+            return HamiltonianPathSearchResult.found(singletonPath(graph), 0L);
+        }
+
+        final boolean directed = graph.getType().isDirected();
+        if (!directed && !cheapUndirectedPrechecks(graph)) {
+            return HamiltonianPathSearchResult.provenAbsent(statesExpanded);
+        }
+        if (directed && !cheapDirectedPrechecks(graph)) {
+            return HamiltonianPathSearchResult.provenAbsent(statesExpanded);
+        }
+
+        VertexToIntegerMapping<V> mapping = Graphs.getVertexToIntegerMapping(graph);
+        List<V> indexToVertex = mapping.getIndexList();
+        Map<V, Integer> vertexToIndex = mapping.getVertexMap();
+
+        int[][] adjacency = buildAdjacency(graph, indexToVertex, vertexToIndex, directed);
+
+        int[] pathIdx = new int[n];
+        boolean[] visited = new boolean[n];
+
+        for (int start = 0; start < n; start++) {
+            pathIdx[0] = start;
+            visited[start] = true;
+            if (extend(adjacency, pathIdx, visited, 1, n)) {
+                return HamiltonianPathSearchResult.found(
+                    buildResult(graph, indexToVertex, pathIdx), statesExpanded);
+            }
+            visited[start] = false;
             if (aborted) {
                 return HamiltonianPathSearchResult.aborted(statesExpanded);
             }
-            return path != null
-                ? HamiltonianPathSearchResult.found(path, statesExpanded)
-                : HamiltonianPathSearchResult.provenAbsent(statesExpanded);
-        } finally {
-            this.maxStatesLimit = previousLimit;
         }
+        return HamiltonianPathSearchResult.provenAbsent(statesExpanded);
     }
 
     /**

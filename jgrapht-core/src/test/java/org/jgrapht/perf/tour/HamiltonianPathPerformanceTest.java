@@ -18,6 +18,7 @@
 package org.jgrapht.perf.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.tour.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
@@ -76,13 +77,13 @@ public class HamiltonianPathPerformanceTest
     }
 
     @Benchmark
-    public GraphPath<Integer, DefaultEdge> backtracking()
+    public HamiltonianPathSearchResult<Integer, DefaultEdge> backtracking()
     {
         return new BacktrackingHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
     }
 
     @Benchmark
-    public GraphPath<Integer, DefaultEdge> heldKarp()
+    public HamiltonianPathSearchResult<Integer, DefaultEdge> heldKarp()
     {
         return new HeldKarpHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
     }

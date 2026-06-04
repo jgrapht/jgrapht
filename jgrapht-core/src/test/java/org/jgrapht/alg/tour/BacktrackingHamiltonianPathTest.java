@@ -18,13 +18,14 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertHamiltonianPath;
+import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertProvenAbsent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -33,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BacktrackingHamiltonianPathTest
 {
 
-    private <V, E> GraphPath<V, E> findPath(Graph<V, E> graph)
+    private <V, E> HamiltonianPathSearchResult<V, E> findPath(Graph<V, E> graph)
     {
         return new BacktrackingHamiltonianPath<V, E>().getPath(graph);
     }
@@ -57,9 +58,12 @@ public class BacktrackingHamiltonianPathTest
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         graph.addVertex("only");
 
-        GraphPath<String, DefaultEdge> path = findPath(graph);
+        HamiltonianPathSearchResult<String, DefaultEdge> result = findPath(graph);
 
-        assertNotNull(path);
+        assertNotNull(result);
+        assertEquals(
+            HamiltonianPathSearchResult.Status.PATH_FOUND, result.getStatus());
+        GraphPath<String, DefaultEdge> path = result.getPath().orElseThrow();
         assertEquals(1, path.getVertexList().size());
         assertEquals("only", path.getStartVertex());
         assertEquals("only", path.getEndVertex());
@@ -121,7 +125,7 @@ public class BacktrackingHamiltonianPathTest
         graph.addEdge(0, 1);
         graph.addEdge(2, 3);
 
-        assertNull(findPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test
@@ -137,7 +141,7 @@ public class BacktrackingHamiltonianPathTest
         graph.addEdge("hub", "b");
         graph.addEdge("hub", "c");
 
-        assertNull(findPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test
@@ -147,7 +151,7 @@ public class BacktrackingHamiltonianPathTest
         graph.addVertex(0);
         graph.addVertex(1);
 
-        assertNull(findPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test
@@ -161,9 +165,10 @@ public class BacktrackingHamiltonianPathTest
             graph.addEdge(i, i + 1);
         }
 
-        GraphPath<Integer, DefaultEdge> path = findPath(graph);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> result = findPath(graph);
 
-        assertHamiltonianPath(graph, path);
+        assertHamiltonianPath(graph, result);
+        GraphPath<Integer, DefaultEdge> path = result.getPath().orElseThrow();
         assertEquals(0, path.getStartVertex());
         assertEquals(4, path.getEndVertex());
     }
@@ -179,7 +184,7 @@ public class BacktrackingHamiltonianPathTest
         // gap: no 1 -> 2 edge.
         graph.addEdge(2, 3);
 
-        assertNull(findPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test
@@ -196,7 +201,7 @@ public class BacktrackingHamiltonianPathTest
         graph.addEdge(2, 3);
         graph.addEdge(3, 2);
 
-        assertNull(findPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test
@@ -232,7 +237,7 @@ public class BacktrackingHamiltonianPathTest
         graph.addEdge(0, 2);
         // vertex 3 is isolated.
 
-        assertNull(findPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test
@@ -263,10 +268,10 @@ public class BacktrackingHamiltonianPathTest
         graph.setEdgeWeight(graph.addEdge(1, 2), 2.5);
         graph.setEdgeWeight(graph.addEdge(2, 3), 3.5);
 
-        GraphPath<Integer, DefaultEdge> path = findPath(graph);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> result = findPath(graph);
 
-        assertHamiltonianPath(graph, path);
-        assertEquals(7.5, path.getWeight(), 1e-9);
+        assertHamiltonianPath(graph, result);
+        assertEquals(7.5, result.getPath().orElseThrow().getWeight(), 1e-9);
     }
 
     @Test
@@ -356,8 +361,8 @@ public class BacktrackingHamiltonianPathTest
         graph.addEdge(2, 10);
 
         // Held-Karp oracle confirms no Hamiltonian path exists.
-        assertNull(new HeldKarpHamiltonianPath<Integer, DefaultEdge>().getPath(graph));
-        assertNull(findPath(graph));
+        assertProvenAbsent(new HeldKarpHamiltonianPath<Integer, DefaultEdge>().getPath(graph));
+        assertProvenAbsent(findPath(graph));
     }
 
     @Test

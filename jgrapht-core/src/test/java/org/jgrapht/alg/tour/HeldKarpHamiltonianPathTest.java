@@ -18,15 +18,17 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.HamiltonianPathSearchResult.Status;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertHamiltonianPath;
+import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertProvenAbsent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -37,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class HeldKarpHamiltonianPathTest
 {
 
-    private <V, E> GraphPath<V, E> dp(Graph<V, E> graph)
+    private <V, E> HamiltonianPathSearchResult<V, E> dp(Graph<V, E> graph)
     {
         return new HeldKarpHamiltonianPath<V, E>().getPath(graph);
     }
@@ -61,9 +63,11 @@ public class HeldKarpHamiltonianPathTest
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         graph.addVertex("only");
 
-        GraphPath<String, DefaultEdge> path = dp(graph);
+        HamiltonianPathSearchResult<String, DefaultEdge> result = dp(graph);
 
-        assertNotNull(path);
+        assertNotNull(result);
+        assertEquals(Status.PATH_FOUND, result.getStatus());
+        GraphPath<String, DefaultEdge> path = result.getPath().orElseThrow();
         assertEquals(1, path.getVertexList().size());
         assertEquals("only", path.getStartVertex());
         assertEquals("only", path.getEndVertex());
@@ -74,10 +78,43 @@ public class HeldKarpHamiltonianPathTest
     public void tooManyVerticesThrows()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        for (int i = 0; i <= HeldKarpHamiltonianPath.MAX_VERTICES; i++) {
+        for (int i = 0; i <= HeldKarpHamiltonianPath.DEFAULT_MAX_VERTICES; i++) {
             graph.addVertex(i);
         }
         assertThrows(IllegalArgumentException.class, () -> dp(graph));
+    }
+
+    @Test
+    public void customMaxVerticesAccepted()
+    {
+        // With an explicit ceiling of 4, a 4-vertex graph must succeed and a 5-vertex graph
+        // must be rejected.
+        HeldKarpHamiltonianPath<Integer, DefaultEdge> small =
+            new HeldKarpHamiltonianPath<>(4);
+        Graph<Integer, DefaultEdge> ok = new SimpleGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 4; i++) {
+            ok.addVertex(i);
+        }
+        for (int i = 0; i < 3; i++) {
+            ok.addEdge(i, i + 1);
+        }
+        assertHamiltonianPath(ok, small.getPath(ok));
+
+        Graph<Integer, DefaultEdge> tooBig = new SimpleGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 5; i++) {
+            tooBig.addVertex(i);
+        }
+        assertThrows(IllegalArgumentException.class, () -> small.getPath(tooBig));
+    }
+
+    @Test
+    public void constructorRejectsOutOfRangeMaxVertices()
+    {
+        assertThrows(IllegalArgumentException.class, () -> new HeldKarpHamiltonianPath<>(0));
+        assertThrows(IllegalArgumentException.class, () -> new HeldKarpHamiltonianPath<>(-1));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new HeldKarpHamiltonianPath<>(HeldKarpHamiltonianPath.HARD_MAX_VERTICES + 1));
     }
 
     @Test
@@ -120,9 +157,10 @@ public class HeldKarpHamiltonianPathTest
             graph.addEdge(i, i + 1);
         }
 
-        GraphPath<Integer, DefaultEdge> path = dp(graph);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> result = dp(graph);
 
-        assertHamiltonianPath(graph, path);
+        assertHamiltonianPath(graph, result);
+        GraphPath<Integer, DefaultEdge> path = result.getPath().orElseThrow();
         assertEquals(0, path.getStartVertex());
         assertEquals(5, path.getEndVertex());
     }
@@ -139,7 +177,7 @@ public class HeldKarpHamiltonianPathTest
         graph.addEdge("hub", "b");
         graph.addEdge("hub", "c");
 
-        assertNull(dp(graph));
+        assertProvenAbsent(dp(graph));
     }
 
     @Test
@@ -152,7 +190,7 @@ public class HeldKarpHamiltonianPathTest
         graph.addEdge(0, 1);
         graph.addEdge(2, 3);
 
-        assertNull(dp(graph));
+        assertProvenAbsent(dp(graph));
     }
 
     @Test
@@ -182,9 +220,9 @@ public class HeldKarpHamiltonianPathTest
         graph.setEdgeWeight(graph.addEdge(1, 2), 2d);
         graph.setEdgeWeight(graph.addEdge(2, 3), 3d);
 
-        GraphPath<Integer, DefaultEdge> path = dp(graph);
-        assertHamiltonianPath(graph, path);
-        assertEquals(6d, path.getWeight(), 1e-9);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> result = dp(graph);
+        assertHamiltonianPath(graph, result);
+        assertEquals(6d, result.getPath().orElseThrow().getWeight(), 1e-9);
     }
 
     @Test
@@ -217,17 +255,17 @@ public class HeldKarpHamiltonianPathTest
 
     private void crossCheck(Graph<Integer, DefaultEdge> graph)
     {
-        GraphPath<Integer, DefaultEdge> dpPath = dp(graph);
-        GraphPath<Integer, DefaultEdge> btPath =
+        HamiltonianPathSearchResult<Integer, DefaultEdge> dpResult = dp(graph);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> btResult =
             new BacktrackingHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
-        assertEquals(
-            btPath == null, dpPath == null,
-            () -> "existence disagreement on graph " + graph);
-        if (dpPath != null) {
-            assertHamiltonianPath(graph, dpPath);
+        boolean dpFound = dpResult.getPath().isPresent();
+        boolean btFound = btResult.getPath().isPresent();
+        assertEquals(btFound, dpFound, () -> "existence disagreement on graph " + graph);
+        if (dpFound) {
+            assertHamiltonianPath(graph, dpResult);
         }
-        if (btPath != null) {
-            assertHamiltonianPath(graph, btPath);
+        if (btFound) {
+            assertHamiltonianPath(graph, btResult);
         }
     }
 

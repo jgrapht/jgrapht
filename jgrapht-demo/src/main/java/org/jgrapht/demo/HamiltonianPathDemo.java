@@ -18,6 +18,7 @@
 package org.jgrapht.demo;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.tour.*;
 import org.jgrapht.graph.*;
 
@@ -64,10 +65,7 @@ public final class HamiltonianPathDemo
         graph.addEdge(3, 4);
         graph.addEdge(2, 4);
 
-        GraphPath<Integer, DefaultEdge> path =
-            new BacktrackingHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
-
-        printResult(path);
+        printResult(new BacktrackingHamiltonianPath<Integer, DefaultEdge>().getPath(graph));
     }
 
     private static void runDirectedDagExample()
@@ -85,10 +83,7 @@ public final class HamiltonianPathDemo
         dag.addEdge("test", "ship");
         dag.addEdge("design", "test"); // forward shortcut
 
-        GraphPath<String, DefaultEdge> path =
-            new DagHamiltonianPath<String, DefaultEdge>().getPath(dag);
-
-        printResult(path);
+        printResult(new DagHamiltonianPath<String, DefaultEdge>().getPath(dag));
     }
 
     private static void runHeldKarpExample()
@@ -103,18 +98,16 @@ public final class HamiltonianPathDemo
             graph.addEdge(i, (i + 1) % 6);
         }
 
-        GraphPath<Integer, DefaultEdge> path =
-            new HeldKarpHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
-
-        printResult(path);
+        printResult(new HeldKarpHamiltonianPath<Integer, DefaultEdge>().getPath(graph));
     }
 
-    private static <V, E> void printResult(GraphPath<V, E> path)
+    private static <V, E> void printResult(HamiltonianPathSearchResult<V, E> result)
     {
-        if (path == null) {
-            System.out.println("No Hamiltonian path exists.");
+        if (result.getPath().isEmpty()) {
+            System.out.println("No Hamiltonian path exists (status=" + result.getStatus() + ").");
             return;
         }
+        GraphPath<V, E> path = result.getPath().orElseThrow();
         System.out.println("Hamiltonian path: " + path.getVertexList());
         System.out.println("Weight: " + path.getWeight());
     }

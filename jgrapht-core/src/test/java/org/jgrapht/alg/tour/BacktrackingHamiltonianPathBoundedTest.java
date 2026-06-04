@@ -18,7 +18,8 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.tour.HamiltonianPathSearchResult.Status;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.HamiltonianPathSearchResult.Status;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
@@ -77,9 +78,8 @@ public class BacktrackingHamiltonianPathBoundedTest
     {
         Graph<Integer, DefaultEdge> graph = path(6);
         HamiltonianPathSearchResult<Integer, DefaultEdge> result = search(graph, 1_000_000L);
-        assertEquals(Status.PATH_FOUND, result.getStatus());
+        assertHamiltonianPath(graph, result);
         assertTrue(result.getPath().isPresent());
-        assertHamiltonianPath(graph, result.getPath().orElseThrow());
         assertTrue(result.getStatesExpanded() > 0);
     }
 
@@ -141,8 +141,7 @@ public class BacktrackingHamiltonianPathBoundedTest
         Graph<Integer, DefaultEdge> graph = path(8);
 
         HamiltonianPathSearchResult<Integer, DefaultEdge> result = search(graph, 8L);
-        assertEquals(Status.PATH_FOUND, result.getStatus());
-        assertHamiltonianPath(graph, result.getPath().orElseThrow());
+        assertHamiltonianPath(graph, result);
     }
 
     @Test
@@ -157,7 +156,7 @@ public class BacktrackingHamiltonianPathBoundedTest
             algo.searchWithStateLimit(hard, 2L);
         assertEquals(Status.ABORTED, bounded.getStatus());
 
-        GraphPath<Integer, DefaultEdge> unbounded = algo.getPath(hard);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> unbounded = algo.getPath(hard);
         assertNotNull(unbounded);
         assertHamiltonianPath(hard, unbounded);
     }

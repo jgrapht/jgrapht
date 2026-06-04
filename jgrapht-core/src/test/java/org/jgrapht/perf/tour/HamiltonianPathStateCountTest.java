@@ -18,6 +18,7 @@
 package org.jgrapht.perf.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.tour.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.perf.tour.HamiltonianPathPerformanceTest.GraphFamily;
@@ -65,20 +66,22 @@ public class HamiltonianPathStateCountTest
 
         BacktrackingHamiltonianPath<Integer, DefaultEdge> bt = new BacktrackingHamiltonianPath<>();
         long btStart = System.nanoTime();
-        GraphPath<Integer, DefaultEdge> btPath = bt.getPath(graph);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> btResult = bt.getPath(graph);
         long btMicros = (System.nanoTime() - btStart) / 1_000L;
 
-        // Held-Karp respects MAX_VERTICES; both benchmark sizes (8, 12) are well under it.
+        // Held-Karp respects its maxVertices ceiling; all benchmark sizes are well under it.
         HeldKarpHamiltonianPath<Integer, DefaultEdge> hk = new HeldKarpHamiltonianPath<>();
         long hkStart = System.nanoTime();
-        GraphPath<Integer, DefaultEdge> hkPath = hk.getPath(graph);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> hkResult = hk.getPath(graph);
         long hkMicros = (System.nanoTime() - hkStart) / 1_000L;
 
+        boolean btFound = btResult.getPath().isPresent();
+        boolean hkFound = hkResult.getPath().isPresent();
         assertEquals(
-            btPath == null, hkPath == null,
+            btFound, hkFound,
             () -> "existence disagreement for family=" + family + " n=" + n);
 
-        String result = btPath == null ? "no path" : "path";
+        String result = btFound ? "path" : "no path";
         System.out.printf("%-18s %4d %-10s %12d %12.3f %12.3f%n",
             family, n, result, bt.getStatesExpanded(),
             btMicros / 1000.0, hkMicros / 1000.0);

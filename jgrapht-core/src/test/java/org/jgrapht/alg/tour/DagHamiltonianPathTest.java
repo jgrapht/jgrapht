@@ -18,15 +18,17 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.HamiltonianPathSearchResult.Status;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertHamiltonianPath;
+import static org.jgrapht.alg.tour.HamiltonianPathValidator.assertProvenAbsent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -35,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class DagHamiltonianPathTest
 {
 
-    private <V, E> GraphPath<V, E> dag(Graph<V, E> graph)
+    private <V, E> HamiltonianPathSearchResult<V, E> dag(Graph<V, E> graph)
     {
         return new DagHamiltonianPath<V, E>().getPath(graph);
     }
@@ -74,10 +76,11 @@ public class DagHamiltonianPathTest
         Graph<String, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("only");
 
-        GraphPath<String, DefaultEdge> path = dag(graph);
+        HamiltonianPathSearchResult<String, DefaultEdge> result = dag(graph);
 
-        assertNotNull(path);
-        assertEquals(1, path.getVertexList().size());
+        assertNotNull(result);
+        assertEquals(Status.PATH_FOUND, result.getStatus());
+        assertEquals(1, result.getPath().orElseThrow().getVertexList().size());
     }
 
     @Test
@@ -90,8 +93,9 @@ public class DagHamiltonianPathTest
         for (int i = 0; i < 5; i++) {
             graph.addEdge(i, i + 1);
         }
-        GraphPath<Integer, DefaultEdge> path = dag(graph);
-        assertHamiltonianPath(graph, path);
+        HamiltonianPathSearchResult<Integer, DefaultEdge> result = dag(graph);
+        assertHamiltonianPath(graph, result);
+        GraphPath<Integer, DefaultEdge> path = result.getPath().orElseThrow();
         assertEquals(0, path.getStartVertex());
         assertEquals(5, path.getEndVertex());
     }
@@ -111,8 +115,7 @@ public class DagHamiltonianPathTest
         graph.addEdge(0, 2);
         graph.addEdge(1, 3);
 
-        GraphPath<Integer, DefaultEdge> path = dag(graph);
-        assertHamiltonianPath(graph, path);
+        assertHamiltonianPath(graph, dag(graph));
     }
 
     @Test
@@ -128,7 +131,7 @@ public class DagHamiltonianPathTest
         graph.addEdge(1, 2);
         graph.addEdge(3, 4);
         graph.addEdge(4, 5);
-        assertNull(dag(graph));
+        assertProvenAbsent(dag(graph));
     }
 
     @Test
@@ -145,7 +148,7 @@ public class DagHamiltonianPathTest
         graph.addEdge(0, 2);
         graph.addEdge(1, 3);
         graph.addEdge(2, 3);
-        assertNull(dag(graph));
+        assertProvenAbsent(dag(graph));
     }
 
     @Test
@@ -172,14 +175,16 @@ public class DagHamiltonianPathTest
             for (double p : new double[] { 0.3, 0.5, 0.8 }) {
                 for (int t = 0; t < 25; t++) {
                     Graph<Integer, DefaultEdge> graph = randomDag(n, p, random);
-                    GraphPath<Integer, DefaultEdge> dagPath = dag(graph);
-                    GraphPath<Integer, DefaultEdge> btPath =
+                    HamiltonianPathSearchResult<Integer, DefaultEdge> dagResult = dag(graph);
+                    HamiltonianPathSearchResult<Integer, DefaultEdge> btResult =
                         new BacktrackingHamiltonianPath<Integer, DefaultEdge>().getPath(graph);
+                    boolean dagFound = dagResult.getPath().isPresent();
+                    boolean btFound = btResult.getPath().isPresent();
                     assertEquals(
-                        btPath == null, dagPath == null,
+                        btFound, dagFound,
                         () -> "existence disagreement on DAG " + graph);
-                    if (dagPath != null) {
-                        assertHamiltonianPath(graph, dagPath);
+                    if (dagFound) {
+                        assertHamiltonianPath(graph, dagResult);
                     }
                 }
             }
