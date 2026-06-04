@@ -103,7 +103,7 @@ public interface HamiltonianPathSearchResult<V, E>
     {
         Objects.requireNonNull(path, "path must not be null");
         requireNonNegativeStates(statesExpanded);
-        return new Default<>(Status.PATH_FOUND, path, statesExpanded);
+        return new DefaultHamiltonianPathSearchResult<>(Status.PATH_FOUND, path, statesExpanded);
     }
 
     /**
@@ -117,7 +117,7 @@ public interface HamiltonianPathSearchResult<V, E>
     static <V, E> HamiltonianPathSearchResult<V, E> provenAbsent(long statesExpanded)
     {
         requireNonNegativeStates(statesExpanded);
-        return new Default<>(Status.PROVEN_ABSENT, null, statesExpanded);
+        return new DefaultHamiltonianPathSearchResult<>(Status.PROVEN_ABSENT, null, statesExpanded);
     }
 
     /**
@@ -131,7 +131,7 @@ public interface HamiltonianPathSearchResult<V, E>
     static <V, E> HamiltonianPathSearchResult<V, E> aborted(long statesExpanded)
     {
         requireNonNegativeStates(statesExpanded);
-        return new Default<>(Status.ABORTED, null, statesExpanded);
+        return new DefaultHamiltonianPathSearchResult<>(Status.ABORTED, null, statesExpanded);
     }
 
     private static void requireNonNegativeStates(long statesExpanded)
@@ -139,53 +139,6 @@ public interface HamiltonianPathSearchResult<V, E>
         if (statesExpanded < 0L) {
             throw new IllegalArgumentException(
                 "statesExpanded must be non-negative, got " + statesExpanded);
-        }
-    }
-
-    /**
-     * Default immutable {@link HamiltonianPathSearchResult} implementation returned by the
-     * static factory methods.
-     *
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     */
-    final class Default<V, E>
-        implements HamiltonianPathSearchResult<V, E>
-    {
-        private final Status status;
-        private final GraphPath<V, E> path;
-        private final long statesExpanded;
-
-        private Default(Status status, GraphPath<V, E> path, long statesExpanded)
-        {
-            this.status = status;
-            this.path = path;
-            this.statesExpanded = statesExpanded;
-        }
-
-        @Override
-        public Status getStatus()
-        {
-            return status;
-        }
-
-        @Override
-        public Optional<GraphPath<V, E>> getPath()
-        {
-            return Optional.ofNullable(path);
-        }
-
-        @Override
-        public long getStatesExpanded()
-        {
-            return statesExpanded;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "HamiltonianPathSearchResult{status=" + status
-                + ", statesExpanded=" + statesExpanded + "}";
         }
     }
 }

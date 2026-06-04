@@ -44,14 +44,16 @@ import java.util.*;
  * its state budget before completing.
  *
  * <p>
- * The depth-first search is informed by classic backtracking ideas for Hamiltonian path
- * existence (see Rubin, F., "A Search Procedure for Hamilton Paths and Circuits", JACM 21(4),
- * 1974) augmented with Warnsdorff-style minimum-remaining-values candidate ordering (after
- * Warnsdorff, "Des R&ouml;sselsprunges einfachste und allgemeinste L&ouml;sung", 1823) and
- * standard constraint-satisfaction reachability propagation (Tsang, "Foundations of Constraint
- * Satisfaction", 1993). The structural prechecks (block / cut-vertex / bridge / SCC) implement
- * well-known necessary conditions from graph theory; see Diestel, "Graph Theory", chapter 3
- * for the underlying decompositions.
+ * This implementation is a straightforward exact DFS / backtracking solver for Hamiltonian
+ * path existence, using standard pruning and candidate-ordering ideas rather than reproducing
+ * any single published algorithm verbatim. For background see Rubin, F., "A Search Procedure
+ * for Hamilton Paths and Circuits", JACM 21(4), 1974 (backtracking search); the
+ * minimum-remaining-values candidate ordering is in the spirit of Warnsdorff's rule (Warnsdorff,
+ * "Des R&ouml;sselsprunges einfachste und allgemeinste L&ouml;sung", 1823) and of
+ * constraint-satisfaction reachability propagation (Tsang, "Foundations of Constraint
+ * Satisfaction", 1993); the structural prechecks (block / cut-vertex / bridge / SCC) are
+ * well-known necessary conditions from graph theory (see Diestel, "Graph Theory", chapter 3,
+ * for the underlying decompositions).
  *
  * <p>
  * The general Hamiltonian path problem is NP-complete. This implementation is exact and runs in
@@ -65,8 +67,9 @@ import java.util.*;
  * heuristics, none of which can cause a false negative:
  * <ul>
  * <li>If the graph contains exactly one vertex, the singleton path is returned.</li>
- * <li>If an undirected graph is not connected, no Hamiltonian path can exist, so {@code null} is
- * returned without searching.</li>
+ * <li>If an undirected graph is not connected, no Hamiltonian path can exist, so a
+ * {@link HamiltonianPathSearchResult.Status#PROVEN_ABSENT} result is returned without DFS
+ * search.</li>
  * <li>If an undirected graph has more than two vertices of degree 1, no Hamiltonian path can
  * exist (a Hamiltonian path has at most two endpoints, and any degree-1 vertex must be one of
  * them).</li>

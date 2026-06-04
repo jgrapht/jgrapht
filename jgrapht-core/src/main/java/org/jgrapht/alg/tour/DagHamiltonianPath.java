@@ -44,12 +44,13 @@ import java.util.*;
  *
  * <p>
  * This class only accepts directed acyclic graphs. Passing a directed graph that contains a
- * cycle, an undirected graph, or {@code null} causes an {@link IllegalArgumentException}
- * (specifically, a
- * {@link org.jgrapht.traverse.NotDirectedAcyclicGraphException} for the cyclic case, surfaced
- * from {@link TopologicalOrderIterator} as the topological pass discovers the cycle). To solve
- * the Hamiltonian path problem on cyclic directed graphs, use
- * {@link BacktrackingHamiltonianPath} or {@link HeldKarpHamiltonianPath}.
+ * cycle causes an {@link IllegalArgumentException} wrapping the
+ * {@link org.jgrapht.traverse.NotDirectedAcyclicGraphException} thrown by
+ * {@link TopologicalOrderIterator} when the topological pass discovers the cycle; passing an
+ * undirected graph or {@code null} also fails with an {@link IllegalArgumentException}
+ * (or {@link NullPointerException} respectively). To solve the Hamiltonian path problem on
+ * cyclic directed graphs, use {@link BacktrackingHamiltonianPath} or
+ * {@link HeldKarpHamiltonianPath}.
  *
  * <p>
  * In multigraphs, parallel edges between the same vertex pair do not change the result. The
