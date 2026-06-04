@@ -145,6 +145,9 @@ public interface HamiltonianPathSearchResult<V, E>
     /**
      * Default immutable {@link HamiltonianPathSearchResult} implementation returned by the
      * static factory methods.
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     final class Default<V, E>
         implements HamiltonianPathSearchResult<V, E>
