@@ -74,7 +74,31 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">org.jgrapht.alg.tour</span></div>
 <section class="package-description" id="package-description">
-<div class="block">Graph tours related algorithms.</div>
+<div class="block">Graph tours and Hamiltonian path related algorithms.
+
+ <p>
+ This package groups algorithms for traversing every vertex of a graph exactly once. Two
+ related but distinct problems live here:
+
+ <ul>
+ <li><em>Hamiltonian cycle / tour</em> — closed traversals that return to the start vertex.
+ Implementations include <a href="PalmerHamiltonianCycle.html" title="class in org.jgrapht.alg.tour"><code>PalmerHamiltonianCycle</code></a>,
+ <a href="HeldKarpTSP.html" title="class in org.jgrapht.alg.tour"><code>HeldKarpTSP</code></a>, and the various TSP heuristics; they share the
+ <a href="../interfaces/HamiltonianCycleAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianCycleAlgorithm</code></a> interface and the
+ <a href="HamiltonianCycleAlgorithmBase.html" title="class in org.jgrapht.alg.tour"><code>HamiltonianCycleAlgorithmBase</code></a> helper class.</li>
+ <li><em>Hamiltonian path</em> — open traversals that need not return to the start vertex.
+ Implementations include <a href="BacktrackingHamiltonianPath.html" title="class in org.jgrapht.alg.tour"><code>BacktrackingHamiltonianPath</code></a>,
+ <a href="HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour"><code>HeldKarpHamiltonianPath</code></a>, and
+ <a href="DagHamiltonianPath.html" title="class in org.jgrapht.alg.tour"><code>DagHamiltonianPath</code></a>; they share the
+ <a href="../interfaces/HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianPathAlgorithm</code></a> interface and the
+ <a href="HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour"><code>HamiltonianPathAlgorithmBase</code></a> helper class.</li>
+ </ul>
+
+ <p>
+ Deciding whether a Hamiltonian path or cycle exists in a general graph is NP-complete. The
+ exact algorithms in this package run in exponential time in the worst case; the polynomial
+ special cases (such as <code>DagHamiltonianPath</code>) and structural prechecks document their
+ scope individually.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -97,9 +121,19 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ChristofidesThreeHalvesApproxMetricTSP.html" title="class in org.jgrapht.alg.tour">ChristofidesThreeHalvesApproxMetricTSP</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="BacktrackingHamiltonianPath.html" title="class in org.jgrapht.alg.tour">BacktrackingHamiltonianPath</a>&lt;V,<wbr>E&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Exact backtracking algorithm for the
+ <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian path problem</a> on
+ directed and undirected graphs.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ChristofidesThreeHalvesApproxMetricTSP.html" title="class in org.jgrapht.alg.tour">ChristofidesThreeHalvesApproxMetricTSP</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A $3/2$-approximation algorithm for the metric TSP problem.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DagHamiltonianPath.html" title="class in org.jgrapht.alg.tour">DagHamiltonianPath</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Polynomial-time Hamiltonian path algorithm for directed acyclic graphs.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FarthestInsertionHeuristicTSP.html" title="class in org.jgrapht.alg.tour">FarthestInsertionHeuristicTSP</a>&lt;V,<wbr>E&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -112,6 +146,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HamiltonianCycleAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianCycleAlgorithmBase</a>&lt;V,<wbr>E&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Base class for TSP solver algorithms.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Base class for <a href="../interfaces/HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianPathAlgorithm</code></a> implementations.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Dynamic-programming algorithm for the
+ <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian path problem</a>.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="HeldKarpTSP.html" title="class in org.jgrapht.alg.tour">HeldKarpTSP</a>&lt;V,<wbr>E&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

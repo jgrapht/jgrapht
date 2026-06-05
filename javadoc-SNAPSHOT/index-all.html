@@ -56,6 +56,14 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:K">K</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<a href="#I:Y">Y</a>&nbsp;<a href="#I:Z">Z</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html#aborted(long)" class="member-name-link">aborted(long)</a> - Static method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a></dt>
+<dd>
+<div class="block">Creates a result for a search that was stopped by a state limit before completing.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html#ABORTED" class="member-name-link">ABORTED</a> - Enum constant in enum class org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a></dt>
+<dd>
+<div class="block">The search was stopped by a state limit before completing.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/AbstractBaseGraph.html" class="type-name-link" title="class in org.jgrapht.graph">AbstractBaseGraph&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/graph/package-summary.html">org.jgrapht.graph</a></dt>
 <dd>
 <div class="block">The most general implementation of the <a href="org.jgrapht.core/org/jgrapht/Graph.html" title="interface in org.jgrapht"><code>Graph</code></a> interface.</div>
@@ -1198,6 +1206,16 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="org.jgrapht.core/org/jgrapht/util/WeightedUnmodifiableSet.html#backingSet" class="member-name-link">backingSet</a> - Variable in class org.jgrapht.util.<a href="org.jgrapht.core/org/jgrapht/util/WeightedUnmodifiableSet.html" title="class in org.jgrapht.util">WeightedUnmodifiableSet</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html" class="type-name-link" title="class in org.jgrapht.alg.tour">BacktrackingHamiltonianPath&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/tour/package-summary.html">org.jgrapht.alg.tour</a></dt>
+<dd>
+<div class="block">Exact backtracking algorithm for the
+ <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian path problem</a> on
+ directed and undirected graphs.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html#%3Cinit%3E()" class="member-name-link">BacktrackingHamiltonianPath()</a> - Constructor for class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html" title="class in org.jgrapht.alg.tour">BacktrackingHamiltonianPath</a></dt>
+<dd>
+<div class="block">Constructs a new instance.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/BarabasiAlbertForestGenerator.html" class="type-name-link" title="class in org.jgrapht.generate">BarabasiAlbertForestGenerator&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/generate/package-summary.html">org.jgrapht.generate</a></dt>
 <dd>
 <div class="block">Barabási-Albert growth and preferential attachment forest generator.</div>
@@ -1693,6 +1711,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/concurrent/AsSynchronizedGraph.Builder.html#build(org.jgrapht.Graph)" class="member-name-link">build(Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.graph.concurrent.<a href="org.jgrapht.core/org/jgrapht/graph/concurrent/AsSynchronizedGraph.Builder.html" title="class in org.jgrapht.graph.concurrent">AsSynchronizedGraph.Builder</a></dt>
 <dd>
 <div class="block">Build the AsSynchronizedGraph.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html#buildAdjacency(org.jgrapht.Graph,java.util.List,java.util.Map,boolean)" class="member-name-link">buildAdjacency(Graph&lt;V, E&gt;, List&lt;V&gt;, Map&lt;V, Integer&gt;, boolean)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase</a></dt>
+<dd>
+<div class="block">Builds an integer-indexed adjacency list over the supplied vertex ordering.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/builder/AbstractGraphBuilder.html#buildAsUnmodifiable()" class="member-name-link">buildAsUnmodifiable()</a> - Method in class org.jgrapht.graph.builder.<a href="org.jgrapht.core/org/jgrapht/graph/builder/AbstractGraphBuilder.html" title="class in org.jgrapht.graph.builder">AbstractGraphBuilder</a></dt>
 <dd>
@@ -3214,6 +3236,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Counts the number of simple directed paths in a Directed Acyclic Graph (DAG) between a given
  source and target using dynamic programming in topological order.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/DagHamiltonianPath.html" class="type-name-link" title="class in org.jgrapht.alg.tour">DagHamiltonianPath&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/tour/package-summary.html">org.jgrapht.alg.tour</a></dt>
+<dd>
+<div class="block">Polynomial-time Hamiltonian path algorithm for directed acyclic graphs.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/DagHamiltonianPath.html#%3Cinit%3E()" class="member-name-link">DagHamiltonianPath()</a> - Constructor for class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/DagHamiltonianPath.html" title="class in org.jgrapht.alg.tour">DagHamiltonianPath</a></dt>
+<dd>
+<div class="block">Constructs a new instance.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/scoring/KatzCentrality.html#DAMPING_FACTOR_DEFAULT" class="member-name-link">DAMPING_FACTOR_DEFAULT</a> - Static variable in class org.jgrapht.alg.scoring.<a href="org.jgrapht.core/org/jgrapht/alg/scoring/KatzCentrality.html" title="class in org.jgrapht.alg.scoring">KatzCentrality</a></dt>
 <dd>
 <div class="block">Damping factor default value.</div>
@@ -3281,6 +3311,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/FRLayoutAlgorithm2D.html#DEFAULT_ITERATIONS" class="member-name-link">DEFAULT_ITERATIONS</a> - Static variable in class org.jgrapht.alg.drawing.<a href="org.jgrapht.core/org/jgrapht/alg/drawing/FRLayoutAlgorithm2D.html" title="class in org.jgrapht.alg.drawing">FRLayoutAlgorithm2D</a></dt>
 <dd>
 <div class="block">Default number of iterations</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#DEFAULT_MAX_VERTICES" class="member-name-link">DEFAULT_MAX_VERTICES</a> - Static variable in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
+<dd>
+<div class="block">Default ceiling on the number of vertices.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/FRLayoutAlgorithm2D.html#DEFAULT_NORMALIZATION_FACTOR" class="member-name-link">DEFAULT_NORMALIZATION_FACTOR</a> - Static variable in class org.jgrapht.alg.drawing.<a href="org.jgrapht.core/org/jgrapht/alg/drawing/FRLayoutAlgorithm2D.html" title="class in org.jgrapht.alg.drawing">FRLayoutAlgorithm2D</a></dt>
 <dd>
@@ -5175,6 +5209,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/builder/GraphTypeBuilder.html#forGraphType(org.jgrapht.GraphType)" class="member-name-link">forGraphType(GraphType)</a> - Static method in class org.jgrapht.graph.builder.<a href="org.jgrapht.core/org/jgrapht/graph/builder/GraphTypeBuilder.html" title="class in org.jgrapht.graph.builder">GraphTypeBuilder</a></dt>
 <dd>
 <div class="block">Create a graph type builder which will create a graph with the same type as the one provided.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html#found(org.jgrapht.GraphPath,long)" class="member-name-link">found(GraphPath&lt;V, E&gt;, long)</a> - Static method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a></dt>
+<dd>
+<div class="block">Creates a result for a successful search.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/BlossomVOptions.InitializationType.html#FRACTIONAL" class="member-name-link">FRACTIONAL</a> - Enum constant in enum class org.jgrapht.alg.matching.blossom.v5.<a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/BlossomVOptions.InitializationType.html" title="enum class in org.jgrapht.alg.matching.blossom.v5">BlossomVOptions.InitializationType</a></dt>
 <dd>&nbsp;</dd>
@@ -7558,6 +7596,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns maximum number of arcs between network sinks and network sources.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#getMaxVertices()" class="member-name-link">getMaxVertices()</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
+<dd>
+<div class="block">Returns the maximum number of vertices this instance will accept.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/drawing/model/Box2D.html#getMaxX()" class="member-name-link">getMaxX()</a> - Method in class org.jgrapht.alg.drawing.model.<a href="org.jgrapht.core/org/jgrapht/alg/drawing/model/Box2D.html" title="class in org.jgrapht.alg.drawing.model">Box2D</a></dt>
 <dd>
 <div class="block">Get the maximum x coordinate</div>
@@ -7795,7 +7837,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the sum of the weights of all vertices that are in the subset with label
  <code>label</code>.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html#getPath()" class="member-name-link">getPath()</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a></dt>
+<dd>
+<div class="block">Returns the Hamiltonian path if the search found one.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/IntVertexDijkstraShortestPath.html#getPath(java.lang.Integer,java.lang.Integer)" class="member-name-link">getPath(Integer, Integer)</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/IntVertexDijkstraShortestPath.html" title="class in org.jgrapht.alg.shortestpath">IntVertexDijkstraShortestPath</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathAlgorithm.html#getPath(org.jgrapht.Graph)" class="member-name-link">getPath(Graph&lt;V, E&gt;)</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathAlgorithm</a></dt>
+<dd>
+<div class="block">Computes a Hamiltonian path in the given graph and returns a tri-state
+ <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianPathSearchResult</code></a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html#getPath(org.jgrapht.Graph)" class="member-name-link">getPath(Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html" title="class in org.jgrapht.alg.tour">BacktrackingHamiltonianPath</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/DagHamiltonianPath.html#getPath(org.jgrapht.Graph)" class="member-name-link">getPath(Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/DagHamiltonianPath.html" title="class in org.jgrapht.alg.tour">DagHamiltonianPath</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#getPath(org.jgrapht.Graph)" class="member-name-link">getPath(Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/ShortestPathAlgorithm.SingleSourcePaths.html#getPath(V)" class="member-name-link">getPath(V)</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/ShortestPathAlgorithm.SingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm.SingleSourcePaths</a></dt>
 <dd>
@@ -8460,12 +8517,30 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the start vertex in the path.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html#getStatesExpanded()" class="member-name-link">getStatesExpanded()</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a></dt>
+<dd>
+<div class="block">Returns the number of DFS / DP states the search explored.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html#getStatesExpanded()" class="member-name-link">getStatesExpanded()</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html" title="class in org.jgrapht.alg.tour">BacktrackingHamiltonianPath</a></dt>
+<dd>
+<div class="block">Returns the number of DFS nodes the search explored during the most recent call to
+ <a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html#getPath(org.jgrapht.Graph)"><code>BacktrackingHamiltonianPath.getPath(Graph)</code></a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#getStatesExpanded()" class="member-name-link">getStatesExpanded()</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
+<dd>
+<div class="block">Returns the number of DP states (predecessor cells initialised) the algorithm filled
+ during the most recent call to <a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#getPath(org.jgrapht.Graph)"><code>HeldKarpHamiltonianPath.getPath(Graph)</code></a>.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/KolmogorovWeightedPerfectMatching.html#getStatistics()" class="member-name-link">getStatistics()</a> - Method in class org.jgrapht.alg.matching.blossom.v5.<a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/KolmogorovWeightedPerfectMatching.html" title="class in org.jgrapht.alg.matching.blossom.v5">KolmogorovWeightedPerfectMatching</a></dt>
 <dd>
 <div class="block">Returns the statistics describing the performance characteristics of the algorithm.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html#getStats()" class="member-name-link">getStats()</a> - Method in class org.jgrapht.alg.shortestpath.<a href="org.jgrapht.core/org/jgrapht/alg/shortestpath/BoundedPrunedYenKShortestPath.html" title="class in org.jgrapht.alg.shortestpath">BoundedPrunedYenKShortestPath</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html#getStatus()" class="member-name-link">getStatus()</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a></dt>
+<dd>
+<div class="block">Returns the termination status of this search.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/SteinerTreeAlgorithm.html#getSteinerTree(java.util.Set)" class="member-name-link">getSteinerTree(Set&lt;V&gt;)</a> - Method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/SteinerTreeAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm</a></dt>
 <dd>
 <div class="block">Computes a Steiner tree.</div>
@@ -10063,6 +10138,36 @@ loadScripts(document, 'script');</script>
 <div class="block">An algorithm improving the result of solving the
  <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian cycle problem</a>.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathAlgorithm.html" class="type-name-link" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathAlgorithm&lt;V,<wbr>E&gt;</a> - Interface in <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/package-summary.html">org.jgrapht.alg.interfaces</a></dt>
+<dd>
+<div class="block">An algorithm solving the <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian
+ path problem</a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html" class="type-name-link" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/tour/package-summary.html">org.jgrapht.alg.tour</a></dt>
+<dd>
+<div class="block">Base class for <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianPathAlgorithm</code></a> implementations.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html#%3Cinit%3E()" class="member-name-link">HamiltonianPathAlgorithmBase()</a> - Constructor for class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase</a></dt>
+<dd>
+<div class="block">Constructs a new instance.</div>
+</dd>
+<dt><a href="org.jgrapht.demo/org/jgrapht/demo/HamiltonianPathDemo.html" class="type-name-link" title="class in org.jgrapht.demo">HamiltonianPathDemo</a> - Class in <a href="org.jgrapht.demo/org/jgrapht/demo/package-summary.html">org.jgrapht.demo</a></dt>
+<dd>
+<div class="block">Hamiltonian path demos for both directed and undirected graphs.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" class="type-name-link" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult&lt;V,<wbr>E&gt;</a> - Interface in <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/package-summary.html">org.jgrapht.alg.interfaces</a></dt>
+<dd>
+<div class="block">Tri-state result of a <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianPathAlgorithm</code></a> search.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html" class="type-name-link" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a> - Enum Class in <a href="org.jgrapht.core/org/jgrapht/alg/interfaces/package-summary.html">org.jgrapht.alg.interfaces</a></dt>
+<dd>
+<div class="block">Termination state of a Hamiltonian path search.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#HARD_MAX_VERTICES" class="member-name-link">HARD_MAX_VERTICES</a> - Static variable in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
+<dd>
+<div class="block">Hard upper bound on the number of vertices, fixed by the algorithm's use of a <code>int</code>
+ subset bitmask.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/scoring/HarmonicCentrality.html" class="type-name-link" title="class in org.jgrapht.alg.scoring">HarmonicCentrality&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/scoring/package-summary.html">org.jgrapht.alg.scoring</a></dt>
 <dd>
 <div class="block">Harmonic centrality.</div>
@@ -10254,6 +10359,20 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html#heawoodGraph()" class="member-name-link">heawoodGraph()</a> - Static method in class org.jgrapht.generate.<a href="org.jgrapht.core/org/jgrapht/generate/NamedGraphGenerator.html" title="class in org.jgrapht.generate">NamedGraphGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" class="type-name-link" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/tour/package-summary.html">org.jgrapht.alg.tour</a></dt>
+<dd>
+<div class="block">Dynamic-programming algorithm for the
+ <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian path problem</a>.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#%3Cinit%3E()" class="member-name-link">HeldKarpHamiltonianPath()</a> - Constructor for class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
+<dd>
+<div class="block">Constructs a new instance with the default vertex ceiling
+ (<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#DEFAULT_MAX_VERTICES"><code>HeldKarpHamiltonianPath.DEFAULT_MAX_VERTICES</code></a>).</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html#%3Cinit%3E(int)" class="member-name-link">HeldKarpHamiltonianPath(int)</a> - Constructor for class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpHamiltonianPath.html" title="class in org.jgrapht.alg.tour">HeldKarpHamiltonianPath</a></dt>
+<dd>
+<div class="block">Constructs a new instance that accepts graphs with up to <code>maxVertices</code> vertices.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HeldKarpTSP.html" class="type-name-link" title="class in org.jgrapht.alg.tour">HeldKarpTSP&lt;V,<wbr>E&gt;</a> - Class in <a href="org.jgrapht.core/org/jgrapht/alg/tour/package-summary.html">org.jgrapht.alg.tour</a></dt>
 <dd>
 <div class="block">A dynamic programming algorithm for the TSP problem.</div>
@@ -12230,6 +12349,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Main demo method</div>
 </dd>
+<dt><a href="org.jgrapht.demo/org/jgrapht/demo/HamiltonianPathDemo.html#main(java.lang.String%5B%5D)" class="member-name-link">main(String[])</a> - Static method in class org.jgrapht.demo.<a href="org.jgrapht.demo/org/jgrapht/demo/HamiltonianPathDemo.html" title="class in org.jgrapht.demo">HamiltonianPathDemo</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org.jgrapht.demo/org/jgrapht/demo/HelloJGraphT.html#main(java.lang.String%5B%5D)" class="member-name-link">main(String[])</a> - Static method in class org.jgrapht.demo.<a href="org.jgrapht.demo/org/jgrapht/demo/HelloJGraphT.html" title="class in org.jgrapht.demo">HelloJGraphT</a></dt>
 <dd>
 <div class="block">The starting point for the demo.</div>
@@ -13354,7 +13475,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/package-summary.html">org.jgrapht.alg.tour</a> - package org.jgrapht.alg.tour</dt>
 <dd>
-<div class="block">Graph tours related algorithms.</div>
+<div class="block">Graph tours and Hamiltonian path related algorithms.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/transform/package-summary.html">org.jgrapht.alg.transform</a> - package org.jgrapht.alg.transform</dt>
 <dd>
@@ -13817,6 +13938,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Refines the partition by adding new subsets if the designated root has more than one
  subtree in the subset <code>label</code> of the partition.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html#PATH_FOUND" class="member-name-link">PATH_FOUND</a> - Enum constant in enum class org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a></dt>
+<dd>
+<div class="block">A Hamiltonian path was found.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/TreeToPathDecompositionAlgorithm.PathDecompositionImpl.html#%3Cinit%3E(org.jgrapht.Graph,java.util.Set,java.util.List)" class="member-name-link">PathDecompositionImpl(Graph&lt;V, E&gt;, Set&lt;E&gt;, List&lt;List&lt;V&gt;&gt;)</a> - Constructor for class org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/TreeToPathDecompositionAlgorithm.PathDecompositionImpl.html" title="class in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm.PathDecompositionImpl</a></dt>
 <dd>
 <div class="block">Construct a new path decomposition.</div>
@@ -14052,6 +14177,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Print to the standard output all simple cycles without building a list to keep them, thus
  avoiding high memory consumption when investigating large and much connected graphs.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html#PROVEN_ABSENT" class="member-name-link">PROVEN_ABSENT</a> - Enum constant in enum class org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a></dt>
+<dd>
+<div class="block">The exhaustive search terminated without finding a Hamiltonian path.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html#provenAbsent(long)" class="member-name-link">provenAbsent(long)</a> - Static method in interface org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a></dt>
+<dd>
+<div class="block">Creates a result for an exhaustive search that proved no Hamiltonian path exists.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/traverse/BreadthFirstIterator.html#provideNextVertex()" class="member-name-link">provideNextVertex()</a> - Method in class org.jgrapht.traverse.<a href="org.jgrapht.core/org/jgrapht/traverse/BreadthFirstIterator.html" title="class in org.jgrapht.traverse">BreadthFirstIterator</a></dt>
 <dd>&nbsp;</dd>
@@ -14810,6 +14943,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Checks that graph is not empty</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html#requireNotEmpty(org.jgrapht.Graph)" class="member-name-link">requireNotEmpty(Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase</a></dt>
+<dd>
+<div class="block">Throws <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> if <code>graph</code> has no vertices.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/GraphTests.html#requireUndirected(org.jgrapht.Graph)" class="member-name-link">requireUndirected(Graph&lt;V, E&gt;)</a> - Static method in class org.jgrapht.<a href="org.jgrapht.core/org/jgrapht/GraphTests.html" title="class in org.jgrapht">GraphTests</a></dt>
 <dd>
 <div class="block">Checks that the specified graph is undirected and throws an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>
@@ -14974,6 +15111,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/traverse/BreadthFirstIterator.SearchNodeData.html#%3Cinit%3E(E,int)" class="member-name-link">SearchNodeData(E, int)</a> - Constructor for class org.jgrapht.traverse.<a href="org.jgrapht.core/org/jgrapht/traverse/BreadthFirstIterator.SearchNodeData.html" title="class in org.jgrapht.traverse">BreadthFirstIterator.SearchNodeData</a></dt>
 <dd>
 <div class="block">Constructor</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html#searchWithStateLimit(org.jgrapht.Graph,long)" class="member-name-link">searchWithStateLimit(Graph&lt;V, E&gt;, long)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/BacktrackingHamiltonianPath.html" title="class in org.jgrapht.alg.tour">BacktrackingHamiltonianPath</a></dt>
+<dd>
+<div class="block">Performs a Hamiltonian path search with an upper bound on the number of DFS states the
+ solver may explore.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/util/Pair.html#second" class="member-name-link">second</a> - Variable in class org.jgrapht.alg.util.<a href="org.jgrapht.core/org/jgrapht/alg/util/Pair.html" title="class in org.jgrapht.alg.util">Pair</a></dt>
 <dd>
@@ -15802,6 +15944,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org.jgrapht.core/org/jgrapht/generate/SimpleWeightedGraphMatrixGenerator.html#%3Cinit%3E()" class="member-name-link">SimpleWeightedGraphMatrixGenerator()</a> - Constructor for class org.jgrapht.generate.<a href="org.jgrapht.core/org/jgrapht/generate/SimpleWeightedGraphMatrixGenerator.html" title="class in org.jgrapht.generate">SimpleWeightedGraphMatrixGenerator</a></dt>
 <dd>
 <div class="block">Constructs a new simple weighted graph matrix generator.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html#singletonPath(org.jgrapht.Graph)" class="member-name-link">singletonPath(Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase</a></dt>
+<dd>
+<div class="block">Returns the trivial Hamiltonian path of a graph with exactly one vertex: a <a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html" title="class in org.jgrapht.graph"><code>GraphWalk</code></a>
+ whose vertex list contains only that vertex, no edges, and weight <code>0</code>.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html#singletonWalk(org.jgrapht.Graph,V)" class="member-name-link">singletonWalk(Graph&lt;V, E&gt;, V)</a> - Static method in class org.jgrapht.graph.<a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html" title="class in org.jgrapht.graph">GraphWalk</a></dt>
 <dd>
@@ -16955,6 +17102,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/BlossomVOptions.DualUpdateStrategy.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class org.jgrapht.alg.matching.blossom.v5.<a href="org.jgrapht.core/org/jgrapht/alg/matching/blossom/v5/BlossomVOptions.DualUpdateStrategy.html" title="enum class in org.jgrapht.alg.matching.blossom.v5">BlossomVOptions.DualUpdateStrategy</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
@@ -17052,6 +17203,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/cycle/ChordalityInspector.IterationOrder.html#values()" class="member-name-link">values()</a> - Static method in enum class org.jgrapht.alg.cycle.<a href="org.jgrapht.core/org/jgrapht/alg/cycle/ChordalityInspector.IterationOrder.html" title="enum class in org.jgrapht.alg.cycle">ChordalityInspector.IterationOrder</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html#values()" class="member-name-link">values()</a> - Static method in enum class org.jgrapht.alg.interfaces.<a href="org.jgrapht.core/org/jgrapht/alg/interfaces/HamiltonianPathSearchResult.Status.html" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -17305,6 +17461,10 @@ the order they are declared.</div>
 </dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html#vertexList" class="member-name-link">vertexList</a> - Variable in class org.jgrapht.graph.<a href="org.jgrapht.core/org/jgrapht/graph/GraphWalk.html" title="class in org.jgrapht.graph">GraphWalk</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html#vertexListToPath(java.util.List,org.jgrapht.Graph)" class="member-name-link">vertexListToPath(List&lt;V&gt;, Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianPathAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianPathAlgorithmBase</a></dt>
+<dd>
+<div class="block">Converts a complete vertex sequence into a <a href="org.jgrapht.core/org/jgrapht/GraphPath.html" title="interface in org.jgrapht"><code>GraphPath</code></a>.</div>
+</dd>
 <dt><a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianCycleAlgorithmBase.html#vertexListToTour(java.util.List,org.jgrapht.Graph)" class="member-name-link">vertexListToTour(List&lt;V&gt;, Graph&lt;V, E&gt;)</a> - Method in class org.jgrapht.alg.tour.<a href="org.jgrapht.core/org/jgrapht/alg/tour/HamiltonianCycleAlgorithmBase.html" title="class in org.jgrapht.alg.tour">HamiltonianCycleAlgorithmBase</a></dt>
 <dd>
 <div class="block">Transform from a List representation to a graph path.</div>

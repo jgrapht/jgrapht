@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
@@ -188,225 +188,238 @@ loadScripts(document, 'script');</script>
 <div class="block">An algorithm improving the result of solving the
  <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian cycle problem</a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="IndependentSetAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">IndependentSetAlgorithm</a>&lt;V&gt;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">An algorithm solving the <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian
+ path problem</a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="HamiltonianPathSearchResult.html" title="interface in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Tri-state result of a <a href="HamiltonianPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces"><code>HamiltonianPathAlgorithm</code></a> search.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="HamiltonianPathSearchResult.Status.html" title="enum class in org.jgrapht.alg.interfaces">HamiltonianPathSearchResult.Status</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">Termination state of a Hamiltonian path search.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="IndependentSetAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">IndependentSetAlgorithm</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Algorithm to compute an
  <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent Set</a> in a graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="IndependentSetAlgorithm.IndependentSet.html" title="interface in org.jgrapht.alg.interfaces">IndependentSetAlgorithm.IndependentSet</a>&lt;V&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="IndependentSetAlgorithm.IndependentSet.html" title="interface in org.jgrapht.alg.interfaces">IndependentSetAlgorithm.IndependentSet</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A (weighted) <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent
  Set</a></div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IndependentSetAlgorithm.IndependentSetImpl.html" title="class in org.jgrapht.alg.interfaces">IndependentSetAlgorithm.IndependentSetImpl</a>&lt;V&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IndependentSetAlgorithm.IndependentSetImpl.html" title="class in org.jgrapht.alg.interfaces">IndependentSetAlgorithm.IndependentSetImpl</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of a (weighted) independent set</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="KShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">KShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="KShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">KShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes $k$-shortest paths between vertices.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="LinkPredictionAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">LinkPredictionAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="LinkPredictionAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">LinkPredictionAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A link prediction algorithm.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="LowestCommonAncestorAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">LowestCommonAncestorAlgorithm</a>&lt;V&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="LowestCommonAncestorAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">LowestCommonAncestorAlgorithm</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Algorithm to compute a <a href="https://en.wikipedia.org/wiki/Lowest_common_ancestor">lowest
  common ancestor</a> in a tree, forest or DAG.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ManyToManyShortestPathsAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ManyToManyShortestPathsAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes shortest paths from all sources to all targets.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ManyToManyShortestPathsAlgorithm.BaseManyToManyShortestPathsImpl.html" title="class in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm.BaseManyToManyShortestPathsImpl</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ManyToManyShortestPathsAlgorithm.BaseManyToManyShortestPathsImpl.html" title="class in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm.BaseManyToManyShortestPathsImpl</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Base class for many-to-many shortest paths implementations.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths.html" title="interface in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths.html" title="interface in org.jgrapht.alg.interfaces">ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A set of paths from all sources vertices to all target vertices.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MatchingAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MatchingAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MatchingAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MatchingAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
  a given graph.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MatchingAlgorithm.Matching.html" title="interface in org.jgrapht.alg.interfaces">MatchingAlgorithm.Matching</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MatchingAlgorithm.Matching.html" title="interface in org.jgrapht.alg.interfaces">MatchingAlgorithm.Matching</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A graph matching.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MatchingAlgorithm.MatchingImpl.html" title="class in org.jgrapht.alg.interfaces">MatchingAlgorithm.MatchingImpl</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MatchingAlgorithm.MatchingImpl.html" title="class in org.jgrapht.alg.interfaces">MatchingAlgorithm.MatchingImpl</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A default implementation of the matching interface.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MaximalCliqueEnumerationAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximalCliqueEnumerationAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MaximalCliqueEnumerationAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximalCliqueEnumerationAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A maximal clique enumeration algorithm.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MaximumDensitySubgraphAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximumDensitySubgraphAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MaximumDensitySubgraphAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximumDensitySubgraphAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Interface for algorithms computing the maximum density subgraph</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MaximumFlowAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MaximumFlowAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Allows to derive <a href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a>
  from the supplied <a href="https://en.wikipedia.org/wiki/Flow_network">flow network</a></div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MaximumFlowAlgorithm.MaximumFlow.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm.MaximumFlow</a>&lt;E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MaximumFlowAlgorithm.MaximumFlow.html" title="interface in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm.MaximumFlow</a>&lt;E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A maximum flow</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MaximumFlowAlgorithm.MaximumFlowImpl.html" title="class in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm.MaximumFlowImpl</a>&lt;E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MaximumFlowAlgorithm.MaximumFlowImpl.html" title="class in org.jgrapht.alg.interfaces">MaximumFlowAlgorithm.MaximumFlowImpl</a>&lt;E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the maximum flow</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MinimumCostFlowAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MinimumCostFlowAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MinimumCostFlowAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MinimumCostFlowAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Allows to calculate minimum cost flow on the specified
  <a href="https://en.wikipedia.org/wiki/Minimum-cost_flow_problem">minimum cost flow problem</a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MinimumCostFlowAlgorithm.MinimumCostFlow.html" title="interface in org.jgrapht.alg.interfaces">MinimumCostFlowAlgorithm.MinimumCostFlow</a>&lt;E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MinimumCostFlowAlgorithm.MinimumCostFlow.html" title="interface in org.jgrapht.alg.interfaces">MinimumCostFlowAlgorithm.MinimumCostFlow</a>&lt;E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a minimum cost flow.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MinimumCostFlowAlgorithm.MinimumCostFlowImpl.html" title="class in org.jgrapht.alg.interfaces">MinimumCostFlowAlgorithm.MinimumCostFlowImpl</a>&lt;E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MinimumCostFlowAlgorithm.MinimumCostFlowImpl.html" title="class in org.jgrapht.alg.interfaces">MinimumCostFlowAlgorithm.MinimumCostFlowImpl</a>&lt;E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the <a href="MinimumCostFlowAlgorithm.MinimumCostFlow.html" title="interface in org.jgrapht.alg.interfaces"><code>MinimumCostFlowAlgorithm.MinimumCostFlow</code></a></div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MinimumCycleMeanAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MinimumCycleMeanAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MinimumCycleMeanAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MinimumCycleMeanAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">The algorithm for finding minimum cycle mean in a graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MinimumSTCutAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MinimumSTCutAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MinimumSTCutAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MinimumSTCutAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Given a weighted graph $G(V,E)$ (directed or undirected).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MultiObjectiveShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MultiObjectiveShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MultiObjectiveShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">MultiObjectiveShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes multi-objective shortest paths between vertices.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A set of paths starting from a single source vertex.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PartitioningAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">PartitioningAlgorithm</a>&lt;V&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="PartitioningAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">PartitioningAlgorithm</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Algorithm to compute a vertex partitioning of a graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="PartitioningAlgorithm.Partitioning.html" title="interface in org.jgrapht.alg.interfaces">PartitioningAlgorithm.Partitioning</a>&lt;V&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PartitioningAlgorithm.Partitioning.html" title="interface in org.jgrapht.alg.interfaces">PartitioningAlgorithm.Partitioning</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A <a href="https://en.wikipedia.org/wiki/Graph_partition">graph partitioning</a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PartitioningAlgorithm.PartitioningImpl.html" title="class in org.jgrapht.alg.interfaces">PartitioningAlgorithm.PartitioningImpl</a>&lt;V&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PartitioningAlgorithm.PartitioningImpl.html" title="class in org.jgrapht.alg.interfaces">PartitioningAlgorithm.PartitioningImpl</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of a vertex partition</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="PlanarityTestingAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">PlanarityTestingAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PlanarityTestingAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">PlanarityTestingAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Allows to check the planarity of the graph.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PlanarityTestingAlgorithm.Embedding.html" title="interface in org.jgrapht.alg.interfaces">PlanarityTestingAlgorithm.Embedding</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="PlanarityTestingAlgorithm.Embedding.html" title="interface in org.jgrapht.alg.interfaces">PlanarityTestingAlgorithm.Embedding</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A
  <a href="https://en.wikipedia.org/wiki/Graph_embedding#Combinatorial_embedding">combinatorial
  embedding</a> of the graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PlanarityTestingAlgorithm.EmbeddingImpl.html" title="class in org.jgrapht.alg.interfaces">PlanarityTestingAlgorithm.EmbeddingImpl</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PlanarityTestingAlgorithm.EmbeddingImpl.html" title="class in org.jgrapht.alg.interfaces">PlanarityTestingAlgorithm.EmbeddingImpl</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Implementation of the <a href="PlanarityTestingAlgorithm.Embedding.html" title="interface in org.jgrapht.alg.interfaces"><code>PlanarityTestingAlgorithm.Embedding</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ShortestPathAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes shortest paths between vertices.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ShortestPathAlgorithm.SingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm.SingleSourcePaths</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ShortestPathAlgorithm.SingleSourcePaths.html" title="interface in org.jgrapht.alg.interfaces">ShortestPathAlgorithm.SingleSourcePaths</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A set of paths starting from a single source vertex.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SpannerAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SpannerAlgorithm</a>&lt;E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SpannerAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SpannerAlgorithm</a>&lt;E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes a
  <a href="https://en.wikipedia.org/wiki/Glossary_of_graph_theory#spanner">graph spanner</a> of a
  given graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SpannerAlgorithm.Spanner.html" title="interface in org.jgrapht.alg.interfaces">SpannerAlgorithm.Spanner</a>&lt;E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SpannerAlgorithm.Spanner.html" title="interface in org.jgrapht.alg.interfaces">SpannerAlgorithm.Spanner</a>&lt;E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A graph spanner.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SpannerAlgorithm.SpannerImpl.html" title="class in org.jgrapht.alg.interfaces">SpannerAlgorithm.SpannerImpl</a>&lt;E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SpannerAlgorithm.SpannerImpl.html" title="class in org.jgrapht.alg.interfaces">SpannerAlgorithm.SpannerImpl</a>&lt;E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the spanner interface.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SpanningTreeAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SpanningTreeAlgorithm</a>&lt;E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SpanningTreeAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SpanningTreeAlgorithm</a>&lt;E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes a <a href="https://en.wikipedia.org/wiki/Spanning_tree"> spanning
  tree</a> of a given connected graph.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SpanningTreeAlgorithm.SpanningTree.html" title="interface in org.jgrapht.alg.interfaces">SpanningTreeAlgorithm.SpanningTree</a>&lt;E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SpanningTreeAlgorithm.SpanningTree.html" title="interface in org.jgrapht.alg.interfaces">SpanningTreeAlgorithm.SpanningTree</a>&lt;E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A spanning tree.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SpanningTreeAlgorithm.SpanningTreeImpl.html" title="class in org.jgrapht.alg.interfaces">SpanningTreeAlgorithm.SpanningTreeImpl</a>&lt;E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SpanningTreeAlgorithm.SpanningTreeImpl.html" title="class in org.jgrapht.alg.interfaces">SpanningTreeAlgorithm.SpanningTreeImpl</a>&lt;E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the spanning tree interface.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SteinerTreeAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SteinerTreeAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes a
  <a href="https://en.wikipedia.org/wiki/Steiner_tree_problem">Steiner tree</a> of a given graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SteinerTreeAlgorithm.SteinerTree.html" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm.SteinerTree</a>&lt;E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SteinerTreeAlgorithm.SteinerTree.html" title="interface in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm.SteinerTree</a>&lt;E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A Steiner tree.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SteinerTreeAlgorithm.SteinerTreeImpl.html" title="class in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm.SteinerTreeImpl</a>&lt;E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SteinerTreeAlgorithm.SteinerTreeImpl.html" title="class in org.jgrapht.alg.interfaces">SteinerTreeAlgorithm.SteinerTreeImpl</a>&lt;E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the Steiner tree interface.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="StrongConnectivityAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">StrongConnectivityAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="StrongConnectivityAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">StrongConnectivityAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A strong connectivity inspector algorithm.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="TreeToPathDecompositionAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="TreeToPathDecompositionAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes a decomposition into disjoint paths for a given tree/forest</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="TreeToPathDecompositionAlgorithm.PathDecomposition.html" title="interface in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm.PathDecomposition</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="TreeToPathDecompositionAlgorithm.PathDecomposition.html" title="interface in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm.PathDecomposition</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A path decomposition.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TreeToPathDecompositionAlgorithm.PathDecompositionImpl.html" title="class in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm.PathDecompositionImpl</a>&lt;V,<wbr>E&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TreeToPathDecompositionAlgorithm.PathDecompositionImpl.html" title="class in org.jgrapht.alg.interfaces">TreeToPathDecompositionAlgorithm.PathDecompositionImpl</a>&lt;V,<wbr>E&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the path decomposition interface.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VertexColoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexColoringAlgorithm</a>&lt;V&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VertexColoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexColoringAlgorithm</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">An algorithm which computes a graph vertex coloring.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VertexColoringAlgorithm.Coloring.html" title="interface in org.jgrapht.alg.interfaces">VertexColoringAlgorithm.Coloring</a>&lt;V&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VertexColoringAlgorithm.Coloring.html" title="interface in org.jgrapht.alg.interfaces">VertexColoringAlgorithm.Coloring</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A coloring.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VertexColoringAlgorithm.ColoringImpl.html" title="class in org.jgrapht.alg.interfaces">VertexColoringAlgorithm.ColoringImpl</a>&lt;V&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VertexColoringAlgorithm.ColoringImpl.html" title="class in org.jgrapht.alg.interfaces">VertexColoringAlgorithm.ColoringImpl</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of the coloring interface.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VertexCoverAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexCoverAlgorithm</a>&lt;V&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VertexCoverAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexCoverAlgorithm</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Computes a (weighted) <a href="http://mathworld.wolfram.com/VertexCover.html">vertex cover</a> in
  an undirected graph.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VertexCoverAlgorithm.VertexCover.html" title="interface in org.jgrapht.alg.interfaces">VertexCoverAlgorithm.VertexCover</a>&lt;V&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VertexCoverAlgorithm.VertexCover.html" title="interface in org.jgrapht.alg.interfaces">VertexCoverAlgorithm.VertexCover</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A <a href="http://mathworld.wolfram.com/VertexCover.html">Vertex Cover</a></div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VertexCoverAlgorithm.VertexCoverImpl.html" title="class in org.jgrapht.alg.interfaces">VertexCoverAlgorithm.VertexCoverImpl</a>&lt;V&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VertexCoverAlgorithm.VertexCoverImpl.html" title="class in org.jgrapht.alg.interfaces">VertexCoverAlgorithm.VertexCoverImpl</a>&lt;V&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of a (weighted) vertex cover</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,<wbr>D&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VertexScoringAlgorithm.html" title="interface in org.jgrapht.alg.interfaces">VertexScoringAlgorithm</a>&lt;V,<wbr>D&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">An interface for all algorithms which assign scores to vertices of a graph.</div>
 </div>
 </div>
