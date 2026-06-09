@@ -70,12 +70,19 @@ public class LabelCorrectingMultiObjectiveShortestPath<V, E>
         this.queue = new ArrayDeque<>();
     }
 
+
+    /**
+    * {@inheritDoc}
+    */
     @Override
     public List<GraphPath<V, E>> getPaths(V source, V sink)
     {
         return this.getPaths(source).getPaths(sink);
     }
 
+    /**
+    * {@inheritDoc}
+    */
     @Override
     public MultiObjectiveSingleSourcePaths<V, E> getPaths(V source)
     {
