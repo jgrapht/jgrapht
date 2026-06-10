@@ -67,14 +67,11 @@ public class DirectedSpecifics<V, E> implements Specifics<V, E>, Serializable
      * {@inheritDoc}
      */
     @Override
-    public boolean addVertex(V v)
+    public boolean addVertex(V vertex)
     {
-        DirectedEdgeContainer<V, E> ec = vertexMap.get(v);
-        if (ec == null) {
-            vertexMap.put(v, new DirectedEdgeContainer<>(edgeSetFactory, v));
-            return true;
-        }
-        return false;
+        int previousSize = vertexMap.size();
+        vertexMap.computeIfAbsent(vertex, v -> new DirectedEdgeContainer<>(edgeSetFactory, v));
+        return previousSize < vertexMap.size();
     }
 
     /**
@@ -115,10 +112,10 @@ public class DirectedSpecifics<V, E> implements Specifics<V, E>, Serializable
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
-            DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        DirectedEdgeContainer<V, E> sourceEC = vertexMap.get(sourceVertex);
+        if (sourceEC != null && vertexMap.containsKey(targetVertex)) {
 
-            for (E e : ec.outgoing) {
+            for (E e : sourceEC.outgoing) {
                 if (graph.getEdgeTarget(e).equals(targetVertex)) {
                     return e;
                 }
@@ -192,18 +189,19 @@ public class DirectedSpecifics<V, E> implements Specifics<V, E>, Serializable
     @Override
     public Set<E> edgesOf(V vertex)
     {
-        ArrayUnenforcedSet<E> inAndOut =
-            new ArrayUnenforcedSet<>(getEdgeContainer(vertex).incoming);
+        DirectedEdgeContainer<V, E> ec = getEdgeContainer(vertex);
+        Set<E> inAndOut = new ArrayUnenforcedSet<>(ec.incoming.size() + ec.outgoing.size());
+        inAndOut.addAll(ec.incoming);
 
         if (graph.getType().isAllowingSelfLoops()) {
-            for (E e : getEdgeContainer(vertex).outgoing) {
+            for (E e : ec.outgoing) {
                 V target = graph.getEdgeTarget(e);
                 if (!vertex.equals(target)) {
                     inAndOut.add(e);
                 }
             }
         } else {
-            inAndOut.addAll(getEdgeContainer(vertex).outgoing);
+            inAndOut.addAll(ec.outgoing);
         }
 
         return Collections.unmodifiableSet(inAndOut);
@@ -267,6 +265,7 @@ public class DirectedSpecifics<V, E> implements Specifics<V, E>, Serializable
         DirectedEdgeContainer<V, E> ec = vertexMap.get(vertex);
 
         if (ec == null) {
+            // It is very unlikely that ec==null, so we save the lambda for Map.computeIfAbsent()
             ec = new DirectedEdgeContainer<>(edgeSetFactory, vertex);
             vertexMap.put(vertex, ec);
         }
