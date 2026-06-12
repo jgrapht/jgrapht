@@ -45,6 +45,47 @@ public class MathUtil
     }
 
     /**
+     * Compute the element-wise sum of two vectors. The two vectors must have the same length.
+     *
+     * @param a the first vector
+     * @param b the second vector
+     * @return the sum of the two vectors
+     */
+    public static double[] vectorSum(double[] a, double[] b)
+    {
+        int d = a.length;
+        double[] res = new double[d];
+        for (int i = 0; i < d; i++) {
+            res[i] = a[i] + b[i];
+        }
+        return res;
+    }
+
+    /**
+     * Return whether a vector dominates another, i.e. whether it is less than or equal to the other
+     * vector in all components and strictly less in at least one component. The two vectors must
+     * have the same length.
+     *
+     * @param a the first vector
+     * @param b the second vector
+     * @return true if the first vector dominates the second
+     */
+    public static boolean vectorDominates(double[] a, double[] b)
+    {
+        boolean strict = false;
+        int d = a.length;
+        for (int i = 0; i < d; i++) {
+            if (a[i] > b[i]) {
+                return false;
+            }
+            if (a[i] < b[i]) {
+                strict = true;
+            }
+        }
+        return strict;
+    }
+
+    /**
      * Calculate the floor of the binary logarithm of $n$.
      *
      * @param n the input number
