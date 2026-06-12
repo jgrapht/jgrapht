@@ -206,36 +206,6 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
     }
 
     /**
-     * Check the validity of the edge weight function
-     *
-     * @param edgeWeightFunction the edge weight function
-     * @return the number of dimensions
-     */
-    private int validateEdgeWeightFunction(Function<E, double[]> edgeWeightFunction)
-    {
-        int dim = 0;
-        for (E e : graph.edgeSet()) {
-            double[] f = edgeWeightFunction.apply(e);
-            if (f == null) {
-                throw new IllegalArgumentException("Invalid edge weight function");
-            }
-            if (dim == 0) {
-                dim = f.length;
-            } else {
-                if (dim != f.length) {
-                    throw new IllegalArgumentException("Invalid edge weight function");
-                }
-            }
-            for (int i = 0; i < dim; i++) {
-                if (Double.compare(f[i], 0d) < 0) {
-                    throw new IllegalArgumentException("Edge weight must be non-negative");
-                }
-            }
-        }
-        return dim;
-    }
-
-    /**
      * A node label.
      */
     private class Label

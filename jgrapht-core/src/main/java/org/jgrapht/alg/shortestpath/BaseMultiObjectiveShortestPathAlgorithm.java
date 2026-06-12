@@ -22,6 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * A base implementation of the multi-objective shortest path interface.
@@ -86,6 +87,37 @@ abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E> implements MultiObj
         } else {
             return null;
         }
+    }
+
+    /**
+     * Check the validity of an edge weight function. The function must return a non-null vector of
+     * non-negative values of the same length for every edge of the graph.
+     *
+     * @param edgeWeightFunction the edge weight function
+     * @return the number of dimensions
+     */
+    protected int validateEdgeWeightFunction(Function<E, double[]> edgeWeightFunction)
+    {
+        int dim = 0;
+        for (E e : graph.edgeSet()) {
+            double[] f = edgeWeightFunction.apply(e);
+            if (f == null) {
+                throw new IllegalArgumentException("Invalid edge weight function");
+            }
+            if (dim == 0) {
+                dim = f.length;
+            } else {
+                if (dim != f.length) {
+                    throw new IllegalArgumentException("Invalid edge weight function");
+                }
+            }
+            for (int i = 0; i < dim; i++) {
+                if (Double.compare(f[i], 0d) < 0) {
+                    throw new IllegalArgumentException("Edge weight must be non-negative");
+                }
+            }
+        }
+        return dim;
     }
 
 }
