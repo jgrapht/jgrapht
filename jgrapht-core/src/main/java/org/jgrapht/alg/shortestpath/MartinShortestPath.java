@@ -19,6 +19,7 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.jheaps.*;
 import org.jheaps.array.*;
 
@@ -113,19 +114,20 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
             V v = curLabel.node;
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
-                Label newLabel =
-                    new Label(u, sum(curLabel.value, edgeWeightFunction.apply(e)), curLabel, e);
+                Label newLabel = new Label(
+                    u, MathUtil.vectorSum(curLabel.value, edgeWeightFunction.apply(e)), curLabel,
+                    e);
 
                 boolean isDominated = false;
                 LinkedList<Label> uLabels = nodeLabels.get(u);
                 ListIterator<Label> it = uLabels.listIterator();
                 while (it.hasNext()) {
                     Label oldLabel = it.next();
-                    if (dominates(oldLabel.value, newLabel.value)) {
+                    if (MathUtil.vectorDominates(oldLabel.value, newLabel.value)) {
                         isDominated = true;
                         break;
                     }
-                    if (dominates(newLabel.value, oldLabel.value)) {
+                    if (MathUtil.vectorDominates(newLabel.value, oldLabel.value)) {
                         it.remove();
                     }
                 }
@@ -164,75 +166,6 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
             }
         }
         return paths;
-    }
-
-    /**
-     * Compute the sum of two vectors
-     *
-     * @param a the first vector
-     * @param b the second vector
-     * @return the sum
-     */
-    private static double[] sum(double[] a, double b[])
-    {
-        int d = a.length;
-        double[] res = new double[d];
-        for (int i = 0; i < d; i++) {
-            res[i] = a[i] + b[i];
-        }
-        return res;
-    }
-
-    /**
-     * Return whether a vector dominates another.
-     *
-     * @param a the first vector
-     * @param b the second vector
-     * @return true if the first vector dominates the second
-     */
-    private static boolean dominates(double[] a, double[] b)
-    {
-        boolean strict = false;
-        int d = a.length;
-        for (int i = 0; i < d; i++) {
-            if (a[i] > b[i]) {
-                return false;
-            }
-            if (a[i] < b[i]) {
-                strict = true;
-            }
-        }
-        return strict;
-    }
-
-    /**
-     * Check the validity of the edge weight function
-     *
-     * @param edgeWeightFunction the edge weight function
-     * @return the number of dimensions
-     */
-    private int validateEdgeWeightFunction(Function<E, double[]> edgeWeightFunction)
-    {
-        int dim = 0;
-        for (E e : graph.edgeSet()) {
-            double[] f = edgeWeightFunction.apply(e);
-            if (f == null) {
-                throw new IllegalArgumentException("Invalid edge weight function");
-            }
-            if (dim == 0) {
-                dim = f.length;
-            } else {
-                if (dim != f.length) {
-                    throw new IllegalArgumentException("Invalid edge weight function");
-                }
-            }
-            for (int i = 0; i < dim; i++) {
-                if (Double.compare(f[i], 0d) < 0) {
-                    throw new IllegalArgumentException("Edge weight must be non-negative");
-                }
-            }
-        }
-        return dim;
     }
 
     /**

@@ -92,6 +92,39 @@ public class LabelCorrectingMultiObjectiveShortestPathTest
     }
 
     @Test
+    public void testApproximation()
+    {
+        DirectedPseudograph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+
+        DefaultEdge e12 = g.addEdge(1, 2);
+        DefaultEdge e13 = g.addEdge(1, 3);
+        DefaultEdge e32 = g.addEdge(3, 2);
+
+        DefaultEdgeFunction<DefaultEdge, double[]> f =
+            new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
+
+        f.set(e12, new double[] { 10.0, 10.0 });
+        f.set(e13, new double[] { 10.5, 9.8 });
+        f.set(e32, new double[] { 0.0, 0.0 });
+
+        MultiObjectiveSingleSourcePaths<Integer, DefaultEdge> exactPaths =
+            new LabelCorrectingMultiObjectiveShortestPath<>(g, f, 0.0).getPaths(1);
+
+        List<GraphPath<Integer, DefaultEdge>> exactPaths12 = exactPaths.getPaths(2);
+        assertEquals(2, exactPaths12.size());
+
+        MultiObjectiveSingleSourcePaths<Integer, DefaultEdge> approximatePaths =
+            new LabelCorrectingMultiObjectiveShortestPath<>(g, f, 0.10).getPaths(1);
+
+        List<GraphPath<Integer, DefaultEdge>> approximatePaths12 = approximatePaths.getPaths(2);
+        assertEquals(1, approximatePaths12.size());
+    }
+
+    @Test
     public void testNoPaths()
     {
         DirectedPseudograph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -137,14 +170,14 @@ public class LabelCorrectingMultiObjectiveShortestPathTest
         DefaultEdgeFunction<DefaultEdge, double[]> f =
             new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
 
-            f.set(e12, new double[] { 1.0, 5.0 });
-            f.set(e13, new double[] { 4.0, 2.0 });
-            f.set(e14, new double[] { 4.0, 4.0 });
-            f.set(e24, new double[] { 1.0, 2.0 });
-            f.set(e25, new double[] { 2.0, 5.0 });
-            f.set(e34, new double[] { 2.0, 3.0 });
-            f.set(e35, new double[] { 6.0, 1.0 });
-            f.set(e45, new double[] { 3.0, 3.0 });
+        f.set(e12, new double[] { 1.0, 5.0 });
+        f.set(e13, new double[] { 4.0, 2.0 });
+        f.set(e14, new double[] { 4.0, 4.0 });
+        f.set(e24, new double[] { 1.0, 2.0 });
+        f.set(e25, new double[] { 2.0, 5.0 });
+        f.set(e34, new double[] { 2.0, 3.0 });
+        f.set(e35, new double[] { 6.0, 1.0 });
+        f.set(e45, new double[] { 3.0, 3.0 });
 
         MultiObjectiveSingleSourcePaths<Integer, DefaultEdge> martinPaths =
             new MartinShortestPath<>(g, f).getPaths(1);
