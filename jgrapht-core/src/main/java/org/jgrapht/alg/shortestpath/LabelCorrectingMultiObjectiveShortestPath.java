@@ -20,54 +20,93 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.jheaps.*;
-import org.jheaps.array.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 /**
- * Martin's algorithm for the multi-objective shortest paths problem.
+ * A label-correcting algorithm for the multi-objective shortest paths problem.
  *
  * <p>
- * Martin's label setting algorithm is a multiple objective extension of Dijkstra's algorithm, where
- * the minimum operator is replaced by a dominance test. It computes a maximal complete set of
- * efficient paths when all the cost values are non-negative.
+ * The algorithm is a multiple objective extension of the Bellman-Ford relaxation process. It
+ * maintains a set of non-dominated labels for each vertex and iteratively propagates labels through
+ * outgoing edges. A newly generated label is discarded if it is dominated by an existing label at
+ * the same vertex. Existing labels dominated by the new label are removed.
+ *
+ * <p>
+ * Optionally, an approximation tolerance $\varepsilon$ may be provided. In that case labels which
+ * are sufficiently close according to the tolerance are also discarded in order to reduce the
+ * number of stored labels, and the algorithm computes an approximation of the Pareto set. With a
+ * tolerance equal to zero the complete Pareto set is computed.
+ *
+ * <p>
+ * All objective values must be non-negative.
+ *
+ * <p>
+ * The label-correcting strategy is described in: A. J. V. Skriver and K. A. Andersen. (2000). A
+ * label correcting approach for solving bicriterion shortest-path problems. Computers &amp;
+ * Operations Research. 27. 507-524. 10.1016/S0305-0548(99)00037-4.
+ *
+ * <p>
+ * The approximation of the Pareto set is described in: A. Warburton. (1987). Approximation of
+ * Pareto Optima in Multiple-Objective, Shortest-Path Problems. Operations Research. 35. 70-79.
+ * 10.1287/opre.35.1.70.
  *
  * <p>
  * Note that the multi-objective shortest path problem is a well-known NP-hard problem.
  *
- * @author Dimitrios Michail
+ * @author Mario Fuentes Jimenez
  *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgorithm<V, E>
+public class LabelCorrectingMultiObjectiveShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgorithm<V, E>
 {
     // the edge weight function
     private final Function<E, double[]> edgeWeightFunction;
     // the number of objectives
     private final int objectives;
+    // the approximation tolerance
+    private final double epsilon;
     // final labels for each node
     private final Map<V, LinkedList<Label>> nodeLabels;
-    // temporary labels ordered lexicographically
-    private final Heap<Label> heap;
+    // labels waiting to be expanded
+    private final Queue<Label> queue;
 
     /**
-     * Create a new shortest path algorithm
+     * Create a new shortest path algorithm which computes the complete Pareto set.
      *
      * @param graph the input graph
      * @param edgeWeightFunction the edge weight function
      */
-    public MartinShortestPath(Graph<V, E> graph, Function<E, double[]> edgeWeightFunction)
+    public LabelCorrectingMultiObjectiveShortestPath(
+        Graph<V, E> graph, Function<E, double[]> edgeWeightFunction)
+    {
+        this(graph, edgeWeightFunction, 0d);
+    }
+
+    /**
+     * Create a new shortest path algorithm which computes an epsilon-approximation of the Pareto
+     * set. A tolerance equal to zero computes the complete Pareto set.
+     *
+     * @param graph the input graph
+     * @param edgeWeightFunction the edge weight function
+     * @param epsilon the approximation tolerance, must be non-negative
+     */
+    public LabelCorrectingMultiObjectiveShortestPath(
+        Graph<V, E> graph, Function<E, double[]> edgeWeightFunction, double epsilon)
     {
         super(graph);
         this.edgeWeightFunction =
             Objects.requireNonNull(edgeWeightFunction, "Function cannot be null");
+        if (Double.compare(epsilon, 0d) < 0) {
+            throw new IllegalArgumentException("Epsilon must be non-negative");
+        }
         this.objectives = validateEdgeWeightFunction(edgeWeightFunction);
+        this.epsilon = epsilon;
         this.nodeLabels = new HashMap<>();
-        this.heap = new DaryArrayHeap<>(3, new LabelComparator());
+        this.queue = new ArrayDeque<>();
     }
 
     @Override
@@ -98,42 +137,53 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
     }
 
     /**
-     * Execute the main algorithm
+     * Execute the main algorithm.
+     *
+     * @param source the source vertex
      */
     private void runAlgorithm(V source)
     {
         Label sourceLabel = new Label(source, new double[objectives], null, null);
+
         for (V v : graph.vertexSet()) {
             nodeLabels.put(v, new LinkedList<>());
         }
-        nodeLabels.get(source).add(sourceLabel);
-        heap.insert(sourceLabel);
 
-        while (!heap.isEmpty()) {
-            Label curLabel = heap.deleteMin();
+        nodeLabels.get(source).add(sourceLabel);
+        queue.add(sourceLabel);
+
+        while (!queue.isEmpty()) {
+            Label curLabel = queue.poll();
             V v = curLabel.node;
+
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 Label newLabel = new Label(
                     u, MathUtil.vectorSum(curLabel.value, edgeWeightFunction.apply(e)), curLabel,
                     e);
 
-                boolean isDominated = false;
+                boolean discard = false;
                 LinkedList<Label> uLabels = nodeLabels.get(u);
                 ListIterator<Label> it = uLabels.listIterator();
+
                 while (it.hasNext()) {
                     Label oldLabel = it.next();
                     if (MathUtil.vectorDominates(oldLabel.value, newLabel.value)) {
-                        isDominated = true;
+                        discard = true;
+                        break;
+                    }
+                    if (epsilon > 0d && close(oldLabel.value, newLabel.value, epsilon)) {
+                        discard = true;
                         break;
                     }
                     if (MathUtil.vectorDominates(newLabel.value, oldLabel.value)) {
                         it.remove();
                     }
                 }
-                if (!isDominated) {
+
+                if (!discard) {
                     uLabels.add(newLabel);
-                    heap.insert(newLabel);
+                    queue.add(newLabel);
                 }
             }
         }
@@ -169,6 +219,26 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
     }
 
     /**
+     * Return whether two vectors are close according to the epsilon tolerance.
+     *
+     * @param a the first vector
+     * @param b the second vector
+     * @param epsilon the approximation tolerance
+     * @return true if the vectors are close
+     */
+    private static boolean close(double[] a, double[] b, double epsilon)
+    {
+        int d = a.length;
+        for (int i = 0; i < d; i++) {
+            double tolerance = Math.abs(a[i]) * epsilon;
+            if (Math.abs(a[i] - b[i]) > tolerance) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * A node label.
      */
     private class Label
@@ -192,28 +262,5 @@ public class MartinShortestPath<V, E> extends BaseMultiObjectiveShortestPathAlgo
             return "Label [node=" + node + ", value=" + Arrays.toString(value) + ", fromPrevious="
                 + fromPrevious + "]";
         }
-
     }
-
-    /**
-     * Lexicographic comparator of two node labels.
-     */
-    private class LabelComparator implements Comparator<Label>
-    {
-
-        @Override
-        public int compare(Label o1, Label o2)
-        {
-            for (int i = 0; i < objectives; i++) {
-                if (o1.value[i] < o2.value[i]) {
-                    return -1;
-                } else if (o1.value[i] > o2.value[i]) {
-                    return 1;
-                }
-            }
-            return 0;
-        }
-
-    }
-
 }
