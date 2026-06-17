@@ -11,6 +11,7 @@ Changes to JGraphT in each version:
     - Optimized `AllDirectedPaths` with forward pruning (contributed by Shai Eilat)
     - Optimized `DijkstraManyToManyShortestPaths.getPaths(v)` (contributed by Shai Eilat)
     - Added exact Hamiltonian path algorithms `BacktrackingHamiltonianPath`, `HeldKarpHamiltonianPath`, and `DagHamiltonianPath` (contributed by Shai Eilat)
+    - Added `LabelCorrectingMultiObjectiveShortestPath` (contributed by Mario Fuentes Jimenez)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
