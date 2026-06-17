@@ -125,6 +125,19 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Calculate the floor of the binary logarithm of $n$.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#vectorDominates(double%5B%5D,double%5B%5D)" class="member-name-link">vectorDominates</a><wbr>(double[]&nbsp;a,
+ double[]&nbsp;b)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Return whether a vector dominates another, i.e. whether it is less than or equal to the other
+ vector in all components and strictly less in at least one component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static double[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#vectorSum(double%5B%5D,double%5B%5D)" class="member-name-link">vectorSum</a><wbr>(double[]&nbsp;a,
+ double[]&nbsp;b)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Compute the element-wise sum of two vectors.</div>
+</div>
 </div>
 </div>
 </div>
@@ -152,6 +165,38 @@ loadScripts(document, 'script');</script>
 <dd><code>n</code> - the input number</dd>
 <dt>Returns:</dt>
 <dd>the factorial</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="vectorSum(double[],double[])">
+<h3>vectorSum</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double[]</span>&nbsp;<span class="element-name">vectorSum</span><wbr><span class="parameters">(double[]&nbsp;a,
+ double[]&nbsp;b)</span></div>
+<div class="block">Compute the element-wise sum of two vectors. The two vectors must have the same length.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>a</code> - the first vector</dd>
+<dd><code>b</code> - the second vector</dd>
+<dt>Returns:</dt>
+<dd>the sum of the two vectors</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="vectorDominates(double[],double[])">
+<h3>vectorDominates</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">vectorDominates</span><wbr><span class="parameters">(double[]&nbsp;a,
+ double[]&nbsp;b)</span></div>
+<div class="block">Return whether a vector dominates another, i.e. whether it is less than or equal to the other
+ vector in all components and strictly less in at least one component. The two vectors must
+ have the same length.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>a</code> - the first vector</dd>
+<dd><code>b</code> - the second vector</dd>
+<dt>Returns:</dt>
+<dd>true if the first vector dominates the second</dd>
 </dl>
 </section>
 </li>
