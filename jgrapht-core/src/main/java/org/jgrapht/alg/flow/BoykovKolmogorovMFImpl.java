@@ -465,130 +465,177 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     private void adopt()
     {
         while (!orphans.isEmpty() || !childOrphans.isEmpty()) {
-            VertexExtension currentVertex;
-
-            // child orphans take precedence
-            if (childOrphans.isEmpty()) {
-                currentVertex = orphans.get(orphans.size() - 1);
-                orphans.remove(orphans.size() - 1);
-            } else {
-                currentVertex = childOrphans.removeLast();
-            }
+            VertexExtension currentVertex = nextOrphan();
 
             if (currentVertex.isSourceTreeVertex()) {
-
-                AnnotatedFlowEdge newParentEdge = null;
-                int minDistance = Integer.MAX_VALUE;
-                // find a parent edge which source has the smaller distance
-                // to a terminal vertex according the distance heuristic
-
-                for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
-                    if (edge.getInverse().hasCapacity()) {
-                        VertexExtension targetNode = edge.getTarget();
-
-                        if (targetNode.isSourceTreeVertex()
-                            && hasConnectionToTerminal(targetNode))
-                        {
-                            if (targetNode.distance < minDistance) {
-                                minDistance = targetNode.distance;
-                                newParentEdge = edge.getInverse();
-                            }
-                        }
-                    }
-                }
-
-                if (newParentEdge == null) {
-
-                    if (DEBUG) {
-                        System.out.printf("Vertex %s becomes free\n\n", currentVertex.prototype);
-                    }
-
-                    // can't adopt this vertex
-                    currentVertex.timestamp = FREE_NODE_TIMESTAMP;
-                    currentVertex.treeStatus = VertexTreeStatus.FREE_VERTEX;
-
-                    for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
-                        VertexExtension targetVertex = edge.getTarget();
-                        if (targetVertex.isSourceTreeVertex()) {
-                            if (edge.getInverse().hasCapacity()) {
-                                makeActive(targetVertex);
-                            }
-                            if (targetVertex.parentEdge == edge) {
-                                // target vertex is a child of the current vertex
-                                targetVertex.makeOrphan();
-                                childOrphans.addFirst(targetVertex);
-                            }
-                        }
-                    }
-                } else {
-
-                    if (DEBUG) {
-                        System.out.printf(
-                            "Vertex %s get's adopted via %s\n\n", currentVertex.prototype,
-                            newParentEdge);
-                    }
-                    // adopt this vertex
-                    makeCheckedInThisIteration(currentVertex);
-                    currentVertex.parentEdge = newParentEdge;
-                    currentVertex.distance = minDistance + 1;
-                }
-
+                adoptSourceOrphan(currentVertex);
             } else {
-                // current node is from sink tree
-                // the processing logic is symmetrical
                 assert currentVertex.isSinkTreeVertex();
-
-                AnnotatedFlowEdge newParentEdge = null;
-                int minDistance = Integer.MAX_VALUE;
-                for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
-                    if (edge.hasCapacity()) {
-                        VertexExtension targetNode = edge.getTarget();
-
-                        if (targetNode.isSinkTreeVertex() && hasConnectionToTerminal(targetNode)) {
-                            if (targetNode.distance < minDistance) {
-                                minDistance = targetNode.distance;
-                                newParentEdge = edge;
-                            }
-                        }
-                    }
-                }
-
-                if (newParentEdge == null) {
-
-                    if (DEBUG) {
-                        System.out.printf("Vertex %s becomes free\n\n", currentVertex.prototype);
-                    }
-
-                    // can't adopt this vertex
-                    currentVertex.timestamp = FREE_NODE_TIMESTAMP;
-                    currentVertex.treeStatus = VertexTreeStatus.FREE_VERTEX;
-
-                    for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
-                        VertexExtension targetVertex = edge.getTarget();
-                        if (targetVertex.isSinkTreeVertex()) {
-                            if (edge.hasCapacity()) {
-                                makeActive(targetVertex);
-                            }
-                            if (targetVertex.parentEdge == edge.getInverse()) {
-                                // target vertex is a child of the current vertex
-                                targetVertex.makeOrphan();
-                                childOrphans.addFirst(targetVertex);
-                            }
-                        }
-                    }
-                } else {
-
-                    if (DEBUG) {
-                        System.out.printf(
-                            "Vertex %s get's adopted via %s\n\n", currentVertex.prototype,
-                            newParentEdge);
-                    }
-                    // adopt this vertex
-                    makeCheckedInThisIteration(currentVertex);
-                    currentVertex.parentEdge = newParentEdge;
-                    currentVertex.distance = minDistance + 1;
-                }
+                adoptSinkOrphan(currentVertex);
             }
+        }
+    }
+
+    private VertexExtension nextOrphan()
+    {
+        // child orphans take precedence
+        if (childOrphans.isEmpty()) {
+            VertexExtension orphan = orphans.get(orphans.size() - 1);
+            orphans.remove(orphans.size() - 1);
+            return orphan;
+        }
+
+        return childOrphans.removeLast();
+    }
+
+    private void adoptSourceOrphan(VertexExtension currentVertex)
+    {
+        AdoptionParent adoptionParent = findSourceTreeParent(currentVertex);
+
+        if (adoptionParent == null) {
+            // can't adopt this vertex
+            makeSourceTreeVertexFree(currentVertex);
+        } else {
+            // adopt this vertex
+            adoptWithParent(currentVertex, adoptionParent);
+        }
+    }
+
+    private AdoptionParent findSourceTreeParent(VertexExtension currentVertex)
+    {
+        AdoptionParent adoptionParent = null;
+        int minDistance = Integer.MAX_VALUE;
+        // find a parent edge which source has the smaller distance
+        // to a terminal vertex according the distance heuristic
+
+        for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
+            if (!edge.getInverse().hasCapacity()) {
+                continue;
+            }
+
+            VertexExtension targetNode = edge.getTarget();
+            if (targetNode.isSourceTreeVertex()
+                && hasConnectionToTerminal(targetNode)
+                && targetNode.distance < minDistance)
+            {
+                minDistance = targetNode.distance;
+                adoptionParent = new AdoptionParent(edge.getInverse(), minDistance);
+            }
+        }
+
+        return adoptionParent;
+    }
+
+    private void makeSourceTreeVertexFree(VertexExtension currentVertex)
+    {
+        makeFree(currentVertex);
+
+        for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
+            VertexExtension targetVertex = edge.getTarget();
+            if (!targetVertex.isSourceTreeVertex()) {
+                continue;
+            }
+
+            if (edge.getInverse().hasCapacity()) {
+                makeActive(targetVertex);
+            }
+            if (targetVertex.parentEdge == edge) {
+                // target vertex is a child of the current vertex
+                targetVertex.makeOrphan();
+                childOrphans.addFirst(targetVertex);
+            }
+        }
+    }
+
+    private void adoptSinkOrphan(VertexExtension currentVertex)
+    {
+        AdoptionParent adoptionParent = findSinkTreeParent(currentVertex);
+
+        if (adoptionParent == null) {
+            // can't adopt this vertex
+            makeSinkTreeVertexFree(currentVertex);
+        } else {
+            // adopt this vertex
+            adoptWithParent(currentVertex, adoptionParent);
+        }
+    }
+
+    private AdoptionParent findSinkTreeParent(VertexExtension currentVertex)
+    {
+        AdoptionParent adoptionParent = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
+            if (!edge.hasCapacity()) {
+                continue;
+            }
+
+            VertexExtension targetNode = edge.getTarget();
+            if (targetNode.isSinkTreeVertex()
+                && hasConnectionToTerminal(targetNode)
+                && targetNode.distance < minDistance)
+            {
+                minDistance = targetNode.distance;
+                adoptionParent = new AdoptionParent(edge, minDistance);
+            }
+        }
+
+        return adoptionParent;
+    }
+
+    private void makeSinkTreeVertexFree(VertexExtension currentVertex)
+    {
+        makeFree(currentVertex);
+
+        for (AnnotatedFlowEdge edge : currentVertex.getOutgoing()) {
+            VertexExtension targetVertex = edge.getTarget();
+            if (!targetVertex.isSinkTreeVertex()) {
+                continue;
+            }
+
+            if (edge.hasCapacity()) {
+                makeActive(targetVertex);
+            }
+            if (targetVertex.parentEdge == edge.getInverse()) {
+                // target vertex is a child of the current vertex
+                targetVertex.makeOrphan();
+                childOrphans.addFirst(targetVertex);
+            }
+        }
+    }
+
+    private void makeFree(VertexExtension currentVertex)
+    {
+        if (DEBUG) {
+            System.out.printf("Vertex %s becomes free\n\n", currentVertex.prototype);
+        }
+
+        currentVertex.timestamp = FREE_NODE_TIMESTAMP;
+        currentVertex.treeStatus = VertexTreeStatus.FREE_VERTEX;
+    }
+
+    private void adoptWithParent(VertexExtension currentVertex, AdoptionParent adoptionParent)
+    {
+        if (DEBUG) {
+            System.out.printf(
+                "Vertex %s get's adopted via %s\n\n", currentVertex.prototype,
+                adoptionParent.edge);
+        }
+
+        makeCheckedInThisIteration(currentVertex);
+        currentVertex.parentEdge = adoptionParent.edge;
+        currentVertex.distance = adoptionParent.distance + 1;
+    }
+
+    private class AdoptionParent
+    {
+        AnnotatedFlowEdge edge;
+        int distance;
+
+        AdoptionParent(AnnotatedFlowEdge edge, int distance)
+        {
+            this.edge = edge;
+            this.distance = distance;
         }
     }
 
