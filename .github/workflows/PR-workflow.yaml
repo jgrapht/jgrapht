@@ -20,7 +20,7 @@ jobs:
     name: Build (${{ matrix.os.name }})
     runs-on: ${{ matrix.os.tag }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
