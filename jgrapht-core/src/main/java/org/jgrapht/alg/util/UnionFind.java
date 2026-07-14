@@ -61,7 +61,7 @@ public class UnionFind<T>
      */
     public void addElement(T element)
     {
-        if (parentMap.containsKey(element))
+        if (contains(element))
             throw new IllegalArgumentException(
                 "element is already contained in UnionFind: " + element);
         parentMap.put(element, element);
@@ -86,6 +86,16 @@ public class UnionFind<T>
     }
 
     /**
+     * Returns true if the given value is an element in this UnionFind data structure.
+     *
+     * @param element a value that might be in this
+     * @return true if this contains the given value
+    */
+    public boolean contains(final T element) {
+        return parentMap.containsKey(element);
+    }
+
+    /**
      * Returns the representative element of the set that element is in.
      *
      * @param element The element to find.
@@ -94,7 +104,7 @@ public class UnionFind<T>
      */
     public T find(final T element)
     {
-        if (!parentMap.containsKey(element)) {
+        if (!contains(element)) {
             throw new IllegalArgumentException(
                 "element is not contained in this UnionFind data structure: " + element);
         }
@@ -129,7 +139,7 @@ public class UnionFind<T>
      */
     public void union(T element1, T element2)
     {
-        if (!parentMap.containsKey(element1) || !parentMap.containsKey(element2)) {
+        if (!contains(element1) || !contains(element2)) {
             throw new IllegalArgumentException("elements must be contained in given set");
         }
 
