@@ -70,7 +70,7 @@
         <apfloat.version>1.16.0</apfloat.version>
         <checkstyle.version>13.7.0</checkstyle.version>
         <commons-text.version>1.15.0</commons-text.version>
-        <dsiutils.version>2.7.4</dsiutils.version>
+        <dsiutils.version>2.7.5</dsiutils.version>
         <fastutil.version>8.5.18</fastutil.version>
         <guava.version>33.6.0-jre</guava.version>
         <hamcrest.version>3.0</hamcrest.version>
