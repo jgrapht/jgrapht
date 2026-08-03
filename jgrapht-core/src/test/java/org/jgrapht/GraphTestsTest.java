@@ -31,9 +31,182 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class GraphTests.
  *
  * @author Dimitrios Michail
+ * @author Wissal Chbani
  */
 public class GraphTestsTest
 {
+
+    @Test
+    public void testIsLinear() {
+        Graph<Integer, DefaultEdge> graph;
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        assertTrue(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        assertTrue(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addEdge(1, 2);
+        assertTrue(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        assertTrue(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 1);
+        assertFalse(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        assertFalse(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addEdge(1, 2);
+        graph.addEdge(3, 4);
+        assertFalse(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 3);
+        graph.addEdge(2, 4);
+        graph.addEdge(3, 4);
+        assertFalse(GraphTests.isLinear(graph));
+
+        graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        assertFalse(GraphTests.isLinear(graph));
+
+        assertThrows(NullPointerException.class, () -> {
+            GraphTests.isLinear(null);
+        });
+
+        Graph<Integer, DefaultEdge> directedGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        directedGraph.addVertex(1);
+        directedGraph.addVertex(2);
+        directedGraph.addEdge(1, 2);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GraphTests.isLinear(directedGraph);
+        });
+    }
+
+    @Test
+    public void testIsChordless()
+    {
+        // Test 1: Triangle (C3) - chordless by definition
+        Graph<Integer, DefaultEdge> triangle = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(triangle, 1, 2);
+        Graphs.addEdgeWithVertices(triangle, 2, 3);
+        Graphs.addEdgeWithVertices(triangle, 3, 1);
+        GraphPath<Integer, DefaultEdge> trianglePath =
+                new GraphWalk<>(triangle, Arrays.asList(1, 2, 3, 1), 0);
+        assertTrue(GraphTests.isChordless(triangle, trianglePath));
+
+        // Test 2: Square (C4) without chord - chordless
+        Graph<Integer, DefaultEdge> square = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(square, 1, 2);
+        Graphs.addEdgeWithVertices(square, 2, 3);
+        Graphs.addEdgeWithVertices(square, 3, 4);
+        Graphs.addEdgeWithVertices(square, 4, 1);
+        GraphPath<Integer, DefaultEdge> squarePath =
+                new GraphWalk<>(square, Arrays.asList(1, 2, 3, 4, 1), 0);
+        assertTrue(GraphTests.isChordless(square, squarePath));
+
+        // Test 3: Square with diagonal - NOT chordless
+        Graph<Integer, DefaultEdge> squareWithChord = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(squareWithChord, 1, 2);
+        Graphs.addEdgeWithVertices(squareWithChord, 2, 3);
+        Graphs.addEdgeWithVertices(squareWithChord, 3, 4);
+        Graphs.addEdgeWithVertices(squareWithChord, 4, 1);
+        Graphs.addEdgeWithVertices(squareWithChord, 1, 3); // chord
+        GraphPath<Integer, DefaultEdge> squareWithChordPath =
+                new GraphWalk<>(squareWithChord, Arrays.asList(1, 2, 3, 4, 1), 0);
+        assertFalse(GraphTests.isChordless(squareWithChord, squareWithChordPath));
+
+        // Test 4: Pentagon (C5) - chordless
+        Graph<Integer, DefaultEdge> pentagon = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(pentagon, 1, 2);
+        Graphs.addEdgeWithVertices(pentagon, 2, 3);
+        Graphs.addEdgeWithVertices(pentagon, 3, 4);
+        Graphs.addEdgeWithVertices(pentagon, 4, 5);
+        Graphs.addEdgeWithVertices(pentagon, 5, 1);
+        GraphPath<Integer, DefaultEdge> pentagonPath =
+                new GraphWalk<>(pentagon, Arrays.asList(1, 2, 3, 4, 5, 1), 0);
+        assertTrue(GraphTests.isChordless(pentagon, pentagonPath));
+
+        // Test 5: Pentagon with chord - NOT chordless
+        Graphs.addEdgeWithVertices(pentagon, 1, 3); // chord
+        assertFalse(GraphTests.isChordless(pentagon, pentagonPath));
+    }
+
+    @Test
+    public void testIsChordlessNullArguments()
+    {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 1);
+        GraphPath<Integer, DefaultEdge> path =
+                new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 1), 0);
+
+        assertThrows(NullPointerException.class, () -> GraphTests.isChordless(null, path));
+        assertThrows(NullPointerException.class, () -> GraphTests.isChordless(graph, null));
+    }
+
+    @Test
+    public void testIsChordlessInvalidCycle()
+    {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+
+        // Not a cycle (too short)
+        GraphPath<Integer, DefaultEdge> tooShort =
+                new GraphWalk<>(graph, Arrays.asList(1, 2, 1), 0);
+        assertThrows(IllegalArgumentException.class, () -> GraphTests.isChordless(graph, tooShort));
+
+        // Not a cycle (first != last)
+        GraphPath<Integer, DefaultEdge> notCycle =
+                new GraphWalk<>(graph, Arrays.asList(1, 2, 3), 0);
+        assertThrows(IllegalArgumentException.class, () -> GraphTests.isChordless(graph, notCycle));
+    }
 
     @Test
     public void testIsEmpty()
