@@ -51,6 +51,10 @@ public class UnionFindTest
         assertEquals(5, uf.numberOfSets());
         testIdentical(strs, sets, uf);
 
+        assertTrue(uf.contains("aaa"));
+        assertTrue(uf.contains("eee"));
+        assertFalse(uf.contains("fff"));
+
         uf.union(strs[0], strs[1]);
         assertEquals(4, uf.numberOfSets());
         union(sets, strs[0], strs[1]);
