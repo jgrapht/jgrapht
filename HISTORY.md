@@ -13,6 +13,7 @@ Changes to JGraphT in each version:
     - Added exact Hamiltonian path algorithms `BacktrackingHamiltonianPath`, `HeldKarpHamiltonianPath`, and `DagHamiltonianPath` (contributed by Shai Eilat)
     - Added `LabelCorrectingMultiObjectiveShortestPath` (contributed by Mario Fuentes Jimenez)
     - Refactored `BoykovKolmogorovMFImpl` orphan adoption (contributed by Arithro Choudhury)
+    - Added `contains` method to `UnionFind` (contributed by Michael Ernst)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
