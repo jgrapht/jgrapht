@@ -258,4 +258,55 @@ public class Graph6Sparse6ExporterTest
         assertEquals(GraphMetrics.getDiameter(orig), GraphMetrics.getDiameter(g), 0.00000001);
         assertEquals(GraphMetrics.getGirth(orig), GraphMetrics.getGirth(g), 0.00000001);
     }
+
+
+        // -------------------Digraph6 tests--------------------
+
+    @Test
+    public void testDigraph6RoundTrip()
+        throws UnsupportedEncodingException,
+        ExportException,
+        ImportException
+    {
+        Graph<Integer, DefaultEdge> orig = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(orig, Arrays.asList(0, 1, 2, 3));
+        orig.addEdge(0, 1);
+        orig.addEdge(1, 2);
+        orig.addEdge(2, 0);
+        orig.addEdge(3, 0);
+
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.DIGRAPH6);
+        assertTrue(res.startsWith("&"));
+
+        Graph<Integer, DefaultEdge> g = importDigraph(res);
+
+        assertEquals(orig.vertexSet().size(), g.vertexSet().size());
+        assertEquals(orig.edgeSet().size(), g.edgeSet().size());
+        this.compareDirected(orig, g);
+    }
+
+    private Graph<Integer, DefaultEdge> importDigraph(String g6)
+        throws ImportException
+    {
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph6Sparse6Importer<Integer, DefaultEdge> importer = new Graph6Sparse6Importer<>();
+        importer.importGraph(g, new ByteArrayInputStream(g6.getBytes(UTF_8)));
+        return g;
+    }
+
+    private <V, E> void compareDirected(Graph<V, E> orig, Graph<V, E> g)
+    {
+        int[] outDegreesOrig = orig.vertexSet().stream()
+            .mapToInt(orig::outDegreeOf).sorted().toArray();
+        int[] outDegreesG = g.vertexSet().stream()
+            .mapToInt(g::outDegreeOf).sorted().toArray();
+        assertTrue(Arrays.equals(outDegreesOrig, outDegreesG));
+
+        int[] inDegreesOrig = orig.vertexSet().stream()
+            .mapToInt(orig::inDegreeOf).sorted().toArray();
+        int[] inDegreesG = g.vertexSet().stream()
+            .mapToInt(g::inDegreeOf).sorted().toArray();
+        assertTrue(Arrays.equals(inDegreesOrig, inDegreesG));
+    }
 }
