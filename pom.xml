@@ -71,7 +71,7 @@
         <checkstyle.version>13.9.0</checkstyle.version>
         <commons-text.version>1.15.0</commons-text.version>
         <dsiutils.version>2.7.5</dsiutils.version>
-        <fastutil.version>8.5.18</fastutil.version>
+        <fastutil.version>8.5.19</fastutil.version>
         <guava.version>33.6.0-jre</guava.version>
         <hamcrest.version>3.0</hamcrest.version>
         <java.version>21</java.version>
