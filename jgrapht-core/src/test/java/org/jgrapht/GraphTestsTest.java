@@ -564,4 +564,32 @@ public class GraphTestsTest
         }
         return graph;
     }
+    
+    @Test
+    public void  testIsLinear() 
+    {
+    	Graph<Integer,DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+    	Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 4);
+        Graphs.addEdgeWithVertices(graph, 4, 5);
+        assertTrue(GraphTests.islinearGraph(graph));
+        Graphs.addEdgeWithVertices(graph, 5, 1);
+        assertFalse(GraphTests.islinearGraph(graph));
+    }
+    @Test
+
+    void testIsChordless() 
+    {
+	    Graph<Integer,DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+	    Graphs.addEdgeWithVertices(graph, 1, 2);
+	    Graphs.addEdgeWithVertices(graph, 2, 3);
+	    Graphs.addEdgeWithVertices(graph, 3, 4);
+	    Graphs.addEdgeWithVertices(graph, 4, 5);
+	    Graphs.addEdgeWithVertices(graph, 5, 1);
+	    assertTrue(GraphTests.ischordless(graph));
+	    Graphs.addEdgeWithVertices(graph, 2, 4);
+	    assertFalse(GraphTests.ischordless(graph));
+    }
+
 }
