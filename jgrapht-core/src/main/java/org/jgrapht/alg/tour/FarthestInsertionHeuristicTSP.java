@@ -238,7 +238,7 @@ public class FarthestInsertionHeuristicTSP<V, E> extends HamiltonianCycleAlgorit
     private E computeDistanceMatrix(Graph<V, E> graph)
     {
         E longestEdge = null;
-        double longestEdgeWeight = -1;
+        double longestEdgeWeight = Double.NEGATIVE_INFINITY;
         int n = graph.vertexSet().size();
         allDist = new double[n][n];
         for (var edge : graph.edgeSet()) {
@@ -270,7 +270,7 @@ public class FarthestInsertionHeuristicTSP<V, E> extends HamiltonianCycleAlgorit
     {
         int n = distances.length;
         int farthest = -1;
-        double maxDist = -1;
+        double maxDist = Double.NEGATIVE_INFINITY;
         for (int i = start; i < n; i++) {
             double dist = distances[i];
             if (dist > maxDist) {

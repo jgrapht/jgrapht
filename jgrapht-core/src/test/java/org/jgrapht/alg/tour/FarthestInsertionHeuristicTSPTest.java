@@ -175,6 +175,46 @@ public class FarthestInsertionHeuristicTSPTest
             tour.getVertexList().toArray(new Integer[0]));
     }
 
+    /**
+     * Complete graph with mixed-sign edge weights. Before the fix, {@code getFarthest} initialized
+     * its running maximum to {@code -1}; when every unvisited vertex was at distance {@code <= -1}
+     * from the partial tour, no candidate exceeded the sentinel and the method returned {@code -1},
+     * causing an {@link ArrayIndexOutOfBoundsException} at {@code tour[-1]}. See
+     * <a href="https://github.com/jgrapht/jgrapht/issues/1324">issue #1324</a>.
+     */
+    @Test
+    public void testNegativeEdgeWeights()
+    {
+        // 0-1=10, 0-2=-3, 0-3=-2, 1-2=-5, 1-3=-4, 2-3=-1
+        int[][] allDist =
+            { { 0, 10, -3, -2 }, { 10, 0, -5, -4 }, { -3, -5, 0, -1 }, { -2, -4, -1, 0 } };
+        Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
+        var farthestInsertion = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
+
+        GraphPath<Integer, DefaultWeightedEdge> tour = farthestInsertion.getTour(graph);
+        assertHamiltonian(graph, tour);
+    }
+
+    /**
+     * Complete graph whose edge weights are all {@code <= -1} with no initial sub-tour supplied.
+     * Before the fix, {@code computeDistanceMatrix} initialized the longest-edge weight to
+     * {@code -1}; when the maximum edge weight was {@code <= -1}, no edge exceeded the sentinel and
+     * {@code longestEdge} stayed {@code null}, causing a {@link NullPointerException} while building
+     * the default initial sub-tour. See
+     * <a href="https://github.com/jgrapht/jgrapht/issues/1324">issue #1324</a>.
+     */
+    @Test
+    public void testNegativeEdgeWeightsAllNegative()
+    {
+        // 0-1=-3, 0-2=-2, 1-2=-1
+        int[][] allDist = { { 0, -3, -2 }, { -3, 0, -1 }, { -2, -1, 0 } };
+        Graph<Integer, DefaultWeightedEdge> graph = createGraphFromMatrixDistances(allDist);
+        var farthestInsertion = new FarthestInsertionHeuristicTSP<Integer, DefaultWeightedEdge>();
+
+        GraphPath<Integer, DefaultWeightedEdge> tour = farthestInsertion.getTour(graph);
+        assertHamiltonian(graph, tour);
+    }
+
     // utilities
     static Graph<Integer, DefaultWeightedEdge> createGraphFromMatrixDistances(int[][] allDist)
     {
