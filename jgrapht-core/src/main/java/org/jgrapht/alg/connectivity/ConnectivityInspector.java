@@ -134,6 +134,12 @@ public class ConnectivityInspector<V, E> implements GraphListener<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
+        if (connectedSets == null) {
+            // Individual components may have been cached by connectedSetOf().
+            // Invalidate them and leave the full computation lazy.
+            vertexToConnectedSet.clear();
+            return;
+        }
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
         Set<V> sourceSet = connectedSetOf(source);
@@ -185,6 +191,9 @@ public class ConnectivityInspector<V, E> implements GraphListener<V, E>
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
+        if (connectedSets == null) {
+            return;
+        }
         Set<V> component = new HashSet<>();
         component.add(e.getVertex());
         connectedSets.add(component);
