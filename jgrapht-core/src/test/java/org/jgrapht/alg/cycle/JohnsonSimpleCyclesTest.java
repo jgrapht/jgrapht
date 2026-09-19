@@ -57,4 +57,36 @@ public class JohnsonSimpleCyclesTest
         assertEquals(Arrays.asList(1, 2, 5, 6), cycle1);
     }
 
+    @Test
+    public void testDistinctVertexInstances()
+    {
+        assertCyclesWithDistinctVertexInstances(new SimpleDirectedGraph<>(DefaultEdge.class));
+    }
+
+    @Test
+    public void testDistinctVertexInstancesWithWeightedEdges()
+    {
+        assertCyclesWithDistinctVertexInstances(
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class));
+    }
+
+    private <E> void assertCyclesWithDistinctVertexInstances(Graph<String, E> graph)
+    {
+        Graphs.addAllVertices(graph, Arrays.asList("A", "B", "C", "D"));
+        graph.addEdge(new String("A"), new String("B"));
+        graph.addEdge(new String("B"), new String("A"));
+        graph.addEdge(new String("B"), new String("C"));
+        graph.addEdge(new String("C"), new String("B"));
+        graph.addEdge(new String("C"), new String("A"));
+
+        List<List<String>> cycles = new JohnsonSimpleCycles<>(graph).findSimpleCycles();
+
+        assertEquals(
+            Arrays.asList(Arrays.asList("A", "B"), Arrays.asList("A", "B", "C"),
+                Arrays.asList("B", "C")),
+            cycles);
+        assertEquals(4, graph.vertexSet().size());
+        assertEquals(5, graph.edgeSet().size());
+    }
+
 }
