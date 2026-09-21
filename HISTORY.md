@@ -18,6 +18,7 @@ Changes to JGraphT in each version:
     - Added `ShortestPathAStarALTDemo` (contributed by federicodeca)
     - Fixed negative edge weights in `FarthestInsertionHeuristicTSP` (contributed by KBS)
     - Fixed intrusive edge reuse in `JohnsonSimpleCycles` (contributed by Jake Wang)
+    - Fixed listener updates in `ConnectivityInspector` (contributed by Shubham Mohole)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
