@@ -172,6 +172,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Mario Fuentes Jimenez](https://github.com/mariio07)
 - [Arithro Choudhury](https://github.com/Avraaaa)
 - [Michael Ernst](https://github.com/mernst)
+- [federicodeca](https://github.com/federicodeca)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
