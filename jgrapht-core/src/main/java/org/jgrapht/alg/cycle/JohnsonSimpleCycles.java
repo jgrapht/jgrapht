@@ -146,7 +146,8 @@ public class JohnsonSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
             for (V w : minSCC) {
                 E edge = graph.getEdge(v, w);
                 if (edge != null) {
-                    resultGraph.addEdge(v, w, edge);
+                    // Intrusive edges must retain their original endpoint instances.
+                    resultGraph.addEdge(graph.getEdgeSource(edge), graph.getEdgeTarget(edge), edge);
                 }
             }
         }
