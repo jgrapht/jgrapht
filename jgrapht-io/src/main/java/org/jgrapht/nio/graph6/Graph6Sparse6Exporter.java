@@ -53,7 +53,8 @@ public class Graph6Sparse6Exporter<V, E> implements GraphExporter<V, E>
     public enum Format
     {
         GRAPH6,
-        SPARSE6
+        SPARSE6,
+        DIGRAPH6
     }
 
     private Format format;
@@ -88,7 +89,11 @@ public class Graph6Sparse6Exporter<V, E> implements GraphExporter<V, E>
     public void exportGraph(Graph<V, E> g, Writer writer)
         throws ExportException
     {
-        GraphTests.requireUndirected(g);
+        if (format == Format.DIGRAPH6) {
+            GraphTests.requireDirected(g);
+        } else {
+            GraphTests.requireUndirected(g);
+        }
         if (format == Format.GRAPH6 && !GraphTests.isSimple(g))
             throw new ExportException(
                 "Graphs exported in graph6 format cannot contain loops or multiple edges.");
@@ -103,6 +108,8 @@ public class Graph6Sparse6Exporter<V, E> implements GraphExporter<V, E>
         try {
             if (format == Format.SPARSE6)
                 writeSparse6(g, vertices);
+            else if (format == Format.DIGRAPH6)
+                writeDigraph6(g, vertices);
             else
                 writeGraph6(g, vertices);
         } catch (IOException e) {
@@ -185,6 +192,20 @@ public class Graph6Sparse6Exporter<V, E> implements GraphExporter<V, E>
         // using the ordering (0,1),(0,2),(1,2),(0,3),(1,3),(2,3),...,(n-1,n).
         for (int i = 0; i < vertices.size(); i++)
             for (int j = 0; j < i; j++)
+                writeBit(g.containsEdge(vertices.get(i), vertices.get(j)));
+        writeByte(); // Finish writing the last byte
+    }
+
+    private void writeDigraph6(Graph<V, E> g, List<V> vertices)
+        throws IOException
+    {
+        // digraph6 format starts with "&"
+        byteArrayOutputStream.write("&".getBytes());
+        writeNumberOfVertices(vertices.size());
+        // Write the adjacency matrix of G (not just the lower triangle),
+        // since edges are directional: i->j does not imply j->i
+        for (int i = 0; i < vertices.size(); i++)
+            for (int j = 0; j < vertices.size(); j++)
                 writeBit(g.containsEdge(vertices.get(i), vertices.get(j)));
         writeByte(); // Finish writing the last byte
     }

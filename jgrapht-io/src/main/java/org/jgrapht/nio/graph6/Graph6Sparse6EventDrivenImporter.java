@@ -60,7 +60,8 @@ public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<In
     enum Format
     {
         GRAPH6,
-        SPARSE6
+        SPARSE6,
+        DIGRAPH6
     }
 
     // ~ Constructors ----------------------------------------------------------
@@ -126,6 +127,7 @@ public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<In
         public Parser(String inputLine)
         {
             this.format = Format.GRAPH6;
+            
             if (inputLine.startsWith(":")) {
                 inputLine = inputLine.substring(1, inputLine.length());
                 this.format = Format.SPARSE6;
@@ -134,8 +136,10 @@ public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<In
                 this.format = Format.SPARSE6;
             } else if (inputLine.startsWith(">>graph6<<")) {
                 inputLine = inputLine.substring(10, inputLine.length());
+            } else if (inputLine.startsWith("&"))  {
+                inputLine = inputLine.substring(1, inputLine.length());
+                this.format = Format.DIGRAPH6;
             }
-
             this.bytes = inputLine.getBytes();
             this.byteIndex = 0;
             this.bitIndex = 0;
@@ -152,9 +156,14 @@ public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<In
             }
             if (format == Format.GRAPH6)
                 readGraph6();
+            else if (format == Format.DIGRAPH6)
+                readDigraph6();
             else
                 readSparse6();
         }
+
+
+  
 
         private void readGraph6()
             throws ImportException
@@ -168,6 +177,26 @@ public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<In
             // Read the lower triangle of the adjacency matrix of G
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < i; j++) {
+                    int bit = getBits(1);
+                    if (bit == 1) {
+                        notifyEdge(Pair.of(i, j));
+                    }
+                }
+            }
+        }
+
+        private void readDigraph6()
+            throws ImportException
+        {
+            // check whether there's enough data (full n x n matrix, not just the lower triangle)
+            int requiredBytes = (int) Math.ceil(n * n / 6.0) + byteIndex;
+            if (bytes.length < requiredBytes)
+                throw new ImportException(
+                    "Graph string seems to be corrupt. Not enough data to read digraph6 graph");
+
+            // Read the entire adjacency matrix of G
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
                     int bit = getBits(1);
                     if (bit == 1) {
                         notifyEdge(Pair.of(i, j));
@@ -205,6 +234,7 @@ public class Graph6Sparse6EventDrivenImporter extends BaseEventDrivenImporter<In
                 dataBits -= 1 + k;
             }
         }
+        
 
         /**
          * Check whether the g6 or s6 encoding contains any obvious errors
