@@ -16,7 +16,8 @@ Changes to JGraphT in each version:
     - Added `contains` method to `UnionFind` (contributed by Michael Ernst)
     - Added digraph6 import/export support (contributed by federicodeca)
     - Added `ShortestPathAStarALTDemo` (contributed by federicodeca)
-    - Fix negative edge weights in `FarthestInsertionHeuristicTSP` (contributed by KBS)
+    - Fixed negative edge weights in `FarthestInsertionHeuristicTSP` (contributed by KBS)
+    - Fixed intrusive edge reuse in `JohnsonSimpleCycles` (contributed by Jake Wang)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)

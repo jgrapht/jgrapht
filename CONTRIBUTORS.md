@@ -174,6 +174,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Michael Ernst](https://github.com/mernst)
 - [federicodeca](https://github.com/federicodeca)
 - [KBS](https://github.com/youdie006)
+- [Jake Wang](https://github.com/jakezwang)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
