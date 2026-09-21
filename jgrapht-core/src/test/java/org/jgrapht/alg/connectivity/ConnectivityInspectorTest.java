@@ -20,6 +20,10 @@ package org.jgrapht.alg.connectivity;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -115,6 +119,81 @@ public class ConnectivityInspectorTest
         g.addEdge(V1, V3);
 
         assertTrue(inspector.isConnected());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testListenerVertexAddBeforeQuery(boolean directed)
+    {
+        ListenableGraph<String, DefaultEdge> g = createListenableGraph(directed);
+        ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(g);
+        g.addGraphListener(inspector);
+
+        g.addVertex(V1);
+        g.addVertex(V2);
+        assertEquals(Set.of(Set.of(V1), Set.of(V2)), new HashSet<>(inspector.connectedSets()));
+        assertEquals(2, inspector.connectedSets().size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testListenerVertexAddAfterRemoval(boolean directed)
+    {
+        ListenableGraph<String, DefaultEdge> g = createListenableGraph(directed);
+        g.addVertex(V1);
+        ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(g);
+        g.addGraphListener(inspector);
+        assertTrue(inspector.isConnected());
+
+        g.removeVertex(V1);
+        g.addVertex(V2);
+        assertEquals(List.of(Set.of(V2)), inspector.connectedSets());
+        g.addVertex(V3);
+        assertEquals(Set.of(Set.of(V2), Set.of(V3)), new HashSet<>(inspector.connectedSets()));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testListenerEdgeAddBeforeQuery(boolean directed)
+    {
+        ListenableGraph<String, DefaultEdge> g = createListenableGraph(directed);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(g);
+        g.addGraphListener(inspector);
+
+        g.addEdge(V1, V2);
+        assertEquals(List.of(Set.of(V1, V2)), inspector.connectedSets());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testListenerEdgeAddAfterRemovalAndPartialQuery(boolean directed)
+    {
+        ListenableGraph<String, DefaultEdge> g = createListenableGraph(directed);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V3);
+        ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(g);
+        g.addGraphListener(inspector);
+        assertTrue(inspector.isConnected());
+
+        g.removeEdge(V1, V2);
+        assertEquals(Set.of(V1), inspector.connectedSetOf(V1));
+        assertEquals(Set.of(V2, V3), inspector.connectedSetOf(V3));
+        g.addEdge(V1, V2);
+        assertEquals(Set.of(V1, V2, V3), inspector.connectedSetOf(V1));
+        assertEquals(Set.of(V1, V2, V3), inspector.connectedSetOf(V3));
+        assertEquals(List.of(Set.of(V1, V2, V3)), inspector.connectedSets());
+    }
+
+    private ListenableGraph<String, DefaultEdge> createListenableGraph(boolean directed)
+    {
+        return new DefaultListenableGraph<>(
+            directed ? new DefaultDirectedGraph<>(DefaultEdge.class)
+                : new SimpleGraph<>(DefaultEdge.class));
     }
 
     /**
