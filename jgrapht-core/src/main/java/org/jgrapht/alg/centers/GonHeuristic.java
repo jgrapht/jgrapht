@@ -17,71 +17,79 @@
  */
 package org.jgrapht.alg.centers;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.util.VertexToIntegerMapping;
 
 /**
  * The Gon heuristic algorithm for the vertex $k$-center problem.
  *
  * <p>
- * The vertex $k$-center problem is an NP-hard combinatorial optimization problem that receives a
- * complete edge-weighted undirected graph $G = (V, E, w)$, and a positive integer $k$. The goal is
- * to find a subset $C$ of $V$ such that $|C| = k$ and the maximum distance from any vertex in $V$
- * to the nearest vertex in $C$ is minimized. $C$ is called the set of centers. The vertex
+ * The vertex $k$-center problem is an NP-hard combinatorial optimization
+ * problem that receives a complete edge-weighted undirected graph $G = (V, E,
+ * w)$, and a positive integer $k$. The goal is to find a subset $C$ of $V$ such
+ * that $|C| = k$ and the maximum distance from any vertex in $V$ to the nearest
+ * vertex in $C$ is minimized. $C$ is called the set of centers. The vertex
  * $k$-center problem has applications in clustering and facility location.
  * </p>
  *
  * <p>
- * The Gon heuristic is a classic heuristic approximation algorithm for the vertex $k$-center
- * problem. It works in a straightforward way. First, a vertex from the input graph is chosen
- * randomly and added to the set of centers $C$. Then, iteratively, the farthest vertex from $V$ to
- * $C$ is chosen and added to $C$. This process is repeated until $|C| = k$.
+ * The Gon heuristic is a classic heuristic approximation algorithm for the
+ * vertex $k$-center problem. It works in a straightforward way. First, a vertex
+ * from the input graph is chosen randomly and added to the set of centers $C$.
+ * Then, iteratively, the farthest vertex from $V$ to $C$ is chosen and added to
+ * $C$. This process is repeated until $|C| = k$.
  *
- * This algorithm provides a guarantee to compute solutions for the vertex $k$-center problem no
- * more than 2-times optimum. According to the literature, this is the best approximation factor
- * (under $P \neq NP$). The implementation chooses the first vertex randomly. Alternatively, an
- * existing set of centers $C$ with fewer than $k$ centers can be provided to be augmented. In this
+ * This algorithm provides a guarantee to compute solutions for the vertex
+ * $k$-center problem no more than 2-times optimum. According to the literature,
+ * this is the best approximation factor (under $P \neq NP$). The implementation
+ * chooses the first vertex randomly. Alternatively, an existing set of centers
+ * $C$ with fewer than $k$ centers can be provided to be augmented. In this
  * implementation, ties are broken by choosing the vertex with the lowest index.
  * </p>
  *
  * <p>
  * The description of this algorithm can be consulted on: <br>
- *
- * T. F. Gonzalez Clustering to minimize the maximum intercluster distance. Theor. Comput. Sci.
- * 1985, 38, 293-306.
- *
- * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández, J. C.
- * Pérez-Sansalvador and N. Lakouari, "Approximation Algorithms for the Vertex K-Center Problem:
- * Survey and Experimental Evaluation," in IEEE Access, vol. 7, pp. 109228-109245, 2019, doi:
- * 10.1109/ACCESS.2019.2933875.
+ * </p>
+ * 
+ * <p>
+ * T. F. Gonzalez Clustering to minimize the maximum intercluster distance.
+ * Theor. Comput. Sci. 1985, 38, 293-306.
  * </p>
  *
  * <p>
- * This implementation can also be used in order to augment an existing partial set of centers. See
- * constructor {@link #GonHeuristic(Set)}.
+ * J. Garcia-Diaz, R. Menchaca-Mendez, R. Menchaca-Mendez, S. Pomares Hernández,
+ * J. C. Pérez-Sansalvador and N. Lakouari, "Approximation Algorithms for the
+ * Vertex K-Center Problem: Survey and Experimental Evaluation," in IEEE Access,
+ * vol. 7, pp. 109228-109245, 2019, doi: 10.1109/ACCESS.2019.2933875.
  * </p>
  *
  * <p>
- * The runtime complexity is $O(k*|V|)$.
+ * This implementation can also be used to augment an existing partial set of
+ * centers. See constructor {@link #GonHeuristic(Set)}.
  * </p>
  *
  * <p>
- * This algorithm requires that the graph is complete, undirected, and edge-weighted.
+ * The runtime complexity of the Gon algorithm is $O(k\cdot |V|)$.
+ * </p>
+ *
+ * <p>
+ * This algorithm requires that the graph is complete, undirected, and
+ * edge-weighted.
  * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Jose Alejandro Cornejo-Acosta
  */
-public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
-{
+public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E> {
 
     /**
      * Initial vertices in the set of centers
@@ -91,43 +99,45 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
     /**
      * Distances from the vertices to the set of centers
      */
-    private double[] distances = null;
+    private Map<V, Double> distances = null;
 
     /**
-     * Matrix of distances between all vertices
+     * Assignment of vertices to centers
      */
-    private double[][] allDist;
+    private Map<V, V> assignment = null;
 
     /**
-     * Mapping of vertices to integers to work on.
+     * Covering radius of the solution
      */
-    private VertexToIntegerMapping<V> mapping;
+    private double coveringRadius;
 
+    /**
+     * The input graph
+     */
+    private Graph<V, E> graph;
+
+    /**
+     * Random number generator to randomly select first center
+     */
     private Random rng;
 
     /**
-     * Constructor.
-     *
-     * By default the first vertex is chosen randomly.
+     * By default the first center will be chosen randomly.
      *
      * @param rng random number generator.
      */
-    public GonHeuristic(Random rng)
-    {
+    public GonHeuristic(Random rng) {
         this.rng = rng;
         this.initialCenters = null;
     }
 
     /**
-     * Constructor
-     *
-     * Specifies a partial set of initial centers that will be augmented to form a set of k centers
-     * when {@link #getCenters } is called.
+     * Specifies a partial set of initial centers that will be augmented to form
+     * a set of $k$ centers when {@link #getCenters } is called.
      *
      * @param initialCenters Initial set of centers.
      */
-    public GonHeuristic(Set<V> initialCenters)
-    {
+    public GonHeuristic(Set<V> initialCenters) {
         if (initialCenters == null) {
             throw new IllegalArgumentException("The set of initial centers cannot be null.");
         }
@@ -135,9 +145,8 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
     }
 
     // algorithm
-
     /**
-     * Computes the set of k centers by using the Gon heuristic.
+     * Computes the set of $k$ centers by using the Gon heuristic.
      *
      * @param graph the input graph.
      * @return a set of centers.
@@ -146,147 +155,156 @@ public class GonHeuristic<V, E> extends CentersLocationAlgorithmBase<V, E>
      * @throws IllegalArgumentException if the graph contains no vertices.
      */
     @Override
-    public Set<V> getCenters(Graph<V, E> graph, int k)
-    {
+    public Set<V> getCenters(Graph<V, E> graph, int k) {
         checkGraph(graph);
-        if (graph.vertexSet().size() == k) {
+        this.graph = graph;
+
+        // size of graph
+        int n = graph.vertexSet().size();
+        if (n == k) {
             return graph.vertexSet();
         }
-
-        if (graph.vertexSet().size() < k) {
+        if (n < k) {
             throw new IllegalArgumentException(
-                "The number of vertices in the graph must be at least k");
+                    "The number of vertices in the graph must be at least k");
         }
-
         if (k <= 0) {
             throw new IllegalArgumentException("k must be at least 1");
         }
 
-        mapping = Graphs.getVertexToIntegerMapping(graph);
-        int n = mapping.getIndexList().size();
-
-        // Computes matrix of distances
-        computeDistanceMatrix(graph);
         if (initialCenters == null || initialCenters.isEmpty()) {
 
             // If no initial set of centers was provided, choose the first center randomly
-            V v = mapping.getIndexList().get(rng.nextInt(n));
-            initialCenters = new HashSet<>(k);
+            V v = new ArrayList<>(graph.vertexSet()).get(rng.nextInt(n));
+            initialCenters = new HashSet<>();
             initialCenters.add(v);
         }
 
         // initialize set of centers C
-        Set<Integer> centers = initPartialC();
+        Set<V> centers = initPartialC();
         // complement of C (i.e. C')
-        Set<Integer> comp = graph.vertexSet().stream().map(v -> mapping.getVertexMap().get(v))
-            .collect(Collectors.toSet());
-        comp.removeAll(centers);
+        Set<V> clients = new HashSet<>(graph.vertexSet());
+        clients.removeAll(centers);
 
-        // init distances from vertices to the set of centers
-        initDistances(centers, comp);
+        // init distances from clients to the set of centers
+        initDistances(centers, clients);
 
         // compute centers
         while (centers.size() < k) {
 
-            // Find the index of the farthest vertex.
-            int v = getFarthest(comp);
+            // Find the farthest vertex.
+            V v = getFarthest(clients);
 
             // remove from C'
-            comp.remove(v);
+            clients.remove(v);
 
             // insert to centers
             centers.add(v);
 
             // Update distances from vertices to the centers
-            updateDistances(v, comp);
+            updateDistances(v, clients);
         }
 
-        // Map the set of centers from integer values to V values
-        return centers.stream().map(i -> mapping.getIndexList().get(i)).collect(Collectors.toSet());
-    }
+        // Assign clients to centers
+        setAssigment(centers, clients);
 
-    /**
-     * Initialize the partial set of centers C with the vertices of {@code initialCenters}.
-     *
-     * @return a partial set of centers with the vertices of {@code initialCenters}.
-     */
-    private Set<Integer> initPartialC()
-    {
-        Set<Integer> centers = initialCenters.stream().map(v -> mapping.getVertexMap().get(v))
-            .collect(Collectors.toSet());
+        // Return the set of centers
         return centers;
     }
 
     /**
-     * Computes the matrix of distances by using the already computed {@code mapping} of vertices to
-     * integers.
-     *
-     * @param graph the input graph.
+     * Assigns each vertex to its closest center.
+     * 
+     * @param centers the set of centers.
+     * @param clients the set of clients (vertices that are not centers).
      */
-    private void computeDistanceMatrix(Graph<V, E> graph)
-    {
-        int n = graph.vertexSet().size();
-        allDist = new double[n][n];
-        for (var edge : graph.edgeSet()) {
-            V source = graph.getEdgeSource(edge);
-            V target = graph.getEdgeTarget(edge);
-            if (!source.equals(target)) {
-                int i = mapping.getVertexMap().get(source);
-                int j = mapping.getVertexMap().get(target);
-                if (allDist[i][j] == 0) {
-                    allDist[i][j] = allDist[j][i] = graph.getEdgeWeight(edge);
+    private void setAssigment(Set<V> centers, Set<V> clients) {
+        this.assignment = new HashMap<>();
+        this.coveringRadius = 0.0;
+        for (V client : clients) {
+            V closestCenter = null;
+            double minDist = Double.MAX_VALUE;
+            for (V center : centers) {
+                double edgeWeight = graph.getEdgeWeight(graph.getEdge(client, center));
+                if (edgeWeight < minDist) {
+                    minDist = edgeWeight;
+                    closestCenter = center;
                 }
             }
+            this.assignment.put(client, closestCenter);
+            this.coveringRadius = Math.max(this.coveringRadius, minDist);
         }
     }
 
     /**
-     * Find the index of the vertex in C' which is farthest from C.
+     * Initialize the partial set of centers C with the vertices of
+     * {@code initialCenters}.
      *
-     * @param comp the set of vertices that are not centers (i.e. C').
-     * @return the index of the vertex which is farthest from the set of centers.
+     * @return a partial set of centers with the vertices of
+     * {@code initialCenters}.
      */
-    private int getFarthest(Set<Integer> comp)
-    {
-        int farthest = -1;
-        double maxDist = -1;
-        for (int v : comp) {
-            double dist = distances[v];
-            if (dist > maxDist) {
-                farthest = v;
-                maxDist = dist;
-            }
-        }
-        return farthest;
+    private Set<V> initPartialC() {
+        return new HashSet<>(initialCenters);
+    }
+
+    /**
+     * Finds the vertex in C' which is farthest from C.
+     *
+     * @param clients the set of vertices that are not centers (i.e. C').
+     * @return the index of the vertex which is farthest from the set of
+     * centers.
+     */
+    private V getFarthest(Set<V> clients) {
+        return Collections.max(clients, Comparator.comparingDouble(distances::get));
     }
 
     /**
      * Initialize distances from the vertices to the initial set of centers
      *
      * @param centers a partial set of centers. {@code initialCenters}.
-     * @param comp the vertices that are not centers (i.e. the complement of C).
+     * @param clients the vertices that are not centers (i.e. the complement of
+     * C).
      */
-    private void initDistances(Set<Integer> centers, Set<Integer> comp)
-    {
-        distances = new double[mapping.getVertexMap().size()];
-        Arrays.fill(distances, Double.POSITIVE_INFINITY);
-        for (int v : comp) {
-            for (int c : centers) {
-                distances[v] = Math.min(distances[v], allDist[v][c]);
+    private void initDistances(Set<V> centers, Set<V> clients) {
+        distances = new HashMap<>(clients.size());
+        for (V client : clients) {
+            double minDist = Double.MAX_VALUE;
+            for (V center : centers) {
+                minDist = Math.min(minDist, graph.getEdgeWeight(graph.getEdge(client, center)));
             }
+            distances.put(client, minDist);
         }
     }
 
     /**
      * Update the distances from the vertices to the partial set of centers.
      *
-     * @param v the last vertex added to the set of centers.
-     * @param comp the vertices that are not centers.
+     * @param center the last vertex added to the set of centers.
+     * @param clients the vertices that are not centers.
      */
-    private void updateDistances(int v, Set<Integer> comp)
-    {
-        for (int i : comp) {
-            distances[i] = Math.min(allDist[v][i], distances[i]);
+    private void updateDistances(V center, Set<V> clients) {
+        for (V client : clients) {
+            double edgeWeight = graph.getEdgeWeight(graph.getEdge(client, center));
+            double currentDist = distances.get(client);
+            if(edgeWeight < currentDist){
+                distances.put(client, edgeWeight);
+            }
         }
+    }
+
+    @Override
+    public double getCoveringRadius() {
+        if (this.assignment == null) {
+            throw new IllegalStateException("You must call getCenters() before calling getCoveringRadius()");
+        }
+        return this.coveringRadius;
+    }
+
+    @Override
+    public Map<V, V> getAssignment() {
+        if (this.assignment == null) {
+            throw new IllegalStateException("You must call getCenters() before calling getAssignment()");
+        }
+        return this.assignment;
     }
 }
