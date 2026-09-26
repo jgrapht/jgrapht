@@ -145,7 +145,7 @@ public class GonAlgorithmTest
 
         GonHeuristic<Integer, DefaultWeightedEdge> gon = new GonHeuristic<>(new Random());
         Set<Integer> centers = gon.getCenters(graph, 1);
-        assertEquals(5, covRadius(graph, centers));
+        assertEquals(5, gon.getCoveringRadius());
     }
 
     /**
@@ -161,7 +161,14 @@ public class GonAlgorithmTest
 
         var centers = gon.getCenters(graph, 2);
         assertTrue(centers.contains(4)); // vertex 4 is the farthest from {0}
-        assertEquals(7, covRadius(graph, centers)); // covering radius is 7
+        assertEquals(7, gon.getCoveringRadius()); // covering radius is 7
+
+        // test assignment
+        var assignment = gon.getAssignment();
+        assertEquals(4, assignment.get(1));
+        assertEquals(4, assignment.get(2));
+        assertEquals(4, assignment.get(3));
+
     }
 
     /**
@@ -176,7 +183,12 @@ public class GonAlgorithmTest
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4));
         var centers = gon.getCenters(graph, 3);
         assertTrue(centers.contains(1)); // vertex 1 is the farthest from {0, 4}
-        assertEquals(3, covRadius(graph, centers)); // covering radius is 2
+        assertEquals(3, gon.getCoveringRadius()); // covering radius is 2
+
+        // test assignment
+        var assignment = gon.getAssignment();
+        assertEquals(1, assignment.get(2));
+        assertEquals(1, assignment.get(3));
     }
 
     /**
@@ -191,7 +203,26 @@ public class GonAlgorithmTest
         var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4, 1));
         var centers = gon.getCenters(graph, 4);
         assertTrue(centers.contains(3)); // vertex 3 is the farthest from {0, 4, 1}
-        assertEquals(1, covRadius(graph, centers)); // covering radius is 1
+        assertEquals(1, gon.getCoveringRadius()); // covering radius is 1
+
+        // test assignment
+        var assignment = gon.getAssignment();
+        assertEquals(3, assignment.get(2));
+    }
+
+    /**
+     * Test early getAssignment() call
+     */
+    @Test
+    public void testEarlyAssignment()
+    {
+        var gon = new GonHeuristic<Integer, DefaultWeightedEdge>(Set.of(0, 4, 1));
+        assertThrows(IllegalStateException.class, () -> {
+            gon.getAssignment();
+        });
+        assertThrows(IllegalStateException.class, () -> {
+            gon.getCoveringRadius();
+        });
     }
 
     /**
@@ -213,25 +244,25 @@ public class GonAlgorithmTest
 
         // for k=5
         var centers = gon.getCenters(graph, 5);
-        double r = covRadius(graph, centers);
+        double r = gon.getCoveringRadius();
         // the optimal solution is 911.41, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 911.41, "For k=5, covering radius is " + r);
 
         // for k=10
         centers = gon.getCenters(graph, 10);
-        r = covRadius(graph, centers);
+        r = gon.getCoveringRadius();
         // the optimal solution is 598.81, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 598.81, "For k=10, covering radius is " + r);
 
         // for k=20
         centers = gon.getCenters(graph, 20);
-        r = covRadius(graph, centers);
+        r = gon.getCoveringRadius();
         // the optimal solution is 389.30, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 389.30, "For k=20, covering radius is " + r);
 
         // for k=40
         centers = gon.getCenters(graph, 40);
-        r = covRadius(graph, centers);
+        r = gon.getCoveringRadius();
         // the optimal solution is 258.25, so we check that the solution is at most 2 times worse
         assertTrue(r <= 2 * 258.25, "For k=40, covering radius is " + r);
     }
@@ -253,28 +284,6 @@ public class GonAlgorithmTest
             }
         }
         return graph;
-    }
-
-    static int covRadius(Graph<Integer, DefaultWeightedEdge> graph, Set<Integer> centers)
-    {
-        int radius = 0;
-        for (Integer v : graph.vertexSet()) {
-            int minDist = Integer.MAX_VALUE;
-            for (Integer c : centers) {
-                if (v.equals(c)) {
-                    minDist = 0;
-                    break;
-                }
-                int dist = (int) graph.getEdgeWeight(graph.getEdge(v, c));
-                if (dist < minDist) {
-                    minDist = dist;
-                }
-            }
-            if (minDist > radius) {
-                radius = minDist;
-            }
-        }
-        return radius;
     }
 
     static Graph<Integer, DefaultWeightedEdge> loadFromTSPLIB(String filePath, int n)
