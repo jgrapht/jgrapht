@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2026-2026, by Fotis Karagiannis and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.generate;
 
 import org.jgrapht.Graph;
@@ -12,7 +29,25 @@ import org.jgrapht.graph.AsUnweightedGraph;
 import java.util.Map;
 
 /**
- * Generator which produces the egonet of a given vertex in a graph.
+ * Generator that produces the egonet of a given vertex in a graph.
+ *
+ * <p>
+ * The general egonet description that led to this implementation is described in the paper: Linton C. Freeman (1981),
+ * Centered Graphs and The Structure of Ego Networks.
+ *
+ * <p>
+ * The generator searches for paths from the given ego vertex to all vertices within the specified radius and generates
+ * a new graph containing the vertices found, along with the edges connecting them.
+ *
+ * <p>
+ * The distance of the vertices included on the resulting graph can be configured by using a custom radius, along
+ * with whether the new graph should include the original ego vertex and whether new edge objects should be used.
+ *
+ * <p>
+ * Note that this implementation works with undirected graphs by using the Breadth-First Shortest Path algorithm,
+ * and with directed graphs by using Dijkstra's Shortest Path algorithm.
+ *
+ * @author Fotis Karagiannis
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

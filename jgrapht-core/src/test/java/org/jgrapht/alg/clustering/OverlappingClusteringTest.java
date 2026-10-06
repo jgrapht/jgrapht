@@ -1,9 +1,24 @@
+/*
+ * (C) Copyright 2026-2026, by Fotis Karagiannis and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.alg.clustering;
 
 import org.jgrapht.Graph;
 import org.jgrapht.TestUtil;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.generate.PlantedPartitionGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
@@ -17,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for OverlappingClustering
+ *
+ * @author Fotis Karagiannis
  */
 public class OverlappingClusteringTest
 {
@@ -36,7 +53,7 @@ public class OverlappingClusteringTest
         expectedFriendshipGroups.add(new HashSet<>(Arrays.asList(3, 4, 5)));
         expectedFriendshipGroups.add(new HashSet<>(Arrays.asList(0, 3, 4, 5)));
 
-        // Parallel fashion requires the check below to see if the result equals the expected result.
+        // Parallel fashion requires the check below to verify that the result equals the expected result.
         assertTrue(alg.getFriendshipGroups().containsAll(expectedFriendshipGroups) && alg.getFriendshipGroups().size()==expectedFriendshipGroups.size());
     }
 
@@ -55,7 +72,7 @@ public class OverlappingClusteringTest
         expectedFriendshipGroups.add(new HashSet<>(Arrays.asList(0, 2)));
         expectedFriendshipGroups.add(new HashSet<>(Arrays.asList(0, 3, 4, 5)));
 
-        // Parallel fashion requires the check below to see if the result equals the expected result.
+        // Parallel fashion requires the check below to verify that the result equals the expected result.
         assertTrue(alg.getSuperGroups().containsAll(expectedFriendshipGroups) && alg.getSuperGroups().size()==expectedFriendshipGroups.size());
     }
 
@@ -101,8 +118,6 @@ public class OverlappingClusteringTest
         graph.addEdge(17, 18);
         graph.addEdge(18, 19);
 
-        OverlappingClustering<Integer, DefaultEdge> alg = new OverlappingClustering<>(graph, OverlappingClustering.DEFAULT_RADIUS);
-
         List<Set<Integer>> expectedClusters = new ArrayList<>();
         expectedClusters.add(Set.of(0, 1, 2, 3, 4));
         expectedClusters.add(Set.of(16, 17, 18, 2, 19));
@@ -111,6 +126,7 @@ public class OverlappingClusteringTest
         expectedClusters.add(Set.of(9, 10, 11));
         Clustering<Integer> expectedClustering = new ClusteringImpl<>(new ArrayList<>(expectedClusters));
 
+        OverlappingClustering<Integer, DefaultEdge> alg = new OverlappingClustering<>(graph, OverlappingClustering.DEFAULT_RADIUS);
         Clustering<Integer> clustering = alg.getClustering();
         assertEquals(expectedClustering.getClusters(), clustering.getClusters());
     }
@@ -185,23 +201,6 @@ public class OverlappingClusteringTest
         OverlappingClustering<Integer, DefaultEdge> alg = new OverlappingClustering<>(graph, OverlappingClustering.DEFAULT_RADIUS);
         Clustering<Integer> clustering = alg.getClustering();
         assertEquals(expectedClustering.getClusters(), clustering.getClusters());
-    }
-
-    @Test
-    public void testBigGraph()
-    {
-        Graph<Integer, DefaultEdge> graph = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
-                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
-
-        GraphGenerator<Integer, DefaultEdge, Integer> generator =
-                new PlantedPartitionGraphGenerator<>(10, 10, 0.40, 0.01, 5);
-        generator.generateGraph(graph);
-
-        OverlappingClustering<Integer, DefaultEdge> alg = new OverlappingClustering<>(graph, OverlappingClustering.DEFAULT_RADIUS);
-        Clustering<Integer> clustering = alg.getClustering();
-        System.out.print(clustering);
     }
 }
 

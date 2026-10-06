@@ -1,4 +1,22 @@
+/*
+ * (C) Copyright 2026-2026, by Fotis Karagiannis and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.alg.clustering;
+
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
@@ -10,7 +28,26 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * The Overlapping community clustering algorithm
+ * Implementation of the Overlapping Clustering Algorithm.
+ *
+ * <p>
+ * The algorithm is described in the paper: Bradley S. Rees & Keith B. Gallagher (2010),
+ * Overlapping Community Detection by Collective Friendship Group Inference.
+ *
+ * <p>
+ * The algorithm is split into three distinct parts: finding friendship groups, removing proper subsets,
+ * and finally merging close sets.
+ *
+ * <p>
+ * Friendship groups are found by generating the egonet graphs of each vertex.
+ *
+ * <p>
+ * Two sets are considered close when, with |B| >= |A|, the condition |A| - |A ∩ B| <= 1 holds.
+ *
+ * <p>
+ * Parallel execution is supported for finding friendship groups and removing proper subsets.
+ *
+ * @author Fotis Karagiannis
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
