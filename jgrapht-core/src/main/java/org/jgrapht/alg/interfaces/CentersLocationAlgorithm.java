@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.interfaces;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.jgrapht.Graph;
@@ -46,5 +47,24 @@ public interface CentersLocationAlgorithm<V, E>
      * @return a set of centes.
      */
     Set<V> getCenters(Graph<V, E> graph, int k);
+
+    /**
+     * Computes the assignment of vertices to their respective centers.
+     *
+     * This method computes and returns the mapping function $f:V\setminus C \rightarrow C$.
+     * Each key represents a vertex in the graph, and the
+     * corresponding value represents the center to which the vertex is assigned. The mapping
+     * reflects the result of any center location algorithm after the {@link #getCenters} method has been called.
+     *
+     * @return a mapping from vertices to their assigned centers
+     */
+    Map<V, V> getAssignment();
+
+    /**
+     * Obtains the covering radius of the solution.
+     *
+     * @return the covering radius of the solution.
+     */
+    double getCoveringRadius();
 
 }
