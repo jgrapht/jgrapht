@@ -156,20 +156,16 @@ public class KouMarkowskyBermanAlgorithm<V, E> implements SteinerTreeAlgorithm<V
             if (path == null)
                 continue;
 
-            List<V> vertices = path.getVertexList();
-            for (int i = 0; i < vertices.size() - 1; i++) {
-                V v1 = vertices.get(i);
-                V v2 = vertices.get(i + 1);
+            for (E originalEdge : path.getEdgeList()) {
+                V v1 = graph.getEdgeSource(originalEdge);
+                V v2 = graph.getEdgeTarget(originalEdge);
 
                 mstPathGraph.addVertex(v1);
                 mstPathGraph.addVertex(v2);
 
                 if (!mstPathGraph.containsEdge(v1, v2)) {
-                    E originalEdge = graph.getEdge(v1, v2);
-                    if (originalEdge != null) {
-                        E newEdge = mstPathGraph.addEdge(v1, v2);
-                        mstPathGraph.setEdgeWeight(newEdge, graph.getEdgeWeight(originalEdge));
-                    }
+                    mstPathGraph.addEdge(v1, v2, originalEdge);
+                    mstPathGraph.setEdgeWeight(originalEdge, graph.getEdgeWeight(originalEdge));
                 }
             }
         }
@@ -186,8 +182,8 @@ public class KouMarkowskyBermanAlgorithm<V, E> implements SteinerTreeAlgorithm<V
         for (E edge : kruskal1.getSpanningTree().getEdges()) {
             V source = mstPathGraph.getEdgeSource(edge);
             V target = mstPathGraph.getEdgeTarget(edge);
-            E newEdge = finalMST.addEdge(source, target);
-            finalMST.setEdgeWeight(newEdge, mstPathGraph.getEdgeWeight(edge));
+            finalMST.addEdge(source, target, edge);
+            finalMST.setEdgeWeight(edge, mstPathGraph.getEdgeWeight(edge));
         }
 
         // Step 5: Prune non-Steiner leaves

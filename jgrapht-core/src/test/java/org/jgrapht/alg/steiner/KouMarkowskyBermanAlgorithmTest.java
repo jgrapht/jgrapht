@@ -32,6 +32,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.SteinerTreeAlgorithm.SteinerTree;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.WeightedMultigraph;
 
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
@@ -44,6 +45,45 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KouMarkowskyBermanAlgorithmTest
 {
+
+    @Test
+    public void testReturnsOriginalEdges()
+    {
+        Graph<String, DefaultWeightedEdge> graph =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.addVertex("a");
+        graph.addVertex("b");
+        graph.addVertex("c");
+        DefaultWeightedEdge ab = graph.addEdge("a", "b");
+        DefaultWeightedEdge bc = graph.addEdge("b", "c");
+        graph.setEdgeWeight(ab, 2);
+        graph.setEdgeWeight(bc, 3);
+
+        SteinerTree<DefaultWeightedEdge> tree =
+            new KouMarkowskyBermanAlgorithm<>(graph).getSteinerTree(Set.of("a", "c"));
+
+        assertEquals(5.0, tree.getWeight());
+        assertEquals(Set.of(ab, bc), tree.getEdges());
+    }
+
+    @Test
+    public void testUsesShortestPathParallelEdge()
+    {
+        Graph<String, DefaultWeightedEdge> graph =
+            new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        graph.addVertex("a");
+        graph.addVertex("b");
+        DefaultWeightedEdge expensive = graph.addEdge("a", "b");
+        DefaultWeightedEdge cheap = graph.addEdge("a", "b");
+        graph.setEdgeWeight(expensive, 10);
+        graph.setEdgeWeight(cheap, 1);
+
+        SteinerTree<DefaultWeightedEdge> tree =
+            new KouMarkowskyBermanAlgorithm<>(graph).getSteinerTree(Set.of("a", "b"));
+
+        assertEquals(1.0, tree.getWeight());
+        assertEquals(Set.of(cheap), tree.getEdges());
+    }
 
     @Test
     public void testExampleGraphSteinerTree()
