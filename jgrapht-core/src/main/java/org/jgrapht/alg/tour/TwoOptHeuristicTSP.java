@@ -267,7 +267,8 @@ public class TwoOptHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
                     int ci1 = tour[i + 1];
                     int cj = tour[j];
                     int cj1 = tour[j + 1];
-                    double change = dist[ci][cj] + dist[ci1][cj1] - dist[ci][ci1] - dist[cj][cj1];
+                    double change =
+                        (dist[ci][cj] + dist[ci1][cj1]) - (dist[ci][ci1] + dist[cj][cj1]);
                     if (change < minChange) {
                         minChange = change;
                         mini = i;
