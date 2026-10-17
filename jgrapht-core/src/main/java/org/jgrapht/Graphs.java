@@ -576,7 +576,7 @@ public abstract class Graphs
      */
     public static <V, E> boolean vertexHasSuccessors(Graph<V, E> graph, V vertex)
     {
-        return !graph.outgoingEdgesOf(vertex).isEmpty();
+        return graph.outDegreeOf(vertex) > 0;
     }
 
     /**
@@ -591,7 +591,7 @@ public abstract class Graphs
      */
     public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex)
     {
-        return !graph.incomingEdgesOf(vertex).isEmpty();
+        return graph.inDegreeOf(vertex) > 0;
     }
 
     /**
