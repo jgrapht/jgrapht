@@ -183,10 +183,9 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
     public GraphPath<V, E> getCycle()
     {
         // best cycle information
-        boolean isBestCycleFound = false;
+        GraphPath<V, E> bestCycle = null;
         double bestCycleWeight = 0.0;
         int bestCycleLength = 1;
-        V bestCycleVertex = null;
 
         // search for best cycle over strongly connected components separately
         int numberOfIterations = 0;
@@ -203,9 +202,17 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
             constructPolicyGraph(component);
 
             // try to improve currently best cycle
+            GraphPath<V, E> currentCycle = null;
             boolean improved = true;
             while (numberOfIterations < maximumIterations && improved) {
                 constructCycle(component);
+
+                // the cycle has to be extracted before computeVertexDistance() changes the
+                // policy graph, after which the found cycle may no longer be in it
+                if (isCurrentCycleFound) {
+                    currentCycle =
+                        buildPath(currentCycleVertex, currentCycleLength, currentCycleWeight);
+                }
 
                 improved = computeVertexDistance(component);
 
@@ -213,13 +220,12 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
             }
 
             // update best cycle information if necessary
-            if (isCurrentCycleFound && (!isBestCycleFound
+            if (currentCycle != null && (bestCycle == null
                 || currentCycleWeight * bestCycleLength < bestCycleWeight * currentCycleLength))
             {
-                isBestCycleFound = true;
+                bestCycle = currentCycle;
                 bestCycleWeight = currentCycleWeight;
                 bestCycleLength = currentCycleLength;
-                bestCycleVertex = currentCycleVertex;
             }
 
             // iterations limit reached
@@ -228,11 +234,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
             }
         }
 
-        if (isBestCycleFound) {
-            return buildPath(bestCycleVertex, bestCycleLength, bestCycleWeight);
-        }
-        // no cycle found in the graph
-        return null;
+        // null if no cycle found in the graph
+        return bestCycle;
     }
 
     /**
