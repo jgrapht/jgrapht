@@ -24,6 +24,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.GraphWalk;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,11 @@ public class HowardMinimumMeanCycleTest
         { 9, 8, 8 }, { 9, 12, 11 }, { 9, 14, 3 }, { 10, 11, 1 }, { 11, 10, 12 }, { 10, 13, 17 },
         { 11, 12, 2 }, { 12, 11, 18 }, { 11, 13, 9 }, { 13, 11, 5 }, { 11, 14, 3 }, { 14, 12, 8 },
         { 14, 13, 9 } };
+    // two cycles with mean 5/3; the distances of vertex 3 computed along both of them differ only
+    // by a rounding error
+    private int[][] graph8 = { { 0, 2, 2 }, { 1, 2, 1 }, { 2, 3, 2 }, { 3, 0, 1 }, { 3, 1, 2 } };
+    // the policy graph changes after the first iteration
+    private int[][] graph9 = { { 0, 1, 4 }, { 1, 2, 2 }, { 2, 0, 5 }, { 2, 1, 5 } };
 
     // expected mean values
     private double expectedMean1 = 1.6666666666666667;
@@ -83,6 +89,9 @@ public class HowardMinimumMeanCycleTest
     private double expectedMean5 = Double.POSITIVE_INFINITY;
     private double expectedMean6 = 3.6000000000000001;
     private double expectedMean7 = 4.4285714285714288;
+    private double expectedMean8 = 5.0 / 3.0;
+    private double expectedMean9 = 3.5;
+    private double expectedMean9OneIteration = 11.0 / 3.0;
 
     // expected minimum mean path for graph instance
     private int[][] expectedCycle1 = { { 2, 3 }, { 3, 4 }, { 4, 2 } };
@@ -93,6 +102,9 @@ public class HowardMinimumMeanCycleTest
     private int[][] expectedCycle6 = { { 14, 6 }, { 6, 10 }, { 10, 13 }, { 13, 3 }, { 3, 14 } };
     private int[][] expectedCycle7 =
         { { 0, 14 }, { 14, 13 }, { 13, 3 }, { 3, 9 }, { 9, 5 }, { 5, 11 }, { 11, 0 } };
+    private int[][] expectedCycle8 = { { 0, 2 }, { 2, 3 }, { 3, 0 } };
+    private int[][] expectedCycle9 = { { 1, 2 }, { 2, 1 } };
+    private int[][] expectedCycle9OneIteration = { { 0, 1 }, { 1, 2 }, { 2, 0 } };
 
     @Test
     public void testGraph1()
@@ -136,6 +148,21 @@ public class HowardMinimumMeanCycleTest
         testOnGraph(graph7, expectedMean7, expectedCycle7);
     }
 
+    @Test
+    @Timeout(value = 10, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    public void testGraph8()
+    {
+        testOnGraph(graph8, expectedMean8, expectedCycle8);
+    }
+
+    @Test
+    @Timeout(value = 10, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    public void testGraph9()
+    {
+        testOnGraph(graph9, expectedMean9, expectedCycle9);
+        testOnGraph(graph9, 1, expectedMean9OneIteration, expectedCycle9OneIteration);
+    }
+
     /**
      * Tests the algorithm on the graph instance {@code graphArray} using {@code expectedMean} and
      * {@code expectedCycleArray} to check correctness.
@@ -146,6 +173,23 @@ public class HowardMinimumMeanCycleTest
      */
     private void testOnGraph(int[][] graphArray, double expectedMean, int[][] expectedCycleArray)
     {
+        testOnGraph(graphArray, Integer.MAX_VALUE, expectedMean, expectedCycleArray);
+    }
+
+    /**
+     * Tests the algorithm on the graph instance {@code graphArray} with at most
+     * {@code maximumIterations} iterations using {@code expectedMean} and
+     * {@code expectedCycleArray} to check correctness.
+     *
+     * @param graphArray graph instance
+     * @param maximumIterations maximum number of iterations
+     * @param expectedMean mean value
+     * @param expectedCycleArray minimum mean cycle
+     */
+    private void testOnGraph(
+        int[][] graphArray, int maximumIterations, double expectedMean,
+        int[][] expectedCycleArray)
+    {
         Graph<Integer, DefaultEdge> graph = new DirectedWeightedPseudograph<>(DefaultEdge.class);
         TestUtil.constructGraph(graph, graphArray);
         GraphPath<Integer, DefaultEdge> expectedPath;
@@ -155,7 +199,8 @@ public class HowardMinimumMeanCycleTest
             expectedPath = readPath(expectedCycleArray, graph);
         }
 
-        HowardMinimumMeanCycle<Integer, DefaultEdge> mmc = new HowardMinimumMeanCycle<>(graph);
+        HowardMinimumMeanCycle<Integer, DefaultEdge> mmc =
+            new HowardMinimumMeanCycle<>(graph, maximumIterations);
         GraphPath<Integer, DefaultEdge> actualPath = mmc.getCycle();
         double actualMean = mmc.getCycleMean();
 
