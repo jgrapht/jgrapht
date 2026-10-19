@@ -22,6 +22,7 @@ Changes to JGraphT in each version:
     - Improved `GonHeuristic` (contributed by J. Alejandro Cornejo-Acosta)
     - Fixed preservation of edges in `KouMarkowskyBermanAlgorithm` (contributed by 박재홍)
     - Optimized `vertexHasSuccessors` and `vertexHasPredecessors` (contributed by Utkarsh Rawat)
+    - Prevent floating point cycles in `TwoOptHeuristicTSP` (contributed by curforever)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
