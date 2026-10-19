@@ -177,6 +177,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Jake Wang](https://github.com/jakezwang)
 - [Shubham Mohole](https://github.com/Ishubhammohole)
 - [박재홍](https://github.com/PHJ2000)
+- [Utkarsh Rawat](https://github.com/Utkarsh-rwt)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 

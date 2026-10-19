@@ -21,6 +21,7 @@ Changes to JGraphT in each version:
     - Fixed listener updates in `ConnectivityInspector` (contributed by Shubham Mohole)
     - Improved `GonHeuristic` (contributed by J. Alejandro Cornejo-Acosta)
     - Fixed preservation of edges in `KouMarkowskyBermanAlgorithm` (contributed by 박재홍)
+    - Optimized `vertexHasSuccessors` and `vertexHasPredecessors` (contributed by Utkarsh Rawat)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
