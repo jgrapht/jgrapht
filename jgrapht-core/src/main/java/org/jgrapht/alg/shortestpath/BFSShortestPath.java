@@ -40,15 +40,21 @@ import java.util.*;
  */
 public class BFSShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
 {
+    private final double radius;
 
     /**
      * Construct a new instance.
      *
      * @param graph the input graph
+     * @param radius limit on path length, or Double.POSITIVE_INFINITY for unbounded search
      */
-    public BFSShortestPath(Graph<V, E> graph)
-    {
+    public BFSShortestPath(Graph<V, E> graph, double radius) {
         super(graph);
+        this.radius = radius;
+    }
+
+    public BFSShortestPath(Graph<V, E> graph) {
+        this(graph, Double.POSITIVE_INFINITY);
     }
 
     /**
@@ -93,6 +99,9 @@ public class BFSShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E>
          */
         while (!queue.isEmpty()) {
             V v = queue.poll();
+            if(distanceAndPredecessorMap.get(v).getFirst() >= radius) {
+                break;
+            }
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 if (!distanceAndPredecessorMap.containsKey(u)) {
