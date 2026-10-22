@@ -20,8 +20,11 @@ package org.jgrapht.alg.matching;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test for the HopcroftKarpMaximumCardinalityBipartiteMatching class
@@ -31,6 +34,23 @@ import java.util.*;
  */
 public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest extends MaximumCardinalityBipartiteMatchingTest
 {
+    @Test
+    public void testMatchingWeightWithNonUnitEdgeWeights()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, -1.5);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 0.0);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 4.25);
+
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
+            new HopcroftKarpMaximumCardinalityBipartiteMatching<>(graph, Set.of(0, 2, 4), Set.of(1, 3, 5)).getMatching();
+
+        assertEquals(3, matching.getEdges().size());
+        assertEquals(graph.edgeSet(), matching.getEdges());
+        assertEquals(2.75, matching.getWeight(), 1e-9);
+    }
+
 
     @Override
     public MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(

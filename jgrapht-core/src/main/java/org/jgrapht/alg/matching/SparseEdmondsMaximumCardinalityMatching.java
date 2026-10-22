@@ -425,8 +425,11 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E> implements MatchingAl
             Algorithm<V, E> alg = new Algorithm<>(graph, initializer);
             Set<E> matchingEdges = alg.computeMatching();
 
-            int cardinality = matchingEdges.size();
-            result = new MatchingImpl<>(graph, matchingEdges, cardinality);
+            double weight = 0;
+            for (E edge : matchingEdges) {
+                weight += graph.getEdgeWeight(edge);
+            }
+            result = new MatchingImpl<>(graph, matchingEdges, weight);
 
             oddSetCover = alg.computeOddSetCover();
         }

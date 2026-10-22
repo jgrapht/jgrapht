@@ -221,6 +221,10 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E> implements Ma
                 edges.add(graph.getEdge(vertices.get(i), vertices.get(matching[i])));
             }
         }
-        return new MatchingImpl<>(graph, edges, edges.size());
+        double weight = 0;
+        for (E edge : edges) {
+            weight += graph.getEdgeWeight(edge);
+        }
+        return new MatchingImpl<>(graph, edges, weight);
     }
 }
