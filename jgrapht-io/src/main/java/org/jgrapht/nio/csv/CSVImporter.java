@@ -38,7 +38,8 @@ import java.util.function.*;
  * </p>
  *
  * <p>
- * The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
+ * The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>, including files
+ * with a single record or without a line ending after the last record. The caller can
  * also adjust the separator to something like semicolon or pipe instead of comma. In such a case,
  * all fields are unescaped using the new separator. See
  * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
