@@ -37,6 +37,23 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public final class SparseEdmondsMaximumCardinalityMatchingTest
 {
+    @Test
+    public void testMatchingWeightWithNonUnitEdgeWeights()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, -1.5);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 0.0);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 4.25);
+
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
+            new SparseEdmondsMaximumCardinalityMatching<>(graph).getMatching();
+
+        assertEquals(3, matching.getEdges().size());
+        assertEquals(graph.edgeSet(), matching.getEdges());
+        assertEquals(2.75, matching.getWeight(), 1e-9);
+    }
+
 
     @Test
     public void testDisconnectedGraph()
