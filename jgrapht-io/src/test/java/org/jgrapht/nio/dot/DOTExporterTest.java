@@ -62,6 +62,39 @@ public class DOTExporterTest
     // ~ Methods ----------------------------------------------------------------
 
     @Test
+    public void testVertexIdsAreRefreshedBetweenExports()
+    {
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Map<Integer, String> ids = new HashMap<>(Map.of(1, "old1", 2, "old2"));
+        DOTExporter<Integer, DefaultEdge> exporter = new DOTExporter<>(ids::get);
+        StringWriter first = new StringWriter();
+        exporter.exportGraph(graph, first);
+        assertTrue(first.toString().contains("old1 -> old2;"));
+
+        ids.put(1, "new1");
+        ids.put(2, "new2");
+        StringWriter second = new StringWriter();
+        exporter.exportGraph(graph, second);
+        assertEquals(
+            "strict digraph G {" + NL + "  new1;" + NL + "  new2;" + NL
+                + "  new1 -> new2;" + NL + "}" + NL,
+            second.toString());
+    }
+
+    @Test
+    public void testChangedVertexIdProviderIsValidated()
+    {
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        DOTExporter<Integer, DefaultEdge> exporter = new DOTExporter<>();
+        exporter.exportGraph(graph, new StringWriter());
+        exporter.setVertexIdProvider(v -> "invalid-id");
+
+        assertThrows(ExportException.class, () -> exporter.exportGraph(graph, new StringWriter()));
+    }
+
+    @Test
     public void testUndirected()
         throws UnsupportedEncodingException,
         ExportException
