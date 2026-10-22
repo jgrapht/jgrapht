@@ -145,7 +145,7 @@ public interface CapacitatedSpanningTreeAlgorithm<V, E>
             // check demands and number of vertices
             int numberOfNodesExplored = 0;
             for (Pair<Set<V>, Double> set1 : this.getPartition().values()) {
-                int currentCapacity = 0;
+                double currentCapacity = 0;
                 for (V v : set1.getFirst()) {
                     currentCapacity += demands.get(v);
                     numberOfNodesExplored++;
