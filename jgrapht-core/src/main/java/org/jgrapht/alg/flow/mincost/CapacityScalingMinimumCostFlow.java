@@ -43,8 +43,9 @@ import java.util.*;
  * arc $e$. Parameters $b_{e}$ define the nodes demands: positive demand means that a node is a
  * supply node, 0 demand means that it is a transhipment node, negative demand means that it is a
  * demand node. Parameters $b_{e}$, $l_{e}$ and $u_{e}$ can be specified via
- * {@link MinimumCostFlowProblem}, graph edge weights are considered to be parameters $c_{e}$, which
- * can be negative.
+ * {@link MinimumCostFlowProblem}. Parameters $c_{e}$ are supplied by
+ * {@link MinimumCostFlowProblem#getArcCosts()} and can be negative. By default, these costs are
+ * the graph edge weights.
  * <p>
  * This algorithm supports two modes: with and without scaling. An integral scaling factor can be
  * specified during construction time. If the specified scaling factor is less than 2, then the
@@ -329,7 +330,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             Node opposite = nodeMap.get(graph.getEdgeTarget(edge));
             int upperCap = problem.getArcCapacityUpperBounds().apply(edge);
             int lowerCap = problem.getArcCapacityLowerBounds().apply(edge);
-            double cost = graph.getEdgeWeight(edge);
+            double cost = problem.getArcCosts().apply(edge);
 
             if (upperCap < 0) {
                 throw new IllegalArgumentException("Negative edge capacities are not allowed");
@@ -612,14 +613,15 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             Arc arc = arcs[i];
             double flowOnArc = arc.revArc.residualCapacity; // this value equals to the flow on the
                                                             // initial arc
-            if (problem.getGraph().getEdgeWeight(graphEdge) < 0) {
+            double cost = problem.getArcCosts().apply(graphEdge);
+            if (cost < 0) {
                 // the initial arc goes in the opposite direction
                 flowOnArc = problem.getArcCapacityUpperBounds().apply(graphEdge)
                     - problem.getArcCapacityLowerBounds().apply(graphEdge) - flowOnArc;
             }
             flowOnArc += problem.getArcCapacityLowerBounds().apply(graphEdge);
             flowMap.put(graphEdge, flowOnArc);
-            totalCost += flowOnArc * problem.getGraph().getEdgeWeight(graphEdge);
+            totalCost += flowOnArc * cost;
         }
         return new MinimumCostFlowImpl<>(totalCost, flowMap);
     }
