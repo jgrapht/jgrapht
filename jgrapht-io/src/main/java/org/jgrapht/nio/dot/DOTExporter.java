@@ -100,6 +100,7 @@ public class DOTExporter<V, E> extends BaseExporter<V, E> implements GraphExport
 
     /**
      * Exports a graph into a plain text file in DOT format.
+     * Vertex identifiers are obtained from the current provider for each export.
      *
      * @param g the graph to be exported
      * @param writer the writer to which the graph to be exported
@@ -107,6 +108,7 @@ public class DOTExporter<V, E> extends BaseExporter<V, E> implements GraphExport
     @Override
     public void exportGraph(Graph<V, E> g, Writer writer)
     {
+        validatedIds.clear();
         PrintWriter out = new PrintWriter(writer);
 
         out.println(computeHeader(g));
