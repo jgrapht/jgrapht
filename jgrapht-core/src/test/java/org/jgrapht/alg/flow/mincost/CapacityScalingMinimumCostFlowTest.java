@@ -46,6 +46,50 @@ public class CapacityScalingMinimumCostFlowTest
 
     @ParameterizedTest
     @MethodSource("scalingFactors")
+    public void testCustomArcCostsChooseCheapestRoute(int scalingFactor)
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge direct = Graphs.addEdgeWithVertices(graph, 0, 1, 1);
+        DefaultWeightedEdge first = Graphs.addEdgeWithVertices(graph, 0, 2, 10);
+        DefaultWeightedEdge second = Graphs.addEdgeWithVertices(graph, 2, 1, 10);
+        MinimumCostFlowProblem<Integer, DefaultWeightedEdge> problem =
+            new MinimumCostFlowProblem.MinimumCostFlowProblemImpl<>(
+                graph, v -> v == 0 ? 1 : v == 1 ? -1 : 0, e -> 1, e -> 0,
+                e -> e == direct ? 8.0 : 1.0);
+
+        MinimumCostFlow<DefaultWeightedEdge> flow =
+            new CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge>(scalingFactor)
+                .getMinimumCostFlow(problem);
+
+        assertEquals(2.0, flow.getCost(), EPS);
+        assertEquals(0.0, flow.getFlow(direct), EPS);
+        assertEquals(1.0, flow.getFlow(first), EPS);
+        assertEquals(1.0, flow.getFlow(second), EPS);
+        assertEquals(1.0, graph.getEdgeWeight(direct), EPS);
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "10.0, -3.0", "-10.0, 3.0" })
+    public void testCustomArcCostSignWithLowerBound(double graphCost, double arcCost)
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge edge = Graphs.addEdgeWithVertices(graph, 0, 1, graphCost);
+        MinimumCostFlowProblem<Integer, DefaultWeightedEdge> problem =
+            new MinimumCostFlowProblem.MinimumCostFlowProblemImpl<>(
+                graph, v -> v == 0 ? 3 : -3, e -> 5, e -> 2, e -> arcCost);
+
+        MinimumCostFlow<DefaultWeightedEdge> flow =
+            new CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge>()
+                .getMinimumCostFlow(problem);
+
+        assertEquals(3.0, flow.getFlow(edge), EPS);
+        assertEquals(3.0 * arcCost, flow.getCost(), EPS);
+    }
+
+    @ParameterizedTest
+    @MethodSource("scalingFactors")
     public void testGetMinimumCostFlow1(int scalingFactor)
     {
         int[][] testCase = new int[][] { { 1, 3 }, { 2, -3 }, { 1, 2, 0, 4, 5 } };
