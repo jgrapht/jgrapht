@@ -77,6 +77,7 @@ public class WeightedGraphTest
         });
     }
 
+    @Test
     public void testInvalidEdgeOnUnweightedGraph()
     {
         Pseudograph<Integer, String> g = new Pseudograph<Integer, String>(String.class);
