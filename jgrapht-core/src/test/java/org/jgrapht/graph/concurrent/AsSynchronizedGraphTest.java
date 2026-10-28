@@ -137,11 +137,13 @@ public class AsSynchronizedGraphTest
             new Thread(() -> {
                 while (true) {
                     DefaultEdge e;
-                    if (edges.size() > 400)
-                        e = edges.remove(0);
-                    else {
-                        semaphore.release();
-                        return;
+                    synchronized (edges) {
+                        if (edges.size() > 400)
+                            e = edges.remove(0);
+                        else {
+                            semaphore.release();
+                            return;
+                        }
                     }
                     g.removeEdge(e);
                 }
@@ -173,11 +175,13 @@ public class AsSynchronizedGraphTest
             new Thread(() -> {
                 while (true) {
                     int c;
-                    if (vertices.size() > 10)
-                        c = vertices.remove(0);
-                    else {
-                        semaphore.release();
-                        return;
+                    synchronized (vertices) {
+                        if (vertices.size() > 10)
+                            c = vertices.remove(0);
+                        else {
+                            semaphore.release();
+                            return;
+                        }
                     }
                     g.removeVertex(c);
                 }
