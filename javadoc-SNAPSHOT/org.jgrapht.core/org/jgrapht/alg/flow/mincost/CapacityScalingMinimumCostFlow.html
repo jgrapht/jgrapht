@@ -122,8 +122,9 @@ implements <a href="../../interfaces/MinimumCostFlowAlgorithm.html" title="inter
  arc $e$. Parameters $b_{e}$ define the nodes demands: positive demand means that a node is a
  supply node, 0 demand means that it is a transhipment node, negative demand means that it is a
  demand node. Parameters $b_{e}$, $l_{e}$ and $u_{e}$ can be specified via
- <a href="MinimumCostFlowProblem.html" title="interface in org.jgrapht.alg.flow.mincost"><code>MinimumCostFlowProblem</code></a>, graph edge weights are considered to be parameters $c_{e}$, which
- can be negative.
+ <a href="MinimumCostFlowProblem.html" title="interface in org.jgrapht.alg.flow.mincost"><code>MinimumCostFlowProblem</code></a>. Parameters $c_{e}$ are supplied by
+ <a href="MinimumCostFlowProblem.html#getArcCosts()"><code>MinimumCostFlowProblem.getArcCosts()</code></a> and can be negative. By default, these costs are
+ the graph edge weights.
  <p>
  This algorithm supports two modes: with and without scaling. An integral scaling factor can be
  specified during construction time. If the specified scaling factor is less than 2, then the

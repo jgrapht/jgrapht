@@ -126,11 +126,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getCenters(org.jgrapht.Graph,int)" class="member-name-link">getCenters</a><wbr>(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>,<wbr><a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">E</a>&gt;&nbsp;graph,
- int&nbsp;k)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>,<wbr><a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAssignment()" class="member-name-link">getAssignment</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Computes the assignment of vertices to their respective centers.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getCenters(org.jgrapht.Graph,int)" class="member-name-link">getCenters</a><wbr>(<a href="../../Graph.html" title="interface in org.jgrapht">Graph</a>&lt;<a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>,<wbr><a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">E</a>&gt;&nbsp;graph,
+ int&nbsp;k)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Computes a set of centers.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getCoveringRadius()" class="member-name-link">getCoveringRadius</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Obtains the covering radius of the solution.</div>
 </div>
 </div>
 </div>
@@ -158,6 +168,33 @@ loadScripts(document, 'script');</script>
 <dd><code>k</code> - the number of centers to locate.</dd>
 <dt>Returns:</dt>
 <dd>a set of centes.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getAssignment()">
+<h3>getAssignment</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>,<wbr><a href="CentersLocationAlgorithm.html" title="type parameter in CentersLocationAlgorithm">V</a>&gt;</span>&nbsp;<span class="element-name">getAssignment</span>()</div>
+<div class="block">Computes the assignment of vertices to their respective centers.
+
+ This method computes and returns the mapping function $f:V\setminus C \rightarrow C$.
+ Each key represents a vertex in the graph, and the
+ corresponding value represents the center to which the vertex is assigned. The mapping
+ reflects the result of any center location algorithm after the <a href="#getCenters(org.jgrapht.Graph,int)"><code>getCenters(org.jgrapht.Graph&lt;V, E&gt;, int)</code></a> method has been called.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a mapping from vertices to their assigned centers</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCoveringRadius()">
+<h3>getCoveringRadius</h3>
+<div class="member-signature"><span class="return-type">double</span>&nbsp;<span class="element-name">getCoveringRadius</span>()</div>
+<div class="block">Obtains the covering radius of the solution.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the covering radius of the solution.</dd>
 </dl>
 </section>
 </li>
