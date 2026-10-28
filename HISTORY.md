@@ -23,6 +23,7 @@ Changes to JGraphT in each version:
     - Fixed preservation of edges in `KouMarkowskyBermanAlgorithm` (contributed by 박재홍)
     - Optimized `vertexHasSuccessors` and `vertexHasPredecessors` (contributed by Utkarsh Rawat)
     - Prevent floating point cycles in `TwoOptHeuristicTSP` (contributed by curforever)
+    - Fixed infinite loop in `HowardMinimumMeanCycle` (contributed by Yang Bai)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
