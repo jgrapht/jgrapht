@@ -23,6 +23,8 @@ import org.jgrapht.graph.builder.*;
 import org.jgrapht.nio.*;
 import org.jgrapht.util.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import java.io.*;
 import java.util.*;
@@ -63,6 +65,63 @@ public class CSVImporterTest
         importer.importGraph(g, new StringReader(input));
 
         return g;
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", "\n", "\r\n" })
+    public void testSingleEdgeRecord(String lineEnding)
+    {
+        Graph<String, DefaultWeightedEdge> graph = readGraph(
+            "\"1\",\"2\",2.5" + lineEnding, CSVFormat.EDGE_LIST, ',',
+            DefaultWeightedEdge.class, true, true);
+
+        assertEquals(Set.of("1", "2"), graph.vertexSet());
+        assertEquals(1, graph.edgeSet().size());
+        assertEquals(2.5, graph.getEdgeWeight(graph.getEdge("1", "2")), 1e-9);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "1,2\n2,3", "1,2\r\n2,3" })
+    public void testFinalRecordWithoutLineEnding(String input)
+    {
+        Graph<String, DefaultEdge> graph =
+            readGraph(input, CSVFormat.EDGE_LIST, ',', DefaultEdge.class, true, false);
+
+        assertEquals(Set.of("1", "2", "3"), graph.vertexSet());
+        assertEquals(2, graph.edgeSet().size());
+        assertTrue(graph.containsEdge("1", "2"));
+        assertTrue(graph.containsEdge("2", "3"));
+    }
+
+    @Test
+    public void testSingleAdjacencyRecordWithoutLineEnding()
+    {
+        Graph<String, DefaultEdge> graph = readGraph(
+            "1;2;3", CSVFormat.ADJACENCY_LIST, ';', DefaultEdge.class, true, false);
+
+        assertEquals(Set.of("1", "2", "3"), graph.vertexSet());
+        assertEquals(2, graph.edgeSet().size());
+        assertTrue(graph.containsEdge("1", "2"));
+        assertTrue(graph.containsEdge("1", "3"));
+    }
+
+    @Test
+    public void testSingleVertexMatrixWithoutLineEnding()
+    {
+        Graph<String, DefaultEdge> graph =
+            readGraph("0", CSVFormat.MATRIX, ',', DefaultEdge.class, true, false);
+
+        assertEquals(Set.of("1"), graph.vertexSet());
+        assertTrue(graph.edgeSet().isEmpty());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", "1,2\n\n2,3", "1,2\n\"unfinished" })
+    public void testEmptyOrMalformedRecordsAreRejected(String input)
+    {
+        assertThrows(
+            ImportException.class,
+            () -> readGraph(input, CSVFormat.EDGE_LIST, ',', DefaultEdge.class, true, false));
     }
 
     @Test

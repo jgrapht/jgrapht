@@ -32,11 +32,12 @@ grammar CSV;
     }
 }
 
-file: header record+ ;
+// Prefer a final line ending over an additional empty record.
+file: header ('\r'? '\n' record)*? ('\r'? '\n')? EOF ;
 
 header : record ;
 
-record : field (SEPARATOR field)* '\r'? '\n' ;
+record : field (SEPARATOR field)* ;
 
 field
     : TEXT     #TextField
