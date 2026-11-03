@@ -522,25 +522,19 @@ public class GraphTestsTest
     @Test
     public void failRequireIsWeightedOnUnweightedGraph()
     {
-        try {
-            Graph<String, DefaultWeightedEdge> graph =
-                new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
-            GraphTests.requireWeighted(graph);
-            fail("Expected an IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("Graph must be weighted"));
-        }
+        Graph<String, DefaultWeightedEdge> graph =
+            new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
+        IllegalArgumentException e = assertThrows(
+            IllegalArgumentException.class, () -> GraphTests.requireWeighted(graph));
+        assertThat(e.getMessage(), is("Graph must be weighted"));
     }
 
     @Test
     public void failRequireIsWeightedOnNull()
     {
-        try {
-            GraphTests.requireWeighted(null);
-            fail("Expected an NullPointerException to be thrown");
-        } catch (NullPointerException e) {
-            assertThat(e.getMessage(), is("Graph cannot be null"));
-        }
+        NullPointerException e = assertThrows(
+            NullPointerException.class, () -> GraphTests.requireWeighted(null));
+        assertThat(e.getMessage(), is("Graph cannot be null"));
     }
 
     @Test
