@@ -29,6 +29,7 @@ Changes to JGraphT in each version:
     - Fixed stale cache in `DOTExporter` (contributed by Jaehong Park)
     - Fixed `CapacitatedSpanningTreeAlgorithm` to preserve fractions (contributed by Jaehong Park)
     - Fixed inconsistent maximum cardinality matching return quantities (contributed by Jaehong Park)
+    - Added Rust port and updated Python bindings (contributed by Dimitrios Michail)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
