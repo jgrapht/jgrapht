@@ -208,7 +208,7 @@ public class BiconnectivityInspector<V, E>
     public boolean isBiconnected()
     {
         performLazyInspection();
-        return graph.vertexSet().size() >= 2 && blocks.size() == 1;
+        return graph.vertexSet().size() >= 2 && blocks.size() == 1 && isConnected();
     }
 
     /**
