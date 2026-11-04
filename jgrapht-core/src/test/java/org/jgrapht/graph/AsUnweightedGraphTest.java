@@ -20,12 +20,11 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AsUnweightedGraphTest
 {
@@ -87,11 +86,9 @@ public class AsUnweightedGraphTest
     @Test
     public void setEdgeWeight()
     {
-        try {
-            this.unweightedGraph.setEdgeWeight(e23, 81);
-        } catch (UnsupportedOperationException e) {
-            assertThat(e.getMessage(), is("Edge weight is not supported"));
-        }
+        UnsupportedOperationException e = assertThrows(
+            UnsupportedOperationException.class, () -> this.unweightedGraph.setEdgeWeight(e23, 81));
+        assertThat(e.getMessage(), is("Edge weight is not supported"));
     }
 
     @Test
@@ -103,11 +100,6 @@ public class AsUnweightedGraphTest
     @Test
     public void failOnCreationOfUnweightedGraph()
     {
-        try {
-            new AsUnweightedGraph<>(null);
-            fail("Expected an NullPointerException to be thrown");
-        } catch (NullPointerException e) {
-            assertNotNull(e);
-        }
+        assertThrows(NullPointerException.class, () -> new AsUnweightedGraph<>(null));
     }
 }
