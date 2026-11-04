@@ -88,6 +88,21 @@ public class BiconnectivityInspectorTest
     }
 
     @Test
+    public void testNotBiconnectedWithIsolatedVertex()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2));
+        g.addEdge(0, 1);
+
+        BiconnectivityInspector<Integer, DefaultEdge> inspector =
+            new BiconnectivityInspector<>(g);
+
+        assertFalse(inspector.isConnected());
+        assertFalse(inspector.isBiconnected());
+        assertFalse(GraphTests.isBiconnected(g));
+    }
+
+    @Test
     public void testConnectedComponents1()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
