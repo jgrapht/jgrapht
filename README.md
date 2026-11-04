@@ -44,6 +44,10 @@ Please refer to the license for details.
 
     SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-2.0
 
+## Beyond Java
+
+JGraphT has been ported to [Rust](https://crates.io/crates/jgrapht), and also has [Python bindings](https://python-jgrapht.readthedocs.io) available.
+
 ## Release Contents
 
 The files below make up the table of contents for a release distribution archive (produced by `mvn package`):
