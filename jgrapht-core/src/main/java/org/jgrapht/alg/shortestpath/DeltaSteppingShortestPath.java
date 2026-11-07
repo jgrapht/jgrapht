@@ -115,6 +115,8 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * Map to store predecessor for each vertex in the shortest path tree.
      */
     private Map<V, Pair<Double, E>> distanceAndPredecessorMap;
+    /** Stable monitors shared by all equal representations of a vertex. */
+    private Map<V, Object> vertexLocks;
     /**
      * Buckets structure.
      */
@@ -358,6 +360,10 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         bucketsSupplier = getBucketsSupplier(source);
         for (int i = 0; i < numOfBuckets; i++) {
             bucketStructure.add(bucketsSupplier.get());
+        }
+        vertexLocks = new HashMap<>();
+        for (V vertex : graph.vertexSet()) {
+            vertexLocks.put(vertex, new Object());
         }
         fillDistanceAndPredecessorMap();
 
@@ -605,7 +611,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Performs relaxation in parallel-safe fashion. Synchronises by {@code vertex}, then if new
+     * Performs relaxation in parallel-safe fashion. Synchronises by the logical vertex, then if new
      * tentative distance is less then removes {@code v} from the old bucket, adds is to the new
      * bucket and updates {@link #distanceAndPredecessorMap} value for {@code v}.
      *
@@ -616,7 +622,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     private void relax(V v, E e, double distance)
     {
         int updatedBucket = bucketIndex(distance);
-        synchronized (v) { // to make relaxation updates thread-safe
+        synchronized (vertexLocks.get(v)) { // equal vertices share one monitor
             Pair<Double, E> oldData = distanceAndPredecessorMap.get(v);
             if (distance < oldData.getFirst()) {
                 if (!oldData.getFirst().equals(Double.POSITIVE_INFINITY)) {
