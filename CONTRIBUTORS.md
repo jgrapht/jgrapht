@@ -182,6 +182,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Yang Bai](https://github.com/ybai08)
 - [Nathan Chandrasekar](https://github.com/vera-rubin)
 - [陈志谦](https://github.com/simpleqt)
+- [Sharang Gupta](https://github.com/sharanggupta)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
