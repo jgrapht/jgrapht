@@ -30,6 +30,7 @@ Changes to JGraphT in each version:
     - Fixed `CapacitatedSpanningTreeAlgorithm` to preserve fractions (contributed by Jaehong Park)
     - Fixed inconsistent maximum cardinality matching return quantities (contributed by Jaehong Park)
     - Added Rust port and updated Python bindings (contributed by Dimitrios Michail)
+    - Fixed bug with sidetrack rest heaps in `EppsteinKShortestPath` (contributed by Nathan Chandrasekar)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)

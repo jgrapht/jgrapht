@@ -180,6 +180,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Utkarsh Rawat](https://github.com/Utkarsh-rwt)
 - [curforever](https://github.com/curforever)
 - [Yang Bai](https://github.com/ybai08)
+- [Nathan Chandrasekar](https://github.com/vera-rubin)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
