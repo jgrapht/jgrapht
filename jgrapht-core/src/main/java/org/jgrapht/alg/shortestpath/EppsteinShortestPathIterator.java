@@ -344,9 +344,10 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         if (outroot == null) {
             hMapping.put(v, predecessorHeap);
         } else {
+            // The rest heap belongs to the outroot, which may not become the new heap root.
+            outroot.rest = restHeapRoot;
             PathsGraphVertex mappingVertex = insertPersistently(predecessorHeap, outroot);
             hMapping.put(v, mappingVertex);
-            mappingVertex.rest = restHeapRoot;
         }
     }
 

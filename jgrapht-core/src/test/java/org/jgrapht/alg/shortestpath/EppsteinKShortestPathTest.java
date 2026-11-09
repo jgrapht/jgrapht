@@ -121,6 +121,23 @@ public class EppsteinKShortestPathTest
         assertSameWeights(paths, weights);
     }
 
+    @Test
+    public void testInheritedRestHeap()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        readGraph(
+            graph, new int[][] { { 0, 1, 1 }, { 0, 2, 3 }, { 1, 2, 1 }, { 1, 3, 1 },
+                { 1, 4, 1 }, { 2, 3, 1 }, { 3, 4, 1 } });
+        EppsteinKShortestPath<Integer, DefaultWeightedEdge> algorithm =
+            new EppsteinKShortestPath<>(graph);
+
+        List<GraphPath<Integer, DefaultWeightedEdge>> paths = algorithm.getPaths(0, 4, 3);
+        assertSameWeights(paths, Arrays.asList(2.0, 3.0, 4.0));
+        assertEquals(Arrays.asList(0, 1, 2, 3, 4), paths.get(2).getVertexList());
+        assertSameWeights(algorithm.getPaths(0, 4, 5), Arrays.asList(2.0, 3.0, 4.0, 5.0));
+    }
+
     private void assertSameWeights(
         List<GraphPath<Integer, DefaultWeightedEdge>> paths, List<Double> weights)
     {
