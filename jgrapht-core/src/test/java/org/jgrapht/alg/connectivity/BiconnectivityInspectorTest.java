@@ -278,4 +278,200 @@ public class BiconnectivityInspectorTest
         assertEquals(1, bi.getBlocks(3).size());
         assertEquals(2, bi.getBlocks().size());
     }
+    @Test
+    public void testLongPathDoesNotUseCallStack()
+    {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        int size = 10000;
+        for (int i = 0; i < size; i++) {
+            graph.addVertex(i);
+            if (i > 0)
+                graph.addEdge(i - 1, i);
+        }
+        BiconnectivityInspector<Integer, DefaultEdge> inspector =
+            new BiconnectivityInspector<>(graph);
+        assertEquals(size - 2, inspector.getCutpoints().size());
+        assertFalse(inspector.getCutpoints().contains(0));
+        assertFalse(inspector.getCutpoints().contains(size - 1));
+        assertEquals(graph.edgeSet(), inspector.getBridges());
+        assertEquals(size - 1, inspector.getBlocks().size());
+        assertEquals(2, inspector.getBlocks(size / 2).size());
+        assertEquals(1, inspector.getConnectedComponents().size());
+        assertSame(inspector.getCutpoints(), inspector.getCutpoints());
+    }
+
+    @Test
+    public void testLongCycleDoesNotUseCallStack()
+    {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        int size = 10000;
+        for (int i = 0; i < size; i++) {
+            graph.addVertex(i);
+            if (i > 0)
+                graph.addEdge(i - 1, i);
+        }
+        graph.addEdge(size - 1, 0);
+        BiconnectivityInspector<Integer, DefaultEdge> inspector =
+            new BiconnectivityInspector<>(graph);
+        assertTrue(inspector.isBiconnected());
+        assertTrue(inspector.getCutpoints().isEmpty());
+        assertTrue(inspector.getBridges().isEmpty());
+        assertEquals(1, inspector.getBlocks().size());
+        assertEquals(graph.vertexSet(), inspector.getBlocks().iterator().next().vertexSet());
+    }
+
+    @Test
+    public void testAllSmallSimpleGraphsAgainstRemovalOracle()
+    {
+        int size = 5;
+        for (int mask = 0; mask < (1 << (size * (size - 1) / 2)); mask++) {
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            for (int v = 0; v < size; v++)
+                graph.addVertex(v);
+            int bit = 0;
+            for (int v = 0; v < size; v++)
+                for (int w = v + 1; w < size; w++)
+                    if ((mask & (1 << bit++)) != 0)
+                        graph.addEdge(v, w);
+            assertMatchesRemovalOracle(graph);
+            assertMatchesBlockOracle(graph);
+        }
+    }
+
+    @Test
+    public void testPseudographsAgainstRemovalOracle()
+    {
+        Random random = new Random(1266);
+        for (int trial = 0; trial < 250; trial++) {
+            Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+            for (int v = 0; v < 7; v++)
+                graph.addVertex(v);
+            for (int edge = 0; edge < 15; edge++)
+                graph.addEdge(random.nextInt(7), random.nextInt(7));
+            assertMatchesRemovalOracle(graph);
+        }
+    }
+
+    @Test
+    public void testDirectedPseudographsAgainstRemovalOracle()
+    {
+        Random random = new Random(850);
+        for (int trial = 0; trial < 250; trial++) {
+            Graph<Integer, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
+            for (int v = 0; v < 7; v++)
+                graph.addVertex(v);
+            for (int edge = 0; edge < 15; edge++)
+                graph.addEdge(random.nextInt(7), random.nextInt(7));
+            assertMatchesRemovalOracle(graph);
+        }
+    }
+
+    @Test
+    public void testInspectionRemainsLazyAndCached()
+    {
+        Graph<Integer, DefaultEdge> base = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(base, Arrays.asList(0, 1, 2));
+        base.addEdge(0, 1);
+        base.addEdge(1, 2);
+        int[] traversals = { 0 };
+        Graph<Integer, DefaultEdge> graph = new GraphDelegator<>(base) {
+            @Override
+            public Set<DefaultEdge> edgesOf(Integer vertex)
+            {
+                traversals[0]++;
+                return super.edgesOf(vertex);
+            }
+        };
+        BiconnectivityInspector<Integer, DefaultEdge> inspector =
+            new BiconnectivityInspector<>(graph);
+        assertEquals(0, traversals[0]);
+        assertEquals(Collections.singleton(1), inspector.getCutpoints());
+        int afterInspection = traversals[0];
+        assertTrue(afterInspection >= 3);
+        inspector.getBridges();
+        inspector.getBlocks();
+        inspector.isConnected();
+        inspector.isBiconnected();
+        assertEquals(afterInspection, traversals[0]);
+    }
+
+    // Enumerate maximal connected vertex sets that remain connected after any vertex removal.
+    private void assertMatchesBlockOracle(Graph<Integer, DefaultEdge> graph)
+    {
+        List<Integer> vertices = new ArrayList<>(graph.vertexSet());
+        Set<Set<Integer>> candidates = new HashSet<>();
+        for (int mask = 0; mask < (1 << vertices.size()); mask++) {
+            if (Integer.bitCount(mask) < 2)
+                continue;
+            Set<Integer> subset = new HashSet<>();
+            for (int i = 0; i < vertices.size(); i++)
+                if ((mask & (1 << i)) != 0)
+                    subset.add(vertices.get(i));
+            Graph<Integer, DefaultEdge> subgraph = new AsSubgraph<>(graph, subset);
+            if (countComponents(subgraph, null, null) != 1)
+                continue;
+            boolean biconnected = true;
+            for (Integer removed : subset)
+                if (countComponents(subgraph, removed, null) != 1)
+                    biconnected = false;
+            if (biconnected)
+                candidates.add(subset);
+        }
+        Set<Set<Integer>> maximal = new HashSet<>(candidates);
+        maximal.removeIf(candidate -> candidates.stream().anyMatch(
+            other -> other.size() > candidate.size() && other.containsAll(candidate)));
+        Set<Set<Integer>> actual = new HashSet<>();
+        for (Graph<Integer, DefaultEdge> block : new BiconnectivityInspector<>(graph).getBlocks())
+            actual.add(block.vertexSet());
+        assertEquals(maximal, actual, graph.toString());
+    }
+
+    private void assertMatchesRemovalOracle(Graph<Integer, DefaultEdge> graph)
+    {
+        int components = countComponents(graph, null, null);
+        Set<Integer> cutpoints = new HashSet<>();
+        for (Integer vertex : graph.vertexSet())
+            if (countComponents(graph, vertex, null) > components)
+                cutpoints.add(vertex);
+        Set<DefaultEdge> bridges = new HashSet<>();
+        for (DefaultEdge edge : graph.edgeSet())
+            if (countComponents(graph, null, edge) > components)
+                bridges.add(edge);
+        BiconnectivityInspector<Integer, DefaultEdge> inspector =
+            new BiconnectivityInspector<>(graph);
+        assertEquals(cutpoints, inspector.getCutpoints(), graph.toString());
+        assertEquals(bridges, inspector.getBridges(), graph.toString());
+        assertEquals(components, inspector.getConnectedComponents().size());
+        Set<Integer> covered = new HashSet<>();
+        for (Graph<Integer, DefaultEdge> component : inspector.getConnectedComponents())
+            covered.addAll(component.vertexSet());
+        assertEquals(graph.vertexSet(), covered);
+    }
+
+    // A plain breadth-first traversal, independent of DFS discovery times and lowpoints.
+    private int countComponents(
+        Graph<Integer, DefaultEdge> graph, Integer removedVertex, DefaultEdge removedEdge)
+    {
+        Set<Integer> visited = new HashSet<>();
+        int components = 0;
+        for (Integer start : graph.vertexSet()) {
+            if (start.equals(removedVertex) || !visited.add(start))
+                continue;
+            components++;
+            Deque<Integer> queue = new ArrayDeque<>();
+            queue.add(start);
+            while (!queue.isEmpty()) {
+                Integer vertex = queue.remove();
+                for (DefaultEdge edge : graph.edgesOf(vertex)) {
+                    if (edge.equals(removedEdge))
+                        continue;
+                    Integer next = Graphs.getOppositeVertex(graph, edge, vertex);
+                    if (!next.equals(removedVertex) && visited.add(next))
+                        queue.add(next);
+                }
+            }
+        }
+        return components;
+    }
+
 }
