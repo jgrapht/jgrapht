@@ -597,9 +597,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     {
         for (int i = 0; i < numOfTasks; i++) {
             try {
-                completionService.take();
+                completionService.take().get();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("Interrupted while relaxing edges", e);
+            } catch (ExecutionException e) {
+                throw new IllegalStateException("Edge relaxation failed", e.getCause());
             }
         }
     }
@@ -636,7 +639,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private int bucketIndex(double distance)
     {
-        return (int) Math.round(distance / delta) % numOfBuckets;
+        return (int) (Math.round(distance / delta) % numOfBuckets);
     }
 
     /**
