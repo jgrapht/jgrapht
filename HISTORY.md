@@ -33,6 +33,7 @@ Changes to JGraphT in each version:
     - Fixed bug with sidetrack rest heaps in `EppsteinKShortestPath` (contributed by Nathan Chandrasekar)
     - Fixed `BiconnectivityInspector` for disconnected graphs (contributed by 陈志谦)
     - Fixed tests for unweighted graphs (contributed by Sharang Gupta)
+    - Fixed bucket index computation and exception handling in `DeltaSteppingShortestPath` (contributed by Ke Yang)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
