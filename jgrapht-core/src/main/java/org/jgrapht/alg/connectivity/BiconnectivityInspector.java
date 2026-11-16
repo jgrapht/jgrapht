@@ -35,14 +35,14 @@ import java.util.*;
  * The algorithm implemented in this class is Hopcroft and Tarjan's biconnected components
  * algorithm, described in: Hopcroft, J. Tarjan, R. Algorithm 447: efficient algorithms for graph
  * manipulation, 1973. Communications of the ACM. 16 (6): 372–378. This implementation runs in
- * linear time $O(|V|+|E|)$ and is based on a recursive depth-first search. More information about
+ * linear time $O(|V|+|E|)$ and uses an iterative depth-first search. More information about
  * this subject be be found in this wikipedia
  * <a href="https://en.wikipedia.org/wiki/Biconnected_component">article</a>.
  *
  * <p>
  * The inspector methods work in a lazy fashion: no computations are performed unless immediately
  * necessary. Computation are done once and results are cached within this class for future need.
- * The core of this class is built around a recursive Depth-first search.
+ * The depth-first search uses an explicit stack, so its depth is not limited by the Java call stack.
  *
  *
  * @param <V> the graph vertex type
@@ -245,7 +245,7 @@ public class BiconnectivityInspector<V, E>
             for (V v : graph.vertexSet()) {
                 if (discTime.get(v) == -1) {
                     connectedSet = new HashSet<>();
-                    dfs(v, null);
+                    dfs(v);
 
                     // Stack can be non-empty when dfs finishes, for instance if the graph has no
                     // cutpoints.
@@ -292,48 +292,69 @@ public class BiconnectivityInspector<V, E>
     }
 
     /**
-     * Performs a depth-first search, starting from vertex v
+     * Performs a depth-first search using explicit frames. Completing a child frame performs
+     * the lowpoint updates and block construction that follow a recursive call in the algorithm.
      *
-     * @param v vertex
-     * @param parent parent of v
-     * @return lowpoint of v
+     * @param start starting vertex
      */
-    private int dfs(V v, V parent)
+    private void dfs(V start)
     {
-        int lowV = ++this.time;
-        discTime.put(v, time);
-        connectedSet.add(v);
-        int children = 0;
-
-        for (E edge : this.graph.edgesOf(v)) {
-            V nv = Graphs.getOppositeVertex(this.graph, edge, v);
-            if (discTime.get(nv) == -1) { // Node hasn't been discovered yet
-                children++;
-
-                this.stack.push(edge);
-
-                int lowNV = dfs(nv, v);
-                lowV = Math.min(lowNV, lowV);
-
-                if (lowNV > discTime.get(v))
-                    bridges.add(edge);
-
-                // 1. nonroot vertex v is a cutpoint iff there is a child y of v such that
-                // lowpoint(y) >= depth(v)
-                // 2. root vertex v is a cutpoint if it has more than 1 child
-                if ((parent != null && lowNV >= discTime.get(v))
-                    || (parent == null && children > 1))
+        Deque<DFSFrame> frames = new ArrayDeque<>();
+        frames.push(new DFSFrame(start, null));
+        while (!frames.isEmpty()) {
+            DFSFrame frame = frames.peek();
+            if (frame.edges.hasNext()) {
+                E edge = frame.edges.next();
+                V next = Graphs.getOppositeVertex(graph, edge, frame.vertex);
+                if (discTime.get(next) == -1) {
+                    frame.children++;
+                    stack.push(edge);
+                    frames.push(new DFSFrame(next, edge));
+                } else if (discTime.get(next) < discTime.get(frame.vertex)
+                    && (frames.size() == 1
+                        || !next.equals(Graphs.getOppositeVertex(graph, frame.parentEdge, frame.vertex))))
                 {
-                    this.cutpoints.add(v); // v is a cutpoint
-                    buildBlock(discTime.get(nv)); // construct biconnected component
+                    stack.push(edge);
+                    frame.low = Math.min(discTime.get(next), frame.low);
                 }
-            } else if ((discTime.get(nv) < discTime.get(v)) && !nv.equals(parent)) { // found
-                                                                                     // backedge
-                this.stack.push(edge);
-                lowV = Math.min(discTime.get(nv), lowV);
+            } else {
+                frames.pop();
+                if (!frames.isEmpty()) {
+                    DFSFrame parent = frames.peek();
+                    parent.low = Math.min(frame.low, parent.low);
+                    if (frame.low > discTime.get(parent.vertex))
+                        bridges.add(frame.parentEdge);
+                    if ((frames.size() > 1 && frame.low >= discTime.get(parent.vertex))
+                        || (frames.size() == 1 && parent.children > 1))
+                    {
+                        cutpoints.add(parent.vertex);
+                        buildBlock(discTime.get(frame.vertex));
+                    }
+                }
             }
         }
-        return lowV;
+    }
+
+    /**
+     * The state retained while a vertex's descendants are being explored.
+     */
+    private class DFSFrame
+    {
+        final V vertex;
+        final E parentEdge;
+        final Iterator<E> edges;
+        int low;
+        int children;
+
+        DFSFrame(V vertex, E parentEdge)
+        {
+            this.vertex = vertex;
+            this.parentEdge = parentEdge;
+            this.edges = graph.edgesOf(vertex).iterator();
+            this.low = ++time;
+            discTime.put(vertex, time);
+            connectedSet.add(vertex);
+        }
     }
 
 }
