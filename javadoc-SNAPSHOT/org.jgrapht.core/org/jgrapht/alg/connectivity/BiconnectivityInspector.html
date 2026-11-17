@@ -113,14 +113,14 @@ loadScripts(document, 'script');</script>
  The algorithm implemented in this class is Hopcroft and Tarjan's biconnected components
  algorithm, described in: Hopcroft, J. Tarjan, R. Algorithm 447: efficient algorithms for graph
  manipulation, 1973. Communications of the ACM. 16 (6): 372–378. This implementation runs in
- linear time $O(|V|+|E|)$ and is based on a recursive depth-first search. More information about
+ linear time $O(|V|+|E|)$ and uses an iterative depth-first search. More information about
  this subject be be found in this wikipedia
  <a href="https://en.wikipedia.org/wiki/Biconnected_component">article</a>.
 
  <p>
  The inspector methods work in a lazy fashion: no computations are performed unless immediately
  necessary. Computation are done once and results are cached within this class for future need.
- The core of this class is built around a recursive Depth-first search.</div>
+ The depth-first search uses an explicit stack, so its depth is not limited by the Java call stack.</div>
 <dl class="notes">
 <dt>Author:</dt>
 <dd>Joris Kinable</dd>
