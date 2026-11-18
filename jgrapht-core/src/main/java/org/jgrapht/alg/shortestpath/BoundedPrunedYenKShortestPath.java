@@ -202,14 +202,15 @@ public class BoundedPrunedYenKShortestPath<V, E>
         // insertion order — matches standard Yen's behaviour closely.
         PriorityQueue<SpurTask> taskHeap = new PriorityQueue<>();
         PriorityQueue<Candidate> candHeap = new PriorityQueue<>();
-        // Dedup: a (vertex-list) signature so we never push the same candidate twice. Candidate
+        // Dedup: an edge-list signature so we never push the same candidate twice. Candidate
         // duplication can in principle occur even under banning if multiple parents lead to the
-        // same path through different spur indices.
-        Set<List<V>> seenCandidates = new HashSet<>();
+        // same path through different spur indices. Parallel edges give distinct paths even
+        // when all vertices are identical.
+        Set<List<E>> seenCandidates = new HashSet<>();
 
         accepted.add(first);
         firstDeviationIndex.add(0); // first path deviates at source
-        seenCandidates.add(first.getVertexList());
+        seenCandidates.add(first.getEdgeList());
         addSpurTasksFor(
             first, /*pathIndex=*/0, firstDeviationIndex, accepted, reverseDistances, taskHeap);
 
@@ -226,7 +227,7 @@ public class BoundedPrunedYenKShortestPath<V, E>
                     stats.unreachableSpurs++;
                     continue;
                 }
-                if (seenCandidates.add(c.path.getVertexList())) {
+                if (seenCandidates.add(c.path.getEdgeList())) {
                     candHeap.offer(c);
                     stats.candidateHeapPushes++;
                     stats.materializedCandidates++;
@@ -294,21 +295,21 @@ public class BoundedPrunedYenKShortestPath<V, E>
     /**
      * Compute the set of edges that standard Yen would ban at {@code spurIndex} given the
      * current {@code accepted} list. An edge is banned iff there exists a previously accepted
-     * path whose first {@code spurIndex+1} vertices match {@code parentVertices} and whose
+     * path whose first {@code spurIndex} edges match {@code parentEdges} and whose
      * {@code spurIndex}-th edge would otherwise be the next edge of the spur.
      */
     private Set<E> computeYenBannedEdges(
-        List<V> parentVertices, int spurIndex, List<GraphPath<V, E>> accepted)
+        List<E> parentEdges, int spurIndex, List<GraphPath<V, E>> accepted)
     {
         Set<E> bannedEdges = new HashSet<>();
         for (GraphPath<V, E> other : accepted) {
-            List<V> ov = other.getVertexList();
-            if (ov.size() <= spurIndex + 1) {
+            List<E> oe = other.getEdgeList();
+            if (oe.size() <= spurIndex) {
                 continue;
             }
             boolean prefixMatch = true;
-            for (int i = 0; i <= spurIndex; i++) {
-                if (!parentVertices.get(i).equals(ov.get(i))) {
+            for (int i = 0; i < spurIndex; i++) {
+                if (!parentEdges.get(i).equals(oe.get(i))) {
                     prefixMatch = false;
                     break;
                 }
@@ -430,7 +431,7 @@ public class BoundedPrunedYenKShortestPath<V, E>
                     // later can only remove legal edges, never add them, so a "no legal exit"
                     // verdict here is stable for the rest of the run. This eliminates the
                     // path-chain pathology where every spur's only outgoing edge gets banned.
-                    Set<E> bannedEdges = computeYenBannedEdges(vertices, i, accepted);
+                    Set<E> bannedEdges = computeYenBannedEdges(edges, i, accepted);
                     if (!hasLegalExit(spurNode, bannedVerticesPrefix, bannedEdges)) {
                         stats.skippedImpossibleSpurTasks++;
                     } else {
@@ -454,7 +455,7 @@ public class BoundedPrunedYenKShortestPath<V, E>
     {
         GraphPath<V, E> parent = accepted.get(task.parentIndex);
         Set<E> bannedEdges =
-            computeYenBannedEdges(parent.getVertexList(), task.spurIndex, accepted);
+            computeYenBannedEdges(parent.getEdgeList(), task.spurIndex, accepted);
         return runSpur(
             parent, task.spurIndex, task.bannedVertices, bannedEdges, task.rootCost,
             reverseDistances);

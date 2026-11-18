@@ -21,11 +21,17 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,6 +46,59 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BoundedPrunedYenKShortestPathTest
 {
     private static final double EPS = 1e-9;
+
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
+    public void testParallelEdgesAreDistinctPaths(boolean useAStar)
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge first = Graphs.addEdgeWithVertices(g, 0, 1, 1.0);
+        DefaultWeightedEdge second = Graphs.addEdge(g, 0, 1, 2.0);
+        BoundedPrunedYenKShortestPath<Integer, DefaultWeightedEdge> algorithm =
+            new BoundedPrunedYenKShortestPath<>(
+                g, useAStar ? new AStarSpurEngine<>() : new DijkstraSpurEngine<>());
+
+        List<GraphPath<Integer, DefaultWeightedEdge>> paths = algorithm.getPaths(0, 1, 3);
+        assertEquals(List.of(1.0, 2.0), weights(paths));
+        assertEquals(List.of(first), paths.get(0).getEdgeList());
+        assertEquals(List.of(second), paths.get(1).getEdgeList());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "false, false", "false, true", "true, false", "true, true" })
+    public void testParallelRootPrefixesAreComparedByEdges(boolean useAStar, boolean equalWeights)
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge firstRoot = Graphs.addEdgeWithVertices(g, 0, 1, 1.0);
+        DefaultWeightedEdge secondRoot = Graphs.addEdge(g, 0, 1, equalWeights ? 1.0 : 3.0);
+        DefaultWeightedEdge firstSuffix = Graphs.addEdgeWithVertices(g, 1, 2, 1.0);
+        DefaultWeightedEdge secondSuffix = Graphs.addEdge(g, 1, 2, equalWeights ? 1.0 : 2.0);
+        Set<List<DefaultWeightedEdge>> expectedEdges = Set.of(
+            List.of(firstRoot, firstSuffix), List.of(firstRoot, secondSuffix),
+            List.of(secondRoot, firstSuffix), List.of(secondRoot, secondSuffix));
+        List<Double> expectedWeights = equalWeights
+            ? List.of(2.0, 2.0, 2.0, 2.0) : List.of(2.0, 3.0, 4.0, 5.0);
+        BoundedPrunedYenKShortestPath<Integer, DefaultWeightedEdge> algorithm =
+            new BoundedPrunedYenKShortestPath<>(
+                g, useAStar ? new AStarSpurEngine<>() : new DijkstraSpurEngine<>());
+
+        // A vertex-prefix match would incorrectly ban both suffixes when exploring the
+        // second parallel root, even after candidate deduplication uses edge identities.
+        for (int k = 1; k <= 5; k++) {
+            List<GraphPath<Integer, DefaultWeightedEdge>> paths = algorithm.getPaths(0, 2, k);
+            assertEquals(expectedWeights.subList(0, Math.min(k, 4)), weights(paths));
+            Set<List<DefaultWeightedEdge>> actualEdges = new HashSet<>();
+            for (GraphPath<Integer, DefaultWeightedEdge> path : paths) {
+                assertTrue(expectedEdges.contains(path.getEdgeList()));
+                assertTrue(actualEdges.add(path.getEdgeList()), "each edge path must be unique");
+            }
+            if (k >= 4) {
+                assertEquals(expectedEdges, actualEdges);
+            }
+        }
+    }
 
     @Test
     public void testNegativeKThrows()
