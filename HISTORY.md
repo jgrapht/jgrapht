@@ -35,6 +35,7 @@ Changes to JGraphT in each version:
     - Fixed tests for unweighted graphs (contributed by Sharang Gupta)
     - Fixed bucket index computation and exception handling in `DeltaSteppingShortestPath` (contributed by Ke Yang)
     - Improved `BiconnectivityInspector` to use iteration instead of recursion (contributed by Rajatendu Dey)
+    - Added `OverlappingClustering` and `EgonetGraphGenerator` (contributed by Fotis Karagiannis)
 
 - **version 1.5.3** (10-Apr-2026)
     - Updated dependencies (contributed by Joris Kinable and Dimitrios Michail)
