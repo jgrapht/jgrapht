@@ -116,4 +116,26 @@ public class BFSShortestPathTest
 
     }
 
+    @Test
+    public void testAllPathsWithRadius()
+    {
+        List<DefaultEdge> path;
+        Graph<String, DefaultEdge> g = create();
+
+        SingleSourcePaths<String, DefaultEdge> tree = new BFSShortestPath<>(g,1 ).getPaths(V1);
+
+        path = tree.getPath(V1).getEdgeList();
+        assertEquals(Arrays.asList(), path);
+
+        path = tree.getPath(V2).getEdgeList();
+        assertEquals(Arrays.asList(e12), path);
+
+        path = tree.getPath(V3).getEdgeList();
+        assertEquals(Arrays.asList(e13), path);
+
+        // Remaining paths are null because of the radius
+        assertNull(tree.getPath(V4));
+
+        assertNull(tree.getPath(V5));
+    }
 }
