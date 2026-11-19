@@ -90,7 +90,8 @@ public class RadixSort
         ListIterator<Integer> listIterator = list.listIterator();
 
         while (listIterator.hasNext()) {
-            array[listIterator.nextIndex()] = listIterator.next();
+            // Flip the sign bit so unsigned radix order matches signed integer order.
+            array[listIterator.nextIndex()] = listIterator.next() ^ Integer.MIN_VALUE;
         }
         radixSort(array, n, new int[n], count);
 
@@ -98,7 +99,7 @@ public class RadixSort
 
         while (listIterator.hasNext()) {
             listIterator.next();
-            listIterator.set(array[listIterator.previousIndex()]);
+            listIterator.set(array[listIterator.previousIndex()] ^ Integer.MIN_VALUE);
         }
     }
 }
