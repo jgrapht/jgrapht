@@ -85,7 +85,7 @@ public class RadixSortTest
         List<Integer> list = new ArrayList<>(n);
 
         for (int i = 0; i < n; i++) {
-            list.add(random.nextInt(Integer.MAX_VALUE));
+            list.add(random.nextInt());
         }
 
         RadixSort.sort(list);
