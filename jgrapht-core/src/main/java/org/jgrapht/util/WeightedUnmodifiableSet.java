@@ -152,11 +152,7 @@ public class WeightedUnmodifiableSet<E> extends AbstractSet<E> implements Serial
     @Override
     public boolean equals(Object o)
     {
-        if (this == o)
-            return true;
-        if (!(o instanceof WeightedUnmodifiableSet<?> other))
-            return false;
-        return this.backingSet.equals(other.backingSet);
+        return backingSet.equals(o);
     }
 
     @Override
