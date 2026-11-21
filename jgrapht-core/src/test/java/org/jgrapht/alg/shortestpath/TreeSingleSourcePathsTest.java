@@ -18,6 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.jupiter.api.*;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -63,9 +65,10 @@ public class TreeSingleSourcePathsTest
         map.put(3, Pair.of(-10d, e23_3));
         map.put(4, Pair.of(-110d, e34_1));
 
-        TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 =
+        SingleSourcePaths<Integer, DefaultWeightedEdge> t1 =
             new TreeSingleSourcePathsImpl<>(g, 1, map);
 
+        assertEquals(map, t1.getDistanceAndPredecessorMap());
         assertEquals(1, t1.getSourceVertex());
         assertEquals(0d, t1.getWeight(1), 1e-9);
         assertTrue(t1.getPath(1).getEdgeList().isEmpty());
@@ -76,6 +79,29 @@ public class TreeSingleSourcePathsTest
         assertEquals(Arrays.asList(e12_1, e23_3), t1.getPath(3).getEdgeList());
         assertEquals(-110d, t1.getWeight(4), 1e-9);
         assertEquals(Arrays.asList(e12_1, e23_3, e34_1), t1.getPath(4).getEdgeList());
+    }
+
+    @Test
+    public void testDistanceAndPredecessorMap()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+        DefaultWeightedEdge e12 = Graphs.addEdge(g, 1, 2, 4d);
+        Graphs.addEdge(g, 1, 3, 9d);
+        DefaultWeightedEdge e23 = Graphs.addEdge(g, 2, 3, 2d);
+
+        SingleSourcePaths<Integer, DefaultWeightedEdge> paths =
+            new DijkstraShortestPath<>(g).getPaths(1);
+        Map<Integer, Pair<Double, DefaultWeightedEdge>> map =
+            paths.getDistanceAndPredecessorMap();
+
+        assertEquals(
+            Map.of(1, Pair.of(0d, null), 2, Pair.of(4d, e12), 3, Pair.of(6d, e23)), map);
+        assertThrows(UnsupportedOperationException.class, () -> map.remove(2));
+        assertEquals(6d, paths.getWeight(3));
+        assertEquals(Arrays.asList(e12, e23), paths.getPath(3).getEdgeList());
+        assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(4));
     }
 
 }

@@ -18,6 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
@@ -130,9 +131,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
 
         pathsQueue = new PriorityQueue<>();
 
-        TreeSingleSourcePathsImpl<V, E> shortestPaths =
-            (TreeSingleSourcePathsImpl<V, E>) new DijkstraShortestPath<>(
-                new EdgeReversedGraph<>(graph)).getPaths(sink);
+        SingleSourcePaths<V, E> shortestPaths =
+            new DijkstraShortestPath<>(new EdgeReversedGraph<>(graph)).getPaths(sink);
 
         GraphPath<V, E> shortestPath = shortestPaths.getPath(source);
         if (shortestPath != null) {

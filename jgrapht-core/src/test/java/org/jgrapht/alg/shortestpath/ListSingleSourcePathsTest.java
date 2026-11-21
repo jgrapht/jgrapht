@@ -26,6 +26,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Dimitrios Michail
@@ -56,6 +57,7 @@ public class ListSingleSourcePathsTest
         ListSingleSourcePathsImpl<Integer, DefaultWeightedEdge> paths =
             new ListSingleSourcePathsImpl<>(g, 0, map);
 
+        assertThrows(UnsupportedOperationException.class, paths::getDistanceAndPredecessorMap);
         assertEquals(0, paths.getSourceVertex());
         assertEquals(0d, paths.getWeight(0), 1e-9);
         for (int i = 1; i < n; i++) {
