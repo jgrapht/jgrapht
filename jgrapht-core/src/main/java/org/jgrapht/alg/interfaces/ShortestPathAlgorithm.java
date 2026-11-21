@@ -18,6 +18,9 @@
 package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * An algorithm which computes shortest paths between vertices.
@@ -98,6 +101,23 @@ public interface ShortestPathAlgorithm<V, E>
          * @return the path from the source vertex to the sink vertex or null if no such path exists
          */
         GraphPath<V, E> getPath(V sink);
+
+        /**
+         * Returns the distance and predecessor edge for each vertex (optional operation).
+         *
+         * <p>
+         * Each map entry contains the distance from the source vertex and the last edge of the
+         * corresponding shortest path. The map need not contain the source vertex; if present, its
+         * predecessor edge is {@code null}. Unreachable vertices may be omitted or have distance
+         * {@link Double#POSITIVE_INFINITY}.
+         *
+         * @return an unmodifiable distance and predecessor map
+         * @throws UnsupportedOperationException if this operation is not supported
+         */
+        default Map<V, Pair<Double, E>> getDistanceAndPredecessorMap()
+        {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }
