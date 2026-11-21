@@ -102,6 +102,7 @@ public class TreeSingleSourcePathsImpl<V, E> implements SingleSourcePaths<V, E>,
      *
      * @return the internal distance and predecessor map used for representing the paths.
      */
+    @Override
     public Map<V, Pair<Double, E>> getDistanceAndPredecessorMap()
     {
         return Collections.unmodifiableMap(map);
