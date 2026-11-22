@@ -381,8 +381,13 @@ class TransitNodeRoutingPrecomputation<V, E>
         for (int i = 0; i < numberOfTasks; ++i) {
             try {
                 completionService.take().get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException(
+                    "Interrupted while precomputing transit node routing", e);
+            } catch (ExecutionException e) {
+                throw new IllegalStateException(
+                    "Transit node routing precomputation failed", e.getCause());
             }
         }
     }
