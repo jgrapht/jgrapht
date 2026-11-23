@@ -877,8 +877,11 @@ public class ContractionHierarchyPrecomputation<V, E>
         for (int i = 0; i < numOfTasks; ++i) {
             try {
                 completionService.take().get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("Interrupted while contracting the graph", e);
+            } catch (ExecutionException e) {
+                throw new IllegalStateException("Graph contraction failed", e.getCause());
             }
         }
     }

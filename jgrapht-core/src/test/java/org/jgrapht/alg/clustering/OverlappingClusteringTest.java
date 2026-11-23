@@ -128,7 +128,16 @@ public class OverlappingClusteringTest
 
         OverlappingClustering<Integer, DefaultEdge> alg = new OverlappingClustering<>(graph, OverlappingClustering.DEFAULT_RADIUS);
         Clustering<Integer> clustering = alg.getClustering();
-        assertEquals(expectedClustering.getClusters(), clustering.getClusters());
+
+        // The worker executor returns groups in completion order, which varies
+        // with thread scheduling; compare the same groups by their smallest vertex.
+        Comparator<Set<Integer>> bySmallestVertex = Comparator.comparingInt(
+                cluster -> cluster.stream().mapToInt(Integer::intValue).min().orElse(Integer.MAX_VALUE));
+        List<Set<Integer>> expected = new ArrayList<>(expectedClustering.getClusters());
+        List<Set<Integer>> actual = new ArrayList<>(clustering.getClusters());
+        expected.sort(bySmallestVertex);
+        actual.sort(bySmallestVertex);
+        assertEquals(expected, actual);
     }
 
     @Test

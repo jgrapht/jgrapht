@@ -153,9 +153,14 @@ public class OverlappingClustering<V, E> implements ClusteringAlgorithm<V>
                 // If any thread finishes its work, results are added, otherwise main thread waits
                 groups.addAll(completionService.take().get());
             }
-            catch (InterruptedException | ExecutionException e)
+            catch (InterruptedException e)
             {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("Interrupted while finding friendship groups", e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new IllegalStateException("Friendship group computation failed", e.getCause());
             }
         }
 
@@ -185,9 +190,14 @@ public class OverlappingClustering<V, E> implements ClusteringAlgorithm<V>
                     keep[result.get()] = true;
                 }
             }
-            catch (InterruptedException | ExecutionException e)
+            catch (InterruptedException e)
             {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("Interrupted while removing proper subsets", e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new IllegalStateException("Proper subset detection failed", e.getCause());
             }
         }
         // Sets after proper subset removal
