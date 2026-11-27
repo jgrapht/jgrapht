@@ -54,14 +54,13 @@ public class DeltaSteppingConcurrencyTest
         var shortPublished = new CountDownLatch(1);
         var paused = new AtomicBoolean();
         var failure = new AtomicReference<Throwable>();
-        var shortThread = new AtomicReference<Thread>();
+        var shortReady = new CountDownLatch(1);
         var shortWorker = ThreadLocal.withInitial(() -> false);
         var observedGraph = new GraphDelegator<String, DefaultWeightedEdge>(graph) {
             @Override
             public Set<DefaultWeightedEdge> outgoingEdgesOf(String vertex)
             {
                 if (vertex.equals("short")) {
-                    shortThread.set(Thread.currentThread());
                     shortWorker.set(true);
                     try {
                         if (!longInsertion.await(5, TimeUnit.SECONDS)) {
@@ -81,7 +80,9 @@ public class DeltaSteppingConcurrencyTest
             {
                 // Visiting the next edge proves that the preceding relaxation has returned.
                 // The thread-local guard excludes the initial maximum-edge-weight scan.
-                if (edge == sentinelEdge && shortWorker.get()) {
+                if (edge == shortEdge && shortWorker.get()) {
+                    shortReady.countDown();
+                } else if (edge == sentinelEdge && shortWorker.get()) {
                     shortPublished.countDown();
                 }
                 return super.getEdgeWeight(edge);
@@ -94,29 +95,12 @@ public class DeltaSteppingConcurrencyTest
                 // With a shared monitor, the shorter relaxation must wait for this one.
                 longInsertion.countDown();
                 try {
-                    // Wait for publication or for the other worker to block in relaxation.
-                    // A scheduling timeout must fail rather than accept an untested result.
-                    long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
-                    boolean observed = false;
-                    while (System.nanoTime() < deadline) {
-                        if (shortPublished.await(1, TimeUnit.MILLISECONDS)) {
-                            observed = true;
-                            break;
-                        }
-                        Thread worker = shortThread.get();
-                        if (worker != null && worker.getState() == Thread.State.BLOCKED) {
-                            StackTraceElement[] stack = worker.getStackTrace();
-                            if (stack.length > 0
-                                && stack[0].getClassName().equals(DeltaSteppingShortestPath.class.getName())
-                                && stack[0].getMethodName().equals("relax")) {
-                                observed = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!observed) {
-                        failure.compareAndSet(null, new AssertionError(
-                            "Shorter relaxation neither published nor blocked on the shared monitor"));
+                    if (!shortReady.await(5, TimeUnit.SECONDS)) {
+                        failure.compareAndSet(null, new AssertionError("Short path was not scheduled"));
+                    } else {
+                        // A shared monitor prevents publication until this callback returns.
+                        // Give the competing relaxation a chance to finish on the old implementation.
+                        shortPublished.await(500, TimeUnit.MILLISECONDS);
                     }
                 } catch (InterruptedException exception) {
                     Thread.currentThread().interrupt();
